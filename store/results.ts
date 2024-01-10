@@ -1,22 +1,39 @@
+import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
 
+interface Result {
+  id: string;
+  name: string;
+  price: number;
+  cost: number;
+  category: string;
+  quantity: number;
+  space: number;
+  color: string;
+  totalPrice: number;
+  totalCost: number;
+  profit: number;
+  margin: number;
+  isNew: boolean;
+}
+
 export const useResultsStore = defineStore("results", {
   state: () => ({
-    results: [],
-    fences: [],
-    poles: [],
-    gatePoles: [],
-    borders: [],
-    borderHolders: [],
-    rivets: [],
-    crossbars: [],
-    crossbarHolders: [],
-    totalElements: [],
-    bindingsLength: [],
-    segments: [],
-    segmentHolders: [],
-    gates: [],
+    results: [] as Result[],
+    fences: [] as any[],
+    poles: 0,
+    gatePoles: 0,
+    borders: 0,
+    borderHolders: 0,
+    rivets: 0,
+    crossbars: 0,
+    crossbarHolders: 0,
+    totalElements: 0,
+    bindingsLength: 0,
+    segments: 0,
+    segmentHolders: 0,
+    gates: [] as any[],
     totalPrice: 0,
     totalCost: 0,
     totalProfit: 0,
@@ -24,7 +41,7 @@ export const useResultsStore = defineStore("results", {
   }),
 
   actions: {
-    createFence(item) {
+    createFence(item: any) {
       // let fenceExist = false;
       // const initialFenceData = {
       //   name: item.type,
@@ -51,15 +68,24 @@ export const useResultsStore = defineStore("results", {
       //   this.fences.push(initialFenceData);
       // }
     },
+
     addNew() {
-      this.results.push({ ...initialResultData, id: uuidv4(), isNew: true });
+      const newResult: Result = {
+        ...initialResultData,
+        id: uuidv4(),
+        isNew: true,
+      };
+      this.results.push(newResult);
     },
 
-    updateName(data) {
+    updateName(data: { index: number; value: string }) {
       this.results[data.index].name = data.value;
     },
 
-    selectItem(data) {
+    selectItem(data: {
+      index: number;
+      value: { name: string; price: number; cost: number; category: string };
+    }) {
       const selectedResult = this.results[data.index];
       selectedResult.name = data.value.name;
       selectedResult.price = data.value.price;
@@ -67,72 +93,70 @@ export const useResultsStore = defineStore("results", {
       selectedResult.category = data.value.category;
     },
 
-    updateQuantity(data) {
+    updateQuantity(data: { index: number; value: number }) {
       this.results[data.index].quantity = data.value;
       this.recalculateTotals(data.index);
       this.calculateTotals();
     },
 
-    updateSpace(data) {
+    updateSpace(data: { index: number; value: number }) {
       this.results[data.index].space = data.value;
     },
 
-    updateColor(data) {
+    updateColor(data: { index: number; value: string }) {
       this.results[data.index].color = data.value;
     },
 
-    updatePrice(data) {
+    updatePrice(data: { index: number; value: number }) {
       this.results[data.index].price = data.value;
       this.recalculateTotals(data.index);
       this.calculateTotals();
     },
 
-    recalculateTotals(index) {
+    recalculateTotals(index: number) {
       const result = this.results[index];
       result.totalPrice = result.price * result.quantity;
       result.totalCost = result.cost * result.quantity;
       result.profit = result.totalPrice - result.totalCost;
-      result.margin = (
-        Math.round(
-          ((result.totalPrice - result.totalCost) / result.totalPrice) * 10000
-        ) / 100
-      ).toFixed(2);
+      const marginValue =
+        ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
+      result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    addPoles(data) {
+    addPoles(data: number) {
       this.poles += data;
     },
-    addGatePoles(data) {
+    addGatePoles(data: number) {
       this.gatePoles += data;
     },
-    addBorders(data) {
+    addBorders(data: number) {
       this.borders += data;
     },
-    addBorderHolders(data) {
+    addBorderHolders(data: number) {
       this.borderHolders += data;
     },
-    addRivets(data) {
+    addRivets(data: number) {
       this.rivets += data;
     },
-    addCrossbars(data) {
+    addCrossbars(data: number) {
       this.crossbars += data;
     },
-    addCrossbarHolders(data) {
-      this.crossbarsHolders += data;
+    addCrossbarHolders(data: number) {
+      this.crossbarHolders += data;
     },
-    addtotalElements(data) {
+    addtotalElements(data: number) {
       this.totalElements += data;
     },
-    addBindingsLength(data) {
+    addBindingsLength(data: number) {
       this.bindingsLength += data;
     },
-    addSegments(data) {
+    addSegments(data: number) {
       this.segments += data;
     },
-    addSegmentHolders(data) {
+    addSegmentHolders(data: number) {
       this.segmentHolders += data;
     },
-    addGates(data) {
+    addGates(data: number) {
       this.gates.push(data);
     },
 
@@ -149,7 +173,7 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = +this.totalMargin / +this.results.length;
     },
 
-    deleteResult(id) {
+    deleteResult(id: string) {
       this.results = this.results.filter((item) => item.id !== id);
       this.calculateTotals();
     },
@@ -174,7 +198,7 @@ export const useResultsStore = defineStore("results", {
       this.borderHolders = 0;
       this.rivets = 0;
       this.crossbars = 0;
-      this.crossbarsHolders = 0;
+      this.crossbarHolders = 0;
       this.totalElements = 0;
       this.bindingsLength = 0;
       this.segments = 0;

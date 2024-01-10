@@ -11,7 +11,7 @@ const props = defineProps(["project", "index"]);
 const useAllProjects = useAllProjectsStore()
 
 const deleteHandler = async (): Promise<void> => {
-    const response: Response = await useFetch("/api/project", {
+    const response: Response = await $fetch("/api/project", {
         method: "delete",
         body: { _id: props.project._id }
     });
@@ -32,10 +32,10 @@ const deleteHandler = async (): Promise<void> => {
         <BaseInfoField :name="props.project.calculatedParts.totalPrice + ' €'" width="w-20" />
         <BaseInfoField :name="project.creator" width="w-20 min-w-fit" />
         <BaseInfoField :name="project.status" width="w-32" />
-        <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" class="hover:cursor-pointer" />
-        <NuxtImg src="/icons/link.svg" alt="link button" width="20" class="hover:cursor-pointer" />
-        <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" class="hover:cursor-pointer" />
-        <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" @click="deleteHandler"
+        <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" height="20" class="hover:cursor-pointer" />
+        <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" class="hover:cursor-pointer" />
+        <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" height="20" class="hover:cursor-pointer" />
+        <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" @click="deleteHandler"
             class="hover:cursor-pointer" />
 
     </div>

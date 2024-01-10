@@ -63,13 +63,13 @@ const saveHandler = async () => {
       :defaultValue="productCategory" width="w-56" @onChange="(v) => (productCategory = v)" />
   </td>
   <td>
-    <NuxtImg v-if="disable" src="/icons/edit.svg" width="20" @click="editHandler"
+    <NuxtImg v-if="disable" src="/icons/edit.svg" width="20" height="20" @click="editHandler"
       class="w-full p-1 m-auto rounded-md hover:cursor-pointer hover:bg-green-100" />
-    <NuxtImg v-else src="/icons/checked.svg" width="20" @click="saveHandler"
+    <NuxtImg v-else src="/icons/checked.svg" width="20" height="20" @click="saveHandler"
       class="w-full p-1 m-auto rounded-md hover:cursor-pointer hover:bg-green-100" />
   </td>
   <td>
-    <NuxtImg src="/icons/delete.svg" width="20" @click="deleteHandler"
+    <NuxtImg src="/icons/delete.svg" width="20" height="20" @click="deleteHandler"
       class="w-full p-1 m-auto rounded-md hover:cursor-pointer hover:bg-red-ulta-light" />
   </td>
 </template>

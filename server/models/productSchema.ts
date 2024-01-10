@@ -1,6 +1,14 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
 
-export const productSchema = defineMongooseModel(
+interface Product {
+  name: string;
+  price: string;
+  cost?: string;
+  category: string;
+  image: string;
+}
+
+export const productSchema = defineMongooseModel<Product>(
   "productSchema",
   {
     name: String,

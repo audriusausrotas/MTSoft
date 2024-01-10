@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.4.16",
     "nuxt": "^3.9.0",
     "nuxt-mongoose": "^1.0.3",

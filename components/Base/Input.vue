@@ -31,9 +31,9 @@ onMounted(() => {
             props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light')
           ">
       <slot />
-      <input :value="props.name" :placeholder="props.placeholder" :id="props.label" :type="props.type"
-        :disabled="props.disable || false" @input="emitUpdate($event.target.value)" @keyup.enter="handleEnterKey"
-        ref="inputRef"
+      <input :value="props.name" :placeholder="props.placeholder" :id="props.label"
+        :type="props.type ? props.type : 'text'" :disabled="props.disable || false"
+        @input="emitUpdate($event.target.value)" @keyup.enter="handleEnterKey" ref="inputRef"
         class="w-full h-full overflow-scroll border-0 outline-none active:outline-none bg-inherit active:border-0" />
     </div>
   </div>

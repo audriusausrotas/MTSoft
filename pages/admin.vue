@@ -1,8 +1,6 @@
 <script setup lang="js">
-import useError from '~/composables/useError';
 
 const useUser = useUserStore();
-const { setError, message, isError } = useError();
 const password = ref < string > ("");
 const modalOpen = ref < boolean > (false);
 const selectedUser = ref("");
@@ -31,16 +29,12 @@ const userChangesHandler = async (id, type) => {
       password.value = "";
       selectedUser.value = "";
     }
-  } else {
-    setError(data.value.message, true);
   }
 };
 
 const confirmHandler = () => {
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
     userChangesHandler(selectedUser.value, "delete");
-  } else {
-    setError("Įveskite spaltažodį", true);
   }
 };
 
@@ -75,7 +69,7 @@ const deleteHandler = (id) => {
         " @onChange="userChangesHandler(user._id, 'admin')" />
 
       <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
-        <NuxtImg src="/icons/delete.svg" alt="delete button " width="24" />
+        <NuxtImg src="/icons/delete.svg" alt="delete button " width="24" height="24" />
       </div>
     </div>
   </div>
@@ -91,7 +85,6 @@ const deleteHandler = (id) => {
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
           <BaseButton name="patvirtinti" @click="confirmHandler" />
         </div>
-        <Error :message="message" :isError="isError" />
       </div>
     </div>
   </Teleport>

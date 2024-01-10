@@ -1,5 +1,4 @@
 <script setup lang="js">
-import useError from "~/composables/useError"
 
 const login = ref(true);
 const username = ref("");
@@ -8,11 +7,8 @@ const password = ref("");
 const retypePassword = ref("");
 
 const useUser = useUserStore();
-const {setError, message, isError} = useError()
 
 const loginHandler = async () => {
-
-  if (!email.value || !password.value || !email.value.includes("@")) return setError("užpildykite visus laukus", true);
 
   const loginData = { email: email.value, password: password.value };
 
@@ -25,15 +21,10 @@ const loginHandler = async () => {
     useUser.setUser(data.value.data)
     clearFields();
     await navigateTo('/')
-  } else {
-    setError(data.value.message, true)
-  }
+  } 
 };
 
 const registerHandler = async () => {
-
-  if (!email.value || !password.value || !email.value.includes("@") || !username.value || !retypePassword.value)  return setError("užpildykite visus laukus", true);
-  if (password.value !== retypePassword.value)  return setError("Slaptažodžiai nesutampa", true);
 
   const loginData = { email: email.value, password: password.value, retypePassword:retypePassword.value, username: username.value };
 
@@ -45,10 +36,7 @@ const registerHandler = async () => {
   if (data.value.success) {
     clearFields();
     changeLogin()
-    setError("registracija sėkminga", false);
-  } else {
-     setError(data.value.message, true);
-    }
+  } 
   };
 
   const changeLogin = () => {
@@ -119,7 +107,6 @@ console.log(useUser.user)
         >
       </p>
 
-      <Error :message="message" :isError="isError" />
     </div>
   </div>
 </template>

@@ -1,13 +1,23 @@
 import { useCookie } from "nuxt/app";
 
+interface User {
+  _id: String;
+  email: String;
+  password: String;
+  username: String;
+  verified: Boolean;
+  admin: Boolean;
+  photo: String;
+}
+
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: null,
-    users: [],
+    user: null as User | null,
+    users: [] as User[],
   }),
 
   actions: {
-    async setUser(data) {
+    async setUser(data: User) {
       this.user = data;
     },
 
@@ -17,19 +27,22 @@ export const useUserStore = defineStore("user", {
       cookie.value = null;
       this.users = [];
     },
-    setAllUsers(data) {
+
+    setAllUsers(data: User[]) {
       this.users = data;
     },
   },
+
   getters: {
-    updateUser: (state) => (data) => {
+    updateUser: (state) => (data: User) => {
       state.users = state.users.map((user) => {
         if (user._id === data._id) return data;
         else return user;
       });
     },
-    deleteUser: (state) => (data) => {
-      state.users = state.users.filter((user) => user._id !== data);
+
+    deleteUser: (state) => (id: string) => {
+      state.users = state.users.filter((user) => user._id !== id);
     },
   },
 });

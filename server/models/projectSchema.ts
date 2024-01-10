@@ -1,6 +1,23 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
 
-export const projectSchema = defineMongooseModel(
+interface Client {}
+
+interface CalculatedParts {}
+
+interface Project {
+  client: Client;
+  fenceMeasures?: any[];
+  results?: any[];
+  calculatedParts: CalculatedParts;
+  confirmed?: boolean;
+  advance?: boolean;
+  payed?: boolean;
+  status?: string;
+  creator: string;
+  orderNumber: string;
+}
+
+export const projectSchema = defineMongooseModel<Project>(
   "projectSchema",
   {
     client: {

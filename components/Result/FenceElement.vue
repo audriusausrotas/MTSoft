@@ -68,7 +68,7 @@ const spaceEditable = computed(
       <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" disable="true" />
     </div>
 
-    <NuxtImg src="/icons/delete.svg" width="20" @click="deleteHandler"
+    <NuxtImg src="/icons/delete.svg" width="20" height="20" @click="deleteHandler"
       class="rounded-lg hover:bg-red-light hover:cursor-pointer" />
   </div>
 </template>
