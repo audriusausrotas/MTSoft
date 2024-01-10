@@ -11,8 +11,8 @@ interface Gate {
   color: string;
   filling: string;
   ready: boolean;
-  aditional: any[];
-  smallGates: any[];
+  aditional?: String[];
+  smallGates?: String[];
 }
 
 export const gateSchema = defineMongooseModel<Gate>(

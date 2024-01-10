@@ -18,10 +18,35 @@ interface Result {
   isNew: boolean;
 }
 
+interface Gate {
+  client: string;
+  phone: string;
+  address: string;
+  type: string;
+  auto: boolean;
+  width: number;
+  height: number;
+  color: string;
+  filling: string;
+  ready: boolean;
+  aditional?: String[];
+  smallGates?: String[];
+}
+
+interface Fences {
+  name: String;
+  color: String;
+  length: Number;
+  sq: Number;
+  material: String;
+  space: Number;
+  twoSided: Boolean;
+}
+
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
-    fences: [] as any[],
+    fences: [] as Fences[],
     poles: 0,
     gatePoles: 0,
     borders: 0,
@@ -33,7 +58,7 @@ export const useResultsStore = defineStore("results", {
     bindingsLength: 0,
     segments: 0,
     segmentHolders: 0,
-    gates: [] as any[],
+    gates: [] as Gate[],
     totalPrice: 0,
     totalCost: 0,
     totalProfit: 0,
@@ -156,7 +181,7 @@ export const useResultsStore = defineStore("results", {
     addSegmentHolders(data: number) {
       this.segmentHolders += data;
     },
-    addGates(data: number) {
+    addGates(data: Gate) {
       this.gates.push(data);
     },
 
