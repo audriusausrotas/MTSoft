@@ -9,6 +9,6 @@ const useAllProjects = useAllProjectsStore();
     <HomeProject v-for="project, index in useAllProjects.allProjects" :key="project._id" :index="index"
       :project="project" />
   </div>
-  <div>bla bla bla </div>
+  <div></div>
 </template>
 <style scoped></style>
