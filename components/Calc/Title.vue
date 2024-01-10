@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="ts">
 const emit = defineEmits(["onClick"]);
 const props = defineProps(["name", "open"]);
 </script>

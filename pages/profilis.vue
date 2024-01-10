@@ -1,12 +1,26 @@
-<script setup>
-import { useFetch } from "nuxt/app";
+<script setup lang="ts">
+
+interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
+}
+
+interface Response {
+  success: boolean;
+  data: User;
+  message: string
+}
 
 const useUser = useUserStore();
-
 const initials = computed(() => useUser.user?.username.slice(0, 2));
-const url = ref("");
-const newPassword = ref("");
-const password = ref("");
+const url = ref<string>('');
+const newPassword = ref<string>('');
+const password = ref<string>('');
 
 const saveHandler = async () => {
   const reqData = {
@@ -15,15 +29,16 @@ const saveHandler = async () => {
     password: password.value,
   };
 
-  const { data } = await useFetch("/api/profile", {
-    method: "post",
+  const { data }: { data: Response } = await $fetch('/api/profile', {
+    method: 'post',
     body: reqData,
   });
-  if (data.value.success) {
-    useUser.setUser(data.value.data);
-    password.value = "";
-    newPassword.value = "";
-    url.value = "";
+
+  if (data.success) {
+    useUser.setUser(data.data);
+    password.value = '';
+    newPassword.value = '';
+    url.value = '';
   }
 };
 </script>
@@ -33,27 +48,27 @@ const saveHandler = async () => {
     <div class="flex flex-col flex-1 gap-8">
       <div class="flex items-center gap-10">
         <div class="flex items-center justify-center overflow-hidden bg-gray-light rounded-xl h-60 w-60">
-          <NuxtImg v-if="useUser.user.photo" :src="useUser.user.photo" alt="Vartotojo nuotrauka"
+          <NuxtImg v-if="useUser.user?.photo" :src="useUser.user?.photo" alt="Vartotojo nuotrauka"
             class="object-cover object-center w-full h-full" width="48" height="48" />
           <h3 v-else class="text-3xl uppercase">{{ initials }}</h3>
         </div>
 
         <div class="flex flex-col gap-4 capitalize">
           <h3 class="text-4xl font-semibold">
-            {{ useUser.user.username }}
+            {{ useUser.user?.username }}
           </h3>
           <div>
-            <p v-if="useUser.user.admin">Vartotojo tipas:</p>
+            <p v-if="useUser.user?.admin">Vartotojo tipas:</p>
 
             <h5 class="font-semibold">
               {{
-                useUser.user.admin ? "administratorius" : "paprastas vartotojas"
+                useUser.user?.admin ? "administratorius" : "paprastas vartotojas"
               }}
             </h5>
           </div>
           <div>
             <h3>El. Paštas:</h3>
-            <h5 class="font-semibold normal-case">{{ useUser.user.email }}</h5>
+            <h5 class="font-semibold normal-case">{{ useUser.user?.email }}</h5>
           </div>
         </div>
       </div>
@@ -73,3 +88,4 @@ const saveHandler = async () => {
 </template>
 
 <style scoped></style>
+

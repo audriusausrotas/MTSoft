@@ -1,44 +1,5 @@
 import { defineStore } from "pinia";
 
-interface Product {
-  _id: String;
-  name: String;
-  price: String;
-  cost: String;
-  category: String;
-  image: String;
-}
-
-interface ApiResponse {
-  success: Boolean;
-  data: Product[];
-  message: String;
-}
-
-interface Product2 {
-  last_page: number;
-  data: Product[];
-}
-
-interface ApiResponse2 {
-  success: Boolean;
-  data: Product[];
-  message: String;
-  products: Product2;
-}
-
-interface ProductsState {
-  products: Product[];
-  fences: Product[];
-  poles: Product[];
-  borders: Product[];
-  crossbars: Product[];
-  holders: Product[];
-  gates: Product[];
-  other: Product[];
-  searchValue: string;
-}
-
 export const useProductsStore = defineStore("products", {
   state: (): ProductsState => ({
     products: [],
@@ -125,3 +86,42 @@ export const useProductsStore = defineStore("products", {
     },
   },
 });
+
+interface Product {
+  _id: string;
+  name: string;
+  price: string;
+  cost: string;
+  category: string;
+  image: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: Product[];
+  message: string;
+}
+
+interface Product2 {
+  last_page: number;
+  data: Product[];
+}
+
+interface ApiResponse2 {
+  success: boolean;
+  data: Product[];
+  message: string;
+  products: Product2;
+}
+
+interface ProductsState {
+  products: Product[];
+  fences: Product[];
+  poles: Product[];
+  borders: Product[];
+  crossbars: Product[];
+  holders: Product[];
+  gates: Product[];
+  other: Product[];
+  searchValue: string;
+}

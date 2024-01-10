@@ -1,10 +1,26 @@
-<script setup lang="js">
+<script setup lang="ts">
 
-const login = ref(true);
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const retypePassword = ref("");
+interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
+}
+
+interface Response {
+  success: boolean;
+  data: User;
+  message: string
+}
+
+const login = ref<boolean>(true);
+const username = ref<string>("");
+const email = ref<string>("");
+const password = ref<string>("");
+const retypePassword = ref<string>("");
 
 const useUser = useUserStore();
 
@@ -12,45 +28,45 @@ const loginHandler = async () => {
 
   const loginData = { email: email.value, password: password.value };
 
-  const { data } = await useFetch("/api/login", {
+  const { data }: { data: Response } = await $fetch("/api/login", {
     method: "post",
     body: loginData
   });
 
-  if (data.value.success) {
-    useUser.setUser(data.value.data)
+  if (data.success) {
+    useUser.setUser(data.data)
     clearFields();
     await navigateTo('/')
-  } 
+  }
 };
 
 const registerHandler = async () => {
 
-  const loginData = { email: email.value, password: password.value, retypePassword:retypePassword.value, username: username.value };
+  const loginData = { email: email.value, password: password.value, retypePassword: retypePassword.value, username: username.value };
 
-  const { data } = await useFetch("/api/register", {
+  const { data }: { data: Response } = await $fetch("/api/register", {
     method: "post",
     body: loginData
   });
 
-  if (data.value.success) {
+  if (data.success) {
     clearFields();
     changeLogin()
-  } 
-  };
+  }
+};
 
-  const changeLogin = () => {
-    clearFields();
-    login.value = !login.value;
-  };
+const changeLogin = () => {
+  clearFields();
+  login.value = !login.value;
+};
 
-  const clearFields = () => {
+const clearFields = () => {
   email.value = "";
   password.value = "";
   retypePassword.value = "";
   username.value = "";
 };
-console.log(useUser.user)
+
 </script>
 
 <template>
@@ -59,52 +75,28 @@ console.log(useUser.user)
       <h3 v-if="login" class="text-2xl">Prisijungti</h3>
       <h3 v-else class="text-2xl">Registruotis</h3>
 
-      <BaseInput
-        v-if="!login"
-        :name="username"
-        @onChange="(v) => (username = v)"
-        placeholder="Vardas"
-        label="Vartotojo vardas"
-      />
+      <BaseInput v-if="!login" :name="username" @onChange="(v) => (username = v)" placeholder="Vardas"
+        label="Vartotojo vardas" />
 
-      <BaseInput
-        :name="email"
-        @onChange="(v) => (email = v)"
-        placeholder="pavyzdys@gmail.com"
-        label="Elektroninis paštas"
-      />
+      <BaseInput :name="email" @onChange="(v) => (email = v)" placeholder="pavyzdys@gmail.com"
+        label="Elektroninis paštas" />
 
-      <BaseInput
-        :name="password"
-        @onChange="(v) => (password = v)"
-        placeholder="Slaptažodis"
-        label="Slaptažodis"
-        type="password"
-      />
-      <BaseInput
-        :name="retypePassword"
-        @onChange="(v) => (retypePassword = v)"
-        v-if="!login"
-        placeholder="Slaptažodis"
-        label="Slaptažodio patvirtinimas"
-        type="password"
-      />
+      <BaseInput :name="password" @onChange="(v) => (password = v)" placeholder="Slaptažodis" label="Slaptažodis"
+        type="password" />
+      <BaseInput :name="retypePassword" @onChange="(v) => (retypePassword = v)" v-if="!login" placeholder="Slaptažodis"
+        label="Slaptažodio patvirtinimas" type="password" />
 
       <BaseButton v-if="login" name="login" @click="loginHandler" />
       <BaseButton v-else name="register" @click="registerHandler" />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Registruokis</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Registruokis</span>
       </p>
 
       <p v-else class="self-center mt-4">
         Turi paskyrą?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Prisijunk</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Prisijunk</span>
       </p>
 
     </div>

@@ -1,12 +1,12 @@
-<script setup lang="js">
+<script setup lang="ts">
 
 const props = defineProps(['fence', 'index']);
 
 const useProject = useProjectStore();
 
-const open = ref(true);
+const open = ref<boolean>(true);
 
-const deleteHandler = () => {
+const deleteHandler = (): void => {
   useProject.deleteFence(props.fence.id);
 };
 </script>

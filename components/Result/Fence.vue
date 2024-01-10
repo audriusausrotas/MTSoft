@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="ts">
 // import calculateResults from '~/utils/calculateResults';
 const results = useResultsStore();
 

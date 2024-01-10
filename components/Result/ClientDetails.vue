@@ -10,7 +10,7 @@ const useUser = useUserStore()
 const saveHandler = async (): Promise<void> => {
 
   const newProject = {
-    creator: useUser.user.username,
+    creator: useUser.user?.username,
     client: useProject.client,
     fenceMeasures: useProject.fences,
     results: useResults.results,

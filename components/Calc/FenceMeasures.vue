@@ -1,17 +1,32 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps(["index"]);
 const useProject = useProjectStore();
 
-const open = ref(false);
-const totalLength = ref("");
+interface Measure {
+  length: number;
+  height: number;
+  MeasureSpace: number;
+  gates: boolean;
+  kampas: {
+    exist: boolean;
+    value: string;
+  };
+  laiptas: {
+    exist: boolean;
+    value: string;
+  };
+}
 
-const cancelHandler = () => {
+const open = ref<boolean>(false);
+const totalLength = ref<number>(0);
+
+const cancelHandler = (): void => {
   open.value = false;
-  totalLength.value = "";
+  totalLength.value = 0;
 };
 
 const calculateLengthHandler = () => {
-  const totalMeasures = [];
+  const totalMeasures: number[] = [];
   if (totalLength.value > 0) {
     const measures = Math.floor(+totalLength.value / 250);
     const modula = +totalLength.value % 250;
@@ -38,18 +53,18 @@ const calculateLengthHandler = () => {
   checkCalculations();
 
   totalMeasures.forEach((item) => {
-    let lastElement =
+    let lastElement: Measure =
       useProject.fences[props.index].measures[
       useProject.fences[props.index].measures.length - 1
       ];
 
     if (!lastElement) {
       useProject.addMeasure(props.index);
-      lastElement = 0;
+      lastElement = useProject.fences[props.index].measures[0];
     }
 
     if (
-      (lastElement.length !== null && lastElement.length !== "") ||
+      (lastElement.length !== null) || // jei neveiks, nuimtas sitas del typescript: && !lastElement.length !== ""
       lastElement.kampas.exist ||
       lastElement.laiptas.exist
     ) {
@@ -63,15 +78,15 @@ const calculateLengthHandler = () => {
   });
 
   open.value = false;
-  totalLength.value = "";
+  totalLength.value = 0;
 };
 
 watch(
   () => useProject.fences[props.index].measures,
   (newMeasures, oldMeasures) => {
-    let totalM = 0;
-    let totalSQ = 0;
-    newMeasures.forEach((item) => {
+    let totalM: number = 0;
+    let totalSQ: number = 0;
+    newMeasures.forEach((item: Measure) => {
       totalM += +item.length;
       totalSQ += item.length * item.height;
     });
@@ -129,7 +144,7 @@ watch(
         <p class="m-auto">{{ measureIndex + 1 }}</p>
 
         <BaseInput width="w-24" placeholder="Ilgis" type="number" variant="light" :name="measure.length"
-          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value) =>
+          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value: number): void =>
             useProject.updateMeasureLength({
               index: props.index,
               value,
@@ -138,7 +153,7 @@ watch(
             " :active="true" />
 
         <BaseInput width="w-24" placeholder="Aukštis" type="number" variant="light" :name="measure.height"
-          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value) =>
+          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value: number): void =>
             useProject.updateMeasureHeight({
               index: props.index,
               value,
@@ -146,7 +161,7 @@ watch(
             })
             " />
 
-        <BaseCheckField class="m-auto" @onChange="(value) =>
+        <BaseCheckField class="m-auto" @onChange="(value: boolean): void =>
           useProject.updateMeasureGate({
             index: props.index,
             value,
@@ -165,7 +180,7 @@ watch(
       <div v-else-if="measure.kampas.exist" class="grid items-center gap-2 custom-grid">
         <p class="m-auto">{{ measureIndex + 1 }}</p>
         <p>Kampas</p>
-        <BaseInput width="w-24" placeholder="Laipsnis" type="number" :name="measure.kampas.value" @onChange="(value) =>
+        <BaseInput width="w-24" placeholder="Laipsnis" type="number" :name="measure.kampas.value" @onChange="(value: string): void =>
           useProject.updateMeasureKampas({
             index: props.index,
             value,
@@ -184,7 +199,7 @@ watch(
       <div v-else-if="measure.laiptas.exist" class="grid items-center gap-2 custom-grid">
         <p class="m-auto">{{ measureIndex + 1 }}</p>
         <p>Laiptas</p>
-        <BaseInput width="w-24" placeholder="Aukštis" type="number" :name="measure.laiptas.value" @onChange="(value) =>
+        <BaseInput width="w-24" placeholder="Aukštis" type="number" :name="measure.laiptas.value" @onChange="(value: string): void =>
           useProject.updateMeasureLaiptas({
             index: props.index,
             value,

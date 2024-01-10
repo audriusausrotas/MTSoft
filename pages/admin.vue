@@ -1,31 +1,60 @@
-<script setup lang="js">
+<script setup lang="ts">
+
+interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
+}
+
+interface Response {
+  success: boolean;
+  data: User;
+  message: string
+}
+interface ResponseArr {
+  success: boolean;
+  data: User[];
+  message: string
+}
+interface ResponseStr {
+  success: boolean;
+  data: string;
+  message: string
+}
 
 const useUser = useUserStore();
-const password = ref < string > ("");
-const modalOpen = ref < boolean > (false);
+const password = ref<string>("");
+const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
 
 if (useUser.users.length === 0) {
-  const data = await useFetch("/api/users");
-  useUser.setAllUsers(data.data.value.data);
+  const data: ResponseArr = await $fetch("/api/users");
+  useUser.setAllUsers(data.data);
 }
 
-const userChangesHandler = async (id, type) => {
+const userChangesHandler = async (id: string, type: string) => {
 
   const postData = { userId: id, changeType: type, password: password.value };
 
-  const { data } = await useFetch("/api/userChanges", {
+  const { data }: { data: string | User } = await $fetch("/api/userChanges", {
     method: "post",
     body: postData
   });
 
-  if (data.value.success) {
-    if (type !== "delete") {
-      useUser.updateUser(data.value.data);
+  if (type !== "delete") {
+
+    if (typeof data !== 'string') {
+      const userData = data as User;
+      useUser.updateUser(userData);
     }
-    else {
+  } else {
+    if (typeof data === 'string') {
       modalOpen.value = false;
-      useUser.deleteUser(data.value.data);
+      useUser.deleteUser(data);
       password.value = "";
       selectedUser.value = "";
     }
@@ -38,7 +67,7 @@ const confirmHandler = () => {
   }
 };
 
-const deleteHandler = (id) => {
+const deleteHandler = (id: string) => {
   selectedUser.value = id;
   modalOpen.value = true;
 };

@@ -1,14 +1,14 @@
-<script setup lang="js">
+<script setup lang="ts">
 const props = defineProps(["placeholder", "label", "type", "name", "width", "active", "variant", "disable"]);
 const emit = defineEmits(["onChange", "EnterPressed"]);
 
-const emitUpdate = (value) => {
+const emitUpdate = (value: string): void => {
   emit("onChange", value);
 };
 
-const inputRef = ref(null);
+const inputRef = ref<HTMLInputElement | null>(null);
 
-const handleEnterKey = () => {
+const handleEnterKey = (): void => {
   emit("EnterPressed");
 };
 
@@ -33,7 +33,7 @@ onMounted(() => {
       <slot />
       <input :value="props.name" :placeholder="props.placeholder" :id="props.label"
         :type="props.type ? props.type : 'text'" :disabled="props.disable || false"
-        @input="emitUpdate($event.target.value)" @keyup.enter="handleEnterKey" ref="inputRef"
+        @input="emitUpdate(($event.target as HTMLInputElement)?.value)" @keyup.enter="handleEnterKey" ref="inputRef"
         class="w-full h-full overflow-scroll border-0 outline-none active:outline-none bg-inherit active:border-0" />
     </div>
   </div>

@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
   const user = new userSchema({
     username,
     email,
-    password: await bcrypt.hash(password, +process.env.SALT),
+    password: await bcrypt.hash(password, +process.env.SALT! as number),
   });
 
   const data = await user.save();

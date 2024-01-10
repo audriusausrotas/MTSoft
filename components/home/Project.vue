@@ -3,7 +3,7 @@ import { useAllProjectsStore } from '../../store/allProjects';
 
 interface Response {
     success: boolean;
-    data: any,
+    data: string,
     message: string
 }
 
