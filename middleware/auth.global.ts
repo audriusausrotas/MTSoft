@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
 
     if (!useUser.user) {
-      const { data } = await useFetch("/api/auth", {
+      const { data }: any = await useFetch("/api/auth", {
         method: "post",
         body: {},
       });
@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (process.server) {
     if (cookie.value) {
-      const { data } = await useFetch("/api/auth", {
+      const { data }: any = await useFetch("/api/auth", {
         method: "post",
         body: {},
       });
