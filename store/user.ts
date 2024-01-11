@@ -1,14 +1,5 @@
 import { useCookie } from "nuxt/app";
-
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}
+import type { User } from "~/data/interfaces";
 
 export const useUserStore = defineStore("user", {
   state: () => ({

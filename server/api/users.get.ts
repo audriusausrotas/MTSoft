@@ -1,4 +1,5 @@
 import { userSchema } from "../models/userSchema";
+import type { User } from "~/data/interfaces";
 
 export default defineEventHandler(async (event: any) => {
   const data: User[] = await userSchema.find();
@@ -13,13 +14,3 @@ export default defineEventHandler(async (event: any) => {
 
   return { success: true, data: updatedData, message: "" };
 });
-
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}

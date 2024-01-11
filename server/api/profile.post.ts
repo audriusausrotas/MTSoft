@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   if (url.trim() !== "") data.photo = url;
 
   if (password.trim() !== "") {
-    data.password = await bcrypt.hash(password, +process.env.SALT);
+    data.password = await bcrypt.hash(password, +process.env.SALT!);
   }
 
   const newData = await data.save();

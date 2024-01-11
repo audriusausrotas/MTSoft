@@ -1,20 +1,5 @@
 <script setup lang="ts">
-
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}
-
-interface Response {
-  success: boolean;
-  data: User;
-  message: string
-}
+import type { ResponseUser } from "~/data/interfaces";
 
 const useUser = useUserStore();
 const initials = computed(() => useUser.user?.username.slice(0, 2));
@@ -29,7 +14,7 @@ const saveHandler = async () => {
     password: password.value,
   };
 
-  const { data }: { data: Response } = await $fetch('/api/profile', {
+  const { data }: { data: ResponseUser } = await $fetch('/api/profile', {
     method: 'post',
     body: reqData,
   });

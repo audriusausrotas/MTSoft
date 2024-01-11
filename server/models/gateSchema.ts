@@ -1,19 +1,5 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
-
-interface Gate {
-  client: string;
-  phone: string;
-  address: string;
-  type: string;
-  auto: boolean;
-  width: number;
-  height: number;
-  color: string;
-  filling: string;
-  ready: boolean;
-  aditional?: String[];
-  smallGates?: String[];
-}
+import type { Gate } from "~/data/interfaces";
 
 export const gateSchema = defineMongooseModel<Gate>(
   "gateSchema",

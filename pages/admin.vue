@@ -1,30 +1,5 @@
 <script setup lang="ts">
-
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}
-
-interface Response {
-  success: boolean;
-  data: User;
-  message: string
-}
-interface ResponseArr {
-  success: boolean;
-  data: User[];
-  message: string
-}
-interface ResponseStr {
-  success: boolean;
-  data: string;
-  message: string
-}
+import type { ResponseUsers, User } from "~/data/interfaces";
 
 const useUser = useUserStore();
 const password = ref<string>("");
@@ -32,7 +7,7 @@ const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
 
 if (useUser.users.length === 0) {
-  const data: ResponseArr = await $fetch("/api/users");
+  const data: ResponseUsers = await $fetch("/api/users");
   useUser.setAllUsers(data.data);
 }
 
@@ -108,7 +83,8 @@ const deleteHandler = (id: string) => {
       <div class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl">
         <div class="flex flex-col items-center gap-8">
           <p>Įveskite slaptaždodį norėdami ištrinti vartotoją</p>
-          <BaseInput placeholder="Slaptažodis" :name="password" type="password" @update:name="(v) => (password = v)" />
+          <BaseInput placeholder="Slaptažodis" :name="password" type="password"
+            @update:name="(v: string) => (password = v)" />
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />

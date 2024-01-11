@@ -1,13 +1,5 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
-
-interface User {
-  email: string;
-  password: string;
-  username: string;
-  verified?: boolean;
-  admin: boolean;
-  photo: string;
-}
+import type { User } from "~/data/interfaces";
 
 export const userSchema = defineMongooseModel<User>(
   "userSchema",

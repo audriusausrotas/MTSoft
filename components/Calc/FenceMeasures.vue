@@ -1,21 +1,7 @@
 <script setup lang="ts">
+import type { Measure } from "~/data/interfaces";
 const props = defineProps(["index"]);
 const useProject = useProjectStore();
-
-interface Measure {
-  length: number;
-  height: number;
-  MeasureSpace: number;
-  gates: boolean;
-  kampas: {
-    exist: boolean;
-    value: string;
-  };
-  laiptas: {
-    exist: boolean;
-    value: string;
-  };
-}
 
 const open = ref<boolean>(false);
 const totalLength = ref<number>(0);
@@ -64,7 +50,7 @@ const calculateLengthHandler = () => {
     }
 
     if (
-      (lastElement.length !== null) || // jei neveiks, nuimtas sitas del typescript: && !lastElement.length !== ""
+      lastElement.length !== 0 ||
       lastElement.kampas.exist ||
       lastElement.laiptas.exist
     ) {
@@ -87,8 +73,8 @@ watch(
     let totalM: number = 0;
     let totalSQ: number = 0;
     newMeasures.forEach((item: Measure) => {
-      totalM += +item.length;
-      totalSQ += item.length * item.height;
+      totalM += +item.length!;
+      totalSQ += item.length! * item.height!;
     });
     useProject.updateTotalLength({ index: props.index, value: totalM / 100 });
     useProject.updateTotalSQ({ index: props.index, value: totalSQ / 10000 });

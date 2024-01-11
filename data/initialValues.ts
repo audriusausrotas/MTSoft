@@ -1,29 +1,13 @@
-export const clientInitialValue: {
-  username: string;
-  address: string;
-  phone: string;
-  email: string;
-} = {
+import type { Client, Measure, Result, MenuLinks } from "~/data/interfaces";
+
+export const clientInitialValue: Client = {
   username: "",
   address: "",
   phone: "",
   email: "",
 };
 
-export const initialMeasure: {
-  length: number;
-  height: number;
-  MeasureSpace: number;
-  gates: boolean;
-  kampas: {
-    exist: boolean;
-    value: string;
-  };
-  laiptas: {
-    exist: boolean;
-    value: string;
-  };
-} = {
+export const initialMeasure: Measure = {
   length: 0,
   height: 0,
   MeasureSpace: 0,
@@ -38,21 +22,7 @@ export const initialMeasure: {
   },
 };
 
-export const initialResultData: {
-  id: string;
-  name: string;
-  quantity: number;
-  color: string;
-  space: number;
-  price: number;
-  totalPrice: number;
-  cost: number;
-  totalCost: number;
-  profit: number;
-  margin: number;
-  isNew: boolean;
-  category: string;
-} = {
+export const initialResultData: Result = {
   id: "",
   name: "",
   quantity: 0,
@@ -67,3 +37,14 @@ export const initialResultData: {
   isNew: false,
   category: "",
 };
+
+export const menuLinks: MenuLinks[] = [
+  { name: "Projektai", link: "/", iconPath: "/icons/projects.svg" },
+  {
+    name: "Skaičiuoklė",
+    link: "/skaiciuokle",
+    iconPath: "/icons/calculations.svg",
+  },
+  { name: "Sąmata", link: "/samata", iconPath: "/icons/projects.svg" },
+  { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
+];

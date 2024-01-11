@@ -1,14 +1,7 @@
+import type { User } from "~/data/interfaces";
+
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
-
-  interface User {
-    email: string;
-    password: string;
-    username: string;
-    verified?: boolean;
-    admin: boolean;
-    photo: string;
-  }
 
   if (!_id)
     return {

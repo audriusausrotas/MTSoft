@@ -1,22 +1,7 @@
 <script setup lang="ts">
 import { useProductsStore } from '~/store/products';
 import { categories } from '~/data/selectFieldData';
-
-interface Response {
-  success: boolean;
-  data: Product;
-  message: string
-}
-
-
-interface Product {
-  _id: string;
-  name: string;
-  price: string;
-  cost: string;
-  category: string;
-  image: string;
-}
+import type { ResponseProduct } from "~/data/interfaces";
 
 const useProducts = useProductsStore();
 const open = ref<boolean>(false);
@@ -30,7 +15,7 @@ const saveHandler = async (): Promise<void> => {
 
   const newProduct = { name: newName.value, price: newPrice.value, cost: newCost.value, category: newCategory.value };
 
-  const data: Response = await $fetch("/api/product", {
+  const data: ResponseProduct = await $fetch("/api/product", {
     method: "post",
     body: newProduct,
   });

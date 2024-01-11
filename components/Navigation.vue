@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-const menuLinks = [{ name: "Projektai", link: "/", iconPath: "/icons/projects.svg" }, { name: "Skaičiuoklė", link: "/skaiciuokle", iconPath: "/icons/calculations.svg" }, { name: "Sąmata", link: "/samata", iconPath: "/icons/projects.svg" }, { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },];
+import { menuLinks } from "~/data/initialValues"
 
 const route = useRoute();
 const useUser = useUserStore();

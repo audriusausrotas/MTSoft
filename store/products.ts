@@ -1,4 +1,9 @@
 import { defineStore } from "pinia";
+import type {
+  Product,
+  ProductsState,
+  ResponseProducts,
+} from "~/data/interfaces";
 
 export const useProductsStore = defineStore("products", {
   state: (): ProductsState => ({
@@ -14,13 +19,14 @@ export const useProductsStore = defineStore("products", {
   }),
 
   actions: {
+    // fetch from website
     async fetchProductsFromWebsite(): Promise<void> {
       try {
         let currentPage = 1;
         let totalPages = 1;
         let allProducts: Product[] = [];
         while (currentPage <= totalPages) {
-          const response: ApiResponse2 = await $fetch(
+          const response: any = await $fetch(
             `https://modernitvora.lt/api/api/public/products?page=${currentPage}`
           );
           const { data, last_page } = response.products;
@@ -34,8 +40,9 @@ export const useProductsStore = defineStore("products", {
       }
     },
 
+    // fetch from database
     async fetchProducts(): Promise<void> {
-      const response: ApiResponse = await $fetch("/api/products");
+      const response: ResponseProducts = await $fetch("/api/products");
       const { data } = response;
       this.products = [...data];
       data.forEach((item) => {
@@ -75,53 +82,18 @@ export const useProductsStore = defineStore("products", {
   },
 
   getters: {
-    updateProduct: (store) => (data: Product): void => {
-      store.products = store.products.map((item) =>
-        item._id === data._id ? data : item
-      );
-    },
+    updateProduct:
+      (store) =>
+      (data: Product): void => {
+        store.products = store.products.map((item) =>
+          item._id === data._id ? data : item
+        );
+      },
 
-    deleteProduct: (store) => (_id: string): void => {
-      store.products = store.products.filter((item) => item._id !== _id);
-    },
+    deleteProduct:
+      (store) =>
+      (_id: string): void => {
+        store.products = store.products.filter((item) => item._id !== _id);
+      },
   },
 });
-
-interface Product {
-  _id: string;
-  name: string;
-  price: string;
-  cost: string;
-  category: string;
-  image: string;
-}
-
-interface ApiResponse {
-  success: boolean;
-  data: Product[];
-  message: string;
-}
-
-interface Product2 {
-  last_page: number;
-  data: Product[];
-}
-
-interface ApiResponse2 {
-  success: boolean;
-  data: Product[];
-  message: string;
-  products: Product2;
-}
-
-interface ProductsState {
-  products: Product[];
-  fences: Product[];
-  poles: Product[];
-  borders: Product[];
-  crossbars: Product[];
-  holders: Product[];
-  gates: Product[];
-  other: Product[];
-  searchValue: string;
-}

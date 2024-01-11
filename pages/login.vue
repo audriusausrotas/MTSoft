@@ -1,20 +1,6 @@
 <script setup lang="ts">
+import type { ResponseUser } from "~/data/interfaces";
 
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}
-
-interface Response {
-  success: boolean;
-  data: User;
-  message: string
-}
 
 const login = ref<boolean>(true);
 const username = ref<string>("");
@@ -25,10 +11,8 @@ const retypePassword = ref<string>("");
 const useUser = useUserStore();
 
 const loginHandler = async () => {
-
   const loginData = { email: email.value, password: password.value };
-
-  const { data }: { data: Response } = await $fetch("/api/login", {
+  const { data }: { data: ResponseUser } = await $fetch("/api/login", {
     method: "post",
     body: loginData
   });
@@ -44,7 +28,7 @@ const registerHandler = async () => {
 
   const loginData = { email: email.value, password: password.value, retypePassword: retypePassword.value, username: username.value };
 
-  const { data }: { data: Response } = await $fetch("/api/register", {
+  const { data }: { data: ResponseUser } = await $fetch("/api/register", {
     method: "post",
     body: loginData
   });
@@ -66,7 +50,6 @@ const clearFields = () => {
   retypePassword.value = "";
   username.value = "";
 };
-
 </script>
 
 <template>

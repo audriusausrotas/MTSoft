@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useProjectStore } from '../../store/project';
-import { useResultsStore } from '../../store/results';
-import { useUserStore } from "../../store/user"
+import { useProjectStore } from '~/store/project';
+import { useResultsStore } from '~/store/results';
+import { useUserStore } from "~/store/user"
+import type { ResponseProject } from "~/data/interfaces"
 
 const useProject = useProjectStore();
 const useResults = useResultsStore();
@@ -35,14 +36,16 @@ const saveHandler = async (): Promise<void> => {
     }
   };
 
-  const data = await $fetch("/api/saveProject", {
+  const data: ResponseProject = await $fetch("/api/saveProject", {
     method: "post",
     body: newProject,
   })
-  console.log(data)
-};
-</script>
+  if (data.success) {
 
+  }
+};
+
+</script>
 <template>
   <div class="flex flex-wrap overflow-hidden border rounded-lg">
     <div class="flex-1">

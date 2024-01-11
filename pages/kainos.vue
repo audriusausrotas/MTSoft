@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useProductsStore } from "~/store/products";
+
 const useProducts = useProductsStore();
 </script>
 <template>

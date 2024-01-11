@@ -1,39 +1,7 @@
 <script setup lang="ts">
 import { useProductsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
-
-
-interface User {
-  _id: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
-}
-
-interface Response {
-  success: boolean;
-  data: User;
-  message: string
-}
-
-interface Response2 {
-  success: boolean;
-  data: Product;
-  message: string
-}
-
-
-interface Product {
-  _id: string;
-  name: string;
-  price: string;
-  cost: string;
-  category: string;
-  image: string;
-}
+import type { ResponseUser, ResponseProduct } from "~/data/interfaces";
 
 const props = defineProps(["product", "index"]);
 const useProducts = useProductsStore();
@@ -49,7 +17,7 @@ const editHandler = (): void => {
 };
 
 const deleteHandler = async (): Promise<void> => {
-  const data: Response = await $fetch("/api/product", {
+  const data: ResponseUser = await $fetch("/api/product", {
     method: "delete",
     body: { _id: props.product._id }
   });
@@ -66,7 +34,7 @@ const saveHandler = async (): Promise<void> => {
 
   const newData = { _id: props.product._id, name: productName.value, price: productPrice.value, cost: productCost.value, category: productCategory.value };
 
-  const data: Response2 = await $fetch("/api/product", {
+  const data: ResponseProduct = await $fetch("/api/product", {
     method: "patch",
     body: newData
   });

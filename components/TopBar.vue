@@ -20,7 +20,7 @@ watchEffect(() => {
   }
 });
 
-function logoutHandler() {
+function logoutHandler(): void {
   useUser.logout();
   router.replace("/login");
 }

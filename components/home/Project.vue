@@ -1,11 +1,6 @@
 <script setup lang='ts'>
 import { useAllProjectsStore } from '../../store/allProjects';
-
-interface Response {
-    success: boolean;
-    data: string,
-    message: string
-}
+import type { Response } from "~/data/interfaces";
 
 const props = defineProps(["project", "index"]);
 const useAllProjects = useAllProjectsStore()
@@ -19,8 +14,6 @@ const deleteHandler = async (): Promise<void> => {
         useAllProjects.deleteProject(props.project._id);
     };
 }
-
-
 </script>
  
 <template>
