@@ -2,47 +2,6 @@ import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
 
-interface Result {
-  id: string;
-  name: string;
-  price: number;
-  cost: number;
-  category: string;
-  quantity: number;
-  space: number;
-  color: string;
-  totalPrice: number;
-  totalCost: number;
-  profit: number;
-  margin: number;
-  isNew: boolean;
-}
-
-interface Gate {
-  client: string;
-  phone: string;
-  address: string;
-  type: string;
-  auto: boolean;
-  width: number;
-  height: number;
-  color: string;
-  filling: string;
-  ready: boolean;
-  aditional?: String[];
-  smallGates?: String[];
-}
-
-interface Fences {
-  name: String;
-  color: String;
-  length: Number;
-  sq: Number;
-  material: String;
-  space: Number;
-  twoSided: Boolean;
-}
-
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
@@ -233,3 +192,44 @@ export const useResultsStore = defineStore("results", {
 
   getters: {},
 });
+
+interface Result {
+  id: string;
+  name: string;
+  price: number;
+  cost: number;
+  category: string;
+  quantity: number;
+  space: number;
+  color: string;
+  totalPrice: number;
+  totalCost: number;
+  profit: number;
+  margin: number;
+  isNew: boolean;
+}
+
+interface Gate {
+  client: string;
+  phone: string;
+  address: string;
+  type: string;
+  auto: boolean;
+  width: number;
+  height: number;
+  color: string;
+  filling: string;
+  ready: boolean;
+  aditional?: String[];
+  smallGates?: String[];
+}
+
+interface Fences {
+  name: string;
+  color: string;
+  length: number;
+  sq: number;
+  material: string;
+  space: number;
+  twoSided: boolean;
+}

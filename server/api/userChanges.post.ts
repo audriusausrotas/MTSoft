@@ -1,12 +1,12 @@
 import { userSchema } from "../models/userSchema";
 import bcrypt from "bcrypt";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event: any) => {
   const { _id, password, userId, changeType } = await readBody(event);
 
-  const data = await userSchema.findById(_id);
+  const data: User | null = await userSchema.findById(_id);
 
-  if (!data.admin)
+  if (!data?.admin)
     return {
       success: false,
       data: null,
@@ -20,22 +20,17 @@ export default defineEventHandler(async (event) => {
       message: "Vartotojas nerastas",
     };
 
-  const selectedUser = await userSchema.findById(userId);
+  const selectedUser: any = await userSchema.findById(userId);
 
-  if (changeType === "admin") {
-    selectedUser.admin = !selectedUser.admin;
-
-    const newUser = await selectedUser.save();
-
-    newUser.password = "";
-
+  if (!selectedUser)
     return {
-      success: true,
-      data: newUser,
-      message: "Pakeitimai atlikti",
+      success: false,
+      data: null,
+      message: "Pasirinktas vartotojas nerastas",
     };
-  } else if (changeType === "verify") {
-    selectedUser.verified = !selectedUser.verified;
+
+  if (changeType === "admin" || changeType === "verify") {
+    selectedUser[changeType] = !selectedUser[changeType];
 
     const newUser = await selectedUser.save();
 
@@ -47,7 +42,9 @@ export default defineEventHandler(async (event) => {
       message: "Pakeitimai atlikti",
     };
   } else if (changeType === "delete") {
-    if (await bcrypt.compare(password, data.password)) {
+    const isPasswordValid = await bcrypt.compare(password, data.password);
+
+    if (isPasswordValid) {
       await userSchema.findByIdAndDelete(userId);
 
       return {
@@ -56,7 +53,11 @@ export default defineEventHandler(async (event) => {
         message: "Pakeitimai atlikti",
       };
     } else {
-      return { success: false, data: null, message: "Klaidingas slaptažodis" };
+      return {
+        success: false,
+        data: null,
+        message: "Klaidingas slaptažodis",
+      };
     }
   } else {
     return {
@@ -66,3 +67,13 @@ export default defineEventHandler(async (event) => {
     };
   }
 });
+
+interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
+}

@@ -1,11 +1,25 @@
-<script setup lang="js">
+<script setup lang="ts">
 const props = defineProps(["width", "data", "name", "index", "label"]);
 const emit = defineEmits(["onClick", "onChange"]);
-const inputRef = ref(null);
-const filteredData = reactive([]);
-const open = ref(false);
+const inputRef = ref<HTMLInputElement | null>(null);
+const filteredData = reactive<any>([]);
+const open = ref<boolean>(false);
 
-const emitUpdate = (value) => {
+interface Product {
+  id: string;
+  name: string;
+  price: string;
+  cost: string;
+  category: string;
+  image: string;
+}
+
+
+
+
+
+
+const emitUpdate = (value: string): void => {
   if (value.length === 0) {
     filteredData.value = [];
     open.value = false;
@@ -16,7 +30,7 @@ const emitUpdate = (value) => {
   filteredItems(props.name);
 };
 
-const emitClick = (value) => {
+const emitClick = (value: Product): void => {
   emit("onClick", value);
   open.value = false;
 };
@@ -27,9 +41,9 @@ onMounted(() => {
   }
 });
 
-const filteredItems = (value) => {
+const filteredItems = (value: string): void => {
   const regex = new RegExp(value, "i");
-  filteredData.value = [...props.data.filter((item) => regex.test(item.name))];
+  filteredData.value = [...props.data.filter((item: Product) => regex.test(item.name))];
 };
 </script>
 
@@ -40,7 +54,7 @@ const filteredItems = (value) => {
     }}</label>
     <input class="h-10 px-4 overflow-auto bg-white border rounded-lg shadow-sm outline-none border-dark-light"
       :id="props.label" :class="props.width ? props.width : 'w-60'" placeholder="Pavadinimas" :value="props.name"
-      @input="emitUpdate($event.target.value)" ref="inputRef" />
+      @input="emitUpdate(($event.target as HTMLInputElement)?.value)" ref="inputRef" />
     <ul v-if="open"
       class="absolute left-0 z-50 flex flex-col overflow-auto bg-white border divide-y rounded-lg shadow-sm top-14 border-dark-light max-h-80">
       <li v-for="item in filteredData.value" :key="item.id" @click="emitClick(item)"

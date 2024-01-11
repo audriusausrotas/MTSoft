@@ -11,9 +11,9 @@ export const clientInitialValue: {
 };
 
 export const initialMeasure: {
-  length: number | null;
-  height: number | null;
-  MeasureSpace: number | null;
+  length: number;
+  height: number;
+  MeasureSpace: number;
   gates: boolean;
   kampas: {
     exist: boolean;
@@ -24,9 +24,9 @@ export const initialMeasure: {
     value: string;
   };
 } = {
-  length: null,
-  height: null,
-  MeasureSpace: null,
+  length: 0,
+  height: 0,
+  MeasureSpace: 0,
   gates: false,
   kampas: {
     exist: false,

@@ -2,53 +2,8 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { clientInitialValue, initialMeasure } from "../data/initialValues";
 
-interface Client {
-  address: string;
-  username: string;
-  phone: string;
-  email: string;
-}
-
-interface Measure {
-  length: number | null;
-  height: number | null;
-  MeasureSpace: number | null;
-  gates: boolean;
-  kampas: {
-    exist: boolean;
-    value: string;
-  };
-  laiptas: {
-    exist: boolean;
-    value: string;
-  };
-}
-
-interface Fence {
-  id: string;
-  side: string;
-  type: string;
-  color: string;
-  material: string;
-  montavimas: boolean;
-  borteliai: boolean;
-  stulpai: boolean;
-  tikMontavimas: boolean;
-  twoSided: boolean;
-  space: number;
-  elements: number;
-  totalLength: number;
-  totalSQ: number;
-  measures: Measure[];
-}
-
-interface ProjectState {
-  client: Client;
-  fences: Fence[];
-}
-
 export const useProjectStore = defineStore("project", {
-  state: (): ProjectState => ({
+  state: (): Project => ({
     client: { ...clientInitialValue },
     fences: [],
   }),
@@ -254,7 +209,6 @@ export const useProjectStore = defineStore("project", {
     deleteMeasure: (state) => (data: {
       index: number;
       measureIndex: number;
-      value: boolean;
     }): void => {
       state.fences[data.index].measures = state.fences[
         data.index
@@ -270,3 +224,48 @@ export const useProjectStore = defineStore("project", {
     },
   },
 });
+
+interface Client {
+  address: string;
+  username: string;
+  phone: string;
+  email: string;
+}
+
+interface Measure {
+  length: number;
+  height: number;
+  MeasureSpace: number;
+  gates: boolean;
+  kampas: {
+    exist: boolean;
+    value: string;
+  };
+  laiptas: {
+    exist: boolean;
+    value: string;
+  };
+}
+
+interface Fence {
+  id: string;
+  side: string;
+  type: string;
+  color: string;
+  material: string;
+  montavimas: boolean;
+  borteliai: boolean;
+  stulpai: boolean;
+  tikMontavimas: boolean;
+  twoSided: boolean;
+  space: number;
+  elements: number;
+  totalLength: number;
+  totalSQ: number;
+  measures: Measure[];
+}
+
+interface Project {
+  client: Client;
+  fences: Fence[];
+}

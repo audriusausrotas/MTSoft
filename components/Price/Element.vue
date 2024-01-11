@@ -1,24 +1,55 @@
-<script setup lang="js">
+<script setup lang="ts">
 import { useProductsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
+
+
+interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
+}
+
+interface Response {
+  success: boolean;
+  data: User;
+  message: string
+}
+
+interface Response2 {
+  success: boolean;
+  data: Product;
+  message: string
+}
+
+
+interface Product {
+  _id: string;
+  name: string;
+  price: string;
+  cost: string;
+  category: string;
+  image: string;
+}
 
 const props = defineProps(["product", "index"]);
 const useProducts = useProductsStore();
 
-const disable = ref(true);
-const productName = ref(props.product.name);
-const productPrice = ref(props.product.price);
-const productCost = ref(props.product.cost);
-const productCategory = ref(props.product.category);
+const disable = ref<boolean>(true);
+const productName = ref<string>(props.product.name);
+const productPrice = ref<number>(props.product.price);
+const productCost = ref<number>(props.product.cost);
+const productCategory = ref<string>(props.product.category);
 
-const editHandler = () => {
+const editHandler = (): void => {
   disable.value = !disable.value;
 };
 
-
-
-const deleteHandler = async () => {
-  const data = await $fetch("/api/product", {
+const deleteHandler = async (): Promise<void> => {
+  const data: Response = await $fetch("/api/product", {
     method: "delete",
     body: { _id: props.product._id }
   });
@@ -27,12 +58,15 @@ const deleteHandler = async () => {
   }
 };
 
-const saveHandler = async () => {
-  if (props.product.cost === productCost.value && props.product.price === productPrice.value && props.product.name === props.productName.value && productCategory.value === props.product.category) return disable.value = true;
+const saveHandler = async (): Promise<void> => {
+  if (props.product.cost === productCost.value && props.product.price === productPrice.value && props.product.name === productName.value && productCategory.value === props.product.category) {
+    disable.value = true;
+    return Promise.resolve()
+  }
 
   const newData = { _id: props.product._id, name: productName.value, price: productPrice.value, cost: productCost.value, category: productCategory.value };
 
-  const data = await $fetch("/api/product", {
+  const data: Response2 = await $fetch("/api/product", {
     method: "patch",
     body: newData
   });

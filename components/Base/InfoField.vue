@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="ts">
 const props = defineProps(["name", "width"]);
 </script>
 

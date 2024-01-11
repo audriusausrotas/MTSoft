@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
         verified: data.verified,
         admin: data.admin,
       },
-      process.env.TOKEN_SECRET
+      process.env.TOKEN_SECRET! as string
     );
 
     data.password = "";

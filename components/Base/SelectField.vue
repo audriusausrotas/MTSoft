@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps([
   "values",
   "defaultValue",
@@ -10,10 +10,10 @@ const props = defineProps([
 ]);
 const emit = defineEmits(["onChange"]);
 
-const isOpen = ref(false);
-const selectedValue = ref(props.defaultValue);
+const isOpen = ref<boolean>(false);
+const selectedValue = ref<string>(props.defaultValue);
 
-const changeHandler = (value) => {
+const changeHandler = (value: string): void => {
   selectedValue.value = value;
   emit("onChange", value);
   isOpen.value = false;
@@ -37,8 +37,8 @@ const changeHandler = (value) => {
         ]">
         <div class="flex gap-3 capitalize">
           <NuxtImg v-if="props.name === 'verified'" :src="selectedValue === 'patvirtintas'
-              ? '/icons/ellipseg.svg'
-              : '/icons/ellipser.svg'
+            ? '/icons/ellipseg.svg'
+            : '/icons/ellipser.svg'
             " width="8" height="8" />
           {{ selectedValue }}
         </div>
