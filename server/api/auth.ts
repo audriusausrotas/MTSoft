@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
 
   data.password = "";
 
-  return { success: true, data: data, message: "" };
+  return { success: true, data: data, message: "Vartotojas prijungtas" };
 });
