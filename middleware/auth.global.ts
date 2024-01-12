@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const cookie = useCookie("mtud");
 
   if (process.client) {
+    console.log("klientas tikrina");
     if (!cookie.value) {
       if (to.path !== "/login") {
         useUser.logout();
@@ -30,6 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   if (process.server) {
+    console.log("serveris tikrina");
     if (cookie.value) {
       const { data }: any = await useFetch("/api/auth", {
         method: "post",
