@@ -6,26 +6,26 @@ import jwt from "jsonwebtoken";
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
-  if (!email || !password)
-    return { success: false, data: null, message: "užpildykite visus laukus" };
-  if (!email.includes("@"))
-    return {
-      success: false,
-      data: null,
-      message: "neteisingas elektroninis paštas",
-    };
-  if (email.length < 4)
-    return {
-      success: false,
-      data: null,
-      message: "elektroninis paštas per trumpas",
-    };
-  if (password.length < 4)
-    return {
-      success: false,
-      data: null,
-      message: "slaptažodis per trumpas",
-    };
+  // if (!email || !password)
+  //   return { success: false, data: null, message: "užpildykite visus laukus" };
+  // if (!email.includes("@"))
+  //   return {
+  //     success: false,
+  //     data: null,
+  //     message: "neteisingas elektroninis paštas",
+  //   };
+  // if (email.length < 4)
+  //   return {
+  //     success: false,
+  //     data: null,
+  //     message: "elektroninis paštas per trumpas",
+  //   };
+  // if (password.length < 4)
+  //   return {
+  //     success: false,
+  //     data: null,
+  //     message: "slaptažodis per trumpas",
+  //   };
 
   const data = await userSchema.findOne({ email });
 
@@ -48,12 +48,8 @@ export default defineEventHandler(async (event) => {
 
     data.password = "";
 
-    await setCookie(event, "mtud", token, {
+    setCookie(event, "mtud", token, {
       maxAge: 2592000,
-      domain: "modernitvora.vercel.app",
-      path: "/",
-      secure: true,
-      sameSite: "none",
     });
 
     return { success: true, data: data, message: "" };
