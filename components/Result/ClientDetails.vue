@@ -38,8 +38,7 @@ const saveHandler = async (): Promise<void> => {
       totalMargin: useResults.totalMargin,
     },
   };
-
-  const data: ResponseProject = await $fetch("/api/Project", {
+  const data: ResponseProject = await $fetch("/api/project", {
     method: "post",
     body: newProject,
   });
