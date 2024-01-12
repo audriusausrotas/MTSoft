@@ -31,7 +31,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   if (process.server) {
-    console.log("serveris tikrina");
     if (cookie.value) {
       const { data }: any = await useFetch("/api/auth", {
         method: "post",

@@ -48,7 +48,13 @@ export default defineEventHandler(async (event) => {
 
     data.password = "";
 
-    setCookie(event, "mtud", token, { maxAge: 2592000 });
+    await setCookie(event, "mtud", token, {
+      maxAge: 2592000,
+      domain: "modernitvora.vercel.app",
+      path: "/",
+      secure: true,
+      sameSite: "none",
+    });
 
     return { success: true, data: data, message: "" };
   }
