@@ -53,7 +53,7 @@ function logoutHandler(): void {
           class="flex items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full"
         >
           <NuxtImg
-            v-if="true"
+            v-if="useUser.user.photo !== ''"
             :src="useUser.user?.photo"
             class="object-cover object-center w-full h-full"
             width="48"
