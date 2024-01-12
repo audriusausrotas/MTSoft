@@ -6,7 +6,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const cookie = useCookie("mtud");
 
   if (process.client) {
-    console.log("klientas tikrina");
     if (!cookie.value) {
       if (to.path !== "/login") {
         useUser.logout();
@@ -36,7 +35,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         method: "post",
         body: {},
       });
-
       if (!data.value.data) {
         if (to.path !== "/login") {
           useUser.logout();

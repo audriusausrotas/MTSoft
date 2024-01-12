@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     await readBody(event);
 
   const userProjects = await projectSchema.find({ creator });
-  const projectQuantity = userProjects.length;
+  const projectQuantity = userProjects.length + 1;
   const formattedProjectQuantity = projectQuantity.toString().padStart(4, "0");
 
   const firstThreeLetters = creator.substring(0, 3).toUpperCase();
@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
   });
 
   const data = await product.save();
-  console.log(data);
 
   return { success: true, data: data, message: "Projektas išsaugotas" };
 });
