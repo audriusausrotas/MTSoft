@@ -189,7 +189,31 @@ export const useResultsStore = defineStore("results", {
       this.segments = 0;
       this.segmentHolders = 0;
     },
+
+    clearAll() {
+      this.clearParts();
+      this.clearTotals();
+      this.clearResults();
+    },
   },
+
+  // fences: [] as Fences[],
+  // poles: 0,
+  // gatePoles: 0,
+  // borders: 0,
+  // borderHolders: 0,
+  // rivets: 0,
+  // crossbars: 0,
+  // crossbarHolders: 0,
+  // totalElements: 0,
+  // bindingsLength: 0,
+  // segments: 0,
+  // segmentHolders: 0,
+  // gates: [] as Gate[],
+  // totalPrice: 0,
+  // totalCost: 0,
+  // totalProfit: 0,
+  // totalMargin: 0,
 
   getters: {},
 });

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-
-const useProject = useProjectStore();
+const useCalculations = useCalculationsStore();
 
 const createFenceHandler = () => {
-  useProject.addFence();
+  useCalculations.addFence();
 };
 </script>
 
@@ -14,7 +13,7 @@ const createFenceHandler = () => {
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
     </div>
 
-    <div v-for="(fence, index) in useProject.fences" :key="fence.id">
+    <div v-for="(fence, index) in useCalculations.fences" :key="fence.id">
       <CalcFence :fence="fence" :index="index" />
     </div>
   </div>

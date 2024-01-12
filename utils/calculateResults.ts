@@ -3,7 +3,7 @@ import calculatePols from "./calculatePoles";
 
 export default function calculateResults() {
   const results = useResultsStore();
-  const fences = useProjectStore().fences;
+  const fences = useCalculationsStore().fences;
 
   results.clearResults();
   results.clearParts();

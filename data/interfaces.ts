@@ -1,17 +1,3 @@
-export interface Project {
-  _id: string;
-  client: Client;
-  fenceMeasures: Fence[];
-  results: Result[];
-  calculatedParts: CalculatedParts;
-  confirmed: boolean;
-  advance: boolean;
-  payed: boolean;
-  status: string;
-  creator: string;
-  orderNumber: string;
-}
-
 export interface CalculatedParts {
   fences: Fences[];
   poles: number;
@@ -52,6 +38,11 @@ export interface Client {
   username: string;
   phone: string;
   email: string;
+}
+
+export interface Calculations {
+  client: Client;
+  fences: Fence[];
 }
 
 export interface Fences {
@@ -141,7 +132,7 @@ export interface ResponseUsers {
 }
 
 export interface ProjectsState {
-  allProjects: Project[];
+  projects: Project[];
 }
 
 export interface ProductsState {
@@ -177,22 +168,23 @@ export interface ResponseProduct {
 }
 
 export interface Project {
+  _id: string;
   client: Client;
-  fences: Fence[];
+  fenceMeasures: Fence[];
+  results: Result[];
+  calculatedParts: CalculatedParts;
+  confirmed: boolean;
+  advance: boolean;
+  payed: boolean;
+  status: string;
+  creator: string;
+  orderNumber: string;
 }
 
 export interface ResponseProject {
   success: boolean;
-  data: ResponseProjectData;
+  data: Project;
   message: string;
-}
-
-export interface ResponseProjectData {
-  creator: string;
-  client: Client;
-  fenceMeasures: Measure[];
-  results: Result[];
-  calculatedParts: CalculatedParts;
 }
 
 export interface MenuLinks {

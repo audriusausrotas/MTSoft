@@ -1,4 +1,4 @@
-import { gateSchema } from "../models/gateSchema";
+import { gateSchema } from "~/server/models/gateSchema";
 
 export default defineEventHandler(async (event) => {
   const { id } = await readBody(event);
@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
 
   if (!data)
     return { success: false, data: null, message: "Produktas nerastas" };
-
 
   return { success: true, data: data, message: "Pakeitimai atlikti" };
 });

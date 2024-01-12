@@ -1,4 +1,4 @@
-import { projectSchema } from "../models/projectSchema";
+import { projectSchema } from "~/server/models/projectSchema";
 
 export default defineEventHandler(async (event) => {
   const { client, fenceMeasures, results, calculatedParts, creator } =
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   });
 
   const data = await product.save();
-  console.log("data");
+  console.log(data);
 
   return { success: true, data: data, message: "Projektas išsaugotas" };
 });

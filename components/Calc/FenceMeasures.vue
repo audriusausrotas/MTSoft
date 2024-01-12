@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Measure } from "~/data/interfaces";
 const props = defineProps(["index"]);
-const useProject = useProjectStore();
+const useCalculations = useCalculationsStore();
 
 const open = ref<boolean>(false);
 const totalLength = ref<number>(0);
@@ -40,13 +40,13 @@ const calculateLengthHandler = () => {
 
   totalMeasures.forEach((item) => {
     let lastElement: Measure =
-      useProject.fences[props.index].measures[
-      useProject.fences[props.index].measures.length - 1
+      useCalculations.fences[props.index].measures[
+        useCalculations.fences[props.index].measures.length - 1
       ];
 
     if (!lastElement) {
-      useProject.addMeasure(props.index);
-      lastElement = useProject.fences[props.index].measures[0];
+      useCalculations.addMeasure(props.index);
+      lastElement = useCalculations.fences[props.index].measures[0];
     }
 
     if (
@@ -54,12 +54,12 @@ const calculateLengthHandler = () => {
       lastElement.kampas.exist ||
       lastElement.laiptas.exist
     ) {
-      useProject.addMeasure(props.index);
+      useCalculations.addMeasure(props.index);
     }
-    useProject.updateMeasureLength({
+    useCalculations.updateMeasureLength({
       index: props.index,
       value: item,
-      measureIndex: useProject.fences[props.index].measures.length - 1,
+      measureIndex: useCalculations.fences[props.index].measures.length - 1,
     });
   });
 
@@ -68,7 +68,7 @@ const calculateLengthHandler = () => {
 };
 
 watch(
-  () => useProject.fences[props.index].measures,
+  () => useCalculations.fences[props.index].measures,
   (newMeasures, oldMeasures) => {
     let totalM: number = 0;
     let totalSQ: number = 0;
@@ -76,8 +76,14 @@ watch(
       totalM += +item.length!;
       totalSQ += item.length! * item.height!;
     });
-    useProject.updateTotalLength({ index: props.index, value: totalM / 100 });
-    useProject.updateTotalSQ({ index: props.index, value: totalSQ / 10000 });
+    useCalculations.updateTotalLength({
+      index: props.index,
+      value: totalM / 100,
+    });
+    useCalculations.updateTotalSQ({
+      index: props.index,
+      value: totalSQ / 10000,
+    });
   },
   { deep: true }
 );
@@ -85,39 +91,76 @@ watch(
 <template>
   <div class="flex flex-col justify-center gap-4">
     <div class="flex flex-wrap justify-center gap-4">
-      <BaseButton name="prideti nauja" @click="useProject.addMeasure(props.index)" />
-      <BaseButton name="nukopijuoti paskutinį" @click="useProject.copyLast(props.index)" />
-      <BaseButton v-if="!open" name="išskaičiuoti pagal ilgį" @click="open = !open" />
+      <BaseButton
+        name="prideti nauja"
+        @click="useCalculations.addMeasure(props.index)"
+      />
+      <BaseButton
+        name="nukopijuoti paskutinį"
+        @click="useCalculations.copyLast(props.index)"
+      />
+      <BaseButton
+        v-if="!open"
+        name="išskaičiuoti pagal ilgį"
+        @click="open = !open"
+      />
 
       <div v-else="open" class="flex overflow-hidden border rounded-lg">
-        <input placeholder="Bendras Ilgis" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
-          v-model="totalLength" :autofocus="open" @keydown.enter="calculateLengthHandler" />
-        <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
-          @click="calculateLengthHandler">
+        <input
+          placeholder="Bendras Ilgis"
+          type="number"
+          class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
+          v-model="totalLength"
+          :autofocus="open"
+          @keydown.enter="calculateLengthHandler"
+        />
+        <button
+          class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
+          @click="calculateLengthHandler"
+        >
           OK
         </button>
-        <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
-          @click="cancelHandler">
+        <button
+          class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
+          @click="cancelHandler"
+        >
           X
         </button>
       </div>
     </div>
     <div class="flex flex-wrap justify-center gap-4">
-      <BaseButton name="įterpti kampą" @click="useProject.addKampas(props.index)" />
-      <BaseButton name="įterpti laiptą" @click="useProject.addLaiptas(props.index)" />
-      <BaseButton name="išvalyti visus" @click="useProject.deleteMeasures(props.index)" />
+      <BaseButton
+        name="įterpti kampą"
+        @click="useCalculations.addKampas(props.index)"
+      />
+      <BaseButton
+        name="įterpti laiptą"
+        @click="useCalculations.addLaiptas(props.index)"
+      />
+      <BaseButton
+        name="išvalyti visus"
+        @click="useCalculations.deleteMeasures(props.index)"
+      />
     </div>
   </div>
   <div class="flex flex-wrap justify-center gap-4">
-    <p>Bendras Ilgis: {{ useProject.fences[props.index].totalLength }} m</p>
+    <p>
+      Bendras Ilgis: {{ useCalculations.fences[props.index].totalLength }} m
+    </p>
     <p class="flex">
-      Kvadratiniai metrai: {{ useProject.fences[props.index].totalSQ }} m<span class="text-[10px] font-semibold">2</span>
+      Kvadratiniai metrai:
+      {{ useCalculations.fences[props.index].totalSQ }} m<span
+        class="text-[10px] font-semibold"
+        >2</span
+      >
     </p>
   </div>
 
   <div class="flex flex-col gap-4">
-    <div v-if="useProject.fences[props.index].measures.length > 0"
-      class="grid gap-2 py-3 rounded-t-xl custom-grid bg-gray-ultra-light">
+    <div
+      v-if="useCalculations.fences[props.index].measures.length > 0"
+      class="grid gap-2 py-3 rounded-t-xl custom-grid bg-gray-ultra-light"
+    >
       <p class="m-auto">Nr</p>
       <p class="m-auto">ilgis</p>
       <p class="m-auto">aukštis</p>
@@ -125,78 +168,149 @@ watch(
       <p class="m-auto">veiksmai</p>
     </div>
 
-    <div v-for="(measure, measureIndex) in useProject.fences[props.index].measures">
-      <div v-if="!measure.kampas.exist && !measure.laiptas.exist" class="grid items-center gap-2 custom-grid">
+    <div
+      v-for="(measure, measureIndex) in useCalculations.fences[props.index]
+        .measures"
+    >
+      <div
+        v-if="!measure.kampas.exist && !measure.laiptas.exist"
+        class="grid items-center gap-2 custom-grid"
+      >
         <p class="m-auto">{{ measureIndex + 1 }}</p>
 
-        <BaseInput width="w-24" placeholder="Ilgis" type="number" variant="light" :name="measure.length"
-          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value: number): void =>
-            useProject.updateMeasureLength({
-              index: props.index,
-              value,
-              measureIndex,
-            })
-            " :active="true" />
+        <BaseInput
+          width="w-24"
+          placeholder="Ilgis"
+          type="number"
+          variant="light"
+          :name="measure.length"
+          @EnterPressed="useCalculations.addMeasure(props.index)"
+          @onChange="
+            (value: number): void =>
+              useCalculations.updateMeasureLength({
+                index: props.index,
+                value,
+                measureIndex,
+              })
+          "
+          :active="true"
+        />
 
-        <BaseInput width="w-24" placeholder="Aukštis" type="number" variant="light" :name="measure.height"
-          @EnterPressed="useProject.addMeasure(props.index)" @onChange="(value: number): void =>
-            useProject.updateMeasureHeight({
-              index: props.index,
-              value,
-              measureIndex,
-            })
-            " />
+        <BaseInput
+          width="w-24"
+          placeholder="Aukštis"
+          type="number"
+          variant="light"
+          :name="measure.height"
+          @EnterPressed="useCalculations.addMeasure(props.index)"
+          @onChange="
+            (value: number): void =>
+              useCalculations.updateMeasureHeight({
+                index: props.index,
+                value,
+                measureIndex,
+              })
+          "
+        />
 
-        <BaseCheckField class="m-auto" @onChange="(value: boolean): void =>
-          useProject.updateMeasureGate({
-            index: props.index,
-            value,
-            measureIndex,
-          })
-          " />
+        <BaseCheckField
+          class="m-auto"
+          @onChange="
+            (value: boolean): void =>
+              useCalculations.updateMeasureGate({
+                index: props.index,
+                value,
+                measureIndex,
+              })
+          "
+        />
 
-        <div @click="
-          useProject.deleteMeasure({ index: props.index, measureIndex })
-          " class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer">
-          <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+        <div
+          @click="
+            useCalculations.deleteMeasure({ index: props.index, measureIndex })
+          "
+          class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            width="20"
+            height="20"
+            decoding="auto"
+          />
           delete
         </div>
       </div>
 
-      <div v-else-if="measure.kampas.exist" class="grid items-center gap-2 custom-grid">
+      <div
+        v-else-if="measure.kampas.exist"
+        class="grid items-center gap-2 custom-grid"
+      >
         <p class="m-auto">{{ measureIndex + 1 }}</p>
         <p>Kampas</p>
-        <BaseInput width="w-24" placeholder="Laipsnis" type="number" :name="measure.kampas.value" @onChange="(value: string): void =>
-          useProject.updateMeasureKampas({
-            index: props.index,
-            value,
-            measureIndex,
-          })
-          " />
+        <BaseInput
+          width="w-24"
+          placeholder="Laipsnis"
+          type="number"
+          :name="measure.kampas.value"
+          @onChange="
+            (value: string): void =>
+              useCalculations.updateMeasureKampas({
+                index: props.index,
+                value,
+                measureIndex,
+              })
+          "
+        />
         <div></div>
-        <div @click="
-          useProject.deleteMeasure({ index: props.index, measureIndex })
-          " class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer">
-          <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+        <div
+          @click="
+            useCalculations.deleteMeasure({ index: props.index, measureIndex })
+          "
+          class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            width="20"
+            height="20"
+            decoding="auto"
+          />
           delete
         </div>
       </div>
 
-      <div v-else-if="measure.laiptas.exist" class="grid items-center gap-2 custom-grid">
+      <div
+        v-else-if="measure.laiptas.exist"
+        class="grid items-center gap-2 custom-grid"
+      >
         <p class="m-auto">{{ measureIndex + 1 }}</p>
         <p>Laiptas</p>
-        <BaseInput width="w-24" placeholder="Aukštis" type="number" :name="measure.laiptas.value" @onChange="(value: string): void =>
-          useProject.updateMeasureLaiptas({
-            index: props.index,
-            value,
-            measureIndex,
-          })
-          " />
+        <BaseInput
+          width="w-24"
+          placeholder="Aukštis"
+          type="number"
+          :name="measure.laiptas.value"
+          @onChange="
+            (value: string): void =>
+              useCalculations.updateMeasureLaiptas({
+                index: props.index,
+                value,
+                measureIndex,
+              })
+          "
+        />
         <div></div>
-        <div @click="
-          useProject.deleteMeasure({ index: props.index, measureIndex })
-          " class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer">
-          <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+        <div
+          @click="
+            useCalculations.deleteMeasure({ index: props.index, measureIndex })
+          "
+          class="flex items-center justify-center gap-2 px-2 py-1 border rounded-md hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            width="20"
+            height="20"
+            decoding="auto"
+          />
           delete
         </div>
       </div>
