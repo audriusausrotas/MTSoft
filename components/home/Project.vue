@@ -23,7 +23,11 @@ const deleteHandler = async (): Promise<void> => {
       :name="props.project.client.address"
       width="w-60 min-w-fit"
     />
-    <BaseInfoField :name="props.project.client.phone" width="w-32" />
+    <BaseInfoField
+      :name="props.project.client.phone"
+      width="w-32"
+      :tel="true"
+    />
     <BaseInfoField
       :name="props.project.calculatedParts.totalPrice + ' €'"
       width="w-20"

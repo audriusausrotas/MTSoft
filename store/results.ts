@@ -1,19 +1,19 @@
 import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type { Result, Fences, Gate } from "~/data/interfaces";
+import type { Result, Fences, Gate, Poles } from "~/data/interfaces";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
     fences: [] as Fences[],
-    poles: 0,
+    poles: [] as Poles[],
     gatePoles: 0,
     borders: 0,
     borderHolders: 0,
-    rivets: 0,
     crossbars: 0,
     crossbarHolders: 0,
+    rivets: 0,
     totalElements: 0,
     bindingsLength: 0,
     segments: 0,
@@ -108,27 +108,32 @@ export const useResultsStore = defineStore("results", {
       result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    addPoles(data: number) {
-      this.poles += data;
+    // done
+    addPoles(data: Poles[]) {
+      this.poles = [...data];
     },
+
+    // done
     addGatePoles(data: number) {
-      this.gatePoles += data;
+      this.gatePoles = data;
     },
-    addBorders(data: number) {
-      this.borders += data;
+
+    // done
+    addBorders() {
+      this.borders++;
+      this.borderHolders += 2;
     },
-    addBorderHolders(data: number) {
-      this.borderHolders += data;
-    },
+
     addRivets(data: number) {
       this.rivets += data;
     },
+
+    // done
     addCrossbars(data: number) {
-      this.crossbars += data;
+      this.crossbars = data;
+      this.crossbarHolders = data * 2;
     },
-    addCrossbarHolders(data: number) {
-      this.crossbarHolders += data;
-    },
+
     addtotalElements(data: number) {
       this.totalElements += data;
     },
@@ -141,11 +146,9 @@ export const useResultsStore = defineStore("results", {
     addSegmentHolders(data: number) {
       this.segmentHolders += data;
     },
-    addGates(data: Gate) {
-      this.gates.push(data);
+    addGates(data: Gate[]) {
+      this.gates = [...data];
     },
-
-    createResults() {},
 
     calculateTotals() {
       this.clearTotals();
@@ -177,7 +180,7 @@ export const useResultsStore = defineStore("results", {
 
     clearParts() {
       this.fences = [];
-      this.poles = 0;
+      this.poles = [];
       this.gatePoles = 0;
       this.borders = 0;
       this.borderHolders = 0;

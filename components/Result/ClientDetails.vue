@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ResponseProject, Project } from "~/data/interfaces";
+import calculateResults from "~/utils/calculateResults";
 
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
@@ -77,6 +78,7 @@ const saveHandler = async (): Promise<void> => {
   <div class="flex gap-4">
     <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
     <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
+    <BaseButton name="skaiciuot laikinas" @click="calculateResults" />
   </div>
 </template>
 <style scoped></style>

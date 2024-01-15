@@ -1,6 +1,6 @@
 export interface CalculatedParts {
   fences: Fences[];
-  poles: number;
+  poles: Poles[];
   gatePoles: number;
   borders: number;
   borderHolders: number;
@@ -30,7 +30,6 @@ export interface Gate {
   filling: string;
   ready: boolean;
   aditional?: String[];
-  smallGates?: String[];
 }
 
 export interface Client {
@@ -191,4 +190,11 @@ export interface MenuLinks {
   name: string;
   link: string;
   iconPath: string;
+}
+
+export interface Poles {
+  height: number;
+  thickness: number;
+  color: string;
+  quantity: number;
 }
