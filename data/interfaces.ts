@@ -59,6 +59,7 @@ export interface Measure {
   height: number | null;
   MeasureSpace: number | null;
   gates: boolean;
+  elements: number;
   kampas: {
     exist: boolean;
     value: string;
@@ -86,6 +87,8 @@ export interface Fence {
   color: string;
   material: string;
   montavimas: boolean;
+  seeThrough: string;
+  direction: string;
   borteliai: boolean;
   stulpai: boolean;
   tikMontavimas: boolean;

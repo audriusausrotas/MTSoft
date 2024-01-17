@@ -1,6 +1,8 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
-import type { Gate, Poles } from "~/data/interfaces";
+import type { Gate, Poles, Fences } from "~/data/interfaces";
+import calculateHorizontalFence from "./calculateHorizontalFence";
+import calculateVerticalFence from "./calculateverticalFence";
 
 export default function calculateResults() {
   const results = useResultsStore();
@@ -14,16 +16,30 @@ export default function calculateResults() {
   let gatePolesTemp: number = 0;
   let crossbarsTemp: number = 0;
   let gatesTemp: Gate[] = [];
+  let totalHeight: number = 0;
+  let fenceTemp: Fences[] = [];
+  let totalElements: number = 0;
 
   fences.fences.forEach((item) => {
-    const hasCrossbars: boolean = verticals.some(
-      (vertical) => vertical === item.type
-    );
+    const hasCrossbars: boolean =
+      verticals.some((vertical) => vertical === item.type) &&
+      item.direction === "Vertikali";
     let polesTemp2: number = 1;
 
     console.log(item);
 
+    // calculate fences
+    if (hasCrossbars) {
+      calculateVerticalFence();
+    } else {
+      const temp = calculateHorizontalFence(fenceTemp, item);
+      fenceTemp = [...temp];
+    }
+
     item.measures.forEach((measure) => {
+      // calculate fence elements
+      totalElements += measure.elements;
+
       // calculate gates
       if (measure.gates) {
         gatesTemp.push({
@@ -41,7 +57,6 @@ export default function calculateResults() {
         });
 
         // calculate poles
-
         if (!isTogether) {
           polesTemp2--;
           gatePolesTemp += 2;
@@ -56,15 +71,23 @@ export default function calculateResults() {
 
       // calculate borders, crossbars
       if (!measure.gates && !measure.kampas.exist && !measure.laiptas.exist) {
+        // calculate total height
+        totalHeight += measure.height || 0;
+
         // calculate crossbars
         if (hasCrossbars) {
-          crossbarsTemp = +2;
+          crossbarsTemp += 2;
         }
         // calculate borders
         results.addBorders();
 
-        // add poles to temp data
+        // calculate segment
+        if (item.type.includes("Segmentas")) {
+          results.addSegment();
+        }
       }
+
+      // add poles to temp data
       const poleData: Poles = {
         height: 0,
         thickness: 0,
@@ -79,8 +102,9 @@ export default function calculateResults() {
         poleData.height = 3;
         poleData.thickness = 2;
       }
-      console.log(polesTemp2);
+
       let notExist: boolean = true;
+
       polesTemp.forEach((pole) => {
         if (
           pole.height === poleData.height &&
@@ -93,13 +117,23 @@ export default function calculateResults() {
       });
 
       if (notExist) polesTemp.push(poleData);
+
+      //calculate crossbar holders
+      if (item.type.includes("Segmentas")) {
+        const poleCount = polesTemp.length + gatePolesTemp;
+        const averageHeight = totalHeight / item.measures.length;
+        const holdersOnPole =
+          averageHeight < 130 ? 2 : averageHeight < 170 ? 3 : 4;
+        results.addSegmentHolders(poleCount * holdersOnPole);
+      }
     });
   });
-
+  results.addFences(fenceTemp);
   results.addPoles(polesTemp);
   results.addGatePoles(gatePolesTemp);
   results.addCrossbars(crossbarsTemp);
   results.addGates(gatesTemp);
+  results.addTotalElements(totalElements);
 
   console.log(results);
 }

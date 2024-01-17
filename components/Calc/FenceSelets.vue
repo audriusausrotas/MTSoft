@@ -4,16 +4,30 @@ import {
   fenceTypes,
   fenceMaterials,
   fenceSide,
+  fenceDirection,
+  pramatomumas,
+  verticals,
 } from "~/data/selectFieldData";
 
 const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
 
+const isFenceBoards = ref(false);
+
 const currentFence = useCalculations.fences[props.index];
+
+watch(
+  () => useCalculations.fences[props.index].type,
+  (newType) => {
+    console.log(newType);
+    isFenceBoards.value = verticals.includes(newType);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-center gap-4 xl:justify-normal">
+  <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
     <BaseSelectField
       label="Tvoros pusė"
       :values="fenceSide"
@@ -23,6 +37,7 @@ const currentFence = useCalculations.fences[props.index];
       @onChange="(value: string) => useCalculations.updateSide({ index: props.index, value })
         "
     />
+
     <BaseSelectField
       label="Tvoros tipas"
       :values="fenceTypes"
@@ -32,6 +47,7 @@ const currentFence = useCalculations.fences[props.index];
       @onChange="(value: string) => useCalculations.updateType({ index: props.index, value })
         "
     />
+
     <BaseSelectField
       label="Tvoros spalva"
       :values="fenceColors"
@@ -41,6 +57,7 @@ const currentFence = useCalculations.fences[props.index];
       @onChange="(value: string) => useCalculations.updateColor({ index: props.index, value })
         "
     />
+
     <BaseSelectField
       label="Skardos Tipas"
       :values="fenceMaterials"
@@ -50,7 +67,31 @@ const currentFence = useCalculations.fences[props.index];
       @onChange="(value: string) => useCalculations.updateMaterial({ index: props.index, value })
         "
     />
+
+    <BaseSelectField
+      v-if="isFenceBoards"
+      label="tvoros kryptis"
+      :values="fenceDirection"
+      id="fenceDirection"
+      :defaultValue="currentFence.direction"
+      width="w-56"
+      @onChange="(value: string) => useCalculations.updateDirection({ index: props.index, value })
+        "
+    />
+
+    <BaseSelectField
+      v-if="!isFenceBoards"
+      label="Pramatomumas"
+      :values="pramatomumas"
+      id="seeThrough"
+      :defaultValue="currentFence.seeThrough"
+      width="w-56"
+      @onChange="(value: string) => useCalculations.updateSeeThrough({ index: props.index, value })
+        "
+    />
+
     <BaseInput
+      v-if="isFenceBoards"
       placeholder="Tarpas Tarp Elementų"
       type="number"
       variant="light"

@@ -12,6 +12,7 @@ export const initialMeasure: Measure = {
   height: 0,
   MeasureSpace: 0,
   gates: false,
+  elements: 0,
   kampas: {
     exist: false,
     value: "",

@@ -7,18 +7,18 @@ export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
     fences: [] as Fences[],
-    poles: [] as Poles[],
-    gatePoles: 0,
-    borders: 0,
-    borderHolders: 0,
-    crossbars: 0,
-    crossbarHolders: 0,
-    rivets: 0,
-    totalElements: 0,
+    poles: [] as Poles[], // done
+    gatePoles: 0, // done
+    borders: 0, // done
+    borderHolders: 0, // done
+    crossbars: 0, // done
+    crossbarHolders: 0, // done
+    rivets: 0, // done
+    totalElements: 0, // done
     bindingsLength: 0,
-    segments: 0,
-    segmentHolders: 0,
-    gates: [] as Gate[],
+    segments: 0, // done
+    segmentHolders: 0, // done
+    gates: [] as Gate[], // done
     totalPrice: 0,
     totalCost: 0,
     totalProfit: 0,
@@ -26,35 +26,11 @@ export const useResultsStore = defineStore("results", {
   }),
 
   actions: {
-    createFence(item: any) {
-      // let fenceExist = false;
-      // const initialFenceData = {
-      //   name: item.type,
-      //   color: item.color,
-      //   length: item.totalLength,
-      //   sq: item.totalSQ,
-      //   material: item.material,
-      //   space: item.space,
-      //   twoSided: false,
-      // };
-      // this.fences.forEach((fenceItem) => {
-      //   if (
-      //     fenceItem.name === item.type &&
-      //     fenceItem.color === item.color &&
-      //     fenceItem.material === item.material &&
-      //     fenceItem.space === item.space
-      //   ) {
-      //     fenceItem.length += item.totalLength || 0;
-      //     fenceItem.sq += item.totalSQ || 0;
-      //     fenceExist = true;
-      //   }
-      // });
-      // if (!fenceExist) {
-      //   this.fences.push(initialFenceData);
-      // }
+    addFences(data: Fences[]): void {
+      this.fences = [...data];
     },
 
-    addNew() {
+    addNew(): void {
       const newResult: Result = {
         ...initialResultData,
         id: uuidv4(),
@@ -63,14 +39,14 @@ export const useResultsStore = defineStore("results", {
       this.results.push(newResult);
     },
 
-    updateName(data: { index: number; value: string }) {
+    updateName(data: { index: number; value: string }): void {
       this.results[data.index].name = data.value;
     },
 
     selectItem(data: {
       index: number;
       value: { name: string; price: number; cost: number; category: string };
-    }) {
+    }): void {
       const selectedResult = this.results[data.index];
       selectedResult.name = data.value.name;
       selectedResult.price = data.value.price;
@@ -78,27 +54,27 @@ export const useResultsStore = defineStore("results", {
       selectedResult.category = data.value.category;
     },
 
-    updateQuantity(data: { index: number; value: number }) {
+    updateQuantity(data: { index: number; value: number }): void {
       this.results[data.index].quantity = data.value;
       this.recalculateTotals(data.index);
       this.calculateTotals();
     },
 
-    updateSpace(data: { index: number; value: number }) {
+    updateSpace(data: { index: number; value: number }): void {
       this.results[data.index].space = data.value;
     },
 
-    updateColor(data: { index: number; value: string }) {
+    updateColor(data: { index: number; value: string }): void {
       this.results[data.index].color = data.value;
     },
 
-    updatePrice(data: { index: number; value: number }) {
+    updatePrice(data: { index: number; value: number }): void {
       this.results[data.index].price = data.value;
       this.recalculateTotals(data.index);
       this.calculateTotals();
     },
 
-    recalculateTotals(index: number) {
+    recalculateTotals(index: number): void {
       const result = this.results[index];
       result.totalPrice = result.price * result.quantity;
       result.totalCost = result.cost * result.quantity;
@@ -108,49 +84,42 @@ export const useResultsStore = defineStore("results", {
       result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    // done
-    addPoles(data: Poles[]) {
+    addPoles(data: Poles[]): void {
       this.poles = [...data];
     },
 
-    // done
-    addGatePoles(data: number) {
+    addGatePoles(data: number): void {
       this.gatePoles = data;
     },
 
-    // done
-    addBorders() {
+    addBorders(): void {
       this.borders++;
       this.borderHolders += 2;
     },
 
-    addRivets(data: number) {
-      this.rivets += data;
-    },
-
-    // done
-    addCrossbars(data: number) {
+    addCrossbars(data: number): void {
       this.crossbars = data;
       this.crossbarHolders = data * 2;
     },
 
-    addtotalElements(data: number) {
-      this.totalElements += data;
+    addTotalElements(data: number): void {
+      this.totalElements = data;
+      this.rivets = data * 4;
     },
-    addBindingsLength(data: number) {
+    addBindingsLength(data: number): void {
       this.bindingsLength += data;
     },
-    addSegments(data: number) {
-      this.segments += data;
+    addSegment() {
+      this.segments++;
     },
-    addSegmentHolders(data: number) {
-      this.segmentHolders += data;
+    addSegmentHolders(data: number): void {
+      this.segmentHolders = data;
     },
-    addGates(data: Gate[]) {
+    addGates(data: Gate[]): void {
       this.gates = [...data];
     },
 
-    calculateTotals() {
+    calculateTotals(): void {
       this.clearTotals();
       this.results.forEach((item) => {
         this.totalPrice += +item.totalPrice;
@@ -161,24 +130,24 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = +this.totalMargin / +this.results.length;
     },
 
-    deleteResult(id: string) {
+    deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
       this.calculateTotals();
     },
 
-    clearResults() {
+    clearResults(): void {
       this.results = [];
       this.clearTotals();
     },
 
-    clearTotals() {
+    clearTotals(): void {
       this.totalPrice = 0;
       this.totalCost = 0;
       this.totalProfit = 0;
       this.totalMargin = 0;
     },
 
-    clearParts() {
+    clearParts(): void {
       this.fences = [];
       this.poles = [];
       this.gatePoles = 0;
@@ -193,30 +162,12 @@ export const useResultsStore = defineStore("results", {
       this.segmentHolders = 0;
     },
 
-    clearAll() {
+    clearAll(): void {
       this.clearParts();
       this.clearTotals();
       this.clearResults();
     },
   },
-
-  // fences: [] as Fences[],
-  // poles: 0,
-  // gatePoles: 0,
-  // borders: 0,
-  // borderHolders: 0,
-  // rivets: 0,
-  // crossbars: 0,
-  // crossbarHolders: 0,
-  // totalElements: 0,
-  // bindingsLength: 0,
-  // segments: 0,
-  // segmentHolders: 0,
-  // gates: [] as Gate[],
-  // totalPrice: 0,
-  // totalCost: 0,
-  // totalProfit: 0,
-  // totalMargin: 0,
 
   getters: {},
 });
