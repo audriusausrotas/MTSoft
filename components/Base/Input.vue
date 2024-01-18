@@ -36,10 +36,10 @@ onMounted(() => {
 
     <div
       class="flex items-center justify-center h-10 gap-3 px-4 overflow-auto border rounded-lg shadow-sm border-dark-light"
-      :class="
-        (props.width ? props.width : 'w-60',
-        props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light')
-      "
+      :class="[
+        props.width ? props.width : 'w-60',
+        props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
+      ]"
     >
       <slot />
       <input

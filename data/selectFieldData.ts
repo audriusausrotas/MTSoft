@@ -9,6 +9,8 @@ export const categories: string[] = [
   "vartai",
   "kita",
 ];
+
+export const gateTypes: string[] = ["Stumdomi", "Varstomi"];
 export const fenceColors: string[] = [
   "7016",
   "7024",
@@ -24,9 +26,11 @@ export const fenceTypes: string[] = [
   "Daimond 60/90",
   "Daimond 40/105",
   "Alba",
+  "Segmentas",
   "Plank",
   "Žaliuzi",
   "Eglė",
+  "Dilė",
   "Dija",
   "Standard",
   "Sigma",
@@ -37,16 +41,10 @@ export const fenceTypes: string[] = [
   "Estetic",
   "Emka",
 ];
-export const horizontals: string[] = [
-  "Daimond 60/90",
-  "Daimond 40/105",
-  "Plank",
-  "Žaliuzi",
-  "Eglė",
-  "Dija",
-];
+
 export const verticals: string[] = [
   "Alba",
+  "Dilė",
   "Dija",
   "Standard",
   "Sigma",
@@ -68,6 +66,20 @@ export const pramatomumas: string[] = [
 ];
 
 export const fenceDirection: string[] = ["Vertikali", "Horizontali"];
+
+export const services: string[] = [
+  "Medžiagos, Montavimas",
+  "Tik Medžiagos",
+  "Tik Montavimas",
+];
+
+export const parts: string[] = [
+  "Borteliai, Stulpai",
+  "Tik Stulpai",
+  "Tik Borteliai",
+];
+
+export const twoSided: string[] = ["Taip", "Ne"];
 
 export const fenceMeasures: object = {
   Daimond60: {

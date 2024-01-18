@@ -17,7 +17,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-center gap-4 xl:justify-normal">
+  <!-- <div class="flex flex-wrap justify-center gap-4 xl:justify-normal">
     <BaseCheckField
       v-if="isDouble"
       label="Dvipusė"
@@ -73,6 +73,6 @@ watch(
         })
         "
     />
-  </div>
+  </div> -->
 </template>
 <style scoped></style>

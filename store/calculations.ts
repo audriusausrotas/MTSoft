@@ -1,6 +1,11 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import { clientInitialValue, initialMeasure } from "~/data/initialValues";
+import {
+  clientInitialValue,
+  initialMeasure,
+  initialFence,
+} from "~/data/initialValues";
+import { verticals } from "~/data/selectFieldData";
 import type { Measure, Calculations } from "~/data/interfaces";
 
 export const useCalculationsStore = defineStore("calculations", {
@@ -11,25 +16,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
   actions: {
     addFence(): void {
-      this.fences.push({
-        id: uuidv4(),
-        side: "Priekis",
-        type: "Daimond 60/90",
-        color: "7016",
-        material: "Matinė",
-        seeThrough: "Nepramatoma",
-        direction: "Vertikali",
-        montavimas: true,
-        borteliai: true,
-        stulpai: true,
-        tikMontavimas: false,
-        twoSided: false,
-        space: 3,
-        elements: 0,
-        totalLength: 0,
-        totalSQ: 0,
-        measures: [{ ...initialMeasure }],
-      });
+      this.fences.push({ ...initialFence, id: uuidv4() });
     },
 
     clearAll() {
@@ -103,25 +90,18 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[data.index].direction = data.value;
     },
 
-    updateMontavimas(data: { index: number; value: boolean }): void {
-      this.fences[data.index].montavimas = data.value;
+    updateServices(data: { index: number; value: string }): void {
+      this.fences[data.index].services = data.value;
+    },
+    updateGateType(data: { index: number; value: string }): void {
+      this.fences[data.index].gateType = data.value;
+    },
+    updateAutomatics(data: { index: number; value: string }): void {
+      this.fences[data.index].automatics = data.value;
     },
 
-    updateBorteliai(data: { index: number; value: boolean }): void {
-      this.fences[data.index].borteliai = data.value;
-    },
-
-    updateStulpai(data: { index: number; value: boolean }): void {
-      this.fences[data.index].stulpai = data.value;
-    },
-
-    updateTikMontavimas(data: { index: number; value: boolean }): void {
-      this.fences[data.index].tikMontavimas = data.value;
-      if (data.value) {
-        this.fences[data.index].stulpai = false;
-        this.fences[data.index].borteliai = false;
-        this.fences[data.index].montavimas = false;
-      }
+    updateParts(data: { index: number; value: string }): void {
+      this.fences[data.index].parts = data.value;
     },
 
     updateMeasureSpace(data: { index: number; value: number }): void {
@@ -136,8 +116,14 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[data.index].measures[data.measureIndex].gates = data.value;
     },
 
-    updateMeasureTwoSided(data: { index: number; value: boolean }): void {
+    updateTwoSided(data: { index: number; value: string }): void {
       this.fences[data.index].twoSided = data.value;
+    },
+    updateGateAditional(data: { index: number; value: string }): void {
+      this.fences[data.index].gateAditional = data.value;
+    },
+    updateAditional(data: { index: number; value: string }): void {
+      this.fences[data.index].aditional = data.value;
     },
 
     updateMeasureKampas(data: {

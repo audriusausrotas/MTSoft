@@ -1,4 +1,10 @@
-import type { Client, Measure, Result, MenuLinks } from "~/data/interfaces";
+import type {
+  Client,
+  Measure,
+  Result,
+  MenuLinks,
+  Fence,
+} from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -21,6 +27,28 @@ export const initialMeasure: Measure = {
     exist: false,
     value: "",
   },
+};
+
+export const initialFence: Fence = {
+  id: "",
+  side: "Priekis",
+  type: "Daimond 60/90",
+  color: "7016",
+  material: "Matinė",
+  seeThrough: "Nepramatoma",
+  direction: "Horizontali",
+  services: "Medžiagos, Montavimas",
+  parts: "Borteliai, Stulpai",
+  twoSided: "Ne",
+  gateType: "Stumdomi",
+  gateAditional: "",
+  automatics: "Taip",
+  aditional: "",
+  space: 3,
+  elements: 0,
+  totalLength: 0,
+  totalSQ: 0,
+  measures: [{ ...initialMeasure }],
 };
 
 export const initialResultData: Result = {

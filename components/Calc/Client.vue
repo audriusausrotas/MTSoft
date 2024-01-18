@@ -12,7 +12,6 @@ const open = ref(true);
         variant="light"
         :active="true"
         label="Klientas"
-        width="w-72"
         :name="useCalculations.client.username"
         @onChange="(value: string) => useCalculations.updateClientUsername(value)"
       />
@@ -22,7 +21,6 @@ const open = ref(true);
         variant="light"
         label="Telefono Numeris"
         type="number"
-        width="w-72"
         :name="useCalculations.client.phone"
         @onChange="(value: string) => -useCalculations.updateClientPhone(value)"
       />
@@ -31,7 +29,6 @@ const open = ref(true);
         placeholder="Adresas"
         variant="light"
         label="Adresas"
-        width="w-72"
         :name="useCalculations.client.address"
         @onChange="(value: string) => useCalculations.updateClientAddress(value)"
       />
@@ -40,7 +37,6 @@ const open = ref(true);
         placeholder="Elektroninis Paštas"
         variant="light"
         label="Elektroninis Paštas"
-        width="w-72"
         :name="useCalculations.client.email"
         @onChange="(value: string) => useCalculations.updateClientEmail(value)"
       />

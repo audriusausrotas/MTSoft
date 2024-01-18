@@ -21,6 +21,7 @@ export default function calculateResults() {
   let totalElements: number = 0;
 
   fences.fences.forEach((item) => {
+    // checks if crossbars needed
     const hasCrossbars: boolean =
       verticals.some((vertical) => vertical === item.type) &&
       item.direction === "Vertikali";
@@ -46,7 +47,7 @@ export default function calculateResults() {
           client: fences.client.username,
           phone: fences.client.phone,
           address: fences.client.address,
-          type: measure.length! > 2 ? "stumdomi" : "varteliai",
+          type: measure.length! > 200 ? item.gateType : "varteliai",
           auto: true,
           width: measure.length!,
           height: measure.height || 0,

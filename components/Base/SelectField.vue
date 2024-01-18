@@ -58,7 +58,7 @@ const changeHandler = (value: string): void => {
       </div>
       <div
         v-if="isOpen"
-        class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-scroll border max-h-52 rounded-xl top-10 border-gray-light"
+        class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border max-h-52 rounded-xl top-10 border-dark-light"
         :class="props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light'"
       >
         <div
