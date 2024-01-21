@@ -14,10 +14,18 @@ export const clientInitialValue: Client = {
 };
 
 export const initialMeasure: Measure = {
-  length: 0,
-  height: 0,
-  MeasureSpace: 0,
-  gates: false,
+  length: null,
+  height: null,
+  MeasureSpace: null,
+  gates: {
+    exist: false,
+    type: "Stumdomi",
+    automatics: "Taip",
+    aditional: "",
+    direction: "Vidus Kairė",
+    lock: "Paprasta",
+  },
+
   elements: 0,
   kampas: {
     exist: false,
@@ -40,9 +48,6 @@ export const initialFence: Fence = {
   services: "Medžiagos, Montavimas",
   parts: "Borteliai, Stulpai",
   twoSided: "Ne",
-  gateType: "Stumdomi",
-  gateAditional: "",
-  automatics: "Taip",
   aditional: "",
   space: 3,
   elements: 0,

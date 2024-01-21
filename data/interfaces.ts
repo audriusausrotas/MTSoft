@@ -58,7 +58,7 @@ export interface Measure {
   length: number | null;
   height: number | null;
   MeasureSpace: number | null;
-  gates: boolean;
+  gates: GateInfo;
   elements: number;
   kampas: {
     exist: boolean;
@@ -68,6 +68,15 @@ export interface Measure {
     exist: boolean;
     value: string;
   };
+}
+
+export interface GateInfo {
+  exist: boolean;
+  type: string;
+  automatics: string;
+  aditional: string;
+  direction: string;
+  lock: string;
 }
 
 export interface User {
@@ -90,11 +99,8 @@ export interface Fence {
   seeThrough: string;
   direction: string;
   parts: string;
-  gateType: string;
-  gateAditional: string;
   aditional: string;
   twoSided: string;
-  automatics: string;
   space: number;
   elements: number;
   totalLength: number;

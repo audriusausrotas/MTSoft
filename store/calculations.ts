@@ -93,11 +93,41 @@ export const useCalculationsStore = defineStore("calculations", {
     updateServices(data: { index: number; value: string }): void {
       this.fences[data.index].services = data.value;
     },
-    updateGateType(data: { index: number; value: string }): void {
-      this.fences[data.index].gateType = data.value;
+
+    updateGateType(data: {
+      index: number;
+      measureIndex: number;
+      value: string;
+    }): void {
+      this.fences[data.index].measures[data.measureIndex].gates.type =
+        data.value;
     },
-    updateAutomatics(data: { index: number; value: string }): void {
-      this.fences[data.index].automatics = data.value;
+
+    updateGateDirection(data: {
+      index: number;
+      measureIndex: number;
+      value: string;
+    }): void {
+      this.fences[data.index].measures[data.measureIndex].gates.direction =
+        data.value;
+    },
+
+    updateGateLock(data: {
+      index: number;
+      measureIndex: number;
+      value: string;
+    }): void {
+      this.fences[data.index].measures[data.measureIndex].gates.lock =
+        data.value;
+    },
+
+    updateAutomatics(data: {
+      index: number;
+      measureIndex: number;
+      value: string;
+    }): void {
+      this.fences[data.index].measures[data.measureIndex].gates.automatics =
+        data.value;
     },
 
     updateParts(data: { index: number; value: string }): void {
@@ -113,15 +143,23 @@ export const useCalculationsStore = defineStore("calculations", {
       measureIndex: number;
       value: boolean;
     }): void {
-      this.fences[data.index].measures[data.measureIndex].gates = data.value;
+      this.fences[data.index].measures[data.measureIndex].gates.exist =
+        data.value;
     },
 
     updateTwoSided(data: { index: number; value: string }): void {
       this.fences[data.index].twoSided = data.value;
     },
-    updateGateAditional(data: { index: number; value: string }): void {
-      this.fences[data.index].gateAditional = data.value;
+
+    updateGateAditional(data: {
+      index: number;
+      measureIndex: number;
+      value: string;
+    }): void {
+      this.fences[data.index].measures[data.measureIndex].gates.aditional =
+        data.value;
     },
+
     updateAditional(data: { index: number; value: string }): void {
       this.fences[data.index].aditional = data.value;
     },

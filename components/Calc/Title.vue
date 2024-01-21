@@ -11,8 +11,8 @@ const props = defineProps(["name", "open"]);
     <h6>{{ props.name }}</h6>
     <NuxtImg
       src="/icons/arrowDown.svg"
-      width="8"
-      height="8"
+      width="10"
+      height="10"
       decoding="auto"
       :ismap="true"
       loading="lazy"

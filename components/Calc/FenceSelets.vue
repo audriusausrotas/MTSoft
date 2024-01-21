@@ -10,28 +10,20 @@ import {
   services,
   parts,
   twoSided,
-  gateTypes,
 } from "~/data/selectFieldData";
-import type { Measure } from "~/data/interfaces";
 
 const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
 const currentFence = useCalculations.fences[props.index];
 
 const isFenceBoards = ref<boolean>(false);
-const isGates = ref<boolean>(false);
+const isOpen = ref<boolean>(false);
 
 watch(
-  () => [
-    useCalculations.fences[props.index].type,
-    useCalculations.fences[props.index].measures,
-  ],
+  () => useCalculations.fences[props.index].type,
   (newValue) => {
-    const isTrue = verticals.includes(newValue[0] as string);
+    const isTrue = verticals.includes(newValue as string);
     isFenceBoards.value = isTrue;
-    isGates.value = (newValue[1] as Measure[]).some(
-      (item: Measure) => item.gates === true && item.length && item.length > 200
-    );
   },
   { deep: true }
 );
@@ -150,50 +142,28 @@ watch(
         "
       />
     </div>
-    <BaseInput
-      placeholder="Papildoma informacija"
-      variant="light"
-      label="Papildoma informacija"
-      width="w-full max-w-[1008px]"
-      class="mb-8"
-      :name="currentFence.aditional"
-      @onChange="(value: string) =>
-        useCalculations.updateAditional({
-          index: props.index,
-          value,
-        })
-        "
-    />
-    <div
-      v-if="isGates"
-      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
-    >
-      <BaseSelectField
-        label="vartų tipas"
-        :values="gateTypes"
-        id="gateType"
-        :defaultValue="currentFence.gateType"
-        width="w-60"
-        @onChange="(value: string) => useCalculations.updateGateType({ index: props.index, value })
-        "
-      />
-      <BaseSelectField
-        label="automatika"
-        :values="twoSided"
-        id="automatika"
-        :defaultValue="currentFence.automatics"
-        width="w-60"
-        @onChange="(value: string) => useCalculations.updateAutomatics({ index: props.index, value })
-        "
-      />
+    <div>
+      <div
+        class="flex gap-2 hover:cursor-pointer select-none"
+        @click="isOpen = !isOpen"
+      >
+        <p class="text-md">Papildoma Informacija</p>
+        <NuxtImg
+          src="icons/arrowDown.svg"
+          width="10"
+          :class="isOpen ? 'rotate-180' : ''"
+          class="transition-all"
+        />
+      </div>
       <BaseInput
+        v-if="isOpen"
         placeholder="Papildoma informacija"
         variant="light"
-        label="Papildoma informacija"
-        width="w-[496px]"
-        :name="currentFence.gateAditional"
+        width="w-full max-w-[1008px]"
+        class="mb-8"
+        :name="currentFence.aditional"
         @onChange="(value: string) =>
-        useCalculations.updateGateAditional({
+        useCalculations.updateAditional({
           index: props.index,
           value,
         })

@@ -9,7 +9,13 @@ export const categories: string[] = [
   "vartai",
   "kita",
 ];
-
+export const gateDirection: string[] = [
+  "Vidus Kairė",
+  "Vidus Dešinė",
+  "Išorė Kairė",
+  "Išorė Dešinė",
+];
+export const gateLock: string[] = ["Paprasta", "Elektromagnetinė"];
 export const gateTypes: string[] = ["Stumdomi", "Varstomi"];
 export const fenceColors: string[] = [
   "7016",
