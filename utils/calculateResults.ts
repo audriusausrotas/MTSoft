@@ -2,8 +2,8 @@ import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
 import type { Gate, Poles, Fences } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
-import calculateVerticalFence from "~/utils/CalculateVerticalFence";
-import createResultElement from "~/utils/createResultElement";
+import calculateVerticalFence from "~/utils/calculateVerticalFence";
+import generateResults from "~/utils/generateResults";
 
 export default function calculateResults() {
   const results = useResultsStore();
@@ -12,7 +12,6 @@ export default function calculateResults() {
   results.clearResults();
   results.clearParts();
 
-  let isTogether: boolean = false;
   let polesTemp: Poles[] = [];
   let gatePolesTemp: number = 0;
   let crossbarsTemp: number = 0;
@@ -34,6 +33,8 @@ export default function calculateResults() {
       const temp = calculateHorizontalFence(fenceTemp, item);
       fenceTemp = [...temp];
     }
+
+    let isTogether: boolean = false;
 
     item.measures.forEach((measure) => {
       // calculate vertical fences
@@ -60,13 +61,18 @@ export default function calculateResults() {
           ready: false,
           aditional: measure.gates.aditional,
         });
+      }
 
-        // calculate poles
-        if (
-          item.services !== "Tik Montavimas" &&
-          item.parts !== "Tik Borteliai" &&
-          item.parts !== "Be Bortelių Ir Stulpų"
-        ) {
+      // calculate poles
+      if (
+        item.services !== "Tik Montavimas" &&
+        item.parts !== "Tik Borteliai" &&
+        item.parts !== "Be Bortelių Ir Stulpų"
+      ) {
+        if (!measure.gates.exist) {
+          polesTemp2++;
+          isTogether = false;
+        } else {
           if (!isTogether) {
             polesTemp2--;
             gatePolesTemp += 2;
@@ -74,14 +80,15 @@ export default function calculateResults() {
             gatePolesTemp++;
           }
           isTogether = true;
-        } else {
-          polesTemp2++;
-          isTogether = false;
         }
       }
 
       // calculate borders, crossbars
-      if (!measure.gates && !measure.kampas.exist && !measure.laiptas.exist) {
+      if (
+        !measure.gates.exist &&
+        !measure.kampas.exist &&
+        !measure.laiptas.exist
+      ) {
         // calculate total height
         totalHeight += measure.height || 0;
 
@@ -113,8 +120,8 @@ export default function calculateResults() {
       };
 
       if (item.type.includes("segmentas")) {
-        poleData.height = 2.6;
-        poleData.thickness = 1.3;
+        poleData.height = 2.4;
+        poleData.thickness = 1.25;
       } else {
         poleData.height = 3;
         poleData.thickness = 2;
@@ -133,11 +140,10 @@ export default function calculateResults() {
             pole.thickness === poleData.thickness &&
             pole.color === poleData.color
           ) {
-            pole.quantity += poleData.quantity;
+            pole.quantity = poleData.quantity;
             notExist = false;
           }
         });
-
         if (notExist) polesTemp.push(poleData);
       }
 
@@ -158,53 +164,5 @@ export default function calculateResults() {
   results.addGates(gatesTemp);
   results.addTotalElements(totalElements);
 
-  // const initialFenceData = {
-  //   type: item.type,
-  //   color: item.color,
-  //   length: item.totalLength,
-  //   height: 0,
-  //   quantity: item.totalQuantity,
-  //   material: item.material,
-  //   space: item.space,
-  //   seeThrough: item.seeThrough,
-  //   direction: item.direction,
-  //   twoSided: item.twoSided,
-  // };
-
-  if (results.fences.length > 0) {
-    results.fences.forEach((item) => createResultElement(item));
-  }
-
-  if (results.poles.length > 0) {
-  }
-
-  if (results.gatePoles > 0) {
-  }
-
-  if (results.borders > 0) {
-  }
-
-  if (results.borderHolders > 0) {
-  }
-
-  if (results.crossbars > 0) {
-  }
-
-  if (results.crossbarHolders > 0) {
-  }
-
-  if (results.rivets > 0) {
-  }
-
-  if (results.bindingsLength > 0) {
-  }
-
-  if (results.segments > 0) {
-  }
-
-  if (results.segmentHolders > 0) {
-  }
-
-  if (results.gates.length > 0) {
-  }
+  generateResults();
 }

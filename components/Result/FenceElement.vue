@@ -11,7 +11,7 @@ const deleteHandler = () => {
 
 const showAditionalVertical = computed(() => {
   if (
-    verticals.some((item) => props.result.type.includes(item)) &&
+    verticals.some((item) => props.result?.type?.includes(item)) &&
     props.result.direction === "Vertikali"
   )
     return true;
@@ -19,7 +19,7 @@ const showAditionalVertical = computed(() => {
 
 const showAditionalHorizontal = computed(() => {
   if (
-    horizontals.some((item) => props.result.type.includes(item)) &&
+    horizontals.some((item) => props.result?.type?.includes(item)) &&
     props.result.direction === "Horizontali"
   )
     return true;

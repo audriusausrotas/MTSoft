@@ -13,56 +13,17 @@ export const clientInitialValue: Client = {
   email: "",
 };
 
-export const initialMeasure: Measure = {
-  length: 0,
-  height: 0,
-  MeasureSpace: 0,
-  gates: {
-    exist: false,
-    type: "Stumdomi",
-    automatics: "Taip",
-    aditional: "",
-    direction: "Vidus Kairė",
-    lock: "Paprasta",
-  },
-
-  elements: 0,
-  kampas: {
-    exist: false,
-    value: "",
-  },
-  laiptas: {
-    exist: false,
-    value: "",
-  },
-};
-
-export const initialFence: Fence = {
-  id: "",
-  side: "Priekis",
-  type: "Daimond 60/90",
-  color: "7016",
-  material: "Matinė",
-  seeThrough: "Nepramatoma",
-  direction: "Horizontali",
-  services: "Medžiagos, Montavimas",
-  parts: "Borteliai, Stulpai",
-  twoSided: "Ne",
-  aditional: "",
-  space: 2,
-  elements: 0,
-  totalLength: 0,
-  totalQuantity: 0,
-  measures: [],
-};
-
 export const initialResultData: Result = {
   id: "",
-  name: "",
+  type: "",
   quantity: 0,
   color: "",
   space: 0,
   price: 0,
+  height: 0,
+  direction: "",
+  twoSided: "Ne",
+  seeThrough: "",
   totalPrice: 0,
   cost: 0,
   totalCost: 0,
@@ -82,3 +43,25 @@ export const menuLinks: MenuLinks[] = [
   { name: "Sąmata", link: "/samata", iconPath: "/icons/projects.svg" },
   { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
 ];
+export const createInitialMeasure = (): Measure => ({
+  length: 0,
+  height: 0,
+  MeasureSpace: 0,
+  gates: {
+    exist: false,
+    type: "Stumdomi",
+    automatics: "Taip",
+    aditional: "",
+    direction: "Vidus Kairė",
+    lock: "Paprasta",
+  },
+  elements: 0,
+  kampas: {
+    exist: false,
+    value: "",
+  },
+  laiptas: {
+    exist: false,
+    value: "",
+  },
+});

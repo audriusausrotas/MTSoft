@@ -8,7 +8,7 @@ import {
 const props = defineProps(["measureIndex", "index", "measure"]);
 const useCalculations = useCalculationsStore();
 
-const isChecked = ref(false);
+const isChecked = ref(props.measure.gates.exist);
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
@@ -64,6 +64,7 @@ function toggleCheckbox(value: boolean) {
     <BaseCheckField
       v-if="!props.measure.kampas.exist && !props.measure.laiptas.exist"
       @onChange="(value: boolean): void => toggleCheckbox(value)"
+      :checked="isChecked"
     />
 
     <p v-if="props.measure.kampas.exist">Kampas</p>

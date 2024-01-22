@@ -1,11 +1,8 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import {
-  clientInitialValue,
-  initialMeasure,
-  initialFence,
-} from "~/data/initialValues";
-import type { Measure, Calculations } from "~/data/interfaces";
+import { clientInitialValue } from "~/data/initialValues";
+import type { Measure, Calculations, Fence } from "~/data/interfaces";
+import { createInitialMeasure } from "~/data/initialValues";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
@@ -15,12 +12,26 @@ export const useCalculationsStore = defineStore("calculations", {
 
   actions: {
     addFence(): void {
-      const tempFence = {
-        ...initialFence,
+      const initialFence: Fence = {
         id: uuidv4(),
-        measures: [{ ...initialMeasure }],
+        side: "Priekis",
+        type: "Daimond 60/90",
+        color: "7016",
+        material: "Matinė",
+        seeThrough: "Nepramatoma",
+        direction: "Horizontali",
+        services: "Medžiagos, Montavimas",
+        parts: "Borteliai, Stulpai",
+        twoSided: "Ne",
+        aditional: "",
+        space: 2,
+        elements: 0,
+        totalLength: 0,
+        totalQuantity: 0,
+        measures: [createInitialMeasure()],
       };
-      this.fences.push(tempFence);
+
+      this.fences.push(initialFence);
     },
 
     clearAll() {
@@ -29,12 +40,12 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     addMeasure(index: number): void {
-      this.fences[index].measures.push({ ...initialMeasure });
+      this.fences[index].measures.push(createInitialMeasure());
     },
 
     addKampas(index: number): void {
       const kampas: Measure = {
-        ...initialMeasure,
+        ...createInitialMeasure(),
         kampas: {
           exist: true,
           value: "",
@@ -45,7 +56,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     addLaiptas(index: number): void {
       const laiptas: Measure = {
-        ...initialMeasure,
+        ...createInitialMeasure(),
         laiptas: {
           exist: true,
           value: "",
@@ -212,7 +223,7 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     deleteMeasures(index: number): void {
-      this.fences[index].measures = [{ ...initialMeasure }];
+      this.fences[index].measures = [createInitialMeasure()];
     },
 
     deleteFence(id: string): void {
