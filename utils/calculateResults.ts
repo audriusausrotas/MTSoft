@@ -2,7 +2,7 @@ import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
 import type { Gate, Poles, Fences } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
-import calculateVerticalFence from "~/utils/createFenceV";
+import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
 
 export default function calculateResults() {
