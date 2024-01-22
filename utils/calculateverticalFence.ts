@@ -1,7 +1,7 @@
 import type { Fence, Measure, Fences } from "~/data/interfaces";
 import { fenceMeasures } from "~/data/selectFieldData";
 
-export default function CalculateVerticalFence(
+export default function calculateVerticalFence(
   item: Fence,
   measure: Measure,
   fenceTemp: Fences[]
