@@ -40,15 +40,15 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateName(data: { index: number; value: string }): void {
-      this.results[data.index].name = data.value;
+      this.results[data.index].type = data.value;
     },
 
     selectItem(data: {
       index: number;
-      value: { name: string; price: number; cost: number; category: string };
+      value: { type: string; price: number; cost: number; category: string };
     }): void {
       const selectedResult = this.results[data.index];
-      selectedResult.name = data.value.name;
+      selectedResult.type = data.value.type;
       selectedResult.price = data.value.price;
       selectedResult.cost = data.value.cost;
       selectedResult.category = data.value.category;

@@ -1,21 +1,26 @@
 import getPriceItem from "~/utils/getPriceItem";
+import type { Result, Product } from "~/data/interfaces";
 import { v4 as uuidv4 } from "uuid";
 
 export default function createResultElement(item: any) {
   const results = useResultsStore().results;
-  const product: Product = getPriceItem(item.name);
+  const product: Product = getPriceItem(item.type);
 
-  const totalPrice = product.price * item.sq;
-  const totalCost = product.cost * item.sq;
+  const totalPrice = product.price * item.quantity;
+  const totalCost = product.cost * item.quantity;
   const profit = totalPrice - totalCost;
   const margin = (Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
 
   const resultData: Result = {
     id: uuidv4(),
-    name: item.name,
-    quantity: item.sq,
+    type: item.type,
+    quantity: item.quantity,
     color: item.color || "",
+    height: item.height || 0,
     space: item.space || 0,
+    twoSided: item.twoSided,
+    direction: item.direction,
+    seeThrough: item.seeThrough,
     price: product.price || 0,
     totalPrice: totalPrice,
     cost: product.cost || 0,
@@ -27,29 +32,4 @@ export default function createResultElement(item: any) {
   };
 
   results.push(resultData);
-}
-
-interface Result {
-  id: string;
-  name: string;
-  price: number;
-  cost: number;
-  category: string;
-  quantity: number;
-  space: number;
-  color: string;
-  totalPrice: number;
-  totalCost: number;
-  profit: number;
-  margin: number;
-  isNew: boolean;
-}
-
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  cost: number;
-  category: string;
-  image: string;
 }

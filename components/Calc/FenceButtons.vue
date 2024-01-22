@@ -10,7 +10,7 @@ const cancelHandler = (): void => {
   totalLength.value = 0;
 };
 
-const calculateLengthHandler = () => {
+const calculateLengthHandler = (): void => {
   const totalMeasures: number[] = [];
   if (totalLength.value > 0) {
     const measures = Math.floor(+totalLength.value / 250);
@@ -21,7 +21,7 @@ const calculateLengthHandler = () => {
     if (modula > 0) totalMeasures.push(modula);
   } else return;
 
-  const checkCalculations = () => {
+  const checkCalculations = (): void => {
     const lastElement = totalMeasures.length - 1;
     const isShort = totalMeasures.some((item) => item === 250);
     if (totalMeasures[lastElement] < 200 && isShort) {
@@ -126,7 +126,7 @@ const calculateLengthHandler = () => {
     </p>
     <p class="flex">
       Kvadratiniai metrai:
-      {{ useCalculations.fences[props.index].totalSQ }} m<span
+      {{ useCalculations.fences[props.index].totalQuantity }} m<span
         class="text-[10px] font-semibold"
         >2</span
       >

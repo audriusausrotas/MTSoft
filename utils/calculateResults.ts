@@ -1,8 +1,9 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
 import type { Gate, Poles, Fences } from "~/data/interfaces";
-import calculateHorizontalFence from "./calculateHorizontalFence";
-import calculateVerticalFence from "./calculateverticalFence";
+import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
+import calculateVerticalFence from "~/utils/CalculateVerticalFence";
+import createResultElement from "~/utils/createResultElement";
 
 export default function calculateResults() {
   const results = useResultsStore();
@@ -22,52 +23,61 @@ export default function calculateResults() {
 
   fences.fences.forEach((item) => {
     // checks if crossbars needed
-    const hasCrossbars: boolean =
-      verticals.some((vertical) => vertical === item.type) &&
-      item.direction === "Vertikali";
+    const hasCrossbars: boolean = verticals.some(
+      (vertical) => vertical === item.type && item.direction === "Vertikali"
+    );
+
     let polesTemp2: number = 1;
 
-    console.log(item);
-
-    // calculate fences
-    if (hasCrossbars) {
-      calculateVerticalFence();
-    } else {
+    // calculate horizontal fences
+    if (!hasCrossbars) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       fenceTemp = [...temp];
     }
 
     item.measures.forEach((measure) => {
+      // calculate vertical fences
+      if (hasCrossbars) {
+        const temp = calculateVerticalFence(item, measure, fenceTemp);
+        fenceTemp = [...temp];
+      }
+
       // calculate fence elements
       totalElements += measure.elements;
 
       // calculate gates
-      if (measure.gates) {
+      if (measure.gates.exist) {
         gatesTemp.push({
           client: fences.client.username,
           phone: fences.client.phone,
           address: fences.client.address,
-          type: measure.length! > 200 ? item.gateType : "varteliai",
-          auto: true,
-          width: measure.length!,
+          type: measure.length! > 200 ? measure.gates.type : "Varteliai",
+          auto: measure.gates.automatics,
+          width: measure.length || 0,
           height: measure.height || 0,
           color: item.color,
           filling: item.type,
           ready: false,
-          aditional: [],
+          aditional: measure.gates.aditional,
         });
 
         // calculate poles
-        if (!isTogether) {
-          polesTemp2--;
-          gatePolesTemp += 2;
+        if (
+          item.services !== "Tik Montavimas" &&
+          item.parts !== "Tik Borteliai" &&
+          item.parts !== "Be Bortelių Ir Stulpų"
+        ) {
+          if (!isTogether) {
+            polesTemp2--;
+            gatePolesTemp += 2;
+          } else {
+            gatePolesTemp++;
+          }
+          isTogether = true;
         } else {
-          gatePolesTemp++;
+          polesTemp2++;
+          isTogether = false;
         }
-        isTogether = true;
-      } else {
-        polesTemp2++;
-        isTogether = false;
       }
 
       // calculate borders, crossbars
@@ -80,7 +90,13 @@ export default function calculateResults() {
           crossbarsTemp += 2;
         }
         // calculate borders
-        results.addBorders();
+        if (
+          item.services !== "TikMontavimas" &&
+          item.parts !== "Tik Stulpai" &&
+          item.parts !== "Be Bortelių Ir Stulpų"
+        ) {
+          results.addBorders();
+        }
 
         // calculate segment
         if (item.type.includes("Segmentas")) {
@@ -104,22 +120,28 @@ export default function calculateResults() {
         poleData.thickness = 2;
       }
 
-      let notExist: boolean = true;
+      if (
+        item.services !== "Tik Montavimas" &&
+        item.parts !== "Tik Borteliai" &&
+        item.parts !== "Be Bortelių Ir Stulpų"
+      ) {
+        let notExist: boolean = true;
 
-      polesTemp.forEach((pole) => {
-        if (
-          pole.height === poleData.height &&
-          pole.thickness === poleData.thickness &&
-          pole.color === poleData.color
-        ) {
-          pole.quantity += poleData.quantity;
-          notExist = false;
-        }
-      });
+        polesTemp.forEach((pole) => {
+          if (
+            pole.height === poleData.height &&
+            pole.thickness === poleData.thickness &&
+            pole.color === poleData.color
+          ) {
+            pole.quantity += poleData.quantity;
+            notExist = false;
+          }
+        });
 
-      if (notExist) polesTemp.push(poleData);
+        if (notExist) polesTemp.push(poleData);
+      }
 
-      //calculate crossbar holders
+      //calculate segment holders
       if (item.type.includes("Segmentas")) {
         const poleCount = polesTemp.length + gatePolesTemp;
         const averageHeight = totalHeight / item.measures.length;
@@ -136,5 +158,53 @@ export default function calculateResults() {
   results.addGates(gatesTemp);
   results.addTotalElements(totalElements);
 
-  console.log(results);
+  // const initialFenceData = {
+  //   type: item.type,
+  //   color: item.color,
+  //   length: item.totalLength,
+  //   height: 0,
+  //   quantity: item.totalQuantity,
+  //   material: item.material,
+  //   space: item.space,
+  //   seeThrough: item.seeThrough,
+  //   direction: item.direction,
+  //   twoSided: item.twoSided,
+  // };
+
+  if (results.fences.length > 0) {
+    results.fences.forEach((item) => createResultElement(item));
+  }
+
+  if (results.poles.length > 0) {
+  }
+
+  if (results.gatePoles > 0) {
+  }
+
+  if (results.borders > 0) {
+  }
+
+  if (results.borderHolders > 0) {
+  }
+
+  if (results.crossbars > 0) {
+  }
+
+  if (results.crossbarHolders > 0) {
+  }
+
+  if (results.rivets > 0) {
+  }
+
+  if (results.bindingsLength > 0) {
+  }
+
+  if (results.segments > 0) {
+  }
+
+  if (results.segmentHolders > 0) {
+  }
+
+  if (results.gates.length > 0) {
+  }
 }

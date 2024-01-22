@@ -14,9 +14,9 @@ export const clientInitialValue: Client = {
 };
 
 export const initialMeasure: Measure = {
-  length: null,
-  height: null,
-  MeasureSpace: null,
+  length: 0,
+  height: 0,
+  MeasureSpace: 0,
   gates: {
     exist: false,
     type: "Stumdomi",
@@ -49,11 +49,11 @@ export const initialFence: Fence = {
   parts: "Borteliai, Stulpai",
   twoSided: "Ne",
   aditional: "",
-  space: 3,
+  space: 2,
   elements: 0,
   totalLength: 0,
-  totalSQ: 0,
-  measures: [{ ...initialMeasure }],
+  totalQuantity: 0,
+  measures: [],
 };
 
 export const initialResultData: Result = {

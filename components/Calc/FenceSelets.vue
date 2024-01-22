@@ -16,7 +16,7 @@ const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
 const currentFence = useCalculations.fences[props.index];
 
-const isFenceBoards = ref<boolean>(false);
+const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
 const isOpen = ref<boolean>(false);
 
 watch(

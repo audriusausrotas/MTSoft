@@ -7,18 +7,18 @@ watch(
   () => useCalculations.fences[props.index].measures,
   (newMeasures, oldMeasures) => {
     let totalM: number = 0;
-    let totalSQ: number = 0;
+    let totalQuantity: number = 0;
     newMeasures.forEach((item: Measure) => {
       totalM += +item.length!;
-      totalSQ += item.length! * item.height!;
+      totalQuantity += item.length! * item.height!;
     });
     useCalculations.updateTotalLength({
       index: props.index,
       value: totalM / 100,
     });
-    useCalculations.updateTotalSQ({
+    useCalculations.updateTotalQuantity({
       index: props.index,
-      value: totalSQ / 10000,
+      value: totalQuantity / 10000,
     });
   },
   { deep: true }

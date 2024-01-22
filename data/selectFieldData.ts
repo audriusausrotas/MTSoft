@@ -1,3 +1,5 @@
+import type { FenceMeasures } from "~/data/interfaces";
+
 export const fenceSide: string[] = ["priekis", "galas", "kairė", "dešinė"];
 export const fenceMaterials: string[] = ["Matinė", "Blizgi", "IceCrystal"];
 export const categories: string[] = [
@@ -48,6 +50,24 @@ export const fenceTypes: string[] = [
   "Emka",
 ];
 
+export const horizontals: string[] = [
+  "Daimond 60/90",
+  "Daimond 40/105",
+  "Alba",
+  "Plank",
+  "Eglė",
+  "Dilė",
+  "Dija",
+  "Standard",
+  "Sigma",
+  "Astra",
+  "Polo",
+  "EVA",
+  "EVA3",
+  "Estetic",
+  "Emka",
+];
+
 export const verticals: string[] = [
   "Alba",
   "Dilė",
@@ -83,30 +103,35 @@ export const parts: string[] = [
   "Borteliai, Stulpai",
   "Tik Stulpai",
   "Tik Borteliai",
+  "Be Bortelių Ir Stulpų",
 ];
 
 export const twoSided: string[] = ["Taip", "Ne"];
 
-export const fenceMeasures: object = {
+export const fenceMeasures: FenceMeasures = {
   Daimond60: {
-    heigth: 90,
-    width: 60,
+    height: 9,
+    width: 6,
   },
   Daimond40: {
     height: 10.5,
-    width: 40,
+    width: 4,
   },
   Plank: {
-    height: 110,
-    width: 40,
+    height: 11,
+    width: 4,
   },
   Žaliuzi: {
     height: 0,
     width: 0,
   },
+  Dilė: {
+    height: 8.6,
+    width: 2,
+  },
   Dija: {
-    height: 86,
-    width: 20,
+    height: 10.9,
+    width: 1.8,
   },
   Eglė: {
     height: 0,
@@ -114,38 +139,38 @@ export const fenceMeasures: object = {
   },
   Alba: {
     height: 10.9,
-    width: 18,
+    width: 1.8,
   },
   Standard: {
-    height: 115,
-    width: 18,
+    height: 11.5,
+    width: 1.8,
   },
   Sigma: {
-    height: 118,
-    width: 23,
+    height: 11.8,
+    width: 2.3,
   },
   Astra: {
-    height: 91,
-    width: 15,
+    height: 9.1,
+    width: 1.5,
   },
   Polo: {
-    height: 110,
-    width: 16,
+    height: 11,
+    width: 1.6,
   },
   Eva: {
-    height: 115,
-    width: 10,
+    height: 11.5,
+    width: 1,
   },
   Eva3: {
-    height: 115,
-    width: 10,
+    height: 11.5,
+    width: 1,
   },
   Estetic: {
-    height: 115,
-    width: 18,
+    height: 11.5,
+    width: 1.8,
   },
   Emka: {
-    height: 115,
-    width: 18,
+    height: 11.5,
+    width: 1.8,
   },
 };

@@ -23,13 +23,13 @@ export interface Gate {
   phone: string;
   address: string;
   type: string;
-  auto: boolean;
+  auto: string;
   width: number;
   height: number;
   color: string;
   filling: string;
   ready: boolean;
-  aditional?: String[];
+  aditional: string;
 }
 
 export interface Client {
@@ -45,19 +45,22 @@ export interface Calculations {
 }
 
 export interface Fences {
-  name: string;
+  type: string;
   color: string;
   length: number;
-  sq: number;
+  height: number;
+  quantity: number;
   material: string;
   space: number;
-  twoSided: boolean;
+  seeThrough: string;
+  direction: string;
+  twoSided: string;
 }
 
 export interface Measure {
-  length: number | null;
-  height: number | null;
-  MeasureSpace: number | null;
+  length: number;
+  height: number;
+  MeasureSpace: number;
   gates: GateInfo;
   elements: number;
   kampas: {
@@ -104,17 +107,21 @@ export interface Fence {
   space: number;
   elements: number;
   totalLength: number;
-  totalSQ: number;
+  totalQuantity: number;
   measures: Measure[];
 }
 
 export interface Result {
   id: string;
-  name: string;
+  type: string;
   price: number;
   cost: number;
   category: string;
   quantity: number;
+  height: number;
+  twoSided: string;
+  direction: string;
+  seeThrough: string;
   space: number;
   color: string;
   totalPrice: number;
@@ -208,4 +215,28 @@ export interface Poles {
   thickness: number;
   color: string;
   quantity: number;
+}
+
+export interface FenceMeasure {
+  height: number;
+  width: number;
+}
+
+export interface FenceMeasures {
+  Daimond60: FenceMeasure;
+  Daimond40: FenceMeasure;
+  Plank: FenceMeasure;
+  Žaliuzi: FenceMeasure;
+  Dija: FenceMeasure;
+  Dilė: FenceMeasure;
+  Eglė: FenceMeasure;
+  Alba: FenceMeasure;
+  Standard: FenceMeasure;
+  Sigma: FenceMeasure;
+  Astra: FenceMeasure;
+  Polo: FenceMeasure;
+  Eva: FenceMeasure;
+  Eva3: FenceMeasure;
+  Estetic: FenceMeasure;
+  Emka: FenceMeasure;
 }

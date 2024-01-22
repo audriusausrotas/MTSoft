@@ -5,7 +5,6 @@ import {
   initialMeasure,
   initialFence,
 } from "~/data/initialValues";
-import { verticals } from "~/data/selectFieldData";
 import type { Measure, Calculations } from "~/data/interfaces";
 
 export const useCalculationsStore = defineStore("calculations", {
@@ -16,7 +15,12 @@ export const useCalculationsStore = defineStore("calculations", {
 
   actions: {
     addFence(): void {
-      this.fences.push({ ...initialFence, id: uuidv4() });
+      const tempFence = {
+        ...initialFence,
+        id: uuidv4(),
+        measures: [{ ...initialMeasure }],
+      };
+      this.fences.push(tempFence);
     },
 
     clearAll() {
@@ -186,8 +190,8 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[data.index].totalLength = data.value;
     },
 
-    updateTotalSQ(data: { index: number; value: number }): void {
-      this.fences[data.index].totalSQ = data.value;
+    updateTotalQuantity(data: { index: number; value: number }): void {
+      this.fences[data.index].totalQuantity = data.value;
     },
 
     copyLast(index: number): void {
