@@ -1,5 +1,3 @@
-import type { FenceMeasures } from "~/data/interfaces";
-
 export const fenceSide: string[] = ["priekis", "galas", "kairė", "dešinė"];
 export const fenceMaterials: string[] = ["Matinė", "Blizgi", "IceCrystal"];
 export const categories: string[] = [
@@ -107,70 +105,3 @@ export const parts: string[] = [
 ];
 
 export const twoSided: string[] = ["Taip", "Ne"];
-
-export const fenceMeasures: FenceMeasures = {
-  Daimond60: {
-    height: 9,
-    width: 6,
-  },
-  Daimond40: {
-    height: 10.5,
-    width: 4,
-  },
-  Plank: {
-    height: 11,
-    width: 4,
-  },
-  Žaliuzi: {
-    height: 0,
-    width: 0,
-  },
-  Dilė: {
-    height: 8.6,
-    width: 2,
-  },
-  Dija: {
-    height: 10.9,
-    width: 1.8,
-  },
-  Eglė: {
-    height: 0,
-    width: 0,
-  },
-  Alba: {
-    height: 10.9,
-    width: 1.8,
-  },
-  Standard: {
-    height: 11.5,
-    width: 1.8,
-  },
-  Sigma: {
-    height: 11.8,
-    width: 2.3,
-  },
-  Astra: {
-    height: 9.1,
-    width: 1.5,
-  },
-  Polo: {
-    height: 11,
-    width: 1.6,
-  },
-  Eva: {
-    height: 11.5,
-    width: 1,
-  },
-  Eva3: {
-    height: 11.5,
-    width: 1,
-  },
-  Estetic: {
-    height: 11.5,
-    width: 1.8,
-  },
-  Emka: {
-    height: 11.5,
-    width: 1.8,
-  },
-};

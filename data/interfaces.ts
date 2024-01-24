@@ -1,42 +1,7 @@
-export interface CalculatedParts {
-  fences: Fences[];
-  poles: Poles[];
-  gatePoles: number;
-  borders: number;
-  borderHolders: number;
-  rivets: number;
-  crossbars: number;
-  crossbarHolders: number;
-  totalElements: number;
-  bindingsLength: number;
-  segments: number;
-  segmentHolders: number;
-  gates: Gate[];
-  totalPrice: number;
-  totalCost: number;
-  totalProfit: number;
-  totalMargin: number;
-}
-
-export interface Gate {
-  client: string;
-  phone: string;
-  address: string;
-  type: string;
-  auto: string;
-  width: number;
-  height: number;
-  color: string;
-  filling: string;
-  ready: boolean;
-  aditional: string;
-}
-
-export interface Client {
-  address: string;
-  username: string;
-  phone: string;
-  email: string;
+export interface Response {
+  success: boolean;
+  data: Project[];
+  message: string;
 }
 
 export interface Calculations {
@@ -44,52 +9,25 @@ export interface Calculations {
   fences: Fence[];
 }
 
-export interface Fences {
-  type: string;
-  color: string;
-  length: number;
-  height: number;
-  quantity: number;
-  material: string;
-  space: number;
-  seeThrough: string;
-  direction: string;
-  twoSided: string;
-}
-
-export interface Measure {
-  length: number;
-  height: number;
-  MeasureSpace: number;
-  gates: GateInfo;
-  elements: number;
-  kampas: {
-    exist: boolean;
-    value: string;
-  };
-  laiptas: {
-    exist: boolean;
-    value: string;
-  };
-}
-
-export interface GateInfo {
-  exist: boolean;
-  type: string;
-  automatics: string;
-  aditional: string;
-  direction: string;
-  lock: string;
-}
-
-export interface User {
+export interface Project {
   _id: string;
-  email: string;
-  password: string;
+  client: Client;
+  fenceMeasures: Fence[];
+  results: Result[];
+  calculatedParts: CalculatedParts;
+  confirmed: boolean;
+  advance: boolean;
+  payed: boolean;
+  status: string;
+  creator: string;
+  orderNumber: string;
+}
+
+export interface Client {
+  address: string;
   username: string;
-  verified: boolean;
-  admin: boolean;
-  photo: string;
+  phone: string;
+  email: string;
 }
 
 export interface Fence {
@@ -109,6 +47,22 @@ export interface Fence {
   totalLength: number;
   totalQuantity: number;
   measures: Measure[];
+}
+
+export interface Measure {
+  length: number;
+  height: number;
+  MeasureSpace: number;
+  elements: number;
+  gates: GateInfo;
+  kampas: {
+    exist: boolean;
+    value: string;
+  };
+  laiptas: {
+    exist: boolean;
+    value: string;
+  };
 }
 
 export interface Result {
@@ -131,10 +85,83 @@ export interface Result {
   isNew: boolean;
 }
 
-export interface Response {
-  success: boolean;
-  data: Project[];
-  message: string;
+export interface CalculatedParts {
+  fences: Fences[];
+  poles: Poles[];
+  gatePoles: OtherParts[];
+  borders: OtherParts[];
+  borderHolders: OtherParts[];
+  rivets: OtherParts[];
+  crossbars: OtherParts[];
+  crossbarHolders: OtherParts[];
+  totalElements: number;
+  bindingsLength: OtherParts[];
+  segments: OtherParts[];
+  segmentHolders: OtherParts[];
+  gates: Gate[];
+  totalPrice: number;
+  totalCost: number;
+  totalProfit: number;
+  totalMargin: number;
+}
+
+export interface OtherParts {
+  color: string;
+  quantity: number;
+}
+
+export interface Fences {
+  type: string;
+  color: string;
+  length: number;
+  height: number;
+  quantity: number;
+  elements: number;
+  material: string;
+  space: number;
+  seeThrough: string;
+  direction: string;
+  twoSided: string;
+}
+
+export interface Poles {
+  height: number;
+  thickness: number;
+  color: string;
+  quantity: number;
+}
+
+export interface Gate {
+  client: string;
+  phone: string;
+  address: string;
+  type: string;
+  auto: string;
+  width: number;
+  height: number;
+  color: string;
+  filling: string;
+  ready: boolean;
+  aditional: string;
+}
+
+export interface GateInfo {
+  exist: boolean;
+  type: string;
+  automatics: string;
+  aditional: string;
+  direction: string;
+  lock: string;
+}
+
+export interface User {
+  _id: string;
+  email: string;
+  password: string;
+  username: string;
+  verified: boolean;
+  admin: boolean;
+  photo: string;
 }
 
 export interface ResponseUser {
@@ -184,20 +211,6 @@ export interface ResponseProduct {
   message: string;
 }
 
-export interface Project {
-  _id: string;
-  client: Client;
-  fenceMeasures: Fence[];
-  results: Result[];
-  calculatedParts: CalculatedParts;
-  confirmed: boolean;
-  advance: boolean;
-  payed: boolean;
-  status: string;
-  creator: string;
-  orderNumber: string;
-}
-
 export interface ResponseProject {
   success: boolean;
   data: Project;
@@ -210,33 +223,9 @@ export interface MenuLinks {
   iconPath: string;
 }
 
-export interface Poles {
-  height: number;
-  thickness: number;
-  color: string;
-  quantity: number;
-}
-
 export interface FenceMeasure {
+  name: string;
   height: number;
   width: number;
-}
-
-export interface FenceMeasures {
-  Daimond60: FenceMeasure;
-  Daimond40: FenceMeasure;
-  Plank: FenceMeasure;
-  Žaliuzi: FenceMeasure;
-  Dija: FenceMeasure;
-  Dilė: FenceMeasure;
-  Eglė: FenceMeasure;
-  Alba: FenceMeasure;
-  Standard: FenceMeasure;
-  Sigma: FenceMeasure;
-  Astra: FenceMeasure;
-  Polo: FenceMeasure;
-  Eva: FenceMeasure;
-  Eva3: FenceMeasure;
-  Estetic: FenceMeasure;
-  Emka: FenceMeasure;
+  seeThrough: number[];
 }

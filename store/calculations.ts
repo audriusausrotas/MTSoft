@@ -1,8 +1,12 @@
+import type { Measure, Calculations, Fence } from "~/data/interfaces";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import { clientInitialValue } from "~/data/initialValues";
-import type { Measure, Calculations, Fence } from "~/data/interfaces";
-import { createInitialMeasure } from "~/data/initialValues";
+import {
+  createInitialMeasure,
+  fenceMeasures,
+  clientInitialValue,
+} from "~/data/initialValues";
+import { pramatomumas, verticals } from "~/data/selectFieldData";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
@@ -87,6 +91,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateType(data: { index: number; value: string }): void {
       this.fences[data.index].type = data.value;
+      this.calculateAllElements(data.index);
     },
 
     updateColor(data: { index: number; value: string }): void {
@@ -99,6 +104,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateSeeThrough(data: { index: number; value: string }): void {
       this.fences[data.index].seeThrough = data.value;
+      this.calculateAllElements(data.index);
     },
 
     updateDirection(data: { index: number; value: string }): void {
@@ -151,6 +157,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateMeasureSpace(data: { index: number; value: number }): void {
       this.fences[data.index].space = data.value;
+      this.calculateAllElements(data.index);
     },
 
     updateMeasureGate(data: {
@@ -164,6 +171,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateTwoSided(data: { index: number; value: string }): void {
       this.fences[data.index].twoSided = data.value;
+      this.calculateAllElements(data.index);
     },
 
     updateGateAditional(data: {
@@ -230,31 +238,13 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences = this.fences.filter((fence) => fence.id !== id);
     },
 
-    calculateTotalElements(data: {
-      index: number;
-      measureIndex: number;
-    }): void {
-      const fence = this.fences[data.index];
-      const height = fence.measures[data.measureIndex].height;
-      const space = fence.space;
-      const type = fence.type;
-      const seeThrough = fence.seeThrough;
-
-      if (height && space) {
-      }
-    },
-
     updateMeasureHeight(data: {
       index: number;
       measureIndex: number;
       value: number;
     }): void {
       this.fences[data.index].measures[data.measureIndex].height = data.value;
-
-      this.calculateTotalElements({
-        index: data.index,
-        measureIndex: data.measureIndex,
-      });
+      this.calculateElements(data.index, data.measureIndex);
     },
 
     updateMeasureLength(data: {
@@ -263,11 +253,41 @@ export const useCalculationsStore = defineStore("calculations", {
       value: number;
     }): void {
       this.fences[data.index].measures[data.measureIndex].length = data.value;
+      this.calculateElements(data.index, data.measureIndex);
+    },
 
-      this.calculateTotalElements({
-        index: data.index,
-        measureIndex: data.measureIndex,
-      });
+    calculateAllElements(index: number) {
+      this.fences[index].measures.forEach((measure, measureIndex) =>
+        this.calculateElements(index, measureIndex)
+      );
+    },
+
+    calculateElements(index: number, measureIndex: number) {
+      const fence = this.fences[index];
+      const measure = fence.measures[measureIndex];
+      const isFenceBoards = verticals.includes(fence.type);
+      const seeThroughIndex = pramatomumas.indexOf(fence.seeThrough);
+      const fenceDataIndex = fenceMeasures.findIndex(
+        (element) => element.name === fence.type
+      );
+      let elements = 0;
+
+      if (isFenceBoards) {
+        elements = calculateFenceBoards(
+          measure.length,
+          fence.space,
+          fenceMeasures[fenceDataIndex].height,
+          fence.twoSided
+        );
+      } else {
+        if (measure.height) {
+          elements =
+            (measure.height - 1) /
+            (fenceMeasures[fenceDataIndex].seeThrough[seeThroughIndex] +
+              fenceMeasures[fenceDataIndex].height);
+        }
+      }
+      measure.elements = elements;
     },
   },
 

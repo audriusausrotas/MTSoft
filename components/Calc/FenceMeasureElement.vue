@@ -9,6 +9,7 @@ const props = defineProps(["measureIndex", "index", "measure"]);
 const useCalculations = useCalculationsStore();
 
 const isChecked = ref(props.measure.gates.exist);
+const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
@@ -25,7 +26,7 @@ function toggleCheckbox(value: boolean) {
     <p class="">{{ props.measureIndex + 1 }}</p>
 
     <BaseInput
-      v-if="!props.measure.kampas.exist && !props.measure.laiptas.exist"
+      v-if="isData"
       width="w-24"
       placeholder="Ilgis"
       type="number"
@@ -44,7 +45,7 @@ function toggleCheckbox(value: boolean) {
     />
 
     <BaseInput
-      v-if="!props.measure.kampas.exist && !props.measure.laiptas.exist"
+      v-if="isData"
       width="w-24"
       placeholder="Aukštis"
       type="number"
@@ -61,8 +62,15 @@ function toggleCheckbox(value: boolean) {
       "
     />
 
+    <BaseInput
+      v-if="isData"
+      width="w-24"
+      :disable="true"
+      :name="props.measure.elements"
+    />
+
     <BaseCheckField
-      v-if="!props.measure.kampas.exist && !props.measure.laiptas.exist"
+      v-if="isData"
       @onChange="(value: boolean): void => toggleCheckbox(value)"
       :checked="isChecked"
     />

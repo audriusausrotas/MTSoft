@@ -1,6 +1,6 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
-import type { Gate, Poles, Fences } from "~/data/interfaces";
+import type { Gate, Poles, Fences, OtherParts } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
 import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
@@ -13,38 +13,58 @@ export default function calculateResults() {
   results.clearParts();
 
   let polesTemp: Poles[] = [];
-  let gatePolesTemp: number = 0;
-  let crossbarsTemp: number = 0;
+  let gatePolesTemp: OtherParts[] = [];
+  let crossbarsTemp: OtherParts[] = [];
   let gatesTemp: Gate[] = [];
   let totalHeight: number = 0;
   let fenceTemp: Fences[] = [];
   let totalElements: number = 0;
 
-  fences.fences.forEach((item) => {
+  fences.fences.forEach((item, index) => {
     // checks if crossbars needed
     const hasCrossbars: boolean = verticals.some(
-      (vertical) => vertical === item.type && item.direction === "Vertikali"
+      (vertical) => vertical === item.type
     );
 
     let polesTemp2: number = 1;
 
-    // calculate horizontal fences
+    // calculate horizontal fence by suare meters
     if (!hasCrossbars) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       fenceTemp = [...temp];
     }
 
     let isTogether: boolean = false;
+    let lastBindingHeight = 0;
 
     item.measures.forEach((measure) => {
-      // calculate vertical fences
-      if (hasCrossbars) {
+      // calculate bindings
+      if (item.direction === "Horizontali") {
+        let fenceExist: boolean = false;
+        ///////////////////////////////////////////////////////////
+        results.bindingsLength.forEach((element) => {
+          if (element.color === item.color) {
+          }
+        });
+
+        results.bindingsLength += measure.height * 2;
+        lastBindingHeight = measure.height;
+      }
+      ////////////////////////////////////////////////////////////
+      // calculate total elements
+      totalElements += measure.elements;
+
+      // calculate vertical fence board fence
+      if (hasCrossbars && item.direction === "Vertikali") {
         const temp = calculateVerticalFence(item, measure, fenceTemp);
         fenceTemp = [...temp];
       }
 
-      // calculate fence elements
-      totalElements += measure.elements;
+      // calculate horizontal fence board fence
+      if (hasCrossbars && item.direction === "Horizontali") {
+        // const temp = calculateVerticalFence(item, measure, fenceTemp);
+        // fenceTemp = [...temp];
+      }
 
       // calculate gates
       if (measure.gates.exist) {
@@ -62,7 +82,6 @@ export default function calculateResults() {
           aditional: measure.gates.aditional,
         });
       }
-
       // calculate poles
       if (
         item.services !== "Tik Montavimas" &&
@@ -82,7 +101,6 @@ export default function calculateResults() {
           isTogether = true;
         }
       }
-
       // calculate borders, crossbars
       if (
         !measure.gates.exist &&
@@ -96,6 +114,7 @@ export default function calculateResults() {
         if (hasCrossbars) {
           crossbarsTemp += 2;
         }
+
         // calculate borders
         if (
           item.services !== "TikMontavimas" &&
@@ -156,6 +175,7 @@ export default function calculateResults() {
         results.addSegmentHolders(poleCount * holdersOnPole);
       }
     });
+    results.bindingsLength += lastBindingHeight * 2;
   });
   results.addFences(fenceTemp);
   results.addPoles(polesTemp);

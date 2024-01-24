@@ -15,6 +15,7 @@ export default function calculateHorizontalFence(
     height: 0,
     quantity: item.totalQuantity,
     material: item.material,
+    elements: 0,
     space: item.space,
     seeThrough: item.seeThrough,
     direction: item.direction,

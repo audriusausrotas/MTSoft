@@ -1,5 +1,5 @@
 import type { Fence, Measure, Fences } from "~/data/interfaces";
-import { fenceMeasures } from "~/data/selectFieldData";
+import { fenceMeasures } from "~/data/initialValues";
 
 export default function calculateVerticalFence(
   item: Fence,
@@ -10,60 +10,28 @@ export default function calculateVerticalFence(
   let fenceExist: boolean = false;
   let fenceWidth: number = 0;
 
+  fenceWidth = fenceMeasures.findIndex((element) => element.name === item.type);
+
+  const elements = calculateFenceBoards(
+    measure.length,
+    item.space,
+    fenceMeasures[fenceWidth].height,
+    item.twoSided
+  );
+
   const initialFenceData = {
     type: item.type,
     color: item.color,
     length: 0,
     height: measure.height,
     quantity: 0,
+    elements: 0,
     material: item.material,
     space: item.space,
     seeThrough: "",
     direction: item.direction,
     twoSided: item.twoSided,
   };
-
-  switch (item.type) {
-    case "Alba":
-      fenceWidth = fenceMeasures.Alba.height;
-      break;
-    case "Standard":
-      fenceWidth = fenceMeasures.Standard.height;
-      break;
-    case "Sigma":
-      fenceWidth = fenceMeasures.Sigma.height;
-      break;
-    case "Astra":
-      fenceWidth = fenceMeasures.Astra.height;
-      break;
-    case "Polo":
-      fenceWidth = fenceMeasures.Polo.height;
-      break;
-    case "Eva":
-      fenceWidth = fenceMeasures.Eva.height;
-      break;
-    case "Eva3":
-      fenceWidth = fenceMeasures.Eva3.height;
-      break;
-    case "Estetic":
-      fenceWidth = fenceMeasures.Estetic.height;
-      break;
-    case "Emka":
-      fenceWidth = fenceMeasures.Emka.height;
-      break;
-    case "Dija":
-      fenceWidth = fenceMeasures.Dija.height;
-      break;
-    case "Dilė":
-      fenceWidth = fenceMeasures.Dilė.height;
-      break;
-    default:
-      break;
-  }
-
-  const elementsTemp = Math.round(measure.length! / (item.space + fenceWidth));
-  const elements =
-    item.twoSided === "Taip" ? elementsTemp * 2 - 1 : elementsTemp;
 
   tempFence.forEach((fenceItem) => {
     if (
@@ -75,11 +43,13 @@ export default function calculateVerticalFence(
       fenceItem.height === measure.height &&
       fenceItem.twoSided === item.twoSided
     ) {
+      fenceItem.elements += elements;
       fenceItem.quantity += elements;
       fenceExist = true;
     }
   });
   if (!fenceExist) {
+    initialFenceData.elements = elements;
     initialFenceData.quantity = elements;
     tempFence.push(initialFenceData);
   }

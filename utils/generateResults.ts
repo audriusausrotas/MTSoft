@@ -1,77 +1,80 @@
 import createResultElement from "~/utils/createResultElement";
+import { defaultValues } from "~/data/initialValues";
 
 export default function generateResults() {
   const results = useResultsStore();
-  // const initialFenceData = {
-  //   type: item.type,
-  //   color: item.color,
-  //   length: item.totalLength,
-  //   height: 0,
-  //   quantity: item.totalQuantity,
-  //   material: item.material,
-  //   space: item.space,
-  //   seeThrough: item.seeThrough,
-  //   direction: item.direction,
-  //   twoSided: item.twoSided,
-  // };
 
   if (results.fences.length > 0) {
-    results.fences.forEach((item) => createResultElement(item));
+    results.fences.forEach((item) => {
+      createResultElement(item);
+    });
   }
 
   if (results.poles.length > 0) {
     results.poles.forEach((item) => {
       let pole = "";
       if (item.height === 3 && item.thickness === 2) {
-        pole = "Stulpas tvorai 60X40 mm, h3.0 m., sienelė: 2.0 mm";
+        pole = defaultValues.poleMain;
       } else {
-        pole = "Stulpas tvorai 60X40 mm, h2.4 m., sienelė: 1.25 mm";
+        pole = defaultValues.poleAlt;
       }
       createResultElement({ ...item, type: pole });
     });
   }
 
-  if (results.gatePoles > 0) {
+  if (results.gatePoles.length > 0) {
     let pole = "";
     results.gates.some((item) => {
       if (item.type === "Varstomi") {
-        pole = "Stulpas vartams 100x100 mm, h3.0 m., sienelė: 3.0 mm";
+        pole = defaultValues.gatePoleAlt;
       } else {
-        pole = "Stulpas vartams 80X80 mm, h3.0 m., sienelė: 2.0 mm";
+        pole = defaultValues.gatePoleMain;
       }
     });
     createResultElement({ type: pole, quantity: results.gatePoles });
   }
 
-  console.log(results.borders);
-  if (results.borders > 0) {
+  if (results.borders.length > 0) {
     createResultElement({
-      type: "Tvoros pamatas tiesus LYGUS, betoninis 2500x200x50 mm",
+      type: defaultValues.border,
       quantity: results.borders,
     });
 
     createResultElement({
-      type: "Laikiklis pamato metalinis 200X50 mm",
+      type: defaultValues.borderHolder,
       quantity: results.borderHolders,
     });
   }
 
-  if (results.crossbars > 0) {
+  if (results.crossbars.length > 0) {
+    createResultElement({
+      type: defaultValues.crossbar,
+      quantity: results.crossbars,
+    });
+    createResultElement({
+      type: defaultValues.crossbarHolders,
+      quantity: results.crossbarHolders,
+    });
   }
 
-  if (results.crossbarHolders > 0) {
+  if (results.totalElements.length > 0) {
+    createResultElement({
+      type: defaultValues.rivets,
+      quantity: results.totalElements * 4,
+    });
   }
 
-  if (results.rivets > 0) {
+  if (results.bindingsLength.length > 0) {
+    createResultElement({
+      type: defaultValues.bindings,
+      quantity: results.bindingsLength,
+    });
   }
 
-  if (results.bindingsLength > 0) {
+  if (results.segments.length > 0) {
   }
 
-  if (results.segments > 0) {
-  }
-
-  if (results.segmentHolders > 0) {
+  if (results.segmentHolders.length > 0) {
   }
 
   if (results.gates.length > 0) {

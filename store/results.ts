@@ -1,24 +1,30 @@
 import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type { Result, Fences, Gate, Poles } from "~/data/interfaces";
+import type {
+  Result,
+  Fences,
+  Gate,
+  Poles,
+  OtherParts,
+} from "~/data/interfaces";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
     fences: [] as Fences[],
-    poles: [] as Poles[], // done
-    gatePoles: 0, // done
-    borders: 0, // done
-    borderHolders: 0, // done
-    crossbars: 0, // done
-    crossbarHolders: 0, // done
-    rivets: 0, // done
-    totalElements: 0, // done
-    bindingsLength: 0,
-    segments: 0, // done
-    segmentHolders: 0, // done
-    gates: [] as Gate[], // done
+    poles: [] as Poles[],
+    gatePoles: [] as OtherParts[],
+    borders: [] as OtherParts[],
+    borderHolders: [] as OtherParts[],
+    crossbars: [] as OtherParts[],
+    crossbarHolders: [] as OtherParts[],
+    rivets: [] as OtherParts[],
+    totalElements: [] as OtherParts[],
+    bindingsLength: [] as OtherParts[],
+    segments: [] as OtherParts[],
+    segmentHolders: [] as OtherParts[],
+    gates: [] as Gate[],
     totalPrice: 0,
     totalCost: 0,
     totalProfit: 0,
@@ -150,16 +156,17 @@ export const useResultsStore = defineStore("results", {
     clearParts(): void {
       this.fences = [];
       this.poles = [];
-      this.gatePoles = 0;
-      this.borders = 0;
-      this.borderHolders = 0;
-      this.rivets = 0;
-      this.crossbars = 0;
-      this.crossbarHolders = 0;
-      this.totalElements = 0;
-      this.bindingsLength = 0;
-      this.segments = 0;
-      this.segmentHolders = 0;
+      this.gates = [];
+      this.gatePoles = [];
+      this.borders = [];
+      this.borderHolders = [];
+      this.rivets = [];
+      this.crossbars = [];
+      this.crossbarHolders = [];
+      this.totalElements = [];
+      this.bindingsLength = [];
+      this.segments = [];
+      this.segmentHolders = [];
     },
 
     clearAll(): void {
