@@ -1,26 +1,21 @@
 import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type {
-  Result,
-  Fences,
-  Gate,
-  Poles,
-  OtherParts,
-} from "~/data/interfaces";
+import type { Result, Fences, Gate, OtherParts } from "~/data/interfaces";
+import addPartsHelper from "~/utils/addPartsHelper";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
     fences: [] as Fences[],
-    poles: [] as Poles[],
+    poles: [] as OtherParts[],
     gatePoles: [] as OtherParts[],
-    borders: [] as OtherParts[],
+    borders: 0 as number,
     borderHolders: [] as OtherParts[],
     crossbars: [] as OtherParts[],
     crossbarHolders: [] as OtherParts[],
     rivets: [] as OtherParts[],
-    totalElements: [] as OtherParts[],
+    totalElements: 0 as number,
     bindingsLength: [] as OtherParts[],
     segments: [] as OtherParts[],
     segmentHolders: [] as OtherParts[],
@@ -90,39 +85,44 @@ export const useResultsStore = defineStore("results", {
       result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    addPoles(data: Poles[]): void {
-      this.poles = [...data];
-    },
+    addPoles(): void {},
 
-    addGatePoles(data: number): void {
-      this.gatePoles = data;
-    },
+    addGatePoles(): void {},
 
-    addBorders(): void {
+    addBorders(color: string): void {
       this.borders++;
-      this.borderHolders += 2;
+      addPartsHelper(this.borderHolders, color, 2, 0);
     },
 
-    addCrossbars(data: number): void {
-      this.crossbars = data;
-      this.crossbarHolders = data * 2;
+    addCrossbars(color: string): void {
+      addPartsHelper(this.crossbars, color, 2, 0);
+      addPartsHelper(this.crossbarHolders, color, 4, 0);
     },
 
-    addTotalElements(data: number): void {
-      this.totalElements = data;
-      this.rivets = data * 4;
+    addTotalElements(elements: number, color: string): void {
+      this.totalElements += elements;
+      addPartsHelper(this.rivets, color, this.totalElements * 4, 0);
     },
-    addBindingsLength(data: number): void {
-      this.bindingsLength += data;
+
+    addBindingsLength(height: number, color: string): void {
+      if (this.bindingsLength.length === 0) {
+        addPartsHelper(this.bindingsLength, color, height * 2, 0);
+      }
+      addPartsHelper(this.bindingsLength, color, height * 2, 0);
     },
-    addSegment() {
-      this.segments++;
+
+    addSegment(height: number, color: string) {
+      addPartsHelper(this.segments, color, 1, height);
+
+      const holders = height < 130 ? 2 : height < 170 ? 3 : 4;
+      if (this.segmentHolders.length === 0) {
+        addPartsHelper(this.segmentHolders, color, holders, 0);
+      }
+      addPartsHelper(this.segmentHolders, color, holders, 0);
     },
-    addSegmentHolders(data: number): void {
-      this.segmentHolders = data;
-    },
-    addGates(data: Gate[]): void {
-      this.gates = [...data];
+
+    addGates(gate: Gate): void {
+      this.gates.push(gate);
     },
 
     calculateTotals(): void {
@@ -158,12 +158,12 @@ export const useResultsStore = defineStore("results", {
       this.poles = [];
       this.gates = [];
       this.gatePoles = [];
-      this.borders = [];
+      this.borders = 0;
       this.borderHolders = [];
       this.rivets = [];
       this.crossbars = [];
       this.crossbarHolders = [];
-      this.totalElements = [];
+      this.totalElements = 0;
       this.bindingsLength = [];
       this.segments = [];
       this.segmentHolders = [];

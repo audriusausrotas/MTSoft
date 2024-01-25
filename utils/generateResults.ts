@@ -13,7 +13,7 @@ export default function generateResults() {
   if (results.poles.length > 0) {
     results.poles.forEach((item) => {
       let pole = "";
-      if (item.height === 3 && item.thickness === 2) {
+      if (item.height === 3) {
         pole = defaultValues.poleMain;
       } else {
         pole = defaultValues.poleAlt;
@@ -34,7 +34,7 @@ export default function generateResults() {
     createResultElement({ type: pole, quantity: results.gatePoles });
   }
 
-  if (results.borders.length > 0) {
+  if (results.borders > 0) {
     createResultElement({
       type: defaultValues.border,
       quantity: results.borders,
@@ -57,7 +57,7 @@ export default function generateResults() {
     });
   }
 
-  if (results.totalElements.length > 0) {
+  if (results.totalElements > 0) {
     createResultElement({
       type: defaultValues.rivets,
       quantity: results.totalElements * 4,

@@ -1,6 +1,6 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
-import type { Gate, Poles, Fences, OtherParts } from "~/data/interfaces";
+import type { Fences, OtherParts } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
 import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
@@ -14,17 +14,22 @@ export default function calculateResults() {
 
   let polesTemp: Poles[] = [];
   let gatePolesTemp: OtherParts[] = [];
-  let crossbarsTemp: OtherParts[] = [];
-  let gatesTemp: Gate[] = [];
-  let totalHeight: number = 0;
   let fenceTemp: Fences[] = [];
-  let totalElements: number = 0;
 
   fences.fences.forEach((item, index) => {
     // checks if crossbars needed
     const hasCrossbars: boolean = verticals.some(
       (vertical) => vertical === item.type
     );
+    const polesNeeded =
+      item.services !== "Tik Montavimas" &&
+      item.parts !== "Tik Borteliai" &&
+      item.parts !== "Be Bortelių Ir Stulpų";
+
+    const bordersNeeded =
+      item.services !== "Tik Montavimas" &&
+      item.parts !== "Tik Stulpai" &&
+      item.parts !== "Be Bortelių Ir Stulpų";
 
     let polesTemp2: number = 1;
 
@@ -38,21 +43,25 @@ export default function calculateResults() {
     let lastBindingHeight = 0;
 
     item.measures.forEach((measure) => {
-      // calculate bindings
-      if (item.direction === "Horizontali") {
-        let fenceExist: boolean = false;
-        ///////////////////////////////////////////////////////////
-        results.bindingsLength.forEach((element) => {
-          if (element.color === item.color) {
-          }
-        });
+      const isFence =
+        !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
 
-        results.bindingsLength += measure.height * 2;
-        lastBindingHeight = measure.height;
+      // calculate gates
+      if (measure.gates.exist) {
+        results.addGates({
+          client: fences.client.username,
+          phone: fences.client.phone,
+          address: fences.client.address,
+          type: measure.length! > 200 ? measure.gates.type : "Varteliai",
+          auto: measure.gates.automatics,
+          width: measure.length,
+          height: measure.height,
+          color: item.color,
+          filling: item.type,
+          ready: false,
+          aditional: measure.gates.aditional,
+        });
       }
-      ////////////////////////////////////////////////////////////
-      // calculate total elements
-      totalElements += measure.elements;
 
       // calculate vertical fence board fence
       if (hasCrossbars && item.direction === "Vertikali") {
@@ -66,28 +75,34 @@ export default function calculateResults() {
         // fenceTemp = [...temp];
       }
 
-      // calculate gates
-      if (measure.gates.exist) {
-        gatesTemp.push({
-          client: fences.client.username,
-          phone: fences.client.phone,
-          address: fences.client.address,
-          type: measure.length! > 200 ? measure.gates.type : "Varteliai",
-          auto: measure.gates.automatics,
-          width: measure.length || 0,
-          height: measure.height || 0,
-          color: item.color,
-          filling: item.type,
-          ready: false,
-          aditional: measure.gates.aditional,
-        });
+      // calculate total elements
+      results.addTotalElements(measure.elements, item.color);
+
+      // calculate bindings
+      if (item.direction === "Horizontali") {
+        results.addBindingsLength(measure.height, item.color);
+        lastBindingHeight = measure.height;
       }
+
+      // calculate borders, crossbars
+      if (isFence) {
+        // calculate crossbars
+        if (hasCrossbars) {
+          results.addCrossbars(item.color);
+        }
+        // calculate borders
+        if (bordersNeeded) {
+          results.addBorders(item.color);
+        }
+
+        // calculate segment
+        if (item.type.includes("Segmentas")) {
+          results.addSegment(measure.height, item.color);
+        }
+      }
+
       // calculate poles
-      if (
-        item.services !== "Tik Montavimas" &&
-        item.parts !== "Tik Borteliai" &&
-        item.parts !== "Be Bortelių Ir Stulpų"
-      ) {
+      if (polesNeeded) {
         if (!measure.gates.exist) {
           polesTemp2++;
           isTogether = false;
@@ -101,49 +116,19 @@ export default function calculateResults() {
           isTogether = true;
         }
       }
-      // calculate borders, crossbars
-      if (
-        !measure.gates.exist &&
-        !measure.kampas.exist &&
-        !measure.laiptas.exist
-      ) {
-        // calculate total height
-        totalHeight += measure.height || 0;
-
-        // calculate crossbars
-        if (hasCrossbars) {
-          crossbarsTemp += 2;
-        }
-
-        // calculate borders
-        if (
-          item.services !== "TikMontavimas" &&
-          item.parts !== "Tik Stulpai" &&
-          item.parts !== "Be Bortelių Ir Stulpų"
-        ) {
-          results.addBorders();
-        }
-
-        // calculate segment
-        if (item.type.includes("Segmentas")) {
-          results.addSegment();
-        }
-      }
 
       // add poles to temp data
-      const poleData: Poles = {
-        height: 0,
-        thickness: 0,
+      const poleData: OtherParts = {
+        height:
+          item.type.includes("Segmentas") && measure.height < 150 ? 2.4 : 3,
         color: item.color,
         quantity: polesTemp2,
       };
 
       if (item.type.includes("segmentas")) {
         poleData.height = 2.4;
-        poleData.thickness = 1.25;
       } else {
         poleData.height = 3;
-        poleData.thickness = 2;
       }
 
       if (
@@ -156,7 +141,6 @@ export default function calculateResults() {
         polesTemp.forEach((pole) => {
           if (
             pole.height === poleData.height &&
-            pole.thickness === poleData.thickness &&
             pole.color === poleData.color
           ) {
             pole.quantity = poleData.quantity;
@@ -165,24 +149,10 @@ export default function calculateResults() {
         });
         if (notExist) polesTemp.push(poleData);
       }
-
-      //calculate segment holders
-      if (item.type.includes("Segmentas")) {
-        const poleCount = polesTemp.length + gatePolesTemp;
-        const averageHeight = totalHeight / item.measures.length;
-        const holdersOnPole =
-          averageHeight < 130 ? 2 : averageHeight < 170 ? 3 : 4;
-        results.addSegmentHolders(poleCount * holdersOnPole);
-      }
     });
-    results.bindingsLength += lastBindingHeight * 2;
+    results.addBindingsLength(lastBindingHeight, item.color);
   });
   results.addFences(fenceTemp);
-  results.addPoles(polesTemp);
-  results.addGatePoles(gatePolesTemp);
-  results.addCrossbars(crossbarsTemp);
-  results.addGates(gatesTemp);
-  results.addTotalElements(totalElements);
 
   generateResults();
 }

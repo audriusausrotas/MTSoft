@@ -87,9 +87,9 @@ export interface Result {
 
 export interface CalculatedParts {
   fences: Fences[];
-  poles: Poles[];
+  poles: OtherParts[];
   gatePoles: OtherParts[];
-  borders: OtherParts[];
+  borders: number;
   borderHolders: OtherParts[];
   rivets: OtherParts[];
   crossbars: OtherParts[];
@@ -108,6 +108,7 @@ export interface CalculatedParts {
 export interface OtherParts {
   color: string;
   quantity: number;
+  height: number;
 }
 
 export interface Fences {
@@ -122,13 +123,6 @@ export interface Fences {
   seeThrough: string;
   direction: string;
   twoSided: string;
-}
-
-export interface Poles {
-  height: number;
-  thickness: number;
-  color: string;
-  quantity: number;
 }
 
 export interface Gate {
