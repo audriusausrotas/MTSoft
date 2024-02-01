@@ -6,7 +6,6 @@ import { verticals } from "~/data/selectFieldData";
 export default function createResultElement(item: any) {
   const results = useResultsStore().results;
   const product: Product = getPriceItem(item.type);
-  console.log(item);
   if (verticals.includes(item.type)) {
     const newPrice = (product.price * item.height) / 100;
     product.price = +newPrice.toFixed(2);

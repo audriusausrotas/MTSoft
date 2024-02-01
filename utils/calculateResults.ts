@@ -12,8 +12,6 @@ export default function calculateResults() {
   results.clearResults();
   results.clearParts();
 
-  let polesTemp: Poles[] = [];
-  let gatePolesTemp: OtherParts[] = [];
   let fenceTemp: Fences[] = [];
 
   fences.fences.forEach((item, index) => {
@@ -30,8 +28,6 @@ export default function calculateResults() {
       item.services !== "Tik Montavimas" &&
       item.parts !== "Tik Stulpai" &&
       item.parts !== "Be Bortelių Ir Stulpų";
-
-    let polesTemp2: number = 1;
 
     // calculate horizontal fence by suare meters
     if (!hasCrossbars) {
@@ -103,51 +99,30 @@ export default function calculateResults() {
 
       // calculate poles
       if (polesNeeded) {
+        let poleHeight = 0;
+
+        if (item.type.includes("Segmentas")) {
+          if (measure.height < 150) {
+            poleHeight = 2.4;
+          } else {
+            poleHeight = 3;
+          }
+        } else {
+          poleHeight = 3;
+        }
+
         if (!measure.gates.exist) {
-          polesTemp2++;
+          results.addPoles(item.color, poleHeight);
           isTogether = false;
         } else {
           if (!isTogether) {
-            polesTemp2--;
-            gatePolesTemp += 2;
+            results.removePole(item.color);
+            results.addGatePoles(item.color, 2);
           } else {
-            gatePolesTemp++;
+            results.addGatePoles(item.color, 1);
           }
           isTogether = true;
         }
-      }
-
-      // add poles to temp data
-      const poleData: OtherParts = {
-        height:
-          item.type.includes("Segmentas") && measure.height < 150 ? 2.4 : 3,
-        color: item.color,
-        quantity: polesTemp2,
-      };
-
-      if (item.type.includes("segmentas")) {
-        poleData.height = 2.4;
-      } else {
-        poleData.height = 3;
-      }
-
-      if (
-        item.services !== "Tik Montavimas" &&
-        item.parts !== "Tik Borteliai" &&
-        item.parts !== "Be Bortelių Ir Stulpų"
-      ) {
-        let notExist: boolean = true;
-
-        polesTemp.forEach((pole) => {
-          if (
-            pole.height === poleData.height &&
-            pole.color === poleData.color
-          ) {
-            pole.quantity = poleData.quantity;
-            notExist = false;
-          }
-        });
-        if (notExist) polesTemp.push(poleData);
       }
     });
     results.addBindingsLength(lastBindingHeight, item.color);

@@ -6,14 +6,16 @@ export default function addPartsHelper(
   quantity: number,
   height: number
 ) {
+  let tempArr = [...array];
   let itemExist = false;
-  array.forEach((item) => {
+  tempArr.forEach((item) => {
     if (item.color === color && height === item.height) {
       item.quantity += quantity;
       itemExist = true;
     }
-    if (!itemExist) {
-      array.push({ color, quantity: 2, height });
-    }
   });
+  if (!itemExist) {
+    tempArr.push({ color, quantity, height });
+  }
+  return tempArr;
 }

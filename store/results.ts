@@ -85,14 +85,30 @@ export const useResultsStore = defineStore("results", {
       result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    addPoles(): void {},
-
-    addGatePoles(): void {},
-
-    addBorders(color: string): void {
-      this.borders++;
-      addPartsHelper(this.borderHolders, color, 2, 0);
+    addPoles(color: string, height: number): void {
+      let quantity = 1;
+      const doesExist = this.poles.some((item) => item.color === color);
+      if (!doesExist) quantity++;
+      addPartsHelper(this.poles, color, 1, height);
     },
+
+    removePole(color: string): void {
+      this.gatePoles.forEach((item) => {
+        if (item.color === color) {
+          item.quantity--;
+        }
+      });
+    },
+
+    addGatePoles(color: string, quantity: number): void {
+      addPartsHelper(this.gatePoles, color, quantity, 3);
+    },
+
+    // addBorders(color: string): void {
+    //   this.borders++;
+    //   const asdf = addPartsHelper(this.borderHolders, color, 2, 0);
+    //   console.log(asdf);
+    // },
 
     addCrossbars(color: string): void {
       addPartsHelper(this.crossbars, color, 2, 0);
@@ -176,5 +192,12 @@ export const useResultsStore = defineStore("results", {
     },
   },
 
-  getters: {},
+  getters: {
+    addBorders:
+      (store) =>
+      (color: string): void => {
+        store.borders++;
+        store.borderHolders = addPartsHelper(store.borderHolders, color, 2, 0);
+      },
+  },
 });

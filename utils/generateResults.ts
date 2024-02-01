@@ -3,7 +3,6 @@ import { defaultValues } from "~/data/initialValues";
 
 export default function generateResults() {
   const results = useResultsStore();
-
   if (results.fences.length > 0) {
     results.fences.forEach((item) => {
       createResultElement(item);
@@ -24,13 +23,13 @@ export default function generateResults() {
 
   if (results.gatePoles.length > 0) {
     let pole = "";
-    results.gates.some((item) => {
-      if (item.type === "Varstomi") {
-        pole = defaultValues.gatePoleAlt;
-      } else {
-        pole = defaultValues.gatePoleMain;
-      }
-    });
+    const exist = results.gates.some((item) => item.type === "Varstomi");
+    if (exist) {
+      pole = defaultValues.gatePoleAlt;
+    } else {
+      pole = defaultValues.gatePoleMain;
+    }
+
     createResultElement({ type: pole, quantity: results.gatePoles });
   }
 
@@ -39,10 +38,9 @@ export default function generateResults() {
       type: defaultValues.border,
       quantity: results.borders,
     });
-
     createResultElement({
       type: defaultValues.borderHolder,
-      quantity: results.borderHolders,
+      quantity: results.borderHolders[0].quantity,
     });
   }
 
