@@ -85,58 +85,6 @@ export const useResultsStore = defineStore("results", {
       result.margin = parseFloat(marginValue.toFixed(2));
     },
 
-    addPoles(color: string, height: number): void {
-      let quantity = 1;
-      const doesExist = this.poles.some((item) => item.color === color);
-      if (!doesExist) quantity++;
-      addPartsHelper(this.poles, color, 1, height);
-    },
-
-    removePole(color: string): void {
-      this.gatePoles.forEach((item) => {
-        if (item.color === color) {
-          item.quantity--;
-        }
-      });
-    },
-
-    addGatePoles(color: string, quantity: number): void {
-      addPartsHelper(this.gatePoles, color, quantity, 3);
-    },
-
-    // addBorders(color: string): void {
-    //   this.borders++;
-    //   const asdf = addPartsHelper(this.borderHolders, color, 2, 0);
-    //   console.log(asdf);
-    // },
-
-    addCrossbars(color: string): void {
-      addPartsHelper(this.crossbars, color, 2, 0);
-      addPartsHelper(this.crossbarHolders, color, 4, 0);
-    },
-
-    addTotalElements(elements: number, color: string): void {
-      this.totalElements += elements;
-      addPartsHelper(this.rivets, color, this.totalElements * 4, 0);
-    },
-
-    addBindingsLength(height: number, color: string): void {
-      if (this.bindingsLength.length === 0) {
-        addPartsHelper(this.bindingsLength, color, height * 2, 0);
-      }
-      addPartsHelper(this.bindingsLength, color, height * 2, 0);
-    },
-
-    addSegment(height: number, color: string) {
-      addPartsHelper(this.segments, color, 1, height);
-
-      const holders = height < 130 ? 2 : height < 170 ? 3 : 4;
-      if (this.segmentHolders.length === 0) {
-        addPartsHelper(this.segmentHolders, color, holders, 0);
-      }
-      addPartsHelper(this.segmentHolders, color, holders, 0);
-    },
-
     addGates(gate: Gate): void {
       this.gates.push(gate);
     },
@@ -198,6 +146,78 @@ export const useResultsStore = defineStore("results", {
       (color: string): void => {
         store.borders++;
         store.borderHolders = addPartsHelper(store.borderHolders, color, 2, 0);
+      },
+
+    addPoles:
+      (store) =>
+      (color: string, height: number): void => {
+        let quantity = 0;
+        if (store.poles.length === 0 && store.gatePoles.length === 0)
+          quantity++;
+        const doesExist = store.poles.some((item) => item.color === color);
+        if (!doesExist) quantity++;
+        if (quantity === 0) quantity++;
+        store.poles = addPartsHelper(store.poles, color, quantity, height);
+      },
+
+    removePole:
+      (store) =>
+      (color: string): void => {
+        store.poles = store.poles.map((item) => {
+          if (item.color === color) item.quantity--;
+          return item;
+        });
+      },
+
+    addGatePoles:
+      (store) =>
+      (color: string, quantity: number): void => {
+        store.gatePoles = addPartsHelper(store.gatePoles, color, quantity, 3);
+      },
+
+    addCrossbars:
+      (store) =>
+      (color: string): void => {
+        store.crossbars = addPartsHelper(store.crossbars, color, 2, 0);
+        store.crossbarHolders = addPartsHelper(
+          store.crossbarHolders,
+          color,
+          4,
+          0
+        );
+      },
+
+    addTotalElements:
+      (store) =>
+      (elements: number, color: string): void => {
+        store.totalElements += elements;
+        store.rivets = addPartsHelper(
+          store.rivets,
+          color,
+          store.totalElements * 4,
+          0
+        );
+      },
+
+    addBindingsLength:
+      (store) =>
+      (height: number, color: string): void => {
+        if (store.bindingsLength.length === 0) {
+          addPartsHelper(store.bindingsLength, color, height * 2, 0);
+        }
+        addPartsHelper(store.bindingsLength, color, height * 2, 0);
+      },
+
+    addSegment:
+      (store) =>
+      (height: number, color: string): void => {
+        addPartsHelper(store.segments, color, 1, height);
+
+        const holdersCount = height < 130 ? 2 : height < 170 ? 3 : 4;
+        if (store.segmentHolders.length === 0) {
+          addPartsHelper(store.segmentHolders, color, holdersCount, 0);
+        }
+        addPartsHelper(store.segmentHolders, color, holdersCount, 0);
       },
   },
 });

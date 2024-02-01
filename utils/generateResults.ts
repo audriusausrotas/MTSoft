@@ -30,7 +30,14 @@ export default function generateResults() {
       pole = defaultValues.gatePoleMain;
     }
 
-    createResultElement({ type: pole, quantity: results.gatePoles });
+    results.gatePoles.forEach((item) => {
+      createResultElement({
+        type: pole,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
+    });
   }
 
   if (results.borders > 0) {
@@ -38,34 +45,51 @@ export default function generateResults() {
       type: defaultValues.border,
       quantity: results.borders,
     });
-    createResultElement({
-      type: defaultValues.borderHolder,
-      quantity: results.borderHolders[0].quantity,
+    results.borderHolders.forEach((item) => {
+      createResultElement({
+        type: defaultValues.borderHolder,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
     });
   }
 
   if (results.crossbars.length > 0) {
-    createResultElement({
-      type: defaultValues.crossbar,
-      quantity: results.crossbars,
+    results.crossbars.forEach((item) => {
+      createResultElement({
+        type: defaultValues.crossbar,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
     });
-    createResultElement({
-      type: defaultValues.crossbarHolders,
-      quantity: results.crossbarHolders,
+
+    results.crossbarHolders.forEach((item) => {
+      createResultElement({
+        type: defaultValues.crossbarHolders,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
     });
   }
 
   if (results.totalElements > 0) {
     createResultElement({
       type: defaultValues.rivets,
-      quantity: results.totalElements * 4,
+      quantity: Math.ceil(results.totalElements),
     });
   }
 
   if (results.bindingsLength.length > 0) {
-    createResultElement({
-      type: defaultValues.bindings,
-      quantity: results.bindingsLength,
+    results.bindingsLength.forEach((item) => {
+      createResultElement({
+        type: defaultValues.bindings,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
     });
   }
 
@@ -76,5 +100,47 @@ export default function generateResults() {
   }
 
   if (results.gates.length > 0) {
+    results.gates.forEach((item) => {
+      if (item.type === "Stumdomi") {
+        if (item.auto) {
+          createResultElement({
+            type: defaultValues.gatesAuto,
+            quantity: 1,
+            color: item.color,
+            height: item.height,
+          });
+        } else {
+          createResultElement({
+            type: defaultValues.gates,
+            quantity: 1,
+            color: item.color,
+            height: item.height,
+          });
+        }
+      } else if (item.type === "Varstomi") {
+        if (item.auto) {
+          createResultElement({
+            type: defaultValues.gates2,
+            quantity: 1,
+            color: item.color,
+            height: item.height,
+          });
+        } else {
+          createResultElement({
+            type: defaultValues.gates2Auto,
+            quantity: 1,
+            color: item.color,
+            height: item.height,
+          });
+        }
+      } else {
+        createResultElement({
+          type: defaultValues.smallGates,
+          quantity: 1,
+          color: item.color,
+          height: item.height,
+        });
+      }
+    });
   }
 }

@@ -80,6 +80,9 @@ export const defaultValues = {
   segment: "Segmentas tvorai, 2,5x1,53 m., [200x50mm]",
   segmentHolders: "Apkaba segmentui 60x40 mm. universali",
   gates: "Stumdomi kiemo vartai su montavimu",
+  gates2: "Varstomi kiemo vartai su montavimu",
+  gatesAuto: "Stumdomi kiemo vartai su automatika ir montavimu",
+  gates2Auto: "Varstomi kiemo vartai su automatika ir montavimu",
   smallGates: "Kiemo varteliai su montavimu",
 };
 
