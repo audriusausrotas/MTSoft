@@ -53,7 +53,6 @@ export default function calculateResults() {
           auto: measure.gates.automatics,
           width: measure.length,
           height: measure.height,
-          quantity: 1,
           color: item.color,
           filling: item.type,
           ready: false,

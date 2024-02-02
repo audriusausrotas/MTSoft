@@ -136,7 +136,6 @@ export interface Gate {
   color: string;
   filling: string;
   ready: boolean;
-  quantity: number;
   aditional: string;
 }
 

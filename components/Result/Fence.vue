@@ -15,13 +15,13 @@ const results = useResultsStore();
       :result="result"
       :index="index"
     />
-    <h3 class="text-2xl font-bold m-auto">Darbai</h3>
+    <!-- <h3 class="text-2xl font-bold m-auto">Darbai</h3>
     <ResultFenceWorks
       v-for="(work, index) in results.works"
       :key="work.id"
       :work="work"
       :index="index"
-    />
+    /> -->
   </div>
 </template>
 <style scoped></style>

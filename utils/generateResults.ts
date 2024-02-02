@@ -3,6 +3,8 @@ import { defaultValues } from "~/data/initialValues";
 
 export default function generateResults() {
   const results = useResultsStore();
+  console.log(results.gates);
+
   if (results.fences.length > 0) {
     results.fences.forEach((item) => {
       createResultElement(item);
