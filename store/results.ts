@@ -194,7 +194,7 @@ export const useResultsStore = defineStore("results", {
         store.rivets = addPartsHelper(
           store.rivets,
           color,
-          store.totalElements * 4,
+          Math.ceil(elements) * 4,
           0
         );
       },

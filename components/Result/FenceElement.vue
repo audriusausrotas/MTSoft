@@ -70,17 +70,6 @@ const spaceEditable = computed(
         />
 
         <BaseInput
-          :name="props.result.space"
-          width="w-20"
-          label="tarpas"
-          :variant="spaceEditable ? 'light' : ''"
-          :disable="spaceEditable ? false : true"
-          @onChange="
-            (value) => useResults.updateSpace({ index: props.index, value })
-          "
-        />
-
-        <BaseInput
           width="w-22"
           variant="light"
           label="kiekis"
@@ -89,10 +78,18 @@ const spaceEditable = computed(
             (value) => useResults.updateQuantity({ index: props.index, value })
           "
         />
+
         <BaseInput
-          width="w-28"
-          label="kryptis"
-          :name="props.result.direction"
+          variant="light"
+          label="kaina"
+          width="w-24"
+          :name="props.result.price"
+        />
+        <BaseInput
+          width="w-24"
+          label="viso kaina"
+          :name="props.result.totalPrice"
+          disable="true"
         />
       </div>
     </div>
@@ -112,27 +109,32 @@ const spaceEditable = computed(
     </div>
     <div v-if="showAditionalHorizontal" class="flex flex-col gap-2">
       <BaseInput
-        variant="light"
         label="pramatomumas"
+        :disable="true"
         :name="props.result.seeThrough"
-        width="w-36"
+        width="w-52"
       />
-      <BaseInput width="w-24" label="laisvas" name="laisvas" :disable="false" />
+      <div class="flex gap-4">
+        <BaseInput
+          width="w-28"
+          label="kryptis"
+          :name="props.result.direction"
+        />
+
+        <BaseInput
+          v-if="props.result.space !== 0"
+          :name="props.result.space"
+          width="w-20"
+          label="tarpas"
+          :variant="spaceEditable ? 'light' : ''"
+          :disable="spaceEditable ? false : true"
+          @onChange="
+            (value) => useResults.updateSpace({ index: props.index, value })
+          "
+        />
+      </div>
     </div>
-    <div class="flex flex-col gap-2">
-      <BaseInput
-        variant="light"
-        label="kaina"
-        width="w-24"
-        :name="props.result.price"
-      />
-      <BaseInput
-        width="w-24"
-        label="viso kaina"
-        :name="props.result.totalPrice"
-        disable="true"
-      />
-    </div>
+
     <div class="flex flex-col gap-2">
       <BaseInput
         label="savikaina"

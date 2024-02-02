@@ -76,9 +76,17 @@ export default function generateResults() {
   }
 
   if (results.totalElements > 0) {
-    createResultElement({
-      type: defaultValues.rivets,
-      quantity: Math.ceil(results.totalElements),
+    results.rivets.forEach((item) => {
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000
+      );
+
+      createResultElement({
+        type: defaultValues.rivets,
+        quantity: boxQuantity,
+        color: item.color,
+        height: item.height,
+      });
     });
   }
 
