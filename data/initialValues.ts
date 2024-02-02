@@ -183,4 +183,10 @@ export const fenceMeasures: FenceMeasure[] = [
     width: 1.8,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
+  {
+    name: "Segmentas",
+    height: 0,
+    width: 250,
+    seeThrough: [0, 0, 0, 0, 0, 0],
+  },
 ];

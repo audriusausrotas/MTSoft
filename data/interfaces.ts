@@ -136,6 +136,7 @@ export interface Gate {
   color: string;
   filling: string;
   ready: boolean;
+  quantity: number;
   aditional: string;
 }
 
@@ -192,6 +193,19 @@ export interface Product {
   cost: number;
   category: string;
   image: string;
+}
+
+export interface Works {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  cost: number;
+  totalCost: number;
+  totalPrice: number;
+  margin: number;
+  profit: number;
+  isNew: boolean;
 }
 
 export interface ResponseProducts {

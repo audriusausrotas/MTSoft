@@ -19,18 +19,19 @@ export default function calculateResults() {
     const hasCrossbars: boolean = verticals.some(
       (vertical) => vertical === item.type
     );
-    const polesNeeded =
+    const isSegment: boolean = item.type.includes("Segmentas");
+    const polesNeeded: boolean =
       item.services !== "Tik Montavimas" &&
       item.parts !== "Tik Borteliai" &&
       item.parts !== "Be Bortelių Ir Stulpų";
 
-    const bordersNeeded =
+    const bordersNeeded: boolean =
       item.services !== "Tik Montavimas" &&
       item.parts !== "Tik Stulpai" &&
       item.parts !== "Be Bortelių Ir Stulpų";
 
     // calculate horizontal fence by suare meters
-    if (!hasCrossbars) {
+    if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       fenceTemp = [...temp];
     }
@@ -52,6 +53,7 @@ export default function calculateResults() {
           auto: measure.gates.automatics,
           width: measure.length,
           height: measure.height,
+          quantity: 1,
           color: item.color,
           filling: item.type,
           ready: false,
@@ -60,30 +62,32 @@ export default function calculateResults() {
       }
 
       // calculate vertical fence board fence
-      if (hasCrossbars && item.direction === "Vertikali") {
+      if (hasCrossbars && item.direction === "Vertikali" && !isSegment) {
         const temp = calculateVerticalFence(item, measure, fenceTemp);
         fenceTemp = [...temp];
       }
 
       // calculate horizontal fence board fence
-      if (hasCrossbars && item.direction === "Horizontali") {
+      if (hasCrossbars && item.direction === "Horizontali" && !isSegment) {
         // const temp = calculateVerticalFence(item, measure, fenceTemp);
         // fenceTemp = [...temp];
       }
 
       // calculate total elements
-      results.addTotalElements(measure.elements, item.color);
+      if (!isSegment) {
+        results.addTotalElements(measure.elements, item.color);
 
-      // calculate bindings
-      if (item.direction === "Horizontali") {
-        results.addBindingsLength(measure.height, item.color);
-        lastBindingHeight = measure.height;
+        // calculate bindings
+        if (item.direction === "Horizontali") {
+          results.addBindingsLength(measure.height, item.color);
+          lastBindingHeight = measure.height;
+        }
       }
 
       // calculate borders, crossbars
       if (isFence) {
         // calculate crossbars
-        if (hasCrossbars) {
+        if (hasCrossbars && !isSegment) {
           results.addCrossbars(item.color);
         }
         // calculate borders
@@ -92,7 +96,7 @@ export default function calculateResults() {
         }
 
         // calculate segment
-        if (item.type.includes("Segmentas")) {
+        if (isSegment) {
           results.addSegment(measure.height, item.color);
         }
       }
@@ -101,7 +105,7 @@ export default function calculateResults() {
       if (polesNeeded) {
         let poleHeight = 0;
 
-        if (item.type.includes("Segmentas")) {
+        if (isSegment) {
           if (measure.height < 150) {
             poleHeight = 2.4;
           } else {
@@ -125,7 +129,11 @@ export default function calculateResults() {
         }
       }
     });
-    results.addBindingsLength(lastBindingHeight, item.color);
+    if (!isSegment) {
+      results.addBindingsLength(lastBindingHeight, item.color);
+    }
+
+    /////////////  skaiciuot darbus jei reikalingi
   });
   results.addFences(fenceTemp);
 

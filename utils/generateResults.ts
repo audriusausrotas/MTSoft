@@ -9,6 +9,28 @@ export default function generateResults() {
     });
   }
 
+  if (results.segments.length > 0) {
+    results.segments.forEach((item) => {
+      createResultElement({
+        type: defaultValues.segment,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
+    });
+  }
+
+  if (results.segmentHolders.length > 0) {
+    results.segmentHolders.forEach((item) => {
+      createResultElement({
+        type: defaultValues.segmentHolders,
+        quantity: item.quantity,
+        color: item.color,
+        height: item.height,
+      });
+    });
+  }
+
   if (results.poles.length > 0) {
     results.poles.forEach((item) => {
       let pole = "";
@@ -94,17 +116,11 @@ export default function generateResults() {
     results.bindingsLength.forEach((item) => {
       createResultElement({
         type: defaultValues.bindings,
-        quantity: item.quantity,
+        quantity: item.quantity / 100,
         color: item.color,
         height: item.height,
       });
     });
-  }
-
-  if (results.segments.length > 0) {
-  }
-
-  if (results.segmentHolders.length > 0) {
   }
 
   if (results.gates.length > 0) {

@@ -9,20 +9,34 @@ const deleteHandler = () => {
   useResults.deleteResult(props.result.id);
 };
 
+const isFenceboard = computed(() => {
+  if (verticals.some((item) => props.result?.type?.includes(item))) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 const showAditionalVertical = computed(() => {
   if (
     verticals.some((item) => props.result?.type?.includes(item)) &&
     props.result.direction === "Vertikali"
-  )
+  ) {
     return true;
+  } else {
+    return false;
+  }
 });
 
 const showAditionalHorizontal = computed(() => {
   if (
     horizontals.some((item) => props.result?.type?.includes(item)) &&
     props.result.direction === "Horizontali"
-  )
+  ) {
     return true;
+  } else {
+    return false;
+  }
 });
 
 const colorEditable = computed(
@@ -93,6 +107,34 @@ const spaceEditable = computed(
         />
       </div>
     </div>
+
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        v-if="props.result.direction"
+        width="w-36"
+        label="kryptis"
+        :name="props.result.direction"
+      />
+      <BaseInput
+        v-if="showAditionalHorizontal"
+        label="pramatomumas"
+        :disable="true"
+        :name="props.result.seeThrough"
+        width="w-36"
+      />
+      <BaseInput
+        v-if="isFenceboard"
+        :name="props.result.space"
+        width="w-36"
+        label="tarpas"
+        :variant="spaceEditable ? 'light' : ''"
+        :disable="spaceEditable ? false : true"
+        @onChange="
+          (value) => useResults.updateSpace({ index: props.index, value })
+        "
+      />
+    </div>
+
     <div v-if="showAditionalVertical" class="flex flex-col gap-2">
       <BaseInput
         variant="light"
@@ -106,33 +148,6 @@ const spaceEditable = computed(
         :name="props.result.twoSided"
         :disable="false"
       />
-    </div>
-    <div v-if="showAditionalHorizontal" class="flex flex-col gap-2">
-      <BaseInput
-        label="pramatomumas"
-        :disable="true"
-        :name="props.result.seeThrough"
-        width="w-52"
-      />
-      <div class="flex gap-4">
-        <BaseInput
-          width="w-28"
-          label="kryptis"
-          :name="props.result.direction"
-        />
-
-        <BaseInput
-          v-if="props.result.space !== 0"
-          :name="props.result.space"
-          width="w-20"
-          label="tarpas"
-          :variant="spaceEditable ? 'light' : ''"
-          :disable="spaceEditable ? false : true"
-          @onChange="
-            (value) => useResults.updateSpace({ index: props.index, value })
-          "
-        />
-      </div>
     </div>
 
     <div class="flex flex-col gap-2">
@@ -152,14 +167,14 @@ const spaceEditable = computed(
     <div class="flex flex-col gap-2">
       <BaseInput
         width="w-24"
-        :name="props.result.profit"
-        label="pelnas"
+        label="marža"
+        :name="props.result.margin + ' %'"
         disable="true"
       />
       <BaseInput
         width="w-24"
-        label="marža"
-        :name="props.result.margin + ' %'"
+        :name="props.result.profit"
+        label="pelnas"
         disable="true"
       />
     </div>

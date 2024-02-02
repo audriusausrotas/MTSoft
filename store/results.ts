@@ -1,12 +1,19 @@
 import { defineStore } from "pinia";
 import { initialResultData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type { Result, Fences, Gate, OtherParts } from "~/data/interfaces";
+import type {
+  Result,
+  Fences,
+  Gate,
+  OtherParts,
+  Works,
+} from "~/data/interfaces";
 import addPartsHelper from "~/utils/addPartsHelper";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
+    works: [] as Works[],
     fences: [] as Fences[],
     poles: [] as OtherParts[],
     gatePoles: [] as OtherParts[],
@@ -203,21 +210,42 @@ export const useResultsStore = defineStore("results", {
       (store) =>
       (height: number, color: string): void => {
         if (store.bindingsLength.length === 0) {
-          addPartsHelper(store.bindingsLength, color, height * 2, 0);
+          store.bindingsLength = addPartsHelper(
+            store.bindingsLength,
+            color,
+            height * 2,
+            0
+          );
         }
-        addPartsHelper(store.bindingsLength, color, height * 2, 0);
+        store.bindingsLength = addPartsHelper(
+          store.bindingsLength,
+          color,
+          height * 2,
+          0
+        );
       },
 
     addSegment:
       (store) =>
       (height: number, color: string): void => {
-        addPartsHelper(store.segments, color, 1, height);
+        store.segments = addPartsHelper(store.segments, color, 1, height);
 
         const holdersCount = height < 130 ? 2 : height < 170 ? 3 : 4;
+
         if (store.segmentHolders.length === 0) {
-          addPartsHelper(store.segmentHolders, color, holdersCount, 0);
+          store.segmentHolders = addPartsHelper(
+            store.segmentHolders,
+            color,
+            holdersCount,
+            0
+          );
         }
-        addPartsHelper(store.segmentHolders, color, holdersCount, 0);
+        store.segmentHolders = addPartsHelper(
+          store.segmentHolders,
+          color,
+          holdersCount,
+          0
+        );
       },
   },
 });
