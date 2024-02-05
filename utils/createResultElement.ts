@@ -6,13 +6,13 @@ import { verticals } from "~/data/selectFieldData";
 export default function createResultElement(item: any) {
   const results = useResultsStore().results;
   const product: Product = getPriceItem(item.type);
-  console.log(product);
 
   let newPrice = product.price;
+  let newCost = product.cost;
 
   if (verticals.includes(item.type)) {
-    newPrice = (product.price * item.height) / 100;
-    product.price = +newPrice.toFixed(2);
+    newPrice = +((product.price * item.height) / 100).toFixed(2);
+    newCost = +((product.cost * item.height) / 100).toFixed(2);
   }
 
   if (item.seeThrough === "Vidutiniška") {

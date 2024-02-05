@@ -255,7 +255,7 @@ export const useCalculationsStore = defineStore("calculations", {
       measureIndex: number;
       value: number;
     }): void {
-      this.fences[data.index].measures[data.measureIndex].height = data.value;
+      this.fences[data.index].measures[data.measureIndex].height = +data.value;
       this.calculateElements(data.index, data.measureIndex);
     },
 
@@ -264,7 +264,7 @@ export const useCalculationsStore = defineStore("calculations", {
       measureIndex: number;
       value: number;
     }): void {
-      this.fences[data.index].measures[data.measureIndex].length = data.value;
+      this.fences[data.index].measures[data.measureIndex].length = +data.value;
       this.calculateElements(data.index, data.measureIndex);
     },
 
