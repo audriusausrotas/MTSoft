@@ -213,6 +213,13 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[data.index].totalQuantity = data.value;
     },
 
+    oneHeight(index: number, height: number) {
+      this.fences[index].measures.forEach((item, i) => {
+        item.height = height;
+        this.calculateElements(index, i);
+      });
+    },
+
     copyLast(index: number): void {
       const elementIndex = this.fences[index].measures.length - 1;
       const element = this.fences[index].measures[elementIndex];

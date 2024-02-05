@@ -175,13 +175,6 @@ export interface ProjectsState {
 
 export interface ProductsState {
   products: Product[];
-  fences: Product[];
-  poles: Product[];
-  borders: Product[];
-  crossbars: Product[];
-  holders: Product[];
-  gates: Product[];
-  other: Product[];
   searchValue: string;
 }
 

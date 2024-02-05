@@ -2,8 +2,8 @@ import getPriceItem from "~/utils/getPriceItem";
 import type { Works, Product } from "~/data/interfaces";
 import { v4 as uuidv4 } from "uuid";
 
-export default function createResultElement(item: any) {
-  const works = useResultsStore().works;
+export default function createWorkElement(item: any) {
+  const works = useResultsStore();
   const product: Product = getPriceItem(item.name);
 
   const totalPrice = product.price * item.quantity;
@@ -24,5 +24,5 @@ export default function createResultElement(item: any) {
     isNew: false,
   };
 
-  works.push(resultData);
+  works.addWork(resultData);
 }

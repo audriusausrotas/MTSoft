@@ -35,7 +35,7 @@ const clearHandler = (): void => {
   newName.value = "";
   newPrice.value = 0;
   newCost.value = 0;
-  newCategory.value = "";
+  newCategory.value = categories[0];
   open.value = false;
 };
 </script>

@@ -84,6 +84,19 @@ export const defaultValues = {
   gatesAuto: "Stumdomi kiemo vartai su automatika ir montavimu",
   gates2Auto: "Varstomi kiemo vartai su automatika ir montavimu",
   smallGates: "Kiemo varteliai su montavimu",
+  polesWork: "Tvoros stulpo betonavimas",
+  gatesPoleWork: "Vartų stulpo betonavimas",
+  gateBnkette: "Vartų stulpo montavimas",
+  poleAnchoringWork: "Ankeriuojamo stulpo Montavimas",
+  bordersWork: "Pamatėlio montavimas",
+  transport: "Transportas",
+  fenceWork: "Tvoros montavimas",
+  bindingWork: "Apkaustų montavimas",
+  fenceboardWork: "Tvoralentės montavimas",
+  crossbarWork: "Skersinio montavimas",
+  smallGateWork: "Vartelių montavimas",
+  TwoSideGateWork: "Dvivėrių vartų montavimas",
+  segmentWork: "Segmento montavimas",
 };
 
 export const fenceMeasures: FenceMeasure[] = [

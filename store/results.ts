@@ -126,6 +126,7 @@ export const useResultsStore = defineStore("results", {
 
     clearParts(): void {
       this.fences = [];
+      this.works = [];
       this.poles = [];
       this.gates = [];
       this.gatePoles = [];
@@ -148,6 +149,29 @@ export const useResultsStore = defineStore("results", {
   },
 
   getters: {
+    addWork: (store) => (work: Works) => {
+      let exist = false;
+      store.works.forEach((item) => {
+        if (item.name === work.name) {
+          const totalPrice = work.price * work.quantity;
+          const totalCost = work.cost * work.quantity;
+          const profit = totalPrice - totalCost;
+          const margin = +(
+            Math.round((profit / totalPrice) * 10000) / 100
+          ).toFixed(2);
+
+          item.quantity = work.quantity;
+          item.totalPrice = totalPrice;
+          item.totalCost = totalCost;
+          item.profit = profit;
+          item.margin = margin;
+
+          exist = true;
+        }
+      });
+      if (!exist) store.works.push(work);
+    },
+
     addBorders:
       (store) =>
       (color: string): void => {

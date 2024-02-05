@@ -3,11 +3,23 @@ import type { Measure } from "~/data/interfaces";
 const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
 const open = ref<boolean>(false);
+const open2 = ref<boolean>(false);
 const totalLength = ref<number>(0);
+const oneHeight = ref<number>(0);
 
 const cancelHandler = (): void => {
   open.value = false;
   totalLength.value = 0;
+};
+
+const cancelHandler2 = (): void => {
+  open2.value = false;
+  oneHeight.value = 0;
+};
+
+const oneHeightHandler = () => {
+  useCalculations.oneHeight(props.index, oneHeight.value);
+  cancelHandler2();
 };
 
 const calculateLengthHandler = (): void => {
@@ -90,7 +102,7 @@ const calculateLengthHandler = (): void => {
         class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
         v-model="totalLength"
         :autofocus="open"
-        @keydown.enter="calculateLengthHandler"
+        @keyup.enter="calculateLengthHandler"
       />
       <button
         class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
@@ -101,6 +113,30 @@ const calculateLengthHandler = (): void => {
       <button
         class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
         @click="cancelHandler"
+      >
+        X
+      </button>
+    </div>
+
+    <BaseButton v-if="!open2" name="Bendras aukštis" @click="open2 = !open2" />
+    <div v-else="open2" class="flex overflow-hidden border rounded-lg">
+      <input
+        placeholder="Bendras aukštis"
+        type="number"
+        class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
+        v-model="oneHeight"
+        :autofocus="open2"
+        @keyup.enter="oneHeightHandler"
+      />
+      <button
+        class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
+        @click="oneHeightHandler"
+      >
+        OK
+      </button>
+      <button
+        class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
+        @click="cancelHandler2"
       >
         X
       </button>

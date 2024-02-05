@@ -1,7 +1,7 @@
 import { productSchema } from "~/server/models/productSchema";
 
 export default defineEventHandler(async (event) => {
-  const { name, price, cost, image } = await readBody(event);
+  const { name, price, cost, image, category } = await readBody(event);
 
   const doesExist = await productSchema.findOne({ name });
 
@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     price: price || 0,
     cost: cost || 0,
     image: image || "",
+    category: category || "Kita",
   });
 
   const data = await product.save();

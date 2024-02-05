@@ -13,43 +13,74 @@ const deleteHandler = () => {
   <div class="flex flex-wrap items-center gap-4 py-4">
     <div class="">{{ props.index + 1 }}</div>
 
-    <BaseSearchField
-      width="w-96"
-      label="Pavadinimas"
-      :data="useProduct.products"
-      @OnClick="
-        (value) => {
-          useResults.selectItem({ index: props.index, value });
-        }
-      "
-      @onChange="
-        (value) => useResults.updateName({ index: props.index, value })
-      "
-      :name="props.work.type"
-      :index="props.index"
-    />
+    <div class="flex flex-col gap-2">
+      <BaseSearchField
+        width="w-80"
+        label="Pavadinimas"
+        :data="useProduct.products"
+        @OnClick="
+          (value) => {
+            useResults.selectItem({ index: props.index, value });
+          }
+        "
+        @onChange="
+          (value) => useResults.updateName({ index: props.index, value })
+        "
+        :name="props.work.name"
+        :index="props.index"
+      />
+      <div class="flex gap-4">
+        <BaseInput
+          variant="light"
+          width="w-24"
+          label="kiekis"
+          :name="props.work.quantity"
+          :disable="false"
+        />
 
-    <BaseInput
-      variant="light"
-      width="w-24"
-      label="kiekis"
-      :name="props.work.quantity"
-      :disable="false"
-    />
+        <BaseInput
+          variant="light"
+          label="Kaina"
+          :name="props.work.price"
+          width="w-24"
+        />
 
-    <BaseInput
-      variant="light"
-      label="Kaina"
-      :name="props.work.price"
-      width="w-24"
-    />
-
-    <BaseInput
-      label="savikaina"
-      :name="props.work.cost"
-      disable="true"
-      width="w-24"
-    />
+        <BaseInput
+          label="savikaina"
+          :name="props.work.cost"
+          disable="true"
+          width="w-24"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        label="Viso Savikaina"
+        :name="props.work.totalCost"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Viso kaina"
+        :name="props.work.totalPrice"
+        disable="true"
+        width="w-24"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        label="marža"
+        :name="props.work.margin"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Pelnas"
+        :name="props.work.profit"
+        disable="true"
+        width="w-24"
+      />
+    </div>
 
     <NuxtImg
       src="/icons/delete.svg"

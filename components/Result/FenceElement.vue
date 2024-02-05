@@ -100,12 +100,32 @@ const spaceEditable = computed(
           :name="props.result.price"
         />
         <BaseInput
-          width="w-24"
-          label="viso kaina"
-          :name="props.result.totalPrice"
+          label="savikaina"
+          :name="props.result.cost"
           disable="true"
+          width="w-24"
         />
       </div>
+    </div>
+
+    <div v-if="showAditionalVertical" class="flex flex-col gap-2">
+      <BaseInput
+        variant="light"
+        label="ilgis"
+        :name="$props.result.height"
+        width="w-24"
+      />
+      <BaseInput
+        v-if="isFenceboard"
+        :name="props.result.space"
+        width="w-24"
+        label="tarpas"
+        :variant="spaceEditable ? 'light' : ''"
+        :disable="spaceEditable ? false : true"
+        @onChange="
+          (value) => useResults.updateSpace({ index: props.index, value })
+        "
+      />
     </div>
 
     <div class="flex flex-col gap-2">
@@ -122,28 +142,10 @@ const spaceEditable = computed(
         :name="props.result.seeThrough"
         width="w-36"
       />
+
       <BaseInput
         v-if="isFenceboard"
-        :name="props.result.space"
         width="w-36"
-        label="tarpas"
-        :variant="spaceEditable ? 'light' : ''"
-        :disable="spaceEditable ? false : true"
-        @onChange="
-          (value) => useResults.updateSpace({ index: props.index, value })
-        "
-      />
-    </div>
-
-    <div v-if="showAditionalVertical" class="flex flex-col gap-2">
-      <BaseInput
-        variant="light"
-        label="ilgis"
-        :name="$props.result.height"
-        width="w-24"
-      />
-      <BaseInput
-        width="w-24"
         label="dvipusė"
         :name="props.result.twoSided"
         :disable="false"
@@ -152,15 +154,15 @@ const spaceEditable = computed(
 
     <div class="flex flex-col gap-2">
       <BaseInput
-        label="savikaina"
-        :name="props.result.cost"
-        disable="true"
-        width="w-24"
-      />
-      <BaseInput
         width="w-24"
         label="viso savikaina"
         :name="props.result.totalCost"
+        disable="true"
+      />
+      <BaseInput
+        width="w-24"
+        label="viso kaina"
+        :name="props.result.totalPrice"
         disable="true"
       />
     </div>

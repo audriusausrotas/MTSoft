@@ -1,6 +1,7 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
-import type { Fences, OtherParts } from "~/data/interfaces";
+import { defaultValues } from "~/data/initialValues";
+import type { Fences } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
 import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
@@ -14,21 +15,28 @@ export default function calculateResults() {
 
   let fenceTemp: Fences[] = [];
 
-  fences.fences.forEach((item, index) => {
+  let totalPoles = 0;
+  let totalGatePoles = 0;
+  let totalBorders = 0;
+  let totalCrossbars = 0;
+  let totalElements = 0;
+  let totalSegments = 0;
+
+  fences.fences.forEach((item) => {
     // checks if crossbars needed
     const hasCrossbars: boolean = verticals.some(
       (vertical) => vertical === item.type
     );
+
+    const onlyParts = item.services === "Tik Medžiagos";
+    const onlyServices = item.services === "Tik Medžiagos";
     const isSegment: boolean = item.type.includes("Segmentas");
+
     const polesNeeded: boolean =
-      item.services !== "Tik Montavimas" &&
-      item.parts !== "Tik Borteliai" &&
-      item.parts !== "Be Bortelių Ir Stulpų";
+      item.parts !== "Tik Borteliai" && item.parts !== "Be Bortelių Ir Stulpų";
 
     const bordersNeeded: boolean =
-      item.services !== "Tik Montavimas" &&
-      item.parts !== "Tik Stulpai" &&
-      item.parts !== "Be Bortelių Ir Stulpų";
+      item.parts !== "Tik Stulpai" && item.parts !== "Be Bortelių Ir Stulpų";
 
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
@@ -75,6 +83,7 @@ export default function calculateResults() {
       // calculate total elements
       if (!isSegment) {
         results.addTotalElements(measure.elements, item.color);
+        totalElements += measure.elements;
 
         // calculate bindings
         if (item.direction === "Horizontali") {
@@ -87,16 +96,19 @@ export default function calculateResults() {
       if (isFence) {
         // calculate crossbars
         if (hasCrossbars && !isSegment) {
-          results.addCrossbars(item.color);
+          if (!onlyServices) results.addCrossbars(item.color);
+          if (!onlyParts) totalCrossbars += 2;
         }
         // calculate borders
         if (bordersNeeded) {
-          results.addBorders(item.color);
+          if (!onlyServices) results.addBorders(item.color);
+          if (!onlyParts) totalBorders++;
         }
 
         // calculate segment
         if (isSegment) {
-          results.addSegment(measure.height, item.color);
+          if (!onlyServices) results.addSegment(measure.height, item.color);
+          if (!onlyParts) totalSegments++;
         }
       }
 
@@ -115,14 +127,20 @@ export default function calculateResults() {
         }
 
         if (!measure.gates.exist) {
-          results.addPoles(item.color, poleHeight);
+          if (!onlyServices) results.addPoles(item.color, poleHeight);
+          if (totalPoles === 0 && !onlyParts) totalPoles++;
+          if (!onlyParts) totalPoles++;
+
           isTogether = false;
         } else {
           if (!isTogether) {
-            results.removePole(item.color);
-            results.addGatePoles(item.color, 2);
+            if (!onlyServices) results.removePole(item.color);
+            if (!onlyServices) results.addGatePoles(item.color, 2);
+            if (!onlyParts) totalPoles--;
+            if (!onlyParts) totalGatePoles += 2;
           } else {
-            results.addGatePoles(item.color, 1);
+            if (!onlyServices) results.addGatePoles(item.color, 1);
+            if (!onlyParts) totalGatePoles++;
           }
           isTogether = true;
         }
@@ -132,7 +150,39 @@ export default function calculateResults() {
       results.addBindingsLength(lastBindingHeight, item.color);
     }
 
-    /////////////  skaiciuot darbus jei reikalingi
+    // calculate works
+    if (!onlyParts) {
+      if (totalPoles > 0) {
+        createWorkElement({
+          name: defaultValues.polesWork,
+          quantity: totalPoles,
+        });
+      }
+      if (totalGatePoles > 0) {
+        createWorkElement({
+          name: defaultValues.gatesPoleWork,
+          quantity: totalGatePoles,
+        });
+      }
+      if (totalBorders > 0) {
+        createWorkElement({
+          name: defaultValues.bordersWork,
+          quantity: totalBorders,
+        });
+      }
+      if (totalCrossbars > 0) {
+        createWorkElement({
+          name: defaultValues.crossbarWork,
+          quantity: totalCrossbars,
+        });
+      }
+      if (totalSegments > 0) {
+        createWorkElement({
+          name: defaultValues.segmentWork,
+          quantity: totalSegments,
+        });
+      }
+    }
   });
   results.addFences(fenceTemp);
 
