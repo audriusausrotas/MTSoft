@@ -54,5 +54,5 @@ export default function calculateVerticalFence(
     tempFence.push(initialFenceData);
   }
 
-  return tempFence;
+  return { arr: tempFence, quantity: elements };
 }

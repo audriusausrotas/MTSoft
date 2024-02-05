@@ -84,7 +84,7 @@ export const verticals: string[] = [
 export const pramatomumas: string[] = [
   "Aklina",
   "Nepramatoma",
-  "Vidutiniškai Pramatoma",
+  "Vidutiniška",
   "Pramatoma",
   "25% Pramatomumas",
   "50% pramatomumas",

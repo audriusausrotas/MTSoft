@@ -8,23 +8,30 @@ import type {
   OtherParts,
   Works,
 } from "~/data/interfaces";
-import addPartsHelper from "~/utils/addPartsHelper";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
     results: [] as Result[],
     works: [] as Works[],
     fences: [] as Fences[],
+    totalFences: 0 as number,
+    totalFencesWithBindings: 0 as number,
+    totalFenceboards: 0 as number,
     poles: [] as OtherParts[],
+    totalPoles: 0 as number,
     gatePoles: [] as OtherParts[],
+    totalGatePoles: 0 as number,
     borders: 0 as number,
+    totalBorders: 0 as number,
     borderHolders: [] as OtherParts[],
     crossbars: [] as OtherParts[],
+    totalCrossbars: 0 as number,
     crossbarHolders: [] as OtherParts[],
     rivets: [] as OtherParts[],
     totalElements: 0 as number,
     bindingsLength: [] as OtherParts[],
     segments: [] as OtherParts[],
+    totalSegments: 0 as number,
     segmentHolders: [] as OtherParts[],
     gates: [] as Gate[],
     totalPrice: 0,
@@ -124,6 +131,7 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = 0;
     },
 
+    // update bellow
     clearParts(): void {
       this.fences = [];
       this.works = [];
@@ -146,12 +154,43 @@ export const useResultsStore = defineStore("results", {
       this.clearTotals();
       this.clearResults();
     },
-  },
 
-  getters: {
-    addWork: (store) => (work: Works) => {
+    addBorders(color: string) {
+      this.borders++;
+      this.borderHolders = this.addPart(this.borderHolders, color, 2, 0);
+    },
+
+    addTotalPoles() {
+      this.totalPoles++;
+    },
+    removeTotalPole() {
+      this.totalPoles--;
+    },
+    addTotalGatePoles(quantity: number) {
+      this.totalGatePoles += quantity;
+    },
+    addTotalBorders() {
+      this.totalBorders++;
+    },
+    addTotalCrossbars() {
+      this.totalCrossbars += 2;
+    },
+    addTotalSegments() {
+      this.totalSegments++;
+    },
+    addTotalFence(quantity: number) {
+      this.totalFences += quantity;
+    },
+    addTotalFenceWithBindings(quantity: number) {
+      this.totalFencesWithBindings += quantity;
+    },
+    addTotalFenceboards(quantity: number) {
+      this.totalFenceboards += quantity;
+    },
+
+    addWork(work: Works) {
       let exist = false;
-      store.works.forEach((item) => {
+      this.works.forEach((item) => {
         if (item.name === work.name) {
           const totalPrice = work.price * work.quantity;
           const totalCost = work.cost * work.quantity;
@@ -169,107 +208,101 @@ export const useResultsStore = defineStore("results", {
           exist = true;
         }
       });
-      if (!exist) store.works.push(work);
+      if (!exist) this.works.push(work);
     },
 
-    addBorders:
-      (store) =>
-      (color: string): void => {
-        store.borders++;
-        store.borderHolders = addPartsHelper(store.borderHolders, color, 2, 0);
-      },
+    addPoles(color: string, height: number): void {
+      let quantity = 0;
+      if (this.poles.length === 0 && this.gatePoles.length === 0) quantity++;
+      const doesExist = this.poles.some((item) => item.color === color);
+      if (!doesExist) quantity++;
+      if (quantity === 0) quantity++;
+      this.poles = this.addPart(this.poles, color, quantity, height);
+    },
 
-    addPoles:
-      (store) =>
-      (color: string, height: number): void => {
-        let quantity = 0;
-        if (store.poles.length === 0 && store.gatePoles.length === 0)
-          quantity++;
-        const doesExist = store.poles.some((item) => item.color === color);
-        if (!doesExist) quantity++;
-        if (quantity === 0) quantity++;
-        store.poles = addPartsHelper(store.poles, color, quantity, height);
-      },
+    removePole(color: string): void {
+      this.poles = this.poles.map((item) => {
+        if (item.color === color) item.quantity--;
+        return item;
+      });
+    },
 
-    removePole:
-      (store) =>
-      (color: string): void => {
-        store.poles = store.poles.map((item) => {
-          if (item.color === color) item.quantity--;
-          return item;
-        });
-      },
+    addGatePoles(color: string, quantity: number): void {
+      this.gatePoles = this.addPart(this.gatePoles, color, quantity, 3);
+    },
 
-    addGatePoles:
-      (store) =>
-      (color: string, quantity: number): void => {
-        store.gatePoles = addPartsHelper(store.gatePoles, color, quantity, 3);
-      },
+    addCrossbars(color: string): void {
+      this.crossbars = this.addPart(this.crossbars, color, 2, 0);
+      this.crossbarHolders = this.addPart(this.crossbarHolders, color, 4, 0);
+    },
 
-    addCrossbars:
-      (store) =>
-      (color: string): void => {
-        store.crossbars = addPartsHelper(store.crossbars, color, 2, 0);
-        store.crossbarHolders = addPartsHelper(
-          store.crossbarHolders,
-          color,
-          4,
-          0
-        );
-      },
+    addTotalElements(elements: number, color: string): void {
+      this.totalElements += elements;
+      this.rivets = this.addPart(
+        this.rivets,
+        color,
+        Math.ceil(elements) * 4,
+        0
+      );
+    },
 
-    addTotalElements:
-      (store) =>
-      (elements: number, color: string): void => {
-        store.totalElements += elements;
-        store.rivets = addPartsHelper(
-          store.rivets,
-          color,
-          Math.ceil(elements) * 4,
-          0
-        );
-      },
-
-    addBindingsLength:
-      (store) =>
-      (height: number, color: string): void => {
-        if (store.bindingsLength.length === 0) {
-          store.bindingsLength = addPartsHelper(
-            store.bindingsLength,
-            color,
-            height * 2,
-            0
-          );
-        }
-        store.bindingsLength = addPartsHelper(
-          store.bindingsLength,
+    addBindingsLength(height: number, color: string): void {
+      if (this.bindingsLength.length === 0) {
+        this.bindingsLength = this.addPart(
+          this.bindingsLength,
           color,
           height * 2,
           0
         );
-      },
+      }
+      this.bindingsLength = this.addPart(
+        this.bindingsLength,
+        color,
+        height * 2,
+        0
+      );
+    },
 
-    addSegment:
-      (store) =>
-      (height: number, color: string): void => {
-        store.segments = addPartsHelper(store.segments, color, 1, height);
+    addSegment(height: number, color: string): void {
+      this.segments = this.addPart(this.segments, color, 1, height);
 
-        const holdersCount = height < 130 ? 2 : height < 170 ? 3 : 4;
+      const holdersCount = height < 130 ? 2 : height < 170 ? 3 : 4;
 
-        if (store.segmentHolders.length === 0) {
-          store.segmentHolders = addPartsHelper(
-            store.segmentHolders,
-            color,
-            holdersCount,
-            0
-          );
-        }
-        store.segmentHolders = addPartsHelper(
-          store.segmentHolders,
+      if (this.segmentHolders.length === 0) {
+        this.segmentHolders = this.addPart(
+          this.segmentHolders,
           color,
           holdersCount,
           0
         );
-      },
+      }
+      this.segmentHolders = this.addPart(
+        this.segmentHolders,
+        color,
+        holdersCount,
+        0
+      );
+    },
+    addPart(
+      array: OtherParts[],
+      color: string,
+      quantity: number,
+      height: number
+    ) {
+      let tempArr = [...array];
+      let itemExist = false;
+      tempArr.forEach((item) => {
+        if (item.color === color && height === item.height) {
+          item.quantity += quantity;
+          itemExist = true;
+        }
+      });
+      if (!itemExist) {
+        tempArr.push({ color, quantity, height });
+      }
+      return tempArr;
+    },
   },
+
+  getters: {},
 });

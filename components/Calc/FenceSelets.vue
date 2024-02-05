@@ -141,6 +141,16 @@ watch(
         })
         "
       />
+      <BaseSelectField
+        v-if="!isFenceBoards"
+        label="Apkaustai"
+        :values="twoSided"
+        id="bingings"
+        :defaultValue="currentFence.bindings"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateBindings({ index: props.index, value })
+        "
+      />
     </div>
     <div>
       <div

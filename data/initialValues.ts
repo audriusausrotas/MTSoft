@@ -86,16 +86,15 @@ export const defaultValues = {
   smallGates: "Kiemo varteliai su montavimu",
   polesWork: "Tvoros stulpo betonavimas",
   gatesPoleWork: "Vartų stulpo betonavimas",
-  gateBnkette: "Vartų stulpo montavimas",
+  gateBnkette: "Vartų pamato betonavimas",
   poleAnchoringWork: "Ankeriuojamo stulpo Montavimas",
   bordersWork: "Pamatėlio montavimas",
   transport: "Transportas",
   fenceWork: "Tvoros montavimas",
+  totalFencesWithBindings: "Tvoros montavimas su apkaustais",
   bindingWork: "Apkaustų montavimas",
   fenceboardWork: "Tvoralentės montavimas",
   crossbarWork: "Skersinio montavimas",
-  smallGateWork: "Vartelių montavimas",
-  TwoSideGateWork: "Dvivėrių vartų montavimas",
   segmentWork: "Segmento montavimas",
 };
 

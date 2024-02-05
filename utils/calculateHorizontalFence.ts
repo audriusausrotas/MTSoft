@@ -9,19 +9,12 @@ export default function calculateHorizontalFence(
   let fenceExist: boolean = false;
 
   const initialFenceData = {
-    type: item.type,
-    color: item.color,
+    ...item,
     length: item.totalLength,
     height: 0,
     quantity: item.totalQuantity,
-    material: item.material,
     elements: 0,
-    space: item.space,
-    seeThrough: item.seeThrough,
-    direction: item.direction,
-    twoSided: item.twoSided,
   };
-
   tempFence.forEach((fenceItem) => {
     if (
       fenceItem.type === item.type &&

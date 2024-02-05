@@ -28,6 +28,7 @@ export const useCalculationsStore = defineStore("calculations", {
         parts: "Borteliai, Stulpai",
         twoSided: "Ne",
         aditional: "",
+        bindings: "Taip",
         space: 2,
         elements: 0,
         totalLength: 0,
@@ -113,6 +114,10 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateServices(data: { index: number; value: string }): void {
       this.fences[data.index].services = data.value;
+    },
+
+    updateBindings(data: { index: number; value: string }): void {
+      this.fences[data.index].bindings = data.value;
     },
 
     updateGateType(data: {

@@ -12,23 +12,13 @@ export default function generateResults() {
 
   if (results.segments.length > 0) {
     results.segments.forEach((item) => {
-      createResultElement({
-        type: defaultValues.segment,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: defaultValues.segment });
     });
   }
 
   if (results.segmentHolders.length > 0) {
     results.segmentHolders.forEach((item) => {
-      createResultElement({
-        type: defaultValues.segmentHolders,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: defaultValues.segmentHolders });
     });
   }
 
@@ -54,12 +44,7 @@ export default function generateResults() {
     }
 
     results.gatePoles.forEach((item) => {
-      createResultElement({
-        type: pole,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: pole });
     });
   }
 
@@ -69,32 +54,17 @@ export default function generateResults() {
       quantity: results.borders,
     });
     results.borderHolders.forEach((item) => {
-      createResultElement({
-        type: defaultValues.borderHolder,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: defaultValues.borderHolder });
     });
   }
 
   if (results.crossbars.length > 0) {
     results.crossbars.forEach((item) => {
-      createResultElement({
-        type: defaultValues.crossbar,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: defaultValues.crossbar });
     });
 
     results.crossbarHolders.forEach((item) => {
-      createResultElement({
-        type: defaultValues.crossbarHolders,
-        quantity: item.quantity,
-        color: item.color,
-        height: item.height,
-      });
+      createResultElement({ ...item, type: defaultValues.crossbarHolders });
     });
   }
 
@@ -105,10 +75,9 @@ export default function generateResults() {
       );
 
       createResultElement({
+        ...item,
         type: defaultValues.rivets,
         quantity: boxQuantity,
-        color: item.color,
-        height: item.height,
       });
     });
   }
@@ -116,10 +85,9 @@ export default function generateResults() {
   if (results.bindingsLength.length > 0) {
     results.bindingsLength.forEach((item) => {
       createResultElement({
+        ...item,
         type: defaultValues.bindings,
         quantity: item.quantity / 100,
-        color: item.color,
-        height: item.height,
       });
     });
   }
@@ -129,43 +97,125 @@ export default function generateResults() {
       if (item.type === "Stumdomi") {
         if (item.auto) {
           createResultElement({
+            ...item,
             type: defaultValues.gatesAuto,
             quantity: 1,
-            color: item.color,
-            height: item.height,
           });
         } else {
           createResultElement({
+            ...item,
             type: defaultValues.gates,
             quantity: 1,
-            color: item.color,
-            height: item.height,
           });
         }
       } else if (item.type === "Varstomi") {
         if (item.auto) {
           createResultElement({
+            ...item,
             type: defaultValues.gates2,
             quantity: 1,
-            color: item.color,
-            height: item.height,
           });
         } else {
           createResultElement({
+            ...item,
             type: defaultValues.gates2Auto,
             quantity: 1,
-            color: item.color,
-            height: item.height,
           });
         }
       } else {
         createResultElement({
+          ...item,
           type: defaultValues.smallGates,
           quantity: 1,
-          color: item.color,
-          height: item.height,
         });
       }
     });
   }
+
+  // calculate works
+
+  if (results.totalFences > 0) {
+    createWorkElement({
+      name: defaultValues.fenceWork,
+      quantity: results.totalFences,
+    });
+  }
+
+  if (results.totalFencesWithBindings > 0) {
+    createWorkElement({
+      name: defaultValues.totalFencesWithBindings,
+      quantity: results.totalFencesWithBindings,
+    });
+  }
+
+  if (results.totalFenceboards > 0) {
+    createWorkElement({
+      name: defaultValues.fenceboardWork,
+      quantity: results.totalFenceboards,
+    });
+  }
+
+  if (results.totalPoles > 0) {
+    createWorkElement({
+      name: defaultValues.polesWork,
+      quantity: results.totalPoles,
+    });
+  }
+
+  if (results.totalGatePoles > 0) {
+    createWorkElement({
+      name: defaultValues.gatesPoleWork,
+      quantity: results.totalGatePoles,
+    });
+  }
+
+  if (results.totalBorders > 0) {
+    createWorkElement({
+      name: defaultValues.bordersWork,
+      quantity: results.totalBorders,
+    });
+  }
+
+  if (results.totalCrossbars > 0) {
+    createWorkElement({
+      name: defaultValues.crossbarWork,
+      quantity: results.totalCrossbars,
+    });
+  }
+
+  if (results.totalSegments > 0) {
+    createWorkElement({
+      name: defaultValues.segmentWork,
+      quantity: results.totalSegments,
+    });
+  }
+
+  if (results.gates.length > 0) {
+    results.gates.forEach((item) => {
+      if (item.type.includes("Stumdomi")) {
+        createWorkElement({
+          name: defaultValues.gateBnkette,
+          quantity:
+            item.width <= 400
+              ? 1.6
+              : item.width <= 500
+              ? 2
+              : item.width <= 600
+              ? 2.5
+              : item.width <= 700
+              ? 3
+              : item.width <= 800
+              ? 3.5
+              : item.width <= 900
+              ? 4
+              : 5,
+        });
+      }
+    });
+  }
+
+  createWorkElement({
+    name: defaultValues.transport,
+    quantity: 1,
+  });
 }

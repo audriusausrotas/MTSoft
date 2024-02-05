@@ -15,37 +15,32 @@ export default function calculateResults() {
 
   let fenceTemp: Fences[] = [];
 
-  let totalPoles = 0;
-  let totalGatePoles = 0;
-  let totalBorders = 0;
-  let totalCrossbars = 0;
-  let totalElements = 0;
-  let totalSegments = 0;
-
   fences.fences.forEach((item) => {
     // checks if crossbars needed
-    const hasCrossbars: boolean = verticals.some(
-      (vertical) => vertical === item.type
-    );
-
     const onlyParts = item.services === "Tik Medžiagos";
     const onlyServices = item.services === "Tik Medžiagos";
     const isSegment: boolean = item.type.includes("Segmentas");
-
     const polesNeeded: boolean =
       item.parts !== "Tik Borteliai" && item.parts !== "Be Bortelių Ir Stulpų";
-
     const bordersNeeded: boolean =
       item.parts !== "Tik Stulpai" && item.parts !== "Be Bortelių Ir Stulpų";
+    const hasCrossbars: boolean = verticals.some(
+      (vertical) => vertical === item.type
+    );
 
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       fenceTemp = [...temp];
+      if (!onlyParts) {
+        if (item.bindings === "Taip")
+          results.addTotalFenceWithBindings(item.totalQuantity);
+        else results.addTotalFence(item.totalQuantity);
+      }
     }
 
     let isTogether: boolean = false;
-    let lastBindingHeight = 0;
+    let lastBindingHeight: number = 0;
 
     item.measures.forEach((measure) => {
       const isFence =
@@ -71,7 +66,8 @@ export default function calculateResults() {
       // calculate vertical fence board fence
       if (hasCrossbars && item.direction === "Vertikali" && !isSegment) {
         const temp = calculateVerticalFence(item, measure, fenceTemp);
-        fenceTemp = [...temp];
+        if (!onlyServices) fenceTemp = [...temp.arr];
+        if (!onlyParts) results.addTotalFenceboards(temp.quantity);
       }
 
       // calculate horizontal fence board fence
@@ -83,12 +79,12 @@ export default function calculateResults() {
       // calculate total elements
       if (!isSegment) {
         results.addTotalElements(measure.elements, item.color);
-        totalElements += measure.elements;
 
         // calculate bindings
         if (item.direction === "Horizontali") {
-          results.addBindingsLength(measure.height, item.color);
-          lastBindingHeight = measure.height;
+          if (!onlyServices)
+            results.addBindingsLength(measure.height, item.color);
+          if (!onlyServices) lastBindingHeight = measure.height;
         }
       }
 
@@ -97,18 +93,18 @@ export default function calculateResults() {
         // calculate crossbars
         if (hasCrossbars && !isSegment) {
           if (!onlyServices) results.addCrossbars(item.color);
-          if (!onlyParts) totalCrossbars += 2;
+          if (!onlyParts) results.addTotalCrossbars();
         }
         // calculate borders
         if (bordersNeeded) {
           if (!onlyServices) results.addBorders(item.color);
-          if (!onlyParts) totalBorders++;
+          if (!onlyParts) results.addTotalBorders();
         }
 
         // calculate segment
         if (isSegment) {
           if (!onlyServices) results.addSegment(measure.height, item.color);
-          if (!onlyParts) totalSegments++;
+          if (!onlyParts) results.addTotalSegments();
         }
       }
 
@@ -128,19 +124,19 @@ export default function calculateResults() {
 
         if (!measure.gates.exist) {
           if (!onlyServices) results.addPoles(item.color, poleHeight);
-          if (totalPoles === 0 && !onlyParts) totalPoles++;
-          if (!onlyParts) totalPoles++;
+          if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
+          if (!onlyParts) results.addTotalPoles();
 
           isTogether = false;
         } else {
           if (!isTogether) {
             if (!onlyServices) results.removePole(item.color);
             if (!onlyServices) results.addGatePoles(item.color, 2);
-            if (!onlyParts) totalPoles--;
-            if (!onlyParts) totalGatePoles += 2;
+            if (!onlyParts) results.removeTotalPole();
+            if (!onlyParts) results.addTotalGatePoles(2);
           } else {
             if (!onlyServices) results.addGatePoles(item.color, 1);
-            if (!onlyParts) totalGatePoles++;
+            if (!onlyParts) results.addTotalGatePoles(1);
           }
           isTogether = true;
         }
@@ -148,40 +144,6 @@ export default function calculateResults() {
     });
     if (!isSegment) {
       results.addBindingsLength(lastBindingHeight, item.color);
-    }
-
-    // calculate works
-    if (!onlyParts) {
-      if (totalPoles > 0) {
-        createWorkElement({
-          name: defaultValues.polesWork,
-          quantity: totalPoles,
-        });
-      }
-      if (totalGatePoles > 0) {
-        createWorkElement({
-          name: defaultValues.gatesPoleWork,
-          quantity: totalGatePoles,
-        });
-      }
-      if (totalBorders > 0) {
-        createWorkElement({
-          name: defaultValues.bordersWork,
-          quantity: totalBorders,
-        });
-      }
-      if (totalCrossbars > 0) {
-        createWorkElement({
-          name: defaultValues.crossbarWork,
-          quantity: totalCrossbars,
-        });
-      }
-      if (totalSegments > 0) {
-        createWorkElement({
-          name: defaultValues.segmentWork,
-          quantity: totalSegments,
-        });
-      }
     }
   });
   results.addFences(fenceTemp);
