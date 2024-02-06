@@ -10,11 +10,6 @@ export default function createResultElement(item: any) {
   let newPrice: number = Number(product.price);
   let newCost: number = Number(product.cost);
 
-  if (verticals.includes(item.type)) {
-    newPrice = +((product.price * item.height) / 100).toFixed(2);
-    newCost = +((product.cost * item.height) / 100).toFixed(2);
-  }
-
   // change gate prices
   if (item.type.includes("vartai")) {
     if (item.width > 400) {
@@ -36,6 +31,10 @@ export default function createResultElement(item: any) {
   }
 
   // change price on fence seeThrough
+  if (item.seeThrough === "Aklina") {
+    newPrice = product.price + 3;
+  }
+
   if (item.seeThrough === "Vidutiniška") {
     newPrice = product.price - 3;
   }
@@ -52,11 +51,16 @@ export default function createResultElement(item: any) {
     newPrice = product.price - 7;
   }
 
+  if (verticals.includes(item.type)) {
+    newPrice = +((product.price * item.height) / 100).toFixed(2);
+    newCost = +((product.cost * item.height) / 100).toFixed(2);
+  }
+
   // calculate total values
-  const totalPrice = newPrice * item.quantity;
-  const totalCost = product.cost * item.quantity;
-  const profit = totalPrice - totalCost;
-  const margin = (Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+  const totalPrice = +(newPrice * item.quantity).toFixed(2);
+  const totalCost = +(product.cost * item.quantity).toFixed(2);
+  const profit = +(totalPrice - totalCost).toFixed(2);
+  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
 
   const resultData: Result = {
     id: uuidv4(),

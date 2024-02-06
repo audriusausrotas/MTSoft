@@ -38,13 +38,21 @@ export const useResultsStore = defineStore("results", {
     totalSegments: 0 as number,
     segmentHolders: [] as OtherParts[],
     gates: [] as Gate[],
-    totalPrice: 0,
-    totalCost: 0,
-    totalProfit: 0,
-    totalMargin: 0,
+    totalPrice: 0 as number,
+    totalCost: 0 as number,
+    totalProfit: 0 as number,
+    totalMargin: 0 as number,
+    priceVAT: 0 as number,
+    priceWithDiscount: 0 as number,
   }),
 
   actions: {
+    useDiscount() {
+      this.priceWithDiscount = +((this.priceVAT - this.totalPrice) / 2).toFixed(
+        2
+      );
+    },
+
     addFences(data: Fences[]): void {
       this.fences = [...data];
     },
@@ -75,8 +83,8 @@ export const useResultsStore = defineStore("results", {
 
     updateQuantity(index: number, value: number): void {
       this.results[index].quantity = value;
+      console.log("asdf");
       this.recalculateTotals(index);
-      this.calculateTotals();
     },
 
     updateSpace(index: number, value: number): void {
@@ -87,20 +95,40 @@ export const useResultsStore = defineStore("results", {
       this.results[index].color = value;
     },
 
-    updatePrice(data: { index: number; value: number }): void {
-      this.results[data.index].price = data.value;
-      this.recalculateTotals(data.index);
-      this.calculateTotals();
+    updatePrice(index: number, value: number): void {
+      this.results[index].price = value;
+      this.recalculateTotals(index);
     },
 
     recalculateTotals(index: number): void {
       const result = this.results[index];
-      result.totalPrice = result.price * result.quantity;
-      result.totalCost = result.cost * result.quantity;
-      result.profit = result.totalPrice - result.totalCost;
+      result.totalPrice = +(result.price * result.quantity).toFixed(2);
+      result.totalCost = +(result.cost * result.quantity).toFixed(2);
+      result.profit = +(result.totalPrice - result.totalCost).toFixed(2);
       const marginValue =
         ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
-      result.margin = parseFloat(marginValue.toFixed(2));
+      result.margin = +marginValue.toFixed(2);
+      this.calculateTotals();
+    },
+
+    updateWorkQuantity(index: number, value: number): void {
+      this.works[index].quantity = value;
+      this.recalculateWorkTotals(index);
+    },
+
+    updateWorkPrice(index: number, value: number): void {
+      this.works[index].price = value;
+      this.recalculateWorkTotals(index);
+    },
+
+    recalculateWorkTotals(index: number): void {
+      const work = this.works[index];
+      work.totalPrice = work.price * work.quantity;
+      work.totalCost = work.cost * work.quantity;
+      work.profit = work.totalPrice - work.totalCost;
+      const marginValue =
+        ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
+      work.margin = parseFloat(marginValue.toFixed(2));
     },
 
     addGates(gate: Gate): void {
@@ -108,19 +136,32 @@ export const useResultsStore = defineStore("results", {
     },
 
     calculateTotals(): void {
-      this.clearTotals();
+      let newPrice = 0;
+      let newCost = 0;
+
       this.results.forEach((item) => {
-        this.totalPrice += +item.totalPrice;
-        this.totalCost += +item.totalCost;
-        this.totalProfit += +item.profit;
-        this.totalMargin += +item.margin || 0;
+        newPrice += item.totalPrice;
+        newCost += item.totalCost;
       });
-      this.totalMargin = +this.totalMargin / +this.results.length;
+
+      this.works.forEach((item) => {
+        newPrice += item.totalPrice;
+        newCost += item.totalCost;
+      });
+
+      this.totalPrice = +newPrice.toFixed(2);
+      this.totalCost = +newCost.toFixed(2);
+      this.totalProfit = +(newPrice - newCost).toFixed(2);
+      this.totalMargin = +(
+        Math.round((this.totalProfit / this.totalPrice) * 10000) / 100
+      ).toFixed(2);
+      this.priceVAT = +(this.totalPrice + this.totalPrice * 0.21).toFixed(2);
+
+      if (this.priceWithDiscount !== 0) this.useDiscount();
     },
 
     deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
-      this.calculateTotals();
     },
 
     clearResults(): void {

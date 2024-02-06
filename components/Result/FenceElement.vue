@@ -106,6 +106,7 @@ const spaceEditable = computed(
           label="kaina"
           width="w-24"
           :name="props.result.price"
+          @onChange="(value) => useResults.updatePrice(props.index, value)"
         />
         <BaseInput
           label="savikaina"

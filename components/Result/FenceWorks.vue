@@ -36,6 +36,9 @@ const deleteHandler = () => {
           label="kiekis"
           :name="props.work.quantity"
           :disable="false"
+          @onChange="
+            (value) => useResults.updateWorkQuantity(props.index, value)
+          "
         />
 
         <BaseInput
@@ -43,6 +46,7 @@ const deleteHandler = () => {
           label="Kaina"
           :name="props.work.price"
           width="w-24"
+          @onChange="(value) => useResults.updateWorkPrice(props.index, value)"
         />
 
         <BaseInput

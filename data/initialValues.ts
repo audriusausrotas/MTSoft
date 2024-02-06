@@ -113,13 +113,13 @@ export const fenceMeasures: FenceMeasure[] = [
     name: "Daimond 60/90",
     height: 9,
     width: 6,
-    seeThrough: [2.5, 3, 4, 5, 4.5, 9],
+    seeThrough: [2, 3, 4, 5, 4.5, 9],
   },
   {
     name: "Daimond 40/105",
     height: 10.5,
     width: 4,
-    seeThrough: [2.5, 3, 4, 5, 5.25, 10.5],
+    seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
   },
   {
     name: "Plank",
@@ -129,15 +129,15 @@ export const fenceMeasures: FenceMeasure[] = [
   },
   {
     name: "Žaliuzi",
-    height: 0,
-    width: 0,
-    seeThrough: [1, 1, 1, 1, 1, 1],
+    height: 6.5,
+    width: 6,
+    seeThrough: [1.5, 2, 3, 4, 3.25, 6.5],
   },
   {
     name: "Dilė",
     height: 8.6,
     width: 2,
-    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
+    seeThrough: [0.8, 1, 3, 4, 4.3, 8.6],
   },
   {
     name: "Dija",
@@ -147,9 +147,9 @@ export const fenceMeasures: FenceMeasure[] = [
   },
   {
     name: "Eglė",
-    height: 0,
-    width: 0,
-    seeThrough: [1, 1, 1, 1, 1, 1],
+    height: 11,
+    width: 6,
+    seeThrough: [0, 0, 1, 2, 5.5, 11],
   },
   {
     name: "Alba",

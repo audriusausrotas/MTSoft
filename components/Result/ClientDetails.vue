@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ResponseProject, Project } from "~/data/interfaces";
 import calculateResults from "~/utils/calculateResults";
+import { twoSided } from "~/data/selectFieldData";
 
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
@@ -79,6 +80,16 @@ const saveHandler = async (): Promise<void> => {
     <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
     <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
     <BaseButton name="skaiciuot laikinas" @click="calculateResults" />
+
+    <BaseSelectField
+      label="Pritaikyta nuolaida"
+      :values="twoSided"
+      id="discount"
+      :defaultValue="twoSided[1]"
+      width="w-60"
+      @onChange="(value: string) => useResults.useDiscount(value)
+        "
+    />
   </div>
 </template>
 <style scoped></style>
