@@ -74,7 +74,7 @@ const deleteHandler = (id: string) => {
           @onChange="userChangesHandler(user._id, 'verify')"
         />
       </div>
-      <div class="flex-[6] flex items-center">{{ user.email }}</div>
+      <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
       <BaseSelectField
         :id="user._id"
