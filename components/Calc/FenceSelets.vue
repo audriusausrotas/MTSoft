@@ -40,7 +40,7 @@ watch(
         id="fenceSide"
         :defaultValue="currentFence.side"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateSide({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateSide(props.index, value )
         "
       />
 
@@ -50,7 +50,7 @@ watch(
         id="fenceType"
         :defaultValue="currentFence.type"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateType({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateType(props.index, value )
         "
       />
 
@@ -60,7 +60,7 @@ watch(
         id="fenceColor"
         :defaultValue="currentFence.color"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateColor({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateColor(props.index, value )
         "
       />
 
@@ -70,7 +70,7 @@ watch(
         id="fenceMaterials"
         :defaultValue="currentFence.material"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateMaterial({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateMaterial(props.index, value )
         "
       />
 
@@ -81,7 +81,7 @@ watch(
         id="seeThrough"
         :defaultValue="currentFence.seeThrough"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateSeeThrough({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateSeeThrough(props.index, value )
         "
       />
 
@@ -91,7 +91,7 @@ watch(
         id="fenceDirection"
         :defaultValue="currentFence.direction"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateDirection({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateDirection(props.index, value )
         "
       />
 
@@ -101,7 +101,7 @@ watch(
         id="services"
         :defaultValue="currentFence.services"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateServices({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateServices(props.index, value )
         "
       />
 
@@ -111,7 +111,7 @@ watch(
         id="parts"
         :defaultValue="currentFence.parts"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateParts({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateParts(props.index, value )
         "
       />
 
@@ -122,7 +122,7 @@ watch(
         id="twoSided"
         :defaultValue="currentFence.twoSided"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateTwoSided({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateTwoSided(props.index, value )
         "
       />
 
@@ -135,10 +135,9 @@ watch(
         width="w-60"
         :name="currentFence.space"
         @onChange="(value: number) =>
-        useCalculations.updateMeasureSpace({
-          index: props.index,
+        useCalculations.updateMeasureSpace(props.index,
           value,
-        })
+        )
         "
       />
       <BaseSelectField
@@ -148,7 +147,16 @@ watch(
         id="bingings"
         :defaultValue="currentFence.bindings"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateBindings({ index: props.index, value })
+        @onChange="(value: string) => useCalculations.updateBindings(props.index, value )
+        "
+      />
+      <BaseSelectField
+        label="ankeriuojami stulpai"
+        :values="twoSided"
+        id="anchoredPoles"
+        :defaultValue="currentFence.anchoredPoles"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateAnchoredPoles(props.index, value )
         "
       />
     </div>
@@ -173,10 +181,9 @@ watch(
         class="mb-8"
         :name="currentFence.aditional"
         @onChange="(value: string) =>
-        useCalculations.updateAditional({
-          index: props.index,
+        useCalculations.updateAditional(props.index,
           value,
-        })
+        )
         "
       />
     </div>

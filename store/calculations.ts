@@ -29,6 +29,7 @@ export const useCalculationsStore = defineStore("calculations", {
         twoSided: "Ne",
         aditional: "",
         bindings: "Taip",
+        anchoredPoles: "Ne",
         space: 2,
         elements: 0,
         totalLength: 0,
@@ -86,136 +87,120 @@ export const useCalculationsStore = defineStore("calculations", {
       this.client.email = data;
     },
 
-    updateSide(data: { index: number; value: string }): void {
-      this.fences[data.index].side = data.value;
+    updateSide(index: number, value: string): void {
+      this.fences[index].side = value;
     },
 
-    updateType(data: { index: number; value: string }): void {
-      this.fences[data.index].type = data.value;
-      this.calculateAllElements(data.index);
+    updateType(index: number, value: string): void {
+      this.fences[index].type = value;
+      this.calculateAllElements(index);
     },
 
-    updateColor(data: { index: number; value: string }): void {
-      this.fences[data.index].color = data.value;
+    updateColor(index: number, value: string): void {
+      this.fences[index].color = value;
     },
 
-    updateMaterial(data: { index: number; value: string }): void {
-      this.fences[data.index].material = data.value;
+    updateMaterial(index: number, value: string): void {
+      this.fences[index].material = value;
     },
 
-    updateSeeThrough(data: { index: number; value: string }): void {
-      this.fences[data.index].seeThrough = data.value;
-      this.calculateAllElements(data.index);
+    updateSeeThrough(index: number, value: string): void {
+      this.fences[index].seeThrough = value;
+      this.calculateAllElements(index);
     },
 
-    updateDirection(data: { index: number; value: string }): void {
-      this.fences[data.index].direction = data.value;
+    updateDirection(index: number, value: string): void {
+      this.fences[index].direction = value;
     },
 
-    updateServices(data: { index: number; value: string }): void {
-      this.fences[data.index].services = data.value;
+    updateServices(index: number, value: string): void {
+      this.fences[index].services = value;
     },
 
-    updateBindings(data: { index: number; value: string }): void {
-      this.fences[data.index].bindings = data.value;
+    updateBindings(index: number, value: string): void {
+      this.fences[index].bindings = value;
     },
 
-    updateGateType(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.type =
-        data.value;
+    updateGateType(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.type = value;
     },
 
-    updateGateDirection(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.direction =
-        data.value;
+    updateGateDirection(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].gates.direction = value;
     },
 
-    updateGateLock(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.lock =
-        data.value;
+    updateGateLock(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.lock = value;
     },
 
-    updateAutomatics(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.automatics =
-        data.value;
+    updateAutomatics(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.automatics = value;
     },
 
-    updateParts(data: { index: number; value: string }): void {
-      this.fences[data.index].parts = data.value;
+    updateParts(index: number, value: string): void {
+      this.fences[index].parts = value;
     },
 
-    updateMeasureSpace(data: { index: number; value: number }): void {
-      this.fences[data.index].space = data.value;
-      this.calculateAllElements(data.index);
+    updateMeasureSpace(index: number, value: number): void {
+      this.fences[index].space = value;
+      this.calculateAllElements(index);
     },
 
-    updateMeasureGate(data: {
-      index: number;
-      measureIndex: number;
-      value: boolean;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.exist =
-        data.value;
+    updateMeasureGate(
+      index: number,
+      value: boolean,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].gates.exist = value;
     },
 
-    updateTwoSided(data: { index: number; value: string }): void {
-      this.fences[data.index].twoSided = data.value;
-      this.calculateAllElements(data.index);
+    updateTwoSided(index: number, value: string): void {
+      this.fences[index].twoSided = value;
+      this.calculateAllElements(index);
     },
 
-    updateGateAditional(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].gates.aditional =
-        data.value;
+    updateGateAditional(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].gates.aditional = value;
     },
 
-    updateAditional(data: { index: number; value: string }): void {
-      this.fences[data.index].aditional = data.value;
+    updateAditional(index: number, value: string): void {
+      this.fences[index].aditional = value;
     },
 
-    updateMeasureKampas(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].kampas.value =
-        data.value;
+    updateAnchoredPoles(index: number, value: string): void {
+      this.fences[index].anchoredPoles = value;
     },
 
-    updateMeasureLaiptas(data: {
-      index: number;
-      measureIndex: number;
-      value: string;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].laiptas.value =
-        data.value;
+    updateMeasureKampas(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].kampas.value = value;
     },
 
-    updateTotalLength(data: { index: number; value: number }): void {
-      this.fences[data.index].totalLength = data.value;
+    updateMeasureLaiptas(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].laiptas.value = value;
     },
 
-    updateTotalQuantity(data: { index: number; value: number }): void {
-      this.fences[data.index].totalQuantity = data.value;
+    updateTotalLength(index: number, value: number): void {
+      this.fences[index].totalLength = value;
+    },
+
+    updateTotalQuantity(index: number, value: number): void {
+      this.fences[index].totalQuantity = value;
     },
 
     oneHeight(index: number, height: number) {
@@ -236,10 +221,10 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences;
     },
 
-    deleteMeasure(data: { index: number; measureIndex: number }): void {
-      this.fences[data.index].measures = this.fences[
-        data.index
-      ].measures.filter((measure, index) => index !== data.measureIndex);
+    deleteMeasure(index: number, measureIndex: number): void {
+      this.fences[index].measures = this.fences[index].measures.filter(
+        (measure, index) => index !== measureIndex
+      );
     },
 
     deleteMeasures(index: number): void {
@@ -250,22 +235,22 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences = this.fences.filter((fence) => fence.id !== id);
     },
 
-    updateMeasureHeight(data: {
-      index: number;
-      measureIndex: number;
-      value: number;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].height = +data.value;
-      this.calculateElements(data.index, data.measureIndex);
+    updateMeasureHeight(
+      index: number,
+      measureIndex: number,
+      value: number
+    ): void {
+      this.fences[index].measures[measureIndex].height = +value;
+      this.calculateElements(index, measureIndex);
     },
 
-    updateMeasureLength(data: {
-      index: number;
-      measureIndex: number;
-      value: number;
-    }): void {
-      this.fences[data.index].measures[data.measureIndex].length = +data.value;
-      this.calculateElements(data.index, data.measureIndex);
+    updateMeasureLength(
+      index: number,
+      measureIndex: number,
+      value: number
+    ): void {
+      this.fences[index].measures[measureIndex].length = +value;
+      this.calculateElements(index, measureIndex);
     },
 
     calculateAllElements(index: number) {

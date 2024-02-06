@@ -29,11 +29,10 @@ export default defineEventHandler(async (event: any) => {
       message: "Pasirinktas vartotojas nerastas",
     };
 
-  if (changeType === "admin" || changeType === "verify") {
-    selectedUser[changeType] = !selectedUser[changeType];
+  if (changeType === "admin") {
+    selectedUser.admin = !selectedUser.admin;
 
     const newUser = await selectedUser.save();
-
     newUser.password = "";
 
     return {
@@ -41,7 +40,22 @@ export default defineEventHandler(async (event: any) => {
       data: newUser,
       message: "Pakeitimai atlikti",
     };
-  } else if (changeType === "delete") {
+  }
+
+  if (changeType === "verify") {
+    selectedUser.verified = !selectedUser.verified;
+
+    const newUser = await selectedUser.save();
+    newUser.password = "";
+
+    return {
+      success: true,
+      data: newUser,
+      message: "Pakeitimai atlikti",
+    };
+  }
+
+  if (changeType === "delete") {
     const isPasswordValid = await bcrypt.compare(password, data.password);
 
     if (isPasswordValid) {

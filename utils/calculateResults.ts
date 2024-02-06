@@ -18,12 +18,14 @@ export default function calculateResults() {
   fences.fences.forEach((item) => {
     // checks if crossbars needed
     const onlyParts = item.services === "Tik Medžiagos";
-    const onlyServices = item.services === "Tik Medžiagos";
+    const onlyServices = item.services === "Tik Montavimas";
     const isSegment: boolean = item.type.includes("Segmentas");
     const polesNeeded: boolean =
       item.parts !== "Tik Borteliai" && item.parts !== "Be Bortelių Ir Stulpų";
     const bordersNeeded: boolean =
-      item.parts !== "Tik Stulpai" && item.parts !== "Be Bortelių Ir Stulpų";
+      item.parts !== "Tik Stulpai" &&
+      item.parts !== "Be Bortelių Ir Stulpų" &&
+      item.anchoredPoles === "Ne";
     const hasCrossbars: boolean = verticals.some(
       (vertical) => vertical === item.type
     );
@@ -31,7 +33,7 @@ export default function calculateResults() {
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
-      fenceTemp = [...temp];
+      if (!onlyServices) fenceTemp = [...temp];
       if (!onlyParts) {
         if (item.bindings === "Taip")
           results.addTotalFenceWithBindings(item.totalQuantity);
@@ -78,10 +80,11 @@ export default function calculateResults() {
 
       // calculate total elements
       if (!isSegment) {
-        results.addTotalElements(measure.elements, item.color);
+        if (!onlyServices)
+          results.addTotalElements(measure.elements, item.color);
 
         // calculate bindings
-        if (item.direction === "Horizontali") {
+        if (item.direction === "Horizontali" && item.bindings === "Taip") {
           if (!onlyServices)
             results.addBindingsLength(measure.height, item.color);
           if (!onlyServices) lastBindingHeight = measure.height;
@@ -122,29 +125,55 @@ export default function calculateResults() {
           poleHeight = 3;
         }
 
-        if (!measure.gates.exist) {
-          if (!onlyServices) results.addPoles(item.color, poleHeight);
-          if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
-          if (!onlyParts) results.addTotalPoles();
+        if (item.anchoredPoles === "Taip") {
+          // count anchored poles
+          if (!measure.gates.exist) {
+            if (!onlyServices) results.addAnchoredPoles(item.color, poleHeight);
 
-          isTogether = false;
-        } else {
-          if (!isTogether) {
-            if (!onlyServices) results.removePole(item.color);
-            if (!onlyServices) results.addGatePoles(item.color, 2);
-            if (!onlyParts) results.removeTotalPole();
-            if (!onlyParts) results.addTotalGatePoles(2);
+            if (results.totalAnchoredPoles === 0 && !onlyParts)
+              results.addTotalAnchoredPoles();
+            if (!onlyParts) results.addTotalAnchoredPoles();
+
+            isTogether = false;
           } else {
-            if (!onlyServices) results.addGatePoles(item.color, 1);
-            if (!onlyParts) results.addTotalGatePoles(1);
+            if (!isTogether) {
+              if (!onlyServices) results.removeAnchoredPole(item.color);
+              if (!onlyServices) results.addAnchoredGatePoles(item.color, 2);
+              if (!onlyParts) results.removeTotalAnchoredPole();
+              if (!onlyParts) results.addTotalAnchoredGatePoles(2);
+            } else {
+              if (!onlyServices) results.addAnchoredGatePoles(item.color, 1);
+              if (!onlyParts) results.addTotalAnchoredGatePoles(1);
+            }
+            isTogether = true;
           }
-          isTogether = true;
+        } else {
+          //count regular poles
+          if (!measure.gates.exist) {
+            if (!onlyServices) results.addPoles(item.color, poleHeight);
+
+            if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
+            if (!onlyParts) results.addTotalPoles();
+
+            isTogether = false;
+          } else {
+            if (!isTogether) {
+              if (!onlyServices) results.removePole(item.color);
+              if (!onlyServices) results.addGatePoles(item.color, 2);
+              if (!onlyParts) results.removeTotalPole();
+              if (!onlyParts) results.addTotalGatePoles(2);
+            } else {
+              if (!onlyServices) results.addGatePoles(item.color, 1);
+              if (!onlyParts) results.addTotalGatePoles(1);
+            }
+            isTogether = true;
+          }
         }
       }
     });
-    if (!isSegment) {
+
+    if (!isSegment && !onlyServices && item.bindings === "Taip")
       results.addBindingsLength(lastBindingHeight, item.color);
-    }
   });
   results.addFences(fenceTemp);
 

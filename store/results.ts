@@ -19,7 +19,11 @@ export const useResultsStore = defineStore("results", {
     totalFenceboards: 0 as number,
     poles: [] as OtherParts[],
     totalPoles: 0 as number,
+    anchoredPoles: [] as OtherParts[],
+    totalAnchoredPoles: 0 as number,
     gatePoles: [] as OtherParts[],
+    anchoredGatePoles: [] as OtherParts[],
+    totalAnchoredGatePoles: 0 as number,
     totalGatePoles: 0 as number,
     borders: 0 as number,
     totalBorders: 0 as number,
@@ -69,18 +73,18 @@ export const useResultsStore = defineStore("results", {
       selectedResult.category = data.value.category;
     },
 
-    updateQuantity(data: { index: number; value: number }): void {
-      this.results[data.index].quantity = data.value;
-      this.recalculateTotals(data.index);
+    updateQuantity(index: number, value: number): void {
+      this.results[index].quantity = value;
+      this.recalculateTotals(index);
       this.calculateTotals();
     },
 
-    updateSpace(data: { index: number; value: number }): void {
-      this.results[data.index].space = data.value;
+    updateSpace(index: number, value: number): void {
+      this.results[index].space = value;
     },
 
-    updateColor(data: { index: number; value: string }): void {
-      this.results[data.index].color = data.value;
+    updateColor(index: number, value: string): void {
+      this.results[index].color = value;
     },
 
     updatePrice(data: { index: number; value: number }): void {
@@ -131,7 +135,6 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = 0;
     },
 
-    // update bellow
     clearParts(): void {
       this.fences = [];
       this.works = [];
@@ -147,6 +150,18 @@ export const useResultsStore = defineStore("results", {
       this.bindingsLength = [];
       this.segments = [];
       this.segmentHolders = [];
+      this.totalFences = 0;
+      this.totalFencesWithBindings = 0;
+      this.totalFenceboards = 0;
+      this.totalPoles = 0;
+      this.totalGatePoles = 0;
+      this.totalBorders = 0;
+      this.totalCrossbars = 0;
+      this.totalSegments = 0;
+      this.anchoredPoles = [];
+      this.totalAnchoredPoles = 0;
+      this.anchoredGatePoles = [];
+      this.totalAnchoredGatePoles = 0;
     },
 
     clearAll(): void {
@@ -163,27 +178,47 @@ export const useResultsStore = defineStore("results", {
     addTotalPoles() {
       this.totalPoles++;
     },
+
+    addTotalAnchoredPoles() {
+      this.totalAnchoredPoles++;
+    },
+
     removeTotalPole() {
       this.totalPoles--;
     },
+
+    removeTotalAnchoredPole() {
+      this.totalAnchoredPoles--;
+    },
+
     addTotalGatePoles(quantity: number) {
       this.totalGatePoles += quantity;
     },
+
+    addTotalAnchoredGatePoles(quantity: number) {
+      this.totalAnchoredGatePoles += quantity;
+    },
+
     addTotalBorders() {
       this.totalBorders++;
     },
+
     addTotalCrossbars() {
       this.totalCrossbars += 2;
     },
+
     addTotalSegments() {
       this.totalSegments++;
     },
+
     addTotalFence(quantity: number) {
       this.totalFences += quantity;
     },
+
     addTotalFenceWithBindings(quantity: number) {
       this.totalFencesWithBindings += quantity;
     },
+
     addTotalFenceboards(quantity: number) {
       this.totalFenceboards += quantity;
     },
@@ -220,6 +255,24 @@ export const useResultsStore = defineStore("results", {
       this.poles = this.addPart(this.poles, color, quantity, height);
     },
 
+    addAnchoredPoles(color: string, height: number): void {
+      let quantity = 0;
+      if (
+        this.anchoredPoles.length === 0 &&
+        this.anchoredGatePoles.length === 0
+      )
+        quantity++;
+      const doesExist = this.anchoredPoles.some((item) => item.color === color);
+      if (!doesExist) quantity++;
+      if (quantity === 0) quantity++;
+      this.anchoredPoles = this.addPart(
+        this.anchoredPoles,
+        color,
+        quantity,
+        height
+      );
+    },
+
     removePole(color: string): void {
       this.poles = this.poles.map((item) => {
         if (item.color === color) item.quantity--;
@@ -227,8 +280,24 @@ export const useResultsStore = defineStore("results", {
       });
     },
 
+    removeAnchoredPole(color: string): void {
+      this.anchoredPoles = this.anchoredPoles.map((item) => {
+        if (item.color === color) item.quantity--;
+        return item;
+      });
+    },
+
     addGatePoles(color: string, quantity: number): void {
       this.gatePoles = this.addPart(this.gatePoles, color, quantity, 3);
+    },
+
+    addAnchoredGatePoles(color: string, quantity: number): void {
+      this.anchoredGatePoles = this.addPart(
+        this.anchoredGatePoles,
+        color,
+        quantity,
+        3
+      );
     },
 
     addCrossbars(color: string): void {

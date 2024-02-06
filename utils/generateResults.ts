@@ -48,6 +48,32 @@ export default function generateResults() {
     });
   }
 
+  if (results.anchoredPoles.length > 0) {
+    results.anchoredPoles.forEach((item) => {
+      let pole = "";
+      if (item.height <= 150) {
+        pole = defaultValues.anchoredPoleMain;
+      } else {
+        pole = defaultValues.anchoredPoleAlt;
+      }
+      createResultElement({ ...item, type: pole });
+    });
+  }
+
+  if (results.anchoredGatePoles.length > 0) {
+    let pole = "";
+    const exist = results.gates.some((item) => item.type === "Varstomi");
+    if (exist) {
+      pole = defaultValues.anchoredGatePoleAlt;
+    } else {
+      pole = defaultValues.anchoredGatePoleMain;
+    }
+
+    results.anchoredGatePoles.forEach((item) => {
+      createResultElement({ ...item, type: pole });
+    });
+  }
+
   if (results.borders > 0) {
     createResultElement({
       type: defaultValues.border,
@@ -95,7 +121,7 @@ export default function generateResults() {
   if (results.gates.length > 0) {
     results.gates.forEach((item) => {
       if (item.type === "Stumdomi") {
-        if (item.auto) {
+        if (item.auto === "Taip") {
           createResultElement({
             ...item,
             type: defaultValues.gatesAuto,
@@ -109,7 +135,7 @@ export default function generateResults() {
           });
         }
       } else if (item.type === "Varstomi") {
-        if (item.auto) {
+        if (item.auto !== "Taip") {
           createResultElement({
             ...item,
             type: defaultValues.gates2,
@@ -166,6 +192,20 @@ export default function generateResults() {
     createWorkElement({
       name: defaultValues.gatesPoleWork,
       quantity: results.totalGatePoles,
+    });
+  }
+
+  if (results.totalAnchoredPoles > 0) {
+    createWorkElement({
+      name: defaultValues.anchoredPolesWork,
+      quantity: results.totalAnchoredPoles,
+    });
+  }
+
+  if (results.totalAnchoredGatePoles > 0) {
+    createWorkElement({
+      name: defaultValues.anchoredGatePolesWork,
+      quantity: results.totalAnchoredGatePoles,
     });
   }
 

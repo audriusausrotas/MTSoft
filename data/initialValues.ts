@@ -71,10 +71,10 @@ export const defaultValues = {
   poleAlt: "Stulpas tvorai 60X40 mm, h2.4 m., sienelė: 1.25 mm",
   gatePoleMain: "Stulpas vartams 80X80 mm, h3.0 m., sienelė: 2.0 mm",
   gatePoleAlt: "Stulpas vartams 100x100 mm, h3.0 m., sienelė: 3.0 mm",
-  border: "Tvoros pamatas tiesus LYGUS, betoninis 2500x200x50 mm",
-  borderHolder: "Laikiklis pamato metalinis 200X50 mm",
+  border: "Tvoros pamatas 2500x200x50 mm",
+  borderHolder: "Pamato laikiklis 200X50 mm",
   crossbar: "Skersinis tvorai 20x40 mm, l2.5 m.",
-  crossbarHolders: "Laikiklis skersinio 20x40mm, įkišamas, plieninis, 2.0mm",
+  crossbarHolders: "Laikiklis skersinio 20x40mm, vidinis",
   rivets: "Kniedės 4.0 x 8.0 mm. 1000 vnt.",
   bindings: "Apkaustai",
   segment: "Segmentas tvorai, 2,5x1,53 m., [200x50mm]",
@@ -96,6 +96,16 @@ export const defaultValues = {
   fenceboardWork: "Tvoralentės montavimas",
   crossbarWork: "Skersinio montavimas",
   segmentWork: "Segmento montavimas",
+  anchoredPoleMain:
+    "Ankeriuojamas stulpas tvorai 60X40 mm, h1.5 m., sienelė: 2.0 mm",
+  anchoredPoleAlt:
+    "Ankeriuojamas stulpas tvorai 60X40 mm, h2.0 m., sienelė: 2.0 mm",
+  anchoredPolesWork: "Ankeriuojamo stulpo montavimas",
+  anchoredGatePoleMain:
+    "Ankeriuojamas stulpas vartams 80X80 mm, h1.5 m., sienelė: 2.0 mm",
+  anchoredGatePoleAlt:
+    "Ankeriuojamas stulpas vartams 80X80 mm, h2.0 m., sienelė: 2.0 mm",
+  anchoredGatePolesWork: "Ankeriuojamo vartų stulpo montavimas",
 };
 
 export const fenceMeasures: FenceMeasure[] = [

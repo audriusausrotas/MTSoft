@@ -51,10 +51,20 @@ const changeHandler = (value: string): void => {
             "
             width="8"
             height="8"
+            decoding="auto"
+            loading="lazy"
+            :ismap="true"
           />
           {{ selectedValue }}
         </div>
-        <NuxtImg src="/icons/doubleArrow.svg" width="20" height="20" />
+        <NuxtImg
+          src="/icons/doubleArrow.svg"
+          width="20"
+          height="20"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
       </div>
       <div
         v-if="isOpen"

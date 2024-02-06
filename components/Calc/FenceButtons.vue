@@ -67,15 +67,14 @@ const calculateLengthHandler = (): void => {
     ) {
       useCalculations.addMeasure(props.index);
     }
-    useCalculations.updateMeasureLength({
-      index: props.index,
-      value: item,
-      measureIndex: useCalculations.fences[props.index].measures.length - 1,
-    });
+    useCalculations.updateMeasureLength(
+      props.index,
+      useCalculations.fences[props.index].measures.length - 1,
+      item
+    );
   });
 
-  open.value = false;
-  totalLength.value = 0;
+  cancelHandler();
 };
 </script>
 

@@ -43,6 +43,7 @@ export interface Fence {
   aditional: string;
   twoSided: string;
   bindings: string;
+  anchoredPoles: string;
   space: number;
   elements: number;
   totalLength: number;

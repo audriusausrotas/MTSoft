@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { verticals, horizontals } from "../../data/selectFieldData";
+import { verticals, horizontals, fenceTypes } from "../../data/selectFieldData";
 const props = defineProps(["result", "index"]);
 
 const useResults = useResultsStore();
@@ -11,6 +11,14 @@ const deleteHandler = () => {
 
 const isFenceboard = computed(() => {
   if (verticals.some((item) => props.result?.type?.includes(item))) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const isFence = computed(() => {
+  if (fenceTypes.some((item) => props.result?.type?.includes(item))) {
     return true;
   } else {
     return false;
@@ -40,8 +48,12 @@ const showAditionalHorizontal = computed(() => {
 });
 
 const colorEditable = computed(
-  () => props.result.color === "Kita" || props.result.isNew
+  () =>
+    props.result.color === "Kita" ||
+    props.result.isNew ||
+    props.result.category !== "tvoros"
 );
+
 const spaceEditable = computed(
   () =>
     props.result.isNew &&
@@ -78,9 +90,7 @@ const spaceEditable = computed(
           :variant="colorEditable ? 'light' : ''"
           :disable="colorEditable ? false : true"
           :name="props.result.color"
-          @onChange="
-            (value) => useResults.updateColor({ index: props.index, value })
-          "
+          @onChange="(value) => useResults.updateColor(props.index, value)"
         />
 
         <BaseInput
@@ -88,9 +98,7 @@ const spaceEditable = computed(
           variant="light"
           label="kiekis"
           :name="props.result.quantity"
-          @onChange="
-            (value) => useResults.updateQuantity({ index: props.index, value })
-          "
+          @onChange="(value) => useResults.updateQuantity(props.index, value)"
         />
 
         <BaseInput
@@ -122,9 +130,7 @@ const spaceEditable = computed(
         label="tarpas"
         :variant="spaceEditable ? 'light' : ''"
         :disable="spaceEditable ? false : true"
-        @onChange="
-          (value) => useResults.updateSpace({ index: props.index, value })
-        "
+        @onChange="(value) => useResults.updateSpace(props.index, value)"
       />
     </div>
 

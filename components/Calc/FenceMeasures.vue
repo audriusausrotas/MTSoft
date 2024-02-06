@@ -12,14 +12,8 @@ watch(
       totalM += +item.length!;
       totalQuantity += item.length! * item.height!;
     });
-    useCalculations.updateTotalLength({
-      index: props.index,
-      value: totalM / 100,
-    });
-    useCalculations.updateTotalQuantity({
-      index: props.index,
-      value: totalQuantity / 10000,
-    });
+    useCalculations.updateTotalLength(props.index, totalM / 100);
+    useCalculations.updateTotalQuantity(props.index, totalQuantity / 10000);
   },
   { deep: true }
 );

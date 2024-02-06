@@ -7,14 +7,35 @@ export default function createResultElement(item: any) {
   const results = useResultsStore().results;
   const product: Product = getPriceItem(item.type);
 
-  let newPrice = product.price;
-  let newCost = product.cost;
+  let newPrice: number = Number(product.price);
+  let newCost: number = Number(product.cost);
 
   if (verticals.includes(item.type)) {
     newPrice = +((product.price * item.height) / 100).toFixed(2);
     newCost = +((product.cost * item.height) / 100).toFixed(2);
   }
 
+  // change gate prices
+  if (item.type.includes("vartai")) {
+    if (item.width > 400) {
+      newPrice += 200;
+      newCost += 200;
+    }
+    if (item.width > 500) {
+      newPrice += 120;
+      newCost += 120;
+    }
+    if (item.width > 600) {
+      newPrice += 200;
+      newCost += 200;
+    }
+    if (item.width > 700) {
+      newPrice += 200;
+      newCost += 200;
+    }
+  }
+
+  // change price on fence seeThrough
   if (item.seeThrough === "Vidutiniška") {
     newPrice = product.price - 3;
   }
@@ -31,6 +52,7 @@ export default function createResultElement(item: any) {
     newPrice = product.price - 7;
   }
 
+  // calculate total values
   const totalPrice = newPrice * item.quantity;
   const totalCost = product.cost * item.quantity;
   const profit = totalPrice - totalCost;
@@ -48,12 +70,12 @@ export default function createResultElement(item: any) {
     seeThrough: item.seeThrough || "",
     price: newPrice || 0,
     totalPrice: totalPrice,
-    cost: product.cost || 0,
+    cost: newCost || 0,
     totalCost: totalCost,
     profit: profit,
     margin: +margin,
     isNew: false,
-    category: "",
+    category: product.category,
   };
 
   results.push(resultData);

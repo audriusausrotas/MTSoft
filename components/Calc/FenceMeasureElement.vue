@@ -13,11 +13,7 @@ const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
-  useCalculations.updateMeasureGate({
-    index: props.index,
-    value,
-    measureIndex: props.measureIndex,
-  });
+  useCalculations.updateMeasureGate(props.index, value, props.measureIndex);
 }
 </script>
 
@@ -35,11 +31,11 @@ function toggleCheckbox(value: boolean) {
       @EnterPressed="useCalculations.addMeasure(props.index)"
       @onChange="
         (value: number): void =>
-          useCalculations.updateMeasureLength({
-            index: props.index,
-            value,
-            measureIndex: props.measureIndex,
-          })
+          useCalculations.updateMeasureLength(
+            props.index,
+            props.measureIndex,
+            value
+          )
       "
       :active="true"
     />
@@ -54,11 +50,11 @@ function toggleCheckbox(value: boolean) {
       @EnterPressed="useCalculations.addMeasure(props.index)"
       @onChange="
         (value: number): void =>
-          useCalculations.updateMeasureHeight({
-            index: props.index,
-            value,
-            measureIndex: props.measureIndex,
-          })
+          useCalculations.updateMeasureHeight(
+            props.index,
+            props.measureIndex,
+            value
+          )
       "
     />
 
@@ -85,11 +81,11 @@ function toggleCheckbox(value: boolean) {
       :name="props.measure.kampas.value"
       @onChange="
         (value: string): void =>
-          useCalculations.updateMeasureKampas({
-            index: props.index,
+          useCalculations.updateMeasureKampas(
+            props.index,
             value,
-            measureIndex: props.measureIndex,
-          })
+            props.measureIndex
+          )
       "
     />
 
@@ -103,11 +99,11 @@ function toggleCheckbox(value: boolean) {
       :name="props.measure.laiptas.value"
       @onChange="
         (value: string): void =>
-          useCalculations.updateMeasureLaiptas({
-            index: props.index,
+          useCalculations.updateMeasureLaiptas(
+            props.index,
             value,
-            measureIndex: props.measureIndex,
-          })
+            props.measureIndex
+          )
       "
     />
 
@@ -116,12 +112,7 @@ function toggleCheckbox(value: boolean) {
       width="20"
       height="20"
       decoding="auto"
-      @click="
-        useCalculations.deleteMeasure({
-          index: props.index,
-          measureIndex: props.measureIndex,
-        })
-      "
+      @click="useCalculations.deleteMeasure(props.index, props.measureIndex)"
     />
 
     <div v-if="isChecked" class="flex gap-2">
@@ -131,7 +122,7 @@ function toggleCheckbox(value: boolean) {
         id="automatics"
         :defaultValue="props.measure.gates.automatics"
         width="w-24"
-        @onChange="(value: string) => useCalculations.updateAutomatics({ index: props.index, value,measureIndex: props.measureIndex  })
+        @onChange="(value: string) => useCalculations.updateAutomatics(props.index, value, props.measureIndex  )
         "
       />
 
@@ -141,7 +132,7 @@ function toggleCheckbox(value: boolean) {
         id="gateTypes"
         :defaultValue="props.measure.gates.type"
         width="w-32"
-        @onChange="(value: string) => useCalculations.updateGateType({ index: props.index, value,measureIndex: props.measureIndex  })
+        @onChange="(value: string) => useCalculations.updateGateType(props.index, value,props.measureIndex  )
         "
       />
 
@@ -151,7 +142,7 @@ function toggleCheckbox(value: boolean) {
         id="gateDirection"
         :defaultValue="props.measure.gates.direction"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateGateDirection({ index: props.index, value,measureIndex: props.measureIndex  })
+        @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value,props.measureIndex  )
         "
       />
 
@@ -161,7 +152,7 @@ function toggleCheckbox(value: boolean) {
         id="gateLock"
         :defaultValue="props.measure.gates.lock"
         width="w-40"
-        @onChange="(value: string) => useCalculations.updateGateLock({ index: props.index, value,measureIndex: props.measureIndex  })
+        @onChange="(value: string) => useCalculations.updateGateLock(props.index, value,props.measureIndex  )
         "
       />
       <BaseInput
@@ -171,9 +162,8 @@ function toggleCheckbox(value: boolean) {
         width="w-full"
         :name="props.measure.gates.aditional"
         @onChange="(value: string) =>
-        useCalculations.updateGateAditional({
-          index: props.index, value,measureIndex: props.measureIndex
-        })
+        useCalculations.updateGateAditional(props.index, value,props.measureIndex
+        )
         "
       />
     </div>
