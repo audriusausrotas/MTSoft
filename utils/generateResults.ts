@@ -12,7 +12,15 @@ export default function generateResults() {
 
   if (results.segments.length > 0) {
     results.segments.forEach((item) => {
-      createResultElement({ ...item, type: defaultValues.segment });
+      if (item.height <= 113)
+        createResultElement({ ...item, type: defaultValues.segment103 });
+      else if (item.height <= 133)
+        createResultElement({ ...item, type: defaultValues.segment123 });
+      else if (item.height <= 163)
+        createResultElement({ ...item, type: defaultValues.segment153 });
+      else if (item.height <= 183)
+        createResultElement({ ...item, type: defaultValues.segment173 });
+      else createResultElement({ ...item, type: defaultValues.segment203 });
     });
   }
 
@@ -248,9 +256,7 @@ export default function generateResults() {
         createWorkElement({
           name: defaultValues.gateBnkette,
           quantity:
-            item.width <= 400
-              ? 1.6
-              : item.width <= 500
+            item.width <= 500
               ? 2
               : item.width <= 600
               ? 2.5

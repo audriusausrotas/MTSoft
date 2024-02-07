@@ -165,6 +165,8 @@ export interface ProjectsState {
 
 export interface ProductsState {
   products: Product[];
+  parts: Product[];
+  works: Product[];
   searchValue: string;
 }
 

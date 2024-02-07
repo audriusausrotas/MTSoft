@@ -81,19 +81,23 @@ export const createInitialMeasure = (): Measure => ({
 });
 
 export const defaultValues = {
-  poleMain: "Stulpas tvorai 60X40 mm, h3.0 m., sienelė: 2.0 mm",
-  poleAlt: "Stulpas tvorai 60X40 mm, h2.4 m., sienelė: 1.25 mm",
-  gatePoleMain: "Stulpas vartams 80X80 mm, h3.0 m., sienelė: 2.0 mm",
-  gatePoleAlt: "Stulpas vartams 100x100 mm, h3.0 m., sienelė: 3.0 mm",
+  poleMain: "Stulpas tvorai 60x40x3000, 2.0 mm",
+  poleAlt: "Stulpas tvorai 60x40x2500 mm, 1.3mm",
+  gatePoleMain: "Stulpas vartams 80x80x3000 mm, 2.0 mm",
+  gatePoleAlt: "Stulpas vartams 100x100x3000 mm, 3.0 mm",
   border: "Tvoros pamatas 2500x200x50 mm",
-  borderHolder: "Pamato laikiklis 200X50 mm",
-  crossbar: "Skersinis tvorai 20x40 mm, l2.5 m.",
+  borderHolder: "Pamato laikiklis 200x50 mm",
+  crossbar: "Skersinis tvorai 20x40 mm, l2.5 m",
   crossbarHolders: "Laikiklis skersinio 20x40mm, vidinis",
-  rivets: "Kniedės 4.0 x 8.0 mm. 1000 vnt.",
+  rivets: "Kniedės 1000 vnt.",
   bolts: "Sąvisriegiai 1000 vnt.",
   bindings: "Apkaustai",
-  segment: "Segmentas tvorai, 2,5x1,53 m., [200x50mm]",
-  segmentHolders: "Apkaba segmentui 60x40 mm. universali",
+  segment103: "Segmentas tvorai, 2,5x1,03 m, 4mm",
+  segment123: "Segmentas tvorai, 2,5x1,23 m, 4mm",
+  segment153: "Segmentas tvorai, 2,5x1,53 m, 4mm",
+  segment173: "Segmentas tvorai, 2,5x1,73 m, 4mm",
+  segment203: "Segmentas tvorai, 2,5x2,03 m, 4mm",
+  segmentHolders: "Apkaba segmentui 60x40 mm",
   gates: "Stumdomi kiemo vartai su montavimu",
   gates2: "Varstomi kiemo vartai su montavimu",
   gatesAuto: "Stumdomi kiemo vartai su automatika ir montavimu",
@@ -111,15 +115,11 @@ export const defaultValues = {
   fenceboardWork: "Tvoralentės montavimas",
   crossbarWork: "Skersinio montavimas",
   segmentWork: "Segmento montavimas",
-  anchoredPoleMain:
-    "Ankeriuojamas stulpas tvorai 60X40 mm, h1.5 m., sienelė: 2.0 mm",
-  anchoredPoleAlt:
-    "Ankeriuojamas stulpas tvorai 60X40 mm, h2.0 m., sienelė: 2.0 mm",
+  anchoredPoleMain: "Ankeriuojamas stulpas tvorai 60x40x1500 mm, 2.0 mm",
+  anchoredPoleAlt: "Ankeriuojamas stulpas tvorai 60x40x2000 mm, 2.0 mm",
   anchoredPolesWork: "Ankeriuojamo stulpo montavimas",
-  anchoredGatePoleMain:
-    "Ankeriuojamas stulpas vartams 80X80 mm, h1.5 m., sienelė: 2.0 mm",
-  anchoredGatePoleAlt:
-    "Ankeriuojamas stulpas vartams 80X80 mm, h2.0 m., sienelė: 2.0 mm",
+  anchoredGatePoleMain: "Ankeriuojamas stulpas vartams 80x80x1500 mm, 2.0 mm",
+  anchoredGatePoleAlt: "Ankeriuojamas stulpas vartams 80x80x2000 mm, 2.0 mm",
   anchoredGatePolesWork: "Ankeriuojamo vartų stulpo montavimas",
 };
 

@@ -10,11 +10,22 @@ const useCalculations = useCalculationsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
+const isSegment = ref<boolean>(
+  useCalculations.fences[props.index].type.includes("Segmentas")
+);
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
   useCalculations.updateMeasureGate(props.index, value, props.measureIndex);
 }
+
+watch(
+  () => useCalculations.fences[props.index].type,
+  (newValue) => {
+    isSegment.value = newValue.includes("Segmentas");
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -59,7 +70,7 @@ function toggleCheckbox(value: boolean) {
     />
 
     <BaseInput
-      v-if="isData"
+      v-if="isData && !isSegment"
       width="w-24"
       :disable="true"
       :name="props.measure.elements"

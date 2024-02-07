@@ -37,7 +37,7 @@ const filteredItems = (value: string): void => {
 </script>
 
 <template>
-  <div class="relative flex flex-col capitalize gap-1">
+  <div class="relative flex flex-col gap-1">
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
       props.label
     }}</label>
@@ -52,7 +52,7 @@ const filteredItems = (value: string): void => {
     />
     <ul
       v-if="open"
-      class="absolute left-0 z-50 flex flex-col overflow-auto bg-white border divide-y rounded-lg shadow-sm top-14 border-dark-light max-h-80"
+      class="absolute left-0 z-50 flex flex-col overflow-auto bg-white border divide-y rounded-lg shadow-sm top-14 border-dark-light w-96 min-w-fit"
     >
       <li
         v-for="item in filteredData.value"

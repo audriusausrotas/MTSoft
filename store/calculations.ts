@@ -268,7 +268,6 @@ export const useCalculationsStore = defineStore("calculations", {
         (element) => element.name === fence.type
       );
       let elements = 0;
-
       if (isFenceBoards) {
         elements = calculateFenceBoards(
           measure.length,

@@ -8,6 +8,8 @@ import type {
 export const useProductsStore = defineStore("products", {
   state: (): ProductsState => ({
     products: [],
+    parts: [],
+    works: [],
     searchValue: "",
   }),
 
@@ -17,6 +19,11 @@ export const useProductsStore = defineStore("products", {
       const response: ResponseProducts = await $fetch("/api/products");
       const { data } = response;
       this.products = [...data];
+
+      data.forEach((item) => {
+        if (item.category === "Darbai") this.works.push(item);
+        else this.parts.push(item);
+      });
     },
 
     updateSearch(value: string): void {

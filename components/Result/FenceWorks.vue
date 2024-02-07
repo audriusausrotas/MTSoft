@@ -14,7 +14,7 @@ const useProduct = useProductsStore();
       <BaseSearchField
         width="w-80"
         label="Pavadinimas"
-        :data="useProduct.products"
+        :data="useProduct.works"
         @OnClick="
           (value: Works) => {
             useResults.selectWork(props.index, value);
