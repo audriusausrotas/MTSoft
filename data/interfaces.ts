@@ -11,16 +11,25 @@ export interface Calculations {
 
 export interface Project {
   _id: string;
+  creator: string;
   client: Client;
   fenceMeasures: Fence[];
   results: Result[];
-  calculatedParts: CalculatedParts;
+  works: Works[];
+  gates: Gate[];
+  totalPrice: number;
+  totalCost: number;
+  totalProfit: number;
+  totalMargin: number;
+  priceVAT: number;
+  priceWithDiscount: number;
+  discount: string;
   confirmed: boolean;
-  advance: boolean;
   payed: boolean;
   status: string;
-  creator: string;
+  advance: boolean;
   orderNumber: string;
+  // calculatedParts: CalculatedParts;
 }
 
 export interface Client {
@@ -89,6 +98,7 @@ export interface Result {
 
 export interface CalculatedParts {
   fences: Fences[];
+  works: Works[];
   poles: OtherParts[];
   gatePoles: OtherParts[];
   borders: number;
@@ -105,6 +115,9 @@ export interface CalculatedParts {
   totalCost: number;
   totalProfit: number;
   totalMargin: number;
+  priceVAT: number;
+  priceWithDiscount: number;
+  discount: string;
 }
 
 export interface OtherParts {

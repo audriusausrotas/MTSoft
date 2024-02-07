@@ -145,8 +145,8 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].parts = value;
     },
 
-    updateMeasureSpace(index: number, value: number): void {
-      this.fences[index].space = value;
+    updateSpace(index: number, value: number): void {
+      this.fences[index].space = +value;
       this.calculateAllElements(index);
     },
 

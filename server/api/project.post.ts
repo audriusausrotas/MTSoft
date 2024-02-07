@@ -1,8 +1,25 @@
 import { projectSchema } from "~/server/models/projectSchema";
 
 export default defineEventHandler(async (event) => {
-  const { client, fenceMeasures, results, calculatedParts, creator } =
-    await readBody(event);
+  const {
+    client,
+    fenceMeasures,
+    results,
+    creator,
+    works,
+    gates,
+    totalPrice,
+    totalCost,
+    totalProfit,
+    totalMargin,
+    priceVAT,
+    priceWithDiscount,
+    discount,
+    confirmed,
+    payed,
+    status,
+    advance,
+  } = await readBody(event);
 
   const userProjects = await projectSchema.find({ creator });
   const projectQuantity = userProjects.length + 1;
@@ -17,8 +34,20 @@ export default defineEventHandler(async (event) => {
     client,
     fenceMeasures,
     results,
-    calculatedParts,
     orderNumber,
+    works,
+    gates,
+    totalPrice,
+    totalCost,
+    totalProfit,
+    totalMargin,
+    priceVAT,
+    priceWithDiscount,
+    discount,
+    confirmed,
+    payed,
+    status,
+    advance,
   });
 
   const data = await product.save();

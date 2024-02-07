@@ -135,7 +135,7 @@ watch(
         width="w-60"
         :name="currentFence.space"
         @onChange="(value: number) =>
-        useCalculations.updateMeasureSpace(props.index,
+        useCalculations.updateSpace(props.index,
           value,
         )
         "

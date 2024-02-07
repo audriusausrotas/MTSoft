@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { ResponseProject, Project } from "~/data/interfaces";
-import calculateResults from "~/utils/calculateResults";
+import type { Project } from "~/data/interfaces";
 import { twoSided } from "~/data/selectFieldData";
 
 const useCalculations = useCalculationsStore();
@@ -15,30 +14,41 @@ const saveHandler = async (): Promise<void> => {
     client: useCalculations.client,
     fenceMeasures: useCalculations.fences,
     results: useResults.results,
+    works: useResults.works,
+    gates: useResults.gates,
+    totalPrice: useResults.totalPrice,
+    totalCost: useResults.totalCost,
+    totalProfit: useResults.totalProfit,
+    totalMargin: useResults.totalMargin,
+    priceVAT: useResults.priceVAT,
+    priceWithDiscount: useResults.priceWithDiscount,
+    discount: useResults.discount,
     confirmed: false,
     payed: false,
     status: "nepatvirtintas",
     advance: false,
     orderNumber: "",
-    calculatedParts: {
-      fences: useResults.fences,
-      poles: useResults.poles,
-      gatePoles: useResults.gatePoles,
-      borders: useResults.borders,
-      borderHolders: useResults.borderHolders,
-      rivets: useResults.rivets,
-      crossbars: useResults.crossbars,
-      crossbarHolders: useResults.crossbarHolders,
-      totalElements: useResults.totalElements,
-      bindingsLength: useResults.bindingsLength,
-      segments: useResults.segments,
-      segmentHolders: useResults.segmentHolders,
-      gates: useResults.gates,
-      totalPrice: useResults.totalPrice,
-      totalCost: useResults.totalCost,
-      totalProfit: useResults.totalProfit,
-      totalMargin: useResults.totalMargin,
-    },
+
+    // calculatedParts: {
+    //   fences: useResults.fences,
+    //   works: useResults.works,
+    //   poles: useResults.poles,
+    //   gatePoles: useResults.gatePoles,
+    //   borders: useResults.borders,
+    //   borderHolders: useResults.borderHolders,
+    //   rivets: useResults.rivets,
+    //   crossbars: useResults.crossbars,
+    //   crossbarHolders: useResults.crossbarHolders,
+    //   totalElements: useResults.totalElements,
+    //   bindingsLength: useResults.bindingsLength,
+    //   segments: useResults.segments,
+    //   segmentHolders: useResults.segmentHolders,
+    //   gates: useResults.gates,
+    //   totalPrice: useResults.totalPrice,
+    //   totalCost: useResults.totalCost,
+    //   totalProfit: useResults.totalProfit,
+    //   totalMargin: useResults.totalMargin,
+    // },
   };
   const data: any = await $fetch("/api/project", {
     method: "post",
