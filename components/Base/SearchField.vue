@@ -37,7 +37,7 @@ const filteredItems = (value: string): void => {
 </script>
 
 <template>
-  <div class="relative flex flex-col gap-1">
+  <div class="relative flex flex-col font-medium gap-1">
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
       props.label
     }}</label>
@@ -58,7 +58,7 @@ const filteredItems = (value: string): void => {
         v-for="item in filteredData.value"
         :key="item.id"
         @click="emitClick(item)"
-        class="px-4 py-1 odd:bg-gray-ultra-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+        class="px-4 py-2 odd:bg-gray-ultra-light hover:cursor-pointer hover:bg-red-full hover:text-white"
       >
         {{ item.name }}
       </li>
