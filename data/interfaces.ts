@@ -116,9 +116,7 @@ export interface Fences {
 }
 
 export interface Gate {
-  client: string;
-  phone: string;
-  address: string;
+  _id: string;
   type: string;
   auto: string;
   width: number;
@@ -127,6 +125,14 @@ export interface Gate {
   filling: string;
   ready: boolean;
   aditional: string;
+}
+export interface GateSchema {
+  _id: string;
+  client: string;
+  phone: string;
+  address: string;
+  creator: string;
+  gates: Gate[];
 }
 
 export interface GateInfo {

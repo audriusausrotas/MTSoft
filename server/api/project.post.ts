@@ -1,4 +1,5 @@
 import { projectSchema } from "~/server/models/projectSchema";
+import { gateSchema } from "~/server/models/gateSchema";
 
 export default defineEventHandler(async (event) => {
   const {
@@ -51,6 +52,17 @@ export default defineEventHandler(async (event) => {
   });
 
   const data = await product.save();
+
+  if (gates.length > 0) {
+    const newGates = new gateSchema({
+      creator,
+      client: client.username,
+      phone: client.phone,
+      address: client.address,
+      gates,
+    });
+    await newGates.save();
+  }
 
   return { success: true, data: data, message: "Projektas išsaugotas" };
 });

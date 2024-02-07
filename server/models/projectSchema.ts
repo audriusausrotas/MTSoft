@@ -19,10 +19,15 @@ export const projectSchema = defineMongooseModel<Project>(
       required: false,
       default: [],
     },
-    calculatedParts: {
-      type: Object,
+    works: {
+      type: [Object],
       required: false,
-      default: {},
+      default: [],
+    },
+    gates: {
+      type: [Object],
+      required: false,
+      default: [],
     },
     confirmed: {
       type: Boolean,
@@ -46,6 +51,13 @@ export const projectSchema = defineMongooseModel<Project>(
     },
     creator: String,
     orderNumber: String,
+    totalPrice: Number,
+    totalCost: Number,
+    totalProfit: Number,
+    totalMargin: Number,
+    priceVAT: Number,
+    priceWithDiscount: Number,
+    discount: String,
   },
   { collection: "projects" }
 );

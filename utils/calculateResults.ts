@@ -1,6 +1,6 @@
 import { useResultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
-import { defaultValues } from "~/data/initialValues";
+import { v4 as uuidv4 } from "uuid";
 import type { Fences } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
 import calculateVerticalFence from "~/utils/calculateVerticalFence";
@@ -51,9 +51,7 @@ export default function calculateResults() {
       // calculate gates
       if (measure.gates.exist) {
         results.addGates({
-          client: fences.client.username,
-          phone: fences.client.phone,
-          address: fences.client.address,
+          _id: uuidv4(),
           type: measure.length! > 200 ? measure.gates.type : "Varteliai",
           auto: measure.gates.automatics,
           width: measure.length,

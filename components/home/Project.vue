@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import type { Response } from "~/data/interfaces";
-
 const props = defineProps(["project", "index"]);
 const useProjects = useProjectsStore();
 
 const deleteHandler = async (): Promise<void> => {
-  const response: Response = await $fetch("/api/project", {
+  const response: any = await $fetch("/api/project", {
     method: "delete",
     body: { _id: props.project._id },
   });
@@ -28,10 +26,7 @@ const deleteHandler = async (): Promise<void> => {
       width="w-32"
       :tel="true"
     />
-    <BaseInfoField
-      :name="props.project.calculatedParts.totalPrice + ' €'"
-      width="w-20"
-    />
+    <BaseInfoField :name="props.project.totalPrice + ' €'" width="w-28" />
     <BaseInfoField :name="project.creator" width="w-20 min-w-fit" />
     <BaseInfoField :name="project.status" width="w-32" />
     <NuxtImg

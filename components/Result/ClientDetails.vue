@@ -29,11 +29,13 @@ const saveHandler = async (): Promise<void> => {
     advance: false,
     orderNumber: "",
   };
+
   const data: any = await $fetch("/api/project", {
     method: "post",
     body: newProject,
   });
   if (data.success) {
+    console.log(data.data);
     useProjects.addProject(data.data);
     useResults.clearAll();
     useCalculations.clearAll();
