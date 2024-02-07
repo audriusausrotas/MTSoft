@@ -196,11 +196,11 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateTotalLength(index: number, value: number): void {
-      this.fences[index].totalLength = value;
+      this.fences[index].totalLength = +value.toFixed(2);
     },
 
     updateTotalQuantity(index: number, value: number): void {
-      this.fences[index].totalQuantity = value;
+      this.fences[index].totalQuantity = +value.toFixed(2);
     },
 
     oneHeight(index: number, height: number) {
@@ -284,7 +284,7 @@ export const useCalculationsStore = defineStore("calculations", {
               fenceMeasures[fenceDataIndex].height);
         }
       }
-      measure.elements = elements;
+      measure.elements = +elements.toFixed(1);
     },
   },
 

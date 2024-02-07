@@ -186,6 +186,9 @@ export const useResultsStore = defineStore("results", {
     deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
     },
+    deleteWork(id: string): void {
+      this.works = this.works.filter((item) => item.id !== id);
+    },
 
     clearResults(): void {
       this.results = [];
@@ -197,11 +200,14 @@ export const useResultsStore = defineStore("results", {
       this.totalCost = 0;
       this.totalProfit = 0;
       this.totalMargin = 0;
+      this.priceVAT = 0;
+      this.priceWithDiscount = 0;
+      this.discount = "";
     },
 
     clearParts(): void {
-      this.fences = [];
       this.works = [];
+      this.fences = [];
       this.poles = [];
       this.gates = [];
       this.gatePoles = [];

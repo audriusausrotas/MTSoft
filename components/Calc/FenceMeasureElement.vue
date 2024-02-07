@@ -157,7 +157,6 @@ function toggleCheckbox(value: boolean) {
       />
       <BaseInput
         placeholder="Papidoma informacija"
-        type="number"
         variant="light"
         width="w-full"
         :name="props.measure.gates.aditional"

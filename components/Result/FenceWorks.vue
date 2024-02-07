@@ -6,7 +6,7 @@ const useResults = useResultsStore();
 const useProduct = useProductsStore();
 
 const deleteHandler = () => {
-  useResults.deleteResult(props.work.id);
+  useResults.deleteWork(props.work.id);
 };
 </script>
 
