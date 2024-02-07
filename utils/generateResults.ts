@@ -94,15 +94,27 @@ export default function generateResults() {
     });
   }
 
-  if (results.totalElements > 0) {
+  if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
       const boxQuantity = Math.ceil(
         (item.quantity + item.quantity * 0.1) / 1000
       );
-
       createResultElement({
         ...item,
         type: defaultValues.rivets,
+        quantity: boxQuantity,
+      });
+    });
+  }
+
+  if (results.bolts.length > 0) {
+    results.bolts.forEach((item) => {
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000
+      );
+      createResultElement({
+        ...item,
+        type: defaultValues.bolts,
         quantity: boxQuantity,
       });
     });

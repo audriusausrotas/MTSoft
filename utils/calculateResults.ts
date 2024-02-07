@@ -81,7 +81,7 @@ export default function calculateResults() {
       // calculate total elements
       if (!isSegment) {
         if (!onlyServices)
-          results.addTotalElements(measure.elements, item.color);
+          results.addTotalElements(measure.elements, item.color, item.type);
 
         // calculate bindings
         if (item.direction === "Horizontali" && item.bindings === "Taip") {

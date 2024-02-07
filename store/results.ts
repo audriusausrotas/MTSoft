@@ -9,6 +9,7 @@ import type {
   Works,
   Product,
 } from "~/data/interfaces";
+import { verticals } from "~/data/selectFieldData";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
@@ -33,6 +34,7 @@ export const useResultsStore = defineStore("results", {
     totalCrossbars: 0 as number,
     crossbarHolders: [] as OtherParts[],
     rivets: [] as OtherParts[],
+    bolts: [] as OtherParts[],
     totalElements: 0 as number,
     bindingsLength: [] as OtherParts[],
     segments: [] as OtherParts[],
@@ -214,6 +216,7 @@ export const useResultsStore = defineStore("results", {
       this.borders = 0;
       this.borderHolders = [];
       this.rivets = [];
+      this.bolts = [];
       this.crossbars = [];
       this.crossbarHolders = [];
       this.totalElements = 0;
@@ -375,14 +378,24 @@ export const useResultsStore = defineStore("results", {
       this.crossbarHolders = this.addPart(this.crossbarHolders, color, 4, 0);
     },
 
-    addTotalElements(elements: number, color: string): void {
+    addTotalElements(elements: number, color: string, type: string): void {
       this.totalElements += elements;
-      this.rivets = this.addPart(
-        this.rivets,
-        color,
-        Math.ceil(elements) * 4,
-        0
-      );
+
+      if (verticals.includes(type)) {
+        this.bolts = this.addPart(
+          this.bolts,
+          color,
+          Math.ceil(elements) * 4,
+          0
+        );
+      } else {
+        this.rivets = this.addPart(
+          this.rivets,
+          color,
+          Math.ceil(elements) * 4,
+          0
+        );
+      }
     },
 
     addBindingsLength(height: number, color: string): void {

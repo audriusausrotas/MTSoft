@@ -90,6 +90,7 @@ export const defaultValues = {
   crossbar: "Skersinis tvorai 20x40 mm, l2.5 m.",
   crossbarHolders: "Laikiklis skersinio 20x40mm, vidinis",
   rivets: "Kniedės 4.0 x 8.0 mm. 1000 vnt.",
+  bolts: "Sąvisriegiai 1000 vnt.",
   bindings: "Apkaustai",
   segment: "Segmentas tvorai, 2,5x1,53 m., [200x50mm]",
   segmentHolders: "Apkaba segmentui 60x40 mm. universali",
