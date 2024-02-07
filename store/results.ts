@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { initialResultData } from "~/data/initialValues";
+import { initialResultData, initialWorkData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
 import type {
   Result,
@@ -7,6 +7,7 @@ import type {
   Gate,
   OtherParts,
   Works,
+  Product,
 } from "~/data/interfaces";
 
 export const useResultsStore = defineStore("results", {
@@ -44,13 +45,16 @@ export const useResultsStore = defineStore("results", {
     totalMargin: 0 as number,
     priceVAT: 0 as number,
     priceWithDiscount: 0 as number,
+    discount: "" as string,
   }),
 
   actions: {
-    useDiscount() {
-      this.priceWithDiscount = +((this.priceVAT - this.totalPrice) / 2).toFixed(
-        2
-      );
+    useDiscount(value: string): void {
+      this.discount = value;
+    },
+
+    updateDiscount(value: number) {
+      this.priceWithDiscount = value;
     },
 
     addFences(data: Fences[]): void {
@@ -65,25 +69,40 @@ export const useResultsStore = defineStore("results", {
       };
       this.results.push(newResult);
     },
-
-    updateName(data: { index: number; value: string }): void {
-      this.results[data.index].type = data.value;
+    addNewWork(): void {
+      const newWork: Works = {
+        ...initialWorkData,
+        id: uuidv4(),
+        isNew: true,
+      };
+      this.works.push(newWork);
     },
 
-    selectItem(data: {
-      index: number;
-      value: { type: string; price: number; cost: number; category: string };
-    }): void {
-      const selectedResult = this.results[data.index];
-      selectedResult.type = data.value.type;
-      selectedResult.price = data.value.price;
-      selectedResult.cost = data.value.cost;
-      selectedResult.category = data.value.category;
+    updateName(index: number, value: string): void {
+      this.results[index].type = value;
+    },
+
+    updateWorkName(index: number, value: string): void {
+      this.works[index].name = value;
+    },
+
+    selectItem(index: number, value: Product): void {
+      const selectedResult = this.results[index];
+      selectedResult.type = value.name;
+      selectedResult.price = value.price;
+      selectedResult.cost = value.cost;
+      selectedResult.category = value.category;
+    },
+
+    selectWork(index: number, value: Works): void {
+      const selectedResult = this.works[index];
+      selectedResult.name = value.name;
+      selectedResult.price = value.price;
+      selectedResult.cost = value.cost;
     },
 
     updateQuantity(index: number, value: number): void {
       this.results[index].quantity = value;
-      console.log("asdf");
       this.recalculateTotals(index);
     },
 
@@ -129,6 +148,7 @@ export const useResultsStore = defineStore("results", {
       const marginValue =
         ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
       work.margin = parseFloat(marginValue.toFixed(2));
+      this.calculateTotals();
     },
 
     addGates(gate: Gate): void {
@@ -157,7 +177,10 @@ export const useResultsStore = defineStore("results", {
       ).toFixed(2);
       this.priceVAT = +(this.totalPrice + this.totalPrice * 0.21).toFixed(2);
 
-      if (this.priceWithDiscount !== 0) this.useDiscount();
+      this.priceWithDiscount = +(
+        this.priceVAT -
+        (this.priceVAT - this.totalPrice) / 2
+      ).toFixed(2);
     },
 
     deleteResult(id: string): void {

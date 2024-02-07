@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Works } from "~/data/interfaces";
 const props = defineProps(["work", "index"]);
 
 const useResults = useResultsStore();
@@ -19,13 +20,11 @@ const deleteHandler = () => {
         label="Pavadinimas"
         :data="useProduct.products"
         @OnClick="
-          (value) => {
-            useResults.selectItem({ index: props.index, value });
+          (value: Works) => {
+            useResults.selectWork(props.index, value);
           }
         "
-        @onChange="
-          (value) => useResults.updateName({ index: props.index, value })
-        "
+        @onChange="(value) => useResults.updateWorkName(props.index, value)"
         :name="props.work.name"
         :index="props.index"
       />
@@ -74,7 +73,7 @@ const deleteHandler = () => {
     <div class="flex flex-col gap-2">
       <BaseInput
         label="marža"
-        :name="props.work.margin"
+        :name="props.work.margin + ' %'"
         disable="true"
         width="w-24"
       />

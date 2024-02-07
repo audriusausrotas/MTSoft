@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { verticals, horizontals, fenceTypes } from "../../data/selectFieldData";
+import type { Product } from "~/data/interfaces";
 const props = defineProps(["result", "index"]);
 
 const useResults = useResultsStore();
@@ -72,13 +73,11 @@ const spaceEditable = computed(
         label="Pavadinimas"
         :data="useProduct.products"
         @OnClick="
-          (value) => {
-            useResults.selectItem({ index: props.index, value });
+          (value: Product) => {
+            useResults.selectItem(props.index, value);
           }
         "
-        @onChange="
-          (value) => useResults.updateName({ index: props.index, value })
-        "
+        @onChange="(value) => useResults.updateName(props.index, value)"
         :name="props.result.type"
         :index="props.index"
       />

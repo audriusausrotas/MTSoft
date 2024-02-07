@@ -4,6 +4,7 @@ import type {
   Result,
   MenuLinks,
   FenceMeasure,
+  Works,
 } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
@@ -11,6 +12,19 @@ export const clientInitialValue: Client = {
   address: "",
   phone: "",
   email: "",
+};
+
+export const initialWorkData: Works = {
+  id: "",
+  name: "",
+  quantity: 0,
+  price: 0,
+  cost: 0,
+  totalCost: 0,
+  totalPrice: 0,
+  margin: 0,
+  profit: 0,
+  isNew: false,
 };
 
 export const initialResultData: Result = {

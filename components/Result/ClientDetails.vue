@@ -78,11 +78,11 @@ const saveHandler = async (): Promise<void> => {
   </div>
   <div class="flex gap-4">
     <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
+    <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
     <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
-    <BaseButton name="skaiciuot laikinas" @click="calculateResults" />
 
     <BaseSelectField
-      label="Pritaikyta nuolaida"
+      label="Nuolaida"
       :values="twoSided"
       id="discount"
       :defaultValue="twoSided[1]"
