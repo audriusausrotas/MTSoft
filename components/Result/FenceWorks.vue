@@ -4,10 +4,6 @@ const props = defineProps(["work", "index"]);
 
 const useResults = useResultsStore();
 const useProduct = useProductsStore();
-
-const deleteHandler = () => {
-  useResults.deleteWork(props.work.id);
-};
 </script>
 
 <template>
@@ -33,6 +29,7 @@ const deleteHandler = () => {
           variant="light"
           width="w-24"
           label="kiekis"
+          type="number"
           :name="props.work.quantity"
           :disable="false"
           @onChange="
@@ -43,6 +40,7 @@ const deleteHandler = () => {
         <BaseInput
           variant="light"
           label="Kaina"
+          type="number"
           :name="props.work.price"
           width="w-24"
           @onChange="(value) => useResults.updateWorkPrice(props.index, value)"
@@ -89,7 +87,7 @@ const deleteHandler = () => {
       src="/icons/delete.svg"
       width="20"
       height="20"
-      @click="deleteHandler"
+      @click="useResults.deleteWork(props.work.id)"
       class="rounded-lg hover:bg-red-light hover:cursor-pointer"
     />
   </div>

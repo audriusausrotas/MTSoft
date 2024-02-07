@@ -6,10 +6,6 @@ const props = defineProps(["result", "index"]);
 const useResults = useResultsStore();
 const useProduct = useProductsStore();
 
-const deleteHandler = () => {
-  useResults.deleteResult(props.result.id);
-};
-
 const isFenceboard = computed(() => {
   if (verticals.some((item) => props.result?.type?.includes(item))) {
     return true;
@@ -96,6 +92,7 @@ const spaceEditable = computed(
           width="w-22"
           variant="light"
           label="kiekis"
+          type="number"
           :name="props.result.quantity"
           @onChange="(value) => useResults.updateQuantity(props.index, value)"
         />
@@ -104,6 +101,7 @@ const spaceEditable = computed(
           variant="light"
           label="kaina"
           width="w-24"
+          type="number"
           :name="props.result.price"
           @onChange="(value) => useResults.updatePrice(props.index, value)"
         />
@@ -191,7 +189,7 @@ const spaceEditable = computed(
       src="/icons/delete.svg"
       width="20"
       height="20"
-      @click="deleteHandler"
+      @click="useResults.deleteResult(props.result.id)"
       class="rounded-lg hover:bg-red-light hover:cursor-pointer"
     />
   </div>
