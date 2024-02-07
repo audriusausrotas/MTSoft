@@ -17,13 +17,25 @@ const useCalculations = useCalculationsStore();
 const currentFence = useCalculations.fences[props.index];
 
 const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
+const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
+
 const isOpen = ref<boolean>(false);
 
 watch(
   () => useCalculations.fences[props.index].type,
   (newValue) => {
-    const isTrue = verticals.includes(newValue as string);
-    isFenceBoards.value = isTrue;
+    isFenceBoards.value = verticals.includes(newValue as string);
+    isSegment.value = newValue.includes("Segmentas");
+
+    if (
+      useCalculations.fences[props.index].direction === "Horizontali" &&
+      !isFenceBoards.value &&
+      !isSegment.value
+    ) {
+      useCalculations.updateBindings(props.index, "Taip");
+    } else {
+      useCalculations.updateBindings(props.index, "Ne");
+    }
   },
   { deep: true }
 );
@@ -65,6 +77,7 @@ watch(
       />
 
       <BaseSelectField
+        v-if="!isSegment"
         label="Skardos Tipas"
         :values="fenceMaterials"
         id="fenceMaterials"
@@ -75,7 +88,7 @@ watch(
       />
 
       <BaseSelectField
-        v-if="!isFenceBoards"
+        v-if="!isFenceBoards && !isSegment"
         label="Pramatomumas"
         :values="pramatomumas"
         id="seeThrough"
@@ -86,6 +99,7 @@ watch(
       />
 
       <BaseSelectField
+        v-if="!isSegment"
         label="tvoros kryptis"
         :values="fenceDirection"
         id="fenceDirection"
@@ -141,7 +155,7 @@ watch(
         "
       />
       <BaseSelectField
-        v-if="!isFenceBoards"
+        v-if="!isSegment && !isFenceBoards"
         label="Apkaustai"
         :values="twoSided"
         id="bingings"

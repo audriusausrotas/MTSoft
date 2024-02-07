@@ -5,7 +5,6 @@ export default function calculateFenceBoards(
   twoSided: string
 ) {
   const elementsTemp = Math.round(length / (fenceWidth + space));
-  console.log(elementsTemp);
 
   return twoSided === "Taip" ? elementsTemp * 2 - 1 : elementsTemp;
 }

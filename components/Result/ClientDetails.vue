@@ -28,27 +28,6 @@ const saveHandler = async (): Promise<void> => {
     status: "nepatvirtintas",
     advance: false,
     orderNumber: "",
-
-    // calculatedParts: {
-    //   fences: useResults.fences,
-    //   works: useResults.works,
-    //   poles: useResults.poles,
-    //   gatePoles: useResults.gatePoles,
-    //   borders: useResults.borders,
-    //   borderHolders: useResults.borderHolders,
-    //   rivets: useResults.rivets,
-    //   crossbars: useResults.crossbars,
-    //   crossbarHolders: useResults.crossbarHolders,
-    //   totalElements: useResults.totalElements,
-    //   bindingsLength: useResults.bindingsLength,
-    //   segments: useResults.segments,
-    //   segmentHolders: useResults.segmentHolders,
-    //   gates: useResults.gates,
-    //   totalPrice: useResults.totalPrice,
-    //   totalCost: useResults.totalCost,
-    //   totalProfit: useResults.totalProfit,
-    //   totalMargin: useResults.totalMargin,
-    // },
   };
   const data: any = await $fetch("/api/project", {
     method: "post",

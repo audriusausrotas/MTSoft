@@ -29,7 +29,6 @@ export interface Project {
   status: string;
   advance: boolean;
   orderNumber: string;
-  // calculatedParts: CalculatedParts;
 }
 
 export interface Client {
@@ -94,30 +93,6 @@ export interface Result {
   profit: number;
   margin: number;
   isNew: boolean;
-}
-
-export interface CalculatedParts {
-  fences: Fences[];
-  works: Works[];
-  poles: OtherParts[];
-  gatePoles: OtherParts[];
-  borders: number;
-  borderHolders: OtherParts[];
-  rivets: OtherParts[];
-  crossbars: OtherParts[];
-  crossbarHolders: OtherParts[];
-  totalElements: number;
-  bindingsLength: OtherParts[];
-  segments: OtherParts[];
-  segmentHolders: OtherParts[];
-  gates: Gate[];
-  totalPrice: number;
-  totalCost: number;
-  totalProfit: number;
-  totalMargin: number;
-  priceVAT: number;
-  priceWithDiscount: number;
-  discount: string;
 }
 
 export interface OtherParts {
