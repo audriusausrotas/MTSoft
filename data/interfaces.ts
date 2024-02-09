@@ -124,6 +124,9 @@ export interface Gate {
   color: string;
   filling: string;
   ready: boolean;
+  bankette: string;
+  direction: string;
+  lock: string;
   aditional: string;
 }
 export interface GateSchema {
@@ -142,6 +145,7 @@ export interface GateInfo {
   aditional: string;
   direction: string;
   lock: string;
+  bankette: string;
 }
 
 export interface User {

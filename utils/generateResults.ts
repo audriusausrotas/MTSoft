@@ -251,25 +251,30 @@ export default function generateResults() {
   }
 
   if (results.gates.length > 0) {
+    let quantity = 0;
     results.gates.forEach((item) => {
-      if (item.type.includes("Stumdomi")) {
-        createWorkElement({
-          name: defaultValues.gateBnkette,
-          quantity:
-            item.width <= 500
-              ? 2
-              : item.width <= 600
-              ? 2.5
-              : item.width <= 700
-              ? 3
-              : item.width <= 800
-              ? 3.5
-              : item.width <= 900
-              ? 4
-              : 5,
-        });
+      if (item.bankette === "Taip" && item.type.includes("Stumdomi")) {
+        quantity +=
+          item.width <= 500
+            ? 2
+            : item.width <= 600
+            ? 2.5
+            : item.width <= 700
+            ? 3
+            : item.width <= 800
+            ? 3.5
+            : item.width <= 900
+            ? 4
+            : 5;
       }
     });
+
+    if (quantity > 0) {
+      createWorkElement({
+        name: defaultValues.gateBnkette,
+        quantity,
+      });
+    }
   }
 
   createWorkElement({

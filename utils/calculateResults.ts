@@ -53,13 +53,20 @@ export default function calculateResults() {
         results.addGates({
           _id: uuidv4(),
           type: measure.length! > 200 ? measure.gates.type : "Varteliai",
-          auto: measure.gates.automatics,
+          auto: measure.length! > 200 ? measure.gates.automatics : "",
           width: measure.length,
           height: measure.height,
           color: item.color,
           filling: item.type,
           ready: false,
+          bankette:
+            measure.length! > 200 && measure.gates.type === "Stumdomi"
+              ? measure.gates.bankette
+              : "",
+
           aditional: measure.gates.aditional,
+          direction: measure.length! < 200 ? measure.gates.direction : "",
+          lock: measure.length! < 200 ? measure.gates.lock : "",
         });
       }
 

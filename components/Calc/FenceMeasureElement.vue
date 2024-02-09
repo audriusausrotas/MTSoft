@@ -146,6 +146,17 @@ watch(
         @onChange="(value: string) => useCalculations.updateGateType(props.index, value,props.measureIndex  )
         "
       />
+      <BaseSelectField
+        v-if="
+          props.measure.length > 200 && props.measure.gates.type === 'Stumdomi'
+        "
+        :values="twoSided"
+        id="bankette"
+        :defaultValue="props.measure.gates.bankette"
+        width="w-32"
+        @onChange="(value: string) => useCalculations.updateBankette(props.index, value,props.measureIndex  )
+        "
+      />
 
       <BaseSelectField
         v-if="props.measure.length <= 200"

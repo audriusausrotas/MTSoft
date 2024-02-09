@@ -124,6 +124,9 @@ export const useCalculationsStore = defineStore("calculations", {
     updateGateType(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.type = value;
     },
+    updateBankette(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.bankette = value;
+    },
 
     updateGateDirection(
       index: number,
@@ -211,9 +214,12 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     copyLast(index: number): void {
-      const elementIndex = this.fences[index].measures.length - 1;
-      const element = this.fences[index].measures[elementIndex];
-      this.fences[index].measures.push({ ...element });
+      const lastElementIndex = this.fences[index].measures.length - 1;
+      const lastElement = this.fences[index].measures[lastElementIndex];
+
+      this.addMeasure(index);
+      this.updateMeasureLength(index, lastElementIndex + 1, lastElement.length);
+      this.updateMeasureHeight(index, lastElementIndex + 1, lastElement.height);
     },
 
     clearFields(): void {

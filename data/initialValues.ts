@@ -69,6 +69,7 @@ export const createInitialMeasure = (): Measure => ({
     aditional: "",
     direction: "Vidus Kairė",
     lock: "Paprasta",
+    bankette: "Taip",
   },
   kampas: {
     exist: false,

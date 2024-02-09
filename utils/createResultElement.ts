@@ -21,12 +21,16 @@ export default function createResultElement(item: any) {
       newCost += 120;
     }
     if (item.width > 600) {
-      newPrice += 200;
-      newCost += 200;
+      newPrice += 300;
+      newCost += 300;
     }
     if (item.width > 700) {
-      newPrice += 200;
-      newCost += 200;
+      newPrice += 400;
+      newCost += 400;
+    }
+    if (item.width > 800) {
+      newPrice += 300;
+      newCost += 300;
     }
   }
 
