@@ -291,6 +291,10 @@ export const useCalculationsStore = defineStore("calculations", {
       }
       measure.elements = +elements.toFixed(1);
     },
+    setProject(project: any) {
+      this.fences = [...project.fenceMeasures];
+      this.client = { ...project.client };
+    },
   },
 
   getters: {},

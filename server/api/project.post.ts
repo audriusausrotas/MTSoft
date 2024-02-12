@@ -1,8 +1,8 @@
 import { projectSchema } from "~/server/models/projectSchema";
-import { gateSchema } from "~/server/models/gateSchema";
 
 export default defineEventHandler(async (event) => {
   const {
+    _id,
     client,
     fenceMeasures,
     results,
@@ -22,47 +22,73 @@ export default defineEventHandler(async (event) => {
     advance,
   } = await readBody(event);
 
-  const userProjects = await projectSchema.find({ creator });
-  const projectQuantity = userProjects.length + 1;
-  const formattedProjectQuantity = projectQuantity.toString().padStart(4, "0");
+  const orderExist = await projectSchema.findById({ _id });
 
-  const firstThreeLetters = creator.substring(0, 3).toUpperCase();
+  let data = null;
 
-  const orderNumber = `${firstThreeLetters}-${formattedProjectQuantity}`;
+  if (!orderExist) {
+    const userProjects = await projectSchema.find({ creator });
+    const projectQuantity = userProjects.length + 1;
+    const formattedProjectQuantity = projectQuantity
+      .toString()
+      .padStart(4, "0");
 
-  const product = new projectSchema({
-    creator,
-    client,
-    fenceMeasures,
-    results,
-    orderNumber,
-    works,
-    gates,
-    totalPrice,
-    totalCost,
-    totalProfit,
-    totalMargin,
-    priceVAT,
-    priceWithDiscount,
-    discount,
-    confirmed,
-    payed,
-    status,
-    advance,
-  });
+    const firstThreeLetters = creator.substring(0, 3).toUpperCase();
 
-  const data = await product.save();
+    const orderNumber = `${firstThreeLetters}-${formattedProjectQuantity}`;
 
-  if (gates.length > 0) {
-    const newGates = new gateSchema({
+    const project = new projectSchema({
       creator,
-      client: client.username,
-      phone: client.phone,
-      address: client.address,
+      client,
+      fenceMeasures,
+      results,
+      orderNumber,
+      works,
       gates,
+      totalPrice,
+      totalCost,
+      totalProfit,
+      totalMargin,
+      priceVAT,
+      priceWithDiscount,
+      discount,
+      confirmed,
+      payed,
+      status,
+      advance,
     });
-    await newGates.save();
+
+    data = await project.save();
+    /////////////////////////////////////////////////////////
+    // if (gates.length > 0) {
+    //   const newGates = new gateSchema({
+    //     creator,
+    //     client: client.username,
+    //     phone: client.phone,
+    //     address: client.address,
+    //     gates,
+    //   });
+    //   await newGates.save();
+    // }
+    ////////////////////////////////////////////////////////////
+  } else {
+    orderExist.creator = creator;
+    orderExist.client = client;
+    orderExist.fenceMeasures = fenceMeasures;
+    orderExist.results = results;
+    orderExist.works = works;
+    orderExist.gates = gates;
+    orderExist.totalPrice = totalPrice;
+    orderExist.totalCost = totalCost;
+    orderExist.totalProfit = totalProfit;
+    orderExist.totalMargin = totalMargin;
+    orderExist.priceVAT = priceVAT;
+    orderExist.priceWithDiscount = priceWithDiscount;
+    orderExist.discount = discount;
+    data = await orderExist.save();
   }
+
+  // PADARYT turi pakeist vartu uzsakyma jei vartai pasikeite !!!!!!!!!
 
   return { success: true, data: data, message: "Projektas išsaugotas" };
 });

@@ -9,7 +9,7 @@ const useUser = useUserStore();
 
 const saveHandler = async (): Promise<void> => {
   const newProject: Project = {
-    _id: "",
+    _id: useProjects.selectedProject || "",
     creator: useUser.user!.username,
     client: useCalculations.client,
     fenceMeasures: useCalculations.fences,
@@ -35,10 +35,10 @@ const saveHandler = async (): Promise<void> => {
     body: newProject,
   });
   if (data.success) {
-    console.log(data.data);
     useProjects.addProject(data.data);
     useResults.clearAll();
     useCalculations.clearAll();
+    await navigateTo("/");
   }
 };
 </script>
@@ -76,7 +76,7 @@ const saveHandler = async (): Promise<void> => {
       label="Nuolaida"
       :values="twoSided"
       id="discount"
-      :defaultValue="twoSided[1]"
+      :defaultValue="useResults.discount"
       width="w-60"
       @onChange="(value: string) => useResults.useDiscount(value)
         "

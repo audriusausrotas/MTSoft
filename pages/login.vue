@@ -15,7 +15,6 @@ const loginHandler = async () => {
     method: "post",
     body: loginData,
   });
-  console.log(loginData);
   if (data.success) {
     useUser.setUser(data.data);
     clearFields();

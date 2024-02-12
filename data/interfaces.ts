@@ -171,6 +171,7 @@ export interface ResponseUsers {
 
 export interface ProjectsState {
   projects: Project[];
+  selectedProject: string | null;
 }
 
 export interface ProductsState {

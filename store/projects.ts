@@ -4,6 +4,7 @@ import type { Response, ProjectsState, Project } from "~/data/interfaces";
 export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
+    selectedProject: null,
   }),
 
   actions: {
@@ -14,10 +15,27 @@ export const useProjectsStore = defineStore("Projects", {
       }
     },
     addProject(project: Project): void {
-      this.projects.push(project);
+      let projectExist = false;
+      this.projects = this.projects.map((item) => {
+        if (item._id === project._id) {
+          projectExist = true;
+          return project;
+        } else {
+          return item;
+        }
+      });
+      if (!projectExist) {
+        this.projects.push(project);
+      }
     },
     deleteProject(id: String): void {
       this.projects = this.projects.filter((item) => item._id !== id);
+    },
+    setSelectedProject(data: string) {
+      this.selectedProject = data;
+    },
+    clearSelected() {
+      this.selectedProject = null;
     },
   },
 });

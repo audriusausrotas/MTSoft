@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const props = defineProps(["project", "index"]);
 const useProjects = useProjectsStore();
+const useResults = useResultsStore();
+const useCalculations = useCalculationsStore();
 
 const deleteHandler = async (): Promise<void> => {
   const response: any = await $fetch("/api/project", {
@@ -10,6 +12,16 @@ const deleteHandler = async (): Promise<void> => {
   if (response.success) {
     useProjects.deleteProject(props.project._id);
   }
+};
+
+const editHandler = () => {
+  useResults.setProject(props.project);
+  useCalculations.setProject({
+    client: props.project.client,
+    fenceMeasures: props.project.fenceMeasures,
+  });
+  useProjects.setSelectedProject(props.project._id);
+  navigateTo("/samata");
 };
 </script>
 
@@ -26,7 +38,14 @@ const deleteHandler = async (): Promise<void> => {
       width="w-32"
       :tel="true"
     />
-    <BaseInfoField :name="props.project.totalPrice + ' €'" width="w-28" />
+    <BaseInfoField
+      :name="
+        props.project.discount === 'Taip'
+          ? props.project.priceWithDiscount
+          : props.project.priceVAT + ' €'
+      "
+      width="w-28"
+    />
     <BaseInfoField :name="project.creator" width="w-20 min-w-fit" />
     <BaseInfoField :name="project.status" width="w-32" />
     <NuxtImg
@@ -48,6 +67,7 @@ const deleteHandler = async (): Promise<void> => {
       alt="edit button"
       width="20"
       height="20"
+      @click="editHandler"
       class="hover:cursor-pointer"
     />
     <NuxtImg

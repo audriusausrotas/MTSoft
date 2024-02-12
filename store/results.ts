@@ -47,7 +47,7 @@ export const useResultsStore = defineStore("results", {
     totalMargin: 0 as number,
     priceVAT: 0 as number,
     priceWithDiscount: 0 as number,
-    discount: "" as string,
+    discount: "Ne" as string,
   }),
 
   actions: {
@@ -209,7 +209,7 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = 0;
       this.priceVAT = 0;
       this.priceWithDiscount = 0;
-      this.discount = "";
+      this.discount = "Ne";
     },
 
     clearParts(): void {
@@ -458,6 +458,19 @@ export const useResultsStore = defineStore("results", {
         tempArr.push({ color, quantity, height });
       }
       return tempArr;
+    },
+
+    setProject(project: any) {
+      this.results = [...project.results];
+      this.works = [...project.works];
+      this.gates = [...project.gates];
+      this.totalPrice = project.price;
+      this.totalCost = project.cost;
+      this.totalProfit = project.profit;
+      this.totalMargin = project.margin;
+      this.priceVAT = project.priceVAT;
+      this.priceWithDiscount = project.priceWithDiscount;
+      this.discount = project.discount;
     },
   },
 
