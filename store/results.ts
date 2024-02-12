@@ -141,6 +141,9 @@ export const useResultsStore = defineStore("results", {
 
     updateWorkPrice(index: number, value: number): void {
       this.works[index].price = value;
+      if (this.works[index].name === "Transportas") {
+        this.works[index].cost = value;
+      }
       this.recalculateWorkTotals(index);
     },
 
