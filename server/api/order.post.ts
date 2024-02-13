@@ -1,9 +1,9 @@
 import { projectSchema } from "../models/projectSchema";
 
 export default defineEventHandler(async (event) => {
-  const { order } = await readBody(event);
+  const { _id } = await readBody(event);
 
-  const data = await projectSchema.findOne({ orderNumber: order });
+  const data = await projectSchema.findById({ _id });
 
   if (!data)
     return { success: false, data: null, message: "Užsakymas nerastas" };

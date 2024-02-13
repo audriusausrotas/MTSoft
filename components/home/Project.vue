@@ -26,6 +26,10 @@ const editHandler = () => {
   useProjects.setSelectedProject(props.project._id);
   navigateTo("/samata");
 };
+
+const linkHandler = () => {
+  console.log(props.project._id);
+};
 </script>
 
 <template>
@@ -63,6 +67,7 @@ const editHandler = () => {
       alt="link button"
       width="20"
       height="20"
+      @click="linkHandler"
       class="hover:cursor-pointer"
     />
     <NuxtImg

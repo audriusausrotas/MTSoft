@@ -1,26 +1,34 @@
-<script setup lang="js"></script>
+<script setup lang="ts">
+const route = useRoute();
+</script>
 
 <template>
-  <div class="flex justify-center bg-slate-600 rounded-lg gap-8">
-    <div
-      class="bg-red-full text-white p-4 rounded-lg hover:bg-red-700 hover:cursor-pointer"
-    >
-      Pasiūlymas
-    </div>
-    <div
-      class="bg-red-full text-white p-4 rounded-lg hover:bg-red-700 hover:cursor-pointer"
-    >
-      Eiga
-    </div>
-    <div
-      class="bg-red-full text-white p-4 rounded-lg hover:bg-red-700 hover:cursor-pointer"
-    >
-      Apie mus
-    </div>
-    <div
-      class="bg-red-full text-white p-4 rounded-lg hover:bg-red-700 hover:cursor-pointer"
-    >
-      privatumo politika
+  <div class="py-4 shadow-bottom">
+    <div class="flex justify-between max-w-[1200px] m-auto">
+      <NuxtLink to="https://www.modernitvora.lt">
+        <NuxtImg
+          src="/images/logo.png"
+          alt="Moderni Tvora logotipas"
+          width="86"
+          height="48"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
+      </NuxtLink>
+      <div class="flex">
+        <BaseOrderLink name="pasiūlymas" :id="route.params.id" />
+        <BaseOrderLink
+          name="tvoros informacija"
+          :id="route.params.id + '/tvora'"
+        />
+        <BaseOrderLink name="eiga" :id="route.params.id + '/eiga'" />
+        <BaseOrderLink name="apie mus" :id="route.params.id + '/apie'" />
+        <BaseOrderLink
+          name="privatumo politika"
+          :id="route.params.id + '/privatumas'"
+        />
+      </div>
     </div>
   </div>
 </template>

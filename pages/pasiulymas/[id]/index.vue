@@ -4,18 +4,16 @@ definePageMeta({
 });
 
 const route = useRoute();
-
 const offer = reactive<any>({});
 
 onMounted(async () => {
   const data: any = await $fetch("/api/order", {
     method: "post",
-    body: { order: route.params.order },
+    body: { _id: route.params.id },
   });
   if (data.success) {
     offer.value = { ...data.data };
   }
-  console.log(offer.value);
 });
 
 const confirmHandler = async () => {
@@ -42,10 +40,13 @@ const cancelHandler = async () => {
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-8">
-      <div>client name: {{ offer.value?.client.username }}</div>
-      <div>client address: {{ offer.value?.client.address }}</div>
-      <div>client phone: {{ offer.value?.client.phone }}</div>
-      <div>client email{{ offer.value?.client.email }}</div>
+      <BaseInput :name="offer.value?.client.username" label="klientas" />
+      <BaseInput :name="offer.value?.client.address" label="adresas" />
+      <BaseInput :name="offer.value?.client.phone" label="telefono numeris" />
+      <BaseInput
+        :name="offer.value?.client.email"
+        label="elektroninis pastas"
+      />
     </div>
     <div class="flex gap-8">
       <div>uzsakymas: {{ offer.value?.orderNumber }}</div>
@@ -57,36 +58,53 @@ const cancelHandler = async () => {
       >
     </div>
 
-    <div class="flex flex-col">
-      <div class="text-2xl font-semibold text-center py-2">Tvora</div>
-      <div class="flex border-b font-semibold even:bg-gray-ultra-light py-1">
-        <div class="w-6">Nr</div>
-        <div class="w-96">Pavadinimas</div>
-        <div class="w-20">Kiekis</div>
-        <div class="w-20">Kaina</div>
-        <div class="w-20">Viso</div>
-        <div class="w-20">spalva</div>
+    <div class="flex flex-col gap-4">
+      <div
+        class="text-2xl font-semibold bg-red-full rounded-2xl text-white text-center py-2"
+      >
+        Tvora
       </div>
-      <OfferResult
-        v-for="(result, index) in offer.value?.results"
-        :key="result._id"
-        :result="result"
-        :index="index"
-      />
-      <div class="text-2xl font-semibold text-center py-2">Darbai</div>
-      <div class="flex border-b font-semibold even:bg-gray-ultra-light py-1">
-        <div class="w-6">Nr</div>
-        <div class="w-96">Pavadinimas</div>
-        <div class="w-20">Kiekis</div>
-        <div class="w-20">Kaina</div>
-        <div class="w-20">Viso</div>
+      <div>
+        <div class="flex border-b bg-gray-ultra-light font-semibold gap-10 p-2">
+          <div class="w-6">Nr</div>
+          <div class="w-[450px]">Pavadinimas</div>
+          <div class="w-20">Kiekis</div>
+          <div class="w-20">Kaina</div>
+          <div class="w-20">Viso</div>
+        </div>
+        <div class="">
+          <OfferResult
+            v-for="(result, index) in offer.value?.results"
+            :key="result._id"
+            :result="result"
+            :index="index"
+          />
+        </div>
       </div>
-      <OfferWork
-        v-for="(work, index) in offer.value?.works"
-        :key="work._id"
-        :work="work"
-        :index="index"
-      />
+      <div
+        class="text-2xl font-semibold bg-red-full rounded-2xl text-white text-center py-2"
+      >
+        Darbai
+      </div>
+      <div>
+        <div
+          class="flex border-b bg-gray-ultra-light font-semibold py-1 gap-10"
+        >
+          <div class="w-6">Nr</div>
+          <div class="w-[450px]">Pavadinimas</div>
+          <div class="w-20">Kiekis</div>
+          <div class="w-20">Kaina</div>
+          <div class="w-20">Viso</div>
+        </div>
+        <div class="">
+          <OfferWork
+            v-for="(work, index) in offer.value?.works"
+            :key="work._id"
+            :work="work"
+            :index="index"
+          />
+        </div>
+      </div>
     </div>
     <div class="flex justify-between">
       <div class="flex gap-8">
