@@ -9,7 +9,7 @@ const useUser = useUserStore();
 
 const saveHandler = async (): Promise<void> => {
   const newProject: Project = {
-    _id: useProjects.selectedProject || "",
+    _id: useProjects.selectedProject ? useProjects.selectedProject : "",
     creator: useUser.user!.username,
     client: useCalculations.client,
     fenceMeasures: useCalculations.fences,
@@ -31,7 +31,7 @@ const saveHandler = async (): Promise<void> => {
   };
 
   const data: any = await $fetch("/api/project", {
-    method: "post",
+    method: "POST",
     body: newProject,
   });
   if (data.success) {

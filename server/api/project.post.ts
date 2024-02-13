@@ -22,11 +22,7 @@ export default defineEventHandler(async (event) => {
     advance,
   } = await readBody(event);
 
-  const orderExist = await projectSchema.findById({ _id });
-
-  let data = null;
-
-  if (!orderExist) {
+  if (_id === "") {
     const userProjects = await projectSchema.find({ creator });
     const projectQuantity = userProjects.length + 1;
     const formattedProjectQuantity = projectQuantity
@@ -58,7 +54,9 @@ export default defineEventHandler(async (event) => {
       advance,
     });
 
-    data = await project.save();
+    const data = await project.save();
+
+    return { success: true, data: data, message: "Projektas išsaugotas" };
     /////////////////////////////////////////////////////////
     // if (gates.length > 0) {
     //   const newGates = new gateSchema({
@@ -72,6 +70,10 @@ export default defineEventHandler(async (event) => {
     // }
     ////////////////////////////////////////////////////////////
   } else {
+    const orderExist = await projectSchema.findById({ _id });
+    if (!orderExist)
+      return { success: false, data: null, message: "Projektas nerastas" };
+
     orderExist.creator = creator;
     orderExist.client = client;
     orderExist.fenceMeasures = fenceMeasures;
@@ -85,10 +87,9 @@ export default defineEventHandler(async (event) => {
     orderExist.priceVAT = priceVAT;
     orderExist.priceWithDiscount = priceWithDiscount;
     orderExist.discount = discount;
-    data = await orderExist.save();
+    const data = await orderExist.save();
+    return { success: true, data: data, message: "Projektas išsaugotas" };
   }
 
   // PADARYT turi pakeist vartu uzsakyma jei vartai pasikeite !!!!!!!!!
-
-  return { success: true, data: data, message: "Projektas išsaugotas" };
 });
