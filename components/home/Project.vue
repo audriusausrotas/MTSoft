@@ -15,6 +15,9 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const editHandler = () => {
+  useCalculations.clearAll();
+  useResults.clearAll();
+  useProjects.clearSelected();
   useResults.setProject(props.project);
   useCalculations.setProject({
     client: props.project.client,

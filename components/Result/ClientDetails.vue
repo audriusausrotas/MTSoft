@@ -41,6 +41,13 @@ const saveHandler = async (): Promise<void> => {
     await navigateTo("/");
   }
 };
+
+const clearHandler = () => {
+  useResults.useDiscount("Ne");
+  useCalculations.clearAll();
+  useResults.clearAll();
+  useProjects.clearSelected();
+};
 </script>
 <template>
   <div class="flex flex-wrap overflow-hidden border rounded-lg">
@@ -71,6 +78,7 @@ const saveHandler = async (): Promise<void> => {
     <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
     <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
     <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
+    <BaseButton name="išvalyti viską" @click="clearHandler" />
 
     <BaseSelectField
       label="Nuolaida"
