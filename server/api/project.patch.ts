@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
       if (!gateExist) {
         const newGates = new gateSchema({
-          creator: project.creator,
+          creator: { ...project.creator },
           client: project.client.username,
           phone: project.client.phone,
           address: project.client.address,

@@ -6,12 +6,16 @@ const initials = computed(() => useUser.user?.username.slice(0, 2));
 const url = ref<string>("");
 const newPassword = ref<string>("");
 const password = ref<string>("");
+const lastName = ref<string>("");
+const phone = ref<string>("");
 
 const saveHandler = async () => {
   const reqData = {
     url: url.value,
     newPassword: newPassword.value,
     password: password.value,
+    lastName: lastName.value,
+    phone: phone.value,
   };
 
   const { data }: { data: ResponseUser } = await $fetch("/api/profile", {
@@ -24,6 +28,8 @@ const saveHandler = async () => {
     password.value = "";
     newPassword.value = "";
     url.value = "";
+    lastName.value = "";
+    phone.value = "";
   }
 };
 </script>
@@ -51,7 +57,7 @@ const saveHandler = async () => {
 
         <div class="flex flex-col gap-4 capitalize">
           <h3 class="text-4xl font-semibold">
-            {{ useUser.user?.username }}
+            {{ useUser.user?.username }} {{ useUser.user?.lastName }}
           </h3>
           <div>
             <p v-if="useUser.user?.admin">Vartotojo tipas:</p>
@@ -67,6 +73,10 @@ const saveHandler = async () => {
           <div>
             <h3>El. Paštas:</h3>
             <h5 class="font-semibold normal-case">{{ useUser.user?.email }}</h5>
+          </div>
+          <div>
+            <h3>Telefono numeris:</h3>
+            <h5 class="font-semibold normal-case">{{ useUser.user?.phone }}</h5>
           </div>
         </div>
       </div>
@@ -86,7 +96,7 @@ const saveHandler = async () => {
         />
       </BaseInput>
     </div>
-    <div class="flex flex-col items-center justify-between flex-[2]">
+    <div class="flex flex-col items-center justify-between gap-2 flex-[2]">
       <h4 class="text-2xl font-semibold">Pakeisti Slaptažodį</h4>
       <BaseInput
         :name="newPassword"
@@ -101,6 +111,18 @@ const saveHandler = async () => {
         @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį"
         label="Pakartoti slaptažodį"
+      />
+      <BaseInput
+        :name="lastName"
+        @onChange="(v) => (lastName = v)"
+        placeholder="Pavardė"
+        label="Pavardė"
+      />
+      <BaseInput
+        :name="phone"
+        @onChange="(v) => (phone = v)"
+        placeholder="Telefono numeris"
+        label="Telefono numeris"
       />
       <BaseButton name="išsaugoti pakeitimus" @click="saveHandler" />
     </div>

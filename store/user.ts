@@ -22,18 +22,18 @@ export const useUserStore = defineStore("user", {
     setAllUsers(data: User[]) {
       this.users = data;
     },
-  },
 
-  getters: {
-    updateUser: (state) => (data: User) => {
-      state.users = state.users.map((user) => {
+    updateUser(data: User) {
+      this.users = this.users.map((user) => {
         if (user._id === data._id) return data;
         else return user;
       });
     },
 
-    deleteUser: (state) => (id: string) => {
-      state.users = state.users.filter((user) => user._id !== id);
+    deleteUser(id: string) {
+      this.users = this.users.filter((user) => user._id !== id);
     },
   },
+
+  getters: {},
 });

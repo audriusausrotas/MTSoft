@@ -10,7 +10,12 @@ const useUser = useUserStore();
 const saveHandler = async (): Promise<void> => {
   const newProject: Project = {
     _id: useProjects.selectedProject ? useProjects.selectedProject : "",
-    creator: useUser.user!.username,
+    creator: {
+      username: useUser.user!.username,
+      lastName: useUser.user!.lastName,
+      email: useUser.user!.email,
+      phone: useUser.user!.phone,
+    },
     client: useCalculations.client,
     fenceMeasures: useCalculations.fences,
     results: useResults.results,

@@ -11,7 +11,7 @@ export interface Calculations {
 
 export interface Project {
   _id: string;
-  creator: string;
+  creator: Creator;
   client: Client;
   fenceMeasures: Fence[];
   results: Result[];
@@ -134,8 +134,15 @@ export interface GateSchema {
   client: string;
   phone: string;
   address: string;
-  creator: string;
+  creator: Creator;
   gates: Gate[];
+}
+
+export interface Creator {
+  username: string;
+  lastName: string;
+  email: string;
+  phone: string;
 }
 
 export interface GateInfo {
@@ -153,6 +160,8 @@ export interface User {
   email: string;
   password: string;
   username: string;
+  lastName: string;
+  phone: string;
   verified: boolean;
   admin: boolean;
   photo: string;

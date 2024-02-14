@@ -7,6 +7,16 @@ export const userSchema = defineMongooseModel<User>(
     email: String,
     password: String,
     username: String,
+    lastName: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    phone: {
+      type: String,
+      required: false,
+      default: "",
+    },
     verified: {
       type: Boolean,
       required: false,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { verticals, horizontals, fenceTypes } from "../../data/selectFieldData";
+import { verticals, horizontals } from "../../data/selectFieldData";
 import type { Product } from "~/data/interfaces";
 const props = defineProps(["result", "index"]);
 
@@ -8,14 +8,6 @@ const useProduct = useProductsStore();
 
 const isFenceboard = computed(() => {
   if (verticals.some((item) => props.result?.type?.includes(item))) {
-    return true;
-  } else {
-    return false;
-  }
-});
-
-const isFence = computed(() => {
-  if (fenceTypes.some((item) => props.result?.type?.includes(item))) {
     return true;
   } else {
     return false;
@@ -46,8 +38,8 @@ const showAditionalHorizontal = computed(() => {
 
 const colorEditable = computed(
   () =>
-    props.result.color === "Kita" ||
     props.result.isNew ||
+    props.result.color === "Kita" ||
     props.result.category !== "tvoros"
 );
 

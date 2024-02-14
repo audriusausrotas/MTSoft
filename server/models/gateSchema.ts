@@ -7,7 +7,7 @@ export const gateSchema = defineMongooseModel<GateSchema>(
     client: String,
     phone: String,
     address: String,
-    creator: String,
+    creator: Object,
     gates: [Object],
   },
   { collection: "gates" }

@@ -2,7 +2,9 @@ import { userSchema } from "~/server/models/userSchema";
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
-  const { url, password, _id, newPassword } = await readBody(event);
+  const { url, password, _id, newPassword, phone, lastName } = await readBody(
+    event
+  );
 
   if (password !== newPassword)
     return { success: false, data: null, message: "slaptažodžiai nesutampa" };
@@ -17,6 +19,8 @@ export default defineEventHandler(async (event) => {
     };
 
   if (url.trim() !== "") data.photo = url;
+  if (phone.trim() !== "") data.phone = phone;
+  if (lastName.trim() !== "") data.lastName = lastName;
 
   if (password.trim() !== "") {
     data.password = await bcrypt.hash(password, +process.env.SALT!);

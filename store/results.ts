@@ -115,6 +115,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateColor(index: number, value: string): void {
+      this.results[index].isNew = true;
       this.results[index].color = value;
     },
 
