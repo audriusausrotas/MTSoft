@@ -40,22 +40,68 @@ const cancelHandler = async () => {
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-8">
-      <BaseInput :name="offer.value?.client.username" label="klientas" />
-      <BaseInput :name="offer.value?.client.address" label="adresas" />
-      <BaseInput :name="offer.value?.client.phone" label="telefono numeris" />
       <BaseInput
+        :disable="true"
+        :name="offer.value?.client.username"
+        label="klientas"
+      />
+      <BaseInput
+        :disable="true"
+        :name="offer.value?.client.address"
+        label="adresas"
+      />
+      <BaseInput
+        :disable="true"
+        :name="offer.value?.client.phone"
+        label="telefono numeris"
+      />
+      <BaseInput
+        :disable="true"
         :name="offer.value?.client.email"
         label="elektroninis pastas"
       />
     </div>
+
     <div class="flex gap-8">
-      <div>uzsakymas: {{ offer.value?.orderNumber }}</div>
-      <div>Statusas: {{ offer.value?.status }}</div>
-      <div>Atsakingas vadybininkas: {{ offer.value?.creator }}</div>
-      <a :href="'tel:' + 37067517745">+37067517745</a>
-      <a :href="'mailto:' + 'audrius@modernitvora.lt'"
-        >audrius@modernitvora.lt</a
+      <BaseInput
+        :disable="true"
+        :name="
+          offer.value?.creator.username + ' ' + offer.value?.creator.lastName
+        "
+        label="Atsakingas vadybininkas:"
+      />
+
+      <a
+        :href="'tel:' + offer.value?.creator.phone"
+        class="hover: cursor-pointer"
       >
+        <BaseInput
+          :disable="true"
+          :name="offer.value?.creator.phone"
+          label="Telefono numeris"
+          class="pointer-events-none"
+      /></a>
+
+      <a :href="'mailto:' + offer.value?.creator.email">
+        <BaseInput
+          :disable="true"
+          :name="offer.value?.creator.email"
+          label="elektroninis pastas"
+          class="pointer-events-none"
+        />
+      </a>
+    </div>
+    <div class="flex gap-8">
+      <BaseInput
+        :disable="true"
+        :name="offer.value?.orderNumber"
+        label="uzsakymas"
+      />
+      <BaseInput
+        :disable="true"
+        :name="offer.value?.status"
+        label="Statusas:"
+      />
     </div>
 
     <div class="flex flex-col gap-4">

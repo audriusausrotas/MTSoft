@@ -12,7 +12,9 @@ gates.getGates();
       class="flex flex-col border-b-8 border-red-full"
     >
       <div class="font-semibold text-4xl m-auto">{{ index + 1 }}</div>
-      <div class="flex gap-20 font-semibold border-b border-red-300 py-4">
+      <div
+        class="flex justify-between font-semibold border-b border-red-300 py-4"
+      >
         <div class="flex flex-col gap-4">
           <h3 class="text-xl">Klento duomenys</h3>
           <BaseInput
