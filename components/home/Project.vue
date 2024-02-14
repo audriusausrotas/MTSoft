@@ -28,7 +28,14 @@ const editHandler = () => {
 };
 
 const linkHandler = () => {
-  console.log(props.project._id);
+  navigator.clipboard
+    .writeText("modernitvora.vercel.app/pasiulymas/" + props.project._id)
+    .then(() => {
+      console.log("Text successfully copied to clipboard:", props.project._id);
+    })
+    .catch((error) => {
+      console.error("Error copying to clipboard:", error);
+    });
 };
 </script>
 
@@ -41,20 +48,21 @@ const linkHandler = () => {
       width="w-60 min-w-fit"
     />
     <BaseInfoField
-      :name="props.project.client.phone"
-      width="w-32"
-      :tel="true"
-    />
-    <BaseInfoField
       :name="
         props.project.discount === 'Taip'
-          ? props.project.priceWithDiscount
+          ? props.project.priceWithDiscount + '€'
           : props.project.priceVAT + ' €'
       "
       width="w-28"
     />
-    <BaseInfoField :name="project.creator" width="w-20 min-w-fit" />
-    <BaseInfoField :name="project.status" width="w-32" />
+    <BaseInfoField
+      :name="props.project.client.phone"
+      width="w-32"
+      :tel="true"
+    />
+
+    <BaseInfoField :name="props.project.client.email" width="w-60 min-w-fit" />
+    <BaseInfoField :name="props.project.status" width="w-32" />
     <NuxtImg
       src="/icons/eye.svg"
       alt="eye button"

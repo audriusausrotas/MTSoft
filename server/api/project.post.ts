@@ -22,16 +22,16 @@ export default defineEventHandler(async (event) => {
     advance,
   } = await readBody(event);
 
-  if (_id === "") {
-    const userProjects = await projectSchema.find({ creator });
-    const projectQuantity = userProjects.length + 1;
-    const formattedProjectQuantity = projectQuantity
-      .toString()
-      .padStart(4, "0");
-
+  if (_id.length === 0) {
     const firstThreeLetters = creator.substring(0, 3).toUpperCase();
 
-    const orderNumber = `${firstThreeLetters}-${formattedProjectQuantity}`;
+    const userProjects = await projectSchema.find({ creator });
+    const lastOrder = userProjects[userProjects.length - 1].orderNumber;
+    let orderNumbers = parseInt(lastOrder.split("-")[1]);
+    orderNumbers++;
+    const newOrderNumbers = orderNumbers.toString().padStart(4, "0");
+
+    const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
 
     const project = new projectSchema({
       creator,
