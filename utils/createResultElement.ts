@@ -69,7 +69,7 @@ export default function createResultElement(item: any) {
   const resultData: Result = {
     id: uuidv4(),
     type: item.type,
-    quantity: item.quantity,
+    quantity: +item.quantity.toFixed(2),
     color: item.color || "",
     height: item.height || 0,
     space: item.space || 0,

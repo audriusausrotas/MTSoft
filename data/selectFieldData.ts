@@ -106,3 +106,12 @@ export const parts: string[] = [
 ];
 
 export const twoSided: string[] = ["Taip", "Ne"];
+
+export const status: string[] = [
+  "Nepatvirtintas",
+  "Patvirtintas",
+  "Gaminama",
+  "Montuojama",
+  "Laukiam Vartų",
+  "Baigta",
+];

@@ -37,5 +37,11 @@ export const useProjectsStore = defineStore("Projects", {
     clearSelected() {
       this.selectedProject = null;
     },
+    updateStatus(project: Project) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === project._id) return project;
+        else return item;
+      });
+    },
   },
 });

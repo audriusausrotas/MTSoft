@@ -57,18 +57,6 @@ export default defineEventHandler(async (event) => {
     const data = await project.save();
 
     return { success: true, data: data, message: "Projektas išsaugotas" };
-    /////////////////////////////////////////////////////////
-    // if (gates.length > 0) {
-    //   const newGates = new gateSchema({
-    //     creator,
-    //     client: client.username,
-    //     phone: client.phone,
-    //     address: client.address,
-    //     gates,
-    //   });
-    //   await newGates.save();
-    // }
-    ////////////////////////////////////////////////////////////
   } else {
     const orderExist = await projectSchema.findById({ _id });
     if (!orderExist)
@@ -90,6 +78,4 @@ export default defineEventHandler(async (event) => {
     const data = await orderExist.save();
     return { success: true, data: data, message: "Projektas išsaugotas" };
   }
-
-  // PADARYT turi pakeist vartu uzsakyma jei vartai pasikeite !!!!!!!!!
 });

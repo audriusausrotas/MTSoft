@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { status } from "~/data/selectFieldData";
 const props = defineProps(["project", "index"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
@@ -37,32 +38,51 @@ const linkHandler = () => {
       console.error("Error copying to clipboard:", error);
     });
 };
+
+const statusHandler = (value: string) => {
+  const data: any = $fetch("/api/project", {
+    method: "PATCH",
+    body: { _id: props.project._id, value },
+  });
+  if (data.success) {
+    useProjects.updateStatus(data.data);
+  }
+};
 </script>
 
 <template>
   <div class="flex items-center gap-4">
     <div>{{ index + 1 }}</div>
-    <BaseInfoField :name="props.project.orderNumber" width="w-28" />
+    <BaseInfoField :name="props.project?.orderNumber" width="w-28" />
     <BaseInfoField
-      :name="props.project.client.address"
+      :name="props.project?.client?.address"
       width="w-60 min-w-fit"
     />
     <BaseInfoField
       :name="
-        props.project.discount === 'Taip'
-          ? props.project.priceWithDiscount + '€'
-          : props.project.priceVAT + ' €'
+        props.project?.discount === 'Taip'
+          ? props.project?.priceWithDiscount + '€'
+          : props.project?.priceVAT + ' €'
       "
       width="w-28"
     />
     <BaseInfoField
-      :name="props.project.client.phone"
+      :name="props.project?.client?.phone"
       width="w-32"
       :tel="true"
     />
-
-    <BaseInfoField :name="props.project.client.email" width="w-60 min-w-fit" />
-    <BaseInfoField :name="props.project.status" width="w-32" />
+    <BaseSelectField
+      :values="status"
+      id="orderStatus"
+      :defaultValue="props.project?.status"
+      width="w-40"
+      @onChange="(value: string) => statusHandler(value)
+        "
+    />
+    <BaseInfoField
+      :name="props.project?.client?.email"
+      width="w-60 min-w-fit"
+    />
     <NuxtImg
       src="/icons/eye.svg"
       alt="eye button"
