@@ -94,16 +94,22 @@ const cancelHandler = async () => {
             />
           </div>
           <div class="flex flex-col gap-2">
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.client.phone"
-              label="telefono numeris"
-            />
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.client.email"
-              label="elektroninis pastas"
-            />
+            <a :href="'tel:' + offer.value?.client.phone">
+              <BaseInput
+                :disable="true"
+                :name="offer.value?.client.phone"
+                label="telefono numeris"
+                class="pointer-events-none"
+              />
+            </a>
+            <a :href="'mailto:' + offer.value?.client.email">
+              <BaseInput
+                :disable="true"
+                :name="offer.value?.client.email"
+                label="elektroninis pastas"
+                class="pointer-events-none"
+              />
+            </a>
           </div>
         </div>
       </div>
@@ -126,7 +132,7 @@ const cancelHandler = async () => {
 
             <BaseInput
               :disable="true"
-              :name="offer.value?.client.address"
+              name=" Kauno g. 31, Marijampolė"
               label="adresas"
             />
           </div>
@@ -223,7 +229,7 @@ const cancelHandler = async () => {
           Kaina su PVM:
           <span class="text-red-full">{{ offer.value?.priceVAT }} </span> €
         </div>
-        <div v-if="offer.value?.priceWithDiscount" class="text-2xl font-bold">
+        <div v-if="offer.value?.discount === 'Taip'" class="text-2xl font-bold">
           Kaina su nuolaida:
           <span class="text-red-full"
             >{{ offer.value?.priceWithDiscount }}
