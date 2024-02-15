@@ -58,6 +58,8 @@ export const projectSchema = defineMongooseModel<Project>(
     priceVAT: Number,
     priceWithDiscount: Number,
     discount: String,
+    dateCreated: String,
+    dateExparation: String,
   },
   { collection: "projects" }
 );

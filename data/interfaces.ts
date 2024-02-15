@@ -29,6 +29,8 @@ export interface Project {
   status: string;
   advance: boolean;
   orderNumber: string;
+  dateCreated: string;
+  dateExparation: string;
 }
 
 export interface Client {

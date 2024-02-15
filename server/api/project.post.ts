@@ -22,8 +22,15 @@ export default defineEventHandler(async (event) => {
     advance,
   } = await readBody(event);
 
+  const currentDate = new Date();
+
+  const dateCreated = currentDate.toISOString();
+  let expirationDate = new Date(currentDate);
+  expirationDate.setDate(currentDate.getDate() + 30);
+  const dateExparation = expirationDate.toISOString();
+
   if (_id.length === 0) {
-    const firstThreeLetters = creator.substring(0, 3).toUpperCase();
+    const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
 
     const userProjects = await projectSchema.find({ creator });
     const lastOrder = userProjects[userProjects.length - 1].orderNumber;
@@ -52,6 +59,8 @@ export default defineEventHandler(async (event) => {
       payed,
       status,
       advance,
+      dateCreated,
+      dateExparation,
     });
 
     const data = await project.save();
@@ -75,6 +84,9 @@ export default defineEventHandler(async (event) => {
     orderExist.priceVAT = priceVAT;
     orderExist.priceWithDiscount = priceWithDiscount;
     orderExist.discount = discount;
+    orderExist.dateCreated = dateCreated;
+    orderExist.dateExparation = dateExparation;
+
     const data = await orderExist.save();
     return { success: true, data: data, message: "Projektas išsaugotas" };
   }

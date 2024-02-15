@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import type { Result, Works } from "~/data/interfaces";
+
 definePageMeta({
   layout: "order",
 });
 
 const route = useRoute();
 const offer = reactive<any>({});
+const totalPriceParts = ref<number>(0);
+const totalPriceWorks = ref<number>(0);
 
 onMounted(async () => {
   const data: any = await $fetch("/api/order", {
@@ -13,6 +17,12 @@ onMounted(async () => {
   });
   if (data.success) {
     offer.value = { ...data.data };
+    offer.value.results.forEach(
+      (item: Result) => (totalPriceParts.value += item.totalPrice)
+    );
+    offer.value.works.forEach(
+      (item: Works) => (totalPriceWorks.value += item.totalPrice)
+    );
   }
 });
 
@@ -39,142 +49,186 @@ const cancelHandler = async () => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <div class="flex gap-8">
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.client.username"
-        label="klientas"
-      />
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.client.address"
-        label="adresas"
-      />
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.client.phone"
-        label="telefono numeris"
-      />
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.client.email"
-        label="elektroninis pastas"
-      />
-    </div>
-
-    <div class="flex gap-8">
-      <BaseInput
-        :disable="true"
-        :name="
-          offer.value?.creator.username + ' ' + offer.value?.creator.lastName
-        "
-        label="Atsakingas vadybininkas:"
-      />
-
-      <a
-        :href="'tel:' + offer.value?.creator.phone"
-        class="hover: cursor-pointer"
-      >
-        <BaseInput
-          :disable="true"
-          :name="offer.value?.creator.phone"
-          label="Telefono numeris"
-          class="pointer-events-none"
-      /></a>
-
-      <a :href="'mailto:' + offer.value?.creator.email">
-        <BaseInput
-          :disable="true"
-          :name="offer.value?.creator.email"
-          label="elektroninis pastas"
-          class="pointer-events-none"
-        />
-      </a>
-    </div>
-    <div class="flex gap-8">
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.orderNumber"
-        label="uzsakymas"
-      />
-      <BaseInput
-        :disable="true"
-        :name="offer.value?.status"
-        label="Statusas:"
-      />
-    </div>
-
-    <div class="flex flex-col gap-4">
-      <div
-        class="text-2xl font-semibold bg-red-full rounded-2xl text-white text-center py-2"
-      >
-        Tvora
-      </div>
-      <div>
-        <div class="flex border-b bg-gray-ultra-light font-semibold gap-10 p-2">
-          <div class="w-6">Nr</div>
-          <div class="w-[450px]">Pavadinimas</div>
-          <div class="w-20">Kiekis</div>
-          <div class="w-20">Kaina</div>
-          <div class="w-20">Viso</div>
-        </div>
-        <div class="">
-          <OfferResult
-            v-for="(result, index) in offer.value?.results"
-            :key="result._id"
-            :result="result"
-            :index="index"
-          />
-        </div>
-      </div>
-      <div
-        class="text-2xl font-semibold bg-red-full rounded-2xl text-white text-center py-2"
-      >
-        Darbai
-      </div>
-      <div>
-        <div
-          class="flex border-b bg-gray-ultra-light font-semibold py-1 gap-10"
+    <div class="flex justify-between text-center border-b pb-6 items-center">
+      <h5 class="text-xl font-semibold">
+        Užsakymo data:<br />
+        {{ offer.value?.dateCreated.slice(0, 10) }}
+      </h5>
+      <h5 class="text-xl font-semibold">
+        Pasiūlymo galiojimo data: <br />
+        {{ offer.value?.dateExparation.slice(0, 10) }}
+      </h5>
+      <h3 class="text-xl font-semibold">
+        Užsakymo Nr. <br />
+        {{ offer.value?.orderNumber }}
+      </h3>
+      <h6 class="text-xl font-semibold">
+        Būsena <br />
+        <span
+          :class="
+            offer.value?.status === 'Nepatvirtintas'
+              ? 'text-orange-500'
+              : offer.value?.status === 'Netinkamas'
+              ? 'text-red-full'
+              : 'text-green-500'
+          "
         >
-          <div class="w-6">Nr</div>
-          <div class="w-[450px]">Pavadinimas</div>
-          <div class="w-20">Kiekis</div>
-          <div class="w-20">Kaina</div>
-          <div class="w-20">Viso</div>
+          {{ offer.value?.status }}
+        </span>
+      </h6>
+    </div>
+    <div class="flex justify-between py-4">
+      <div class="flex flex-col items-center gap-8">
+        <p class="text-xl font-semibold">Kliento Duomenys</p>
+        <div class="flex gap-4">
+          <div class="flex flex-col gap-2">
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.username"
+              label="klientas"
+            />
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.address"
+              label="adresas"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.phone"
+              label="telefono numeris"
+            />
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.email"
+              label="elektroninis pastas"
+            />
+          </div>
         </div>
-        <div class="">
-          <OfferWork
-            v-for="(work, index) in offer.value?.works"
-            :key="work._id"
-            :work="work"
-            :index="index"
-          />
+      </div>
+
+      <div class="border border-dark-ultra-light min-h-full"></div>
+
+      <div class="flex flex-col items-center gap-8">
+        <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
+        <div class="flex gap-4">
+          <div class="flex flex-col gap-2">
+            <BaseInput
+              :disable="true"
+              :name="
+                offer.value?.creator.username +
+                ' ' +
+                offer.value?.creator.lastName
+              "
+              label="Atsakingas vadybininkas:"
+            />
+
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.address"
+              label="adresas"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <a
+              :href="'tel:' + offer.value?.creator.phone"
+              class="hover: cursor-pointer"
+            >
+              <BaseInput
+                :disable="true"
+                :name="offer.value?.creator.phone"
+                label="Telefono numeris"
+                class="pointer-events-none"
+            /></a>
+
+            <a :href="'mailto:' + offer.value?.creator.email">
+              <BaseInput
+                :disable="true"
+                :name="offer.value?.creator.email"
+                label="elektroninis pastas"
+                class="pointer-events-none"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
-    <div class="flex justify-between">
+
+    <div
+      class="text-2xl font-semibold bg-red-full rounded-xl text-white text-center py-3"
+    >
+      Medžiagos
+    </div>
+    <div>
+      <div
+        class="flex border-b bg-gray-light font-semibold gap-10 text-lg px-2 py-3 rounded-t-xl"
+      >
+        <div class="w-6 text-center">Nr</div>
+        <div class="flex-1">Pavadinimas</div>
+        <div class="w-20">Kiekis</div>
+        <div class="w-20">Kaina €</div>
+        <div class="w-20">Viso €</div>
+      </div>
+      <div>
+        <OfferResult
+          v-for="(result, index) in offer.value?.results"
+          :key="result._id"
+          :result="result"
+          :index="index"
+        />
+      </div>
+      <p class="text-end text-2xl p-2 font-semibold">
+        Viso: {{ totalPriceParts.toFixed(2) }} €
+      </p>
+    </div>
+    <div
+      class="text-2xl font-semibold bg-red-full rounded-xl text-white text-center py-3"
+    >
+      Darbai
+    </div>
+    <div>
+      <div
+        class="flex border-b bg-gray-light text-lg rounded-t-xl font-semibold px-2 py-3 gap-10"
+      >
+        <div class="w-6 text-center">Nr</div>
+        <div class="flex-1">Pavadinimas</div>
+        <div class="w-20">Kiekis</div>
+        <div class="w-20">Kaina</div>
+        <div class="w-20">Viso</div>
+      </div>
+      <div class="">
+        <OfferWork
+          v-for="(work, index) in offer.value?.works"
+          :key="work._id"
+          :work="work"
+          :index="index"
+        />
+      </div>
+      <p class="text-end text-2xl p-2 font-semibold">
+        Viso: {{ totalPriceWorks.toFixed(2) }} €
+      </p>
+    </div>
+    <div class="flex justify-between items-center py-8">
       <div class="flex gap-8">
         <BaseButton name="užsakymas tenkina" @click="confirmHandler" />
         <BaseButton name="užsakymas netekina" @click="cancelHandler" />
       </div>
-      <div class="flex flex-col text-xl">
-        <div>
-          Kaina: <span class="font-medium"> {{ offer.value?.totalPrice }}</span>
+      <div class="text-xl flex flex-col gap-1">
+        <div class="font-semibold">
+          Kaina:
+          {{ offer.value?.totalPrice }} €
         </div>
-        <div>
+        <div class="font-bold">
           Kaina su PVM:
-          <span class="font-medium text-red-full">{{
-            offer.value?.priceVAT
-          }}</span>
+          <span class="text-red-full">{{ offer.value?.priceVAT }} </span> €
         </div>
-        <div
-          v-if="offer.value?.priceWithDiscount"
-          class="text-2xl font-semibold"
-        >
+        <div v-if="offer.value?.priceWithDiscount" class="text-2xl font-bold">
           Kaina su nuolaida:
-          <span class="font-medium text-red-full">{{
-            offer.value?.priceWithDiscount
-          }}</span>
+          <span class="text-red-full"
+            >{{ offer.value?.priceWithDiscount }}
+          </span>
+          €
         </div>
       </div>
     </div>

@@ -8,11 +8,13 @@ export default defineEventHandler(async (event) => {
   }
 
   if (project.gates.length > 0) {
-    if (value === "Nepatvirtintas") {
+    if (
+      value === "Nepatvirtintas" ||
+      value === "Netinkamas" ||
+      value === "Tinkamas"
+    ) {
       await gateSchema.findOneAndDelete({ address: project.client.address });
-    }
-
-    if (value === "Patvirtintas") {
+    } else {
       const allGates = await gateSchema.find();
       const gateExist = allGates.some(
         (item) => item.address === project.client.address

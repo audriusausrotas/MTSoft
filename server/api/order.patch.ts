@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     return { success: false, data: null, message: "Užsakymas nerastas" };
 
   order.confirmed = true;
-  order.status = "patvirtintas";
+  order.status = "Tinkamas";
 
   const data = await order.save();
 
