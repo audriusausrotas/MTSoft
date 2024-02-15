@@ -9,6 +9,7 @@ const route = useRoute();
 const offer = reactive<any>({});
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
+let showButtons = true;
 
 onMounted(async () => {
   const data: any = await $fetch("/api/order", {
@@ -23,6 +24,10 @@ onMounted(async () => {
     offer.value.works.forEach(
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
+    showButtons =
+      offer.value?.status === "Nepatvirtintas" ||
+      offer.value?.status === "Netinkamas" ||
+      offer.value?.status === "Tinkamas";
   }
 });
 
@@ -49,7 +54,9 @@ const cancelHandler = async () => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <div class="flex justify-between text-center border-b pb-6 items-center">
+    <div
+      class="flex justify-between text-center border-b p-6 items-center rounded-xl text-white bg-red-full"
+    >
       <h5 class="text-xl font-semibold">
         Užsakymo data:<br />
         {{ offer.value?.dateCreated.slice(0, 10) }}
@@ -59,17 +66,17 @@ const cancelHandler = async () => {
         {{ offer.value?.dateExparation.slice(0, 10) }}
       </h5>
       <h3 class="text-xl font-semibold">
-        Užsakymo Nr. <br />
+        Užsakymo Nr.: <br />
         {{ offer.value?.orderNumber }}
       </h3>
       <h6 class="text-xl font-semibold">
-        Būsena <br />
+        Būsena: <br />
         <span
           :class="
             offer.value?.status === 'Nepatvirtintas'
               ? 'text-orange-500'
               : offer.value?.status === 'Netinkamas'
-              ? 'text-red-full'
+              ? 'white'
               : 'text-green-500'
           "
         >
@@ -215,8 +222,11 @@ const cancelHandler = async () => {
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
     </div>
-    <div class="flex justify-between items-center py-8">
-      <div class="flex gap-8">
+    <div
+      class="flex items-center py-8"
+      :class="showButtons ? 'justify-between' : 'justify-end'"
+    >
+      <div v-if="showButtons" class="flex gap-8">
         <BaseButton name="užsakymas tenkina" @click="confirmHandler" />
         <BaseButton name="užsakymas netekina" @click="cancelHandler" />
       </div>
