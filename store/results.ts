@@ -47,12 +47,12 @@ export const useResultsStore = defineStore("results", {
     totalMargin: 0 as number,
     priceVAT: 0 as number,
     priceWithDiscount: 0 as number,
-    discount: "Ne" as string,
+    discount: false as boolean,
   }),
 
   actions: {
-    useDiscount(value: string): void {
-      this.discount = value;
+    useDiscount(): void {
+      this.discount = !this.discount;
     },
 
     updateDiscount(value: number) {
@@ -210,7 +210,7 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = 0;
       this.priceVAT = 0;
       this.priceWithDiscount = 0;
-      this.discount = "Ne";
+      this.discount = false;
     },
 
     clearParts(): void {

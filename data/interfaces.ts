@@ -23,7 +23,7 @@ export interface Project {
   totalMargin: number;
   priceVAT: number;
   priceWithDiscount: number;
-  discount: string;
+  discount: boolean;
   confirmed: boolean;
   payed: boolean;
   status: string;

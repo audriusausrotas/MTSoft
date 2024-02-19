@@ -50,12 +50,9 @@ const statusHandler = (value: string) => {
   }
 };
 
-// const openNewHandler = () => {
-//   // window.open("localhost:3000/pasiulymas/" + props.project._id, "_blank");
-//   navigateTo("localhost:3000/pasiulymas/" + props.project._id, {
-//     external: true,
-//   });
-// };
+const previewHandler = () => {
+  navigateTo("/perziura/" + props.project._id);
+};
 </script>
 
 <template>
@@ -116,6 +113,7 @@ const statusHandler = (value: string) => {
             alt="eye button"
             width="20"
             height="20"
+            @click="previewHandler"
           />
         </div>
         <div

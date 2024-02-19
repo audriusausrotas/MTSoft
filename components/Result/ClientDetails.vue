@@ -48,7 +48,6 @@ const saveHandler = async (): Promise<void> => {
 };
 
 const clearHandler = () => {
-  useResults.useDiscount("Ne");
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
@@ -79,22 +78,19 @@ const clearHandler = () => {
       />
     </div>
   </div>
-  <div class="flex gap-4">
-    <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
-    <BaseButton name="išvalyti viską" @click="clearHandler" />
-    <BaseSelectField
-      label="Nuolaida"
-      :values="twoSided"
-      id="discount"
-      :defaultValue="useResults.discount"
-      width="w-60"
-      @onChange="(value: string) => useResults.useDiscount(value)
-        "
-    />
-  </div>
+
   <div class="flex gap-4">
     <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
     <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
+    <div class="flex gap-4">
+      <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
+      <BaseButton name="išvalyti viską" @click="clearHandler" />
+      <BaseButton
+        name="Pritaikyti nuolaidą"
+        width="w-60"
+        @click="useResults.useDiscount()"
+      />
+    </div>
   </div>
 </template>
 <style scoped></style>

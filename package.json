@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@sidebase/nuxt-pdf": "^0.2.0-alpha.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/uuid": "^9.0.7",
@@ -28,6 +29,7 @@
     "clipboard": "^2.0.11",
     "h3": "^1.10.0",
     "jsonwebtoken": "^9.0.2",
+    "nuxt-pdfeasy": "^1.4.0",
     "pinia": "^2.1.7",
     "uuid": "^9.0.1"
   }

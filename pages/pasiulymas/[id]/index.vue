@@ -10,6 +10,7 @@ const offer = reactive<any>({});
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
 const showButtons = ref<boolean>(true);
+const pdfSection = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
   const data: any = await $fetch("/api/order", {
@@ -25,9 +26,7 @@ onMounted(async () => {
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
 
-    showButtons.value =
-      offer.value?.status === "Nepatvirtintas" ||
-      offer.value?.status === "Netinkamas";
+    showButtons.value = offer.value?.status === "Nepatvirtintas";
   }
 });
 
@@ -39,9 +38,7 @@ const confirmHandler = async () => {
   if (data.success) {
     offer.value = { ...data.data };
   }
-  showButtons.value =
-    offer.value?.status === "Nepatvirtintas" ||
-    offer.value?.status === "Netinkamas";
+  showButtons.value = offer.value?.status === "Nepatvirtintas";
 };
 
 const cancelHandler = async () => {
@@ -53,10 +50,12 @@ const cancelHandler = async () => {
     offer.value = { ...data.data };
   }
 };
+
+const pdfHandler = () => {};
 </script>
 
 <template>
-  <div class="flex flex-col gap-12">
+  <div class="flex flex-col gap-12" ref="pdfSection">
     <div
       class="flex justify-between text-center border-b p-14 items-center rounded-t-xl text-white bg-red-full"
     >
@@ -88,10 +87,10 @@ const cancelHandler = async () => {
       </h6>
     </div>
 
-    <!-- <div class="flex justify-between py-4">
+    <div class="flex justify-evenly py-4">
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Kliento Duomenys</p>
-        <div class="flex gap-4">
+        <div class="flex gap-8">
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
@@ -129,7 +128,7 @@ const cancelHandler = async () => {
 
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
-        <div class="flex gap-4">
+        <div class="flex gap-7">
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
@@ -170,90 +169,6 @@ const cancelHandler = async () => {
           </div>
         </div>
       </div>
-    </div> -->
-
-    <div class="flex flex-col gap-8">
-      <div class="flex flex-col gap-4">
-        <p class="text-xl font-semibold">Kliento Duomenys</p>
-        <div class="flex items-center justify-between">
-          <BaseInput
-            :disable="true"
-            :name="offer.value?.client.username"
-            label="klientas"
-            width="w-64"
-          />
-          <BaseInput
-            :disable="true"
-            :name="offer.value?.client.address"
-            label="adresas"
-            width="w-64"
-          />
-
-          <a :href="'tel:' + offer.value?.client.phone">
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.client.phone"
-              label="telefono numeris"
-              class="pointer-events-none"
-              width="w-64"
-            />
-          </a>
-          <a :href="'mailto:' + offer.value?.client.email">
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.client.email"
-              label="elektroninis pastas"
-              class="pointer-events-none"
-              width="w-64"
-            />
-          </a>
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
-        <div class="flex justify-between">
-          <BaseInput
-            :disable="true"
-            :name="
-              offer.value?.creator.username +
-              ' ' +
-              offer.value?.creator.lastName
-            "
-            label="Atsakingas vadybininkas:"
-            width="w-64"
-          />
-
-          <BaseInput
-            :disable="true"
-            name=" Kauno g. 31, Marijampolė"
-            label="adresas"
-            width="w-64"
-          />
-
-          <a
-            :href="'tel:' + offer.value?.creator.phone"
-            class="hover: cursor-pointer"
-          >
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.creator.phone"
-              label="Telefono numeris"
-              class="pointer-events-none"
-              width="w-64"
-          /></a>
-
-          <a :href="'mailto:' + offer.value?.creator.email">
-            <BaseInput
-              :disable="true"
-              :name="offer.value?.creator.email"
-              label="elektroninis pastas"
-              class="pointer-events-none"
-              width="w-64"
-            />
-          </a>
-        </div>
-      </div>
     </div>
 
     <div
@@ -268,8 +183,8 @@ const cancelHandler = async () => {
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
-        <div class="w-20">Kaina €</div>
-        <div class="w-20">Viso €</div>
+        <div class="w-20">Kaina</div>
+        <div class="w-20">Viso</div>
       </div>
       <div>
         <OfferResult
@@ -323,12 +238,17 @@ const cancelHandler = async () => {
         </div>
 
         <div class="flex w-96 px-4 justify-between">
+          <p class="font-semibold">PVM Suma:</p>
+          <p>{{ (offer.value?.totalPrice * 0.21).toFixed(2) }} €</p>
+        </div>
+
+        <div class="flex w-96 px-4 justify-between">
           <p class="font-bold">Kaina su PVM:</p>
           <p class="text-red-full font-bold">{{ offer.value?.priceVAT }} €</p>
         </div>
 
         <div
-          v-if="offer.value?.discount === 'Taip'"
+          v-if="offer.value?.discount"
           class="flex w-96 px-4 justify-between"
         >
           <p class="text-2xl font-bold">Kaina su nuolaida:</p>
@@ -340,7 +260,10 @@ const cancelHandler = async () => {
         </div>
       </div>
     </div>
-    <div v-if="showButtons" class="flex flex-col items-center gap-10 py-8">
+    <div
+      v-if="showButtons"
+      class="flex flex-col items-center gap-10 pt-8 pb-12"
+    >
       <p class="text-2xl font-semibold">Ar jus tenkina šis pasiūlymas?</p>
       <div class="flex gap-8">
         <BaseButton
@@ -352,6 +275,10 @@ const cancelHandler = async () => {
           name="pasiūlymas netekina"
           @click="cancelHandler"
           width="w-96"
+        />
+        <BaseButton
+          name="atsisiusti pdf"
+          @click="exportToPDF('my-pdf-file.pdf', pdfSection)"
         />
       </div>
     </div>
