@@ -17,7 +17,7 @@ else measurement.value = "vnt";
 
 <template>
   <div
-    class="flex border-b font- gap-10 items-center font-medium even:bg-gray-ultra-light px-2 py-2"
+    class="flex border-b font- gap-10 items-center font-medium even:bg-gray-ultra-light px-2 py-[10px]"
   >
     <div class="w-6 text-center">{{ props.index + 1 }}</div>
     <div class="flex-1 flex gap-8">

@@ -23,7 +23,15 @@ const route = useRoute();
           :id="route.params.id + '/tvora'"
         />
         <BaseOrderLink name="eiga" :id="route.params.id + '/eiga'" />
-        <BaseOrderLink name="apie mus" :id="route.params.id + '/apie'" />
+
+        <NuxtLink
+          class="hover:text-white py-3 w-48 rounded-lg capitalize text-center hover:bg-red-full hover:cursor-pointer font-medium"
+          to="https://www.modernitvora.lt/lt/about-us"
+          target="_blank"
+        >
+          Apie Mus
+        </NuxtLink>
+
         <BaseOrderLink
           name="privatumo politika"
           :id="route.params.id + '/privatumas'"

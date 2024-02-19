@@ -9,7 +9,7 @@ const route = useRoute();
 const offer = reactive<any>({});
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
-let showButtons = true;
+const showButtons = ref<boolean>(true);
 
 onMounted(async () => {
   const data: any = await $fetch("/api/order", {
@@ -24,10 +24,10 @@ onMounted(async () => {
     offer.value.works.forEach(
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
-    showButtons =
+
+    showButtons.value =
       offer.value?.status === "Nepatvirtintas" ||
-      offer.value?.status === "Netinkamas" ||
-      offer.value?.status === "Tinkamas";
+      offer.value?.status === "Netinkamas";
   }
 });
 
@@ -39,6 +39,9 @@ const confirmHandler = async () => {
   if (data.success) {
     offer.value = { ...data.data };
   }
+  showButtons.value =
+    offer.value?.status === "Nepatvirtintas" ||
+    offer.value?.status === "Netinkamas";
 };
 
 const cancelHandler = async () => {
@@ -53,9 +56,9 @@ const cancelHandler = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
     <div
-      class="flex justify-between text-center border-b p-6 items-center rounded-xl text-white bg-red-full"
+      class="flex justify-between text-center border-b p-14 items-center rounded-t-xl text-white bg-red-full"
     >
       <h5 class="text-xl font-semibold">
         Užsakymo data:<br />
@@ -74,17 +77,18 @@ const cancelHandler = async () => {
         <span
           :class="
             offer.value?.status === 'Nepatvirtintas'
-              ? 'text-orange-500'
+              ? 'text-orange-300'
               : offer.value?.status === 'Netinkamas'
-              ? 'white'
-              : 'text-green-500'
+              ? 'text-red-300'
+              : 'text-green-300'
           "
         >
           {{ offer.value?.status }}
         </span>
       </h6>
     </div>
-    <div class="flex justify-between py-4">
+
+    <!-- <div class="flex justify-between py-4">
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Kliento Duomenys</p>
         <div class="flex gap-4">
@@ -166,6 +170,90 @@ const cancelHandler = async () => {
           </div>
         </div>
       </div>
+    </div> -->
+
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-4">
+        <p class="text-xl font-semibold">Kliento Duomenys</p>
+        <div class="flex items-center justify-between">
+          <BaseInput
+            :disable="true"
+            :name="offer.value?.client.username"
+            label="klientas"
+            width="w-64"
+          />
+          <BaseInput
+            :disable="true"
+            :name="offer.value?.client.address"
+            label="adresas"
+            width="w-64"
+          />
+
+          <a :href="'tel:' + offer.value?.client.phone">
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.phone"
+              label="telefono numeris"
+              class="pointer-events-none"
+              width="w-64"
+            />
+          </a>
+          <a :href="'mailto:' + offer.value?.client.email">
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.client.email"
+              label="elektroninis pastas"
+              class="pointer-events-none"
+              width="w-64"
+            />
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
+        <div class="flex justify-between">
+          <BaseInput
+            :disable="true"
+            :name="
+              offer.value?.creator.username +
+              ' ' +
+              offer.value?.creator.lastName
+            "
+            label="Atsakingas vadybininkas:"
+            width="w-64"
+          />
+
+          <BaseInput
+            :disable="true"
+            name=" Kauno g. 31, Marijampolė"
+            label="adresas"
+            width="w-64"
+          />
+
+          <a
+            :href="'tel:' + offer.value?.creator.phone"
+            class="hover: cursor-pointer"
+          >
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.creator.phone"
+              label="Telefono numeris"
+              class="pointer-events-none"
+              width="w-64"
+          /></a>
+
+          <a :href="'mailto:' + offer.value?.creator.email">
+            <BaseInput
+              :disable="true"
+              :name="offer.value?.creator.email"
+              label="elektroninis pastas"
+              class="pointer-events-none"
+              width="w-64"
+            />
+          </a>
+        </div>
+      </div>
     </div>
 
     <div
@@ -173,7 +261,7 @@ const cancelHandler = async () => {
     >
       Medžiagos
     </div>
-    <div>
+    <div class="flex flex-col">
       <div
         class="flex border-b bg-gray-light font-semibold gap-10 text-lg px-2 py-3 rounded-t-xl"
       >
@@ -191,7 +279,9 @@ const cancelHandler = async () => {
           :index="index"
         />
       </div>
-      <p class="text-end text-2xl p-2 font-semibold">
+      <p
+        class="text-2xl text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+      >
         Viso: {{ totalPriceParts.toFixed(2) }} €
       </p>
     </div>
@@ -200,7 +290,7 @@ const cancelHandler = async () => {
     >
       Darbai
     </div>
-    <div>
+    <div class="flex flex-col">
       <div
         class="flex border-b bg-gray-light text-lg rounded-t-xl font-semibold px-2 py-3 gap-10"
       >
@@ -218,34 +308,51 @@ const cancelHandler = async () => {
           :index="index"
         />
       </div>
-      <p class="text-end text-2xl p-2 font-semibold">
+      <p
+        class="text-2xl text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+      >
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
     </div>
-    <div
-      class="flex items-center py-8"
-      :class="showButtons ? 'justify-between' : 'justify-end'"
-    >
-      <div v-if="showButtons" class="flex gap-8">
-        <BaseButton name="užsakymas tenkina" @click="confirmHandler" />
-        <BaseButton name="užsakymas netekina" @click="cancelHandler" />
+
+    <div class="flex justify-end">
+      <div class="text-xl flex flex-col gap-2">
+        <div class="flex w-96 px-4 justify-between">
+          <p class="font-semibold">Kaina:</p>
+          <p class="">{{ offer.value?.totalPrice }} €</p>
+        </div>
+
+        <div class="flex w-96 px-4 justify-between">
+          <p class="font-bold">Kaina su PVM:</p>
+          <p class="text-red-full font-bold">{{ offer.value?.priceVAT }} €</p>
+        </div>
+
+        <div
+          v-if="offer.value?.discount === 'Taip'"
+          class="flex w-96 px-4 justify-between"
+        >
+          <p class="text-2xl font-bold">Kaina su nuolaida:</p>
+          <p class="text-red-full font-bold">
+            {{ offer.value?.priceWithDiscount }}
+
+            €
+          </p>
+        </div>
       </div>
-      <div class="text-xl flex flex-col gap-1">
-        <div class="font-semibold">
-          Kaina:
-          {{ offer.value?.totalPrice }} €
-        </div>
-        <div class="font-bold">
-          Kaina su PVM:
-          <span class="text-red-full">{{ offer.value?.priceVAT }} </span> €
-        </div>
-        <div v-if="offer.value?.discount === 'Taip'" class="text-2xl font-bold">
-          Kaina su nuolaida:
-          <span class="text-red-full"
-            >{{ offer.value?.priceWithDiscount }}
-          </span>
-          €
-        </div>
+    </div>
+    <div v-if="showButtons" class="flex flex-col items-center gap-10 py-8">
+      <p class="text-2xl font-semibold">Ar jus tenkina šis pasiūlymas?</p>
+      <div class="flex gap-8">
+        <BaseButton
+          name="pasiūlymas tenkina"
+          @click="confirmHandler"
+          width="w-96"
+        />
+        <BaseButton
+          name="pasiūlymas netekina"
+          @click="cancelHandler"
+          width="w-96"
+        />
       </div>
     </div>
   </div>

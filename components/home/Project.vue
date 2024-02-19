@@ -49,6 +49,13 @@ const statusHandler = (value: string) => {
     useProjects.updateStatus(data.data);
   }
 };
+
+// const openNewHandler = () => {
+//   // window.open("localhost:3000/pasiulymas/" + props.project._id, "_blank");
+//   navigateTo("localhost:3000/pasiulymas/" + props.project._id, {
+//     external: true,
+//   });
+// };
 </script>
 
 <template>

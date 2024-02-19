@@ -4,7 +4,7 @@ const props = defineProps(["work", "index"]);
 
 <template>
   <div
-    class="flex border-b even:bg-gray-ultra-light font-medium gap-10 px-2 py-2"
+    class="flex border-b even:bg-gray-ultra-light font-medium gap-10 px-2 py-[10px]"
   >
     <div class="w-6 text-center">{{ props.index + 1 }}</div>
     <div class="flex-1">{{ props.work.name }}</div>
