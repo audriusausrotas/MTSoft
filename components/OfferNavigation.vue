@@ -3,7 +3,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="py-4 shadow-bottom">
+  <div class="py-4 shadow-bottom print:hidden">
     <div class="flex justify-between max-w-[1200px] m-auto">
       <NuxtLink to="https://www.modernitvora.lt">
         <NuxtImg

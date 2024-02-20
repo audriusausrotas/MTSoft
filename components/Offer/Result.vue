@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Result } from "postcss";
-
 const props = defineProps(["result", "index"]);
 const measurement = ref<string>("vnt");
 
@@ -17,10 +15,10 @@ else measurement.value = "vnt";
 
 <template>
   <div
-    class="flex border-b font- gap-10 items-center font-medium even:bg-gray-ultra-light px-2 py-[10px]"
+    class="flex border-b print:gap-6 gap-10 items-center font-medium print:text-sm even:bg-gray-ultra-light px-2 py-[10px]"
   >
     <div class="w-6 text-center">{{ props.index + 1 }}</div>
-    <div class="flex-1 flex gap-8">
+    <div class="flex-1 flex print:gap-4 gap-8">
       <span>{{ props.result.type }}</span>
       <span v-if="props.result.seeThrough">{{ props.result.seeThrough }}</span>
       <span>{{ props.result.color }}</span>

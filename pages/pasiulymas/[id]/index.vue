@@ -30,7 +30,7 @@ onMounted(async () => {
   }
 });
 
-const downloadAsPDF = () => {
+const downloadAsPDF = async () => {
   const content = pdfSection.value;
   const address = offer.value.client.address;
   const contentWidth = content!.offsetWidth / 3.5;
@@ -77,23 +77,33 @@ const cancelHandler = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-12" ref="pdfSection">
+  <div class="flex flex-col print:gap-4 gap-12" ref="pdfSection">
     <div
-      class="flex justify-between text-center p-14 items-center rounded-t-xl text-white bg-red-full"
+      class="flex justify-between text-center p-14 print:p-8 text-xl print:text-sm print:font-medium font-semibold items-center rounded-t-xl text-white bg-red-full print:text-black print:bg-gray-full"
     >
-      <h5 class="text-xl font-semibold">
+      <NuxtImg
+        src="/images/logo.png"
+        alt="Moderni Tvora logotipas"
+        width="86"
+        height="48"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+        class="hidden print:block"
+      />
+      <h5>
         Užsakymo data:<br />
         {{ offer.value?.dateCreated.slice(0, 10) }}
       </h5>
-      <h5 class="text-xl font-semibold">
+      <h5>
         Pasiūlymo galiojimo data: <br />
         {{ offer.value?.dateExparation.slice(0, 10) }}
       </h5>
-      <h3 class="text-xl font-semibold">
+      <h3>
         Užsakymo Nr.: <br />
         {{ offer.value?.orderNumber }}
       </h3>
-      <h6 class="text-xl font-semibold">
+      <h6 class="print:hidden">
         Būsena: <br />
         <span
           :class="
@@ -109,7 +119,7 @@ const cancelHandler = async () => {
       </h6>
     </div>
 
-    <div class="flex justify-evenly py-4">
+    <div class="flex justify-evenly py-4 print:hidden">
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Kliento Duomenys</p>
         <div class="flex gap-8">
@@ -193,14 +203,38 @@ const cancelHandler = async () => {
       </div>
     </div>
 
+    <div class="hidden print:flex justify-evenly">
+      <div class="flex flex-col gap-1">
+        <h3 class="font-medium">Kliento Duomenys</h3>
+        <p>
+          {{ offer.value?.client.username }}
+        </p>
+        <p>{{ offer.value?.client.address }}</p>
+        <p>{{ offer.value?.client.phone }}</p>
+        <p>{{ offer.value?.client.email }}</p>
+      </div>
+      <div class="border border-dark-ultra-light min-h-full"></div>
+      <div class="flex flex-col gap-1">
+        <h3 class="font-medium">Moderni Tvora Kontaktai</h3>
+        <p>
+          {{
+            offer.value?.creator.username + " " + offer.value?.creator.lastName
+          }}
+        </p>
+        <p>Kauno g. 31, Marijampolė</p>
+        <p>{{ offer.value?.creator.phone }}</p>
+        <p>{{ offer.value?.creator.email }}</p>
+      </div>
+    </div>
+
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl flex items-center justify-center h-14 text-white text-center"
+      class="text-2xl font-semibold bg-red-full rounded-xl p-3 print:p-2 print:text-lg text-white text-center"
     >
       Medžiagos
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b bg-gray-light font-semibold gap-10 text-lg px-2 py-3 rounded-t-xl"
+        class="flex border-b bg-gray-light font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -217,19 +251,19 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+        class="text-2xl print:text-lg print:font-medium text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
       >
         Viso: {{ totalPriceParts.toFixed(2) }} €
       </p>
     </div>
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl text-white text-center py-3"
+      class="text-2xl font-semibold bg-red-full rounded-xl p-3 print:p-2 print:text-lg text-white text-center"
     >
       Darbai
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b bg-gray-light text-lg rounded-t-xl font-semibold px-2 py-3 gap-10"
+        class="flex border-b bg-gray-light font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -246,7 +280,7 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+        class="text-2xl print:text-lg print:font-medium text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
       >
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
@@ -283,7 +317,7 @@ const cancelHandler = async () => {
       </div>
     </div>
   </div>
-  <div class="flex flex-col items-center gap-10 mt-8 mb-12">
+  <div class="flex flex-col items-center gap-10 mt-8 mb-12 print:hidden">
     <p v-if="showButtons" class="text-2xl font-semibold">
       Ar jus tenkina šis pasiūlymas?
     </p>
