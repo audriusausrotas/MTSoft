@@ -30,6 +30,30 @@ onMounted(async () => {
   }
 });
 
+const downloadAsPDF = () => {
+  const content = pdfSection.value;
+  const address = offer.value.client.address;
+  const contentWidth = content!.offsetWidth / 3.5;
+  const contentHeight = content!.offsetHeight / 3.5;
+
+  if (process.client) {
+    //@ts-ignore
+    import("html2pdf.js").then((html2pdf) => {
+      const options = {
+        margin: 10,
+        filename: address + ".pdf",
+        jsPDF: {
+          unit: "mm",
+          format: [contentWidth, contentHeight],
+          orientation: "portrait",
+        },
+      };
+
+      html2pdf.default(content, options);
+    });
+  }
+};
+
 const confirmHandler = async () => {
   const data: any = await $fetch("/api/order", {
     method: "patch",
@@ -50,14 +74,12 @@ const cancelHandler = async () => {
     offer.value = { ...data.data };
   }
 };
-
-const pdfHandler = () => {};
 </script>
 
 <template>
   <div class="flex flex-col gap-12" ref="pdfSection">
     <div
-      class="flex justify-between text-center border-b p-14 items-center rounded-t-xl text-white bg-red-full"
+      class="flex justify-between text-center p-14 items-center rounded-t-xl text-white bg-red-full"
     >
       <h5 class="text-xl font-semibold">
         Užsakymo data:<br />
@@ -172,7 +194,7 @@ const pdfHandler = () => {};
     </div>
 
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl text-white text-center py-3"
+      class="text-2xl font-semibold bg-red-full rounded-xl flex items-center justify-center h-14 text-white text-center"
     >
       Medžiagos
     </div>
@@ -251,7 +273,7 @@ const pdfHandler = () => {};
           v-if="offer.value?.discount"
           class="flex w-96 px-4 justify-between"
         >
-          <p class="text-2xl font-bold">Kaina su nuolaida:</p>
+          <p class="text-2xl font-bold pb-4">Kaina su nuolaida:</p>
           <p class="text-red-full font-bold">
             {{ offer.value?.priceWithDiscount }}
 
@@ -260,28 +282,24 @@ const pdfHandler = () => {};
         </div>
       </div>
     </div>
-    <div
-      v-if="showButtons"
-      class="flex flex-col items-center gap-10 pt-8 pb-12"
-    >
-      <p class="text-2xl font-semibold">Ar jus tenkina šis pasiūlymas?</p>
-      <div class="flex gap-8">
-        <BaseButton
-          name="pasiūlymas tenkina"
-          @click="confirmHandler"
-          width="w-96"
-        />
-        <BaseButton
-          name="pasiūlymas netekina"
-          @click="cancelHandler"
-          width="w-96"
-        />
-        <BaseButton
-          name="atsisiusti pdf"
-          @click="exportToPDF('my-pdf-file.pdf', pdfSection)"
-        />
-      </div>
+  </div>
+  <div class="flex flex-col items-center gap-10 mt-8 mb-12">
+    <p v-if="showButtons" class="text-2xl font-semibold">
+      Ar jus tenkina šis pasiūlymas?
+    </p>
+    <div v-if="showButtons" class="flex gap-8">
+      <BaseButton
+        name="pasiūlymas tenkina"
+        @click="confirmHandler"
+        width="w-96"
+      />
+      <BaseButton
+        name="pasiūlymas netekina"
+        @click="cancelHandler"
+        width="w-96"
+      />
     </div>
+    <BaseButton name="atsisiūsti PDF" @click="downloadAsPDF" width="w-96" />
   </div>
 </template>
 <style scoped></style>

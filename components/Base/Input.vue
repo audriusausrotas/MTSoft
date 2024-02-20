@@ -30,7 +30,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-1 capitalize">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
+    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 text-sm">{{
       props.label
     }}</label>
 

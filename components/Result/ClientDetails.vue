@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
-import { twoSided } from "~/data/selectFieldData";
 
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
@@ -28,6 +27,8 @@ const saveHandler = async (): Promise<void> => {
     priceVAT: useResults.priceVAT,
     priceWithDiscount: useResults.priceWithDiscount,
     discount: useResults.discount,
+    dateCreated: "",
+    dateExparation: "",
     confirmed: false,
     payed: false,
     status: "nepatvirtintas",

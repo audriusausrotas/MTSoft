@@ -10,7 +10,7 @@ useResults.calculateTotals();
     <div>Pelnas: {{ useResults.totalProfit }}</div>
     <div>Marža: {{ useResults.totalMargin }} %</div>
     <div>Suma suPVM: {{ useResults.priceVAT }}</div>
-    <div v-if="useResults.discount === 'Taip'" class="flex gap-2 items-center">
+    <div v-if="useResults.discount" class="flex gap-2 items-center">
       Suma su nuolaida:
       <BaseInput
         :name="useResults.priceWithDiscount"

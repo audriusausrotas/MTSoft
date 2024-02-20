@@ -9,21 +9,22 @@ export default function createWorkElement(item: {
   const works = useResultsStore();
   const product: Product = getPriceItem(item.name);
 
-  const totalPrice = product.price * item.quantity;
-  const totalCost = product.cost * item.quantity;
-  const profit = totalPrice - totalCost;
-  const margin = (Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+  const totalPrice = +(product.price * item.quantity).toFixed(2);
+  const totalCost = +(product.cost * item.quantity).toFixed(2);
+  const profit = +(totalPrice - totalCost).toFixed(2);
+  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+  const roundedQuantity = +item.quantity.toFixed(2);
 
   const resultData: Works = {
     id: uuidv4(),
     name: item.name,
-    quantity: item.quantity,
-    price: product.price || 0,
+    quantity: roundedQuantity,
+    price: product.price,
     totalPrice: totalPrice,
     cost: product.cost,
     totalCost: totalCost,
     profit: profit,
-    margin: +margin,
+    margin: margin,
     isNew: false,
   };
 
