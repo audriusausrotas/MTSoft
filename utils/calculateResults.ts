@@ -34,6 +34,7 @@ export default function calculateResults() {
       const temp = calculateHorizontalFence(fenceTemp, item);
       if (!onlyServices) fenceTemp = [...temp];
       if (!onlyParts) {
+        console.log(item.bindings);
         if (item.bindings === "Taip")
           results.addTotalFenceWithBindings(item.totalQuantity);
         else results.addTotalFence(item.totalQuantity);

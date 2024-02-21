@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           body: {},
         });
 
-        if (!data.value.data) {
+        if (!data?.value?.data) {
           if (to.path !== "/login") {
             useUser.logout();
             return navigateTo("/login");
@@ -36,13 +36,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           method: "post",
           body: {},
         });
-        if (!data.value.data) {
+        if (!data?.value?.data) {
           if (to.path !== "/login") {
             useUser.logout();
             return navigateTo("/login");
           }
         } else {
-          useUser.setUser({ ...data.value.data });
+          useUser.setUser({ ...data?.value?.data });
         }
       } else {
         if (to.path !== "/login") {
