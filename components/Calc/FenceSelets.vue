@@ -21,7 +21,6 @@ const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
 
 const isOpen = ref<boolean>(false);
-console.log(currentFence);
 
 watch(
   () => useCalculations.fences[props.index],

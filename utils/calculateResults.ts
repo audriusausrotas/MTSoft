@@ -10,8 +10,7 @@ export default function calculateResults() {
   const results = useResultsStore();
   const fences = useCalculationsStore();
 
-  results.clearResults();
-  results.clearParts();
+  results.clearAll();
 
   let fenceTemp: Fences[] = [];
 

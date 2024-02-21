@@ -18,7 +18,7 @@ onMounted(async () => {
     offer.value.works.forEach(
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
-    console.log(offer);
+    console.log(offer.value.fenceMeasures);
   }
 });
 </script>
@@ -26,8 +26,11 @@ onMounted(async () => {
 <template>
   <div>
     <div></div>
-    <PreviewClient :data="offer.client" />
-    <PreviewResults :data="offer.results" />
-    <PreviewMeasures :data="offer.fenceMeasures" />
+    <PreviewClient :data="offer.value?.client" />
+    <div class="border rounded-lg p-4">
+      <PreviewResults :data="offer.value?.results" />
+      <PreviewWorks :data="offer.value?.works" />
+    </div>
+    <PreviewFences :data="offer.value?.fenceMeasures" />
   </div>
 </template>
