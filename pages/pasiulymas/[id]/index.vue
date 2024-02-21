@@ -77,15 +77,18 @@ const cancelHandler = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col print:gap-4 gap-12" ref="pdfSection">
+  <div
+    class="flex flex-col print:gap-4 py-8 print:py-0 gap-12"
+    ref="pdfSection"
+  >
     <div
-      class="flex justify-between text-center p-14 print:p-8 text-xl print:text-sm print:font-medium font-semibold items-center rounded-t-xl text-white bg-red-full print:text-black print:bg-gray-full"
+      class="flex justify-between text-center p-14 print:py-0 print:px-8 text-xl print:text-sm print:font-medium font-semibold items-center rounded-t-xl text-white bg-red-full print:bg-transparent print:text-black print:bg-gray-full"
     >
       <NuxtImg
         src="/images/logo.png"
         alt="Moderni Tvora logotipas"
-        width="86"
-        height="48"
+        width="129"
+        height="72"
         decoding="auto"
         loading="lazy"
         :ismap="true"
@@ -203,38 +206,37 @@ const cancelHandler = async () => {
       </div>
     </div>
 
-    <div class="hidden print:flex justify-evenly">
+    <div class="hidden print:flex justify-evenly print:py-4 text-xs">
       <div class="flex flex-col gap-1">
         <h3 class="font-medium">Kliento Duomenys</h3>
-        <p>
-          {{ offer.value?.client.username }}
-        </p>
-        <p>{{ offer.value?.client.address }}</p>
-        <p>{{ offer.value?.client.phone }}</p>
-        <p>{{ offer.value?.client.email }}</p>
+        <p>Klientas: {{ offer.value?.client.username }}</p>
+        <p>Adresas: {{ offer.value?.client.address }}</p>
+        <p>Telefonas: {{ offer.value?.client.phone }}</p>
+        <p>El. Paštas {{ offer.value?.client.email }}</p>
       </div>
-      <div class="border border-dark-ultra-light min-h-full"></div>
+      <div class="border border-dark-light min-h-full"></div>
       <div class="flex flex-col gap-1">
         <h3 class="font-medium">Moderni Tvora Kontaktai</h3>
         <p>
+          Vadybininkas:
           {{
             offer.value?.creator.username + " " + offer.value?.creator.lastName
           }}
         </p>
-        <p>Kauno g. 31, Marijampolė</p>
-        <p>{{ offer.value?.creator.phone }}</p>
-        <p>{{ offer.value?.creator.email }}</p>
+        <p>Adresas: Kauno g. 31, Marijampolė</p>
+        <p>Telefonas: {{ offer.value?.creator.phone }}</p>
+        <p>El. Paštas: {{ offer.value?.creator.email }}</p>
       </div>
     </div>
 
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl p-3 print:p-2 print:text-lg text-white text-center"
+      class="text-2xl font-semibold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black print:border-y-4 print:border-black p-3 print:p-2 print:text-base text-white text-center"
     >
       Medžiagos
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b bg-gray-light font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
+        class="flex border-b print:py-1 bg-gray-light print:bg-transparent print:border-b-2 print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -251,19 +253,19 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-lg print:font-medium text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceParts.toFixed(2) }} €
       </p>
     </div>
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl p-3 print:p-2 print:text-lg text-white text-center"
+      class="text-2xl font-semibold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black print:border-y-4 print:border-black p-3 print:p-2 print:text-base text-white text-center"
     >
       Darbai
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b bg-gray-light font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
+        class="flex border-b print:py-1 bg-gray-light print:bg-transparent print:border-b-2 print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -280,14 +282,14 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-lg print:font-medium text-center p-2 bg-gray-light rounded-2xl font-semibold w-96 mt-8 self-end"
+        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
     </div>
 
     <div class="flex justify-end">
-      <div class="text-xl flex flex-col gap-2">
+      <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
         <div class="flex w-96 px-4 justify-between">
           <p class="font-semibold">Kaina:</p>
           <p class="">{{ offer.value?.totalPrice }} €</p>
@@ -300,15 +302,19 @@ const cancelHandler = async () => {
 
         <div class="flex w-96 px-4 justify-between">
           <p class="font-bold">Kaina su PVM:</p>
-          <p class="text-red-full font-bold">{{ offer.value?.priceVAT }} €</p>
+          <p class="text-red-full font-bold print:text-black">
+            {{ offer.value?.priceVAT }} €
+          </p>
         </div>
 
         <div
           v-if="offer.value?.discount"
           class="flex w-96 px-4 justify-between"
         >
-          <p class="text-2xl font-bold pb-4">Kaina su nuolaida:</p>
-          <p class="text-red-full font-bold">
+          <p class="text-2xl print:text-base font-bold pb-4">
+            Kaina su nuolaida:
+          </p>
+          <p class="text-red-full font-bold print:text-black">
             {{ offer.value?.priceWithDiscount }}
 
             €
