@@ -80,12 +80,14 @@ const clearHandler = () => {
     </div>
   </div>
 
-  <div class="flex gap-4">
-    <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
-    <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
+  <div class="flex gap-4 flex-wrap">
     <div class="flex gap-4">
       <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
       <BaseButton name="išvalyti viską" @click="clearHandler" />
+    </div>
+    <div class="flex gap-4">
+      <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
+      <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
       <BaseButton
         name="Pritaikyti nuolaidą"
         width="w-60"
