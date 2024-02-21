@@ -6,9 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const cookie = useCookie("mtud");
 
   if (!to.path.includes("pasiulymas")) {
-    console.log("1");
     if (process.client) {
-      console.log("2");
       if (!cookie.value) {
         console.log("3");
         if (to.path !== "/login") {
@@ -17,8 +15,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           return navigateTo("/login");
         }
       }
-      console.log(useUser.user);
-      if (!useUser.user) {
+      console.log(cookie);
+      console.log(cookie.value);
+      if (cookie.value && !useUser.user) {
         console.log("7");
         const { data }: any = await useFetch("/api/auth", {
           method: "post",
