@@ -18,14 +18,17 @@ const currentFence = useCalculations.fences[props.index];
 
 const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
 const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
+const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
 
 const isOpen = ref<boolean>(false);
+console.log(currentFence);
 
 watch(
-  () => useCalculations.fences[props.index].type,
+  () => useCalculations.fences[props.index],
   (newValue) => {
-    isFenceBoards.value = verticals.includes(newValue as string);
-    isSegment.value = newValue.includes("Segmentas");
+    needPoles.value = newValue.parts.includes("Stulpai");
+    isFenceBoards.value = verticals.includes(newValue.type as string);
+    isSegment.value = newValue.type.includes("Segmentas");
 
     if (
       useCalculations.fences[props.index].direction === "Horizontali" &&
@@ -165,6 +168,7 @@ watch(
         "
       />
       <BaseSelectField
+        v-if="needPoles"
         label="ankeriuojami stulpai"
         :values="twoSided"
         id="anchoredPoles"
