@@ -8,7 +8,7 @@ const open = ref<boolean>(false);
 
 const deleteHandler = async (): Promise<void> => {
   const response: any = await $fetch("/api/project", {
-    method: "delete",
+    method: "DELETE",
     body: { _id: props.project._id },
   });
   console.log(response);
