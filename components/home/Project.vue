@@ -11,6 +11,7 @@ const deleteHandler = async (): Promise<void> => {
     method: "delete",
     body: { _id: props.project._id },
   });
+  console.log(response);
   if (response.success) {
     useProjects.deleteProject(props.project._id);
   }
