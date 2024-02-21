@@ -15,10 +15,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           console.log("4");
           useUser.logout();
           return navigateTo("/login");
-          console.log("5");
         }
       }
-      console.log("6");
+      console.log(useUser.user);
       if (!useUser.user) {
         console.log("7");
         const { data }: any = await useFetch("/api/auth", {
@@ -37,36 +36,30 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           }
         }
         console.log("12");
-        useUser.setUser({ ...data.value.data });
+        useUser.setUser({ ...data?.value?.data });
       }
     }
 
     if (process.server) {
-      console.log("13");
       if (cookie.value) {
-        console.log("14");
         const { data }: any = await useFetch("/api/auth", {
           method: "post",
           body: {},
         });
-        console.log("15");
+
         if (!data?.value?.data) {
-          console.log("16");
           if (to.path !== "/login") {
             useUser.logout();
-            console.log("17");
+
             return navigateTo("/login");
           }
-          console.log("18");
         } else {
-          console.log("19");
           useUser.setUser({ ...data?.value?.data });
         }
       } else {
-        console.log("20");
         if (to.path !== "/login") {
           useUser.logout();
-          console.log("21");
+
           return navigateTo("/login");
         }
       }
