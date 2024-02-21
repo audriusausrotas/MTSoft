@@ -18,10 +18,10 @@ const route = useRoute();
       </NuxtLink>
       <div class="flex">
         <BaseOrderLink name="pasiūlymas" :id="route.params.id" />
-        <BaseOrderLink
+        <!-- <BaseOrderLink
           name="tvoros informacija"
           :id="route.params.id + '/tvora'"
-        />
+        /> -->
         <BaseOrderLink name="eiga" :id="route.params.id + '/eiga'" />
 
         <NuxtLink

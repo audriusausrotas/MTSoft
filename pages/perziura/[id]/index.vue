@@ -23,4 +23,11 @@ onMounted(async () => {
 });
 </script>
 
-<template></template>
+<template>
+  <div>
+    <div></div>
+    <PreviewClient :data="offer.client" />
+    <PreviewResults :data="offer.results" />
+    <PreviewMeasures :data="offer.fenceMeasures" />
+  </div>
+</template>
