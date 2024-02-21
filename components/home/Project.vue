@@ -7,6 +7,7 @@ const useCalculations = useCalculationsStore();
 const open = ref<boolean>(false);
 
 const deleteHandler = async (): Promise<void> => {
+  console.log("siuncia");
   const response: any = await $fetch("/api/project", {
     method: "DELETE",
     body: { _id: props.project._id },
@@ -14,6 +15,8 @@ const deleteHandler = async (): Promise<void> => {
   console.log(response);
   if (response.success) {
     useProjects.deleteProject(props.project._id);
+  } else {
+    console.log(response.message);
   }
 };
 
