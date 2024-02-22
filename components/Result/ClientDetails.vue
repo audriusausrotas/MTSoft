@@ -42,8 +42,7 @@ const saveHandler = async (): Promise<void> => {
   });
   if (data.success) {
     useProjects.addProject(data.data);
-    useResults.clearAll();
-    useCalculations.clearAll();
+    clearHandler();
     await navigateTo("/");
   }
 };
