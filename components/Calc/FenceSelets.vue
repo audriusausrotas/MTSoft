@@ -36,9 +36,9 @@ watch(
     ) {
       if (newValue.bindings === "Taip")
         useCalculations.updateBindings(props.index, "Taip");
+      else useCalculations.updateBindings(props.index, "Ne");
     } else {
-      if (newValue.bindings === "Ne")
-        useCalculations.updateBindings(props.index, "Ne");
+      useCalculations.updateBindings(props.index, "Ne");
     }
   },
   { deep: true }
