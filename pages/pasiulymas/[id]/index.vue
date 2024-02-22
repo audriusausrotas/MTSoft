@@ -26,7 +26,8 @@ onMounted(async () => {
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
 
-    showButtons.value = offer.value?.status === "Nepatvirtintas";
+    showButtons.value = showButtons.value =
+      offer.value?.status === "Nepatvirtintas";
   }
 });
 

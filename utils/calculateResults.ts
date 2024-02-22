@@ -120,7 +120,7 @@ export default function calculateResults() {
         let poleHeight = 0;
 
         if (isSegment) {
-          if (measure.height < 150) {
+          if (measure.height < 160) {
             poleHeight = 2.4;
           } else {
             poleHeight = 3;

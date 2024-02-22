@@ -57,7 +57,7 @@ export const projectSchema = defineMongooseModel<Project>(
     totalMargin: Number,
     priceVAT: Number,
     priceWithDiscount: Number,
-    discount: String,
+    discount: Boolean,
     dateCreated: String,
     dateExparation: String,
   },

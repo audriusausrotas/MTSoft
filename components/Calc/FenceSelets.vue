@@ -30,13 +30,15 @@ watch(
     isSegment.value = newValue.type.includes("Segmentas");
 
     if (
-      useCalculations.fences[props.index].direction === "Horizontali" &&
+      newValue.direction === "Horizontali" &&
       !isFenceBoards.value &&
       !isSegment.value
     ) {
-      useCalculations.updateBindings(props.index, "Taip");
+      if (newValue.bindings === "Taip")
+        useCalculations.updateBindings(props.index, "Taip");
     } else {
-      useCalculations.updateBindings(props.index, "Ne");
+      if (newValue.bindings === "Ne")
+        useCalculations.updateBindings(props.index, "Ne");
     }
   },
   { deep: true }
