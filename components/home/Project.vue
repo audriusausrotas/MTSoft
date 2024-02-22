@@ -67,7 +67,7 @@ const previewHandler = () => {
     />
     <BaseInfoField
       :name="
-        props.project?.discount === 'Taip'
+        props.project?.discount
           ? props.project?.priceWithDiscount + '€'
           : props.project?.priceVAT + ' €'
       "
@@ -108,6 +108,7 @@ const previewHandler = () => {
         class="absolute z-40 flex flex-col gap-2 top-8 -left-3 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-14 h-40"
       >
         <div
+          @click="previewHandler"
           class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
         >
           <NuxtImg
@@ -119,6 +120,7 @@ const previewHandler = () => {
           />
         </div>
         <div
+          @click="linkHandler"
           class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
         >
           <NuxtImg
@@ -126,10 +128,10 @@ const previewHandler = () => {
             alt="link button"
             width="20"
             height="20"
-            @click="linkHandler"
           />
         </div>
         <div
+          @click="editHandler"
           class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
         >
           <NuxtImg
@@ -137,10 +139,10 @@ const previewHandler = () => {
             alt="edit button"
             width="20"
             height="20"
-            @click="editHandler"
           />
         </div>
         <div
+          @click="deleteHandler"
           class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
         >
           <NuxtImg
@@ -148,7 +150,6 @@ const previewHandler = () => {
             alt="delete button"
             width="20"
             height="20"
-            @click="deleteHandler"
           />
         </div>
       </div>

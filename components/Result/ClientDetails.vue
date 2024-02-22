@@ -31,7 +31,7 @@ const saveHandler = async (): Promise<void> => {
     dateExparation: "",
     confirmed: false,
     payed: false,
-    status: "nepatvirtintas",
+    status: "Nepatvirtintas",
     advance: false,
     orderNumber: "",
   };

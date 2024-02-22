@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import OrderLink from "~/components/Base/OrderLink.vue";
 import type { Result, Works } from "~/data/interfaces";
 
 definePageMeta({
@@ -25,9 +26,7 @@ onMounted(async () => {
     offer.value.works.forEach(
       (item: Works) => (totalPriceWorks.value += item.totalPrice)
     );
-
-    showButtons.value = showButtons.value =
-      offer.value?.status === "Nepatvirtintas";
+    showButtons.value = offer.value?.status === "Nepatvirtintas";
   }
 });
 
