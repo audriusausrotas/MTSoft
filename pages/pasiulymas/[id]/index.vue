@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import OrderLink from "~/components/Base/OrderLink.vue";
 import type { Result, Works } from "~/data/interfaces";
 
 definePageMeta({
@@ -78,22 +77,12 @@ const cancelHandler = async () => {
 
 <template>
   <div
-    class="flex flex-col print:gap-4 py-8 print:py-0 gap-12"
+    class="flex flex-col print:gap-0 py-8 print:py-0 gap-12"
     ref="pdfSection"
   >
     <div
-      class="flex justify-between text-center p-14 print:py-0 print:px-8 text-xl print:text-sm print:font-medium font-semibold items-center rounded-t-xl text-white bg-red-full print:bg-transparent print:text-black print:bg-gray-full"
+      class="flex justify-between text-center p-14 text-xl font-semibold items-center rounded-t-xl text-white bg-red-full print:hidden"
     >
-      <NuxtImg
-        src="/images/logo.png"
-        alt="Moderni Tvora logotipas"
-        width="129"
-        height="72"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        class="hidden print:block"
-      />
       <h5>
         Užsakymo data:<br />
         {{ offer.value?.dateCreated.slice(0, 10) }}
@@ -103,10 +92,10 @@ const cancelHandler = async () => {
         {{ offer.value?.dateExparation.slice(0, 10) }}
       </h5>
       <h3>
-        Užsakymo Nr.: <br />
+        Pasiūlymo Nr.: <br />
         {{ offer.value?.orderNumber }}
       </h3>
-      <h6 class="print:hidden">
+      <h6>
         Būsena: <br />
         <span
           :class="
@@ -206,17 +195,56 @@ const cancelHandler = async () => {
       </div>
     </div>
 
-    <div class="hidden print:flex justify-evenly print:py-4 text-xs">
-      <div class="flex flex-col gap-1">
-        <h3 class="font-medium">Kliento Duomenys</h3>
+    <div class="print:flex hidden items-center justify-between">
+      <div class="flex flex-col">
+        <h3 class="text-3xl font-bold">PASIŪLYMAS</h3>
+        <h3 class="font-medium">
+          Pasiūlymo Nr.: {{ offer.value?.orderNumber }}
+        </h3>
+      </div>
+      <NuxtImg
+        src="/images/logo.png"
+        alt="Moderni Tvora logotipas"
+        width="129"
+        height="72"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+        class="hidden print:block"
+      />
+    </div>
+
+    <div
+      class="hidden print:flex justify-between border-y text-xs border-dark-full"
+    >
+      <div
+        class="flex flex-col justify-between py-4 print:font-medium flex-1 pr-4"
+      >
+        <div class="flex flex-col flex-1 gap-1">
+          <p class="">Pasiūlymo data:</p>
+          <p>
+            {{ offer.value?.dateCreated.slice(0, 10) }}
+          </p>
+        </div>
+        <div class="flex flex-col flex-1 gap-1">
+          <p>Pasiūlymo galiojimo data:</p>
+          <p>
+            {{ offer.value?.dateExparation.slice(0, 10) }}
+          </p>
+        </div>
+      </div>
+      <div
+        class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4"
+      >
+        <h3 class="font-bold">Kliento Duomenys</h3>
         <p>Klientas: {{ offer.value?.client.username }}</p>
         <p>Adresas: {{ offer.value?.client.address }}</p>
         <p>Telefonas: {{ offer.value?.client.phone }}</p>
         <p>El. Paštas {{ offer.value?.client.email }}</p>
       </div>
-      <div class="border border-dark-light min-h-full"></div>
-      <div class="flex flex-col gap-1">
-        <h3 class="font-medium">Moderni Tvora Kontaktai</h3>
+
+      <div class="flex flex-col font-medium flex-1 gap-1 py-4 pl-4">
+        <h3 class="font-bold">Moderni Tvora Kontaktai</h3>
         <p>
           Vadybininkas:
           {{
@@ -230,13 +258,13 @@ const cancelHandler = async () => {
     </div>
 
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black print:border-y-4 print:border-black p-3 print:p-2 print:text-base text-white text-center"
+      class="text-2xl font-semibold print:font-bold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black p-3 print:p-0 print:text-base print:py-4 text-white text-center"
     >
       Medžiagos
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b print:py-1 bg-gray-light print:bg-transparent print:border-b-2 print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
+        class="flex border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -244,7 +272,7 @@ const cancelHandler = async () => {
         <div class="w-20">Kaina</div>
         <div class="w-20">Viso</div>
       </div>
-      <div>
+      <div class="print:border-b border-dark-full">
         <OfferResult
           v-for="(result, index) in offer.value?.results"
           :key="result._id"
@@ -253,19 +281,19 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
+        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceParts.toFixed(2) }} €
       </p>
     </div>
     <div
-      class="text-2xl font-semibold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black print:border-y-4 print:border-black p-3 print:p-2 print:text-base text-white text-center"
+      class="text-2xl font-semibold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black print:border-black p-3 print:font-bold print:pb-4 print:p-0 print:text-base text-white text-center"
     >
       Darbai
     </div>
     <div class="flex flex-col">
       <div
-        class="flex border-b print:py-1 bg-gray-light print:bg-transparent print:border-b-2 print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 rounded-t-xl"
+        class="flex border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -273,7 +301,7 @@ const cancelHandler = async () => {
         <div class="w-20">Kaina</div>
         <div class="w-20">Viso</div>
       </div>
-      <div class="">
+      <div class="print:border-b border-dark-full">
         <OfferWork
           v-for="(work, index) in offer.value?.works"
           :key="work._id"
@@ -282,43 +310,50 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
+        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
     </div>
 
-    <div class="flex justify-end">
-      <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
-        <div class="flex w-96 px-4 justify-between">
-          <p class="font-semibold">Kaina:</p>
-          <p class="">{{ offer.value?.totalPrice }} €</p>
-        </div>
+    <div class="flex justify-end border-dark-full">
+      <div class="w-96 print:w-72">
+        <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
+          <div
+            class="flex px-4 justify-between print:border-t border-dark-full"
+          >
+            <p class="font-semibold">Kaina:</p>
+            <p class="">{{ offer.value?.totalPrice }} €</p>
+          </div>
 
-        <div class="flex w-96 px-4 justify-between">
-          <p class="font-semibold">PVM Suma:</p>
-          <p>{{ (offer.value?.totalPrice * 0.21).toFixed(2) }} €</p>
-        </div>
+          <div class="flex px-4 justify-between">
+            <p class="font-semibold">PVM Suma:</p>
+            <p>{{ (offer.value?.totalPrice * 0.21).toFixed(2) }} €</p>
+          </div>
 
-        <div class="flex w-96 px-4 justify-between">
-          <p class="font-bold">Kaina su PVM:</p>
-          <p class="text-red-full font-bold print:text-black">
-            {{ offer.value?.priceVAT }} €
-          </p>
-        </div>
+          <div
+            class="flex px-4 justify-between"
+            :class="
+              !offer.value?.discount ? 'border-y-2 border-dark-full py-1' : ''
+            "
+          >
+            <p class="font-bold">Kaina su PVM:</p>
+            <p class="text-red-full font-bold print:text-black">
+              {{ offer.value?.priceVAT }} €
+            </p>
+          </div>
 
-        <div
-          v-if="offer.value?.discount"
-          class="flex w-96 px-4 justify-between"
-        >
-          <p class="text-2xl print:text-base font-bold pb-4">
-            Kaina su nuolaida:
-          </p>
-          <p class="text-red-full font-bold print:text-black">
-            {{ offer.value?.priceWithDiscount }}
+          <div
+            v-if="offer.value?.discount"
+            class="flex px-4 print:py-1 justify-between border-y-2 border-dark-full"
+          >
+            <p class="text-2xl print:text-base font-bold">Kaina su nuolaida:</p>
+            <p class="text-red-full font-bold print:text-black">
+              {{ offer.value?.priceWithDiscount }}
 
-            €
-          </p>
+              €
+            </p>
+          </div>
         </div>
       </div>
     </div>
