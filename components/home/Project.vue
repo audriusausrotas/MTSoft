@@ -58,8 +58,10 @@ const previewHandler = () => {
 </script>
 
 <template>
-  <div class="flex items-center gap-4">
-    <div>{{ index + 1 }}</div>
+  <div
+    class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4"
+  >
+    <div class="font-semibold text-xl w-8">{{ index + 1 }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <BaseInfoField
       :name="props.project?.client?.address"
@@ -73,6 +75,7 @@ const previewHandler = () => {
       "
       width="w-28"
     />
+
     <BaseInfoField
       :name="props.project?.client?.phone"
       width="w-32"
