@@ -29,7 +29,7 @@ else measurement.value = "vnt";
         <span v-if="props.result.seeThrough">{{
           props.result.seeThrough
         }}</span>
-        <span>{{ props.result.color }}</span>
+        <span>RAL{{ props.result.color }}</span>
       </div>
     </div>
     <div class="border sm:hidden w-full"></div>
