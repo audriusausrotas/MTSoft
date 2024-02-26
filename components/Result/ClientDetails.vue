@@ -35,7 +35,7 @@ const saveHandler = async (): Promise<void> => {
     advance: false,
     orderNumber: "",
   };
-
+  console.log(newProject);
   const data: any = await $fetch("/api/project", {
     method: "POST",
     body: newProject,
