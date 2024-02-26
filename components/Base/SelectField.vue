@@ -31,7 +31,7 @@ const changeHandler = (value: string): void => {
     >
       <div
         @click="props.disable ? '' : (isOpen = !isOpen)"
-        class="flex justify-between gap-3 py-2 pl-4 border border-dark-light rounded-2xl"
+        class="flex justify-between gap-3 py-2 pl-4 border border-dark-light rounded-lg"
         :class="[
           props.variant !== 'light'
             ? 'bg-gray-ultra-light'

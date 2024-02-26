@@ -24,7 +24,7 @@ watch(
 <template>
   <nav
     v-if="useUser?.user?.username"
-    class="sticky flex flex-col items-center gap-10 top-8 w-44"
+    class="lg:sticky flex flex-col items-center gap-10 top-8 w-44"
   >
     <div v-if="useUser?.user?.username" class="flex items-center gap-2">
       <NuxtImg

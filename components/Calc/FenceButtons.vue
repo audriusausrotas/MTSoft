@@ -140,20 +140,20 @@ const calculateLengthHandler = (): void => {
         X
       </button>
     </div>
-  </div>
-  <div class="flex flex-wrap justify-center gap-4">
-    <BaseButton
-      name="įterpti kampą"
-      @click="useCalculations.addKampas(props.index)"
-    />
-    <BaseButton
-      name="įterpti laiptą"
-      @click="useCalculations.addLaiptas(props.index)"
-    />
-    <BaseButton
-      name="išvalyti visus"
-      @click="useCalculations.deleteMeasures(props.index)"
-    />
+    <div class="flex flex-wrap justify-center gap-4">
+      <BaseButton
+        name="įterpti kampą"
+        @click="useCalculations.addKampas(props.index)"
+      />
+      <BaseButton
+        name="įterpti laiptą"
+        @click="useCalculations.addLaiptas(props.index)"
+      />
+      <BaseButton
+        name="išvalyti visus"
+        @click="useCalculations.deleteMeasures(props.index)"
+      />
+    </div>
   </div>
   <div class="flex flex-wrap justify-center gap-4">
     <p>

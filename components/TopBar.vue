@@ -37,7 +37,7 @@ function logoutHandler(): void {
           loading="lazy"
           :ismap="true"
         />
-        <SearchBar />
+        <SearchBar class="hidden lg:flex" />
       </div>
 
       <div class="h-0 border-0 sm:h-12 sm:border"></div>

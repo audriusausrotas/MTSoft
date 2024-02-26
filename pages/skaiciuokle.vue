@@ -16,7 +16,7 @@ const calculateResultsHandler = () => {
   <div class="flex flex-col gap-12">
     <div class="flex flex-col items-center gap-8 xl:items-start">
       <CalcClient />
-      <div class="flex gap-4">
+      <div class="flex justify-center flex-wrap gap-4">
         <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
         <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
       </div>
