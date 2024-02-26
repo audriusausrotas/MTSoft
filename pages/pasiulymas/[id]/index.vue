@@ -77,11 +77,11 @@ const cancelHandler = async () => {
 
 <template>
   <div
-    class="flex flex-col print:gap-0 py-8 print:py-0 gap-12"
+    class="flex flex-col print:gap-0 sm:py-8 py-0 print:py-0 gap-6 sm:gap-12"
     ref="pdfSection"
   >
     <div
-      class="flex justify-between text-center p-14 text-xl font-semibold items-center rounded-t-xl text-white bg-red-full print:hidden"
+      class="flex justify-center flex-wrap text-center md:justify-between p-8 sm:p-14 text-xl font-semibold items-center gap-8 md:gap-0 rounded-t-xl text-white bg-red-full print:hidden"
     >
       <h5>
         Užsakymo data:<br />
@@ -111,10 +111,12 @@ const cancelHandler = async () => {
       </h6>
     </div>
 
-    <div class="flex justify-evenly py-4 print:hidden">
+    <div
+      class="flex justify-evenly flex-wrap gap-8 lg:gap-0 lg:py-4 py-0 print:hidden"
+    >
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Kliento Duomenys</p>
-        <div class="flex gap-8">
+        <div class="flex gap-2 sm:gap-8 justify-center flex-wrap">
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
@@ -148,11 +150,13 @@ const cancelHandler = async () => {
         </div>
       </div>
 
-      <div class="border border-dark-ultra-light min-h-full"></div>
+      <div
+        class="border border-dark-ultra-light min-h-full hidden xl:block"
+      ></div>
 
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
-        <div class="flex gap-7">
+        <div class="flex gap-2 sm:gap-8 justify-center flex-wrap">
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
@@ -262,9 +266,9 @@ const cancelHandler = async () => {
     >
       Medžiagos
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col pr-4 sm:pr-0">
       <div
-        class="flex border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none rounded-t-xl"
+        class="hidden border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none sm:flex rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -281,7 +285,7 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
+        class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceParts.toFixed(2) }} €
       </p>
@@ -291,9 +295,9 @@ const cancelHandler = async () => {
     >
       Darbai
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col pr-4 sm:pr-0">
       <div
-        class="flex border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none rounded-t-xl"
+        class="hidden border-y print:py-1 bg-gray-light print:bg-transparent print:border-y print:gap-6 print:border-black font-semibold gap-10 text-lg print:text-sm px-2 py-3 print:rounded-t-none sm:flex rounded-t-xl"
       >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
@@ -310,7 +314,7 @@ const cancelHandler = async () => {
         />
       </div>
       <p
-        class="text-2xl print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-96 mt-8 print:mt-1 self-end"
+        class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
         Viso: {{ totalPriceWorks.toFixed(2) }} €
       </p>
@@ -362,19 +366,23 @@ const cancelHandler = async () => {
     <p v-if="showButtons" class="text-2xl font-semibold">
       Ar jus tenkina šis pasiūlymas?
     </p>
-    <div v-if="showButtons" class="flex gap-8">
+    <div v-if="showButtons" class="flex justify-center gap-8 flex-wrap">
       <BaseButton
         name="pasiūlymas tenkina"
         @click="confirmHandler"
-        width="w-96"
+        width="w-56 sm:w-96"
       />
       <BaseButton
         name="pasiūlymas netekina"
         @click="cancelHandler"
-        width="w-96"
+        width="w-56 sm:w-96"
       />
     </div>
-    <BaseButton name="atsisiūsti PDF" @click="downloadAsPDF" width="w-96" />
+    <BaseButton
+      name="atsisiūsti PDF"
+      @click="downloadAsPDF"
+      width="w-56 sm:w-96"
+    />
   </div>
 </template>
 <style scoped></style>

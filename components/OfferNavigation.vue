@@ -4,7 +4,9 @@ const route = useRoute();
 
 <template>
   <div class="py-4 shadow-bottom print:hidden">
-    <div class="flex justify-between max-w-[1200px] m-auto">
+    <div
+      class="flex lg:justify-between flex-wrap justify-center max-w-[1200px] m-auto"
+    >
       <NuxtLink to="https://www.modernitvora.lt">
         <NuxtImg
           src="/images/logo.png"
@@ -16,7 +18,8 @@ const route = useRoute();
           :ismap="true"
         />
       </NuxtLink>
-      <div class="flex">
+      <div class="border border-red-full w-full md:hidden"></div>
+      <div class="flex justify-center flex-wrap">
         <BaseOrderLink name="pasiūlymas" :id="route.params.id" />
         <!-- <BaseOrderLink
           name="tvoros informacija"

@@ -81,6 +81,7 @@ const previewHandler = () => {
     <BaseInfoField
       :name="props.project?.client?.email"
       width="w-64 min-w-fit"
+      :email="true"
     />
     <BaseSelectField
       :values="status"
