@@ -1,4 +1,5 @@
 import { projectSchema } from "~/server/models/projectSchema";
+import type { Creator } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
   const {
@@ -32,7 +33,9 @@ export default defineEventHandler(async (event) => {
 
   const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
 
-  const userProjects = await projectSchema.find({ creator });
+  const userProjects = await projectSchema.find({
+    "creator.username": creator.username,
+  });
 
   const lastOrder = userProjects[userProjects.length - 1]?.orderNumber;
 
