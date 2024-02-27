@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 
   const userProjects = await projectSchema.find({ creator });
 
-  const lastOrder = userProjects[userProjects.length - 1].orderNumber;
+  const lastOrder = userProjects[userProjects.length - 1]?.orderNumber;
 
   let newOrderNumbers = "";
 
