@@ -32,23 +32,30 @@ export default defineEventHandler(async (event) => {
   const dateExparation = expirationDate.toISOString();
 
   const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
+  let newOrderNumbers = "0001";
 
   const userProjects = await projectSchema.find({
     "creator.username": creator.username,
   });
 
-  const lastOrder = userProjects[userProjects.length - 1]?.orderNumber;
+  if (userProjects) {
+    function extractOrderNumber(item: any) {
+      return parseInt(item.orderNumber.split("-")[1], 10);
+    }
 
-  let newOrderNumbers = "";
+    const sortedOrderNumbers = userProjects.sort(
+      (a, b) => extractOrderNumber(a) - extractOrderNumber(b)
+    );
 
-  if (!lastOrder) {
-    newOrderNumbers = "0001";
-  } else {
+    const lastOrder =
+      sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
+
     let orderNumbers = parseInt(lastOrder.split("-")[1]);
     orderNumbers++;
 
     newOrderNumbers = orderNumbers.toString().padStart(4, "0");
   }
+
   const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
 
   const project = new projectSchema({
