@@ -73,7 +73,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await project.save();
 
-  data._id = data._id.toString();
-
   return { success: true, data: data, message: "Projektas išsaugotas" };
 });
