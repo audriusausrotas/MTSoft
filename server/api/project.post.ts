@@ -38,7 +38,9 @@ export default defineEventHandler(async (event) => {
     "creator.username": creator.username,
   });
 
-  if (userProjects) {
+  console.log(userProjects);
+
+  if (userProjects.length > 0) {
     function extractOrderNumber(item: any) {
       return parseInt(item.orderNumber.split("-")[1], 10);
     }
