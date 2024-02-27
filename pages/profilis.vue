@@ -18,13 +18,13 @@ const saveHandler = async () => {
     phone: phone.value,
   };
 
-  const { data }: { data: ResponseUser } = await $fetch("/api/profile", {
+  const response: ResponseUser = await $fetch("/api/profile", {
     method: "post",
     body: reqData,
   });
 
-  if (data.success) {
-    useUser.setUser(data.data);
+  if (response.success) {
+    useUser.setUser(response.data);
     password.value = "";
     newPassword.value = "";
     url.value = "";
