@@ -1,67 +1,78 @@
 import { projectSchema } from "~/server/models/projectSchema";
 
 export default defineEventHandler(async (event) => {
-  const {
-    client,
-    fenceMeasures,
-    results,
-    creator,
-    works,
-    gates,
-    totalPrice,
-    totalCost,
-    totalProfit,
-    totalMargin,
-    priceVAT,
-    priceWithDiscount,
-    discount,
-    confirmed,
-    payed,
-    status,
-    advance,
-  } = await readBody(event);
+  try {
+    const {
+      client,
+      fenceMeasures,
+      results,
+      creator,
+      works,
+      gates,
+      totalPrice,
+      totalCost,
+      totalProfit,
+      totalMargin,
+      priceVAT,
+      priceWithDiscount,
+      discount,
+      confirmed,
+      payed,
+      status,
+      advance,
+    } = await readBody(event);
 
-  const currentDate = new Date();
+    const currentDate = new Date();
 
-  const dateCreated = currentDate.toISOString();
-  let expirationDate = new Date(currentDate);
-  expirationDate.setDate(currentDate.getDate() + 30);
-  const dateExparation = expirationDate.toISOString();
+    const dateCreated = currentDate.toISOString();
 
-  const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
+    let expirationDate = new Date(currentDate);
+    expirationDate.setDate(currentDate.getDate() + 30);
 
-  const userProjects = await projectSchema.find({ creator });
-  const lastOrder = userProjects[userProjects.length - 1].orderNumber;
-  let orderNumbers = parseInt(lastOrder.split("-")[1]);
-  orderNumbers++;
-  const newOrderNumbers = orderNumbers.toString().padStart(4, "0");
+    const dateExparation = expirationDate.toISOString();
 
-  const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
+    const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
 
-  const project = new projectSchema({
-    creator,
-    client,
-    fenceMeasures,
-    results,
-    orderNumber,
-    works,
-    gates,
-    totalPrice,
-    totalCost,
-    totalProfit,
-    totalMargin,
-    priceVAT,
-    priceWithDiscount,
-    discount,
-    confirmed,
-    payed,
-    status,
-    advance,
-    dateCreated,
-    dateExparation,
-  });
+    const userProjects = await projectSchema.find({ creator });
 
-  const data = await project.save();
+    const lastOrder = userProjects[userProjects.length - 1].orderNumber;
 
-  return { success: true, data: data, message: "Projektas išsaugotas" };
+    let orderNumbers = parseInt(lastOrder.split("-")[1]);
+    orderNumbers++;
+
+    const newOrderNumbers = orderNumbers.toString().padStart(4, "0");
+
+    const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
+
+    const project = new projectSchema({
+      creator,
+      client,
+      fenceMeasures,
+      results,
+      orderNumber,
+      works,
+      gates,
+      totalPrice,
+      totalCost,
+      totalProfit,
+      totalMargin,
+      priceVAT,
+      priceWithDiscount,
+      discount,
+      confirmed,
+      payed,
+      status,
+      advance,
+      dateCreated,
+      dateExparation,
+    });
+
+    const data = await project.save();
+
+    data._id = data._id.toString();
+
+    return { success: true, data: data, message: "Projektas išsaugotas" };
+  } catch (error) {
+    return { success: false, data: null, message: error };
+  }
 });

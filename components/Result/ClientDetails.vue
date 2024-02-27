@@ -35,10 +35,9 @@ const saveHandler = async (): Promise<void> => {
     advance: false,
     orderNumber: "",
   };
-
-  if (useProjects.selectedProject) {
+  try {
     const data: any = await $fetch("/api/project", {
-      method: "put",
+      method: useProjects.selectedProject ? "put" : "post",
       body: newProject,
     });
     if (data.success) {
@@ -46,16 +45,8 @@ const saveHandler = async (): Promise<void> => {
       clearHandler();
       await navigateTo("/");
     }
-  } else {
-    const data: any = await $fetch("/api/project", {
-      method: "post",
-      body: newProject,
-    });
-    if (data.success) {
-      useProjects.addProject(data.data);
-      clearHandler();
-      await navigateTo("/");
-    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
