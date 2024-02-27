@@ -33,7 +33,9 @@ const editHandler = () => {
 
 const linkHandler = () => {
   navigator.clipboard
-    .writeText("modernitvora.vercel.app/pasiulymas/" + props.project._id)
+    .writeText(
+      "https://modernitvora.vercel.app/pasiulymas/" + props.project._id
+    )
     .then(() => {
       console.log("Text successfully copied to clipboard:", props.project._id);
     })

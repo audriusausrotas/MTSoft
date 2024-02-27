@@ -88,7 +88,11 @@ export default function calculateResults() {
           results.addTotalElements(measure.elements, item.color, item.type);
 
         // calculate bindings
-        if (item.direction === "Horizontali" && item.bindings === "Taip") {
+        if (
+          item.direction === "Horizontali" &&
+          item.bindings === "Taip" &&
+          !measure.gates.exist
+        ) {
           if (!onlyServices)
             results.addBindingsLength(measure.height, item.color);
           if (!onlyServices) lastBindingHeight = measure.height;
