@@ -1,18 +1,71 @@
 <script setup lang="ts">
-const props = defineProps(["data"]);
+const props = defineProps(["work", "index"]);
 </script>
 
 <template>
-  <div v-for="(work, index) in props.data" :key="work.id" class="flex gap-4">
-    <p>{{ index + 1 }}</p>
-    <p>{{ work.name }}</p>
-    <p>{{ work.quantity }}</p>
-    <p>{{ work.price }}</p>
-    <p>{{ work.cost }}</p>
-    <p>{{ work.totalPrice }}</p>
-    <p>{{ work.totalCost }}</p>
-    <p>{{ work.profit }}</p>
-    <p>{{ work.margin }} %</p>
+  <div class="flex flex-wrap items-center gap-4 py-4">
+    <div class="">{{ props.index + 1 }}</div>
+
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        width="w-80"
+        label="Pavadinimas"
+        :disable="true"
+        :name="props.work.name"
+      />
+      <div class="flex gap-4">
+        <BaseInput
+          width="w-24"
+          label="kiekis"
+          type="number"
+          :disable="true"
+          :name="props.work.quantity"
+        />
+
+        <BaseInput
+          label="Kaina"
+          type="number"
+          :disable="true"
+          :name="props.work.price"
+          width="w-24"
+        />
+
+        <BaseInput
+          label="savikaina"
+          :name="props.work.cost"
+          :disable="true"
+          width="w-24"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        label="Viso Savikaina"
+        :name="props.work.totalCost"
+        :disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Viso kaina"
+        :name="props.work.totalPrice"
+        :disable="true"
+        width="w-24"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        label="marža"
+        :name="props.work.margin + ' %'"
+        :disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Pelnas"
+        :name="props.work.profit"
+        :disable="true"
+        width="w-24"
+      />
+    </div>
   </div>
 </template>
 <style scoped></style>
