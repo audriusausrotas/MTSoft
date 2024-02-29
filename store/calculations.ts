@@ -275,6 +275,8 @@ export const useCalculationsStore = defineStore("calculations", {
       );
       let elements = 0;
       if (isFenceBoards) {
+        console.log(fenceMeasures[fenceDataIndex].height);
+        console.log(fence.space);
         elements = calculateFenceBoards(
           measure.length,
           fence.space,

@@ -26,6 +26,27 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           }
         }
         useUser.setUser({ ...data.value.data });
+        if (
+          data.value.data.accountType !== "Administratorius" ||
+          data.value.data.accountType !== "Paprastas vartotojas"
+        ) {
+          switch (data.value.data.accountType) {
+            case "Vartonas":
+              if (to.path !== "/vartonas") return navigateTo("/vartonas");
+              break;
+
+            case "Montavimas":
+              if (to.path !== "/montavimas") return navigateTo("/montavimas");
+              break;
+
+            case "Gamyba":
+              if (to.path !== "/gamyba") return navigateTo("/gamyba");
+              break;
+
+            default:
+              break;
+          }
+        }
       }
     }
 
@@ -43,6 +64,27 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           }
         } else {
           useUser.setUser({ ...data.value.data });
+          if (
+            data.value.data.accountType !== "Administratorius" ||
+            data.value.data.accountType !== "Paprastas vartotojas"
+          ) {
+            switch (data.value.data.accountType) {
+              case "Vartonas":
+                if (to.path !== "/vartonas") return navigateTo("/vartonas");
+                break;
+
+              case "Montavimas":
+                if (to.path !== "/montavimas") return navigateTo("/montavimas");
+                break;
+
+              case "Gamyba":
+                if (to.path !== "/gamyba") return navigateTo("/gamyba");
+                break;
+
+              default:
+                break;
+            }
+          }
         }
       } else {
         if (to.path !== "/login") {

@@ -47,6 +47,21 @@ export const initialResultData: Result = {
   category: "",
 };
 
+export const topBarLinks: MenuLinks[] = [
+  { name: "Projektai", link: "/", iconPath: "/icons/projects.svg" },
+  {
+    name: "Gamyba",
+    link: "/gamyba",
+    iconPath: "",
+  },
+  { name: "Montavimas", link: "/montavimas", iconPath: "" },
+  { name: "Vartonas", link: "/vartonas", iconPath: "" },
+];
+
+export const adminPanelLinks: MenuLinks[] = [
+  { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
+  { name: "Vartotojai", link: "/admin", iconPath: "/icons/users.svg" },
+];
 export const menuLinks: MenuLinks[] = [
   { name: "Projektai", link: "/", iconPath: "/icons/projects.svg" },
   {
@@ -55,7 +70,6 @@ export const menuLinks: MenuLinks[] = [
     iconPath: "/icons/calculations.svg",
   },
   { name: "Sąmata", link: "/samata", iconPath: "/icons/projects.svg" },
-  { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
 ];
 export const createInitialMeasure = (): Measure => ({
   length: 0,
@@ -151,9 +165,9 @@ export const fenceMeasures: FenceMeasure[] = [
   },
   {
     name: "Dilė",
-    height: 8.6,
+    height: 10.6,
     width: 2,
-    seeThrough: [0.8, 1, 3, 4, 4.3, 8.6],
+    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
   },
   {
     name: "Dija",

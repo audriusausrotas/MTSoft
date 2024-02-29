@@ -30,10 +30,11 @@ const registerHandler = async () => {
     username: username.value,
   };
 
-  const { data }: { data: ResponseUser } = await $fetch("/api/register", {
-    method: "post",
-    body: loginData,
-  });
+  const data: { success: boolean; data: ResponseUser; message: string } =
+    await $fetch("/api/register", {
+      method: "post",
+      body: loginData,
+    });
 
   if (data.success) {
     clearFields();

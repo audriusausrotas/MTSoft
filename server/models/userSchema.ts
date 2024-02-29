@@ -22,10 +22,10 @@ export const userSchema = defineMongooseModel<User>(
       required: false,
       default: false,
     },
-    admin: {
-      type: Boolean,
+    accountType: {
+      type: String,
       required: false,
-      default: false,
+      default: "Paprastas vartotojas",
     },
     photo: {
       type: String,

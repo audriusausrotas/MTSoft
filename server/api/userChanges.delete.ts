@@ -3,9 +3,10 @@ import type { User } from "~/data/interfaces";
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event: any) => {
-  const { _id, value, userId, changeType } = await readBody(event);
+  const { _id, password, userId } = await readBody(event);
 
   const data: User | null = await userSchema.findById(_id);
+  console.log(data?.accountType === "Administratorius");
 
   if (data?.accountType !== "Administratorius")
     return {
@@ -30,35 +31,21 @@ export default defineEventHandler(async (event: any) => {
       message: "Pasirinktas vartotojas nerastas",
     };
 
-  if (changeType === "admin") {
-    selectedUser.accountType = value;
+  const isPasswordValid = await bcrypt.compare(password, data.password);
 
-    const newUser = await selectedUser.save();
-    newUser.password = "";
-
-    return {
-      success: true,
-      data: newUser,
-      message: "Pakeitimai atlikti",
-    };
-  }
-
-  if (changeType === "verify") {
-    selectedUser.verified = !selectedUser.verified;
-
-    const newUser = await selectedUser.save();
-    newUser.password = "";
+  if (isPasswordValid) {
+    await userSchema.findByIdAndDelete(userId);
 
     return {
       success: true,
-      data: newUser,
+      data: userId,
       message: "Pakeitimai atlikti",
     };
   } else {
     return {
       success: false,
       data: null,
-      message: "Neteisinga užklausa",
+      message: "Klaidingas slaptažodis",
     };
   }
 });

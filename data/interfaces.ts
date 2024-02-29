@@ -167,7 +167,7 @@ export interface User {
   lastName: string;
   phone: string;
   verified: boolean;
-  admin: boolean;
+  accountType: string;
   photo: string;
 }
 

@@ -117,3 +117,13 @@ export const status: string[] = [
   "Laukiam Vartų",
   "Baigta",
 ];
+
+export const accountTypes: string[] = [
+  "Administratorius",
+  "Paprastas vartotojas",
+  "Vartonas",
+  "Gamyba",
+  "Montavimas",
+];
+
+export const accountStatus: string[] = ["patvirtintas", "nepatvirtintas"];

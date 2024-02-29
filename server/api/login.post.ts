@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
         id: data._id,
         email: data.email,
         verified: data.verified,
-        admin: data.admin,
+        accountType: data.accountType,
       },
       process.env.TOKEN_SECRET! as string
     );

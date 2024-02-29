@@ -59,11 +59,7 @@ const saveHandler = async () => {
           {{ useUser.user?.username }} {{ useUser.user?.lastName }}
         </h3>
         <div>
-          <p v-if="useUser.user?.admin">
-            {{
-              useUser.user?.admin ? "administratorius" : "paprastas vartotojas"
-            }}
-          </p>
+          {{ useUser.user?.accountType }}
 
           <h5 class="font-semibold"></h5>
         </div>

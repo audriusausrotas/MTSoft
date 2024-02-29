@@ -13,8 +13,6 @@ const deleteHandler = async (): Promise<void> => {
   });
   if (response.success) {
     useProjects.deleteProject(props.project._id);
-  } else {
-    console.log(response.message);
   }
 };
 
@@ -63,7 +61,7 @@ const previewHandler = () => {
   <div
     class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4"
   >
-    <div class="font-semibold text-xl w-8">{{ index + 1 }}</div>
+    <div class="font-semibold text-xl w-6">{{ index + 1 }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <BaseInfoField
       :name="props.project?.client?.address"

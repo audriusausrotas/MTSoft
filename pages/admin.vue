@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ResponseUsers, User } from "~/data/interfaces";
+import { accountTypes, accountStatus } from "~/data/selectFieldData";
 
 const useUser = useUserStore();
 const password = ref<string>("");
@@ -11,33 +12,45 @@ if (useUser.users.length === 0) {
   useUser.setAllUsers(data.data);
 }
 
-const userChangesHandler = async (id: string, type: string) => {
-  const postData = { userId: id, changeType: type, password: password.value };
+const userChangesHandler = async (id: string, type: string, value: string) => {
+  const postData = {
+    userId: id,
+    changeType: type,
+    password: password.value,
+    value: value,
+  };
 
-  const { data }: { data: string | User } = await $fetch("/api/userChanges", {
-    method: "post",
-    body: postData,
-  });
-
-  if (type !== "delete") {
-    if (typeof data !== "string") {
-      const userData = data as User;
-      useUser.updateUser(userData);
+  const data: { data: User; message: string; success: boolean } = await $fetch(
+    "/api/userChanges",
+    {
+      method: "post",
+      body: postData,
     }
-  } else {
-    if (typeof data === "string") {
-      modalOpen.value = false;
-      useUser.deleteUser(data);
-      password.value = "";
-      selectedUser.value = "";
-    }
+  );
+  if (data.success) {
+    useUser.updateUser(data.data);
   }
 };
 
-const confirmHandler = () => {
+const confirmHandler = async () => {
+  const postData = {
+    userId: selectedUser.value,
+    password: password.value,
+  };
+
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    userChangesHandler(selectedUser.value, "delete");
-    modalOpen.value = false;
+    const data: { data: null; message: string; success: boolean } =
+      await $fetch("/api/userChanges", {
+        method: "delete",
+        body: postData,
+      });
+
+    if (data.success) {
+      useUser.deleteUser(selectedUser.value);
+      password.value = "";
+      selectedUser.value = "";
+      modalOpen.value = false;
+    }
   }
 };
 
@@ -51,10 +64,10 @@ const deleteHandler = (id: string) => {
   <div>
     <div class="flex pb-6 text-gray-400 capitalize">
       <div class="flex-1">nr</div>
-      <p class="flex-[4]">vartotojo vardas</p>
+      <p class="flex-[3]">vartotojo vardas</p>
+      <p class="flex-[5]">el. paštas</p>
       <p class="flex-[4]">paskyros statusas</p>
-      <p class="flex-[6]">el. paštas</p>
-      <p class="flex-[3]">paskyros tipas</p>
+      <p class="flex-[4]">paskyros tipas</p>
       <div class="flex-1"></div>
     </div>
 
@@ -64,26 +77,28 @@ const deleteHandler = (id: string) => {
       class="flex py-2 capitalize border-b"
     >
       <div class="flex-1">{{ index + 1 }}</div>
-      <p class="flex-[4] flex items-center">{{ user.username }}</p>
-      <div class="flex-[4]">
-        <BaseSelectField
-          :id="user._id"
-          name="verified"
-          :values="['patvirtintas', 'nepatvirtintas']"
-          :defaultValue="user?.verified ? 'patvirtintas' : 'nepatvirtintas'"
-          @onChange="userChangesHandler(user._id, 'verify')"
-        />
-      </div>
-      <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
+      <p class="flex-[3] flex items-center">
+        {{ user.username }} {{ user.lastName }}
+      </p>
+
+      <div class="flex-[5] flex lowercase items-center">{{ user.email }}</div>
 
       <BaseSelectField
         :id="user._id"
-        name="admin"
-        :values="['administratorius', 'paprastas vartotojas']"
-        :defaultValue="
-          user?.admin ? 'administratorius' : 'paprastas vartotojas'
-        "
-        @onChange="userChangesHandler(user._id, 'admin')"
+        name="verified"
+        class="flex-[4]"
+        :values="accountStatus"
+        :defaultValue="user?.verified ? 'patvirtintas' : 'nepatvirtintas'"
+        @onChange="(value: string) => userChangesHandler(user._id, 'verify', value)"
+      />
+
+      <BaseSelectField
+        :id="user._id"
+        :values="accountTypes"
+        width="w-48"
+        class="flex-[4]"
+        :defaultValue="user?.accountType"
+        @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
       <div
