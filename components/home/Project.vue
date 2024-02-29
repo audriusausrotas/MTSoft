@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { status } from "~/data/selectFieldData";
 const props = defineProps(["project", "index", "length"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
@@ -42,16 +41,6 @@ const linkHandler = () => {
     });
 };
 
-const statusHandler = (value: string) => {
-  const data: any = $fetch("/api/project", {
-    method: "PATCH",
-    body: { _id: props.project._id, value },
-  });
-  if (data.success) {
-    useProjects.updateStatus(data.data);
-  }
-};
-
 const previewHandler = () => {
   navigateTo("/perziura/" + props.project._id);
 };
@@ -86,14 +75,7 @@ const previewHandler = () => {
       width="w-64 min-w-fit"
       :email="true"
     />
-    <BaseSelectField
-      :values="status"
-      id="orderStatus"
-      :defaultValue="props.project?.status"
-      width="w-40"
-      @onChange="(value: string) => statusHandler(value)
-        "
-    />
+    <BaseInfoField :name="props.project?.status" width="w-40" />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
