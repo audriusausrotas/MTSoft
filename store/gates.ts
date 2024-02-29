@@ -7,9 +7,10 @@ export const useGateStore = defineStore("gate", {
 
   actions: {
     async getGates(): Promise<void> {
-      const response: any = await $fetch("/api/gates");
-      const { data } = response;
-      this.gates = [...data];
+      const { data: gates }: any = await useFetch("/api/gates");
+      if (gates.value.success) {
+        this.gates = [...gates.value.data];
+      }
     },
   },
 

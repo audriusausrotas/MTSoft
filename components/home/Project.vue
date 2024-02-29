@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { status } from "~/data/selectFieldData";
-const props = defineProps(["project", "index"]);
+const props = defineProps(["project", "index", "length"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
@@ -61,7 +61,7 @@ const previewHandler = () => {
   <div
     class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4"
   >
-    <div class="font-semibold text-xl w-6">{{ index + 1 }}</div>
+    <div class="font-semibold text-xl w-6">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <BaseInfoField
       :name="props.project?.client?.address"

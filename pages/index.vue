@@ -8,6 +8,7 @@ const useProjects = useProjectsStore();
       v-for="(project, index) in useProjects.projects"
       :key="project._id"
       :index="index"
+      :length="useProjects.projects.length"
       :project="project"
     />
   </div>

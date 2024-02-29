@@ -1,37 +1,28 @@
 <script setup lang="ts">
 import type { Result, Works } from "~/data/interfaces";
+import { useOfferStore } from "~/store/offer";
 
 definePageMeta({
   layout: "order",
 });
 
-const route = useRoute();
-const offer = reactive<any>({});
+const offer = useOfferStore();
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
 const showButtons = ref<boolean>(true);
 const pdfSection = ref<HTMLElement | null>(null);
 
-onMounted(async () => {
-  const data: any = await $fetch("/api/order", {
-    method: "post",
-    body: { _id: route.params.id },
-  });
-  if (data.success) {
-    offer.value = { ...data.data };
-    offer.value.results.forEach(
-      (item: Result) => (totalPriceParts.value += item.totalPrice)
-    );
-    offer.value.works.forEach(
-      (item: Works) => (totalPriceWorks.value += item.totalPrice)
-    );
-    showButtons.value = offer.value?.status === "Nepatvirtintas";
-  }
-});
+offer.offer?.results?.forEach(
+  (item: Result) => (totalPriceParts.value += item.totalPrice)
+);
+offer.offer?.works?.forEach(
+  (item: Works) => (totalPriceWorks.value += item.totalPrice)
+);
+showButtons.value = offer.offer?.status === "Nepatvirtintas";
 
 const downloadAsPDF = async () => {
   const content = pdfSection.value;
-  const address = offer.value.client.address;
+  const address = offer.offer.client.address;
   const contentWidth = content!.offsetWidth / 3.5;
   const contentHeight = content!.offsetHeight / 3.5;
 
@@ -56,21 +47,21 @@ const downloadAsPDF = async () => {
 const confirmHandler = async () => {
   const data: any = await $fetch("/api/order", {
     method: "patch",
-    body: { _id: offer.value._id },
+    body: { _id: offer.offer._id },
   });
   if (data.success) {
-    offer.value = { ...data.data };
+    offer.offer = { ...data.data };
   }
-  showButtons.value = offer.value?.status === "Nepatvirtintas";
+  showButtons.value = offer.offer?.status === "Nepatvirtintas";
 };
 
 const cancelHandler = async () => {
   const data: any = await $fetch("/api/order", {
     method: "put",
-    body: { _id: offer.value._id },
+    body: { _id: offer.offer._id },
   });
   if (data.success) {
-    offer.value = { ...data.data };
+    offer.offer = { ...data.data };
   }
 };
 </script>
@@ -85,28 +76,28 @@ const cancelHandler = async () => {
     >
       <h5>
         Užsakymo data:<br />
-        {{ offer.value?.dateCreated.slice(0, 10) }}
+        {{ offer.offer?.dateCreated?.slice(0, 10) }}
       </h5>
       <h5>
         Pasiūlymo galiojimo data: <br />
-        {{ offer.value?.dateExparation.slice(0, 10) }}
+        {{ offer.offer?.dateExparation?.slice(0, 10) }}
       </h5>
       <h3>
         Pasiūlymo Nr.: <br />
-        {{ offer.value?.orderNumber }}
+        {{ offer.offer?.orderNumber }}
       </h3>
       <h6>
         Būsena: <br />
         <span
           :class="
-            offer.value?.status === 'Nepatvirtintas'
+            offer.offer?.status === 'Nepatvirtintas'
               ? 'text-orange-300'
-              : offer.value?.status === 'Netinkamas'
+              : offer.offer?.status === 'Netinkamas'
               ? 'text-red-300'
               : 'text-green-300'
           "
         >
-          {{ offer.value?.status }}
+          {{ offer.offer?.status }}
         </span>
       </h6>
     </div>
@@ -120,28 +111,28 @@ const cancelHandler = async () => {
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
-              :name="offer.value?.client.username"
+              :name="offer.offer?.client?.username"
               label="klientas"
             />
             <BaseInput
               :disable="true"
-              :name="offer.value?.client.address"
+              :name="offer.offer?.client?.address"
               label="adresas"
             />
           </div>
           <div class="flex flex-col gap-2">
-            <a :href="'tel:' + offer.value?.client.phone">
+            <a :href="'tel:' + offer.offer?.client?.phone">
               <BaseInput
                 :disable="true"
-                :name="offer.value?.client.phone"
+                :name="offer.offer?.client?.phone"
                 label="telefono numeris"
                 class="pointer-events-none"
               />
             </a>
-            <a :href="'mailto:' + offer.value?.client.email">
+            <a :href="'mailto:' + offer.offer?.client?.email">
               <BaseInput
                 :disable="true"
-                :name="offer.value?.client.email"
+                :name="offer.offer?.client?.email"
                 label="elektroninis pastas"
                 class="pointer-events-none"
               />
@@ -161,9 +152,9 @@ const cancelHandler = async () => {
             <BaseInput
               :disable="true"
               :name="
-                offer.value?.creator.username +
+                offer.offer?.creator?.username +
                 ' ' +
-                offer.value?.creator.lastName
+                offer.offer?.creator?.lastName
               "
               label="Atsakingas vadybininkas:"
             />
@@ -176,20 +167,20 @@ const cancelHandler = async () => {
           </div>
           <div class="flex flex-col gap-2">
             <a
-              :href="'tel:' + offer.value?.creator.phone"
+              :href="'tel:' + offer.offer?.creator?.phone"
               class="hover: cursor-pointer"
             >
               <BaseInput
                 :disable="true"
-                :name="offer.value?.creator.phone"
+                :name="offer.offer?.creator?.phone"
                 label="Telefono numeris"
                 class="pointer-events-none"
             /></a>
 
-            <a :href="'mailto:' + offer.value?.creator.email">
+            <a :href="'mailto:' + offer.offer?.creator?.email">
               <BaseInput
                 :disable="true"
-                :name="offer.value?.creator.email"
+                :name="offer.offer?.creator?.email"
                 label="elektroninis pastas"
                 class="pointer-events-none"
               />
@@ -203,7 +194,7 @@ const cancelHandler = async () => {
       <div class="flex flex-col">
         <h3 class="text-3xl font-bold">PASIŪLYMAS</h3>
         <h3 class="font-medium">
-          Pasiūlymo Nr.: {{ offer.value?.orderNumber }}
+          Pasiūlymo Nr.: {{ offer.offer?.orderNumber }}
         </h3>
       </div>
       <NuxtImg
@@ -227,13 +218,13 @@ const cancelHandler = async () => {
         <div class="flex flex-col flex-1 gap-1">
           <p class="">Pasiūlymo data:</p>
           <p>
-            {{ offer.value?.dateCreated.slice(0, 10) }}
+            {{ offer.offer?.dateCreated?.slice(0, 10) }}
           </p>
         </div>
         <div class="flex flex-col flex-1 gap-1">
           <p>Pasiūlymo galiojimo data:</p>
           <p>
-            {{ offer.value?.dateExparation.slice(0, 10) }}
+            {{ offer.offer?.dateExparation?.slice(0, 10) }}
           </p>
         </div>
       </div>
@@ -241,10 +232,10 @@ const cancelHandler = async () => {
         class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4"
       >
         <h3 class="font-bold">Kliento Duomenys</h3>
-        <p>Klientas: {{ offer.value?.client.username }}</p>
-        <p>Adresas: {{ offer.value?.client.address }}</p>
-        <p>Telefonas: {{ offer.value?.client.phone }}</p>
-        <p>El. Paštas {{ offer.value?.client.email }}</p>
+        <p>Klientas: {{ offer.offer?.client?.username }}</p>
+        <p>Adresas: {{ offer.offer?.client?.address }}</p>
+        <p>Telefonas: {{ offer.offer?.client?.phone }}</p>
+        <p>El. Paštas {{ offer.offer?.client?.email }}</p>
       </div>
 
       <div class="flex flex-col font-medium flex-1 gap-1 py-4 pl-4">
@@ -252,12 +243,14 @@ const cancelHandler = async () => {
         <p>
           Vadybininkas:
           {{
-            offer.value?.creator.username + " " + offer.value?.creator.lastName
+            offer.offer?.creator?.username +
+            " " +
+            offer.offer?.creator?.lastName
           }}
         </p>
         <p>Adresas: Kauno g. 31, Marijampolė</p>
-        <p>Telefonas: {{ offer.value?.creator.phone }}</p>
-        <p>El. Paštas: {{ offer.value?.creator.email }}</p>
+        <p>Telefonas: {{ offer.offer?.creator?.phone }}</p>
+        <p>El. Paštas: {{ offer.offer?.creator?.email }}</p>
       </div>
     </div>
 
@@ -278,7 +271,7 @@ const cancelHandler = async () => {
       </div>
       <div class="print:border-b border-dark-full">
         <OfferResult
-          v-for="(result, index) in offer.value?.results"
+          v-for="(result, index) in offer.offer?.results"
           :key="result._id"
           :result="result"
           :index="index"
@@ -307,7 +300,7 @@ const cancelHandler = async () => {
       </div>
       <div class="print:border-b border-dark-full">
         <OfferWork
-          v-for="(work, index) in offer.value?.works"
+          v-for="(work, index) in offer.offer?.works"
           :key="work._id"
           :work="work"
           :index="index"
@@ -327,33 +320,33 @@ const cancelHandler = async () => {
             class="flex px-4 justify-between print:border-t border-dark-full"
           >
             <p class="font-semibold">Kaina:</p>
-            <p class="">{{ offer.value?.totalPrice }} €</p>
+            <p class="">{{ offer.offer?.totalPrice }} €</p>
           </div>
 
           <div class="flex px-4 justify-between">
             <p class="font-semibold">PVM Suma:</p>
-            <p>{{ (offer.value?.totalPrice * 0.21).toFixed(2) }} €</p>
+            <p>{{ (offer.offer?.totalPrice * 0.21).toFixed(2) }} €</p>
           </div>
 
           <div
             class="flex px-4 justify-between"
             :class="
-              !offer.value?.discount ? 'border-y-2 border-dark-full py-1' : ''
+              !offer.offer?.discount ? 'border-y-2 border-dark-full py-1' : ''
             "
           >
             <p class="font-bold">Kaina su PVM:</p>
             <p class="text-red-full font-bold print:text-black">
-              {{ offer.value?.priceVAT }} €
+              {{ offer.offer?.priceVAT }} €
             </p>
           </div>
 
           <div
-            v-if="offer.value?.discount"
+            v-if="offer.offer?.discount"
             class="flex px-4 print:py-1 justify-between border-y-2 border-dark-full"
           >
             <p class="text-2xl print:text-base font-bold">Kaina su nuolaida:</p>
             <p class="text-red-full font-bold print:text-black">
-              {{ offer.value?.priceWithDiscount }}
+              {{ offer.offer?.priceWithDiscount }}
 
               €
             </p>

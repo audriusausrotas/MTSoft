@@ -1,9 +1,5 @@
 import { defineStore } from "pinia";
-import type {
-  Product,
-  ProductsState,
-  ResponseProducts,
-} from "~/data/interfaces";
+import type { Product, ProductsState } from "~/data/interfaces";
 
 export const useProductsStore = defineStore("products", {
   state: (): ProductsState => ({
@@ -14,15 +10,14 @@ export const useProductsStore = defineStore("products", {
   }),
 
   actions: {
-    // fetch from database
-    async fetchProducts(): Promise<void> {
-      const response: ResponseProducts = await $fetch("/api/products");
-      const { data } = response;
+    addProducts(data: any) {
       this.products = [...data];
-
-      data.forEach((item) => {
-        if (item.category === "Darbai") this.works.push(item);
-        else this.parts.push(item);
+      data.forEach((item: Product) => {
+        if (item.category === "Darbai") {
+          this.works.push(item);
+        } else {
+          this.parts.push(item);
+        }
       });
     },
 
@@ -33,21 +28,16 @@ export const useProductsStore = defineStore("products", {
     newProduct(data: Product): void {
       this.products.push(data);
     },
+
+    updateProduct(data: Product): void {
+      this.products = this.products.map((item) =>
+        item._id === data._id ? data : item
+      );
+    },
+    deleteProduct(_id: string): void {
+      this.products = this.products.filter((item) => item._id !== _id);
+    },
   },
 
-  getters: {
-    updateProduct:
-      (store) =>
-      (data: Product): void => {
-        store.products = store.products.map((item) =>
-          item._id === data._id ? data : item
-        );
-      },
-
-    deleteProduct:
-      (store) =>
-      (_id: string): void => {
-        store.products = store.products.filter((item) => item._id !== _id);
-      },
-  },
+  getters: {},
 });

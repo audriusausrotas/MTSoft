@@ -8,12 +8,10 @@ export const useProjectsStore = defineStore("Projects", {
   }),
 
   actions: {
-    async fetchProjects(): Promise<void> {
-      const response: Response = await $fetch("/api/project");
-      if (response.success) {
-        this.projects = [...response.data];
-      }
+    addProjects(data: any) {
+      this.projects = [...data];
     },
+
     addProject(project: Project): void {
       let projectExist = false;
       this.projects = this.projects.map((item) => {
@@ -25,7 +23,7 @@ export const useProjectsStore = defineStore("Projects", {
         }
       });
       if (!projectExist) {
-        this.projects.push(project);
+        this.projects.unshift(project);
       }
     },
     deleteProject(id: String): void {

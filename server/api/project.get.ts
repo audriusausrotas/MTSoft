@@ -6,5 +6,7 @@ export default defineEventHandler(async () => {
   if (!data)
     return { success: false, data: null, message: "Projektai nerasti" };
 
+  data.reverse();
+
   return { success: true, data, message: "done" };
 });

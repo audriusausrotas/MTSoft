@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ResponseUsers, User } from "~/data/interfaces";
+import type { User } from "~/data/interfaces";
 import { accountTypes, accountStatus } from "~/data/selectFieldData";
 
 const useUser = useUserStore();
@@ -8,8 +8,7 @@ const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
 
 if (useUser.users.length === 0) {
-  const data: ResponseUsers = await $fetch("/api/users");
-  useUser.setAllUsers(data.data);
+  useUser.getAllUsers();
 }
 
 const userChangesHandler = async (id: string, type: string, value: string) => {

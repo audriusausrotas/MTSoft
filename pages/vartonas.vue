@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useGateStore } from "~/store/gates";
 const gates = useGateStore();
-gates.getGates();
+if (gates.gates.length === 0) gates.getGates();
 </script>
 
 <template>

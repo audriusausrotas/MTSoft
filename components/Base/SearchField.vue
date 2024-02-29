@@ -13,6 +13,7 @@ const emitUpdate = (value: string): void => {
   } else {
     open.value = true;
   }
+
   emit("onChange", value);
   filteredItems(props.name);
 };
@@ -30,9 +31,17 @@ onMounted(() => {
 
 const filteredItems = (value: string): void => {
   const regex = new RegExp(value, "i");
-  filteredData.value = [
-    ...props.data.filter((item: Product) => regex.test(item.name)),
-  ];
+  const filteredItemsArray = props.data.filter((item: Product) =>
+    regex.test(item.name)
+  );
+
+  filteredData.value = [...filteredItemsArray];
+
+  if (filteredItemsArray.length === 0) {
+    open.value = false;
+  } else {
+    open.value = true;
+  }
 };
 </script>
 

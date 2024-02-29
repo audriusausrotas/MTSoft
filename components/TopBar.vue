@@ -4,8 +4,6 @@ import { topBarLinks } from "~/data/initialValues";
 const router = useRouter();
 const route = useRoute();
 const useUser = useUserStore();
-const useProducts = useProductsStore();
-const useProjects = useProjectsStore();
 
 const isOpen = ref<boolean>(false);
 const initials = computed(() => useUser?.user?.username.slice(0, 2));
@@ -19,13 +17,6 @@ function routeHandler(newPath: string) {
   }
 }
 routeHandler(route.path);
-
-watchEffect(() => {
-  if (useUser.user && useProducts.products.length === 0) {
-    useProjects.fetchProjects();
-    useProducts.fetchProducts();
-  }
-});
 
 watch(
   () => route.path,
