@@ -3,8 +3,10 @@ const props = defineProps(["work", "index"]);
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4 py-4">
-    <div class="">{{ props.index + 1 }}</div>
+  <div
+    class="flex flex-wrap items-center border-b pb-2 border-dark-light gap-4"
+  >
+    <div class="text-xl font-semibold">{{ props.index + 1 }}</div>
 
     <div class="flex flex-col gap-2">
       <BaseInput

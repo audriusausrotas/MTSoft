@@ -283,6 +283,7 @@ export const useCalculationsStore = defineStore("calculations", {
           fenceMeasures[fenceDataIndex].height,
           fence.twoSided
         );
+        this.fences[index].elements += elements;
       } else {
         if (measure.height) {
           elements =

@@ -1,20 +1,23 @@
 <script setup lang="ts">
 const props = defineProps(["client"]);
 </script>
-
 <template>
-  <div class="flex flex-col gap-2 border p-4 rounded-lg border-dark-light">
-    <p class="font-medium text-lg">Kliento Duomenys</p>
-    <div class="flex gap-20">
-      <p>Klientas: {{ props?.client?.username }}</p>
-      <p>Adresas: {{ props?.client?.address }}</p>
-      <a :href="'tel:' + props?.client?.phone">
-        Telefonas: {{ props?.client?.phone }}
-      </a>
-      <a :href="'mailto:' + props?.client?.email">
-        Pastas:
-        {{ props.client?.email }}
-      </a>
+  <div class="flex flex-wrap overflow-hidden border rounded-lg">
+    <div class="flex-1">
+      <ResultClient
+        name="klientas"
+        :value="props.client.username"
+        class="capitalize border-b"
+      />
+      <ResultClient name="telefono numeris" :value="props.client.phone" />
+    </div>
+    <div class="flex-1">
+      <ResultClient
+        name="adresas"
+        :value="props.client.address"
+        class="capitalize border-b"
+      />
+      <ResultClient name="elektroninis paštas" :value="props.client.email" />
     </div>
   </div>
 </template>

@@ -1,6 +1,13 @@
 <script setup lang="ts">
 const route = useRoute();
 const selected = ref<any>(route.name);
+
+watch(
+  () => route.name,
+  (newPath) => {
+    selected.value = newPath;
+  }
+);
 </script>
 
 <template>
@@ -16,13 +23,17 @@ const selected = ref<any>(route.name);
     <NuxtLink
       :to="'/perziura/' + route.params.id + '/gamybai'"
       class="flex-1 hover:bg-red-full hover:text-white h-full py-6"
-      :class="selected.includes('gamybai') ? 'bg-red-full text-white' : ''"
+      :class="
+        selected === 'perziura-id-gamybai' ? 'bg-red-full text-white' : ''
+      "
       >Gamybai</NuxtLink
     >
     <NuxtLink
       :to="'/perziura/' + route.params.id + '/montuotojams'"
       class="flex-1 hover:bg-red-full hover:text-white h-full py-6"
-      :class="selected.includes('montuotojams') ? 'bg-red-full text-white' : ''"
+      :class="
+        selected === 'perziura-id-montuotojams' ? 'bg-red-full text-white' : ''
+      "
       >Montuotojams</NuxtLink
     >
   </div>

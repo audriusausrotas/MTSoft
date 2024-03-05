@@ -35,8 +35,10 @@ const showAditionalHorizontal = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4 py-4">
-    <div class="">{{ props.index + 1 }}</div>
+  <div
+    class="flex flex-wrap items-center border-b pb-2 border-dark-light gap-4"
+  >
+    <div class="text-xl font-semibold">{{ props.index + 1 }}</div>
 
     <div class="flex flex-col gap-2 w-96">
       <BaseInput width="w-full" label="Pavadinimas" :name="props.result.type" />
@@ -97,6 +99,7 @@ const showAditionalHorizontal = computed(() => {
         :disable="true"
         :name="props.result.direction"
       />
+
       <BaseInput
         v-if="showAditionalHorizontal"
         label="pramatomumas"

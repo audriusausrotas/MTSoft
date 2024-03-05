@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { verticals } from "~/data/selectFieldData";
 const props = defineProps(["data"]);
-
+console.log(props.data);
 const isFenceboards = ref<boolean>(verticals.includes(props.data?.type));
 </script>
 
@@ -35,6 +35,7 @@ const isFenceboards = ref<boolean>(verticals.includes(props.data?.type));
         label="ankeriuojami stulpai"
         width="w-36"
       />
+
       <BaseInput :name="fence.totalLength" label="tvoros ilgis" width="w-24" />
       <BaseInput :name="fence.totalQuantity" label="Kvadratai" width="w-24" />
       <BaseInput :name="fence.totalQuantity" label="Kvadratai" width="w-24" />
