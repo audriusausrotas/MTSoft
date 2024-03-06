@@ -1,0 +1,15 @@
+jei varteliu magnetine spyna reik naujo produkto
+pridet parapeto skaiciavima
+dar reik atsvaitinio daviklio vartams
+prijungt automatini meilu siuntima
+atviazduot viska vienam lape, 
+atprintint visa info pdf i trella
+pasiulyme pridet tvoros infromacija
+neapvalina vartu pamato samatoj
+pasiulyme rodo pamatelio spalva kai jos nera
+pasiulyme vartu pamata rasyt metrais
+filtrai pagridiniam puslapyj
+atidaryt pasiulyma naujam lange mygtukas
+archyvuot mygtukas
+mygtukas nukopijuot projekta
+spalvotos busenos
