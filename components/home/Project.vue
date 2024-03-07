@@ -79,7 +79,19 @@ const copyHandler = async () => {
   }
 };
 
-const archieveHandler = () => {};
+const archiveHandler = async () => {
+  try {
+    const data: any = await $fetch("/api/archive", {
+      method: "post",
+      body: { _id: props.project._id },
+    });
+    if (data.success) {
+      useProjects.deleteProject(props.project._id);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
@@ -206,7 +218,7 @@ const archieveHandler = () => {};
         </div>
 
         <div
-          @click="archieveHandler"
+          @click="archiveHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
