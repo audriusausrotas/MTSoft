@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
-import type { Response, ProjectsState, Project } from "~/data/interfaces";
+import type { ProjectsState, Project } from "~/data/interfaces";
 
 export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
+    archive: [],
     selectedProject: null,
   }),
 
@@ -29,6 +30,9 @@ export const useProjectsStore = defineStore("Projects", {
     deleteProject(id: String): void {
       this.projects = this.projects.filter((item) => item._id !== id);
     },
+    deleteArchive(id: String): void {
+      this.archive = this.archive.filter((item) => item._id !== id);
+    },
     setSelectedProject(data: string) {
       this.selectedProject = data;
     },
@@ -40,6 +44,19 @@ export const useProjectsStore = defineStore("Projects", {
         if (item._id === project._id) return project;
         else return item;
       });
+    },
+    moveToArchive(data: Project) {
+      this.archive.unshift(data);
+      this.deleteProject(data._id);
+    },
+
+    moveToProjects(data: Project) {
+      this.projects.unshift(data);
+      this.deleteArchive(data._id);
+    },
+
+    addArchives(data: Project[]) {
+      this.archive = [...data];
     },
   },
 });

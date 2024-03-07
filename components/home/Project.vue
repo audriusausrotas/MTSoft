@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
-const props = defineProps(["project", "index", "length"]);
+
+const props = defineProps(["project", "index", "length", "archive"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
@@ -82,11 +83,13 @@ const copyHandler = async () => {
 const archiveHandler = async () => {
   try {
     const data: any = await $fetch("/api/archive", {
-      method: "post",
+      method: props.archive ? "patch" : "post",
       body: { _id: props.project._id },
     });
     if (data.success) {
-      useProjects.deleteProject(props.project._id);
+      props.archive
+        ? useProjects.moveToProjects(props.project)
+        : useProjects.moveToArchive(props.project);
     }
   } catch (error) {
     console.log(error);
@@ -227,7 +230,8 @@ const archiveHandler = async () => {
             width="20"
             height="20"
           />
-          <p>Archyvuoti</p>
+          <p v-if="!props.archive">Archyvuoti</p>
+          <p v-else>Sugrąžinti</p>
         </div>
         <div
           @click="deleteHandler"

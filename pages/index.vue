@@ -3,6 +3,7 @@ const useProjects = useProjectsStore();
 const user = useUserStore();
 
 const userLetters = user.user?.username.substring(0, 3).toUpperCase();
+const selectedFilter = ref<string>(userLetters || "");
 const filteredProjects = ref();
 const users = [
   "Visi",
@@ -10,14 +11,23 @@ const users = [
 ];
 
 const filterProjects = (value: string) => {
+  selectedFilter.value = value;
   if (value === "Visi") filteredProjects.value = useProjects.projects;
   else
     filteredProjects.value = useProjects.projects.filter((item) =>
-      item.orderNumber.startsWith(value)
+      item.orderNumber.startsWith(selectedFilter.value)
     );
 };
 
-filterProjects(userLetters as string);
+filterProjects(selectedFilter.value as string);
+
+watch(
+  useProjects.archive,
+  () => {
+    filterProjects(selectedFilter.value);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
