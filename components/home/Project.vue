@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Project } from "~/data/interfaces";
 const props = defineProps(["project", "index", "length"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
@@ -16,6 +17,7 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const editHandler = () => {
+  console.log(props.project._id);
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
@@ -43,6 +45,39 @@ const linkHandler = () => {
 
 const previewHandler = () => {
   navigateTo("/perziura/" + props.project._id);
+};
+
+const openInNewHandler = () => {
+  window.open(
+    "https://modernitvora.vercel.app/pasiulymas/" + props.project._id,
+    "_blank"
+  );
+};
+
+const copyHandler = async () => {
+  const newProject: Project = {
+    ...props.project,
+    _id: "",
+    orderNumber: "",
+    dateCreated: "",
+    dateExparation: "",
+    confirmed: false,
+    payed: false,
+    status: "Nepatvirtintas",
+    advance: false,
+  };
+
+  try {
+    const data: any = await $fetch("/api/project", {
+      method: useProjects.selectedProject ? "put" : "post",
+      body: newProject,
+    });
+    if (data.success) {
+      useProjects.addProject(data.data);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 
@@ -91,11 +126,11 @@ const previewHandler = () => {
       />
       <div
         v-if="open"
-        class="absolute z-40 flex flex-col gap-2 top-8 -left-3 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-14 h-40"
+        class="absolute z-40 flex flex-col gap-2 top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden h-60 w-48"
       >
         <div
           @click="previewHandler"
-          class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
         >
           <NuxtImg
             src="/icons/eye.svg"
@@ -104,21 +139,12 @@ const previewHandler = () => {
             height="20"
             @click="previewHandler"
           />
+          <p>Peržiūrėti</p>
         </div>
-        <div
-          @click="linkHandler"
-          class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
-        >
-          <NuxtImg
-            src="/icons/link.svg"
-            alt="link button"
-            width="20"
-            height="20"
-          />
-        </div>
+
         <div
           @click="editHandler"
-          class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
         >
           <NuxtImg
             src="/icons/edit.svg"
@@ -126,10 +152,51 @@ const previewHandler = () => {
             width="20"
             height="20"
           />
+          <p>Redaguoti</p>
         </div>
+
+        <div
+          @click="linkHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/link.svg"
+            alt="link button"
+            width="20"
+            height="20"
+          />
+          <p>Kopijuoti nuorodą</p>
+        </div>
+
+        <div
+          @click="openInNewHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/link.svg"
+            alt="edit button"
+            width="20"
+            height="20"
+          />
+          <p>Atidaryti pasiūlymą</p>
+        </div>
+
+        <div
+          @click="copyHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+        >
+          <NuxtImg
+            src="/icons/edit.svg"
+            alt="edit button"
+            width="20"
+            height="20"
+          />
+          <p>Kopijuoti projektą</p>
+        </div>
+
         <div
           @click="deleteHandler"
-          class="hover:bg-red-full w-full h-full flex justify-center items-center hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
         >
           <NuxtImg
             src="/icons/delete.svg"
@@ -137,6 +204,7 @@ const previewHandler = () => {
             width="20"
             height="20"
           />
+          <p>Ištrinti</p>
         </div>
       </div>
     </div>
