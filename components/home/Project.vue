@@ -17,7 +17,6 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const editHandler = () => {
-  console.log(props.project._id);
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
@@ -79,6 +78,8 @@ const copyHandler = async () => {
     console.log(error);
   }
 };
+
+const archieveHandler = () => {};
 </script>
 
 <template>
@@ -110,7 +111,17 @@ const copyHandler = async () => {
       width="w-64 min-w-fit"
       :email="true"
     />
-    <BaseInfoField :name="props.project?.status" width="w-40" />
+    <BaseInfoField
+      :name="props.project?.status"
+      width="w-40"
+      :class="
+        props.project?.status === 'Nepatvirtintas'
+          ? 'bg-orange-300'
+          : props.project?.status === 'Netinkamas'
+          ? 'bg-red-300'
+          : 'bg-green-400'
+      "
+    />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
@@ -126,11 +137,11 @@ const copyHandler = async () => {
       />
       <div
         v-if="open"
-        class="absolute z-40 flex flex-col gap-2 top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden h-60 w-48"
+        class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden h-64 w-48"
       >
         <div
           @click="previewHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/eye.svg"
@@ -144,7 +155,7 @@ const copyHandler = async () => {
 
         <div
           @click="editHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/edit.svg"
@@ -157,7 +168,7 @@ const copyHandler = async () => {
 
         <div
           @click="linkHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/link.svg"
@@ -170,7 +181,7 @@ const copyHandler = async () => {
 
         <div
           @click="openInNewHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/link.svg"
@@ -183,7 +194,7 @@ const copyHandler = async () => {
 
         <div
           @click="copyHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/edit.svg"
@@ -195,8 +206,20 @@ const copyHandler = async () => {
         </div>
 
         <div
+          @click="archieveHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            alt="delete button"
+            width="20"
+            height="20"
+          />
+          <p>Archyvuoti</p>
+        </div>
+        <div
           @click="deleteHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
           <NuxtImg
             src="/icons/delete.svg"
