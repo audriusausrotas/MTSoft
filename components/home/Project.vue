@@ -8,12 +8,17 @@ const useCalculations = useCalculationsStore();
 const open = ref<boolean>(false);
 
 const deleteHandler = async (): Promise<void> => {
-  const response: any = await $fetch("/api/project", {
-    method: "DELETE",
-    body: { _id: props.project._id },
-  });
+  const response: any = await $fetch(
+    props.archive ? "/api/archive" : "/api/project",
+    {
+      method: "DELETE",
+      body: { _id: props.project._id },
+    }
+  );
   if (response.success) {
-    useProjects.deleteProject(props.project._id);
+    props.archive
+      ? useProjects.deleteArchive(props.project._id)
+      : useProjects.deleteProject(props.project._id);
   }
 };
 
@@ -44,7 +49,9 @@ const linkHandler = () => {
 };
 
 const previewHandler = () => {
-  navigateTo("/perziura/" + props.project._id);
+  props.archive
+    ? navigateTo("/archyvas/" + props.project._id)
+    : navigateTo("/perziura/" + props.project._id);
 };
 
 const openInNewHandler = () => {
@@ -152,7 +159,8 @@ const archiveHandler = async () => {
       />
       <div
         v-if="open"
-        class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden h-64 w-48"
+        class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
+        :class="props.archive ? 'h-28' : 'h-64'"
       >
         <div
           @click="previewHandler"
@@ -163,12 +171,12 @@ const archiveHandler = async () => {
             alt="eye button"
             width="20"
             height="20"
-            @click="previewHandler"
           />
           <p>Peržiūrėti</p>
         </div>
 
         <div
+          v-if="!props.archive"
           @click="editHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -182,6 +190,7 @@ const archiveHandler = async () => {
         </div>
 
         <div
+          v-if="!props.archive"
           @click="linkHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -195,6 +204,7 @@ const archiveHandler = async () => {
         </div>
 
         <div
+          v-if="!props.archive"
           @click="openInNewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -208,6 +218,7 @@ const archiveHandler = async () => {
         </div>
 
         <div
+          v-if="!props.archive"
           @click="copyHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
