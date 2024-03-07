@@ -2,7 +2,7 @@
 import { status } from "~/data/selectFieldData";
 definePageMeta({
   layout: "preview",
-});
+} as any);
 const route = useRoute();
 const useProjects = useProjectsStore();
 const offer = useProjects.projects.find((item) => item._id === route.params.id);

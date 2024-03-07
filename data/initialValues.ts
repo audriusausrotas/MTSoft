@@ -136,6 +136,7 @@ export const defaultValues = {
   anchoredGatePoleMain: "Ankeriuojamas stulpas vartams 80x80x1500 mm, 2.0 mm",
   anchoredGatePoleAlt: "Ankeriuojamas stulpas vartams 80x80x2000 mm, 2.0 mm",
   anchoredGatePolesWork: "Ankeriuojamo vartų stulpo montavimas",
+  dileCork: "Dilė tvoralentės kamštelis",
 };
 
 export const fenceMeasures: FenceMeasure[] = [

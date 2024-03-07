@@ -150,8 +150,8 @@ export const useResultsStore = defineStore("results", {
 
     recalculateWorkTotals(index: number): void {
       const work = this.works[index];
-      work.totalPrice = work.price * work.quantity;
-      work.totalCost = work.cost * work.quantity;
+      work.totalPrice = Math.round(work.price * work.quantity);
+      work.totalCost = Math.round(work.cost * work.quantity);
       work.profit = work.totalPrice - work.totalCost;
       const marginValue =
         ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;

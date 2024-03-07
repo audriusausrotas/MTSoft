@@ -140,7 +140,7 @@ const spaceEditable = computed(
       />
 
       <BaseInput
-        v-if="isFenceboard"
+        v-if="isFenceboard && props.result.twoSided"
         width="w-36"
         label="dvipusė"
         :name="props.result.twoSided"

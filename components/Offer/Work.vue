@@ -24,7 +24,13 @@ const props = defineProps(["work", "index"]);
             {{ props.work.quantity }}
           </p>
           <p>
-            {{ props.work.name.includes("Tvoros montavimas") ? "m2" : "vnt" }}
+            {{
+              props.work.name.includes("Tvoros montavimas")
+                ? "m2"
+                : props.work.name.includes("Vartų pamato betonavimas")
+                ? "m"
+                : "vnt"
+            }}
           </p>
         </div>
       </div>

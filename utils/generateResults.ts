@@ -5,9 +5,20 @@ export default function generateResults() {
   const results = useResultsStore();
 
   if (results.fences.length > 0) {
+    let cork = 0;
     results.fences.forEach((item) => {
       createResultElement(item);
+      if (item.type.includes("Dilė")) {
+        cork += item.quantity;
+      }
     });
+    if (cork > 0) {
+      createResultElement({
+        type: defaultValues.dileCork,
+        quantity: cork,
+        color: 9005,
+      });
+    }
   }
 
   if (results.segments.length > 0) {
