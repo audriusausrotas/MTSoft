@@ -351,6 +351,20 @@ const cancelHandler = async () => {
               €
             </p>
           </div>
+          <div
+            class="flex px-4 print:py-1 text-base font-medium justify-between"
+          >
+            <p class=" ">Avanso suma:</p>
+            <p class="">
+              {{
+                offer.offer?.discount
+                  ? Math.round(offer.offer?.priceWithDiscount * 0.3)
+                  : Math.round(offer.offer?.priceVAT * 0.3)
+              }}
+
+              €
+            </p>
+          </div>
         </div>
       </div>
     </div>
