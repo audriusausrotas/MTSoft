@@ -3,31 +3,12 @@ const useProjects = useProjectsStore();
 const user = useUserStore();
 
 const userLetters = user.user?.username.substring(0, 3).toUpperCase();
-const selectedFilter = ref<string>(userLetters || "");
-const filteredProjects = ref();
+useProjects.changeFilter(userLetters ? userLetters : "Visi");
+
 const users = [
   "Visi",
   ...new Set(useProjects.projects.map((item) => item.orderNumber.slice(0, 3))),
 ];
-
-const filterProjects = (value: string) => {
-  selectedFilter.value = value;
-  if (value === "Visi") filteredProjects.value = useProjects.projects;
-  else
-    filteredProjects.value = useProjects.projects.filter((item) =>
-      item.orderNumber.startsWith(selectedFilter.value)
-    );
-};
-
-filterProjects(selectedFilter.value as string);
-
-watch(
-  useProjects.archive,
-  () => {
-    filterProjects(selectedFilter.value);
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -38,15 +19,15 @@ watch(
       id="fenceSide"
       :defaultValue="userLetters"
       width="w-24"
-      @onChange="(value: string) => filterProjects(value) 
+      @onChange="(value: string) => useProjects.changeFilter(value) 
         "
     />
     <div class="flex flex-col gap-4">
       <HomeProject
-        v-for="(project, index) in filteredProjects"
+        v-for="(project, index) in useProjects.filteredProjects"
         :key="project._id"
         :index="index"
-        :length="useProjects.projects.length"
+        :length="useProjects.filteredProjects.length"
         :project="project"
       />
     </div>

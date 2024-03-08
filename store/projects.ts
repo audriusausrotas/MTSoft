@@ -5,7 +5,9 @@ export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
     archive: [],
+    filteredProjects: [],
     selectedProject: null,
+    selectedFilter: "Visi",
   }),
 
   actions: {
@@ -26,9 +28,11 @@ export const useProjectsStore = defineStore("Projects", {
       if (!projectExist) {
         this.projects.unshift(project);
       }
+      this.filterProjects();
     },
     deleteProject(id: String): void {
       this.projects = this.projects.filter((item) => item._id !== id);
+      this.filterProjects();
     },
     deleteArchive(id: String): void {
       this.archive = this.archive.filter((item) => item._id !== id);
@@ -57,6 +61,19 @@ export const useProjectsStore = defineStore("Projects", {
 
     addArchives(data: Project[]) {
       this.archive = [...data];
+    },
+
+    changeFilter(data: string) {
+      this.selectedFilter = data;
+      this.filterProjects();
+    },
+    filterProjects() {
+      if (this.selectedFilter === "Visi")
+        this.filteredProjects = [...this.projects];
+      else
+        this.filteredProjects = this.projects.filter((item) =>
+          item.orderNumber.startsWith(this.selectedFilter)
+        );
     },
   },
 });
