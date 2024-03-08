@@ -31,7 +31,11 @@ console.log(props.result);
         <span v-if="props.result.seeThrough">{{
           props.result.seeThrough
         }}</span>
-        <span v-if="props.result.height && props.result.category === 'tvoros'"
+        <span
+          v-if="
+            props.result.height &&
+            props.result.category.toLowerCase() === 'tvoros'
+          "
           >H-{{ props.result.height }}</span
         >
         <span v-if="props.result.color">RAL{{ props.result.color }}</span>
