@@ -90,9 +90,9 @@ const copyHandler = async () => {
 const archiveHandler = async () => {
   try {
     const data: any = await $fetch("/api/archive", {
-      method: props.archive ? "patch" : "post",
+      method: props.archive ? "PATCH" : "POST",
       body: { _id: props.project._id },
-    });
+    } as any);
     if (data.success) {
       props.archive
         ? useProjects.moveToProjects(props.project)
