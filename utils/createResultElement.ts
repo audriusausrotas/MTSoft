@@ -84,6 +84,7 @@ export default function createResultElement(item: any) {
     margin: +margin,
     isNew: false,
     category: product.category,
+    width: item.width || null,
   };
 
   results.push(resultData);

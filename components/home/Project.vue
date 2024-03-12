@@ -141,6 +141,8 @@ const archiveHandler = async () => {
           ? 'bg-orange-300'
           : props.project?.status === 'Netinkamas'
           ? 'bg-red-300'
+          : props.project?.status === 'Tinkamas'
+          ? 'bg-pink-400'
           : 'bg-green-400'
       "
     />

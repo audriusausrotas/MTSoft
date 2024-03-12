@@ -49,8 +49,9 @@ const useProduct = useProductsStore();
         <BaseInput
           label="savikaina"
           :name="props.work.cost"
-          disable="true"
           width="w-24"
+          variant="light"
+          @onChange="(value) => useResults.updateWorkCost(props.index, value)"
         />
       </div>
     </div>

@@ -20,6 +20,13 @@ watch(
       :class="selected === 'perziura-id' ? 'bg-red-full text-white' : ''"
       >Apžvalga</NuxtLink
     >
+
+    <NuxtLink
+      :to="'/perziura/' + route.params.id + '/trello'"
+      class="flex-1 hover:bg-red-full hover:text-white h-full py-6"
+      :class="selected === 'perziura-id-trello' ? 'bg-red-full text-white' : ''"
+      >Trello</NuxtLink
+    >
     <NuxtLink
       :to="'/perziura/' + route.params.id + '/gamybai'"
       class="flex-1 hover:bg-red-full hover:text-white h-full py-6"

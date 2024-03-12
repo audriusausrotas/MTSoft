@@ -45,6 +45,7 @@ export const initialResultData: Result = {
   margin: 0,
   isNew: false,
   category: "",
+  width: null,
 };
 
 export const topBarLinks: MenuLinks[] = [
@@ -119,6 +120,7 @@ export const defaultValues = {
   gatesAuto: "Stumdomi kiemo vartai su automatika ir montavimu",
   gates2Auto: "Varstomi kiemo vartai su automatika ir montavimu",
   smallGates: "Kiemo varteliai su montavimu",
+  smallGates2: "Kiemo varteliai su elektromagnetine spyna ir montavimu",
   polesWork: "Tvoros stulpo betonavimas",
   gatesPoleWork: "Vartų stulpo betonavimas",
   gateBnkette: "Vartų pamato betonavimas",

@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
   }
 
   project.status = value;
-  const data = project.save();
+  const data = await project.save();
 
   return { success: true, data: data, message: "Būsena atnaujinta" };
 });

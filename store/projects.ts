@@ -8,6 +8,7 @@ export const useProjectsStore = defineStore("Projects", {
     filteredProjects: [],
     selectedProject: null,
     selectedFilter: "Visi",
+    selectedStatusFilter: "Visi",
   }),
 
   actions: {
@@ -67,13 +68,34 @@ export const useProjectsStore = defineStore("Projects", {
       this.selectedFilter = data;
       this.filterProjects();
     },
+    changeStatusFilter(data: string) {
+      this.selectedStatusFilter = data;
+      this.filterProjects();
+    },
+
     filterProjects() {
-      if (this.selectedFilter === "Visi")
-        this.filteredProjects = [...this.projects];
-      else
-        this.filteredProjects = this.projects.filter((item) =>
-          item.orderNumber.startsWith(this.selectedFilter)
-        );
+      if (this.selectedFilter === "Visi") {
+        if (this.selectedStatusFilter === "Visi") {
+          this.filteredProjects = [...this.projects];
+        } else {
+          const filteredByStatus = this.projects.filter(
+            (item) => item.status === this.selectedStatusFilter
+          );
+          this.filteredProjects = [...filteredByStatus];
+        }
+      } else {
+        if (this.selectedStatusFilter === "Visi") {
+          this.filteredProjects = this.projects.filter((item) =>
+            item.orderNumber.startsWith(this.selectedFilter)
+          );
+        } else {
+          this.filteredProjects = this.projects.filter(
+            (item) =>
+              item.orderNumber.startsWith(this.selectedFilter) &&
+              item.status === this.selectedStatusFilter
+          );
+        }
+      }
     },
   },
 });

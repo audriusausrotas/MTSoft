@@ -12,7 +12,7 @@ else if (
   measurement.value = "m2";
 else measurement.value = "vnt";
 
-console.log(props.result);
+
 </script>
 
 <template>
@@ -34,11 +34,17 @@ console.log(props.result);
         <span
           v-if="
             props.result.height &&
-            props.result.category.toLowerCase() === 'tvoros'
+            props.result.category.toLowerCase() === 'tvoros' &&
+            !props.result.type.includes('Segmentas')
           "
           >H-{{ props.result.height }}</span
         >
-        <span v-if="props.result.color">RAL{{ props.result.color }}</span>
+        <span v-if="props.result.color && !props.result.type.includes('RAL')"
+          >RAL{{ props.result.color }}</span
+        >
+        <span v-if="props.result.category.toLowerCase() === 'vartai'"
+          >plotis: {{ props.result.width }} cm
+        </span>
       </div>
     </div>
     <div class="border sm:hidden w-full"></div>

@@ -56,7 +56,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateDiscount(value: number) {
-      this.priceWithDiscount = value;
+      this.priceWithDiscount = +value;
     },
 
     addFences(data: Fences[]): void {
@@ -88,6 +88,16 @@ export const useResultsStore = defineStore("results", {
       this.works[index].name = value;
     },
 
+    updateResultCost(index: number, value: number): void {
+      this.results[index].cost = +value;
+      this.recalculateTotals(index);
+    },
+
+    updateWorkCost(index: number, value: string): void {
+      this.works[index].cost = +value;
+      this.recalculateWorkTotals(index);
+    },
+
     selectItem(index: number, value: Product): void {
       const selectedResult = this.results[index];
       selectedResult.type = value.name;
@@ -106,12 +116,12 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateQuantity(index: number, value: number): void {
-      this.results[index].quantity = value;
+      this.results[index].quantity = +value;
       this.recalculateTotals(index);
     },
 
     updateSpace(index: number, value: number): void {
-      this.results[index].space = value;
+      this.results[index].space = +value;
     },
 
     updateColor(index: number, value: string): void {
@@ -120,8 +130,21 @@ export const useResultsStore = defineStore("results", {
     },
 
     updatePrice(index: number, value: number): void {
-      this.results[index].price = value;
+      this.results[index].price = +value;
       this.recalculateTotals(index);
+    },
+
+    updateWorkQuantity(index: number, value: number): void {
+      this.works[index].quantity = +value;
+      this.recalculateWorkTotals(index);
+    },
+
+    updateWorkPrice(index: number, value: number): void {
+      this.works[index].price = +value;
+      if (this.works[index].name === "Transportas") {
+        this.works[index].cost = +value;
+      }
+      this.recalculateWorkTotals(index);
     },
 
     recalculateTotals(index: number): void {
@@ -133,19 +156,6 @@ export const useResultsStore = defineStore("results", {
         ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
       result.margin = +marginValue.toFixed(2);
       this.calculateTotals();
-    },
-
-    updateWorkQuantity(index: number, value: number): void {
-      this.works[index].quantity = value;
-      this.recalculateWorkTotals(index);
-    },
-
-    updateWorkPrice(index: number, value: number): void {
-      this.works[index].price = value;
-      if (this.works[index].name === "Transportas") {
-        this.works[index].cost = value;
-      }
-      this.recalculateWorkTotals(index);
     },
 
     recalculateWorkTotals(index: number): void {
@@ -193,9 +203,11 @@ export const useResultsStore = defineStore("results", {
 
     deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
+      this.calculateTotals();
     },
     deleteWork(id: string): void {
       this.works = this.works.filter((item) => item.id !== id);
+      this.calculateTotals();
     },
 
     clearResults(): void {
@@ -331,7 +343,7 @@ export const useResultsStore = defineStore("results", {
       const doesExist = this.poles.some((item) => item.color === color);
       if (!doesExist) quantity++;
       if (quantity === 0) quantity++;
-      this.poles = this.addPart(this.poles, color, quantity, height);
+      this.poles = this.addPart(this.poles, color, quantity, +height);
     },
 
     addAnchoredPoles(color: string, height: number): void {
@@ -367,14 +379,14 @@ export const useResultsStore = defineStore("results", {
     },
 
     addGatePoles(color: string, quantity: number): void {
-      this.gatePoles = this.addPart(this.gatePoles, color, quantity, 3);
+      this.gatePoles = this.addPart(this.gatePoles, color, +quantity, 3);
     },
 
     addAnchoredGatePoles(color: string, quantity: number): void {
       this.anchoredGatePoles = this.addPart(
         this.anchoredGatePoles,
         color,
-        quantity,
+        +quantity,
         3
       );
     },
@@ -422,9 +434,9 @@ export const useResultsStore = defineStore("results", {
     },
 
     addSegment(height: number, color: string): void {
-      this.segments = this.addPart(this.segments, color, 1, height);
+      this.segments = this.addPart(this.segments, color, 1, +height);
 
-      const holdersCount = height < 130 ? 2 : height < 170 ? 3 : 4;
+      const holdersCount = +height < 130 ? 2 : +height < 170 ? 3 : 4;
 
       if (this.segmentHolders.length === 0) {
         this.segmentHolders = this.addPart(

@@ -180,11 +180,20 @@ export default function generateResults() {
           });
         }
       } else {
-        createResultElement({
-          ...item,
-          type: defaultValues.smallGates,
-          quantity: 1,
-        });
+        console.log(item);
+        if (item.lock === "Elektromagnetinė") {
+          createResultElement({
+            ...item,
+            type: defaultValues.smallGates2,
+            quantity: 1,
+          });
+        } else {
+          createResultElement({
+            ...item,
+            type: defaultValues.smallGates,
+            quantity: 1,
+          });
+        }
       }
     });
   }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { verticals } from "~/data/selectFieldData";
 const props = defineProps(["data"]);
-console.log(props.data);
 const isFenceboards = ref<boolean>(verticals.includes(props.data?.type));
 </script>
 

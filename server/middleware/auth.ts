@@ -4,7 +4,8 @@ export default defineEventHandler(async (event: any) => {
   if (
     event.node.req.url.includes("auth") ||
     event.node.req.url.includes("userChanges") ||
-    event.node.req.url.includes("profile")
+    event.node.req.url.includes("profile") ||
+    event.node.req.url.includes("mail")
   ) {
     const body = await readBody(event);
     const token = getCookie(event, "mtud");

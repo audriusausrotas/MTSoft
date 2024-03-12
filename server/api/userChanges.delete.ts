@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: any) => {
   const { _id, password, userId } = await readBody(event);
 
   const data: User | null = await userSchema.findById(_id);
-  console.log(data?.accountType === "Administratorius");
+
 
   if (data?.accountType !== "Administratorius")
     return {

@@ -1,5 +1,3 @@
-import type { ObjectId } from "mongoose";
-
 export interface Response {
   success: boolean;
   data: Project[];
@@ -97,6 +95,7 @@ export interface Result {
   profit: number;
   margin: number;
   isNew: boolean;
+  width: number | null;
 }
 
 export interface OtherParts {
@@ -188,6 +187,7 @@ export interface ProjectsState {
   filteredProjects: Project[];
   selectedProject: string | null;
   selectedFilter: string;
+  selectedStatusFilter: string;
 }
 
 export interface ProductsState {
