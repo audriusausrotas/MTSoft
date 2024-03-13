@@ -6,26 +6,26 @@ import jwt from "jsonwebtoken";
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
-  // if (!email || !password)
-  //   return { success: false, data: null, message: "užpildykite visus laukus" };
-  // if (!email.includes("@"))
-  //   return {
-  //     success: false,
-  //     data: null,
-  //     message: "neteisingas elektroninis paštas",
-  //   };
-  // if (email.length < 4)
-  //   return {
-  //     success: false,
-  //     data: null,
-  //     message: "elektroninis paštas per trumpas",
-  //   };
-  // if (password.length < 4)
-  //   return {
-  //     success: false,
-  //     data: null,
-  //     message: "slaptažodis per trumpas",
-  //   };
+  if (!email || !password)
+    return { success: false, data: null, message: "Užpildykite visus laukus" };
+  if (!email.includes("@"))
+    return {
+      success: false,
+      data: null,
+      message: "Neteisingas elektroninis paštas",
+    };
+  if (email.length < 4)
+    return {
+      success: false,
+      data: null,
+      message: "Elektroninis paštas per trumpas",
+    };
+  if (password.length < 4)
+    return {
+      success: false,
+      data: null,
+      message: "Slaptažodis per trumpas",
+    };
 
   const data = await userSchema.findOne({ email });
 
@@ -53,5 +53,7 @@ export default defineEventHandler(async (event) => {
     });
 
     return { success: true, data: data, message: "" };
+  } else {
+    return { success: false, data: null, message: "Neteisingas slaptažodis" };
   }
 });

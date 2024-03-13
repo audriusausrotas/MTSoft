@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
 
+const { setError, setIsError } = useError();
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useUser = useUserStore();
+const isLoading = ref<boolean>(false);
 
 const saveHandler = async (): Promise<void> => {
+  isLoading.value = true;
   const newProject: Project = {
     _id: useProjects.selectedProject ? useProjects.selectedProject : "",
     creator: {
@@ -43,11 +46,16 @@ const saveHandler = async (): Promise<void> => {
     if (data.success) {
       useProjects.addProject(data.data);
       clearHandler();
+      setIsError(false);
+      setError(data.message);
       await navigateTo("/");
+    } else {
+      setError(data.message);
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    setError(error);
   }
+  isLoading.value = false;
 };
 
 const clearHandler = () => {
@@ -84,7 +92,11 @@ const clearHandler = () => {
 
   <div class="flex gap-4 flex-wrap">
     <div class="flex gap-4">
-      <BaseButton name="išsaugoti sąmatą" @click="saveHandler" />
+      <BaseButton
+        name="išsaugoti sąmatą"
+        @click="saveHandler"
+        :isLoading="isLoading"
+      />
       <BaseButton name="išvalyti viską" @click="clearHandler" />
     </div>
     <div class="flex gap-4">

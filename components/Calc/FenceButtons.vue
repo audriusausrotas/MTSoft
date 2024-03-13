@@ -94,7 +94,7 @@ const calculateLengthHandler = (): void => {
       @click="open = !open"
     />
 
-    <div v-else="open" class="flex overflow-hidden border rounded-lg">
+    <div v-else-if="open" class="flex overflow-hidden border rounded-lg">
       <input
         placeholder="Bendras Ilgis"
         type="number"
@@ -109,6 +109,7 @@ const calculateLengthHandler = (): void => {
       >
         OK
       </button>
+
       <button
         class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
         @click="cancelHandler"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ResponseUser } from "~/data/interfaces";
 
+const { setError, setIsError } = useError();
 const useUser = useUserStore();
 const initials = computed(() => useUser.user?.username.slice(0, 2));
 const url = ref<string>("");
@@ -8,8 +9,10 @@ const newPassword = ref<string>("");
 const password = ref<string>("");
 const lastName = ref<string>("");
 const phone = ref<string>("");
+const isLoading = ref<boolean>(false);
 
 const saveHandler = async () => {
+  isLoading.value = true;
   const reqData = {
     url: url.value,
     newPassword: newPassword.value,
@@ -30,7 +33,12 @@ const saveHandler = async () => {
     url.value = "";
     lastName.value = "";
     phone.value = "";
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
   }
+  isLoading.value = false;
 };
 </script>
 
@@ -120,7 +128,12 @@ const saveHandler = async () => {
         width="w-64"
       />
     </div>
-    <BaseButton name="išsaugoti pakeitimus" @click="saveHandler" class="my-8" />
+    <BaseButton
+      name="išsaugoti pakeitimus"
+      @click="saveHandler"
+      class="my-8"
+      :isLoading="isLoading"
+    />
   </div>
 </template>
 

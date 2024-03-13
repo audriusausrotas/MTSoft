@@ -1,6 +1,5 @@
 import { userSchema } from "~/server/models/userSchema";
 import type { User } from "~/data/interfaces";
-import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event: any) => {
   const { _id, value, userId, changeType } = await readBody(event);
@@ -11,7 +10,7 @@ export default defineEventHandler(async (event: any) => {
     return {
       success: false,
       data: null,
-      message: "Vartotojas neturi teisiu",
+      message: "Vartotojas neturi teisių",
     };
 
   if (!data)

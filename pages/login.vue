@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import type { ResponseUser } from "~/data/interfaces";
 
+const { setError, setIsError } = useError();
 const login = ref<boolean>(true);
 const username = ref<string>("");
 const email = ref<string>("");
 const password = ref<string>("");
 const retypePassword = ref<string>("");
-
+const isLoading = ref<boolean>(false);
 const useUser = useUserStore();
 
 const loginHandler = async () => {
+  isLoading.value = true;
   const loginData = { email: email.value, password: password.value };
   const data: ResponseUser = await $fetch("/api/login", {
     method: "post",
@@ -18,11 +20,17 @@ const loginHandler = async () => {
   if (data.success) {
     useUser.setUser(data.data);
     clearFields();
+    setIsError(false);
+    setError(data.message);
     await navigateTo("/");
+  } else {
+    setError(data.message);
   }
+  isLoading.value = false;
 };
 
 const registerHandler = async () => {
+  isLoading.value = true;
   const loginData = {
     email: email.value,
     password: password.value,
@@ -37,9 +45,14 @@ const registerHandler = async () => {
     });
 
   if (data.success) {
+    setIsError(false);
+    setError(data.message);
     clearFields();
     changeLogin();
+  } else {
+    setError(data.message);
   }
+  isLoading.value = false;
 };
 
 const changeLogin = () => {
@@ -92,8 +105,18 @@ const clearFields = () => {
         type="password"
       />
 
-      <BaseButton v-if="login" name="login" @click="loginHandler" />
-      <BaseButton v-else name="register" @click="registerHandler" />
+      <BaseButton
+        v-if="login"
+        name="login"
+        @click="loginHandler"
+        :isLoading="isLoading"
+      />
+      <BaseButton
+        v-else
+        name="register"
+        @click="registerHandler"
+        :isLoading="isLoading"
+      />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?

@@ -53,5 +53,5 @@ export default defineEventHandler(async () => {
     ...vartai,
   ];
 
-  return { success: true, data: sortedData, message: "done" };
+  return { success: true, data: sortedData, message: "" };
 });

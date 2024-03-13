@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
     return { success: true, data: null, message: "Projektas ištrintas" };
   } catch (error) {
-    console.error("Error deleting project:", error);
+    console.error("Klaida trinant projektą:", error);
     return { success: false, data: null, message: error };
   }
 });

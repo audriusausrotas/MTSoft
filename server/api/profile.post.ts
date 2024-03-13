@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   );
 
   if (password !== newPassword)
-    return { success: false, data: null, message: "slaptažodžiai nesutampa" };
+    return { success: false, data: null, message: "Slaptažodžiai nesutampa" };
 
   const data = await userSchema.findById(_id);
 
@@ -30,5 +30,5 @@ export default defineEventHandler(async (event) => {
 
   newData.password = "";
 
-  return { success: true, data: newData, message: "" };
+  return { success: true, data: newData, message: "Pakeitimai išsaugoti" };
 });

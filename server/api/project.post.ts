@@ -1,5 +1,4 @@
 import { projectSchema } from "~/server/models/projectSchema";
-import type { Creator } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
   const {

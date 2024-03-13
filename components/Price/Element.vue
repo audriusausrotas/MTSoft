@@ -6,6 +6,7 @@ import type { ResponseUser, ResponseProduct } from "~/data/interfaces";
 const props = defineProps(["product", "index"]);
 const useProducts = useProductsStore();
 
+const { setError, setIsError } = useError();
 const disable = ref<boolean>(true);
 const productName = ref<string>(props.product.name);
 const productPrice = ref<number>(props.product.price);
@@ -23,6 +24,10 @@ const deleteHandler = async (): Promise<void> => {
   });
   if (data.success) {
     useProducts.deleteProduct(props.product._id);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
 };
 
@@ -53,6 +58,10 @@ const saveHandler = async (): Promise<void> => {
   if (data.success) {
     useProducts.updateProduct(data.data);
     disable.value = true;
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
 };
 </script>

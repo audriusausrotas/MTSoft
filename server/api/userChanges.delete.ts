@@ -12,7 +12,7 @@ export default defineEventHandler(async (event: any) => {
     return {
       success: false,
       data: null,
-      message: "Vartotojas neturi teisiu",
+      message: "Vartotojas neturi teisių",
     };
 
   if (!data)

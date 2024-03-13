@@ -7,6 +7,28 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const cookie = useCookie("mtud");
 
   if (!to.path.includes("pasiulymas")) {
+    if (process.client) {
+      const useProjects = useProjectsStore();
+      if (useProjects.projects.length === 0) {
+        if (
+          useUser.user?.accountType === "Administratorius" ||
+          useUser.user?.accountType === "Paprastas vartotojas"
+        ) {
+          const { data: projects }: any = await useFetch("/api/project");
+          if (projects.value.success) {
+            const useProjects = useProjectsStore();
+            useProjects.addProjects(projects.value.data);
+          }
+
+          const { data: products }: any = await useFetch("/api/products");
+          if (products.value.success) {
+            const useProducts = useProductsStore();
+            useProducts.addProducts(products.value.data);
+          }
+        }
+      }
+    }
+
     if (process.server) {
       if (cookie.value) {
         const { data }: any = await useFetch("/api/auth", {

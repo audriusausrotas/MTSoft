@@ -6,6 +6,7 @@ const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
 const open = ref<boolean>(false);
+const { setError, setIsError } = useError();
 
 const deleteHandler = async (): Promise<void> => {
   const response: any = await $fetch(
@@ -19,6 +20,10 @@ const deleteHandler = async (): Promise<void> => {
     props.archive
       ? useProjects.deleteArchive(props.project._id)
       : useProjects.deleteProject(props.project._id);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
   }
 };
 
@@ -41,10 +46,11 @@ const linkHandler = () => {
       "https://modernitvora.vercel.app/pasiulymas/" + props.project._id
     )
     .then(() => {
-      console.log("Text successfully copied to clipboard:", props.project._id);
+      setIsError(false);
+      setError("Nuoroda nukopijuota");
     })
     .catch((error) => {
-      console.error("Error copying to clipboard:", error);
+      setError("Klaida: " + error);
     });
 };
 
@@ -81,9 +87,12 @@ const copyHandler = async () => {
     });
     if (data.success) {
       useProjects.addProject(data.data);
+      setError(data.message);
+    } else {
+      setError(data.message);
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    setError(error);
   }
 };
 
@@ -97,9 +106,13 @@ const archiveHandler = async () => {
       props.archive
         ? useProjects.moveToProjects(props.project)
         : useProjects.moveToArchive(props.project);
+
+      setError(data.message);
+    } else {
+      setError(data.message);
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    setError(error);
   }
 };
 </script>
@@ -140,7 +153,7 @@ const archiveHandler = async () => {
         props.project?.status === 'Nepatvirtintas'
           ? 'bg-orange-300'
           : props.project?.status === 'Netinkamas'
-          ? 'bg-red-300'
+          ? 'bg-red-full'
           : props.project?.status === 'Tinkamas'
           ? 'bg-pink-400'
           : 'bg-green-400'

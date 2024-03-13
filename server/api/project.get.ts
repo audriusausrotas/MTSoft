@@ -8,5 +8,5 @@ export default defineEventHandler(async () => {
 
   data.reverse();
 
-  return { success: true, data, message: "done" };
+  return { success: true, data, message: "" };
 });

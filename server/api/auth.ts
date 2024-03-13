@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       data: null,
-      message: "nera tokeno",
+      message: "Žetonas neegzistuoja",
     };
 
   const data: User | null = await userSchema.findById({ _id });
@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
 
   data.password = "";
 
-  return { success: true, data: data, message: "Vartotojas prijungtas" };
+  return { success: true, data: data, message: "" };
 });

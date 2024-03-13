@@ -6,8 +6,10 @@ const route = useRoute();
 const useProjects = useProjectsStore();
 const pdfSection = ref<HTMLElement | null>(null);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
+const isLoading = ref<boolean>(false);
 
 const downloadAsPDF = async () => {
+  isLoading.value = true;
   const content = pdfSection.value;
   const address = offer?.client.address + "gamyba";
   const contentWidth = content!.offsetWidth / 3.5;
@@ -28,6 +30,7 @@ const downloadAsPDF = async () => {
       html2pdf.default(content, options);
     });
   }
+  isLoading.value = false;
 };
 </script>
 
@@ -44,6 +47,7 @@ const downloadAsPDF = async () => {
     name="atsisiūsti PDF"
     @click="downloadAsPDF"
     width="w-56 sm:w-96"
+    :isLoading="isLoading"
   />
 </template>
 <style scoped></style>

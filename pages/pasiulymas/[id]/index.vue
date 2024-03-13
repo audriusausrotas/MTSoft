@@ -6,10 +6,12 @@ definePageMeta({
   layout: "order",
 });
 
+const { setError, setIsError } = useError();
 const offer = useOfferStore();
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
 const showButtons = ref<boolean>(true);
+const isLoading = ref<boolean>(false);
 const pdfSection = ref<HTMLElement | null>(null);
 
 offer.offer?.results?.forEach(
@@ -21,6 +23,7 @@ offer.offer?.works?.forEach(
 showButtons.value = offer.offer?.status === "Nepatvirtintas";
 
 const downloadAsPDF = async () => {
+  isLoading.value = true;
   const content = pdfSection.value;
   const address = offer.offer.client.address;
   const contentWidth = content!.offsetWidth / 3.5;
@@ -42,27 +45,40 @@ const downloadAsPDF = async () => {
       html2pdf.default(content, options);
     });
   }
+  isLoading.value = false;
 };
 
 const confirmHandler = async () => {
+  isLoading.value = true;
   const data: any = await $fetch("/api/order", {
     method: "patch",
     body: { _id: offer.offer._id },
   });
   if (data.success) {
     offer.offer = { ...data.data };
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
   showButtons.value = offer.offer?.status === "Nepatvirtintas";
+  isLoading.value = false;
 };
 
 const cancelHandler = async () => {
+  isLoading.value = true;
   const data: any = await $fetch("/api/order", {
     method: "put",
     body: { _id: offer.offer._id },
   });
   if (data.success) {
     offer.offer = { ...data.data };
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
+  isLoading.value = false;
 };
 </script>
 
@@ -378,17 +394,20 @@ const cancelHandler = async () => {
         name="pasiūlymas tenkina"
         @click="confirmHandler"
         width="w-56 sm:w-96"
+        :isLoading="isLoading"
       />
       <BaseButton
         name="pasiūlymas netekina"
         @click="cancelHandler"
         width="w-56 sm:w-96"
+        :isLoading="isLoading"
       />
     </div>
     <BaseButton
       name="atsisiūsti PDF"
       @click="downloadAsPDF"
       width="w-56 sm:w-96"
+      :isLoading="isLoading"
     />
   </div>
 </template>

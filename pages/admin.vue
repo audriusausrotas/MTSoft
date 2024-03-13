@@ -2,10 +2,12 @@
 import type { User } from "~/data/interfaces";
 import { accountTypes, accountStatus } from "~/data/selectFieldData";
 
+const { setError, setIsError } = useError();
 const useUser = useUserStore();
 const password = ref<string>("");
 const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
+const isLoading = ref<boolean>(false);
 
 if (useUser.users.length === 0) {
   useUser.getAllUsers();
@@ -28,10 +30,15 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
   );
   if (data.success) {
     useUser.updateUser(data.data);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
 };
 
 const confirmHandler = async () => {
+  isLoading.value = true;
   const postData = {
     userId: selectedUser.value,
     password: password.value,
@@ -49,8 +56,13 @@ const confirmHandler = async () => {
       password.value = "";
       selectedUser.value = "";
       modalOpen.value = false;
+      setIsError(false);
+      setError(data.message);
+    } else {
+      setError(data.message);
     }
   }
+  isLoading.value = false;
 };
 
 const deleteHandler = (id: string) => {
@@ -94,7 +106,7 @@ const deleteHandler = (id: string) => {
       <BaseSelectField
         :id="user._id"
         :values="accountTypes"
-        width="w-48"
+        width="w-52"
         class="flex-[4]"
         :defaultValue="user?.accountType"
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
@@ -135,7 +147,11 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton name="patvirtinti" @click="confirmHandler" />
+          <BaseButton
+            name="patvirtinti"
+            @click="confirmHandler"
+            :isLoading="isLoading"
+          />
         </div>
       </div>
     </div>

@@ -8,33 +8,33 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       data: null,
-      message: "užpildykite visus laukus",
+      message: "Užpildykite visus laukus",
     };
   if (!email.includes("@"))
     return {
       success: false,
       data: null,
-      message: "neteisingas elektroninis paštas",
+      message: "Neteisingas elektroninis paštas",
     };
   if (email.length < 4)
     return {
       success: false,
       data: null,
-      message: "elektroninis paštas per trumpas",
+      message: "Elektroninis paštas per trumpas",
     };
 
   if (password !== retypePassword)
     return {
       success: false,
       data: null,
-      message: "slaptažodžiai nesutampa",
+      message: "Slaptažodžiai nesutampa",
     };
 
   if (password.length < 4)
     return {
       success: false,
       data: null,
-      message: "slaptažodis per trumpas",
+      message: "Slaptažodis per trumpas",
     };
 
   const userExists = await userSchema.findOne({ email });
@@ -52,5 +52,5 @@ export default defineEventHandler(async (event) => {
 
   data.password = "";
 
-  return { success: true, data: null, message: "sekmingai prisiregistruota" };
+  return { success: true, data: null, message: "Sėkmingai prisiregistruota" };
 });

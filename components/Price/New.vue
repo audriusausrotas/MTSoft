@@ -8,9 +8,12 @@ const open = ref<boolean>(false);
 const newName = ref<string>("");
 const newPrice = ref<number>(0);
 const newCost = ref<number>(0);
+const isLoading = ref<boolean>(false);
 const newCategory = ref<string>(categories[0]);
+const { setError, setIsError } = useError();
 
 const saveHandler = async (): Promise<void> => {
+  isLoading.value = true;
   if (newName.value.trim() === "") return;
 
   const newProduct = {
@@ -28,7 +31,12 @@ const saveHandler = async (): Promise<void> => {
   if (data.success) {
     useProducts.newProduct(data.data);
     clearHandler();
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
+  isLoading.value = false;
 };
 
 const clearHandler = (): void => {
@@ -44,7 +52,11 @@ const clearHandler = (): void => {
   <div class="flex flex-col gap-4">
     <BaseButton v-if="!open" name="pridėti naują" @click="open = true" />
     <div v-else class="flex gap-4">
-      <BaseButton name="išsaugoti" @click="saveHandler" />
+      <BaseButton
+        name="išsaugoti"
+        @click="saveHandler"
+        :isLoading="isLoading"
+      />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
     <div v-if="open" class="flex items-end gap-2">

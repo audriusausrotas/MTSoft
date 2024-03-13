@@ -81,7 +81,7 @@ export default defineEventHandler(async (event: any) => {
     return {
       success: true,
       data: null,
-      message: "Elektroninis paštas išsiūstas",
+      message: "Pasiūlymas išsiūstas",
     };
   } catch (error) {
     return {
