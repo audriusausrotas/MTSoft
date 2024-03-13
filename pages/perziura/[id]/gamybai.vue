@@ -33,7 +33,6 @@ const downloadAsPDF = async () => {
 
 <template>
   <div class="flex-col gap-8" ref="pdfSection">
-    <PreviewClient :client="offer?.client" />
     <PreviewGamybai
       v-for="(fence, index) in offer?.fenceMeasures"
       :key="fence.id"

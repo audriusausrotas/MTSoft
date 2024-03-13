@@ -21,16 +21,17 @@ const statusHandler = async (value: string) => {
 const sendEmailHandler = async () => {
   const data: any = await $fetch("/api/mail", {
     method: "post",
-    body: { to: offer?.client.email },
+    body: { to: offer?.client.email, link: offer?._id },
   });
   if (data.success) {
+    console.log(data.message);
   } else {
+    console.log(data.message);
   }
 };
 </script>
 <template>
   <div class="flex flex-col gap-4">
-    <PreviewClient :client="offer?.client" />
     <div class="flex gap-4 items-end">
       <BaseSelectField
         :values="status"
@@ -44,22 +45,5 @@ const sendEmailHandler = async () => {
 
       <BaseButton name="išsiūsti pasiūlymą" @click="sendEmailHandler" />
     </div>
-
-    <div class="self-center font-semibold text-2xl">Medžiagos</div>
-    <PreviewResults
-      v-for="(result, index) in offer?.results"
-      :key="result.id"
-      :result="result"
-      :index="index"
-      class="flex gap-4"
-    />
-    <div class="self-center font-semibold text-2xl">Darbai</div>
-    <PreviewWorks
-      v-for="(work, index) in offer?.works"
-      :key="work.id"
-      :work="work"
-      :index="index"
-      class="flex gap-4"
-    />
   </div>
 </template>

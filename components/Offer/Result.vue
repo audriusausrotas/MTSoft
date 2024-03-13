@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["result", "index"]);
+const props = defineProps(["result", "index", "hidePrices"]);
 const measurement = ref<string>("vnt");
 
 if (props.result.type.includes("Apkaustai")) measurement.value = "m";
@@ -11,8 +11,6 @@ else if (
 )
   measurement.value = "m2";
 else measurement.value = "vnt";
-
-
 </script>
 
 <template>
@@ -58,7 +56,7 @@ else measurement.value = "vnt";
           <p>{{ measurement }}</p>
         </div>
       </div>
-      <div>
+      <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Kaina:</p>
         <div class="w-20 flex gap-2">
           <p>
@@ -67,7 +65,7 @@ else measurement.value = "vnt";
           <p>€</p>
         </div>
       </div>
-      <div>
+      <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Viso:</p>
         <div class="w-20 flex gap-2">
           <p>

@@ -7,7 +7,5 @@ const useProjects = useProjectsStore();
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
 </script>
 
-<template>
-  <PreviewMontuotojams />
-</template>
+<template></template>
 <style scoped></style>

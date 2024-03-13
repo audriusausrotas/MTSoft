@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["work", "index"]);
+const props = defineProps(["work", "index", "hidePrices"]);
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const props = defineProps(["work", "index"]);
         </div>
       </div>
 
-      <div>
+      <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Kaina:</p>
         <div class="w-20 flex gap-2">
           <p>
@@ -44,7 +44,7 @@ const props = defineProps(["work", "index"]);
           <p>€</p>
         </div>
       </div>
-      <div>
+      <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Viso:</p>
         <div class="w-20 flex gap-2">
           <p>
