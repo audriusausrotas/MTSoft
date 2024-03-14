@@ -17,10 +17,14 @@ export const useGateStore = defineStore("gate", {
     },
     removeGates(id: string) {
       if (this.gates.vartonas.some((item) => item._id === id)) {
-        this.gates.vartonas.filter((item) => item._id !== id);
+        this.gates.vartonas = this.gates.vartonas.filter(
+          (item) => item._id !== id
+        );
       }
       if (this.gates.gigasta.some((item) => item._id === id)) {
-        this.gates.vartonas.filter((item) => item._id !== id);
+        this.gates.gigasta = this.gates.gigasta.filter(
+          (item) => item._id !== id
+        );
       }
     },
     addGate(data: GateSchema, value: string) {
