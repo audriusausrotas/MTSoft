@@ -7,6 +7,7 @@ const route = useRoute();
 const { setError, setIsError } = useError();
 const useProjects = useProjectsStore();
 const isLoading = ref<boolean>(false);
+const isOpen = ref<boolean>(false);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
 
 const statusHandler = async (value: string) => {
@@ -37,6 +38,10 @@ const sendEmailHandler = async () => {
   }
   isLoading.value = false;
 };
+
+const gateOrderHadnler = (name: string): void => {
+  isOpen.value = false;
+};
 </script>
 <template>
   <div class="flex flex-col gap-4">
@@ -56,6 +61,17 @@ const sendEmailHandler = async () => {
         @click="sendEmailHandler"
         :isLoading="isLoading"
       />
+
+      <BaseButton
+        v-if="!isOpen"
+        name="Užsakyti vartus"
+        @click="isOpen = true"
+        :isLoading="isLoading"
+      />
+      <div v-else class="flex">
+        <button @click="gateOrderHadnler('vartonas')">Vartonas</button>
+        <button @click="gateOrderHadnler('gigasta')">Gigasta</button>
+      </div>
     </div>
   </div>
 </template>

@@ -74,7 +74,7 @@ export default defineEventHandler(async (event: any) => {
     await transporter.sendMail({
       from: "Moderni Tvora " + data.email,
       // pakeist gaveja i to
-      to: "sopuku@gmail.com",
+      to: data.email,
       subject: "Tvoros pasiūlymas",
       html: htmlContent,
     });
@@ -87,7 +87,7 @@ export default defineEventHandler(async (event: any) => {
     return {
       success: false,
       data: null,
-      message: error,
+      message: "Klaida: " + error,
     };
   }
 });
