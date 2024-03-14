@@ -132,13 +132,18 @@ export interface Gate {
   lock: string;
   aditional: string;
 }
+
+export interface GateObject {
+  vartonas: GateSchema[];
+  gigasta: GateSchema[];
+}
+
 export interface GateSchema {
   _id: string;
-  client: string;
-  phone: string;
-  address: string;
+  client: Client;
   creator: Creator;
   gates: Gate[];
+  dateCreated: string;
 }
 
 export interface Creator {

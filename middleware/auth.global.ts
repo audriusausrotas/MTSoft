@@ -10,6 +10,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (process.client) {
       const useProjects = useProjectsStore();
       if (useProjects.projects.length === 0) {
+        const { data: gates }: any = await useFetch("/api/gates");
+        if (gates.value.success) {
+          const useGates = useGateStore();
+          useGates.addGates(gates.value.data);
+        }
+
         if (
           useUser.user?.accountType === "Administratorius" ||
           useUser.user?.accountType === "Paprastas vartotojas"
@@ -44,6 +50,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
         } else {
           useUser.setUser({ ...data.value.data });
 
+          const { data: gates }: any = await useFetch("/api/gates");
+          if (gates.value.success) {
+            const useGates = useGateStore();
+            useGates.addGates(gates.value.data);
+          }
+
           if (
             data.value.data.accountType === "Administratorius" ||
             data.value.data.accountType === "Paprastas vartotojas"
@@ -68,6 +80,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
             switch (data.value.data.accountType) {
               case "Vartonas":
                 if (to.path !== "/vartonas") return navigateTo("/vartonas");
+                break;
+
+              case "Gigasta":
+                if (to.path !== "/gigasta") return navigateTo("/gigasta");
                 break;
 
               case "Montavimas":
