@@ -120,9 +120,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
           const useOffer = useOfferStore();
           useOffer.setOffer({ ...offer.value.data });
         } else {
-          const pathName = to.name?.toString();
-          if (!pathName?.includes("negalioja")) {
-            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+          const data: any = await $fetch("/api/archive", {
+            method: "post",
+            body: { _id: offer.value.data._id },
+          } as any);
+
+          if (data.success) {
+            const pathName = to.name?.toString();
+            if (!pathName?.includes("negalioja")) {
+              return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+            }
           }
         }
       } else {
