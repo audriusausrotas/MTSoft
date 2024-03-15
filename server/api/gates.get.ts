@@ -1,7 +1,8 @@
-import { gateSchema } from "~/server/models/gateSchema";
+export default defineEventHandler(async (event) => {
+  const dataVartonas = await gateSchemaVartonas.find();
+  const dataGigasta = await gateSchemaGigasta.find();
 
-export default defineEventHandler(async () => {
-  const data = await gateSchema.find();
+  const data = { vartonas: dataVartonas, gigasta: dataGigasta };
 
   if (!data) return { success: false, data: null, message: "Vartai nerasti" };
 

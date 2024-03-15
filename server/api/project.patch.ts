@@ -7,32 +7,6 @@ export default defineEventHandler(async (event) => {
     return { success: true, data: null, message: "Projektas nerastas" };
   }
 
-  if (project.gates.length > 0) {
-    if (
-      value === "Nepatvirtintas" ||
-      value === "Netinkamas" ||
-      value === "Tinkamas"
-    ) {
-      await gateSchema.findOneAndDelete({ address: project.client.address });
-    } else {
-      const allGates = await gateSchema.find();
-      const gateExist = allGates.some(
-        (item) => item.address === project.client.address
-      );
-
-      if (!gateExist) {
-        const newGates = new gateSchema({
-          creator: { ...project.creator },
-          client: project.client.username,
-          phone: project.client.phone,
-          address: project.client.address,
-          gates: project.gates,
-        });
-        await newGates.save();
-      }
-    }
-  }
-
   project.status = value;
   const data = await project.save();
 

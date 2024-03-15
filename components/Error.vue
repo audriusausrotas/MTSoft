@@ -7,7 +7,7 @@ const { isError } = useError();
   <Teleport to="body">
     <div
       v-if="error"
-      class="fixed justify-center flex w-full top-0 left-0 z-50"
+      class="fixed justify-center flex w-full top-0 left-0 z-50 pointer-events-none"
       :class="error ? 'animation' : ''"
     >
       <div

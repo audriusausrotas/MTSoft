@@ -1,19 +1,16 @@
 <script setup lang="ts">
 const gates = useGateStore();
+if (gates.gates.gigasta.length === 0) gates.getGates();
 </script>
 
 <template>
   <div class="flex flex-col gap-12">
     <div
-      v-for="(gate, index) in gates.gates.vartonas"
+      v-for="(gate, index) in gates.gates.gigasta"
       :key="gate._id"
       class="flex flex-col border-b-8 border-red-full"
     >
-      <div class="font-semibold text-4xl m-auto">
-        Uzsakymo nr: {{ index + 1 }} <br />uzsakymo data:
-        {{ gate.dateCreated.slice(0, 10) }}
-      </div>
-
+      <div class="font-semibold text-4xl m-auto">{{ index + 1 }}</div>
       <div
         class="flex justify-between font-semibold border-b border-red-300 py-4"
       >
