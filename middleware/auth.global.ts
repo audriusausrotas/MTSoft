@@ -97,8 +97,23 @@ export default defineNuxtRouteMiddleware(async (to) => {
         body: { _id: to.params.id },
       });
       if (offer.value.success) {
-        const useOffer = useOfferStore();
-        useOffer.setOffer({ ...offer.value.data });
+        const currentDate = new Date();
+        const exparationDate = new Date(offer.value.data.dateExparation);
+
+        if (currentDate < exparationDate) {
+          const useOffer = useOfferStore();
+          useOffer.setOffer({ ...offer.value.data });
+        } else {
+          const pathName = to.name?.toString();
+          if (!pathName?.includes("negalioja")) {
+            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+          }
+        }
+      } else {
+        const pathName = to.name?.toString();
+        if (!pathName?.includes("negalioja")) {
+          return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+        }
       }
     }
   }

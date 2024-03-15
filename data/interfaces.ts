@@ -27,7 +27,7 @@ export interface Project {
   confirmed: boolean;
   payed: boolean;
   status: string;
-  advance: boolean;
+  advance: number;
   orderNumber: string;
   dateCreated: string;
   dateExparation: string;
