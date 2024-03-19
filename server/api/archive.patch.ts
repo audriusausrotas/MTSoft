@@ -13,6 +13,12 @@ export default defineEventHandler(async (event) => {
       message: "Archyvuyotas projektas nerastas",
     };
 
+  const currentDate = new Date();
+  let expirationDate = new Date(currentDate);
+  expirationDate.setDate(currentDate.getDate() + 30);
+  const dateExparation = expirationDate.toISOString();
+
+  archivedProject.dateExparation = dateExparation;
   const projectData = archivedProject.toObject();
 
   const project = new projectSchema(projectData);

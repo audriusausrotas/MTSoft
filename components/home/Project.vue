@@ -106,7 +106,7 @@ const archiveHandler = async () => {
       props.archive
         ? useProjects.moveToProjects(props.project)
         : useProjects.moveToArchive(props.project);
-
+      setIsError(false);
       setError(data.message);
     } else {
       setError(data.message);

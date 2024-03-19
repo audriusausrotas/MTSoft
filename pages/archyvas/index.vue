@@ -6,6 +6,7 @@ const { data: archive }: any = await useFetch("/api/archive");
 if (archive.value.success) {
   useProjects.addArchives([...archive.value.data]);
 } else {
+  setIsError(false);
   setError(archive.value.message);
 }
 </script>
