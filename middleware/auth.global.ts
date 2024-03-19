@@ -113,24 +113,31 @@ export default defineNuxtRouteMiddleware(async (to) => {
         body: { _id: to.params.id },
       });
       if (offer.value.success) {
-        const currentDate = new Date();
-        const exparationDate = new Date(offer.value.data.dateExparation);
+        const useOffer = useOfferStore();
+        if (
+          offer.status === "Nepatvirtintas" ||
+          offer.status === "Netinkamas"
+        ) {
+          const currentDate = new Date();
+          const exparationDate = new Date(offer.value.data.dateExparation);
 
-        if (currentDate < exparationDate) {
-          const useOffer = useOfferStore();
-          useOffer.setOffer({ ...offer.value.data });
-        } else {
-          const data: any = await $fetch("/api/archive", {
-            method: "post",
-            body: { _id: offer.value.data._id },
-          } as any);
+          if (currentDate < exparationDate) {
+            useOffer.setOffer({ ...offer.value.data });
+          } else {
+            const data: any = await $fetch("/api/archive", {
+              method: "post",
+              body: { _id: offer.value.data._id },
+            } as any);
 
-          if (data.success) {
-            const pathName = to.name?.toString();
-            if (!pathName?.includes("negalioja")) {
-              return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+            if (data.success) {
+              const pathName = to.name?.toString();
+              if (!pathName?.includes("negalioja")) {
+                return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+              }
             }
           }
+        } else {
+          useOffer.setOffer({ ...offer.value.data });
         }
       } else {
         const pathName = to.name?.toString();
