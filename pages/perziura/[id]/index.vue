@@ -7,7 +7,9 @@ const route = useRoute();
 const { setError, setIsError } = useError();
 const useProjects = useProjectsStore();
 const useGates = useGateStore();
+const useUsers = useUserStore();
 
+const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
 const isOpen = ref<boolean>(false);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
@@ -76,6 +78,20 @@ const gateCancelHadnler = async (): Promise<void> => {
   isLoading.value = false;
 };
 
+const changeCreatorHandler = async (value: string) => {
+  const data: any = await $fetch("/api/projectCreator", {
+    method: "PATCH",
+    body: { _id: offer!._id, value },
+  });
+  if (data.success) {
+    useProjects.changeCreator(data.data);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+};
+
 const checkGates = () => {
   const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
   gateOrdered.value = allGates.some(
@@ -141,6 +157,15 @@ watch(
           Gigasta
         </button>
       </div>
+      <BaseSelectField
+        :values="allUsers"
+        id="changeCreator"
+        :defaultValue="offer?.creator.username"
+        label="Atsakingas asmuo"
+        width="w-40"
+        @onChange="(value: string) => changeCreatorHandler(value)
+        "
+      />
     </div>
   </div>
 </template>

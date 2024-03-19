@@ -1,5 +1,3 @@
-import { projectSchema } from "~/server/models/projectSchema";
-
 export default defineEventHandler(async (event) => {
   const {
     client,

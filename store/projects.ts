@@ -72,6 +72,13 @@ export const useProjectsStore = defineStore("Projects", {
       this.selectedStatusFilter = data;
       this.filterProjects();
     },
+    changeCreator(data: Project) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === data._id) return data;
+        else return item;
+      });
+      this.filterProjects();
+    },
 
     filterProjects() {
       if (this.selectedFilter === "Visi") {
@@ -86,12 +93,16 @@ export const useProjectsStore = defineStore("Projects", {
       } else {
         if (this.selectedStatusFilter === "Visi") {
           this.filteredProjects = this.projects.filter((item) =>
-            item.orderNumber.startsWith(this.selectedFilter)
+            item.creator.username
+              .toLowerCase()
+              .startsWith(this.selectedFilter.toLowerCase())
           );
         } else {
           this.filteredProjects = this.projects.filter(
             (item) =>
-              item.orderNumber.startsWith(this.selectedFilter) &&
+              item.creator.username
+                .toLowerCase()
+                .startsWith(this.selectedFilter.toLowerCase()) &&
               item.status === this.selectedStatusFilter
           );
         }

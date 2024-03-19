@@ -1,4 +1,3 @@
-import { userSchema } from "~/server/models/userSchema";
 import type { User } from "~/data/interfaces";
 import nodemailer from "nodemailer";
 

@@ -1,5 +1,3 @@
-import { archiveSchema } from "~/server/models/archiveSchema";
-
 export default defineEventHandler(async (event) => {
   const data = await archiveSchema.find();
 

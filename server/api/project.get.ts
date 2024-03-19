@@ -1,5 +1,3 @@
-import { projectSchema } from "~/server/models/projectSchema";
-
 export default defineEventHandler(async () => {
   const data = await projectSchema.find();
 

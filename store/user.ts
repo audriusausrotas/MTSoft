@@ -19,11 +19,8 @@ export const useUserStore = defineStore("user", {
       this.users = [];
     },
 
-    async getAllUsers() {
-      const { data: users }: any = await useFetch("/api/users");
-      if (users.value.success) {
-        this.users = [...users.value.data];
-      }
+    async setUsers(users: User[]) {
+      this.users = [...users];
     },
 
     updateUser(data: User) {

@@ -1,4 +1,3 @@
-import { userSchema } from "~/server/models/userSchema";
 import type { User } from "~/data/interfaces";
 
 export default defineEventHandler(async (event: any) => {

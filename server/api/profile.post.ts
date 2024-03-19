@@ -1,4 +1,3 @@
-import { userSchema } from "~/server/models/userSchema";
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {

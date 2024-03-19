@@ -1,5 +1,3 @@
-import { archiveSchema } from "~/server/models/archiveSchema";
-
 export default defineEventHandler(async (event) => {
   try {
     const { _id } = await readBody(event);

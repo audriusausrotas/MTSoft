@@ -3,12 +3,20 @@ import { status } from "~/data/selectFieldData";
 const useProjects = useProjectsStore();
 const user = useUserStore();
 
-const userLetters = user.user?.username.substring(0, 3).toUpperCase();
+const userLetters = user.user?.username;
 useProjects.changeFilter(userLetters ? userLetters : "Visi");
 
 const users = [
   "Visi",
-  ...new Set(useProjects.projects.map((item) => item.orderNumber.slice(0, 3))),
+  ...new Set(
+    useProjects.projects.map((item) => {
+      return user.users.find((usr) =>
+        usr.username
+          .toLowerCase()
+          .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+      )!.username;
+    })
+  ),
 ];
 
 const statusFilters = ["Visi", ...status];
@@ -22,7 +30,7 @@ const statusFilters = ["Visi", ...status];
         :values="users"
         id="userFilter"
         :defaultValue="userLetters"
-        width="w-24"
+        width="w-40"
         @onChange="(value: string) => useProjects.changeFilter(value) 
         "
       />

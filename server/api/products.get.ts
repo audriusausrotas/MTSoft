@@ -1,4 +1,3 @@
-import { productSchema } from "~/server/models/productSchema";
 import type { Product } from "~/data/interfaces";
 
 export default defineEventHandler(async () => {

@@ -1,4 +1,3 @@
-import { userSchema } from "~/server/models/userSchema";
 import type { User } from "~/data/interfaces";
 import bcrypt from "bcrypt";
 
@@ -6,7 +5,6 @@ export default defineEventHandler(async (event: any) => {
   const { _id, password, userId } = await readBody(event);
 
   const data: User | null = await userSchema.findById(_id);
-
 
   if (data?.accountType !== "Administratorius")
     return {

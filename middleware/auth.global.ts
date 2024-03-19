@@ -31,6 +31,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
             const useProducts = useProductsStore();
             useProducts.addProducts(products.value.data);
           }
+
+          const { data: users }: any = await useFetch("/api/users");
+          if (users.value.success) {
+            useUser.setUsers([...users.value.data]);
+          }
         }
       }
     }
@@ -70,6 +75,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
             if (products.value.success) {
               const useProducts = useProductsStore();
               useProducts.addProducts(products.value.data);
+            }
+
+            const { data: users }: any = await useFetch("/api/users");
+            if (users.value.success) {
+              useUser.setUsers([...users.value.data]);
             }
           }
 

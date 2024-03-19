@@ -1,5 +1,3 @@
-import { productSchema } from "~/server/models/productSchema";
-
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
 

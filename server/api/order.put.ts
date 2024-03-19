@@ -1,5 +1,3 @@
-import { projectSchema } from "../models/projectSchema";
-
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
 

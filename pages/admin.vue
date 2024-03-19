@@ -9,10 +9,6 @@ const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
 const isLoading = ref<boolean>(false);
 
-if (useUser.users.length === 0) {
-  useUser.getAllUsers();
-}
-
 const userChangesHandler = async (id: string, type: string, value: string) => {
   const postData = {
     userId: id,
