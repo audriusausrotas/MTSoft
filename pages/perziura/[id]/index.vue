@@ -3,6 +3,7 @@ import { status } from "~/data/selectFieldData";
 definePageMeta({
   layout: "preview",
 } as any);
+
 const route = useRoute();
 const { setError, setIsError } = useError();
 const useProjects = useProjectsStore();
@@ -111,61 +112,40 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-end">
-      <BaseSelectField
-        :values="status"
-        id="orderStatus"
-        :defaultValue="offer?.status"
-        label="Statusas"
-        width="w-40"
+      <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
         @onChange="(value: string) => statusHandler(value)
-        "
-      />
+        " />
 
-      <BaseButton
-        name="išsiūsti pasiūlymą"
-        @click="sendEmailHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton name="išsiūsti pasiūlymą" @click="sendEmailHandler" :isLoading="isLoading" />
 
-      <BaseButton
-        v-if="gateOrdered"
-        name="Atšaukti vartų užsakymą"
-        @click="gateCancelHadnler"
-      />
-      <BaseButton
-        v-if="!gateOrdered && !isOpen"
-        name="Užsakyti vartus"
-        @click="isOpen = true"
-        :isLoading="isLoading"
-      />
-      <div
-        v-if="!gateOrdered && isOpen"
-        class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden"
-      >
-        <button
-          @click="gateOrderHadnler('vartonas')"
-          class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full"
-        >
+      <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
+      <BaseButton v-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true" :isLoading="isLoading" />
+      <div v-if="!gateOrdered && isOpen"
+        class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
+        <button @click="gateOrderHadnler('vartonas')"
+          class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
           Vartonas
         </button>
-        <button
-          @click="gateOrderHadnler('gigasta')"
-          class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full"
-        >
+        <button @click="gateOrderHadnler('gigasta')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
           Gigasta
         </button>
       </div>
-      <BaseSelectField
-        :values="allUsers"
-        id="changeCreator"
-        :defaultValue="offer?.creator.username"
-        label="Atsakingas asmuo"
-        width="w-40"
-        @onChange="(value: string) => changeCreatorHandler(value)
-        "
-      />
+      <BaseSelectField :values="allUsers" id="changeCreator" :defaultValue="offer?.creator.username"
+        label="Atsakingas asmuo" width="w-40" @onChange="(value: string) => changeCreatorHandler(value)
+        " />
+    </div>
+    <PreviewClient :offer="offer" />
+    <div class="flex flex-col gap-4 divide-y text-center w-fit divide-red-full">
+      <h3 class="text-2xl font-bold m-auto">
+        Medžiagos
+      </h3>
+      <ResultFenceElement v-for="(result, index) in offer!.results" :key="result.id" :result="result" :index="index" />
+      <h3 class="text-2xl pt-4 w-full font-bold">
+        Darbai
+      </h3>
+      <ResultFenceWorks v-for="(work, index) in offer!.works" :key="work.id" :work="work" :index="index" />
     </div>
   </div>
 </template>
