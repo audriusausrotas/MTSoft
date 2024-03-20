@@ -290,7 +290,7 @@ export const useCalculationsStore = defineStore("calculations", {
               fenceMeasures[fenceDataIndex].height);
         }
       }
-      measure.elements = +elements.toFixed(1);
+      measure.elements = Math.round(elements);
     },
     setProject(project: any) {
       this.fences = [...project.fenceMeasures];
