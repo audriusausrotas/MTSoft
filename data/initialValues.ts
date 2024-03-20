@@ -57,6 +57,7 @@ export const topBarLinks: MenuLinks[] = [
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
   { name: "Vartonas", link: "/vartonas", iconPath: "" },
+  { name: "Gigasta", link: "/gigasta", iconPath: "" },
   { name: "Archyvas", link: "/archyvas", iconPath: "" },
 ];
 
