@@ -29,7 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col capitalize">
+  <div class="flex flex-col capitalize bg-white">
     <label v-if="props.label" :for="props.label" class="pl-2 pb-1 text-sm">{{
       props.label
     }}</label>
@@ -39,20 +39,12 @@ onMounted(() => {
       :class="[
         props.width ? props.width : 'w-60',
         props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
-      ]"
-    >
+      ]">
       <slot />
-      <input
-        :value="props.name"
-        :placeholder="props.placeholder"
-        :id="props.label"
-        :type="props.type ? props.type : 'text'"
-        :disabled="props.disable || false"
-        @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
-        @keyup.enter="handleEnterKey"
-        ref="inputRef"
-        class="w-full h-full overflow-scroll border-0 outline-none active:outline-none bg-inherit active:border-0"
-      />
+      <input :value="props.name" :placeholder="props.placeholder" :id="props.label"
+        :type="props.type ? props.type : 'text'" :disabled="props.disable || false"
+        @input="emitUpdate(($event.target as HTMLInputElement)?.value)" @keyup.enter="handleEnterKey" ref="inputRef"
+        class="w-full h-full overflow-scroll border-0 outline-none active:outline-none bg-inherit active:border-0" />
     </div>
   </div>
 </template>

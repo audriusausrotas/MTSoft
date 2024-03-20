@@ -36,6 +36,27 @@ export default defineNuxtRouteMiddleware(async (to) => {
           if (users.value.success) {
             useUser.setUsers([...users.value.data]);
           }
+        } else {
+          switch (useUser.user?.accountType) {
+            case "Vartonas":
+              if (to.path !== "/vartonas") return navigateTo("/vartonas");
+              break;
+
+            case "Gigasta":
+              if (to.path !== "/gigasta") return navigateTo("/gigasta");
+              break;
+
+            case "Montavimas":
+              if (to.path !== "/montavimas") return navigateTo("/montavimas");
+              break;
+
+            case "Gamyba":
+              if (to.path !== "/gamyba") return navigateTo("/gamyba");
+              break;
+
+            default:
+              break;
+          }
         }
       }
     }

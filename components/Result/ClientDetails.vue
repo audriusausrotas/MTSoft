@@ -35,7 +35,7 @@ const saveHandler = async (): Promise<void> => {
     confirmed: false,
     payed: false,
     status: "Nepatvirtintas",
-    advance: false,
+    advance: 0,
     orderNumber: "",
   };
   try {
@@ -67,46 +67,24 @@ const clearHandler = () => {
 <template>
   <div class="flex flex-wrap overflow-hidden border rounded-lg">
     <div class="flex-1">
-      <ResultClient
-        name="klientas"
-        :value="useCalculations.client.username"
-        class="capitalize border-b"
-      />
-      <ResultClient
-        name="telefono numeris"
-        :value="useCalculations.client.phone"
-      />
+      <ResultClient name="klientas" :value="useCalculations.client.username" class="capitalize border-b" />
+      <ResultClient name="telefono numeris" :value="useCalculations.client.phone" />
     </div>
     <div class="flex-1">
-      <ResultClient
-        name="adresas"
-        :value="useCalculations.client.address"
-        class="capitalize border-b"
-      />
-      <ResultClient
-        name="elektroninis paštas"
-        :value="useCalculations.client.email"
-      />
+      <ResultClient name="adresas" :value="useCalculations.client.address" class="capitalize border-b" />
+      <ResultClient name="elektroninis paštas" :value="useCalculations.client.email" />
     </div>
   </div>
 
   <div class="flex gap-4 flex-wrap">
     <div class="flex gap-4">
-      <BaseButton
-        name="išsaugoti sąmatą"
-        @click="saveHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton name="išsaugoti sąmatą" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="išvalyti viską" @click="clearHandler" />
     </div>
     <div class="flex gap-4">
       <BaseButton name="pridėti naują detalę" @click="useResults.addNew" />
       <BaseButton name="Pridėti naują darbą " @click="useResults.addNewWork" />
-      <BaseButton
-        name="Pritaikyti nuolaidą"
-        width="w-60"
-        @click="useResults.useDiscount()"
-      />
+      <BaseButton name="Pritaikyti nuolaidą" width="w-60" @click="useResults.useDiscount()" />
     </div>
   </div>
 </template>

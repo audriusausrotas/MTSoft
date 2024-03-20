@@ -32,96 +32,43 @@ function logoutHandler(): void {
 </script>
 
 <template>
-  <div v-if="useUser?.user?.username" class="shadow-bottom">
-    <div
-      class="flex flex-col items-center gap-4 px-12 py-4 m-auto sm:flex-row max-w-custom"
-    >
-      <div
-        class="flex flex-col items-center justify-center flex-1 sm:flex-row sm:justify-between"
-      >
-        <NuxtImg
-          src="/images/logo.png"
-          alt="Moderni Tvora logotipas"
-          width="86"
-          height="48"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+  <div v-if="useUser?.user?.username" class="shadow-bottom ">
+    <div class="flex flex-col items-center gap-4 px-12 py-4 m-auto sm:flex-row max-w-custom">
+      <div class="flex flex-col items-center justify-center flex-1 sm:flex-row sm:justify-between">
+        <NuxtImg src="/images/logo.png" alt="Moderni Tvora logotipas" width="86" height="48" decoding="auto"
+          loading="lazy" :ismap="true" />
         <!-- <SearchBar class="hidden lg:flex" /> -->
 
-        <div
-          v-if="useUser.user.accountType === 'Administratorius'"
-          class="flex gap-4 justify-center flex-wrap flex-1"
-        >
-          <NuxtLink
-            v-for="link in topBarLinks"
-            :to="link.link"
+        <div v-if="useUser.user.accountType === 'Administratorius'" class="flex gap-4 justify-center flex-wrap flex-1">
+          <NuxtLink v-for="link in topBarLinks" :to="link.link"
             class="flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white"
-            :class="currentPath === link.name ? 'bg-red-full text-white' : ''"
-          >
-            <NuxtImg
-              v-if="link.iconPath !== ''"
-              :src="link.iconPath"
-              width="20"
-              height="20"
-              decoding="auto"
-              loading="lazy"
-              :ismap="true"
-            />
+            :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
+            <NuxtImg v-if="link.iconPath !== ''" :src="link.iconPath" width="20" height="20" decoding="auto"
+              loading="lazy" :ismap="true" />
             {{ link.name }}
           </NuxtLink>
         </div>
       </div>
 
       <div class="h-0 border-0 sm:h-12 sm:border"></div>
-      <div
-        @click="
-          () => {
-            isOpen = !isOpen;
-          }
-        "
-        class="relative flex items-center gap-2 select-none hover:cursor-pointer"
-      >
+      <div @click="() => {
+    isOpen = !isOpen;
+  }
+    " class="relative flex items-center gap-2 select-none hover:cursor-pointer">
         <div
-          class="flex items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full"
-        >
-          <NuxtImg
-            v-if="useUser.user.photo !== ''"
-            :src="useUser.user?.photo"
-            class="object-cover object-center w-full h-full"
-            width="48"
-            height="48"
-            decoding="auto"
-            loading="lazy"
-            :ismap="true"
-          />
+          class="flex items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full">
+          <NuxtImg v-if="useUser.user.photo !== ''" :src="useUser.user?.photo"
+            class="object-cover object-center w-full h-full" width="48" height="48" decoding="auto" loading="lazy"
+            :ismap="true" />
           <p v-else>{{ initials }}</p>
         </div>
 
         <div>{{ useUser.user.username }}</div>
-        <NuxtImg
-          src="/icons/arrowDown.svg"
-          width="8"
-          height="8"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+        <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" loading="lazy" :ismap="true" />
 
-        <div
-          v-if="isOpen"
-          class="absolute left-0 flex flex-col overflow-hidden bg-white border rounded-md top-14"
-        >
-          <NuxtLink
-            to="/profilis"
-            class="px-6 py-2 hover:text-white hover:bg-red-full"
-            >Profilis</NuxtLink
-          >
-          <div
-            @click="logoutHandler"
-            class="px-6 py-2 hover:text-white hover:bg-red-full hover:cursor-pointer"
-          >
+        <div v-if="isOpen" class="absolute left-0 flex flex-col overflow-hidden bg-white border rounded-md top-14">
+          <NuxtLink to="/profilis" class="px-6 py-2 hover:text-white hover:bg-red-full">Profilis</NuxtLink>
+          <div @click="logoutHandler" class="px-6 py-2 hover:text-white hover:bg-red-full hover:cursor-pointer">
             Atsijungti
           </div>
         </div>

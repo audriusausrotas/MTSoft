@@ -112,7 +112,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
     <div class="flex gap-4 items-end">
       <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
         @onChange="(value: string) => statusHandler(value)
@@ -137,15 +137,10 @@ watch(
         " />
     </div>
     <PreviewClient :offer="offer" />
-    <div class="flex flex-col gap-4 divide-y text-center w-fit divide-red-full">
-      <h3 class="text-2xl font-bold m-auto">
-        Medžiagos
-      </h3>
-      <ResultFenceElement v-for="(result, index) in offer!.results" :key="result.id" :result="result" :index="index" />
-      <h3 class="text-2xl pt-4 w-full font-bold">
-        Darbai
-      </h3>
-      <ResultFenceWorks v-for="(work, index) in offer!.works" :key="work.id" :work="work" :index="index" />
-    </div>
+    <ResultTotalElement :results="offer" />
+    <previewTrello :offer="offer" :hidePrices="false" />
+
+
+
   </div>
 </template>

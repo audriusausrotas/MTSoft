@@ -36,32 +36,18 @@ watch(
 </script>
 
 <template>
-  <nav
-    v-if="
-      useUser?.user?.accountType === 'Administratorius' ||
-      useUser?.user?.accountType === 'Paprastas vartotojas'
-    "
-    class="lg:sticky flex flex-col items-center gap-10 top-8 w-44"
-  >
+  <nav v-if="useUser?.user?.accountType === 'Administratorius' ||
+    useUser?.user?.accountType === 'Paprastas vartotojas'
+    " class="lg:sticky flex flex-col items-center gap-10 top-8 w-44">
     <div>
       <div class="flex items-center gap-2">
         <h4 class="text-sm capitalize">panelė</h4>
       </div>
 
-      <NuxtLink
-        v-for="link in menuLinks"
-        :to="link.link"
+      <NuxtLink v-for="link in menuLinks" :to="link.link"
         class="flex gap-2 px-4 py-2 rounded-md w-36 hover:bg-red-full hover:text-white"
-        :class="currentPath === link.name ? 'bg-red-full text-white' : ''"
-      >
-        <NuxtImg
-          :src="link.iconPath"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+        :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
+        <NuxtImg :src="link.iconPath" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         {{ link.name }}
       </NuxtLink>
     </div>
@@ -71,20 +57,10 @@ watch(
         <h4 class="text-sm capitalize">admin panelė</h4>
       </div>
 
-      <NuxtLink
-        v-for="link in adminPanelLinks"
-        :to="link.link"
+      <NuxtLink v-for="link in adminPanelLinks" :to="link.link"
         class="flex gap-2 px-4 py-2 rounded-md w-36 hover:bg-red-full hover:text-white"
-        :class="currentPath === link.name ? 'bg-red-full text-white' : ''"
-      >
-        <NuxtImg
-          :src="link.iconPath"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+        :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
+        <NuxtImg :src="link.iconPath" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         {{ link.name }}
       </NuxtLink>
     </div>

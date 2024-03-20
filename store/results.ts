@@ -482,8 +482,8 @@ export const useResultsStore = defineStore("results", {
       this.totalProfit = project.profit;
       this.totalMargin = project.margin;
       this.priceVAT = project.priceVAT;
-      this.priceWithDiscount = project.priceWithDiscount;
       this.discount = project.discount;
+      this.priceWithDiscount = project.priceWithDiscount;
     },
   },
 

@@ -20,7 +20,7 @@ const props = defineProps(["offer"]);
       </a>
       <a :href="'mailto:' + props.offer?.client?.email">
         <BaseInput :disable="true" :name="props.offer?.client?.email" label="elektroninis pastas"
-          class="pointer-events-none" />
+          class="pointer-events-none print:hidden" />
       </a>
 
     </div>
