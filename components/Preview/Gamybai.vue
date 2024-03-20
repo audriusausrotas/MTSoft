@@ -7,8 +7,8 @@ const isSegmentas = props.fence.type === "Segmentas";
 </script>
 
 <template>
-  <div v-if="showFull || !isSegmentas" class="flex flex-col gap-8 p-4 items-center border-b border-dark-full">
-    <div class="flex flex-col gap-4">
+  <div v-if="showFull || !isSegmentas" class="flex flex-col gap-8 p-4 items-center border-b  border-dark-full">
+    <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 font-semibold text-3xl self-center flex-wrap">
         <p class="">{{ index + 1 }}</p>
         <p>{{ fence.side }}</p>
