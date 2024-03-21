@@ -157,6 +157,12 @@ const archiveHandler = async () => {
           <p>Redaguoti</p>
         </div>
 
+        <div v-if="!props.archive" @click="copyHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
+          <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
+          <p>Kopijuoti projektą</p>
+        </div>
+
         <div v-if="!props.archive" @click="linkHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
           <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
@@ -165,19 +171,13 @@ const archiveHandler = async () => {
 
         <div v-if="!props.archive" @click="openInNewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/link.svg" alt="edit button" width="20" height="20" />
+          <NuxtImg src="/icons/newtab.svg" alt="edit button" width="20" height="20" />
           <p>Atidaryti pasiūlymą</p>
-        </div>
-
-        <div v-if="!props.archive" @click="copyHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" height="20" />
-          <p>Kopijuoti projektą</p>
         </div>
 
         <div @click="archiveHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
+          <NuxtImg src="/icons/archive.svg" alt="delete button" width="20" height="20" />
           <p v-if="!props.archive">Archyvuoti</p>
           <p v-else>Sugrąžinti</p>
         </div>

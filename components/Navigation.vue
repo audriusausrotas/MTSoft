@@ -69,7 +69,7 @@ watch(
       <NuxtLink v-if="useUser?.user?.username === 'Audrius' || useUser?.user?.username === 'Andrius'" to="/bonusai"
         class="flex gap-2 px-4 py-2 rounded-md w-36 hover:bg-red-full hover:text-white"
         :class="currentPath === 'Bonusai' ? 'bg-red-full text-white' : ''">
-        <NuxtImg src="/icons/bank.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
+        <NuxtImg src="/icons/coins.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         Bonusai
       </NuxtLink>
     </div>
