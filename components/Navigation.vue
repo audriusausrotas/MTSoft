@@ -19,6 +19,9 @@ function routeHandler(newPath: String) {
     case "/kainos":
       currentPath.value = "Kainos";
       break;
+    case "/bonusai":
+      currentPath.value = "Bonusai";
+      break;
     default:
       currentPath.value = "";
       break;
@@ -62,6 +65,12 @@ watch(
         :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
         <NuxtImg :src="link.iconPath" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         {{ link.name }}
+      </NuxtLink>
+      <NuxtLink v-if="useUser?.user?.username === 'Audrius' || useUser?.user?.username === 'Andrius'" to="/bonusai"
+        class="flex gap-2 px-4 py-2 rounded-md w-36 hover:bg-red-full hover:text-white"
+        :class="currentPath === 'Bonusai' ? 'bg-red-full text-white' : ''">
+        <NuxtImg src="/icons/bank.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
+        Bonusai
       </NuxtLink>
     </div>
   </nav>

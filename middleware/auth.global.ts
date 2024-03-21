@@ -8,6 +8,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (!to.path.includes("pasiulymas")) {
     if (process.client) {
+      if (to.path === "/bonusai") {
+        if (
+          useUser.user?.username !== "Audrius" &&
+          useUser.user?.username !== "Andrius"
+        ) {
+          return navigateTo("/");
+        }
+      }
+
       const useProjects = useProjectsStore();
       if (useProjects.projects.length === 0) {
         const { data: gates }: any = await useFetch("/api/gates");
@@ -101,6 +110,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
             const { data: users }: any = await useFetch("/api/users");
             if (users.value.success) {
               useUser.setUsers([...users.value.data]);
+            }
+          }
+
+          if (to.path === "/bonusai") {
+            if (
+              useUser.user?.username !== "Audrius" &&
+              useUser.user?.username !== "Andrius"
+            ) {
+              return navigateTo("/");
             }
           }
 

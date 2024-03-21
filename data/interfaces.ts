@@ -30,6 +30,7 @@ export interface Project {
   advance: number;
   orderNumber: string;
   dateCreated: string;
+  dateFinished: string;
   dateExparation: string;
 }
 

@@ -122,6 +122,7 @@ export const accountTypes: string[] = [
   "Administratorius",
   "Paprastas vartotojas",
   "Vartonas",
+  "Gigasta",
   "Gamyba",
   "Montavimas",
 ];

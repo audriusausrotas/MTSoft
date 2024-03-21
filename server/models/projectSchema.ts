@@ -35,9 +35,9 @@ export const projectSchema = defineMongooseModel<Project>(
       default: false,
     },
     advance: {
-      type: Boolean,
+      type: Number,
       required: false,
-      default: false,
+      default: 0,
     },
     payed: {
       type: Boolean,
@@ -59,6 +59,11 @@ export const projectSchema = defineMongooseModel<Project>(
     priceWithDiscount: Number,
     discount: Boolean,
     dateCreated: String,
+    dateFinished: {
+      type: String,
+      required: false,
+      default: "",
+    },
     dateExparation: String,
   },
   { collection: "projects" }
