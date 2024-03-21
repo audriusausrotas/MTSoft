@@ -93,6 +93,35 @@ const changeCreatorHandler = async (value: string) => {
   }
 };
 
+const orderFinishHandler = async () => {
+
+  const response: any = await $fetch("/api/project", {
+    method: "PATCH",
+    body: { _id: offer!._id, value: "Baigtas" },
+  });
+  if (response.success) {
+    useProjects.updateStatus(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+
+  const data: any = await $fetch("/api/archive", {
+    method: "POST",
+    body: { _id: offer!._id },
+  } as any);
+  if (data.success) {
+    useProjects.moveToArchive(offer!);
+    setIsError(false);
+    setError(data.message);
+    navigateTo("/")
+  } else {
+    setError(data.message);
+  }
+}
+
+
 const checkGates = () => {
   const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
   gateOrdered.value = allGates.some(
@@ -114,14 +143,15 @@ watch(
 <template>
   <div class="flex flex-col gap-12">
     <div class="flex gap-4 items-end">
+
+
       <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
         @onChange="(value: string) => statusHandler(value)
         " />
-
-      <BaseButton name="išsiūsti pasiūlymą" @click="sendEmailHandler" :isLoading="isLoading" />
-
+      <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
       <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
       <BaseButton v-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true" :isLoading="isLoading" />
+      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
       <div v-if="!gateOrdered && isOpen"
         class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
         <button @click="gateOrderHadnler('vartonas')"

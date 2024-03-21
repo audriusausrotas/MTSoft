@@ -28,7 +28,7 @@ const buttonHandler = async (id: string) => {
           <h3 class="text-xl">Užsakymo duomenys</h3>
           <BaseInput :name="index + 1" width="w-72" label="Užsakymo nr:" :disable="true" />
           <BaseInput :name="gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:" :disable="true" />
-          <BaseButton name="užsakymas baigtas" @click="buttonHandler(gate._id)" />
+          <BaseButtonWithConfirmation name="užsakymas baigtas" @onConfirm="buttonHandler(gate._id)" />
         </div>
         <div class="flex flex-col gap-4">
           <h3 class="text-xl">Klento duomenys</h3>

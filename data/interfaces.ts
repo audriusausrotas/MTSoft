@@ -30,7 +30,6 @@ export interface Project {
   advance: number;
   orderNumber: string;
   dateCreated: string;
-  dateFinished: string;
   dateExparation: string;
 }
 
@@ -246,6 +245,16 @@ export interface MenuLinks {
   name: string;
   link: string;
   iconPath: string;
+}
+
+export interface Bonus {
+  address: string;
+  dateFinished: string;
+  price: number;
+  cost: number;
+  profit: number;
+  margin: number;
+  bonus: number;
 }
 
 export interface FenceMeasure {

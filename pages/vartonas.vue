@@ -29,55 +29,50 @@ const buttonHandler = async (id: string) => {
           <h3 class="text-xl">Užsakymo duomenys</h3>
           <BaseInput :name="index + 1" width="w-72" label="Užsakymo nr:" :disable="true" />
           <BaseInput :name="gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:" :disable="true" />
-          <BaseButton v-if="!open" name="užsakymas baigtas" width="72" @click="open = !open" />
-          <div v-else class="w-72 text-white  rounded-lg  flex overflow-hidden  justify-between">
-            <button class="bg-dark-full py-2 px-4 flex-1 hover:bg-red-full" @click="buttonHandler(gate._id)">Patvirtinti
-              Baigtumą</button>
-            <div class="border border-red-full" </div>
-              <button class="bg-dark-full py-2 px-4   hover:bg-red-full" @click="open = !open">Atšaukti</button>
-            </div>
-          </div>
-          <div class="flex flex-col gap-4">
-            <h3 class="text-xl">Klento duomenys</h3>
-            <BaseInput :name="gate.client.username" width="w-72" label="klientas" :disable="true" />
-            <BaseInput :name="gate.client.address" width="w-72" label="adresas" :disable="true" />
-            <BaseInput :name="gate.client.phone" width="w-72" label="telefonas" :disable="true" />
-          </div>
-          <div class="flex flex-col gap-4">
-            <h3 class="text-xl">Vadybininko duomenys</h3>
-            <BaseInput :name="gate.creator.username" width="w-72" label="atsakingas asmuo" :disable="true" />
-            <BaseInput :name="gate.creator.phone" width="w-72" label="Telefono numeris" :disable="true" />
-            <BaseInput :name="gate.creator.email" width="w-72" label="Elektroninis paštas" :disable="true" />
-          </div>
+          <BaseButtonWithConfirmation name="užsakymas baigtas" @onConfirm="buttonHandler(gate._id)" />
+
         </div>
-        <div v-for="(g, i) in gate.gates" :key="g._id" class="flex flex-col pb-4 border-b border-red-300">
-          <div class="flex gap-4  flex-wrap py-4 items-center">
-            <div class="font-medium text-xl">{{ i + 1 }}</div>
-            <BaseInput :name="g.type" width="w-28" label="vartų tipas" :disable="true" />
+        <div class="flex flex-col gap-4">
+          <h3 class="text-xl">Klento duomenys</h3>
+          <BaseInput :name="gate.client.username" width="w-72" label="klientas" :disable="true" />
+          <BaseInput :name="gate.client.address" width="w-72" label="adresas" :disable="true" />
+          <BaseInput :name="gate.client.phone" width="w-72" label="telefonas" :disable="true" />
+        </div>
+        <div class="flex flex-col gap-4">
+          <h3 class="text-xl">Vadybininko duomenys</h3>
+          <BaseInput :name="gate.creator.username" width="w-72" label="atsakingas asmuo" :disable="true" />
+          <BaseInput :name="gate.creator.phone" width="w-72" label="Telefono numeris" :disable="true" />
+          <BaseInput :name="gate.creator.email" width="w-72" label="Elektroninis paštas" :disable="true" />
+        </div>
+      </div>
+      <div v-for="(g, i) in gate.gates" :key="g._id" class="flex flex-col pb-4 border-b border-red-300">
+        <div class="flex gap-4  flex-wrap py-4 items-center">
+          <div class="font-medium text-xl">{{ i + 1 }}</div>
+          <BaseInput :name="g.type" width="w-28" label="vartų tipas" :disable="true" />
 
-            <BaseInput :name="g.color" width="w-28" label="vartų spalva" :disable="true" />
+          <BaseInput :name="g.color" width="w-28" label="vartų spalva" :disable="true" />
 
-            <BaseInput :name="g.width" width="w-28" label="vartų ilgis" :disable="true" />
+          <BaseInput :name="g.width" width="w-28" label="vartų ilgis" :disable="true" />
 
-            <BaseInput :name="g.height" width="w-28" label="vartų aukštis" :disable="true" />
+          <BaseInput :name="g.height" width="w-28" label="vartų aukštis" :disable="true" />
 
-            <BaseInput :name="g.filling" width="w-40" label="vartų užpildas" :disable="true" />
+          <BaseInput :name="g.filling" width="w-40" label="vartų užpildas" :disable="true" />
 
-            <BaseInput v-if="g.auto" :name="g.auto" width="w-28" label="automatika" :disable="true" />
+          <BaseInput v-if="g.auto" :name="g.auto" width="w-28" label="automatika" :disable="true" />
 
-            <BaseInput v-if="g.direction" :name="g.direction" width="w-36" label=" atidarymo kryptis" :disable="true" />
+          <BaseInput v-if="g.direction" :name="g.direction" width="w-36" label=" atidarymo kryptis" :disable="true" />
 
-            <BaseInput v-if="g.lock" :name="g.lock" width="w-40" label="spyna" :disable="true" />
+          <BaseInput v-if="g.lock" :name="g.lock" width="w-40" label="spyna" :disable="true" />
 
-          </div>
-          <div v-if="g.aditional !== ''" class="flex gap-4 text-lg pl-7">
-            <p class="font-bold">papildoma informacija:</p>
-            <p>
-              {{ g.aditional }}
-            </p>
-          </div>
+        </div>
+        <div v-if="g.aditional !== ''" class="flex gap-4 text-lg pl-7">
+          <p class="font-bold">papildoma informacija:</p>
+          <p>
+            {{ g.aditional }}
+          </p>
         </div>
       </div>
     </div>
+  </div>
 </template>
 <style scoped></style>

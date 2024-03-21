@@ -10,17 +10,13 @@ const props = defineProps(["name", "width", "type", "isLoading"]);
       props.type === 'special'
         ? 'text-black  hover:bg-red-full hover:text-white border border-inputBorder'
         : 'text-white bg-dark-full hover:bg-red-full hover:text-white',
-    ]"
-  >
+    ]">
     <slot />
     <span v-if="!props.isLoading">
       {{ props.name }}
     </span>
-    <span
-      v-else
-      :class="props.isLoading ? 'animate-spin' : ''"
-      class="border-4 border-b-red-full h-8 w-8 rounded-full"
-    ></span>
+    <span v-else :class="props.isLoading ? 'animate-spin' : ''"
+      class="border-4 border-b-red-full h-8 w-8 rounded-full"></span>
   </button>
 </template>
 <style scoped></style>

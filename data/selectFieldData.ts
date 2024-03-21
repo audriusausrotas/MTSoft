@@ -115,7 +115,6 @@ export const status: string[] = [
   "Gaminama",
   "Montuojama",
   "Laukiam Vartų",
-  "Baigta",
 ];
 
 export const accountTypes: string[] = [

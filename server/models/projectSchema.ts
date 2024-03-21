@@ -59,11 +59,6 @@ export const projectSchema = defineMongooseModel<Project>(
     priceWithDiscount: Number,
     discount: Boolean,
     dateCreated: String,
-    dateFinished: {
-      type: String,
-      required: false,
-      default: "",
-    },
     dateExparation: String,
   },
   { collection: "projects" }

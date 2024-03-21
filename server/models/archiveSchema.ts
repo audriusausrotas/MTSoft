@@ -35,9 +35,9 @@ export const archiveSchema = defineMongooseModel<Project>(
       default: false,
     },
     advance: {
-      type: Boolean,
+      type: Number,
       required: false,
-      default: false,
+      default: 0,
     },
     payed: {
       type: Boolean,
