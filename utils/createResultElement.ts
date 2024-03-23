@@ -62,7 +62,7 @@ export default function createResultElement(item: any) {
 
   // calculate total values
   const totalPrice = +(newPrice * item.quantity).toFixed(2);
-  const totalCost = +(product.cost * item.quantity).toFixed(2);
+  const totalCost = +(newCost * item.quantity).toFixed(2);
   const profit = +(totalPrice - totalCost).toFixed(2);
   const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
 
