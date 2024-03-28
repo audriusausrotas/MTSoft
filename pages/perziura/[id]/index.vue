@@ -168,9 +168,7 @@ watch(
     <div class="flex gap-4 flex-wrap items-end">
 
 
-      <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
-        @onChange="(value: string) => statusHandler(value)
-        " />
+
       <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
 
       <div>
@@ -206,13 +204,17 @@ watch(
         </div>
       </div>
       <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
+
+    </div>
+    <div class="flex gap-4">
+      <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
+        @onChange="(value: string) => statusHandler(value)
+        " />
       <BaseSelectField :values="allUsers" id="changeCreator" :defaultValue="offer?.creator.username"
         label="Atsakingas asmuo" width="w-40" @onChange="(value: string) => changeCreatorHandler(value)
         " />
-
-
+      <BaseInput label="Avansas" width="w-40" :name="offer?.advance + ' €'" :disable="true" />
     </div>
-    <p class="text-xl font-medium"> Avansas: {{ offer?.advance }}</p>
     <PreviewClient :offer="offer" />
     <ResultTotalElement :results="offer" />
     <previewTrello :offer="offer" :hidePrices="false" />

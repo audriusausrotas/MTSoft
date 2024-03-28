@@ -121,14 +121,14 @@ const archiveHandler = async () => {
   <div class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4">
     <div class="font-semibold text-xl w-6">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
-    <BaseInfoField :name="props.project?.client?.address" width="w-64 min-w-fit" />
+    <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
     <BaseInfoField :name="props.project?.discount
       ? props.project?.priceWithDiscount + '€'
       : props.project?.priceVAT + ' €'
       " width="w-28" />
 
     <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
-    <BaseInfoField :name="props.project?.client?.email" width="w-64 min-w-fit" :email="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-96 " :email="true" />
     <BaseInfoField :name="props.project?.status" width="w-40" :class="props.project?.status === 'Nepatvirtintas'
       ? 'bg-orange-300'
       : props.project?.status === 'Netinkamas'
