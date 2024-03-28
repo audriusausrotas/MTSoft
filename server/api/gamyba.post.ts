@@ -26,6 +26,9 @@ export default defineEventHandler(async (event) => {
         let step = false;
         item.measures.forEach((measure, index) => {
           if (measure.laiptas.exist) {
+            //jei laiptas i virsu, nepridedam nieko,
+            // if (laiptas aukstyn) lastHeight = lastHeight
+            // if (laiptas zemyn) darom kas apacioj
             lastHeight += measure.laiptas.value;
             step = true;
             return;
