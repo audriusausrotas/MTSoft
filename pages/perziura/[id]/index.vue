@@ -13,8 +13,10 @@ const useUsers = useUserStore();
 const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
 const isOpen = ref<boolean>(false);
+const open = ref<boolean>(false);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
 const gateOrdered = ref(false);
+const advance = ref<number>(0);
 
 const statusHandler = async (value: string) => {
   const data: any = await $fetch("/api/project", {
@@ -79,6 +81,11 @@ const gateCancelHadnler = async (): Promise<void> => {
   isLoading.value = false;
 };
 
+const cancelHandler = () => {
+  advance.value = 0
+  open.value = false
+}
+
 const changeCreatorHandler = async (value: string) => {
   const data: any = await $fetch("/api/projectCreator", {
     method: "PATCH",
@@ -92,6 +99,22 @@ const changeCreatorHandler = async (value: string) => {
     setError(data.message);
   }
 };
+
+const advanceHandler = async () => {
+  const data: any = await $fetch("/api/advance", {
+    method: "post",
+    body: { _id: offer!._id, advance: advance.value },
+  });
+  if (data.success) {
+    useProjects.changeAdvance(data.data)
+    offer!.advance = advance.value
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+  cancelHandler()
+}
 
 const orderFinishHandler = async () => {
 
@@ -142,30 +165,54 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
-    <div class="flex gap-4 items-end">
+    <div class="flex gap-4 flex-wrap items-end">
 
 
       <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
         @onChange="(value: string) => statusHandler(value)
         " />
       <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
-      <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
-      <BaseButton v-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true" :isLoading="isLoading" />
-      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
-      <div v-if="!gateOrdered && isOpen"
-        class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
-        <button @click="gateOrderHadnler('vartonas')"
-          class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
-          Vartonas
-        </button>
-        <button @click="gateOrderHadnler('gigasta')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
-          Gigasta
-        </button>
+
+      <div>
+        <BaseButton v-if="!open" name="Paliktas avansas" @click="open = !open" />
+        <div v-else-if="open" class="flex overflow-hidden border rounded-lg">
+          <input placeholder="Avansas" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
+            v-model="advance" :autofocus="open" @keyup.enter="advanceHandler" />
+          <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer" @click="advanceHandler">
+            OK
+          </button>
+
+          <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
+            @click="cancelHandler">
+            X
+          </button>
+        </div>
       </div>
+
+      <div>
+        <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
+        <BaseButton v-else-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true"
+          :isLoading="isLoading" />
+        <div v-else-if="!gateOrdered && isOpen"
+          class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
+          <button @click="gateOrderHadnler('vartonas')"
+            class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+            Vartonas
+          </button>
+          <button @click="gateOrderHadnler('gigasta')"
+            class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+            Gigasta
+          </button>
+        </div>
+      </div>
+      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
       <BaseSelectField :values="allUsers" id="changeCreator" :defaultValue="offer?.creator.username"
         label="Atsakingas asmuo" width="w-40" @onChange="(value: string) => changeCreatorHandler(value)
         " />
+
+
     </div>
+    <p class="text-xl font-medium"> Avansas: {{ offer?.advance }}</p>
     <PreviewClient :offer="offer" />
     <ResultTotalElement :results="offer" />
     <previewTrello :offer="offer" :hidePrices="false" />

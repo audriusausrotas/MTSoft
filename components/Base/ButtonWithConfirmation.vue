@@ -15,7 +15,8 @@ const buttonHandler = () => {
         <button class="bg-dark-full py-2 px-4 flex-1 hover:bg-red-full" @click="buttonHandler">Patvirtinti
         </button>
         <div class="border border-red-full"></div>
-        <button class="bg-dark-full py-2 px-4 flex-1  hover:bg-red-full" @click="open = false">Atšaukti</button>
+        <button class="bg-dark-full text-red-full hover:text-black font-bold py-2 px-4 flex-1  hover:bg-red-full"
+            @click="open = false">X</button>
     </div>
 </template>
 <style scoped></style>
