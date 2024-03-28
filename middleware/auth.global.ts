@@ -164,12 +164,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
       if (offer.value.success) {
         const useOffer = useOfferStore();
         if (
-          offer.status === "Nepatvirtintas" ||
-          offer.status === "Netinkamas"
+          offer.value.data.status === "Nepatvirtintas" ||
+          offer.value.data.status === "Netinkamas"
         ) {
           const currentDate = new Date();
           const exparationDate = new Date(offer.value.data.dateExparation);
-
           if (currentDate < exparationDate) {
             useOffer.setOffer({ ...offer.value.data });
           } else {
