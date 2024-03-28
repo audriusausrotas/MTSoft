@@ -57,7 +57,7 @@ export const topBarLinks: MenuLinks[] = [
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
   { name: "Vartonas", link: "/vartonas", iconPath: "" },
- // { name: "Gigasta", link: "/gigasta", iconPath: "" },
+  // { name: "Gigasta", link: "/gigasta", iconPath: "" },
   { name: "Archyvas", link: "/archyvas", iconPath: "" },
 ];
 
@@ -94,7 +94,7 @@ export const createInitialMeasure = (): Measure => ({
   },
   laiptas: {
     exist: false,
-    value: "",
+    value: 0,
   },
 });
 

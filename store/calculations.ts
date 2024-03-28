@@ -65,7 +65,7 @@ export const useCalculationsStore = defineStore("calculations", {
         ...createInitialMeasure(),
         laiptas: {
           exist: true,
-          value: "",
+          value: 0,
         },
       };
       this.fences[index].measures.push(laiptas);
@@ -192,10 +192,10 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateMeasureLaiptas(
       index: number,
-      value: string,
+      value: number,
       measureIndex: number
     ): void {
-      this.fences[index].measures[measureIndex].laiptas.value = value;
+      this.fences[index].measures[measureIndex].laiptas.value = +value;
     },
 
     updateTotalLength(index: number, value: number): void {

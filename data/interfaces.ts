@@ -73,7 +73,7 @@ export interface Measure {
   };
   laiptas: {
     exist: boolean;
-    value: string;
+    value: number;
   };
 }
 
@@ -262,4 +262,26 @@ export interface FenceMeasure {
   height: number;
   width: number;
   seeThrough: number[];
+}
+
+export interface Gamyba {
+  _id: string;
+  client: Client;
+  creator: Creator;
+  fences: Fence[];
+  bindings: Bindings[] | null;
+  aditional: string[];
+}
+
+export interface Bindings {
+  color: string;
+  height: number;
+  type: string;
+  quantity: number;
+}
+
+export interface Montavimas {
+  _id: string;
+  client: Client;
+  creator: Creator;
 }

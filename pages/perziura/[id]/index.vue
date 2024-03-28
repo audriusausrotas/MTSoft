@@ -144,6 +144,33 @@ const orderFinishHandler = async () => {
   }
 }
 
+const gamybaHandler = async () => {
+  const data: any = await $fetch("/api/gamyba", {
+    method: "post",
+    body: { _id: offer!._id },
+  });
+  if (data.success) {
+    console.log(data.data)
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+}
+
+const montavimasHandler = async () => {
+  const data: any = await $fetch("/api/montavimas", {
+    method: "post",
+    body: { _id: offer!._id },
+  });
+  if (data.success) {
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+}
+
 
 const checkGates = () => {
   const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
@@ -203,6 +230,8 @@ watch(
           </button>
         </div>
       </div>
+      <BaseButtonWithConfirmation name="Į gamybą" @onConfirm="gamybaHandler" :isLoading="isLoading" />
+      <BaseButtonWithConfirmation name="Į montavimą" @onConfirm="montavimasHandler" :isLoading="isLoading" />
       <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
 
     </div>
