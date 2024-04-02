@@ -22,18 +22,18 @@ export default defineEventHandler(async (event) => {
 
     project.fenceMeasures.forEach((item) => {
       if (item.bindings) {
-        // let lastHeight = 0;
-        // let stepHeight = 0;
-        // let stepDirection = "";
-        // let step = false;
+        let lastHeight = 0;
+        let stepHeight = 0;
+        let stepDirection = "";
+        let step = false;
+
         item.measures.forEach((measure, index) => {
-          // tvarkyt kazka cia
-          // if (measure.laiptas.exist) {
-          //   stepDirection = measure.laiptas.direction;
-          //   stepHeight = measure.laiptas.value;
-          //   step = true;
-          //   return;
-          // }
+          if (measure.laiptas.exist) {
+            stepDirection = measure.laiptas.direction;
+            stepHeight = measure.laiptas.value;
+            step = true;
+            return;
+          }
 
           const color = item.color;
           let height = measure.height;
@@ -41,17 +41,15 @@ export default defineEventHandler(async (event) => {
             ? "kampinis" + measure.kampas.value
             : "centrinis";
 
-          console.log(index, height);
+          // dadet logika kur lygini buvusi su esamu ir pasirenki didesni
+          if (step) {
+            lastHeight = measure.height;
+            step = false;
+          } else {
+            lastHeight = measure.height;
+          }
 
-          // if (step) {
-          //   const difference = measure.height - lastHeight;
-          //   console.log(difference);
-          //   height = lastHeight + difference + stepHeight;
-          //   lastHeight = measure.height;
-          //   step = false;
-          // } else {
-          //   lastHeight = height;
-          // }
+          console.log(index, height);
 
           if (index !== 0) {
             let found = false;
@@ -75,12 +73,14 @@ export default defineEventHandler(async (event) => {
                 quantity: type === "centrinis" ? 2 : 1,
               });
             }
+            found = false;
           }
         });
       }
     });
 
     console.log(bindings);
+
     const newGamyba = {
       _id: project._id,
       creator: { ...project.creator },
