@@ -183,6 +183,8 @@ const checkGates = () => {
 
 checkGates();
 
+const gateExist = offer?.gates.length && offer?.gates.length > 0
+
 watch(
   useGates.gates,
   () => {
@@ -216,7 +218,7 @@ watch(
         </div>
       </div>
 
-      <div>
+      <div v-if="gateExist">
         <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
         <BaseButton v-else-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true"
           :isLoading="isLoading" />

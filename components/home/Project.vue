@@ -122,13 +122,17 @@ const archiveHandler = async () => {
     <div class="font-semibold text-xl w-6">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
-    <BaseInfoField :name="props.project?.discount
+
+    <div class="relative">
+      <div v-if="props.project.advance" class="absolute top-1 right-1  w-2 h-2 rounded-full bg-green-500"></div>
+      <BaseInfoField :name="props.project?.discount
       ? props.project?.priceWithDiscount + '€'
       : props.project?.priceVAT + ' €'
       " width="w-28" />
+    </div>
 
     <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
-    <BaseInfoField :name="props.project?.client?.email" width="w-96 " :email="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
     <BaseInfoField :name="props.project?.status" width="w-40" :class="props.project?.status === 'Nepatvirtintas'
       ? 'bg-orange-300'
       : props.project?.status === 'Netinkamas'
@@ -139,7 +143,7 @@ const archiveHandler = async () => {
             'bg-violet-500 animate-pulse text-white'
             : 'bg-green-400'
       " />
-    <div class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer" :class="open && 'bg-red-full'"
+    <div class="relative hover:bg-red-full p-2  rounded-lg hover:cursor-pointer" :class="open && 'bg-red-full'"
       @click="open = !open">
       <NuxtImg src="/icons/menu.svg" width="16" height="16" decoding="auto" loading="lazy" :ismap="true" />
       <div v-if="open"
