@@ -32,7 +32,10 @@ export default defineEventHandler(async (event) => {
   let newOrderNumbers = "0001";
 
   const userProjects = await projectSchema.find({
-    "creator.username": creator.username,
+    $and: [
+      { "creator.username": creator.username },
+      { orderNumber: { $regex: `^${firstThreeLetters}`, $options: "i" } },
+    ],
   });
 
   if (userProjects.length > 0) {
@@ -44,7 +47,7 @@ export default defineEventHandler(async (event) => {
       (a, b) => extractOrderNumber(a) - extractOrderNumber(b)
     );
 
-    const lastOrder =
+    let lastOrder =
       sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
 
     let orderNumbers = parseInt(lastOrder.split("-")[1]);

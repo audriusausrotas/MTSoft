@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     data.password = "";
 
     setCookie(event, "mtud", token, {
-      maxAge: 2592000,
+      // maxAge: 2592000,
     });
 
     return { success: true, data: data, message: "" };

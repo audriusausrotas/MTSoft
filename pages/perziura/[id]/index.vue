@@ -101,6 +101,7 @@ const changeCreatorHandler = async (value: string) => {
 };
 
 const advanceHandler = async () => {
+  isLoading.value = true;
   const data: any = await $fetch("/api/advance", {
     method: "post",
     body: { _id: offer!._id, advance: advance.value },
@@ -114,6 +115,7 @@ const advanceHandler = async () => {
     setError(data.message);
   }
   cancelHandler()
+  isLoading.value = false;
 }
 
 const orderFinishHandler = async () => {
