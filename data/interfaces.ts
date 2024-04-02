@@ -69,11 +69,13 @@ export interface Measure {
   gates: GateInfo;
   kampas: {
     exist: boolean;
-    value: string;
+    value: number;
+    aditional: string;
   };
   laiptas: {
     exist: boolean;
     value: number;
+    direction: string;
   };
 }
 

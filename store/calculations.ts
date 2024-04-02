@@ -54,7 +54,8 @@ export const useCalculationsStore = defineStore("calculations", {
         ...createInitialMeasure(),
         kampas: {
           exist: true,
-          value: "",
+          value: 90,
+          aditional: "",
         },
       };
       this.fences[index].measures.push(kampas);
@@ -66,6 +67,7 @@ export const useCalculationsStore = defineStore("calculations", {
         laiptas: {
           exist: true,
           value: 0,
+          direction: "Aukštyn",
         },
       };
       this.fences[index].measures.push(laiptas);
@@ -187,15 +189,31 @@ export const useCalculationsStore = defineStore("calculations", {
       value: string,
       measureIndex: number
     ): void {
-      this.fences[index].measures[measureIndex].kampas.value = value;
+      this.fences[index].measures[measureIndex].kampas.value = +value;
+    },
+
+    updateMeasureKampasAditional(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].kampas.aditional = value;
     },
 
     updateMeasureLaiptas(
       index: number,
-      value: number,
+      value: string,
       measureIndex: number
     ): void {
       this.fences[index].measures[measureIndex].laiptas.value = +value;
+    },
+
+    updateMeasureLaiptasDirection(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
+      this.fences[index].measures[measureIndex].laiptas.direction = value;
     },
 
     updateTotalLength(index: number, value: number): void {

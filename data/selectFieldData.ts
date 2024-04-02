@@ -1,4 +1,4 @@
-export const fenceSide: string[] = ["priekis", "galas", "kairė", "dešinė"];
+export const fenceSide: string[] = ["Priekis", "Galas", "Kairė", "Dešinė"];
 export const fenceMaterials: string[] = ["Matinė", "Blizgi", "IceCrystal"];
 export const categories: string[] = [
   "Tvoros",
@@ -126,4 +126,6 @@ export const accountTypes: string[] = [
   "Montavimas",
 ];
 
-export const accountStatus: string[] = ["patvirtintas", "nepatvirtintas"];
+export const accountStatus: string[] = ["Patvirtintas", "Nepatvirtintas"];
+
+export const laiptasDirection: string[] = ["Aukštyn", "Žemyn"];

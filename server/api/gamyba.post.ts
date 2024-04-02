@@ -25,11 +25,13 @@ export default defineEventHandler(async (event) => {
         let lastHeight = 0;
         let step = false;
         item.measures.forEach((measure, index) => {
+          // tvarkyt kazka cia
           if (measure.laiptas.exist) {
-            //jei laiptas i virsu, nepridedam nieko,
-            // if (laiptas aukstyn) lastHeight = lastHeight
-            // if (laiptas zemyn) darom kas apacioj
-            lastHeight += measure.laiptas.value;
+            if (measure.laiptas.direction === "Aukštyn") {
+              lastHeight = lastHeight;
+            } else {
+              lastHeight += measure.laiptas.value;
+            }
             step = true;
             return;
           }

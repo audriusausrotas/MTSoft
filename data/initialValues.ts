@@ -90,11 +90,13 @@ export const createInitialMeasure = (): Measure => ({
   },
   kampas: {
     exist: false,
-    value: "",
+    value: 90,
+    aditional: "",
   },
   laiptas: {
     exist: false,
     value: 0,
+    direction: "Aukštyn",
   },
 });
 
