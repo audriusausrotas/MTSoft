@@ -22,35 +22,36 @@ export default defineEventHandler(async (event) => {
 
     project.fenceMeasures.forEach((item) => {
       if (item.bindings) {
-        let lastHeight = 0;
-        let step = false;
+        // let lastHeight = 0;
+        // let stepHeight = 0;
+        // let stepDirection = "";
+        // let step = false;
         item.measures.forEach((measure, index) => {
           // tvarkyt kazka cia
-          if (measure.laiptas.exist) {
-            if (measure.laiptas.direction === "Aukštyn") {
-              lastHeight = lastHeight;
-            } else {
-              lastHeight += measure.laiptas.value;
-            }
-            step = true;
-            return;
-          }
+          // if (measure.laiptas.exist) {
+          //   stepDirection = measure.laiptas.direction;
+          //   stepHeight = measure.laiptas.value;
+          //   step = true;
+          //   return;
+          // }
 
           const color = item.color;
           let height = measure.height;
-          let type = "centrinis";
+          const type = measure.kampas.exist
+            ? "kampinis" + measure.kampas.value
+            : "centrinis";
 
-          if (measure.kampas.exist) {
-            type = "kampinis" + measure.kampas.value;
-          }
+          console.log(index, height);
 
-          if (step) {
-            height = lastHeight;
-            lastHeight = measure.height;
-            step = false;
-          } else {
-            lastHeight = height;
-          }
+          // if (step) {
+          //   const difference = measure.height - lastHeight;
+          //   console.log(difference);
+          //   height = lastHeight + difference + stepHeight;
+          //   lastHeight = measure.height;
+          //   step = false;
+          // } else {
+          //   lastHeight = height;
+          // }
 
           if (index !== 0) {
             let found = false;

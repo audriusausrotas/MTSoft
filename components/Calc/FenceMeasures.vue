@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Measure } from "~/data/interfaces";
+import { v4 } from "uuid";
 const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
 
@@ -23,14 +24,8 @@ watch(
     <CalcFenceButtons :index="props.index" />
   </div>
   <div class="flex flex-wrap justify-evenly">
-    <CalcFenceMeasureElement
-      v-for="(measure, measureIndex) in useCalculations.fences[props.index]
-        .measures"
-      :key="measureIndex"
-      :measureIndex="measureIndex"
-      :index="props.index"
-      :measure="measure"
-    />
+    <CalcFenceMeasureElement v-for="(measure, measureIndex) in useCalculations.fences[props.index]
+      .measures" :key="v4()" :measureIndex="measureIndex" :index="props.index" :measure="measure" />
   </div>
 </template>
 <style scoped></style>
