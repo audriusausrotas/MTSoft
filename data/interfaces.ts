@@ -287,3 +287,10 @@ export interface Montavimas {
   client: Client;
   creator: Creator;
 }
+
+export interface BindingItem {
+  bindings: boolean;
+  color: string;
+  firstHeight: number;
+  lastHeight: number;
+}

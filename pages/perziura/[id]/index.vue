@@ -119,7 +119,6 @@ const advanceHandler = async () => {
 }
 
 const orderFinishHandler = async () => {
-
   const response: any = await $fetch("/api/project", {
     method: "PATCH",
     body: { _id: offer!._id, value: "Baigtas" },

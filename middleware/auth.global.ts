@@ -5,71 +5,11 @@ import { useOfferStore } from "~/store/offer";
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
   const cookie = useCookie("mtud");
+  const useProjects = useProjectsStore();
+  const useProducts = useProductsStore();
 
   if (!to.path.includes("pasiulymas")) {
-    if (process.client) {
-      if (to.path === "/bonusai") {
-        if (
-          useUser.user?.username !== "Audrius" &&
-          useUser.user?.username !== "Andrius"
-        ) {
-          return navigateTo("/");
-        }
-      }
-
-      const useProjects = useProjectsStore();
-      if (useProjects.projects.length === 0) {
-        const { data: gates }: any = await useFetch("/api/gates");
-        if (gates.value.success) {
-          const useGates = useGateStore();
-          useGates.addGates(gates.value.data);
-        }
-
-        if (
-          useUser.user?.accountType === "Administratorius" ||
-          useUser.user?.accountType === "Paprastas vartotojas"
-        ) {
-          const { data: projects }: any = await useFetch("/api/project");
-          if (projects.value.success) {
-            const useProjects = useProjectsStore();
-            useProjects.addProjects(projects.value.data);
-          }
-
-          const { data: products }: any = await useFetch("/api/products");
-          if (products.value.success) {
-            const useProducts = useProductsStore();
-            useProducts.addProducts(products.value.data);
-          }
-
-          const { data: users }: any = await useFetch("/api/users");
-          if (users.value.success) {
-            useUser.setUsers([...users.value.data]);
-          }
-        } else {
-          switch (useUser.user?.accountType) {
-            case "Vartonas":
-              if (to.path !== "/vartonas") return navigateTo("/vartonas");
-              break;
-
-            case "Gigasta":
-              if (to.path !== "/gigasta") return navigateTo("/gigasta");
-              break;
-
-            case "Montavimas":
-              if (to.path !== "/montavimas") return navigateTo("/montavimas");
-              break;
-
-            case "Gamyba":
-              if (to.path !== "/gamyba") return navigateTo("/gamyba");
-              break;
-
-            default:
-              break;
-          }
-        }
-      }
-    }
-
+    // authentificate in server from cookie
     if (process.server) {
       if (cookie.value) {
         const { data }: any = await useFetch("/api/auth", {
@@ -84,75 +24,71 @@ export default defineNuxtRouteMiddleware(async (to) => {
           }
         } else {
           useUser.setUser({ ...data.value.data });
-
-          const { data: gates }: any = await useFetch("/api/gates");
-          if (gates.value.success) {
-            const useGates = useGateStore();
-            useGates.addGates(gates.value.data);
-          }
-
-          if (
-            data.value.data.accountType === "Administratorius" ||
-            data.value.data.accountType === "Paprastas vartotojas"
-          ) {
-            const { data: projects }: any = await useFetch("/api/project");
-            if (projects.value.success) {
-              const useProjects = useProjectsStore();
-              useProjects.addProjects(projects.value.data);
-            }
-
-            const { data: products }: any = await useFetch("/api/products");
-            if (products.value.success) {
-              const useProducts = useProductsStore();
-              useProducts.addProducts(products.value.data);
-            }
-
-            const { data: users }: any = await useFetch("/api/users");
-            if (users.value.success) {
-              useUser.setUsers([...users.value.data]);
-            }
-          }
-
-          if (to.path === "/bonusai") {
-            if (
-              useUser.user?.username !== "Audrius" &&
-              useUser.user?.username !== "Andrius"
-            ) {
-              return navigateTo("/");
-            }
-          }
-
-          if (
-            data.value.data.accountType !== "Administratorius" ||
-            data.value.data.accountType !== "Paprastas vartotojas"
-          ) {
-            switch (data.value.data.accountType) {
-              case "Vartonas":
-                if (to.path !== "/vartonas") return navigateTo("/vartonas");
-                break;
-
-              case "Gigasta":
-                if (to.path !== "/gigasta") return navigateTo("/gigasta");
-                break;
-
-              case "Montavimas":
-                if (to.path !== "/montavimas") return navigateTo("/montavimas");
-                break;
-
-              case "Gamyba":
-                if (to.path !== "/gamyba") return navigateTo("/gamyba");
-                break;
-
-              default:
-                break;
-            }
-          }
         }
       } else {
         if (to.path !== "/login") {
           useUser.logout();
           return navigateTo("/login");
         }
+      }
+    }
+
+    // fetches data in back/front
+    if (useProjects.projects.length === 0) {
+      const { data: gates }: any = await useFetch("/api/gates");
+      if (gates.value.success) {
+        const useGates = useGateStore();
+        useGates.addGates(gates.value.data);
+      }
+
+      if (
+        useUser.user?.accountType === "Administratorius" ||
+        useUser.user?.accountType === "Paprastas vartotojas"
+      ) {
+        if (useProjects.projects.length === 0) {
+          const { data: projects }: any = await useFetch("/api/project");
+          if (projects.value.success) {
+            useProjects.addProjects(projects.value.data);
+          }
+        }
+        if (useProducts.products.length === 0) {
+          const { data: products }: any = await useFetch("/api/products");
+          if (products.value.success) {
+            useProducts.addProducts(products.value.data);
+          }
+        }
+        if (useUser.users.length === 0) {
+          const { data: users }: any = await useFetch("/api/users");
+          if (users.value.success) {
+            useUser.setUsers([...users.value.data]);
+          }
+        }
+      } else {
+        switch (useUser.user?.accountType) {
+          case "Vartonas":
+            if (to.path !== "/vartonas") return navigateTo("/vartonas");
+            break;
+          case "Gigasta":
+            if (to.path !== "/gigasta") return navigateTo("/gigasta");
+            break;
+          case "Montavimas":
+            if (to.path !== "/montavimas") return navigateTo("/montavimas");
+            break;
+          case "Gamyba":
+            if (to.path !== "/gamyba") return navigateTo("/gamyba");
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
+    if (to.path === "/bonusai") {
+      if (
+        useUser.user?.username !== "Audrius" &&
+        useUser.user?.username !== "Andrius"
+      ) {
+        return navigateTo("/");
       }
     }
   } else {

@@ -1,4 +1,6 @@
-<script setup lang="js"></script>
+<script setup lang="ts">
+
+</script>
 
 <template>
   <div>gamyba</div>

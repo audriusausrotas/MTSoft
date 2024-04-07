@@ -1,4 +1,4 @@
-import type { Gamyba, Project, Bindings } from "~/data/interfaces";
+import type { Gamyba, Project, Bindings, BindingItem } from "~/data/interfaces";
 import { verticals } from "~/data/selectFieldData";
 
 export default defineEventHandler(async (event) => {
@@ -47,23 +47,23 @@ export default defineEventHandler(async (event) => {
       found = false;
     };
 
-    const front: any = [];
-    const left: any = [];
-    const back: any = [];
-    const right: any = [];
+    const front: BindingItem[] = [];
+    const left: BindingItem[] = [];
+    const back: BindingItem[] = [];
+    const right: BindingItem[] = [];
 
     project.fenceMeasures.forEach((item) => {
-      const bindingItem = {
+      const bindingItem: BindingItem = {
         bindings: item.bindings === "Taip" ? true : false,
         color: item.color,
         firstHeight: item.measures[0].height,
         lastHeight: item.measures[item.measures.length - 1].height,
       };
 
-      if (item.direction === "Priekis") front.push(bindingItem);
-      if (item.direction === "Kairė") left.push(bindingItem);
-      if (item.direction === "Galas") back.push(bindingItem);
-      if (item.direction === "Dešinė") right.push(bindingItem);
+      if (item.side === "Priekis") front.push(bindingItem);
+      if (item.side === "Kairė") left.push(bindingItem);
+      if (item.side === "Galas") back.push(bindingItem);
+      if (item.side === "Dešinė") right.push(bindingItem);
 
       if (item.bindings === "Taip") {
         let lastHeight = 0;
@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
           const color = item.color;
           let height = measure.height;
           const type = measure.kampas.exist
-            ? "Kampinis" + measure.kampas.value
+            ? "Kampinis " + measure.kampas.value
             : measure.gates.exist
             ? "Elka"
             : "Centrinis";
@@ -105,14 +105,13 @@ export default defineEventHandler(async (event) => {
       }
     });
 
-    //istestuot
-    const calculateMiddle = (array: any) => {
+    const calculateMiddle = (array: BindingItem[]) => {
       if (array.length > 1) {
-        let lastElement: any;
+        let lastElement: BindingItem | null = null;
 
         for (const item of array) {
           if (lastElement) {
-            if (lastElement.bingings) {
+            if (lastElement.bindings && item.bindings) {
               if (item.bindings) {
                 if (
                   lastElement.lastHeight === item.firstHeight ||
@@ -147,39 +146,61 @@ export default defineEventHandler(async (event) => {
     calculateMiddle(back);
     calculateMiddle(right);
 
-    //  const front = [];
-    // const left = [];
-    // const back = [];
-    // const right = [];
+    const calculateCorners = (a: BindingItem[], b: BindingItem[]) => {
+      const firstElement = a[a.length - 1];
+      const secondElement = b[0];
+      if (a.length > 0 && b.length > 0) {
+        if (firstElement.bindings && secondElement.bindings) {
+          let length = 0;
+          let color = "";
+          if (firstElement.lastHeight > secondElement.firstHeight) {
+            length = firstElement.lastHeight;
+            color = firstElement.color;
+          } else {
+            length = secondElement.firstHeight;
+            color = secondElement.color;
+          }
+          addBindings(color, length, "Kampinis");
+        } else {
+          if (firstElement.bindings) {
+            addBindings(firstElement.color, firstElement.lastHeight, "Elka");
+          }
+          if (secondElement.bindings) {
+            addBindings(secondElement.color, secondElement.firstHeight, "Elka");
+          }
+        }
+      } else {
+        if (a.length > 0 && firstElement.bindings) {
+          addBindings(firstElement.color, firstElement.lastHeight, "Elka");
+        }
 
-    // project.fenceMeasures.forEach((item) => {
-    //   const bindingItem = {
-    //     bindings: item.bindings,
-    //     color: item.color,
-    //     firstHeight: item.measures[0].height,
-    //     lastHeight: item.measures[item.measures.length - 1].height,
-    //   };
+        if (b.length > 0 && secondElement.bindings) {
+          addBindings(secondElement.color, secondElement.firstHeight, "Elka");
+        }
+      }
+    };
 
-    const calculateCorners = () => {};
+    calculateCorners(front, left);
+    calculateCorners(left, back);
+    calculateCorners(back, right);
+    calculateCorners(right, front);
 
-    console.log(bindings);
-
-    const newGamyba = {
+    const newGamyba = new gamybaSchema({
       _id: project._id,
       creator: { ...project.creator },
       client: { ...project.client },
       fences: [...project.fenceMeasures],
       aditional: [],
       bindings,
-    };
+    });
     //@ts-ignore
-    // const data = await newGamyba.save();
+    const data = await newGamyba.save();
 
-    // if (!data) return { success: false, data: null, message: "Įvyko klaida" };
+    if (!data) return { success: false, data: null, message: "Įvyko klaida" };
 
-    // project.status = "Gaminama";
-    // //@ts-ignore
-    // await project.save();
+    project.status = "Gaminama";
+    //@ts-ignore
+    await project.save();
 
     return { success: true, data: newGamyba, message: "Perduota gamybai" };
   }

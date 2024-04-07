@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
     };
 
   project.advance = advance;
+  project.status = "Patvirtintas";
 
   const data = await project.save();
 
