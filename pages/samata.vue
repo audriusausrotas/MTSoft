@@ -3,8 +3,8 @@
 
 <template>
   <div class="flex flex-col gap-8">
-    <ResultClientDetails />
+    <ResultClient />
+    <ResultClientButtons />
     <ResultFence />
   </div>
 </template>
-

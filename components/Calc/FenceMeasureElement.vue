@@ -6,7 +6,7 @@ import {
   gateDirection,
   laiptasDirection
 } from "~/data/selectFieldData";
-const props = defineProps(["measureIndex", "index", "measure"]);
+const props = defineProps(["measureIndex", "index", "measure", "lastElement"]);
 const useCalculations = useCalculationsStore();
 
 const isChecked = ref(props.measure.gates.exist);
@@ -27,6 +27,7 @@ watch(
   },
   { deep: true }
 );
+
 </script>
 
 <template>
@@ -35,13 +36,14 @@ watch(
       <p class="font-bold pb-2 text-xl">Nr. {{ props.measureIndex + 1 }}</p>
 
       <BaseInput v-if="isData" width="w-24" placeholder="Ilgis" label="ilgis" type="number" variant="light"
+        :active="useCalculations.fences[props.index].measures.length - 1 === props.measureIndex"
         :name="props.measure.length" @EnterPressed="useCalculations.addMeasure(props.index)" @onChange="(value: number): void =>
         useCalculations.updateMeasureLength(
           props.index,
           props.measureIndex,
           value
         )
-        " :active="true" />
+        " />
 
       <BaseInput v-if="isData" width="w-24" placeholder="Aukštis" type="number" label="aukštis" variant="light"
         :name="props.measure.height" @EnterPressed="useCalculations.addMeasure(props.index)" @onChange="(value: number): void =>

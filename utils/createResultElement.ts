@@ -36,23 +36,23 @@ export default function createResultElement(item: any) {
 
   // change price on fence seeThrough
   if (item.seeThrough === "Aklina") {
-    newPrice = product.price + 3;
+    newPrice = +product.price + 3;
   }
 
   if (item.seeThrough === "Vidutiniška") {
-    newPrice = product.price - 3;
+    newPrice = +product.price - 3;
   }
 
   if (item.seeThrough === "Pramatoma") {
-    newPrice = product.price - 5;
+    newPrice = +product.price - 5;
   }
 
   if (item.seeThrough === "25% Pramatomumas") {
-    newPrice = product.price - 5;
+    newPrice = +product.price - 5;
   }
 
   if (item.seeThrough === "50% pramatomumas") {
-    newPrice = product.price - 7;
+    newPrice = +product.price - 7;
   }
 
   if (verticals.includes(item.type)) {

@@ -65,18 +65,9 @@ const clearHandler = () => {
 };
 </script>
 <template>
-  <div class="flex flex-wrap overflow-hidden border rounded-lg">
-    <div class="flex-1">
-      <ResultClient name="klientas" :value="useCalculations.client.username" class="capitalize border-b" />
-      <ResultClient name="telefono numeris" :value="useCalculations.client.phone" />
-    </div>
-    <div class="flex-1">
-      <ResultClient name="adresas" :value="useCalculations.client.address" class="capitalize border-b" />
-      <ResultClient name="elektroninis paštas" :value="useCalculations.client.email" />
-    </div>
-  </div>
 
-  <div class="flex gap-4 flex-wrap">
+
+  <div class="flex gap-4 flex-wrap lg:sticky top-0 z-50 bg-white py-4 border-b ">
     <div class="flex gap-4">
       <BaseButton name="išsaugoti sąmatą" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="išvalyti viską" @click="clearHandler" />

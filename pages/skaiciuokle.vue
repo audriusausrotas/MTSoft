@@ -10,16 +10,14 @@ const calculateResultsHandler = () => {
   calculateResults();
   router.replace("/samata");
 };
+
 </script>
 
 <template>
-  <div class="flex flex-col gap-12">
-    <div class="flex flex-col items-center gap-8 xl:items-start">
-      <CalcClient />
-      <div class="flex justify-center flex-wrap gap-4">
-        <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
-        <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
-      </div>
+  <div class="flex flex-col ">
+    <div class="flex flex-wrap gap-4 lg:sticky top-0 py-4 z-50 bg-white border-b">
+      <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
+      <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
     </div>
 
     <div v-for="(fence, index) in useCalculations.fences" :key="fence.id">

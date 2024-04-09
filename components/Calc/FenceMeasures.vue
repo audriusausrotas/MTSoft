@@ -20,7 +20,7 @@ watch(
 );
 </script>
 <template>
-  <div class="flex flex-col justify-center gap-4">
+  <div class="flex flex-col lg:sticky top-16 bg-white border-b z-50 py-2  gap-4">
     <CalcFenceButtons :index="props.index" />
   </div>
   <div class="flex flex-wrap justify-evenly">
