@@ -4,7 +4,6 @@ export default defineEventHandler(async (event) => {
     client,
     fenceMeasures,
     results,
-    creator,
     works,
     gates,
     totalPrice,
@@ -27,7 +26,6 @@ export default defineEventHandler(async (event) => {
   if (!orderExist)
     return { success: false, data: null, message: "Projektas nerastas" };
 
-  orderExist.creator = creator;
   orderExist.client = client;
   orderExist.fenceMeasures = fenceMeasures;
   orderExist.results = results;
