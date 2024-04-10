@@ -5,7 +5,10 @@ const props = defineProps(["project", "index", "length", "archive"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
+const useGates = useGateStore();
 const open = ref<boolean>(false);
+const gateOrdered = ref(false);
+
 const { setError, setIsError } = useError();
 
 const deleteHandler = async (): Promise<void> => {
@@ -115,13 +118,29 @@ const archiveHandler = async () => {
     setError(error);
   }
 };
+
+
+const checkGates = () => {
+  const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
+  gateOrdered.value = allGates.some(
+    (item) => item._id.toString() === props.project?._id.toString()
+  );
+};
+
+checkGates();
 </script>
 
 <template>
   <div class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4">
     <div class="font-semibold text-xl w-6">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
-    <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
+    <div class="relative">
+      <div v-if="props.project.gates.length > 0 && props.project.status !== 'Nepatvirtintas'"
+        class="absolute top-1 right-1  w-2 h-2 rounded-full bg-green-500"
+        :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'">
+      </div>
+      <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
+    </div>
 
     <div class="relative">
       <div v-if="props.project.advance" class="absolute top-1 right-1  w-2 h-2 rounded-full bg-green-500"></div>
