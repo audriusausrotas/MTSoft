@@ -90,6 +90,7 @@ const copyHandler = async () => {
     });
     if (data.success) {
       useProjects.addProject(data.data);
+      setIsError(false)
       setError(data.message);
     } else {
       setError(data.message);
