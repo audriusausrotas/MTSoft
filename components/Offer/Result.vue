@@ -15,8 +15,7 @@ else measurement.value = "vnt";
 
 <template>
   <div
-    class="flex flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-10 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
-  >
+    class="flex flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-10 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none">
     <div class="flex">
       <p class="block sm:hidden font-bold">Nr.:</p>
       <div class="w-6 text-center">{{ props.index + 1 }}</div>
@@ -27,21 +26,14 @@ else measurement.value = "vnt";
       <div class="flex print:gap-4 gap-2 md:gap-8">
         <span class="w-fit">{{ props.result.type }}</span>
         <span v-if="props.result.seeThrough">{{
-          props.result.seeThrough
-        }}</span>
-        <span
-          v-if="
-            props.result.height &&
-            props.result.category.toLowerCase() === 'tvoros' &&
-            !props.result.type.includes('Segmentas')
-          "
-          >H-{{ props.result.height }}</span
-        >
-        <span v-if="props.result.color && !props.result.type.includes('RAL')"
-          >RAL{{ props.result.color }}</span
-        >
-        <span v-if="props.result.category.toLowerCase() === 'vartai'"
-          >plotis: {{ props.result.width }} cm
+        props.result.seeThrough
+      }}</span>
+        <span v-if="props.result.height &&
+        props.result.category.toLowerCase() === 'tvoros' &&
+        !props.result.type.includes('Segmentas')
+        ">H-{{ props.result.height }}</span>
+        <span v-if="props.result.color && !props.result.type.includes('RAL')">RAL {{ props.result.color }}</span>
+        <span v-if="props.result.category.toLowerCase() === 'vartai'">plotis: {{ props.result.width }} cm
         </span>
       </div>
     </div>
