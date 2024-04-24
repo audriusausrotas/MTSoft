@@ -57,7 +57,7 @@ export const topBarLinks: MenuLinks[] = [
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
   { name: "Vartonas", link: "/vartonas", iconPath: "" },
-  // { name: "Gigasta", link: "/gigasta", iconPath: "" },
+  { name: "Gigasta", link: "/gigasta", iconPath: "" },
   { name: "Archyvas", link: "/archyvas", iconPath: "" },
 ];
 
@@ -74,6 +74,7 @@ export const menuLinks: MenuLinks[] = [
   },
   { name: "Sąmata", link: "/samata", iconPath: "/icons/projects.svg" },
 ];
+
 export const createInitialMeasure = (): Measure => ({
   length: 0,
   height: 0,
