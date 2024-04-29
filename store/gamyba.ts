@@ -17,6 +17,13 @@ export const useGamybaStore = defineStore("gamyba", {
     deleteGamybaOrder(id: string) {
       this.gamybaList = this.gamybaList.filter((item) => item._id !== id);
     },
+
+    addComment(id: string, data: Gamyba) {
+      this.gamybaList = this.gamybaList.map((item) => {
+        if (item._id === id) return data;
+        else return item;
+      });
+    },
   },
 
   getters: {},

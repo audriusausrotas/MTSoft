@@ -273,7 +273,13 @@ export interface Gamyba {
   orderNumber: string;
   fences: Fence[];
   bindings: Bindings[] | null;
-  aditional: string[];
+  aditional: Comment[];
+}
+
+export interface Comment {
+  date: string;
+  creator: string;
+  comment: string;
 }
 
 export interface Bindings {

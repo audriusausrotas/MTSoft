@@ -15,7 +15,7 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
       default: [],
     },
     aditional: {
-      type: [String],
+      type: [Object],
       required: false,
       default: [],
     },
