@@ -1,17 +1,17 @@
 import { useCookie } from "nuxt/app";
-import { useUserStore } from "~/store/user";
-import { useOfferStore } from "~/store/offer";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
   const cookie = useCookie("mtud");
   const useProjects = useProjectsStore();
   const useProducts = useProductsStore();
+  const useGamyba = useGamybaStore();
+  const useGates = useGateStore();
 
   if (!to.path.includes("pasiulymas")) {
     // authentificate in server from cookie
-    if (process.server) {
-      if (cookie.value) {
+    if (cookie.value) {
+      if (!useUser.user) {
         const { data }: any = await useFetch("/api/auth", {
           method: "post",
           body: {},
@@ -25,11 +25,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
         } else {
           useUser.setUser({ ...data.value.data });
         }
-      } else {
-        if (to.path !== "/login") {
-          useUser.logout();
-          return navigateTo("/login");
-        }
+      }
+    } else {
+      if (to.path !== "/login") {
+        useUser.logout();
+        return navigateTo("/login");
       }
     }
 
@@ -37,8 +37,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (useProjects.projects.length === 0) {
       const { data: gates }: any = await useFetch("/api/gates");
       if (gates.value.success) {
-        const useGates = useGateStore();
         useGates.addGates(gates.value.data);
+      }
+
+      if (useGamyba.gamybaList.length === 0) {
+        const { data: gamyba }: any = await useFetch("/api/gamyba");
+        if (gamyba.value.success) {
+          useGamyba.addAll(gamyba.value.data);
+        }
       }
 
       if (

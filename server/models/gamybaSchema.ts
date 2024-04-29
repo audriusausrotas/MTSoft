@@ -7,6 +7,7 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
     _id: Object,
     client: Object,
     creator: Object,
+    orderNumber: String,
     fences: Array,
     bindings: {
       type: Array,

@@ -1,5 +1,6 @@
 import type { Gamyba, Project, Bindings, BindingItem } from "~/data/interfaces";
 import { verticals } from "~/data/selectFieldData";
+import { v4 } from "uuid";
 
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
@@ -11,11 +12,11 @@ export default defineEventHandler(async (event) => {
 
   const gamybaList: Gamyba[] = await gamybaSchema.find();
 
-  const gatesExist = gamybaList.some(
+  const gamybaExist = gamybaList.some(
     (item) => item._id.toString() === project._id.toString()
   );
 
-  if (gatesExist) {
+  if (gamybaExist) {
     return { success: false, data: null, message: "Objektas jau gaminamas" };
   } else {
     const bindings: Bindings[] = [];
@@ -38,6 +39,7 @@ export default defineEventHandler(async (event) => {
 
       if (!found) {
         bindings.push({
+          id: v4(),
           color,
           height,
           type,
@@ -189,6 +191,7 @@ export default defineEventHandler(async (event) => {
       _id: project._id,
       creator: { ...project.creator },
       client: { ...project.client },
+      orderNumber: project.orderNumber,
       fences: [...project.fenceMeasures],
       aditional: [],
       bindings,

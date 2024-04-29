@@ -270,12 +270,14 @@ export interface Gamyba {
   _id: string;
   client: Client;
   creator: Creator;
+  orderNumber: string;
   fences: Fence[];
   bindings: Bindings[] | null;
   aditional: string[];
 }
 
 export interface Bindings {
+  id: string;
   color: string;
   height: number;
   type: string;

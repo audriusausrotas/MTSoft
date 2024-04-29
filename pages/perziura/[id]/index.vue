@@ -9,6 +9,7 @@ const { setError, setIsError } = useError();
 const useProjects = useProjectsStore();
 const useGates = useGateStore();
 const useUsers = useUserStore();
+const useGamyba = useGamybaStore()
 
 const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
@@ -151,9 +152,9 @@ const gamybaHandler = async () => {
     body: { _id: offer!._id },
   });
   if (data.success) {
-    console.log(data.data)
     setIsError(false);
     setError(data.message);
+    useGamyba.addGamyba(data.data)
   } else {
     setError(data.message);
   }
