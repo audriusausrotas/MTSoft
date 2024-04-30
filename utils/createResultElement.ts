@@ -12,25 +12,60 @@ export default function createResultElement(item: any) {
 
   // change gate prices
   if (item.type.includes("vartai")) {
-    if (item.width > 400) {
-      newPrice += 200;
-      newCost += 200;
+    if (item.type.includes("segmentiniai")) {
+      if (item.width > 400) {
+        newPrice += 60;
+        newCost += 60;
+      }
+
+      if (item.height > 140) {
+        newPrice += 30;
+        newCost += 30;
+      }
+      if (item.height > 165) {
+        newPrice += 50;
+        newCost += 50;
+      }
+    } else {
+      if (item.width > 400) {
+        newPrice += 200;
+        newCost += 200;
+      }
+      if (item.width > 500) {
+        newPrice += 120;
+        newCost += 120;
+      }
+      if (item.width > 600) {
+        newPrice += 300;
+        newCost += 300;
+      }
+      if (item.width > 700) {
+        newPrice += 400;
+        newCost += 400;
+      }
+      if (item.width > 800) {
+        newPrice += 300;
+        newCost += 300;
+      }
     }
-    if (item.width > 500) {
-      newPrice += 120;
-      newCost += 120;
+  }
+
+  if (item.type === "Kiemo varteliai segmentiniai") {
+    if (item.height > 110) {
+      newPrice += 20;
+      newCost += 20;
     }
-    if (item.width > 600) {
-      newPrice += 300;
-      newCost += 300;
+    if (item.height > 140) {
+      newPrice += 20;
+      newCost += 20;
     }
-    if (item.width > 700) {
-      newPrice += 400;
-      newCost += 400;
+    if (item.height > 165) {
+      newPrice += 20;
+      newCost += 20;
     }
-    if (item.width > 800) {
-      newPrice += 300;
-      newCost += 300;
+    if (item.height > 185) {
+      newPrice += 20;
+      newCost += 20;
     }
   }
 

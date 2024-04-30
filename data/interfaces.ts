@@ -133,6 +133,7 @@ export interface Gate {
   direction: string;
   lock: string;
   aditional: string;
+  option: string;
 }
 
 export interface GateObject {
@@ -163,6 +164,7 @@ export interface GateInfo {
   direction: string;
   lock: string;
   bankette: string;
+  option: string;
 }
 
 export interface User {

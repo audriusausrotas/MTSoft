@@ -66,6 +66,7 @@ export default function calculateResults() {
           aditional: measure.gates.aditional,
           direction: measure.length! < 200 ? measure.gates.direction : "",
           lock: measure.length! < 200 ? measure.gates.lock : "",
+          option: measure.gates.option,
         });
       }
 

@@ -170,6 +170,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     addGates(gate: Gate): void {
+      console.log(gate);
       this.gates.push(gate);
     },
 

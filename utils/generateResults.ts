@@ -179,18 +179,39 @@ export default function generateResults() {
             quantity: 1,
           });
         }
+      } else if (item.type === "Segmentiniai") {
+        createResultElement({
+          ...item,
+          type: defaultValues.gateSegment,
+          quantity: 1,
+        });
+        createWorkElement({
+          name: defaultValues.segmentGateWork,
+          quantity: 1,
+        });
       } else {
-        console.log(item);
-        if (item.lock === "Elektromagnetinė") {
-          createResultElement({
-            ...item,
-            type: defaultValues.smallGates2,
-            quantity: 1,
-          });
+        if (item.option === "Gaminami") {
+          if (item.lock === "Elektromagnetinė") {
+            createResultElement({
+              ...item,
+              type: defaultValues.smallGates2,
+              quantity: 1,
+            });
+          } else {
+            createResultElement({
+              ...item,
+              type: defaultValues.smallGates,
+              quantity: 1,
+            });
+          }
         } else {
           createResultElement({
             ...item,
-            type: defaultValues.smallGates,
+            type: defaultValues.smallGatesSegment,
+            quantity: 1,
+          });
+          createWorkElement({
+            name: defaultValues.segmentGatesWork,
             quantity: 1,
           });
         }

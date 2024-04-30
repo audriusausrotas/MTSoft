@@ -88,6 +88,7 @@ export const createInitialMeasure = (): Measure => ({
     direction: "Vidus Kairė",
     lock: "Paprasta",
     bankette: "Taip",
+    option: "Gaminami",
   },
   kampas: {
     exist: false,
@@ -125,6 +126,10 @@ export const defaultValues = {
   gates2Auto: "Varstomi kiemo vartai su automatika ir montavimu",
   smallGates: "Kiemo varteliai su montavimu",
   smallGates2: "Kiemo varteliai su elektromagnetine spyna ir montavimu",
+  smallGatesSegment: "Kiemo varteliai segmentiniai",
+  segmentGatesWork: "Segmentinių vartelių montavimas",
+  segmentGateWork: "Segmentinių vartų montavimas",
+  gateSegment: "Varstomi vartai segmentiniai",
   polesWork: "Tvoros stulpo betonavimas",
   gatesPoleWork: "Vartų stulpo betonavimas",
   gateBnkette: "Vartų pamato betonavimas",

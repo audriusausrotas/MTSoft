@@ -142,6 +142,10 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].measures[measureIndex].gates.lock = value;
     },
 
+    updateGateOption(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.option = value;
+    },
+
     updateAutomatics(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.automatics = value;
     },

@@ -4,7 +4,8 @@ import {
   gateTypes,
   gateLock,
   gateDirection,
-  laiptasDirection
+  laiptasDirection,
+  gateOption
 } from "~/data/selectFieldData";
 const props = defineProps(["measureIndex", "index", "measure", "lastElement"]);
 const useCalculations = useCalculationsStore();
@@ -102,8 +103,9 @@ watch(
     </div>
 
     <div v-if="isChecked" class="flex flex-wrap justify-center md:justify-between gap-2">
-      <BaseSelectField v-if="props.measure.length > 200" :values="twoSided" label="Automatika" id="automatics"
-        :defaultValue="props.measure.gates.automatics" width="w-36" @onChange="(value: string) => useCalculations.updateAutomatics(props.index, value, props.measureIndex)
+      <BaseSelectField v-if="props.measure.length > 200 && props.measure.gates.type !== 'Segmentiniai'"
+        :values="twoSided" label="Automatika" id="automatics" :defaultValue="props.measure.gates.automatics"
+        width="w-36" @onChange="(value: string) => useCalculations.updateAutomatics(props.index, value, props.measureIndex)
         " />
 
       <BaseSelectField v-if="props.measure.length > 200" :values="gateTypes" id="gateTypes" label="vartų tipas"
@@ -115,12 +117,17 @@ watch(
         " />
 
       <BaseSelectField v-if="props.measure.length <= 200" :values="gateDirection" id="gateDirection"
-        label="vartelių atidarymas" :defaultValue="props.measure.gates.direction" width="w-56" @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value, props.measureIndex)
+        label="vartelių atidarymas" :defaultValue="props.measure.gates.direction" width="w-36" @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value, props.measureIndex)
         " />
 
       <BaseSelectField v-if="props.measure.length <= 200" :values="gateLock" id="gateLock" label="vartelių spyna"
-        :defaultValue="props.measure.gates.lock" width="w-56" @onChange="(value: string) => useCalculations.updateGateLock(props.index, value, props.measureIndex)
+        :defaultValue="props.measure.gates.lock" width="w-36" @onChange="(value: string) => useCalculations.updateGateLock(props.index, value, props.measureIndex)
         " />
+
+      <BaseSelectField v-if="props.measure.length <= 200" :values="gateOption" id="gateOption" label="Vartelių tipas"
+        :defaultValue="props.measure.gates.option" width="w-36" @onChange="(value: string) => useCalculations.updateGateOption(props.index, value, props.measureIndex)
+        " />
+
     </div>
     <BaseInput v-if="isChecked" placeholder="Papidoma informacija" variant="light" width="w-full"
       :name="props.measure.gates.aditional" @onChange="(value: string) =>

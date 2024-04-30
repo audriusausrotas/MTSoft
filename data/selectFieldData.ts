@@ -16,8 +16,13 @@ export const gateDirection: string[] = [
   "Išorė Kairė",
   "Išorė Dešinė",
 ];
+
+export const gateOption = ["Gaminami", "Segmentiniai"];
+
 export const gateLock: string[] = ["Paprasta", "Elektromagnetinė"];
-export const gateTypes: string[] = ["Stumdomi", "Varstomi"];
+
+export const gateTypes: string[] = ["Stumdomi", "Varstomi", "Segmentiniai"];
+
 export const fenceColors: string[] = [
   "7016",
   "7024",
@@ -29,6 +34,7 @@ export const fenceColors: string[] = [
   "3009",
   "Kita",
 ];
+
 export const fenceTypes: string[] = [
   "Daimond 60/90",
   "Daimond 40/105",
