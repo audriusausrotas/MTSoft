@@ -43,8 +43,8 @@ const measureHandler = async (id: string) => {
 </script>
 
 <template>
-    <div class="flex gap-4 pb-4 flex-wrap" @click="open = !open">
-        <CalcTitle :open="open" />
+    <div class="flex gap-4 pb-4 flex-wrap">
+        <CalcTitle :open="open" @click="open = !open" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-12" label="Nr:" :disable="true" />
             <BaseInput :name="gate.client.address" width="w-80" label="adresas" :disable="true" />

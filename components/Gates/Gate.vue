@@ -1,4 +1,4 @@
-<script setup lang='js'>
+<script setup lang='ts'>
 const props = defineProps(["gate", "index"]);
 </script>
 
@@ -23,7 +23,7 @@ const props = defineProps(["gate", "index"]);
         <BaseInput v-if="gate.lock" :name="gate.lock" width="w-40" label="spyna" :disable="true" />
 
     </div>
-    <div v-if="gate.aditional !== ''" class="flex gap-4 text-lg pl-7">
+    <div v-if="gate.aditional !== ''" class="flex flex-col text-lg pl-7">
         <p class="font-bold">papildoma informacija:</p>
         <p>
             {{ gate.aditional }}
