@@ -49,13 +49,13 @@ const measureHandler = async (id: string) => {
             <BaseInput :name="index + 1" width="w-12" label="Nr:" :disable="true" />
             <BaseInput :name="gate.client.address" width="w-80" label="adresas" :disable="true" />
             <BaseInfoField :name="gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
-            <BaseButton v-if="user.user?.accountType === 'Administratorius'"
-                :name="gate.measure === 'Eilėje' ? 'Galima matuoti' : 'Matuoti negalima'"
-                @click="measureHandler(gate._id)" />
         </div>
         <div class="text-white self-end px-4 py-2 rounded-lg"
             :class="gate.measure === 'Eilėje' ? 'bg-red-full' : 'bg-green-500'">
             {{ gate.measure }}</div>
+        <BaseButton v-if="user.user?.accountType === 'Administratorius'"
+            :name="gate.measure === 'Eilėje' ? 'Galima matuoti' : 'Matuoti negalima'" @click="measureHandler(gate._id)"
+            class="self-end" />
     </div>
     <div v-if="open">
         <div class="flex justify-between font-semibold border-b border-red-300 py-4">
