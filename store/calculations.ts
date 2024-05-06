@@ -125,6 +125,11 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateGateType(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.type = value;
+      if (value === "Segmentiniai") {
+        this.fences[index].measures[measureIndex].gates.option = value;
+      } else {
+        this.fences[index].measures[measureIndex].gates.option = value;
+      }
     },
     updateBankette(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.bankette = value;

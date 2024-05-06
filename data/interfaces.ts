@@ -143,6 +143,7 @@ export interface GateObject {
 
 export interface GateSchema {
   _id: string;
+  measure: string;
   client: Client;
   creator: Creator;
   gates: Gate[];

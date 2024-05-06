@@ -183,7 +183,7 @@ const checkGates = () => {
 
 checkGates();
 
-const gateExist = offer?.gates.length && offer?.gates.length > 0
+const gateExist = offer?.gates.length && offer?.gates.length > 0 && offer?.gates.some(item => item.type !== "Segmentiniai" && item.option !== "Segmentiniai")
 
 watch(
   useGates.gates,

@@ -7,6 +7,11 @@ export const gateSchemaGigasta = defineMongooseModel<GateSchema>(
     _id: Object,
     client: Object,
     creator: Object,
+    measure: {
+      type: String,
+      required: false,
+      default: "Eilėje",
+    },
     gates: [Object],
     dateCreated: String,
   },
