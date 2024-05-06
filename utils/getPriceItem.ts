@@ -1,11 +1,35 @@
-import type { Product } from "~/data/interfaces";
-
 export default function getPriceItem(name: string) {
-  const products = useProductsStore().products;
+  const useBackup = useBackupStore();
+  const products = useProductsStore();
 
-  const productList: Product[] = products.filter((productItem) =>
-    productItem.name.includes(name)
-  );
+  if (useBackup.backupExist) {
+    let oldProduct: any;
 
-  return productList[0];
+    oldProduct = useBackup.results.find((item) => item.type === name);
+
+    if (!oldProduct)
+      oldProduct = useBackup.works.find((item) => item.name === name);
+
+    if (!oldProduct) {
+      return findProduct();
+    } else {
+      const returnProduct: any = {
+        _id: oldProduct.id,
+        name: oldProduct.type ? oldProduct.type : oldProduct.name,
+        price: oldProduct.price,
+        cost: oldProduct.cost,
+        category: oldProduct.category,
+        image: "",
+      };
+      return returnProduct;
+    }
+  } else {
+    return findProduct();
+  }
+
+  function findProduct() {
+    return (
+      products.products.find((product) => product.name.includes(name)) || null
+    );
+  }
 }

@@ -3,6 +3,7 @@ import { defaultValues } from "~/data/initialValues";
 
 export default function generateResults() {
   const results = useResultsStore();
+  const useBackup = useBackupStore();
 
   if (results.fences.length > 0) {
     let cork = 0;
@@ -321,5 +322,27 @@ export default function generateResults() {
   createWorkElement({
     name: defaultValues.transport,
     quantity: 1,
+  });
+
+  const tempResults = useBackup.results.filter(
+    (item) => !results.results.some((itm) => itm.type === item.type)
+  );
+  const tempWorks = useBackup.works.filter(
+    (item) => !results.works.some((itm) => itm.name === item.name)
+  );
+
+  tempResults.forEach((item) => {
+    createResultElement({
+      ...item,
+      type: item.type,
+      quantity: item.quantity,
+    });
+  });
+
+  tempWorks.forEach((item) => {
+    createWorkElement({
+      name: item.name,
+      quantity: item.quantity,
+    });
   });
 }

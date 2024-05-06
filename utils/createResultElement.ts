@@ -4,14 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 import { verticals } from "~/data/selectFieldData";
 
 export default function createResultElement(item: any) {
-  const results = useResultsStore().results;
+  const results = useResultsStore();
+  const useBackup = useBackupStore();
   const product: Product = getPriceItem(item.type);
 
   let newPrice: number = Number(product.price);
   let newCost: number = Number(product.cost);
 
   // change gate prices
-  if (item.type.includes("vartai")) {
+  if (item.type.includes("vartai") && !useBackup.backupExist) {
     if (item.type.includes("segmentiniai")) {
       if (item.width > 400) {
         newPrice += 60;
@@ -50,7 +51,7 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (item.type === "Kiemo varteliai segmentiniai") {
+  if (item.type === "Kiemo varteliai segmentiniai" && !useBackup.backupExist) {
     if (item.height > 110) {
       newPrice += 20;
       newCost += 20;
@@ -122,5 +123,5 @@ export default function createResultElement(item: any) {
     width: item.width || null,
   };
 
-  results.push(resultData);
+  results.results.push(resultData);
 }

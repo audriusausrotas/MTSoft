@@ -91,6 +91,7 @@ export const useResultsStore = defineStore("results", {
     updateResultCost(index: number, value: number): void {
       this.results[index].cost = +value;
       this.recalculateTotals(index);
+      this.calculatePriceWithDiscount();
     },
 
     updateWorkCost(index: number, value: string): void {
@@ -104,7 +105,7 @@ export const useResultsStore = defineStore("results", {
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
       selectedResult.category = value.category;
-      this.recalculateTotals(index);
+      // this.recalculateTotals(index);
     },
 
     selectWork(index: number, value: Works): void {
@@ -112,12 +113,13 @@ export const useResultsStore = defineStore("results", {
       selectedResult.name = value.name;
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
-      this.recalculateTotals(index);
+      // this.recalculateTotals(index);
     },
 
     updateQuantity(index: number, value: number): void {
       this.results[index].quantity = +value;
       this.recalculateTotals(index);
+      this.calculatePriceWithDiscount();
     },
 
     updateSpace(index: number, value: number): void {
@@ -132,6 +134,7 @@ export const useResultsStore = defineStore("results", {
     updatePrice(index: number, value: number): void {
       this.results[index].price = +value;
       this.recalculateTotals(index);
+      this.calculatePriceWithDiscount();
     },
 
     updateWorkQuantity(index: number, value: number): void {
@@ -194,7 +197,9 @@ export const useResultsStore = defineStore("results", {
         Math.round((this.totalProfit / this.totalPrice) * 10000) / 100
       ).toFixed(2);
       this.priceVAT = +(this.totalPrice + this.totalPrice * 0.21).toFixed(2);
+    },
 
+    calculatePriceWithDiscount() {
       this.priceWithDiscount = +(
         this.priceVAT -
         (this.priceVAT - this.totalPrice) / 2
@@ -204,10 +209,12 @@ export const useResultsStore = defineStore("results", {
     deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
       this.calculateTotals();
+      this.calculatePriceWithDiscount();
     },
     deleteWork(id: string): void {
       this.works = this.works.filter((item) => item.id !== id);
       this.calculateTotals();
+      this.calculatePriceWithDiscount();
     },
 
     clearResults(): void {

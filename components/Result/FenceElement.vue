@@ -57,8 +57,8 @@ const spaceEditable = computed(
 
     <div class="flex flex-col gap-2 w-96">
       <BaseSearchField width="w-full" label="Pavadinimas" :data="useProduct.parts" @OnClick="(value: Product) => {
-        useResults.selectItem(props.index, value);
-      }
+      useResults.selectItem(props.index, value);
+    }
       " @onChange="(value) => useResults.updateName(props.index, value)" :name="props.result.type"
         :index="props.index" />
 
@@ -68,7 +68,7 @@ const spaceEditable = computed(
           @onChange="(value) => useResults.updateColor(props.index, value)" />
 
         <BaseInput width="w-22" variant="light" label="kiekis" type="number" :name="props.result.quantity"
-          @onChange="(value) => useResults.updateQuantity(props.index, value)" />
+          @onChange="(value: number) => useResults.updateQuantity(props.index, +value)" />
 
         <BaseInput variant="light" label="kaina" width="w-24" type="number" :name="props.result.price"
           @onChange="(value: number) => useResults.updatePrice(props.index, value)" />

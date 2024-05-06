@@ -6,6 +6,7 @@ const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useUser = useUserStore();
+const useBackup = useBackupStore()
 const isLoading = ref<boolean>(false);
 
 const saveHandler = async (): Promise<void> => {
@@ -62,6 +63,7 @@ const clearHandler = () => {
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
+  useBackup.clearBackup()
 };
 </script>
 <template>

@@ -50,7 +50,7 @@ const measureHandler = async (id: string) => {
             <BaseInput :name="gate.client.address" width="w-80" label="adresas" :disable="true" />
             <BaseInfoField :name="gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
         </div>
-        <div class="text-white self-end px-4 py-2 rounded-lg"
+        <div class="text-white self-end py-2 rounded-lg w-40 text-center"
             :class="gate.measure === 'Eilėje' ? 'bg-red-full' : 'bg-green-500'">
             {{ gate.measure }}</div>
         <BaseButton v-if="user.user?.accountType === 'Administratorius'"
@@ -58,7 +58,7 @@ const measureHandler = async (id: string) => {
             class="self-end" />
     </div>
     <div v-if="open">
-        <div class="flex justify-between font-semibold border-b border-red-300 py-4">
+        <div class="flex justify-between font-semibold border-b border-gray-full py-4">
             <div class="flex flex-col gap-4 justify-between">
                 <h3 class="text-xl">Užsakymo duomenys</h3>
                 <BaseInput :name="index + 1" width="w-72" label="Užsakymo nr:" :disable="true" />
@@ -78,7 +78,8 @@ const measureHandler = async (id: string) => {
                 <BaseInput :name="gate.creator.email" width="w-72" label="Elektroninis paštas" :disable="true" />
             </div>
         </div>
-        <div v-for="(g, i) in gate.gates" :key="g._id" class="flex flex-col pb-4 border-b border-red-300">
+        <div v-for="(g, i) in gate.gates" :key="g._id"
+            class="flex flex-col pb-4 border-b border-gray-full last:border-b-0 ">
             <GatesGate :gate="g" :index="i" />
         </div>
     </div>

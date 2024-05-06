@@ -1,7 +1,10 @@
 <script setup lang="ts">
 const props = defineProps(["results"])
 const useResults = useResultsStore();
+
 useResults.calculateTotals();
+
+if (!useResults.priceWithDiscount) useResults.calculatePriceWithDiscount()
 
 </script>
 

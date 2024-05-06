@@ -6,6 +6,7 @@ const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
 const useGates = useGateStore();
+const useBackup = useBackupStore()
 const open = ref<boolean>(false);
 const gateOrdered = ref(false);
 
@@ -34,11 +35,13 @@ const editHandler = () => {
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
+  useBackup.clearBackup()
   useCalculations.setProject({
     client: props.project.client,
     fenceMeasures: props.project.fenceMeasures,
   });
   useResults.setProject(props.project);
+  useBackup.addBackup(props.project.results, props.project.works)
   useProjects.setSelectedProject(props.project._id);
   navigateTo("/samata");
 };
