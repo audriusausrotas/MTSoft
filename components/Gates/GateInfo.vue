@@ -74,14 +74,22 @@ const updateHandler = async (change: string, value: any) => {
         <CalcTitle :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-14" label="Nr:" :disable="true" />
-            <BaseInput :name="props.gate.orderNr" width="w-24" label="Užsakymo Nr." :disable="true" />
+            <BaseInput :name="props.gate.orderNr" width="w-28" label="Užsakymo Nr." :disable="true" />
+            <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-32" label="Užsakymo data" :disable="true" />
             <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
-            <BaseInfoField :name="props.gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
+            <div class="flex flex-col gap-1">
+                <label for="clientPhone" class="text-sm ml-2 ">Kliento Tel. Nr.</label>
+                <BaseInfoField :name="props.gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true"
+                    id="clientPhone" />
+            </div>
         </div>
-        <div v-if="!open" class="text-white self-end py-2 rounded-lg w-40 text-center"
-            :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : props.gate.measure === 'Galima matuoti' ? ' bg-orange-500' : 'bg-green-500'">
-            {{ props.gate.measure }}</div>
+        <div class="flex flex-col gap-1">
+            <label for="gateStatus" class="text-sm ml-2 ">Statusas</label>
+            <div v-if="!open" id="gateStatus" class="text-white self-end py-2 rounded-lg w-40 text-center"
+                :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : props.gate.measure === 'Galima matuoti' ? ' bg-orange-500' : 'bg-green-500'">
+                {{ props.gate.measure }}</div>
 
+        </div>
     </div>
     <div v-if="open">
         <div class="flex flex-col gap-4">
