@@ -2,31 +2,16 @@
 import type { Measure } from "~/data/interfaces";
 const props = defineProps(["index"]);
 const useCalculations = useCalculationsStore();
-const open = ref<boolean>(false);
-const open2 = ref<boolean>(false);
-const totalLength = ref<number>(0);
-const oneHeight = ref<number>(0);
 
-const cancelHandler = (): void => {
-  open.value = false;
-  totalLength.value = 0;
+const oneHeightHandler = (oneHeight: string) => {
+  useCalculations.oneHeight(props.index, +oneHeight);
 };
 
-const cancelHandler2 = (): void => {
-  open2.value = false;
-  oneHeight.value = 0;
-};
-
-const oneHeightHandler = () => {
-  useCalculations.oneHeight(props.index, oneHeight.value);
-  cancelHandler2();
-};
-
-const calculateLengthHandler = (): void => {
+const calculateLengthHandler = (totalLength: string): void => {
   const totalMeasures: number[] = [];
-  if (totalLength.value > 0) {
-    const measures = Math.floor(+totalLength.value / 250);
-    const modula = +totalLength.value % 250;
+  if (+totalLength > 0) {
+    const measures = Math.floor(+totalLength / 250);
+    const modula = +totalLength % 250;
     for (let i = 0; i < measures; i++) {
       totalMeasures.push(250);
     }
@@ -74,7 +59,7 @@ const calculateLengthHandler = (): void => {
     );
   });
 
-  cancelHandler();
+
 };
 </script>
 
@@ -82,34 +67,10 @@ const calculateLengthHandler = (): void => {
   <div class="flex flex-wrap justify-center lg:justify-start gap-4 ">
     <BaseButton name="prideti nauja" @click="useCalculations.addMeasure(props.index)" />
     <BaseButton name="nukopijuoti paskutinį" @click="useCalculations.copyLast(props.index)" />
-    <BaseButton v-if="!open" name="išskaičiuoti pagal ilgį" @click="open = !open" />
-
-    <div v-else-if="open" class="flex overflow-hidden border rounded-lg">
-      <input placeholder="Bendras Ilgis" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
-        v-model="totalLength" :autofocus="open" @keyup.enter="calculateLengthHandler" />
-      <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
-        @click="calculateLengthHandler">
-        OK
-      </button>
-
-      <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
-        @click="cancelHandler">
-        X
-      </button>
-    </div>
-
-    <BaseButton v-if="!open2" name="Bendras aukštis" @click="open2 = !open2" />
-    <div v-else="open2" class="flex overflow-hidden border rounded-lg">
-      <input placeholder="Bendras aukštis" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
-        v-model="oneHeight" :autofocus="open2" @keyup.enter="oneHeightHandler" />
-      <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer" @click="oneHeightHandler">
-        OK
-      </button>
-      <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
-        @click="cancelHandler2">
-        X
-      </button>
-    </div>
+    <BaseButtonWithInput name="išskaičiuoti pagal ilgį" placeholder="Bendras Ilgis" type="number"
+      @onConfirm="calculateLengthHandler" />
+    <BaseButtonWithInput name="Bendras aukštis" placeholder="Bendras aukštis" type="number"
+      @onConfirm="oneHeightHandler" />
     <div class="flex flex-wrap justify-center gap-4">
       <BaseButton name="įterpti kampą" @click="useCalculations.addKampas(props.index)" />
       <BaseButton name="įterpti laiptą" @click="useCalculations.addLaiptas(props.index)" />
