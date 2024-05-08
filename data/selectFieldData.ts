@@ -1,5 +1,6 @@
 export const fenceSide: string[] = ["Priekis", "Galas", "Kairė", "Dešinė"];
 export const fenceMaterials: string[] = ["Matinė", "Blizgi", "IceCrystal"];
+export const gateStatus: string[] = ["Eilėje", "Galima matuoti", "Pamatuota"];
 export const categories: string[] = [
   "Tvoros",
   "Stulpai",

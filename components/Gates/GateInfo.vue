@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { v4 } from 'uuid';
+import { gateStatus } from "~/data/selectFieldData";
 const props = defineProps(["gate", "index", "provider"])
 const gates = useGateStore();
 const useUser = useUserStore()
@@ -35,6 +36,29 @@ const updateHandler = async (change: string, value: any) => {
     );
     if (response.success) {
         gates.updateGate(response.data, props.provider, props.gate._id)
+
+        let sendTo
+        if (props.provider === "Vartonas") {
+            sendTo = useUser.users.find(item => item.accountType === "Vartonas")
+        }
+        if (props.provider === "Gigasta") {
+            sendTo = useUser.users.find(item => item.accountType === "Gigasta")
+        }
+
+        if (change === "status") {
+            if (useUser.user?.accountType !== "Vartonas" && useUser.user?.accountType !== "Gigasta") {
+                const data: any = await $fetch("/api/mail", {
+                    method: "put",
+                    body: { to: sendTo?.email, message: `Užsakymo ${props.gate.orderNr}, ${props.gate.client.address} statusas pakeistas į "${value}"`, title: "Statusas pasikeitė" },
+                });
+                if (data.success) {
+                    setIsError(false);
+                    setError(data.message);
+                } else {
+                    setError(data.message);
+                }
+            }
+        }
         setIsError(false);
         setError(response.message);
     } else {
@@ -49,22 +73,21 @@ const updateHandler = async (change: string, value: any) => {
     <div class="flex gap-4 pb-4 flex-wrap items-end">
         <CalcTitle :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
-            <BaseInput :name="index + 1" width="w-12" label="Nr:" :disable="true" />
+            <BaseInput :name="index + 1" width="w-14" label="Nr:" :disable="true" />
             <BaseInput :name="props.gate.orderNr" width="w-24" label="Užsakymo Nr." :disable="true" />
             <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
             <BaseInfoField :name="props.gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
         </div>
         <div v-if="!open" class="text-white self-end py-2 rounded-lg w-40 text-center"
-            :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : 'bg-green-500'">
+            :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : props.gate.measure === 'Galima matuoti' ? ' bg-orange-500' : 'bg-green-500'">
             {{ props.gate.measure }}</div>
 
     </div>
     <div v-if="open">
         <div class="flex flex-col gap-4">
             <div class="flex gap-4">
-                <BaseButton name="pakeisti statusa"
-                    @click="updateHandler('status', props.gate.measure === 'Eilėje' ? 'Galima matuoti' : 'Eilėje')"
-                    class="self-end" />
+                <BaseSelectField :values="gateStatus" id="gateStatus" :defaultValue="props.gate.measure" width="w-60"
+                    @onChange="(value: string) => updateHandler('status', value)" />
                 <BaseButtonWithInput name="įvesti užsakymo Nr." placeholder="Užsakymo Nr."
                     @onConfirm="(value) => updateHandler('orderNr', value)" />
                 <BaseButtonWithInput name="įvesti komentarą" placeholder="Komentaras"
@@ -95,7 +118,7 @@ const updateHandler = async (change: string, value: any) => {
                     <h3 class="text-xl">Užsakymo duomenys</h3>
                     <BaseInput :name="props.gate.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
                     <BaseInput :name="props.gate.measure" width="w-72" label="Statusas:" :disable="true"
-                        :class="props.gate.measure === 'Eilėje' ? 'text-red-full' : 'text-green-500'" />
+                        :class="props.gate.measure === 'Eilėje' ? 'text-red-full' : props.gate.measure === 'Galima matuoti' ? ' text-orange-500' : 'text-green-500'" />
                     <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:"
                         :disable="true" />
 

@@ -72,7 +72,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
       } else {
         switch (useUser.user?.accountType) {
           case "Vartonas":
-            if (to.path !== "/vartonas") return navigateTo("/vartonas");
+            if (to.path !== "/profilis") {
+              if (to.path !== "/vartonas") return navigateTo("/vartonas");
+            }
             break;
           case "Gigasta":
             if (to.path !== "/gigasta") return navigateTo("/gigasta");

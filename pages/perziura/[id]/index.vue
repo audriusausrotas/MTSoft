@@ -21,7 +21,7 @@ const advance = ref<number>(0);
 
 const statusHandler = async (value: string) => {
   const data: any = await $fetch("/api/project", {
-    method: "PATCH",
+    method: "patch",
     body: { _id: offer!._id, value },
   });
   if (data.success) {
@@ -56,6 +56,26 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   });
   if (data.success) {
     useGates.addGate(data.data, name);
+
+    let sendTo
+    if (name === "Vartonas") {
+      sendTo = useUsers.users.find(item => item.accountType === "Vartonas")
+    }
+    if (name === "Gigasta") {
+      sendTo = useUsers.users.find(item => item.accountType === "Gigasta")
+    }
+
+    const data2: any = await $fetch("/api/mail", {
+      method: "put",
+      body: { to: sendTo?.email, message: `Turi naują užsakymą "${data.data.client.address}"`, title: "Naujas užsakymas" },
+    });
+    if (data2.success) {
+      setIsError(false);
+      setError(data2.message);
+    } else {
+      setError(data2.message);
+    }
+
     setIsError(false);
     setError(data.message);
   } else {

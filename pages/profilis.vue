@@ -45,20 +45,10 @@ const saveHandler = async () => {
 <template>
   <div class="flex flex-col">
     <div class="flex border-b py-8 gap-14">
-      <div
-        class="flex items-center justify-center overflow-hidden bg-gray-light rounded-xl h-60 w-60"
-      >
-        <NuxtImg
-          v-if="useUser.user?.photo"
-          :src="useUser.user?.photo"
-          alt="Vartotojo nuotrauka"
-          class="object-cover object-center w-full h-full"
-          width="48"
-          height="48"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+      <div class="flex items-center justify-center overflow-hidden bg-gray-light rounded-xl h-60 w-60">
+        <NuxtImg v-if="useUser.user?.photo" :src="useUser.user?.photo" alt="Vartotojo nuotrauka"
+          class="object-cover object-center w-full h-full" width="48" height="48" decoding="auto" loading="lazy"
+          :ismap="true" />
         <h3 v-else class="text-3xl uppercase">{{ initials }}</h3>
       </div>
 
@@ -76,64 +66,26 @@ const saveHandler = async () => {
 
         <h5 class="font-semibold normal-case">{{ useUser.user?.phone }}</h5>
 
-        <BaseInput
-          :name="url"
-          @onChange="(v) => (url = v)"
-          placeholder="Nuotraukos nuoroda"
-          width="full"
-        >
-          <NuxtImg
-            src="/icons/link.svg"
-            width="20"
-            height="20"
-            decoding="auto"
-            loading="lazy"
-            :ismap="true"
-          />
+        <BaseInput :name="url" @onChange="(v) => (url = v)" placeholder="Nuotraukos nuoroda" width="full"
+          :disable="true">
+          <NuxtImg src="/icons/link.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         </BaseInput>
       </div>
     </div>
 
     <div class="flex py-8 border-b gap-14">
-      <BaseInput
-        :name="lastName"
-        @onChange="(v) => (lastName = v)"
-        placeholder="Pavardė"
-        label="Pavardė"
-        width="w-64"
-      />
-      <BaseInput
-        :name="phone"
-        @onChange="(v) => (phone = v)"
-        placeholder="Telefono numeris"
-        label="Telefono numeris"
-        width="w-64"
-      />
+      <BaseInput :name="lastName" @onChange="(v) => (lastName = v)" placeholder="Pavardė" label="Pavardė"
+        width="w-64" />
+      <BaseInput :name="phone" @onChange="(v) => (phone = v)" placeholder="Telefono numeris" label="Telefono numeris"
+        width="w-64" />
     </div>
     <div class="flex py-8 border-b gap-14">
-      <BaseInput
-        :name="newPassword"
-        type="password"
-        @onChange="(v) => (newPassword = v)"
-        placeholder="Naujas slaptažodis"
-        label="Naujas Slaptažodis"
-        width="w-64"
-      />
-      <BaseInput
-        :name="password"
-        type="password"
-        @onChange="(v) => (password = v)"
-        placeholder="Pakartoti slaptažodį"
-        label="Pakartoti slaptažodį"
-        width="w-64"
-      />
+      <BaseInput :name="newPassword" type="password" @onChange="(v) => (newPassword = v)"
+        placeholder="Naujas slaptažodis" label="Naujas Slaptažodis" width="w-64" />
+      <BaseInput :name="password" type="password" @onChange="(v) => (password = v)" placeholder="Pakartoti slaptažodį"
+        label="Pakartoti slaptažodį" width="w-64" />
     </div>
-    <BaseButton
-      name="išsaugoti pakeitimus"
-      @click="saveHandler"
-      class="my-8"
-      :isLoading="isLoading"
-    />
+    <BaseButton name="išsaugoti pakeitimus" @click="saveHandler" class="my-8" :isLoading="isLoading" />
   </div>
 </template>
 
