@@ -14,8 +14,6 @@ export default defineEventHandler(async (event) => {
     (item) => item.date !== comment.date && item.comment !== comment.comment
   );
 
-  console.log(data);
-
   await data.save();
 
   return { success: true, data, message: "Komentaras istrintas" };

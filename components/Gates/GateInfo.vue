@@ -1,7 +1,8 @@
 <script setup lang='ts'>
+import { v4 } from 'uuid';
 const props = defineProps(["gate", "index", "provider"])
-const user = useUserStore()
 const gates = useGateStore();
+const useUser = useUserStore()
 
 const { setError, setIsError } = useError();
 
@@ -24,12 +25,12 @@ const buttonHandler = async () => {
     }
 }
 
-const measureHandler = async () => {
+const updateHandler = async (change: string, value: any) => {
     const response: any = await $fetch(
         "/api/gates",
         {
             method: "put",
-            body: { _id: props.gate._id, provider: props.provider, change: "status" },
+            body: { _id: props.gate._id, provider: props.provider, change, value, username: useUser.user?.username },
         }
     );
     if (response.success) {
@@ -41,13 +42,7 @@ const measureHandler = async () => {
     }
 }
 
-const orderNumberHandler = (value: string) => {
 
-}
-
-const commentHandler = (value: string) => {
-
-}
 </script>
 
 <template>
@@ -55,50 +50,73 @@ const commentHandler = (value: string) => {
         <CalcTitle :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-12" label="Nr:" :disable="true" />
-            <BaseInput :name="index + 1" width="w-24" label="Užsakymo Nr." :disable="true" />
-            <BaseInput :name="gate.client.address" width="w-80" label="adresas" :disable="true" />
-            <BaseInfoField :name="gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
+            <BaseInput :name="props.gate.orderNr" width="w-24" label="Užsakymo Nr." :disable="true" />
+            <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
+            <BaseInfoField :name="props.gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true" />
         </div>
         <div v-if="!open" class="text-white self-end py-2 rounded-lg w-40 text-center"
-            :class="gate.measure === 'Eilėje' ? 'bg-red-full' : 'bg-green-500'">
-            {{ gate.measure }}</div>
+            :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : 'bg-green-500'">
+            {{ props.gate.measure }}</div>
 
     </div>
     <div v-if="open">
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-4">
             <div class="flex gap-4">
-                <BaseButton name="pakeisti statusa" @click="measureHandler" class="self-end" />
+                <BaseButton name="pakeisti statusa"
+                    @click="updateHandler('status', props.gate.measure === 'Eilėje' ? 'Galima matuoti' : 'Eilėje')"
+                    class="self-end" />
                 <BaseButtonWithInput name="įvesti užsakymo Nr." placeholder="Užsakymo Nr."
-                    @onConfirm="orderNumberHandler" />
-                <BaseButtonWithInput name="įvesti komentarą" placeholder="Komentaras" @onConfirm="commentHandler" />
+                    @onConfirm="(value) => updateHandler('orderNr', value)" />
+                <BaseButtonWithInput name="įvesti komentarą" placeholder="Komentaras"
+                    @onConfirm="(value) => updateHandler('comment', value)" />
                 <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="buttonHandler" />
+            </div>
+            <div class="flex flex-col border p-2 rounded-lg border-dark-light">
+                <p class="text-2xl font-bold pb-2 self-center">Komentarai:</p>
+                <p v-for="comment in props.gate.comments" :key="v4()"
+                    class=" flex justify-between border-b font-semibold">
+                <p>
+                    {{ ("2024-05-08T20:20:42.121Z").replace("T", " | ").slice(0, 18) }} | <span
+                        :class="useUser.user?.username === comment.creator ? 'text-green-500' : 'text-red-full'">
+                        {{ comment.creator }}:
+                    </span>
+                    {{ comment.comment }}
+                </p>
+                <div @click="updateHandler('deleteComment', comment)"
+                    class=" hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
+                    <NuxtImg src="/icons/delete.svg" width="18" height="18" decoding="auto" :ismap="true"
+                        loading="lazy" />
+                </div>
+                </p>
             </div>
             <div class="flex justify-between font-semibold border-b border-gray-full py-4">
 
                 <div class="flex flex-col gap-4 justify-between">
                     <h3 class="text-xl">Užsakymo duomenys</h3>
-                    <BaseInput :name="index + 1" width="w-72" label="Užsakymo nr:" :disable="true" />
-                    <BaseInput :name="gate.measure" width="w-72" label="Statusas:" :disable="true"
-                        :class="gate.measure === 'Eilėje' ? 'text-red-full' : 'text-green-500'" />
-                    <BaseInput :name="gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:"
+                    <BaseInput :name="props.gate.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
+                    <BaseInput :name="props.gate.measure" width="w-72" label="Statusas:" :disable="true"
+                        :class="props.gate.measure === 'Eilėje' ? 'text-red-full' : 'text-green-500'" />
+                    <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:"
                         :disable="true" />
 
 
                 </div>
                 <div class="flex flex-col gap-4">
                     <h3 class="text-xl">Klento duomenys</h3>
-                    <BaseInput :name="gate.client.username" width="w-72" label="klientas" :disable="true" />
-                    <BaseInput :name="gate.client.address" width="w-72" label="adresas" :disable="true" />
-                    <BaseInput :name="gate.client.phone" width="w-72" label="telefonas" :disable="true" />
+                    <BaseInput :name="props.gate.client.username" width="w-72" label="klientas" :disable="true" />
+                    <BaseInput :name="props.gate.client.address" width="w-72" label="adresas" :disable="true" />
+                    <BaseInput :name="props.gate.client.phone" width="w-72" label="telefonas" :disable="true" />
                 </div>
                 <div class="flex flex-col gap-4">
                     <h3 class="text-xl">Vadybininko duomenys</h3>
-                    <BaseInput :name="gate.creator.username" width="w-72" label="atsakingas asmuo" :disable="true" />
-                    <BaseInput :name="gate.creator.phone" width="w-72" label="Telefono numeris" :disable="true" />
-                    <BaseInput :name="gate.creator.email" width="w-72" label="Elektroninis paštas" :disable="true" />
+                    <BaseInput :name="props.gate.creator.username" width="w-72" label="atsakingas asmuo"
+                        :disable="true" />
+                    <BaseInput :name="props.gate.creator.phone" width="w-72" label="Telefono numeris" :disable="true" />
+                    <BaseInput :name="props.gate.creator.email" width="w-72" label="Elektroninis paštas"
+                        :disable="true" />
                 </div>
             </div>
-            <div v-for="(g, i) in gate.gates" :key="g._id"
+            <div v-for="(g, i) in props.gate.gates" :key="g._id"
                 class="flex flex-col pb-4 border-b border-gray-full last:border-b-0 ">
                 <GatesGate :gate="g" :index="i" />
             </div>

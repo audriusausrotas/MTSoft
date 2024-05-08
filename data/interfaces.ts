@@ -145,6 +145,8 @@ export interface GateSchema {
   _id: string;
   measure: string;
   client: Client;
+  orderNr: string;
+  comments: Comment[];
   creator: Creator;
   gates: Gate[];
   dateCreated: string;

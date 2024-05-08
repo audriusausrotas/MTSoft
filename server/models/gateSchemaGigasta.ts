@@ -7,6 +7,16 @@ export const gateSchemaGigasta = defineMongooseModel<GateSchema>(
     _id: Object,
     client: Object,
     creator: Object,
+    orderNr: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    comments: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
     measure: {
       type: String,
       required: false,

@@ -1,5 +1,4 @@
 import type { Gamyba, Project, Bindings, BindingItem } from "~/data/interfaces";
-import { verticals } from "~/data/selectFieldData";
 import { v4 } from "uuid";
 
 export default defineEventHandler(async (event) => {
