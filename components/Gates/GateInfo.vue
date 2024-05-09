@@ -37,19 +37,11 @@ const updateHandler = async (change: string, value: any) => {
     if (response.success) {
         gates.updateGate(response.data, props.provider, props.gate._id)
 
-        let sendTo
-        if (props.provider === "Vartonas") {
-            sendTo = useUser.users.find(item => item.accountType === "Vartonas")
-        }
-        if (props.provider === "Gigasta") {
-            sendTo = useUser.users.find(item => item.accountType === "Gigasta")
-        }
-
         if (change === "status") {
             if (useUser.user?.accountType !== "Vartonas" && useUser.user?.accountType !== "Gigasta") {
                 const data: any = await $fetch("/api/mail", {
                     method: "put",
-                    body: { to: sendTo?.email, message: `Užsakymo ${props.gate.orderNr}, ${props.gate.client.address} statusas pakeistas į "${value}"`, title: "Statusas pasikeitė" },
+                    body: { to: response.data.manager, message: `Užsakymo ${props.gate.orderNr}, ${props.gate.client.address} statusas pakeistas į "${value}"`, title: "Statusas pasikeitė" },
                 });
                 if (data.success) {
                     setIsError(false);
@@ -65,12 +57,8 @@ const updateHandler = async (change: string, value: any) => {
         setError(response.message);
     }
 }
-
-
 </script>
-
 <template>
-
     <div class="flex gap-4 pb-4 flex-wrap items-end">
         <CalcTitle v-if="!open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
@@ -78,6 +66,9 @@ const updateHandler = async (change: string, value: any) => {
             <BaseInput :name="props.gate.orderNr" width="w-36" label="Užsakymo Nr." :disable="true" />
             <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-32" label="Užsakymo data" :disable="true" />
             <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
+            <BaseInfoField v-if="useUser.user?.accountType === 'Administratorius'"
+                :name="props.gate.manager.split('@')[0].replace('.', ' ')" width="w-32" label="Atsakingas"
+                class="capitalize" />
             <div class="flex flex-col gap-1">
                 <label for="clientPhone" class="text-sm ml-2 ">Kliento Tel. Nr.</label>
                 <BaseInfoField :name="props.gate.client.phone" label="Telefono Numeris" width="w-32" :tel="true"
@@ -104,7 +95,7 @@ const updateHandler = async (change: string, value: any) => {
             </div>
             <div v-if="props.gate.comments.length > 0" class="flex flex-col border p-2 rounded-lg border-dark-light">
                 <p class="text-2xl font-bold pb-2 self-center">Komentarai:</p>
-                <p v-for="comment in props.gate.comments" :key="v4()"
+                <p v-for=" comment  in  props.gate.comments " :key="v4()"
                     class=" flex justify-between border-b font-semibold">
                 <p>
                     {{ ("2024-05-08T20:20:42.121Z").replace("T", " | ").slice(0, 18) }} | <span
@@ -147,7 +138,7 @@ const updateHandler = async (change: string, value: any) => {
                         :disable="true" />
                 </div>
             </div>
-            <div v-for="(g, i) in props.gate.gates" :key="g._id"
+            <div v-for="( g, i ) in  props.gate.gates " :key="g._id"
                 class="flex flex-col pb-4 border-b border-gray-full last:border-b-0 ">
                 <GatesGate :gate="g" :index="i" />
             </div>

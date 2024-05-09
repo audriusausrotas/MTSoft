@@ -1,9 +1,17 @@
 <script setup lang="ts">
-const gates = useGateStore();
+const useGates = useGateStore();
+const useUser = useUserStore()
 
+const filteredGates = computed(() => {
+  if (useUser.user!.accountType === "Administratorius") {
+    return useGates.gates.gigasta;
+  } else {
+    return useGates.gates.gigasta.filter(item => item.manager === useUser.user?.email);
+  }
+});
 </script>
 
 <template>
-  <GatesMain provider="Gigasta" :gates="gates.gates.gigasta" />
+  <GatesMain provider="Gigasta" :gates="filteredGates" />
 </template>
 <style scoped></style>

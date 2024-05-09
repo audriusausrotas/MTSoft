@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["name", "width", "tel", "email"]);
+const props = defineProps(["name", "width", "tel", "email", "disabled"]);
 </script>
 
 <template>

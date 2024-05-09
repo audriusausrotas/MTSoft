@@ -7,6 +7,7 @@ export const gateSchemaVartonas = defineMongooseModel<GateSchema>(
     _id: Object,
     client: Object,
     creator: Object,
+    manager: String,
     orderNr: {
       type: String,
       required: false,

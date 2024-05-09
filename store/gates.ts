@@ -28,9 +28,10 @@ export const useGateStore = defineStore("gate", {
       }
     },
     addGate(data: GateSchema, value: string) {
-      if (value === "vartonas") this.gates.vartonas.push(data);
-      else if (value === "gigasta") this.gates.gigasta.push(data);
+      if (value === "Vartonas") this.gates.vartonas.push(data);
+      else if (value === "Gigasta") this.gates.gigasta.push(data);
     },
+
     updateGate(data: GateSchema, provider: string, id: string) {
       if (provider === "Vartonas") {
         this.gates.vartonas = this.gates.vartonas.map((item) => {

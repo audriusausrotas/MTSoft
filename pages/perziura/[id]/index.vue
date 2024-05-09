@@ -14,90 +14,94 @@ const useGamyba = useGamybaStore()
 const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
 const isOpen = ref<boolean>(false);
+const isOpen2 = ref<boolean>(false);
 const open = ref<boolean>(false);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
+const provider = ref<string>("")
+const vartonasUsers = useUsers.users.filter(user => user.accountType === "Vartonas").map(user => user.email)
+const gigastaUsers = useUsers.users.filter(user =>
+  user.accountType === "Gigasta").map(user => user.email)
+
 
 const statusHandler = async (value: string) => {
-  const data: any = await $fetch("/api/project", {
+  const response: any = await $fetch("/api/project", {
     method: "patch",
     body: { _id: offer!._id, value },
   });
-  if (data.success) {
-    useProjects.updateStatus(data.data);
+  if (response.success) {
+    useProjects.updateStatus(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
+const setProvider = (value: string) => {
+  provider.value = value
+  isOpen.value = false
+  isOpen2.value = true
+}
+
 const sendEmailHandler = async () => {
   isLoading.value = true;
-  const data: any = await $fetch("/api/mail", {
+  const response: any = await $fetch("/api/mail", {
     method: "post",
     body: { to: offer?.client.email, link: offer?._id },
   });
-  if (data.success) {
+  if (response.success) {
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };
 
 const gateOrderHadnler = async (name: string): Promise<void> => {
   isLoading.value = true;
-  const data: any = await $fetch("/api/gates", {
+  const response: any = await $fetch("/api/gates", {
     method: "post",
-    body: { _id: offer?._id, value: name },
+    body: { _id: offer?._id, value: provider.value, manager: name },
   });
-  if (data.success) {
-    useGates.addGate(data.data, name);
-    console.log(name)
-    let sendTo
-    if (name === "Vartonas") {
-      sendTo = useUsers.users.find(item => item.accountType === "Vartonas")
-    }
-    if (name === "Gigasta") {
-      sendTo = useUsers.users.find(item => item.accountType === "Gigasta")
-    }
+  if (response.success) {
+    useGates.addGate(response.data, provider.value);
 
-    const data2: any = await $fetch("/api/mail", {
+    const emailResponse: any = await $fetch("/api/mail", {
       method: "put",
-      body: { to: sendTo?.email, message: `Turi naują užsakymą "${data.data.client.address}"`, title: "Naujas užsakymas" },
+      body: { to: name, message: `Turi naują užsakymą "${response.data.client.address}"`, title: "Naujas užsakymas" },
     });
-    if (data2.success) {
+    if (emailResponse.success) {
       setIsError(false);
-      setError(data2.message);
+      setError(emailResponse.message);
     } else {
-      setError(data2.message);
+      setError(emailResponse.message);
     }
-
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
-  isOpen.value = false;
+  isOpen2.value = false;
+  provider.value = ""
 };
 
 const gateCancelHadnler = async (): Promise<void> => {
   isLoading.value = true;
-  const data: any = await $fetch("/api/gates", {
+  const response: any = await $fetch("/api/gates", {
     method: "delete",
     body: { _id: offer?._id },
   });
-  if (data.success) {
+  if (response.success) {
     useGates.removeGates(offer!._id);
     gateOrdered.value = false;
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };
@@ -108,32 +112,32 @@ const cancelHandler = () => {
 }
 
 const changeCreatorHandler = async (value: string) => {
-  const data: any = await $fetch("/api/projectCreator", {
+  const response: any = await $fetch("/api/projectCreator", {
     method: "PATCH",
     body: { _id: offer!._id, value },
   });
-  if (data.success) {
-    useProjects.changeCreator(data.data);
+  if (response.success) {
+    useProjects.changeCreator(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
 const advanceHandler = async () => {
   isLoading.value = true;
-  const data: any = await $fetch("/api/advance", {
+  const response: any = await $fetch("/api/advance", {
     method: "post",
     body: { _id: offer!._id, advance: advance.value },
   });
-  if (data.success) {
-    useProjects.changeAdvance(data.data)
+  if (response.success) {
+    useProjects.changeAdvance(response.data)
     offer!.advance = advance.value
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   cancelHandler()
   isLoading.value = false;
@@ -152,44 +156,44 @@ const orderFinishHandler = async () => {
     setError(response.message);
   }
 
-  const data: any = await $fetch("/api/archive", {
+  const archieveResponse: any = await $fetch("/api/archive", {
     method: "POST",
     body: { _id: offer!._id },
   } as any);
-  if (data.success) {
+  if (archieveResponse.success) {
     useProjects.moveToArchive(offer!);
     setIsError(false);
-    setError(data.message);
+    setError(archieveResponse.message);
     navigateTo("/")
   } else {
-    setError(data.message);
+    setError(archieveResponse.message);
   }
 }
 
 const gamybaHandler = async () => {
-  const data: any = await $fetch("/api/gamyba", {
+  const response: any = await $fetch("/api/gamyba", {
     method: "post",
     body: { _id: offer!._id },
   });
-  if (data.success) {
+  if (response.success) {
     setIsError(false);
-    setError(data.message);
-    useGamyba.addGamyba(data.data)
+    setError(response.message);
+    useGamyba.addGamyba(response.data)
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 }
 
 const montavimasHandler = async () => {
-  const data: any = await $fetch("/api/montavimas", {
+  const response: any = await $fetch("/api/montavimas", {
     method: "post",
     body: { _id: offer!._id },
   });
-  if (data.success) {
+  if (response.success) {
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 }
 
@@ -217,9 +221,6 @@ watch(
 <template>
   <div class="flex flex-col gap-12">
     <div class="flex gap-4 flex-wrap items-end">
-
-
-
       <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
 
       <div>
@@ -240,19 +241,23 @@ watch(
 
       <div v-if="gateExist">
         <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
-        <BaseButton v-else-if="!gateOrdered && !isOpen" name="Užsakyti vartus" @click="isOpen = true"
+        <BaseButton v-else-if="!gateOrdered && !isOpen && !isOpen2" name="Užsakyti vartus" @click="isOpen = true"
           :isLoading="isLoading" />
         <div v-else-if="!gateOrdered && isOpen"
           class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
-          <button @click="gateOrderHadnler('Vartonas')"
-            class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+          <button @click="setProvider('Vartonas')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
             Vartonas
           </button>
-          <button @click="gateOrderHadnler('Gigasta')"
-            class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+          <button @click="setProvider('Gigasta')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
             Gigasta
           </button>
         </div>
+
+        <BaseSelectField v-else-if="!gateOrdered && isOpen2"
+          :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers" id="userSelect"
+          defaultValue="Priskirti vartotoja" width="w-60" @onChange="(value: string) => gateOrderHadnler(value)
+        " />
+
       </div>
       <BaseButtonWithConfirmation name="Į gamybą" @onConfirm="gamybaHandler" :isLoading="isLoading" />
       <BaseButtonWithConfirmation name="Į montavimą" @onConfirm="montavimasHandler" :isLoading="isLoading" />
@@ -271,8 +276,5 @@ watch(
     <PreviewClient :offer="offer" />
     <ResultTotalElement :results="offer" />
     <previewTrello :offer="offer" :hidePrices="false" />
-
-
-
   </div>
 </template>

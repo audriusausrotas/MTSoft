@@ -148,6 +148,7 @@ export interface GateSchema {
   orderNr: string;
   comments: Comment[];
   creator: Creator;
+  manager: string;
   gates: Gate[];
   dateCreated: string;
 }

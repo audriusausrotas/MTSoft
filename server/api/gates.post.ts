@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { _id, value } = await readBody(event);
+  const { _id, value, manager } = await readBody(event);
 
   const project = await projectSchema.findById({ _id });
 
@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
       creator: { ...project.creator },
       client: { ...project.client },
       gates: [...project.gates],
+      manager,
       dateCreated,
     };
 
