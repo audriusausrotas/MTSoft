@@ -65,8 +65,6 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
       sendTo = useUsers.users.find(item => item.accountType === "Gigasta")
     }
 
-    console.log(sendTo)
-
     const data2: any = await $fetch("/api/mail", {
       method: "put",
       body: { to: sendTo?.email, message: `Turi naują užsakymą "${data.data.client.address}"`, title: "Naujas užsakymas" },
