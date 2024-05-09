@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 export default defineEventHandler(async (event: any) => {
   const { _id, to, message, title } = await readBody(event);
   const data: User | null = await userSchema.findById(_id);
-
+  console.log(to);
   if (!data)
     return {
       success: false,

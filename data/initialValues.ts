@@ -66,7 +66,7 @@ export const adminPanelLinks: MenuLinks[] = [
   { name: "Vartotojai", link: "/admin", iconPath: "/icons/users.svg" },
 ];
 export const menuLinks: MenuLinks[] = [
-  { name: "Projektai", link: "/", iconPath: "/icons/projects.svg" },
+  // { name: "Projektai", link: "/", iconPath: "/icons/projects.svg" },
   {
     name: "Skaičiuoklė",
     link: "/skaiciuokle",

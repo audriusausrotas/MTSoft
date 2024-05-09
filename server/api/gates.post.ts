@@ -34,9 +34,9 @@ export default defineEventHandler(async (event) => {
 
     let newGates;
 
-    if (value === "vartonas") {
+    if (value === "Vartonas") {
       newGates = new gateSchemaVartonas(gateData);
-    } else if (value === "gigasta") {
+    } else if (value === "Gigasta") {
       newGates = new gateSchemaGigasta(gateData);
     }
     const data = await newGates?.save();

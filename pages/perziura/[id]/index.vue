@@ -56,7 +56,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   });
   if (data.success) {
     useGates.addGate(data.data, name);
-
+    console.log(name)
     let sendTo
     if (name === "Vartonas") {
       sendTo = useUsers.users.find(item => item.accountType === "Vartonas")
@@ -64,6 +64,8 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
     if (name === "Gigasta") {
       sendTo = useUsers.users.find(item => item.accountType === "Gigasta")
     }
+
+    console.log(sendTo)
 
     const data2: any = await $fetch("/api/mail", {
       method: "put",
@@ -244,11 +246,11 @@ watch(
           :isLoading="isLoading" />
         <div v-else-if="!gateOrdered && isOpen"
           class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
-          <button @click="gateOrderHadnler('vartonas')"
+          <button @click="gateOrderHadnler('Vartonas')"
             class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
             Vartonas
           </button>
-          <button @click="gateOrderHadnler('gigasta')"
+          <button @click="gateOrderHadnler('Gigasta')"
             class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
             Gigasta
           </button>
