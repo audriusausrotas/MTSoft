@@ -74,7 +74,7 @@ const updateHandler = async (change: string, value: any) => {
         <CalcTitle :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-14" label="Nr:" :disable="true" />
-            <BaseInput :name="props.gate.orderNr" width="w-28" label="Užsakymo Nr." :disable="true" />
+            <BaseInput :name="props.gate.orderNr" width="w-36" label="Užsakymo Nr." :disable="true" />
             <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-32" label="Užsakymo data" :disable="true" />
             <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
             <div class="flex flex-col gap-1">
