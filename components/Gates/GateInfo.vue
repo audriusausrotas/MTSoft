@@ -102,7 +102,7 @@ const updateHandler = async (change: string, value: any) => {
                     @onConfirm="(value) => updateHandler('comment', value)" />
                 <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="buttonHandler" />
             </div>
-            <div class="flex flex-col border p-2 rounded-lg border-dark-light">
+            <div v-if="props.gate.comments.length > 0" class="flex flex-col border p-2 rounded-lg border-dark-light">
                 <p class="text-2xl font-bold pb-2 self-center">Komentarai:</p>
                 <p v-for="comment in props.gate.comments" :key="v4()"
                     class=" flex justify-between border-b font-semibold">
