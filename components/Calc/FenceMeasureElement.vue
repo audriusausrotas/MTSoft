@@ -16,14 +16,17 @@ const isSegment = ref<boolean>(
   useCalculations.fences[props.index].type.includes("Segmentas")
 );
 
+
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
   useCalculations.updateMeasureGate(props.index, value, props.measureIndex);
+  console.log(props.measure)
 }
 
 watch(
   () => useCalculations.fences[props.index].type,
   (newValue) => {
+
     isSegment.value = newValue.includes("Segmentas");
   },
   { deep: true }
@@ -116,12 +119,14 @@ watch(
         width="w-36" @onChange="(value: string) => useCalculations.updateBankette(props.index, value, props.measureIndex)
         " />
 
-      <BaseSelectField v-if="props.measure.length <= 200" :values="gateDirection" id="gateDirection"
-        label="vartelių atidarymas" :defaultValue="props.measure.gates.direction" width="w-36" @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value, props.measureIndex)
+      <BaseSelectField v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
+        :values="gateDirection" id="gateDirection" label="vartelių atidarymas"
+        :defaultValue="props.measure.gates.direction" width="w-36" @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value, props.measureIndex)
         " />
 
-      <BaseSelectField v-if="props.measure.length <= 200" :values="gateLock" id="gateLock" label="vartelių spyna"
-        :defaultValue="props.measure.gates.lock" width="w-36" @onChange="(value: string) => useCalculations.updateGateLock(props.index, value, props.measureIndex)
+      <BaseSelectField v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
+        :values="gateLock" id="gateLock" label="vartelių spyna" :defaultValue="props.measure.gates.lock" width="w-36"
+        @onChange="(value: string) => useCalculations.updateGateLock(props.index, value, props.measureIndex)
         " />
 
       <BaseSelectField v-if="props.measure.length <= 200" :values="gateOption" id="gateOption" label="Vartelių tipas"

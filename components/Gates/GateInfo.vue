@@ -66,7 +66,7 @@ const updateHandler = async (change: string, value: any) => {
             <BaseInput :name="props.gate.orderNr" width="w-36" label="Užsakymo Nr." :disable="true" />
             <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-32" label="Užsakymo data" :disable="true" />
             <BaseInput :name="props.gate.client.address" width="w-80" label="adresas" :disable="true" />
-            <BaseInfoField v-if="useUser.user?.accountType === 'Administratorius'"
+            <BaseInfoField v-if="useUser.user?.accountType === 'Administratorius' && props.gate.manager"
                 :name="props.gate.manager.split('@')[0].replace('.', ' ')" width="w-32" label="Atsakingas"
                 class="capitalize" />
             <div class="flex flex-col gap-1">
