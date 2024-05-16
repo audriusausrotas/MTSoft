@@ -125,7 +125,7 @@ export default function calculateResults() {
         let poleHeight = 0;
 
         if (isSegment) {
-          if (measure.height < 160) {
+          if (measure.height < 130) {
             poleHeight = 2.4;
           } else {
             poleHeight = 3;
@@ -168,7 +168,8 @@ export default function calculateResults() {
           } else {
             if (!isTogether) {
               if (!onlyServices) results.removePole(item.color);
-              if (!onlyServices) results.addGatePoles(item.color, 2);
+              if (!onlyServices && measure.gates.option !== "Segmentiniai")
+                results.addGatePoles(item.color, 2);
               if (!onlyParts) results.removeTotalPole();
               if (!onlyParts) results.addTotalGatePoles(2);
             } else {
