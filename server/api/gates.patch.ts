@@ -3,13 +3,11 @@ export default defineEventHandler(async (event) => {
   const { _id, provider } = await readBody(event);
   const _idObject = new mongoose.Types.ObjectId(_id);
 
-  const project = await projectSchema.findOneAndUpdate(
+  await projectSchema.findOneAndUpdate(
     { _id },
     { status: "Vartai Sumontuoti" },
     { new: true }
   );
-
-  if (!project) return { success: false, data: null, message: "Įvyko klaida" };
 
   let data;
   if (provider === "Vartonas") {
