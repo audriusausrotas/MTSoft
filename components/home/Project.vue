@@ -136,7 +136,7 @@ checkGates();
 
 <template>
   <div class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4">
-    <div class="font-semibold text-xl w-6">{{ length - index }}</div>
+    <div class="font-semibold text-xl w-8">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative">
       <div v-if="props.project.gates.length > 0 && props.project.status !== 'Nepatvirtintas'"
