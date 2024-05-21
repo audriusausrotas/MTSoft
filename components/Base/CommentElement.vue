@@ -10,7 +10,7 @@ const hours = String(date.getHours()).padStart(2, "0");
 const minutes = String(date.getMinutes()).padStart(2, "0");
 
 const deleteHandler = () => {
-    emit("onDelete", props.comment.comment)
+    emit("onDelete", props.comment)
 }
 
 </script>

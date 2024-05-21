@@ -27,6 +27,7 @@ const buttonHandler = async () => {
 }
 
 const updateHandler = async (change: string, value: any) => {
+
     const response: any = await $fetch(
         "/api/gates",
         {
@@ -59,7 +60,7 @@ const updateHandler = async (change: string, value: any) => {
 }
 </script>
 <template>
-    <div class="flex gap-4 pb-4 flex-wrap items-end">
+    <div class="flex gap-4 pb-4 flex-wrap items-end ">
         <CalcTitle v-if="!open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-14" label="Nr:" :disable="true" />
@@ -75,53 +76,30 @@ const updateHandler = async (change: string, value: any) => {
                     id="clientPhone" />
             </div>
         </div>
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col">
             <div v-if="!open" id="gateStatus" class="text-white self-end py-2 rounded-lg w-40 text-center"
                 :class="props.gate.measure === 'Eilėje' ? 'bg-red-full' : props.gate.measure === 'Galima matuoti' ? ' bg-orange-500' : 'bg-green-500'">
                 {{ props.gate.measure }}</div>
         </div>
     </div>
     <div v-if="open">
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 pb-4 ">
             <div class="flex gap-4">
                 <CalcTitle v-if="open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
                 <BaseSelectField :values="gateStatus" id="gateStatus" :defaultValue="props.gate.measure" width="w-60"
                     @onChange="(value: string) => updateHandler('status', value)" />
                 <BaseButtonWithInput name="įvesti užsakymo Nr." placeholder="Užsakymo Nr."
                     @onConfirm="(value) => updateHandler('orderNr', value)" />
-                <BaseButtonWithInput name="įvesti komentarą" placeholder="Komentaras"
-                    @onConfirm="(value) => updateHandler('comment', value)" />
                 <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="buttonHandler" />
             </div>
-            <div v-if="props.gate.comments.length > 0" class="flex flex-col border p-2 rounded-lg border-dark-light">
-                <p class="text-2xl font-bold pb-2 self-center">Komentarai:</p>
-                <p v-for=" comment  in  props.gate.comments " :key="v4()"
-                    class=" flex justify-between border-b font-semibold">
-                <p>
-                    {{ ("2024-05-08T20:20:42.121Z").replace("T", " | ").slice(0, 18) }} | <span
-                        :class="useUser.user?.username === comment.creator ? 'text-green-500' : 'text-red-full'">
-                        {{ comment.creator }}:
-                    </span>
-                    {{ comment.comment }}
-                </p>
-                <div @click="updateHandler('deleteComment', comment)"
-                    class=" hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
-                    <NuxtImg src="/icons/delete.svg" width="18" height="18" decoding="auto" :ismap="true"
-                        loading="lazy" />
-                </div>
-                </p>
-            </div>
-            <div class="flex justify-between font-semibold border-b border-gray-full py-4">
-
-                <div class="flex flex-col gap-4 justify-between">
+            <div class="flex justify-between font-semibold  gap-4 flex-wrap">
+                <div class="flex flex-col gap-4 ">
                     <h3 class="text-xl">Užsakymo duomenys</h3>
                     <BaseInput :name="props.gate.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
                     <BaseInput :name="props.gate.measure" width="w-72" label="Statusas:" :disable="true"
                         :class="props.gate.measure === 'Eilėje' ? 'text-red-full' : props.gate.measure === 'Galima matuoti' ? ' text-orange-500' : 'text-green-500'" />
                     <BaseInput :name="props.gate.dateCreated.slice(0, 10)" width="w-72" label="užsakymo data:"
                         :disable="true" />
-
-
                 </div>
                 <div class="flex flex-col gap-4">
                     <h3 class="text-xl">Klento duomenys</h3>
@@ -138,11 +116,17 @@ const updateHandler = async (change: string, value: any) => {
                         :disable="true" />
                 </div>
             </div>
-            <div v-for="( g, i ) in  props.gate.gates " :key="g._id"
-                class="flex flex-col pb-4 border-b border-gray-full last:border-b-0 ">
-                <GatesGate :gate="g" :index="i" />
-            </div>
 
+            <div class="py-8">
+                <BaseComment :commentsArray="props.gate.comments" :id="props.gate._id"
+                    @onSave="(value) => updateHandler('comment', value)"
+                    @onDelete="(id, comment) => updateHandler('deleteComment', comment)" />
+            </div>
+            <div class="flex flex-col gap-4">
+                <div v-for="( g, i ) in  props.gate.gates " :key="g._id">
+                    <GatesGate :gate="g" :index="i" />
+                </div>
+            </div>
         </div>
     </div>
 </template>

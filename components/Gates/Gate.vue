@@ -3,7 +3,7 @@ const props = defineProps(["gate", "index"]);
 </script>
 
 <template>
-    <div v-if="gate.option !== 'Segmentiniai'" class="flex gap-4  flex-wrap py-4 items-center">
+    <div v-if="gate.option !== 'Segmentiniai'" class="flex gap-4  flex-wrap items-center">
         <div class="font-medium text-xl">{{ props.index + 1 }}</div>
         <BaseInput :name="gate.type" width="w-28" label="vartų tipas" :disable="true" />
 

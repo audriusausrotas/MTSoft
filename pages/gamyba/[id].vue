@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import { v4 } from 'uuid';
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
 const useUser = useUserStore()
@@ -73,11 +72,9 @@ const deleteHandler = async (value: string, comment: string) => {
             <BaseInfoField :name="order?.creator.username" width="w-24" />
             <BaseButtonWithConfirmation name="užsakymas pagamintas" @onConfirm="confirmHandler" />
         </div>
-        <div class="flex flex-col gap-2">
+        <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
+            @onDelete="deleteHandler" />
 
-            <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
-                @onDelete="deleteHandler" />
-        </div>
         <GamybaFence v-for="fence, index in order?.fences" :key="fence.id" :fence="fence" :index="index" />
         <GamybaBindings v-for="binding, index in order?.bindings" :key="binding.id" />
     </div>
