@@ -15,11 +15,7 @@ const isSegmentas = props.fence.type === "Segmentas";
       </div>
       <div class="flex gap-4 pb-4">
         <BaseInput :name="fence.type" label="Tvoros tipas" width="w-40" />
-        <BaseInput v-if="!isFenceboards && !isSegmentas" :name="fence.seeThrough" label="pramatomumas" width="w-36" />
-        <BaseInput v-if="isFenceboards" :name="fence.space" label="tarpas" width="w-20" />
-        <BaseInput v-if="isFenceboards" :name="fence.twoSided" label="dvipuse" width="w-20" />
         <BaseInput :name="fence.color" label="Spalva" width="w-20" />
-        <BaseInput v-if="!isSegmentas" :name="fence.direction" label="Tvoros kryptis" width="w-32" />
         <BaseInput v-if="!isFenceboards && !isSegmentas" :name="fence.bindings" label="Apkaustai" width="w-20" />
         <BaseInput v-if="!isFenceboards && !isSegmentas" :name="fence.material" label="Skarda" width="w-24" />
       </div>

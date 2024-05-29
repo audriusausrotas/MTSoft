@@ -18,7 +18,7 @@ const deleteHandler = (comment: string): void => {
 
 <template>
     <div class="flex flex-col gap-2">
-        <div class="flex gap-4 items-end flex-wrap">
+        <div class="flex gap-4 items-end flex-wrap print:hidden">
             <BaseInput label="Naujas komentaras" class="flex-1" width="w-full" variant="light" :name="newComment"
                 @onChange="(value: string) => newComment = value" />
             <BaseButton name="Issaugoti komentara" @click="saveHandler" />

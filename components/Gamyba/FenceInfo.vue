@@ -1,25 +1,29 @@
 <script setup lang='ts'>
 const props = defineProps(["data", "index"])
+
+const length = ref(0)
+const done = ref<number>(0)
 </script>
 
 <template>
-    <div v-if="props.data.laiptas.exist" class="flex gap-4">
-        <BaseInput :name="props.index + 1" label="nr" width="w-20" :disable="true" />
-        <BaseInput :name="props.data.laiptas.value" label="laiptas" width="w-20" :disable="true" />
-        <BaseInput label="komentarai" width="w-full" variant="light" />
+    <div v-if="props.data.laiptas.exist" class="container border-b p-1 border-black odd:bg-gray-ultra-light">
+        <p class="element">{{ props.index + 1 }}</p>
+        <p class="element">Laiptas</p>
+        <p class="element">{{ props.data.laiptas.direction }}</p>
+        <p class="element">{{ props.data.laiptas.value }} cm</p>
     </div>
-    <div v-else-if="props.data.kampas.exist" class="flex gap-4">
-        <BaseInput :name="props.index + 1" label="nr" width="w-20" :disable="true" />
-        <BaseInput :name="props.data.kampas.value" label="kampas" width="w-20" :disable="true" />
-        <BaseInput label="komentarai" width="w-full" variant="light" />
+    <div v-else-if="props.data.kampas.exist" class="container border-b p-1 border-black odd:bg-gray-ultra-light">
+        <p class="element">{{ props.index + 1 }}</p>
+        <p class="element">Kampas</p>
+        <p class="element">{{ props.data.kampas.value }}</p>
+        <p class="element">laipsnių</p>
     </div>
-    <div v-else class="flex gap-4">
-        <BaseInput :name="props.index + 1" label="nr" width="w-20" :disable="true" />
-        <BaseInput :name="props.data.length" label="Ilgis" width="w-20" :disable="true" />
-        <BaseInput :name="props.data.elements" label="elementai" width="w-20" :disable="true" />
-        <BaseInput :name="0" label="išpjauti" width="w-20" variant="light" />
-        <BaseInput :name="0" label="pagaminti" width="w-20" variant="light" />
-        <BaseInput label="komentarai" width="w-full" variant="light" />
+    <div v-else class="container border-b border-black p-1 odd:bg-gray-ultra-light">
+        <p class="element">{{ props.index + 1 }}</p>
+        <p class="element">{{ props.data.length }}</p>
+        <p class="element">{{ props.data.elements }}</p>
+        <input v-model="length" type="text" placeholder="Išpjauti" class="element ">
+        <input v-model="done" type="text" placeholder="Pagaminti" class="element">
     </div>
 </template>
 <style scoped></style>

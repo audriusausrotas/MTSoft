@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { status } from "~/data/selectFieldData";
-definePageMeta({
-  layout: "preview",
-} as any);
 
 const route = useRoute();
 const { setError, setIsError } = useError();

@@ -70,7 +70,7 @@ const deleteHandler = async (value: string, comment: string) => {
             <BaseInfoField :name="order?.orderNumber" width="w-24" />
             <BaseInfoField :name="order?.client.address" width="w-96" />
             <BaseInfoField :name="order?.creator.username" width="w-24" />
-            <BaseButtonWithConfirmation name="užsakymas pagamintas" @onConfirm="confirmHandler" />
+            <BaseButtonWithConfirmation name="užsakymas pagamintas" @onConfirm="confirmHandler" class="print:hidden" />
         </div>
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />
