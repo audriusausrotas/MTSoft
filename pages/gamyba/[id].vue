@@ -78,7 +78,7 @@ const deleteHandler = async (value: string, comment: string) => {
         <div class="flex gap-8 flex-col">
             <GamybaFence v-for="fence, index in order?.fences" :key="fence.id" :fence="fence" :index="index" />
         </div>
-        <GamybaBindings v-for="binding, index in order?.bindings" :key="binding.id" />
+        <GamybaBindings v-for="binding in order?.bindings" :key="binding.id" />
     </div>
 </template>
 <style scoped></style>

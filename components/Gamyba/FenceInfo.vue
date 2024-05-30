@@ -1,35 +1,68 @@
 <script setup lang='ts'>
-const props = defineProps(["data", "index"])
+const props = defineProps(["data", "index", "fenceSide", "total"])
 
 const length = ref(0)
 const done = ref<number>(0)
+
+
+const printHandler = () => {
+    const printContent = `
+        <html>
+            <head>
+                <title>Print</title>
+                <style>
+                    .print-content {
+                        display: flex;
+                        justify-content: center;
+                        font-size: 100px;
+
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="print-content">
+                    <p>${props.fenceSide} ${props.index + 1} / ${props.total}</p>
+                </div>
+            </body>
+        </html>
+    `;
+
+    const printWindow = window.open('', '', 'width=600,height=400');
+    printWindow?.document.write(printContent);
+    printWindow?.document.close();
+    printWindow?.print();
+}
 </script>
 
 <template>
-    <div v-if="props.data.laiptas.exist" class="container border-b  border-black odd:bg-gray-ultra-light">
+    <div v-if="props.data.laiptas.exist"
+        class="container border-b container-border border-black odd:bg-gray-ultra-light">
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">Laiptas</p>
         <p class="element">{{ props.data.laiptas.direction }}</p>
         <p class="element">{{ props.data.laiptas.value }} cm</p>
     </div>
-    <div v-else-if="props.data.kampas.exist" class="container border-b  border-black odd:bg-gray-ultra-light">
+    <div v-else-if="props.data.kampas.exist"
+        class="container border-b container-border border-black odd:bg-gray-ultra-light">
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">Kampas</p>
         <p class="element">{{ props.data.kampas.value }}</p>
         <p class="element">laipsnių</p>
     </div>
-    <div v-else class="container border-b border-black  odd:bg-gray-ultra-light">
+    <div v-else class="container odd:bg-gray-ultra-light container-border">
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
         <p class="element">{{ props.data.elements }}</p>
         <input v-model="length" type="text" placeholder="Išpjauti" class="element ">
         <input v-model="done" type="text" placeholder="Pagaminti" class="element">
-        <button class="element print:hidden hover:bg-red-full hover:text-white">Spausdinti</button>
+        <button class="element print:hidden hover:bg-red-full hover:text-white"
+            @click="printHandler">Spausdinti</button>
     </div>
 </template>
 <style scoped>
 .element {
     border-right: 1px solid black;
-    padding: 4px 10px;
+    padding: 4px;
+    text-align: center
 }
 </style>
