@@ -1,22 +1,8 @@
 <script setup lang='ts'>
-
 const props = defineProps(["data", "index", "fenceSide", "total"])
 
-const cut = ref<number>(0)
-const done = ref<number>(0)
-const isDone = ref(+props.data.elements === +done.value)
-const isCut = ref(+props.data.elements === +done.value)
-
-watch(done, (newValue) => {
-    isDone.value = +props.data.elements === +newValue;
-});
-
-watch(cut, (newValue) => {
-    isCut.value = +props.data.elements === +newValue;
-});
-
-
-
+const cut = ref<string>('')
+const done = ref<string>('')
 
 const printHandler = () => {
     const printContent = `
@@ -65,8 +51,10 @@ const printHandler = () => {
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
         <p class="element">{{ props.data.elements }}</p>
-        <input v-model="cut" type="text" placeholder="Išpjauti" class="element" :class="{ 'bg-green-500': isCut }">
-        <input v-model="done" type="text" placeholder="Pagaminti" class="element" :class="{ 'bg-green-500': isDone }">
+        <input v-model="cut" type="number" placeholder="Išpjauti" class="element text-white"
+            :class="+cut === +props.data.elements ? 'bg-green-500' : cut === '' ? 'bg-white' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+        <input v-model="done" type="number" placeholder="Pagaminti" class="element text-white"
+            :class="+done === +props.data.elements ? 'bg-green-500' : done === '' ? 'bg-white' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
         <button class=" element print:hidden hover:bg-red-full hover:text-white"
             @click="printHandler">Spausdinti</button>
     </div>
