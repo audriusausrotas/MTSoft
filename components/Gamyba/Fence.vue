@@ -7,7 +7,7 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
 </script>
 
 <template>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
         <div v-if="!isFenceboards" class="flex gap-4">
             <BaseInput :name="props.fence.side" label="Tvoros pusė" width="w-24" />
             <BaseInput :name="props.fence.type" label="Tvoros tipas" />
@@ -16,26 +16,22 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
         <div>
             <p v-if="props.fence.aditional">{{ props.fence.aditional }} </p>
         </div>
-    </div>
-    <div class="container">
-        <p>Nr</p>
-        <p>Ilgis</p>
-        <p>Elementai</p>
-        <p>Išpjauti</p>
-        <p>Pagaminti</p>
-    </div>
-    <div class="flex flex-col ">
-        <GamybaFenceInfo v-for="info, index in props.fence.measures" :key="index" :data="info" :index="index" />
+        <div class="container">
+            <p>Nr</p>
+            <p>Ilgis</p>
+            <p>Elementai</p>
+            <p>Išpjauti</p>
+            <p>Pagaminti</p>
+        </div>
+        <div class="flex flex-col">
+            <GamybaFenceInfo v-for="info, index in props.fence.measures" :key="index" :data="info" :index="index" />
+        </div>
     </div>
 </template>
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 100px 100px 100px 100px;
-    gap: 10px;
-}
-
-.element {
-    border: 1px solid black;
+    grid-template-columns: 40px 80px 80px 80px 80px 100px;
+    row-gap: 10px;
 }
 </style>

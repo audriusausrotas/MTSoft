@@ -75,7 +75,7 @@ const deleteHandler = async (value: string, comment: string) => {
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />
 
-        <div class="flex flex-col gap-4">
+        <div class="flex gap-8 flex-col">
             <GamybaFence v-for="fence, index in order?.fences" :key="fence.id" :fence="fence" :index="index" />
         </div>
         <GamybaBindings v-for="binding, index in order?.bindings" :key="binding.id" />
