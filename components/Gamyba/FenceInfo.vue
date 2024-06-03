@@ -1,8 +1,29 @@
 <script setup lang='ts'>
-const props = defineProps(["data", "index", "fenceSide", "total"])
+const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", "_id"])
 
-const cut = ref<string>('')
-const done = ref<string>('')
+const cut = ref<number>(props.data.cut)
+const done = ref<number>(props.data.done)
+
+const { setError, setIsError } = useError();
+const useGamyba = useGamybaStore()
+
+const saveHandler = async (action: string) => {
+    const response: any = await $fetch(
+        "/api/gamyba",
+        {
+            method: action === 'cut' ? 'put' : 'patch',
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: cut.value },
+        }
+    );
+    if (response.success) {
+        useGamyba.updateGamyba(props.data._id, response.data)
+        setIsError(false);
+        setError(response.message);
+    } else {
+        setError(response.message);
+    }
+
+}
 
 const printHandler = () => {
     const printContent = `
@@ -51,10 +72,18 @@ const printHandler = () => {
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
         <p class="element">{{ props.data.elements }}</p>
-        <input v-model="cut" type="number" placeholder="Išpjauti" class="element text-white"
-            :class="+cut === +props.data.elements ? 'bg-green-500' : cut === '' ? 'bg-white' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
-        <input v-model="done" type="number" placeholder="Pagaminti" class="element text-white"
-            :class="+done === +props.data.elements ? 'bg-green-500' : done === '' ? 'bg-white' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+        <div class="element flex"
+            :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-white' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="cut" type="number" placeholder="Išpjauti" />
+            <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
+                @click="saveHandler('cut')" class="hover:cursor-pointer hover:bg-green-100 rounded-md print:hidden" />
+        </div>
+        <div class="element flex"
+            :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-white' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="done" type="number" placeholder="Pagaminti" />
+            <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
+                @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-green-100 rounded-md print:hidden" />
+        </div>
         <button class=" element print:hidden hover:bg-red-full hover:text-white"
             @click="printHandler">Spausdinti</button>
     </div>

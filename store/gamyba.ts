@@ -24,6 +24,12 @@ export const useGamybaStore = defineStore("gamyba", {
         else return item;
       });
     },
+    updateGamyba(id: string, data: Gamyba) {
+      this.gamybaList = this.gamybaList.map((item) => {
+        if (item._id === id) return data;
+        else return item;
+      });
+    },
   },
 
   getters: {},

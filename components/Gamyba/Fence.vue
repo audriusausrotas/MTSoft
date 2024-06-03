@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { verticals } from '~/data/selectFieldData';
-const props = defineProps(["fence",])
+const props = defineProps(["fence", "fenceIndex", "_id"])
 
 const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas")
 
@@ -26,7 +26,8 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
 
         <div class="flex flex-col flex-1">
             <GamybaFenceInfo v-for="info, index in props.fence.measures" :key="index" :data="info" :index="index"
-                :fenceSide="props.fence.side" :total="props.fence.measures.length" />
+                :fenceSide="props.fence.side" :total="props.fence.measures.length" :fenceIndex="props.fenceIndex"
+                :_id="props._id" />
         </div>
 
     </div>

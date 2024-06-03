@@ -1,4 +1,10 @@
-import type { Gamyba, Project, Bindings, BindingItem } from "~/data/interfaces";
+import type {
+  Gamyba,
+  GamybaFence,
+  Project,
+  Bindings,
+  BindingItem,
+} from "~/data/interfaces";
 import { v4 } from "uuid";
 
 export default defineEventHandler(async (event) => {
@@ -186,12 +192,23 @@ export default defineEventHandler(async (event) => {
     calculateCorners(back, right);
     calculateCorners(right, front);
 
+    const newFences: GamybaFence[] = project.fenceMeasures.map((item) => {
+      return {
+        ...item,
+        measures: item.measures.map((measure) => ({
+          ...measure,
+          cut: 0,
+          done: 0,
+        })),
+      };
+    });
+
     const newGamyba = new gamybaSchema({
       _id: project._id,
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,
-      fences: [...project.fenceMeasures],
+      fences: [...newFences],
       aditional: [],
       bindings,
     });

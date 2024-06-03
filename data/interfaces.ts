@@ -277,9 +277,50 @@ export interface Gamyba {
   client: Client;
   creator: Creator;
   orderNumber: string;
-  fences: Fence[];
+  fences: GamybaFence[];
   bindings: Bindings[] | null;
   aditional: Comment[];
+}
+
+export interface GamybaFence {
+  id: string;
+  side: string;
+  type: string;
+  color: string;
+  material: string;
+  services: string;
+  seeThrough: string;
+  direction: string;
+  parts: string;
+  aditional: string;
+  twoSided: string;
+  bindings: string;
+  anchoredPoles: string;
+  space: number;
+  elements: number;
+  totalLength: number;
+  totalQuantity: number;
+  measures: GamybaMeasure[];
+}
+
+export interface GamybaMeasure {
+  length: number;
+  height: number;
+  MeasureSpace: number;
+  elements: number;
+  gates: GateInfo;
+  cut: number;
+  done: number;
+  kampas: {
+    exist: boolean;
+    value: number;
+    aditional: string;
+  };
+  laiptas: {
+    exist: boolean;
+    value: number;
+    direction: string;
+  };
 }
 
 export interface Comment {
