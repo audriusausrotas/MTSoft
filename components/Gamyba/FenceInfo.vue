@@ -3,6 +3,8 @@ const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", 
 
 const cut = ref<number>(props.data.cut)
 const done = ref<number>(props.data.done)
+const isSavedCut = ref<boolean>(true)
+const isSavedDone = ref<boolean>(true)
 
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
@@ -12,13 +14,19 @@ const saveHandler = async (action: string) => {
         "/api/gamyba",
         {
             method: action === 'cut' ? 'put' : 'patch',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: cut.value },
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: action === 'cut' ? cut.value : done.value },
         }
     );
     if (response.success) {
         useGamyba.updateGamyba(props.data._id, response.data)
         setIsError(false);
         setError(response.message);
+
+        if (action === 'cut') {
+            isSavedCut.value = true
+        } else {
+            isSavedDone.value = true
+        }
     } else {
         setError(response.message);
     }
@@ -51,6 +59,15 @@ const printHandler = () => {
     printWindow?.document.close();
     printWindow?.print();
 }
+
+watch(cut, () => {
+    isSavedCut.value = false
+});
+
+watch(done, () => {
+    isSavedDone.value = false
+});
+
 </script>
 
 <template>
@@ -76,13 +93,15 @@ const printHandler = () => {
             :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-white' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
             <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('cut')" class="hover:cursor-pointer hover:bg-green-100 rounded-md print:hidden" />
+                @click="saveHandler('cut')" class="hover:cursor-pointer  hover:bg-pink-500 rounded-md print:hidden"
+                :class="{ 'bg-red-full': !isSavedCut }" />
         </div>
         <div class="element flex"
             :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-white' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
             <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-green-100 rounded-md print:hidden" />
+                @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-pink-500 rounded-md print:hidden"
+                :class="{ 'bg-red-full': !isSavedDone }" />
         </div>
         <button class=" element print:hidden hover:bg-red-full hover:text-white"
             @click="printHandler">Spausdinti</button>

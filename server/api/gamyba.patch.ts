@@ -1,20 +1,26 @@
-import type { Gamyba } from "~/data/interfaces";
 import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
-  const { _id, index, measureIndex, value } = await readBody(event);
+  try {
+    const { _id, index, measureIndex, value } = await readBody(event);
 
-  const objectId = new mongoose.Types.ObjectId(_id);
+    const objectId = new mongoose.Types.ObjectId(_id);
 
-  const project: Gamyba | null = await gamybaSchema.findById(objectId);
+    const updatePath = `fences.${index}.measures.${measureIndex}.done`;
 
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+    const project = await gamybaSchema.findOneAndUpdate(
+      { _id: objectId },
+      { $set: { [updatePath]: +value } },
+      { new: true }
+    );
 
-  project.fences[index].measures[measureIndex].done = +value;
+    if (!project) {
+      return { success: false, data: null, message: "Projektas nerastas" };
+    }
 
-  //@ts-ignore
-  const data = await project.save();
-
-  return { success: true, data, message: "issaugota" };
+    return { success: true, data: project, message: "issaugota" };
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, data: null, message: "Klaida saugant duomenis" };
+  }
 });
