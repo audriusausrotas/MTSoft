@@ -91,13 +91,8 @@ const updateHandler = async (change: string, value: any) => {
                 <CalcTitle v-if="open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
                 <BaseSelectField :values="gateStatus" id="gateStatus" :defaultValue="props.gate.measure" width="w-60"
                     @onChange="(value: string) => updateHandler('status', value)" />
-
-
                 <BaseSelectField :values="vartonasUsers" id="vartonasUsers" :defaultValue="props.gate.manager"
                     width="w-60" @onChange="(value: string) => updateHandler('manager', value)" />
-
-
-
                 <BaseButtonWithInput name="įvesti užsakymo Nr." placeholder="Užsakymo Nr."
                     @onConfirm="(value) => updateHandler('orderNr', value)" />
                 <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="buttonHandler" />
