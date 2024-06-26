@@ -309,8 +309,9 @@ export interface GamybaMeasure {
   MeasureSpace: number;
   elements: number;
   gates: GateInfo;
-  cut: number;
-  done: number;
+  cut: number | undefined;
+  done: number | undefined;
+  postone: boolean;
   kampas: {
     exist: boolean;
     value: number;
@@ -335,6 +336,9 @@ export interface Bindings {
   height: number;
   type: string;
   quantity: number;
+  cut: number | undefined;
+  done: number | undefined;
+  postone: boolean;
 }
 
 export interface Montavimas {

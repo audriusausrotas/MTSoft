@@ -319,9 +319,15 @@ export default function generateResults() {
     }
   }
 
+  let transportCount = 1;
+  if (useBackup.backupExist) {
+    const temp = useBackup.works.find((item) => item.name === "Transportas");
+    transportCount = temp?.quantity || 1;
+  }
+
   createWorkElement({
     name: defaultValues.transport,
-    quantity: 1,
+    quantity: transportCount,
   });
 
   const tempResults = useBackup.results.filter(

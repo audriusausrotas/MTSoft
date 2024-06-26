@@ -105,7 +105,7 @@ export const useResultsStore = defineStore("results", {
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
       selectedResult.category = value.category;
-      // this.recalculateTotals(index);
+      this.recalculateTotals(index);
     },
 
     selectWork(index: number, value: Works): void {
@@ -113,7 +113,7 @@ export const useResultsStore = defineStore("results", {
       selectedResult.name = value.name;
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
-      // this.recalculateTotals(index);
+      this.recalculateTotals(index);
     },
 
     updateQuantity(index: number, value: number): void {

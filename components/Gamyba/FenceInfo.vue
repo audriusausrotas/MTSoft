@@ -3,18 +3,19 @@ const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", 
 
 const cut = ref<number>(props.data.cut)
 const done = ref<number>(props.data.done)
+const postone = ref<boolean>(props.data.postone)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
 
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
 
-const saveHandler = async (action: string) => {
+const saveHandler = async (field: string) => {
     const response: any = await $fetch(
         "/api/gamyba",
         {
-            method: action === 'cut' ? 'put' : 'patch',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: action === 'cut' ? cut.value : done.value },
+            method: 'put',
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? cut.value : done.value, field, option: 'fences' },
         }
     );
     if (response.success) {
@@ -22,7 +23,7 @@ const saveHandler = async (action: string) => {
         setIsError(false);
         setError(response.message);
 
-        if (action === 'cut') {
+        if (field === 'cut') {
             isSavedCut.value = true
         } else {
             isSavedDone.value = true
@@ -30,7 +31,25 @@ const saveHandler = async (action: string) => {
     } else {
         setError(response.message);
     }
+}
 
+const postoneHandler = async () => {
+    const response: any = await $fetch(
+        "/api/gamyba",
+        {
+            method: 'patch',
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: !postone.value, option: 'fences' },
+        }
+    );
+
+    if (response.success) {
+        useGamyba.updateGamyba(props.data._id, response.data)
+        postone.value = !postone.value;
+        setIsError(false);
+        setError(response.message);
+    } else {
+        setError(response.message);
+    }
 }
 
 const printHandler = () => {
@@ -60,12 +79,21 @@ const printHandler = () => {
     printWindow?.print();
 }
 
-watch(cut, () => {
-    isSavedCut.value = false
+
+
+watch(cut, (newCut) => {
+    if (newCut !== props.data.cut)
+        isSavedCut.value = false
+    else
+        isSavedCut.value = true
 });
 
-watch(done, () => {
-    isSavedDone.value = false
+watch(done, (newDone) => {
+
+    if (newDone !== props.data.done)
+        isSavedDone.value = false
+    else
+        isSavedDone.value = true
 });
 
 </script>
@@ -86,25 +114,27 @@ watch(done, () => {
         <p class="element">laipsnių</p>
     </div>
     <div v-else class="container odd:bg-gray-ultra-light container-border flex-1">
-        <p class="element">{{ props.index + 1 }}</p>
+        <p class="element" :class="{ 'bg-red-full text-white': postone }">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
         <p class="element">{{ props.data.elements }}</p>
         <div class="element flex"
-            :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-white' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
-            <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('cut')" class="hover:cursor-pointer  hover:bg-pink-500 rounded-md print:hidden"
-                :class="{ 'bg-red-full': !isSavedCut }" />
+            <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('cut')"
+                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md print:hidden" />
         </div>
         <div class="element flex"
-            :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-white' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
-            <NuxtImg src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-pink-500 rounded-md print:hidden"
-                :class="{ 'bg-red-full': !isSavedDone }" />
+            <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('done')"
+                class="hover:cursor-pointer hover:bg-pink-500 rounded-md print:hidden" />
         </div>
         <button class=" element print:hidden hover:bg-red-full hover:text-white"
             @click="printHandler">Spausdinti</button>
+        <button class=" element print:hidden hover:bg-red-full hover:text-white"
+            :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
     </div>
 
 </template>

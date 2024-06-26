@@ -71,24 +71,31 @@ export default function createResultElement(item: any) {
   }
 
   // change price on fence seeThrough
-  if (item.seeThrough === "Aklina") {
-    newPrice = +product.price + 3;
-  }
+  if (!useBackup.backupExist) {
+    if (item.seeThrough === "Aklina") {
+      newPrice = +product.price + 3;
+      newCost = +product.cost + 2.1;
+    }
 
-  if (item.seeThrough === "Vidutiniška") {
-    newPrice = +product.price - 3;
-  }
+    if (item.seeThrough === "Vidutiniška") {
+      newPrice = +product.price - 3;
+      newCost = +product.cost - 2.1;
+    }
 
-  if (item.seeThrough === "Pramatoma") {
-    newPrice = +product.price - 5;
-  }
+    if (item.seeThrough === "Pramatoma") {
+      newPrice = +product.price - 5;
+      newCost = +product.cost - 4.2;
+    }
 
-  if (item.seeThrough === "25% Pramatomumas") {
-    newPrice = +product.price - 5;
-  }
+    if (item.seeThrough === "25% Pramatomumas") {
+      newPrice = +product.price - 5;
+      newCost = +product.cost - 4.2;
+    }
 
-  if (item.seeThrough === "50% pramatomumas") {
-    newPrice = +product.price - 7;
+    if (item.seeThrough === "50% pramatomumas") {
+      newPrice = +product.price - 7;
+      newCost = +product.cost - 6.3;
+    }
   }
 
   if (verticals.includes(item.type)) {

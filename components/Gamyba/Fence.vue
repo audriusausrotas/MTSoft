@@ -22,6 +22,7 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
             <p class="element">Išpjauti</p>
             <p class="element">Pagaminti</p>
             <p class="element print:hidden">Veiksmai</p>
+            <p class="element print:hidden">Veiksmai</p>
         </div>
 
         <div class="flex flex-col flex-1">
@@ -36,7 +37,7 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 80px 100px 100px 100px 100px;
+    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px;
     row-gap: 10px;
 }
 

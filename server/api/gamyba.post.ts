@@ -49,6 +49,9 @@ export default defineEventHandler(async (event) => {
           height,
           type,
           quantity: quantity,
+          cut: undefined,
+          done: undefined,
+          postone: false,
         });
       }
       found = false;
@@ -197,8 +200,9 @@ export default defineEventHandler(async (event) => {
         ...item,
         measures: item.measures.map((measure) => ({
           ...measure,
-          cut: 0,
-          done: 0,
+          cut: undefined,
+          done: undefined,
+          postone: false,
         })),
       };
     });

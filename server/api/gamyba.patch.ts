@@ -2,11 +2,15 @@ import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { _id, index, measureIndex, value } = await readBody(event);
+    const { _id, index, measureIndex, value, option } = await readBody(event);
 
     const objectId = new mongoose.Types.ObjectId(_id);
 
-    const updatePath = `fences.${index}.measures.${measureIndex}.done`;
+    let updatePath = "";
+    if (option === "bindings") updatePath = `bindings.${index}.postone`;
+    else updatePath = `fences.${index}.measures.${measureIndex}.postone`;
+
+    console.log(updatePath, value, option);
 
     const project = await gamybaSchema.findOneAndUpdate(
       { _id: objectId },

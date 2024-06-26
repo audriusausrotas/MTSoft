@@ -7,8 +7,8 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
-console.log(order)
 
+console.log(order.value)
 const confirmHandler = async () => {
     const response: any = await $fetch(
         "/api/gamyba",
@@ -79,7 +79,38 @@ const deleteHandler = async (value: string, comment: string) => {
             <GamybaFence v-for="fence, index in order?.fences" :key="fence._id" :fence="fence" :fenceIndex="index"
                 :_id="order._id" />
         </div>
-        <GamybaBindings v-for="binding in order?.bindings" :key="binding.id" />
+        <div class="flex flex-col">
+            <div class="container container-border border-t border-black flex-1">
+                <p class="element">Nr</p>
+                <p class="element">Ilgis</p>
+                <p class="element">Elementai</p>
+                <p class="element">tipas</p>
+                <p class="element">spalva</p>
+                <p class="element">Išpjauti</p>
+                <p class="element">Pagaminti</p>
+                <p class="element print:hidden">Veiksmai</p>
+            </div>
+            <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
+                :_id="order._id" />
+        </div>
     </div>
 </template>
-<style scoped></style>
+<style scoped>
+.container {
+    display: grid;
+    grid-template-columns: 40px 80px 80px 120px 80px 100px 100px 100px;
+    row-gap: 10px;
+}
+
+.container-border {
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+
+}
+
+.element {
+    border-right: 1px solid black;
+    padding: 4px;
+    text-align: center;
+}
+</style>
