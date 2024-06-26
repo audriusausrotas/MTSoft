@@ -9,6 +9,12 @@ const { setError, setIsError } = useError();
 
 const vartonasUsers = useUser.users.filter(user => user.accountType === "Vartonas").map(user => user.email)
 
+console.log("visi")
+console.log(useUser.users)
+console.log("vartono")
+console.log(vartonasUsers)
+
+
 const open = ref<boolean>(false)
 
 const buttonHandler = async () => {
