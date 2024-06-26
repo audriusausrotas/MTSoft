@@ -88,7 +88,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
             }
             break;
           case "Gigasta":
-            if (to.path !== "/gigasta") return navigateTo("/gigasta");
+            if (to.path !== "/profilis") {
+              if (to.path !== "/gigasta") return navigateTo("/gigasta");
+
+              if (useUser.users.length === 0) {
+                const { data: users }: any = await useFetch("/api/users");
+                if (users.value.success) {
+                  const gigastaUsers = users.value.data.filter(
+                    (user: User) => user.accountType === "Gigasta"
+                  );
+                  useUser.setUsers([...gigastaUsers]);
+                }
+              }
+            }
+            break;
+
             break;
           case "Montavimas":
             if (to.path !== "/montavimas") return navigateTo("/montavimas");

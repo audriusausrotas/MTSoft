@@ -63,7 +63,7 @@ const updateHandler = async (change: string, value: any) => {
 
 </script>
 <template>
-    <div class="flex gap-4 pb-4 flex-wrap items-end ">
+    <div class="flex gap-4 pb-4 flex-wrap items-end">
         <CalcTitle v-if="!open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
         <div v-if="!open" class="flex gap-4 items-end flex-wrap">
             <BaseInput :name="index + 1" width="w-14" label="Nr:" :disable="true" />
@@ -86,7 +86,7 @@ const updateHandler = async (change: string, value: any) => {
         </div>
     </div>
     <div v-if="open">
-        <div class="flex flex-col gap-4 pb-4 ">
+        <div class="flex flex-col gap-4 pb-32 ">
             <div class="flex gap-4">
                 <CalcTitle v-if="open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
                 <BaseSelectField :values="gateStatus" id="gateStatus" :defaultValue="props.gate.measure" width="w-60"
