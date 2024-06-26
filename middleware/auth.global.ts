@@ -72,18 +72,22 @@ export default defineNuxtRouteMiddleware(async (to) => {
       } else {
         switch (useUser.user?.accountType) {
           case "Vartonas":
-            if (useUser.users.length === 0) {
-              const { data: users }: any = await useFetch("/api/users");
-              if (users.value.success) {
-                const vartonasUsers = useUser.users.filter(
-                  (user) => user.accountType === "Vartonas"
-                );
-                console.log("vartono -->>" + vartonasUsers);
-                useUser.setUsers([...vartonasUsers]);
-              }
-            }
             if (to.path !== "/profilis") {
               if (to.path !== "/vartonas") return navigateTo("/vartonas");
+
+              if (useUser.users.length === 0) {
+                const { data: users }: any = await useFetch("/api/users");
+                console.log("users-->> ");
+                console.log(users);
+                if (users.value.success) {
+                  const vartonasUsers = useUser.users.filter(
+                    (user) => user.accountType === "Vartonas"
+                  );
+                  console.log("vartono -->>");
+                  console.log(vartonasUsers);
+                  useUser.setUsers([...vartonasUsers]);
+                }
+              }
             }
             break;
           case "Gigasta":
