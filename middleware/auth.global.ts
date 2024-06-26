@@ -78,6 +78,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
                 const vartonasUsers = useUser.users.filter(
                   (user) => user.accountType === "Vartonas"
                 );
+                console.log("vartono -->>" + vartonasUsers);
                 useUser.setUsers([...vartonasUsers]);
               }
             }
