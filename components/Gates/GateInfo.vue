@@ -7,6 +7,8 @@ const useUser = useUserStore()
 
 const { setError, setIsError } = useError();
 
+const vartonasUsers = useUser.users.filter(user => user.accountType === "Vartonas").map(user => user.email)
+
 const open = ref<boolean>(false)
 
 const buttonHandler = async () => {
@@ -58,6 +60,7 @@ const updateHandler = async (change: string, value: any) => {
         setError(response.message);
     }
 }
+
 </script>
 <template>
     <div class="flex gap-4 pb-4 flex-wrap items-end ">
@@ -88,6 +91,13 @@ const updateHandler = async (change: string, value: any) => {
                 <CalcTitle v-if="open" :open="open" @click="open = !open" class="w-8 h-12  flex justify-center" />
                 <BaseSelectField :values="gateStatus" id="gateStatus" :defaultValue="props.gate.measure" width="w-60"
                     @onChange="(value: string) => updateHandler('status', value)" />
+
+
+                <BaseSelectField :values="vartonasUsers" id="vartonasUsers" :defaultValue="props.gate.manager"
+                    width="w-60" @onChange="(value: string) => updateHandler('manager', value)" />
+
+
+
                 <BaseButtonWithInput name="įvesti užsakymo Nr." placeholder="Užsakymo Nr."
                     @onConfirm="(value) => updateHandler('orderNr', value)" />
                 <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="buttonHandler" />

@@ -27,6 +27,9 @@ export default defineEventHandler(async (event) => {
     case "orderNr":
       data.orderNr = value;
       break;
+    case "manager":
+      data.manager = value;
+      break;
     case "comment":
       const newComment: Comment = {
         comment: value as string,
