@@ -8,6 +8,7 @@ const useUser = useUserStore()
 const { setError, setIsError } = useError();
 
 const vartonasUsers = useUser.users.filter(user => user.accountType === "Vartonas").map(user => user.email)
+console.log(vartonasUsers)
 
 const open = ref<boolean>(false)
 
