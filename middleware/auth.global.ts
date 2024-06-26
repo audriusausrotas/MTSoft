@@ -72,6 +72,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
       } else {
         switch (useUser.user?.accountType) {
           case "Vartonas":
+            if (useUser.users.length === 0) {
+              const { data: users }: any = await useFetch("/api/users");
+              if (users.value.success) {
+                const vartonasUsers = useUser.users.filter(
+                  (user) => user.accountType === "Vartonas"
+                );
+                useUser.setUsers([...vartonasUsers]);
+              }
+            }
             if (to.path !== "/profilis") {
               if (to.path !== "/vartonas") return navigateTo("/vartonas");
             }
