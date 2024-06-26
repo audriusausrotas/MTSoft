@@ -1,4 +1,5 @@
 import { useCookie } from "nuxt/app";
+import type { User } from "~/data/interfaces";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
@@ -78,7 +79,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
               if (useUser.users.length === 0) {
                 const { data: users }: any = await useFetch("/api/users");
                 if (users.value.success) {
-                  useUser.setUsers([...users.value.data]);
+                  const vartonasUsers = users.value.data.filter(
+                    (user: User) => user.accountType === "Vartonas"
+                  );
+                  useUser.setUsers([...vartonasUsers]);
                 }
               }
             }
