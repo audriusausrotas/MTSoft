@@ -77,15 +77,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
               if (useUser.users.length === 0) {
                 const { data: users }: any = await useFetch("/api/users");
-                // console.log("users-->> ");
-                // console.log(users);
                 if (users.value.success) {
-                  //   const vartonasUsers = useUser.users.filter(
-                  //     (user) => user.accountType === "Vartonas"
-                  //   );
-                  //   console.log("vartono -->>");
-                  //   console.log(vartonasUsers);
-                  useUser.setUsers([...users]);
+                  useUser.setUsers([...users.value.data]);
                 }
               }
             }
