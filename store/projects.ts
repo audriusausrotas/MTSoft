@@ -115,5 +115,23 @@ export const useProjectsStore = defineStore("Projects", {
         }
       }
     },
+
+    searchProjects(value: string) {
+      if (value.length > 2) {
+        const foundProjects = this.projects.filter(
+          (project) =>
+            project.client.address
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            project.client.email.toLowerCase().includes(value.toLowerCase()) ||
+            project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
+            project.client.username.toLowerCase().includes(value.toLowerCase())
+        );
+
+        this.filteredProjects = [...foundProjects];
+      } else {
+        this.filterProjects();
+      }
+    },
   },
 });
