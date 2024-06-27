@@ -1,5 +1,6 @@
 import { useCookie } from "nuxt/app";
 import type { User } from "~/data/interfaces";
+import { fetchProjects } from "~/utils/fetchData";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
@@ -58,6 +59,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
             useProjects.addProjects(projects.value.data);
           }
         }
+
         if (useProducts.products.length === 0) {
           const { data: products }: any = await useFetch("/api/products");
           if (products.value.success) {
@@ -103,12 +105,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
             }
             break;
 
-            break;
           case "Montavimas":
             if (to.path !== "/montavimas") return navigateTo("/montavimas");
             break;
           case "Gamyba":
-            if (to.path !== "/gamyba") return navigateTo("/gamyba");
+            if (!to.path.includes("/gamyba")) return navigateTo("/gamyba");
             break;
           default:
             break;

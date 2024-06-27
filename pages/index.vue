@@ -28,7 +28,7 @@ const statusFilters = ["Visi", ...status];
       <BaseSelectField label="Vartotojas" :values="users" id="userFilter" :defaultValue="userLetters" width="w-40"
         @onChange="(value: string) => useProjects.changeFilter(value)
         " />
-      <BaseSelectField label="statusas" :values="statusFilters" id="statusFilter"
+      <BaseSelectField label="Statusas" :values="statusFilters" id="statusFilter"
         :defaultValue="useProjects.selectedStatusFilter" width="w-40" @onChange="(value: string) => useProjects.changeStatusFilter(value)
         " />
       <BaseInput placeholder="Paieška" label="Paieška" width="w-96" variant="light" @onChange="(value: string): void =>

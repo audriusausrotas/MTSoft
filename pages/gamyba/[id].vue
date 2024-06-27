@@ -7,7 +7,6 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
-
 console.log(order.value)
 const confirmHandler = async () => {
     const response: any = await $fetch(
