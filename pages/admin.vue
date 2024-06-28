@@ -78,11 +78,7 @@ const deleteHandler = (id: string) => {
       <div class="flex-1"></div>
     </div>
 
-    <div
-      v-for="(user, index) in useUser.users"
-      :key="user._id"
-      class="flex py-2 capitalize border-b"
-    >
+    <div v-for="(user, index) in useUser.users" :key="user._id" class="flex py-2 capitalize border-b">
       <div class="flex-1">{{ index + 1 }}</div>
       <p class="flex-[3] flex items-center">
         {{ user.username }} {{ user.lastName }}
@@ -90,64 +86,30 @@ const deleteHandler = (id: string) => {
 
       <div class="flex-[5] flex lowercase items-center">{{ user.email }}</div>
 
-      <BaseSelectField
-        :id="user._id"
-        name="verified"
-        class="flex-[4]"
-        :values="accountStatus"
+      <BaseSelectField :id="user._id" name="verified" class="flex-[4]" :values="accountStatus"
         :defaultValue="user?.verified ? 'patvirtintas' : 'nepatvirtintas'"
-        @onChange="(value: string) => userChangesHandler(user._id, 'verify', value)"
-      />
+        @onChange="(value: string) => userChangesHandler(user._id, 'verify', value)" />
 
-      <BaseSelectField
-        :id="user._id"
-        :values="accountTypes"
-        width="w-52"
-        class="flex-[4]"
-        :defaultValue="user?.accountType"
-        @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
-      />
+      <BaseSelectField :id="user._id" :values="accountTypes" width="w-52" class="flex-[4]"
+        :defaultValue="user?.accountType" @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)" />
 
-      <div
-        class="flex justify-end flex-1 hover:cursor-pointer"
-        @click="deleteHandler(user._id)"
-      >
-        <NuxtImg
-          src="/icons/delete.svg"
-          alt="delete button "
-          width="24"
-          height="24"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
+        <NuxtImg src="/icons/delete.svg" alt="delete button " width="24" height="24" decoding="auto" loading="lazy"
+          :ismap="true" />
       </div>
     </div>
   </div>
   <Teleport to="body">
-    <div
-      v-if="modalOpen"
-      class="absolute top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
-    >
-      <div
-        class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl"
-      >
+    <div v-if="modalOpen"
+      class="absolute top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light">
+      <div class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl">
         <div class="flex flex-col items-center gap-8">
           <p>Įveskite slaptaždodį norėdami ištrinti vartotoją</p>
-          <BaseInput
-            placeholder="Slaptažodis"
-            type="password"
-            :name="password"
-            @onChange="(v) => (password = v)"
-          />
+          <BaseInput placeholder="Slaptažodis" type="password" :name="password" @onChange="(v) => (password = v)" />
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton
-            name="patvirtinti"
-            @click="confirmHandler"
-            :isLoading="isLoading"
-          />
+          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
         </div>
       </div>
     </div>

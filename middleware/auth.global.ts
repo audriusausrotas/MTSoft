@@ -1,31 +1,29 @@
 import { useCookie } from "nuxt/app";
 import type { User } from "~/data/interfaces";
-import { fetchProjects } from "~/utils/fetchData";
+import {
+  fetchUser,
+  fetchGates,
+  fetchGamyba,
+  fetchProjects,
+  fetchProducts,
+  fetchUsers,
+  fetchArchive,
+} from "~/utils/fetchData";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
   const cookie = useCookie("mtud");
-  const useProjects = useProjectsStore();
-  const useProducts = useProductsStore();
-  const useGamyba = useGamybaStore();
-  const useGates = useGateStore();
 
   if (!to.path.includes("pasiulymas")) {
     // authentificate in server from cookie
     if (cookie.value) {
       if (!useUser.user) {
-        const { data }: any = await useFetch("/api/auth", {
-          method: "post",
-          body: {},
-        });
-
-        if (!data.value.data) {
+        const data: any = await fetchUser();
+        if (!data) {
           if (to.path !== "/login") {
             useUser.logout();
             return navigateTo("/login");
           }
-        } else {
-          useUser.setUser({ ...data.value.data });
         }
       }
     } else {
@@ -35,85 +33,54 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
 
+    if (to.path.includes("archyvas")) {
+      await fetchArchive();
+    }
+
     // fetches data in back/front
-    if (useProjects.projects.length === 0) {
-      const { data: gates }: any = await useFetch("/api/gates");
-      if (gates.value.success) {
-        useGates.addGates(gates.value.data);
-      }
 
-      if (useGamyba.gamybaList.length === 0) {
-        const { data: gamyba }: any = await useFetch("/api/gamyba");
-        if (gamyba.value.success) {
-          useGamyba.addAll(gamyba.value.data);
-        }
-      }
-
-      if (
-        useUser.user?.accountType === "Administratorius" ||
-        useUser.user?.accountType === "Paprastas vartotojas"
-      ) {
-        if (useProjects.projects.length === 0) {
-          const { data: projects }: any = await useFetch("/api/project");
-          if (projects.value.success) {
-            useProjects.addProjects(projects.value.data);
+    if (
+      useUser.user?.accountType === "Administratorius" ||
+      useUser.user?.accountType === "Paprastas vartotojas"
+    ) {
+      await fetchProjects();
+      await fetchProducts();
+      await fetchUsers();
+      await fetchGates();
+      await fetchGamyba();
+    } else {
+      switch (useUser.user?.accountType) {
+        case "Vartonas":
+          await fetchGates();
+          await fetchUsers();
+          if (to.path !== "/profilis") {
+            if (to.path !== "/vartonas") return navigateTo("/vartonas");
           }
-        }
+          break;
 
-        if (useProducts.products.length === 0) {
-          const { data: products }: any = await useFetch("/api/products");
-          if (products.value.success) {
-            useProducts.addProducts(products.value.data);
+        case "Gigasta":
+          await fetchGates();
+          await fetchUsers();
+          if (to.path !== "/profilis") {
+            if (to.path !== "/gigasta") return navigateTo("/gigasta");
           }
-        }
-        if (useUser.users.length === 0) {
-          const { data: users }: any = await useFetch("/api/users");
-          if (users.value.success) {
-            useUser.setUsers([...users.value.data]);
-          }
-        }
-      } else {
-        switch (useUser.user?.accountType) {
-          case "Vartonas":
-            if (to.path !== "/profilis") {
-              if (to.path !== "/vartonas") return navigateTo("/vartonas");
+          break;
 
-              if (useUser.users.length === 0) {
-                const { data: users }: any = await useFetch("/api/users");
-                if (users.value.success) {
-                  const vartonasUsers = users.value.data.filter(
-                    (user: User) => user.accountType === "Vartonas"
-                  );
-                  useUser.setUsers([...vartonasUsers]);
-                }
-              }
-            }
-            break;
-          case "Gigasta":
-            if (to.path !== "/profilis") {
-              if (to.path !== "/gigasta") return navigateTo("/gigasta");
-
-              if (useUser.users.length === 0) {
-                const { data: users }: any = await useFetch("/api/users");
-                if (users.value.success) {
-                  const gigastaUsers = users.value.data.filter(
-                    (user: User) => user.accountType === "Gigasta"
-                  );
-                  useUser.setUsers([...gigastaUsers]);
-                }
-              }
-            }
-            break;
-
-          case "Montavimas":
+        case "Montavimas":
+          if (to.path !== "/profilis") {
             if (to.path !== "/montavimas") return navigateTo("/montavimas");
-            break;
-          case "Gamyba":
+          }
+          break;
+
+        case "Gamyba":
+          await fetchGamyba();
+          if (to.path !== "/profilis") {
             if (!to.path.includes("/gamyba")) return navigateTo("/gamyba");
-            break;
-          default:
-            break;
-        }
+          }
+          break;
+
+        default:
+          break;
       }
     }
 
@@ -127,37 +94,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
   } else {
     if (process.server) {
-      const { data: offer }: any = await useFetch("/api/order", {
-        method: "post",
-        body: { _id: to.params.id },
-      });
-      if (offer.value.success) {
-        const useOffer = useOfferStore();
-        if (
-          offer.value.data.status === "Nepatvirtintas" ||
-          offer.value.data.status === "Netinkamas"
-        ) {
-          const currentDate = new Date();
-          const exparationDate = new Date(offer.value.data.dateExparation);
-          if (currentDate < exparationDate) {
-            useOffer.setOffer({ ...offer.value.data });
-          } else {
-            const data: any = await $fetch("/api/archive", {
-              method: "post",
-              body: { _id: offer.value.data._id },
-            } as any);
-
-            if (data.success) {
-              const pathName = to.name?.toString();
-              if (!pathName?.includes("negalioja")) {
-                return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-              }
-            }
-          }
-        } else {
-          useOffer.setOffer({ ...offer.value.data });
-        }
-      } else {
+      const success = await fetchOrder(to);
+      if (!success) {
         const pathName = to.name?.toString();
         if (!pathName?.includes("negalioja")) {
           return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);

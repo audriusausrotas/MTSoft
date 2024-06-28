@@ -7,7 +7,12 @@ const useUser = useUserStore();
 
 const isOpen = ref<boolean>(false);
 const initials = computed(() => useUser?.user?.username.slice(0, 2));
-const currentPath = ref("");
+const currentPath = ref("")
+
+
+const currentMenu = topBarLinks.find(item => item.name === useUser.user?.accountType)
+
+console.log(currentMenu)
 
 function routeHandler(newPath: string) {
   if (newPath === "/") currentPath.value = "Projektai";
@@ -32,12 +37,11 @@ function logoutHandler(): void {
 </script>
 
 <template>
-  <div v-if="useUser?.user?.username" class="shadow-bottom ">
+  <div v-if="useUser?.user" class="shadow-bottom ">
     <div class="flex flex-col items-center gap-4 px-12 py-4 m-auto sm:flex-row max-w-custom">
       <div class="flex flex-col items-center justify-center flex-1 sm:flex-row sm:justify-between">
         <NuxtImg src="/images/logo.png" alt="Moderni Tvora logotipas" width="86" height="48" decoding="auto"
           loading="lazy" :ismap="true" />
-        <!-- <SearchBar class="hidden lg:flex" /> -->
 
         <div v-if="useUser.user.accountType === 'Administratorius'" class="flex gap-4 justify-center flex-wrap flex-1">
           <NuxtLink v-for="link in topBarLinks" :to="link.link"
@@ -46,6 +50,14 @@ function logoutHandler(): void {
             <NuxtImg v-if="link.iconPath !== ''" :src="link.iconPath" width="20" height="20" decoding="auto"
               loading="lazy" :ismap="true" />
             {{ link.name }}
+          </NuxtLink>
+        </div>
+        <div v-else>
+          <NuxtLink :to="currentMenu?.link"
+            class="flex px-4 py-2 bg-red-full text-white rounded-md w-40 justify-center hover:bg-red-500 ">
+            <NuxtImg v-if="currentMenu?.iconPath !== ''" :src="currentMenu?.iconPath" width="20" height="20"
+              decoding="auto" loading="lazy" :ismap="true" />
+            Pagrindinis
           </NuxtLink>
         </div>
       </div>

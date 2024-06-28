@@ -172,6 +172,13 @@ checkGates();
       <div v-if="open"
         class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
         :class="props.archive ? 'h-28' : 'h-64'">
+
+        <div v-if="!props.archive" @click="openInNewHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
+          <NuxtImg src="/icons/newtab.svg" alt="edit button" width="20" height="20" />
+          <p>Atidaryti pasiūlymą</p>
+        </div>
+
         <div @click="previewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
           <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" height="20" />
@@ -194,12 +201,6 @@ checkGates();
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
           <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
           <p>Kopijuoti nuorodą</p>
-        </div>
-
-        <div v-if="!props.archive" @click="openInNewHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/newtab.svg" alt="edit button" width="20" height="20" />
-          <p>Atidaryti pasiūlymą</p>
         </div>
 
         <div @click="archiveHandler"

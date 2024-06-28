@@ -36,7 +36,7 @@ const changeHandler = (value: string): void => {
       props.disable ? '' : 'cursor-pointer',
     ]">
         <div class="flex gap-3">
-          <NuxtImg v-if="props.name === 'verified'" :src="selectedValue === 'patvirtintas'
+          <NuxtImg v-if="props.name === 'verified'" :src="props.defaultValue === 'patvirtintas'
       ? '/icons/ellipseg.svg'
       : '/icons/ellipser.svg'
       " width="8" height="8" decoding="auto" loading="lazy" :ismap="true" />

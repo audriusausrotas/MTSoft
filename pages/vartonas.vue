@@ -9,6 +9,7 @@ const filteredGates = computed(() => {
     return useGates.gates.vartonas.filter(item => item.manager === useUser.user?.email);
   }
 });
+
 </script>
 
 <template>

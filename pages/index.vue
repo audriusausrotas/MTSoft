@@ -33,7 +33,10 @@ const statusFilters = ["Visi", ...status];
         " />
       <BaseInput placeholder="Paieška" label="Paieška" width="w-96" variant="light" @onChange="(value: string): void =>
         useProjects.searchProjects(value)
-        " />
+        ">
+        <NuxtImg src="/icons/search.svg" width="14" height="14" alt="search icon" decoding="auto" loading="lazy"
+          :ismap="true" />
+      </BaseInput>
     </div>
 
     <div class="flex flex-col gap-4">

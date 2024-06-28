@@ -12,8 +12,8 @@ const route = useRoute();
       <div class="border border-red-full w-full md:hidden"></div>
       <div class="flex justify-center flex-wrap">
         <BaseOrderLink name="pasiūlymas" :id="route.params.id" />
-        <BaseOrderLink name="tvoros informacija" :id="route.params.id + '/tvora'" />
-        <BaseOrderLink name="eiga" :id="route.params.id + '/eiga'" />
+        <BaseOrderLink name="tvoros informacija" :id="route.params.id + '/tvoros_informacija'" />
+        <BaseOrderLink name="Bendra informacija" :id="route.params.id + '/bendra_informacija'" />
 
         <NuxtLink
           class="hover:text-white py-3 w-48 rounded-lg capitalize text-center hover:bg-red-full hover:cursor-pointer font-medium"
