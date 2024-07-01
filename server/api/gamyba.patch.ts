@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
     if (option === "bindings") updatePath = `bindings.${index}.postone`;
     else updatePath = `fences.${index}.measures.${measureIndex}.postone`;
 
-    console.log(updatePath, value, option);
-
     const project = await gamybaSchema.findOneAndUpdate(
       { _id: objectId },
       { $set: { [updatePath]: +value } },

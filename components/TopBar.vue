@@ -12,8 +12,6 @@ const currentPath = ref("")
 
 const currentMenu = topBarLinks.find(item => item.name === useUser.user?.accountType)
 
-console.log(currentMenu)
-
 function routeHandler(newPath: string) {
   if (newPath === "/") currentPath.value = "Projektai";
   else {

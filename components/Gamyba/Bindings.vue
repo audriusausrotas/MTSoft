@@ -17,9 +17,6 @@ const height = ref<number>(props.binding.height)
 const quantity = ref<number>(props.binding.quantity)
 const color = ref<string>(props.binding.color)
 
-
-console.log(type)
-
 const saveHandler = async (field: string) => {
     const response: any = await $fetch(
         "/api/gamyba",
@@ -76,13 +73,12 @@ const deleteHandler = async () => {
         "/api/bindings",
         {
             method: 'delete',
-            // gal vistik binding.id naudot..?
-            body: { _id: props._id, index: props.index, },
+            body: { _id: props._id, bindingId: props.binding.id, },
         }
     );
 
     if (response.success) {
-
+        useGamyba.updateGamyba(props._id, response.data)
         setIsError(false);
         setError(response.message);
 
@@ -185,7 +181,7 @@ watch(color, (newColor) => {
             :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
         <div class="element print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
             @click="deleteHandler">
-            <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+            <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
         </div>
     </div>
 

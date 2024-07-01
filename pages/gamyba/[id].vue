@@ -71,14 +71,18 @@ const newBindingHandler = async () => {
         "/api/bindings",
         {
             method: 'post',
-            body: { _id: order._id, type: type.value, height: height.value, quantity: quantity.value, color: color.value },
+            body: { _id: order.value._id, type: type.value, height: height.value, quantity: quantity.value, color: color.value },
         }
     );
 
     if (response.success) {
-
+        useGamyba.addComment(order!.value._id, response.data);
         setIsError(false);
         setError(response.message);
+        type.value = ""
+        height.value = ""
+        quantity.value = ""
+        color.value = ""
 
     } else {
         setError(response.message);
@@ -115,7 +119,8 @@ const newBindingHandler = async () => {
                 <p class="element">Pagaminta</p>
                 <p class="element print:hidden">Veiksmai</p>
                 <p class="element flex justify-center items-center print:hidden">
-                    <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+                    <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" loading="lazy"
+                        :ismap="true" />
                 </p>
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"

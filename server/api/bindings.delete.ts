@@ -5,20 +5,15 @@ export default defineEventHandler(async (event) => {
 
   const objectId = new mongoose.Types.ObjectId(_id);
 
-  // const data = await gamybaSchema.findOneAndDelete(objectId);
+  const order = await gamybaSchema.findById(objectId);
 
-  // if (!data)
-  // return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!order)
+    return { success: false, data: null, message: "užsakymas nerastas" };
 
-  // if (completed) {
-  //   const project = await projectSchema.findById(objectId);
+  order!.bindings = order.bindings!.filter((item) => item.id !== bindingId);
 
-  //   if (!project) {
-  //     return { success: true, data: null, message: "Projektas neegzistuoja" };
-  //   }
+  //@ts-ignore
+  const data = await order.save();
 
-  //   project.status = "Pagamintas";
-  //   project.save();
-  // }
-  return { success: true, data: null, message: "Uzsakymas istrintas" };
+  return { success: true, data: data, message: "Uzsakymas istrintas" };
 });

@@ -1,4 +1,4 @@
-import type { Gamyba } from "~/data/interfaces";
+import type { Gamyba, Bindings } from "~/data/interfaces";
 
 export const useGamybaStore = defineStore("gamyba", {
   state: () => ({

@@ -1,24 +1,32 @@
 import mongoose from "mongoose";
+import type { Gamyba } from "~/data/interfaces";
+import { v4 } from "uuid";
 
 export default defineEventHandler(async (event) => {
   const { _id, type, height, quantity, color } = await readBody(event);
 
   const objectId = new mongoose.Types.ObjectId(_id);
 
-  // const data = await gamybaSchema.findOneAndDelete(objectId);
+  const order: Gamyba | null = await gamybaSchema.findById(objectId);
 
-  // if (!data)
-  // return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!order)
+    return { success: false, data: null, message: "užsakymas nerastas" };
 
-  // if (completed) {
-  //   const project = await projectSchema.findById(objectId);
+  const newBinding = {
+    id: v4(),
+    type,
+    height,
+    quantity,
+    color,
+    cut: undefined,
+    done: undefined,
+    postone: false,
+  };
 
-  //   if (!project) {
-  //     return { success: true, data: null, message: "Projektas neegzistuoja" };
-  //   }
+  order.bindings?.push(newBinding);
 
-  //   project.status = "Pagamintas";
-  //   project.save();
-  // }
-  return { success: true, data: null, message: "Uzsakymas istrintas" };
+  //@ts-ignore
+  const data = await order.save();
+
+  return { success: true, data: data, message: "Apkaustas pridėtas" };
 });
