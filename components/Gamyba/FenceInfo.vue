@@ -15,7 +15,7 @@ const saveHandler = async (field: string) => {
         "/api/gamyba",
         {
             method: 'put',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? cut.value : done.value, field, option: 'fences' },
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : +done.value, field, option: 'fences' },
         }
     );
     if (response.success) {
@@ -121,15 +121,13 @@ watch(done, (newDone) => {
             :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
             <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('cut')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md print:hidden" />
+                :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer  hover:bg-pink-500 rounded-md " />
         </div>
         <div class="element flex"
             :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
             <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('done')"
-                class="hover:cursor-pointer hover:bg-pink-500 rounded-md print:hidden" />
+                :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-pink-500 rounded-md " />
         </div>
         <button class=" element print:hidden hover:bg-red-full hover:text-white"
             @click="printHandler">Spausdinti</button>

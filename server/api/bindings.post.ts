@@ -1,0 +1,24 @@
+import mongoose from "mongoose";
+
+export default defineEventHandler(async (event) => {
+  const { _id, type, height, quantity, color } = await readBody(event);
+
+  const objectId = new mongoose.Types.ObjectId(_id);
+
+  // const data = await gamybaSchema.findOneAndDelete(objectId);
+
+  // if (!data)
+  // return { success: false, data: null, message: "užsakymas nerastas" };
+
+  // if (completed) {
+  //   const project = await projectSchema.findById(objectId);
+
+  //   if (!project) {
+  //     return { success: true, data: null, message: "Projektas neegzistuoja" };
+  //   }
+
+  //   project.status = "Pagamintas";
+  //   project.save();
+  // }
+  return { success: true, data: null, message: "Uzsakymas istrintas" };
+});

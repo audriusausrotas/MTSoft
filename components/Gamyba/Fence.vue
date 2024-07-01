@@ -39,12 +39,12 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
     display: grid;
     grid-template-columns: 40px 80px 100px 100px 100px 100px 100px;
     row-gap: 10px;
+    width: fit-content
 }
 
 .container-border {
     border-left: 1px solid black;
     border-bottom: 1px solid black;
-
 }
 
 .element {

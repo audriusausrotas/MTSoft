@@ -7,6 +7,11 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
+const type = ref<string>("")
+const height = ref<string>("")
+const quantity = ref<string>("")
+const color = ref<string>("")
+
 console.log(order.value)
 const confirmHandler = async () => {
     const response: any = await $fetch(
@@ -61,6 +66,25 @@ const deleteHandler = async (value: string, comment: string) => {
     }
 }
 
+const newBindingHandler = async () => {
+    const response: any = await $fetch(
+        "/api/bindings",
+        {
+            method: 'post',
+            body: { _id: order._id, type: type.value, height: height.value, quantity: quantity.value, color: color.value },
+        }
+    );
+
+    if (response.success) {
+
+        setIsError(false);
+        setError(response.message);
+
+    } else {
+        setError(response.message);
+    }
+}
+
 </script>
 
 <template>
@@ -79,26 +103,39 @@ const deleteHandler = async (value: string, comment: string) => {
                 :_id="order._id" />
         </div>
         <div class="flex flex-col">
+            <div class="text-2xl font-bold">Apkaustai</div>
+
             <div class="container container-border border-t border-black flex-1">
                 <p class="element">Nr</p>
-                <p class="element">Ilgis</p>
-                <p class="element">Elementai</p>
                 <p class="element">tipas</p>
+                <p class="element">Ilgis</p>
+                <p class="element">Kiekis</p>
                 <p class="element">spalva</p>
-                <p class="element">Išpjauti</p>
-                <p class="element">Pagaminti</p>
+                <p class="element">Išpjauta</p>
+                <p class="element">Pagaminta</p>
                 <p class="element print:hidden">Veiksmai</p>
+                <p class="element flex justify-center items-center print:hidden">
+                    <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" />
+                </p>
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
                 :_id="order._id" />
+            <div class="border flex border-black border-r-0 mt-2 w-fit print:hidden">
+                <input type="text" class="element w-40" v-model="type" placeholder="tipas" />
+                <input type="number" class="element w-24" v-model="height" placeholder="ilgis" />
+                <input type="number" class="element w-24" v-model="quantity" placeholder="kiekis" />
+                <input type="text" class="element w-24" v-model="color" placeholder="spalva" />
+                <button class=" element p hover:bg-red-full hover:text-white w-20"
+                    @click="newBindingHandler">Išsaugoti</button>
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 80px 80px 120px 80px 100px 100px 100px;
-    row-gap: 10px;
+    grid-template-columns: 40px 130px 80px 80px 80px 80px 90px 100px 40px;
+    width: fit-content
 }
 
 .container-border {
