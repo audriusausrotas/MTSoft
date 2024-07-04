@@ -15,10 +15,11 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
             <p v-if="props.fence.aditional">{{ props.fence.aditional }} </p>
         </div>
 
-        <div class="container container-border border-t border-black flex-1">
+        <div class="container container-border border-t border-black flex-1 select-none">
             <p class="element">Nr</p>
             <p class="element">Ilgis</p>
             <p class="element">Elementai</p>
+            <p class="element">Aukštis</p>
             <p class="element">Išpjauti</p>
             <p class="element">Pagaminti</p>
             <p class="element print:hidden">Veiksmai</p>
@@ -37,7 +38,7 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px;
+    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px 100px;
     row-gap: 10px;
     width: fit-content
 }

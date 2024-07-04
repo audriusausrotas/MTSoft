@@ -106,7 +106,7 @@ const newBindingHandler = async () => {
             <GamybaFence v-for="fence, index in order?.fences" :key="fence._id" :fence="fence" :fenceIndex="index"
                 :_id="order._id" />
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col select-none">
             <div class="text-2xl font-bold">Apkaustai</div>
 
             <div class="container container-border border-t border-black flex-1">
@@ -119,18 +119,17 @@ const newBindingHandler = async () => {
                 <p class="element">Pagaminta</p>
                 <p class="element print:hidden">Veiksmai</p>
                 <p class="element flex justify-center items-center print:hidden">
-                    <NuxtImg src="/icons/delete.svg" width="20" height="20" decoding="auto" loading="lazy"
-                        :ismap="true" />
                 </p>
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
                 :_id="order._id" />
-            <div class="border flex border-black border-r-0 mt-2 w-fit print:hidden">
-                <input type="text" class="element w-40" v-model="type" placeholder="tipas" />
+            <div class="mt-4 text-xl font-semibold"> Pridėti naują apkaustą</div>
+            <div class="border flex border-black border-r-0  w-fit print:hidden">
+                <input type="text" class="element w-[387px]" v-model="type" placeholder="tipas" />
                 <input type="number" class="element w-24" v-model="height" placeholder="ilgis" />
                 <input type="number" class="element w-24" v-model="quantity" placeholder="kiekis" />
                 <input type="text" class="element w-24" v-model="color" placeholder="spalva" />
-                <button class=" element p hover:bg-red-full hover:text-white w-20"
+                <button class=" element hover:bg-red-full hover:text-white w-20"
                     @click="newBindingHandler">Išsaugoti</button>
             </div>
         </div>
@@ -139,7 +138,7 @@ const newBindingHandler = async () => {
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 130px 80px 80px 80px 80px 90px 100px 40px;
+    grid-template-columns: 40px 200px 65px 65px 65px 90px 90px 100px 40px;
     width: fit-content
 }
 

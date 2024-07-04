@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     options: {},
     modelsDir: "models",
   },
-  plugins: [],
   pinia: {
     storesDirs: ["./store/**"],
   },

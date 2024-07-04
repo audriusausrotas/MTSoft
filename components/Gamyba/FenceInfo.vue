@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", "_id"])
 
-const cut = ref<number>(props.data.cut)
-const done = ref<number>(props.data.done)
+const cut = ref<string>(props.data.cut)
+const done = ref<string>(props.data.done)
 const postone = ref<boolean>(props.data.postone)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
@@ -82,6 +82,7 @@ const printHandler = () => {
 
 
 watch(cut, (newCut) => {
+    console.log(newCut)
     if (newCut !== props.data.cut)
         isSavedCut.value = false
     else
@@ -89,7 +90,6 @@ watch(cut, (newCut) => {
 });
 
 watch(done, (newDone) => {
-
     if (newDone !== props.data.done)
         isSavedDone.value = false
     else
@@ -100,38 +100,41 @@ watch(done, (newDone) => {
 
 <template>
     <div v-if="props.data.laiptas.exist"
-        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1">
+        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1 select-none">
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">Laiptas</p>
         <p class="element">{{ props.data.laiptas.direction }}</p>
         <p class="element">{{ props.data.laiptas.value }} cm</p>
     </div>
     <div v-else-if="props.data.kampas.exist"
-        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1">
+        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1 select-none">
         <p class="element">{{ props.index + 1 }}</p>
         <p class="element">Kampas</p>
         <p class="element">{{ props.data.kampas.value }}</p>
         <p class="element">laipsnių</p>
     </div>
-    <div v-else class="container odd:bg-gray-ultra-light container-border flex-1">
+    <div v-else class="container odd:bg-gray-ultra-light container-border flex-1 select-none">
         <p class="element" :class="{ 'bg-red-full text-white': postone }">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
         <p class="element">{{ props.data.elements }}</p>
+        <p class="element">{{ props.data.height }}</p>
         <div class="element flex"
             :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
-            <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer  hover:bg-pink-500 rounded-md " />
+            <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
+                @click="saveHandler('cut')"
+                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
         </div>
         <div class="element flex"
             :class="+done === +props.data.elements ? 'bg-green-400' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
-            <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" width="20" height="20" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer hover:bg-pink-500 rounded-md " />
+            <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
+                @click="saveHandler('done')"
+                class="hover:cursor-pointer hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6" />
         </div>
-        <button class=" element print:hidden hover:bg-red-full hover:text-white"
+        <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
             @click="printHandler">Spausdinti</button>
-        <button class=" element print:hidden hover:bg-red-full hover:text-white"
+        <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
             :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
     </div>
 
