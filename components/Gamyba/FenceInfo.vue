@@ -10,6 +10,8 @@ const isSavedDone = ref<boolean>(true)
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
 
+console.log(props.data)
+
 const saveHandler = async (field: string) => {
     const response: any = await $fetch(
         "/api/gamyba",
