@@ -41,8 +41,8 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
         </div>
 
         <div class="container container-border border-t border-black flex-1 select-none">
-            <p class="element hover:cursor-pointer" @click="filterByIndex">Nr</p>
-            <p class="element hover:cursor-pointer" @click="filterByLength">Ilgis</p>
+            <p class="element hover:cursor-pointer">Nr</p>
+            <p class="element hover:cursor-pointer">Ilgis</p>
             <p class="element">Elementai</p>
             <p class="element">Aukštis</p>
             <p class="element">Išpjauti</p>
