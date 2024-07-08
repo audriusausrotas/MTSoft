@@ -3,30 +3,29 @@ import type { Measure } from "~/data/interfaces"
 import { verticals } from '~/data/selectFieldData';
 const props = defineProps(["fence", "fenceIndex", "_id"])
 
-// const filteredMeasures = reactive({ ...addIndex() })
+const filteredMeasures = reactive({ ...props.fence.measures })
 
 const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas")
 
-// function addIndex() {
-//     return props.fence.measures.map((item: Measure, index: number) => { return { ...item, index } })
-// }
+function addIndex() {
+    return props.fence.measures.map((item: Measure, index: number) => { return { ...item, index } })
+}
 
-// const filterByLength = () => {
-//     const temp = addIndex()
-//     temp.sort((a: any, b: any) => b.length - a.length)
+const filterByLength = () => {
+    const temp = addIndex()
+    temp.sort((a: any, b: any) => b.length - a.length)
 
-//     filteredMeasures.value = { ...temp }
-// }
+    filteredMeasures.value = { ...temp }
+}
 
-// const filterByIndex = () => {
-//     const temp = addIndex()
-//     temp.sort((a: any, b: any) => a.index - b.index)
+const filterByIndex = () => {
+    const temp = addIndex()
+    temp.sort((a: any, b: any) => a.index - b.index)
 
-//     filteredMeasures.value = { ...temp }
-// }
+    filteredMeasures.value = { ...temp }
+}
 
-
-
+filterByIndex()
 
 
 </script>
@@ -41,8 +40,8 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
         </div>
 
         <div class="container container-border border-t border-black flex-1 select-none">
-            <p class="element hover:cursor-pointer">Nr</p>
-            <p class="element hover:cursor-pointer">Ilgis</p>
+            <p class="element hover:cursor-pointer" @click="filterByIndex">Nr</p>
+            <p class="element hover:cursor-pointer" @click="filterByLength">Ilgis</p>
             <p class="element">Elementai</p>
             <p class="element">Aukštis</p>
             <p class="element">Išpjauti</p>
@@ -52,11 +51,10 @@ const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.i
         </div>
 
         <div class="flex flex-col flex-1">
-            <GamybaFenceInfo v-for="data, index in props.fence.measures" :key="index" :data="data"
-                :index="data.index | index" :fenceSide="props.fence.side" :total="props.fence.measures.length"
+            <GamybaFenceInfo v-for="data, index in filteredMeasures.value" :key="index" :data="data"
+                :index="data.index | index" :fenceSide="props.fence.side" :total="filteredMeasures.length"
                 :fenceIndex="props.fenceIndex" :_id="props._id" />
         </div>
-
     </div>
 
 </template>
