@@ -24,8 +24,10 @@ export default defineEventHandler(async (event) => {
   if (gamybaExist) {
     return { success: false, data: null, message: "Objektas jau gaminamas" };
   } else {
+    //main bindings array
     const bindings: Bindings[] = [];
 
+    //adds bindings as new or update quantity of existing
     const addBindings = (color: string, height: number, type: string) => {
       let found = false;
       const quantity = type === "Centrinis" || type === "Elka" ? 2 : 1;
@@ -36,7 +38,7 @@ export default defineEventHandler(async (event) => {
           binding.height === height &&
           binding.type === type
         ) {
-          binding.quantity += quantity;
+          binding.quantity = binding.quantity || 0 + quantity;
           found = true;
           break;
         }
@@ -57,6 +59,7 @@ export default defineEventHandler(async (event) => {
       found = false;
     };
 
+    //fence sides with bindings
     const front: BindingItem[] = [];
     const left: BindingItem[] = [];
     const back: BindingItem[] = [];
@@ -115,6 +118,7 @@ export default defineEventHandler(async (event) => {
       }
     });
 
+    // calculate middle bindings
     const calculateMiddle = (array: BindingItem[]) => {
       if (array.length > 1) {
         let lastElement: BindingItem | null = null;
@@ -156,6 +160,7 @@ export default defineEventHandler(async (event) => {
     calculateMiddle(back);
     calculateMiddle(right);
 
+    // calculate corner bindings
     const calculateCorners = (a: BindingItem[], b: BindingItem[]) => {
       const firstElement = a[a.length - 1];
       const secondElement = b[0];

@@ -7,10 +7,10 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
-const type = ref<string>("")
-const height = ref<string>("")
-const quantity = ref<string>("")
-const color = ref<string>("")
+// const type = ref<string>("")
+// const height = ref<string>("")
+// const quantity = ref<string>("")
+// const color = ref<string>("")
 
 const confirmHandler = async () => {
     const response: any = await $fetch(
@@ -78,10 +78,10 @@ const newBindingHandler = async () => {
         useGamyba.addComment(order!.value._id, response.data);
         setIsError(false);
         setError(response.message);
-        type.value = ""
-        height.value = ""
-        quantity.value = ""
-        color.value = ""
+        // type.value = ""
+        // height.value = ""
+        // quantity.value = ""
+        // color.value = ""
 
     } else {
         setError(response.message);

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
     const project = await gamybaSchema.findOneAndUpdate(
       { _id: objectId },
-      { $set: { [updatePath]: +value } },
+      { $set: { [updatePath]: value } },
       { new: true }
     );
 
