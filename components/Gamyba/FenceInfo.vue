@@ -4,8 +4,10 @@ const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", 
 const cut = ref<string>(props.data.cut)
 const done = ref<string>(props.data.done)
 const elements = ref<string>(props.data.elements)
+const height = ref<string>(props.data.height)
 const postone = ref<boolean>(props.data.postone)
 const isSavedElements = ref<boolean>(true)
+const isSavedHeight = ref<boolean>(true)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
 
@@ -18,7 +20,7 @@ const saveHandler = async (field: string) => {
         "/api/gamyba",
         {
             method: 'put',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : field === 'done' ? +done.value : +elements.value, field, option: 'fences' },
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : field === 'done' ? +done.value : field === 'elements' ? +elements.value : +height.value, field, option: 'fences' },
         }
     );
     if (response.success) {
@@ -30,7 +32,9 @@ const saveHandler = async (field: string) => {
             isSavedCut.value = true
         else if (field === 'elements')
             isSavedElements.value = true
-        else
+        else if (field === 'height')
+            isSavedHeight.value = true
+        else if (field === 'done')
             isSavedDone.value = true
 
     } else {
@@ -108,6 +112,13 @@ watch(elements, (newElements) => {
         isSavedElements.value = true
 });
 
+watch(height, (newHeight) => {
+    if (+newHeight !== +props.data.height)
+        isSavedHeight.value = false
+    else
+        isSavedHeight.value = true
+});
+
 </script>
 
 <template>
@@ -134,7 +145,12 @@ watch(elements, (newElements) => {
                 loading="lazy" :ismap="true" @click="saveHandler('elements')"
                 class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
         </div>
-        <p class="element">{{ props.data.height }}</p>
+        <div class="element  flex">
+            <input type="number" v-model="height">
+            <NuxtImg width="20" height="20" v-if="!isSavedHeight" src="/icons/checked.svg" decoding="auto"
+                loading="lazy" :ismap="true" @click="saveHandler('height')"
+                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
+        </div>
         <div class="element flex"
             :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
