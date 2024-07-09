@@ -3,21 +3,22 @@ const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", 
 
 const cut = ref<string>(props.data.cut)
 const done = ref<string>(props.data.done)
+const elements = ref<string>(props.data.elements)
 const postone = ref<boolean>(props.data.postone)
+const isSavedElements = ref<boolean>(true)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
 
+
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
-
-console.log(props.data)
 
 const saveHandler = async (field: string) => {
     const response: any = await $fetch(
         "/api/gamyba",
         {
             method: 'put',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : +done.value, field, option: 'fences' },
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : field === 'done' ? +done.value : +elements.value, field, option: 'fences' },
         }
     );
     if (response.success) {
@@ -25,11 +26,13 @@ const saveHandler = async (field: string) => {
         setIsError(false);
         setError(response.message);
 
-        if (field === 'cut') {
+        if (field === 'cut')
             isSavedCut.value = true
-        } else {
+        else if (field === 'elements')
+            isSavedElements.value = true
+        else
             isSavedDone.value = true
-        }
+
     } else {
         setError(response.message);
     }
@@ -98,6 +101,13 @@ watch(done, (newDone) => {
         isSavedDone.value = true
 });
 
+watch(elements, (newElements) => {
+    if (+newElements !== +props.data.elements)
+        isSavedElements.value = false
+    else
+        isSavedElements.value = true
+});
+
 </script>
 
 <template>
@@ -118,7 +128,12 @@ watch(done, (newDone) => {
     <div v-else class="container odd:bg-gray-ultra-light container-border flex-1 select-none">
         <p class="element" :class="{ 'bg-red-full text-white': postone }">{{ props.index + 1 }}</p>
         <p class="element">{{ props.data.length }}</p>
-        <p class="element">{{ props.data.elements }}</p>
+        <div class="element  flex">
+            <input type="number" v-model="elements">
+            <NuxtImg width="20" height="20" v-if="!isSavedElements" src="/icons/checked.svg" decoding="auto"
+                loading="lazy" :ismap="true" @click="saveHandler('elements')"
+                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+        </div>
         <p class="element">{{ props.data.height }}</p>
         <div class="element flex"
             :class="+cut === +props.data.elements ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">

@@ -3,7 +3,10 @@ import type { Measure } from "~/data/interfaces"
 import { verticals } from '~/data/selectFieldData';
 const props = defineProps(["fence", "fenceIndex", "_id"])
 
-const filteredMeasures = reactive({ ...props.fence.measures })
+const filterIndex = ref<boolean>(false)
+const filterLength = ref<boolean>(false)
+
+const filteredMeasures = ref([...props.fence.measures])
 
 const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas")
 
@@ -15,17 +18,22 @@ const filterByLength = () => {
     const temp = addIndex()
     temp.sort((a: any, b: any) => b.length - a.length)
 
-    filteredMeasures.value = { ...temp }
+    filteredMeasures.value = [...temp]
+    filterLength.value = true
+    filterIndex.value = false
+
 }
 
 const filterByIndex = () => {
     const temp = addIndex()
     temp.sort((a: any, b: any) => a.index - b.index)
 
-    filteredMeasures.value = { ...temp }
+    filteredMeasures.value = [...temp]
+    filterLength.value = false
+    filterIndex.value = true
 }
 
-filterByIndex()
+filterByLength()
 
 
 </script>
@@ -40,8 +48,14 @@ filterByIndex()
         </div>
 
         <div class="container container-border border-t border-black flex-1 select-none">
-            <p class="element hover:cursor-pointer" @click="filterByIndex">Nr</p>
-            <p class="element hover:cursor-pointer" @click="filterByLength">Ilgis</p>
+            <p class="element hover:cursor-pointer flex gap-1 justify-center" @click="filterByIndex">Nr
+                <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" :ismap="true" loading="lazy"
+                    :class="filterIndex ? 'rotate-180' : ''" class="transition-all" />
+            </p>
+            <p class="element hover:cursor-pointer flex gap-1 justify-center" @click="filterByLength">Ilgis
+                <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" :ismap="true" loading="lazy"
+                    :class="filterLength ? 'rotate-180' : ''" class="transition-all" />
+            </p>
             <p class="element">Elementai</p>
             <p class="element">Aukštis</p>
             <p class="element">Išpjauti</p>
@@ -51,9 +65,9 @@ filterByIndex()
         </div>
 
         <div class="flex flex-col flex-1">
-            <GamybaFenceInfo v-for="data, index in filteredMeasures.value" :key="index" :data="data"
-                :index="data.index | index" :fenceSide="props.fence.side" :total="filteredMeasures.length"
-                :fenceIndex="props.fenceIndex" :_id="props._id" />
+            <GamybaFenceInfo v-for="data in filteredMeasures" :key="data.index" :data="data" :index="data.index"
+                :fenceSide="props.fence.side" :total="filteredMeasures.length" :fenceIndex="props.fenceIndex"
+                :_id="props._id" />
         </div>
     </div>
 
