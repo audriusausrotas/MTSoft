@@ -8,12 +8,12 @@ export default defineEventHandler(async (event) => {
   const order = await gamybaSchema.findById(objectId);
 
   if (!order)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+    return { success: false, data: null, message: "Užsakymas nerastas" };
 
   order!.bindings = order.bindings!.filter((item) => item.id !== bindingId);
 
   //@ts-ignore
   const data = await order.save();
 
-  return { success: true, data: data, message: "Uzsakymas istrintas" };
+  return { success: true, data: data, message: "Apkaustas ištrintas" };
 });

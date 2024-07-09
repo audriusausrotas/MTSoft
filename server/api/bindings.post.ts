@@ -14,10 +14,10 @@ export default defineEventHandler(async (event) => {
 
   const newBinding = {
     id: v4(),
-    type,
-    height,
-    quantity,
-    color,
+    type: undefined,
+    height: undefined,
+    quantity: undefined,
+    color: undefined,
     cut: undefined,
     done: undefined,
     postone: false,

@@ -12,7 +12,6 @@ const height = ref<string>("")
 const quantity = ref<string>("")
 const color = ref<string>("")
 
-console.log(order.value)
 const confirmHandler = async () => {
     const response: any = await $fetch(
         "/api/gamyba",
@@ -71,7 +70,7 @@ const newBindingHandler = async () => {
         "/api/bindings",
         {
             method: 'post',
-            body: { _id: order.value._id, type: type.value, height: height.value, quantity: quantity.value, color: color.value },
+            body: { _id: order.value._id },
         }
     );
 
@@ -107,7 +106,9 @@ const newBindingHandler = async () => {
                 :_id="order._id" />
         </div>
         <div class="flex flex-col select-none">
-            <div class="text-2xl font-bold">Apkaustai</div>
+            <div class="text-2xl font-bold">Apkaustai
+
+            </div>
 
             <div class="container container-border border-t border-black flex-1">
                 <p class="element">Nr</p>
@@ -123,7 +124,8 @@ const newBindingHandler = async () => {
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
                 :_id="order._id" />
-            <div class="mt-4 text-xl font-semibold"> Pridėti naują apkaustą</div>
+            <BaseButton name="Pridėti naują" class="mt-4" @click="newBindingHandler" />
+            <!-- <div class="mt-4 text-xl font-semibold"> Pridėti naują apkaustą</div>
             <div class="border flex border-black border-r-0  w-fit print:hidden">
                 <input type="text" class="element w-[387px]" v-model="type" placeholder="tipas" />
                 <input type="number" class="element w-24" v-model="height" placeholder="ilgis" />
@@ -131,7 +133,7 @@ const newBindingHandler = async () => {
                 <input type="text" class="element w-24" v-model="color" placeholder="spalva" />
                 <button class=" element hover:bg-red-full hover:text-white w-20"
                     @click="newBindingHandler">Išsaugoti</button>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

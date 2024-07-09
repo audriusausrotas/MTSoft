@@ -332,10 +332,10 @@ export interface Comment {
 
 export interface Bindings {
   id: string;
-  color: string;
-  height: number;
-  type: string;
-  quantity: number;
+  color: string | undefined;
+  height: number | undefined;
+  type: string | undefined;
+  quantity: number | undefined;
   cut: number | undefined;
   done: number | undefined;
   postone: boolean;
