@@ -2,6 +2,7 @@
 const props = defineProps(["binding", "index", "_id"])
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
+const useUser = useUserStore()
 
 const cut = ref<number>(props.binding.cut)
 const done = ref<number>(props.binding.done)
@@ -69,6 +70,12 @@ const postoneHandler = async () => {
 }
 
 const deleteHandler = async () => {
+
+    if (useUser.user?.accountType !== "Administratorius") {
+        setError("Ištrinti gali tik administratorius");
+        return
+    }
+
     const response: any = await $fetch(
         "/api/bindings",
         {

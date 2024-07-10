@@ -1,6 +1,9 @@
 <script setup lang='ts'>
 const props = defineProps(["data", "fenceIndex", "index", "fenceSide", "total", "_id"])
 
+const useGamyba = useGamybaStore()
+const useUser = useUserStore()
+
 const cut = ref<string>(props.data.cut)
 const done = ref<string>(props.data.done)
 const elements = ref<string>(props.data.elements)
@@ -15,7 +18,6 @@ const isSavedDone = ref<boolean>(true)
 
 
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore()
 
 const saveHandler = async (field: string) => {
     const response: any = await $fetch(
@@ -66,6 +68,12 @@ const postoneHandler = async () => {
 }
 
 const deleteHandler = async () => {
+
+    if (useUser.user?.accountType !== "Administratorius") {
+        setError("Ištrinti gali tik administratorius");
+        return
+    }
+
     const response: any = await $fetch(
         "/api/gamybaMeasure",
         {
