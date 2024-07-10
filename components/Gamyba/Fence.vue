@@ -59,7 +59,10 @@ filterByIndex()
 
 watch(() => props.fence.measures, (newMeasures) => {
     filteredMeasures.value = [...newMeasures];
-    filterByLength();
+    if (filterIndex.value)
+        filterByIndex();
+    else if (filterLength.value)
+        filterByLength()
 }, { deep: true })
 
 

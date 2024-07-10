@@ -25,6 +25,8 @@ const clickHandler = () => {
     navigateTo(`/gamyba/${props.order._id}`)
 }
 
+
+
 </script>
 
 <template>
