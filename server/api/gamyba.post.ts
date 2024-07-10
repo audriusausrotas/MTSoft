@@ -213,7 +213,7 @@ export default defineEventHandler(async (event) => {
     });
 
     const newGamyba = new gamybaSchema({
-      _id: project._id,
+      _id: project._id.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,

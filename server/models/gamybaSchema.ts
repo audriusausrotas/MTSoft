@@ -31,14 +31,31 @@ const measureSchema = new Schema({
   MeasureSpace: { type: Number, default: 0 },
   elements: { type: Number, default: 0 },
   gates: { type: gatesSchema, default: () => ({}) },
-  cut: { type: Number, default: 0 },
-  done: { type: Number, default: 0 },
+  cut: { type: Number, default: undefined },
+  done: { type: Number, default: undefined },
   postone: { type: Boolean, default: false },
   kampas: { type: kampasSchema, default: () => ({}) },
   laiptas: { type: laiptasSchema, default: () => ({}) },
 });
 
 const fenceSchema = new Schema({
+  id: String,
+  side: String,
+  type: String,
+  color: String,
+  material: String,
+  services: String,
+  seeThrough: String,
+  direction: String,
+  parts: String,
+  aditional: String,
+  twoSided: String,
+  bindings: String,
+  anchoredPoles: String,
+  space: Number,
+  elements: Number,
+  totalLength: Number,
+  totalQuantity: Number,
   measures: { type: [measureSchema], default: [] },
 });
 
@@ -53,7 +70,7 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
       default: [],
     },
     bindings: {
-      type: Array,
+      type: [Object],
       required: false,
       default: [],
     },
