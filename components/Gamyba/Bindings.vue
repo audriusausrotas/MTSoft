@@ -26,7 +26,7 @@ const saveHandler = async (field: string) => {
         }
     );
     if (response.success) {
-        useGamyba.updateGamyba(props._id, response.data)
+        useGamyba.updateOrder(props._id, response.data)
         setIsError(false);
         setError(response.message);
 
@@ -58,7 +58,7 @@ const postoneHandler = async () => {
     );
 
     if (response.success) {
-        useGamyba.updateGamyba(props._id, response.data)
+        useGamyba.updateOrder(props._id, response.data)
         postone.value = !postone.value;
         setIsError(false);
         setError(response.message);
@@ -78,7 +78,7 @@ const deleteHandler = async () => {
     );
 
     if (response.success) {
-        useGamyba.updateGamyba(props._id, response.data)
+        useGamyba.updateOrder(props._id, response.data)
         setIsError(false);
         setError(response.message);
 

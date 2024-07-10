@@ -3,12 +3,34 @@ import type { Measure } from "~/data/interfaces"
 import { verticals } from '~/data/selectFieldData';
 const props = defineProps(["fence", "fenceIndex", "_id"])
 
+const { setError, setIsError } = useError();
+const useGamyba = useGamybaStore()
+
 const filterIndex = ref<boolean>(false)
 const filterLength = ref<boolean>(false)
 
 const filteredMeasures = ref([...props.fence.measures])
 
 const isFenceboards = verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas")
+
+const newMeasureHandler = async () => {
+    const response: any = await $fetch(
+        "/api/gamybaMeasure",
+        {
+            method: 'post',
+            body: { _id: props._id, index: props.fenceIndex },
+        }
+    );
+
+    if (response.success) {
+        useGamyba.updateOrder(props._id, response.data);
+        setIsError(false);
+        setError(response.message);
+
+    } else {
+        setError(response.message);
+    }
+}
 
 function addIndex() {
     return props.fence.measures.map((item: Measure, index: number) => { return { ...item, index } })
@@ -33,7 +55,12 @@ const filterByIndex = () => {
     filterIndex.value = true
 }
 
-filterByLength()
+filterByIndex()
+
+watch(() => props.fence.measures, (newMeasures) => {
+    filteredMeasures.value = [...newMeasures];
+    filterByLength();
+}, { deep: true })
 
 
 </script>
@@ -62,12 +89,17 @@ filterByLength()
             <p class="element">Pagaminti</p>
             <p class="element print:hidden">Veiksmai</p>
             <p class="element print:hidden">Veiksmai</p>
+            <p class="element print:hidden"></p>
+
+
+
         </div>
 
         <div class="flex flex-col flex-1">
             <GamybaFenceInfo v-for="data in filteredMeasures" :key="data.index" :data="data" :index="data.index"
                 :fenceSide="props.fence.side" :total="filteredMeasures.length" :fenceIndex="props.fenceIndex"
                 :_id="props._id" />
+            <BaseButton name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
         </div>
     </div>
 
@@ -75,7 +107,7 @@ filterByLength()
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px 100px;
+    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px 100px 40px;
     row-gap: 10px;
     width: fit-content
 }

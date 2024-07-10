@@ -5,9 +5,11 @@ const cut = ref<string>(props.data.cut)
 const done = ref<string>(props.data.done)
 const elements = ref<string>(props.data.elements)
 const height = ref<string>(props.data.height)
+const length = ref<string>(props.data.length)
 const postone = ref<boolean>(props.data.postone)
 const isSavedElements = ref<boolean>(true)
 const isSavedHeight = ref<boolean>(true)
+const isSavedLength = ref<boolean>(true)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
 
@@ -20,11 +22,11 @@ const saveHandler = async (field: string) => {
         "/api/gamyba",
         {
             method: 'put',
-            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : field === 'done' ? +done.value : field === 'elements' ? +elements.value : +height.value, field, option: 'fences' },
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index, value: field === 'cut' ? +cut.value : field === 'done' ? +done.value : field === 'elements' ? +elements.value : field === 'length' ? +length.value : +height.value, field, option: 'fences' },
         }
     );
     if (response.success) {
-        useGamyba.updateGamyba(props.data._id, response.data)
+        useGamyba.updateOrder(props.data._id, response.data)
         setIsError(false);
         setError(response.message);
 
@@ -36,6 +38,8 @@ const saveHandler = async (field: string) => {
             isSavedHeight.value = true
         else if (field === 'done')
             isSavedDone.value = true
+        else if (field === 'length')
+            isSavedLength.value = true
 
     } else {
         setError(response.message);
@@ -52,10 +56,29 @@ const postoneHandler = async () => {
     );
 
     if (response.success) {
-        useGamyba.updateGamyba(props.data._id, response.data)
+        useGamyba.updateOrder(props._id, response.data)
         postone.value = !postone.value;
         setIsError(false);
         setError(response.message);
+    } else {
+        setError(response.message);
+    }
+}
+
+const deleteHandler = async () => {
+    const response: any = await $fetch(
+        "/api/gamybaMeasure",
+        {
+            method: 'delete',
+            body: { _id: props._id, index: props.fenceIndex, measureIndex: props.index },
+        }
+    );
+
+    if (response.success) {
+        useGamyba.updateOrder(props._id, response.data)
+        setIsError(false);
+        setError(response.message);
+
     } else {
         setError(response.message);
     }
@@ -88,8 +111,6 @@ const printHandler = () => {
     printWindow?.print();
 }
 
-
-
 watch(cut, (newCut) => {
     console.log(newCut)
     if (newCut !== props.data.cut)
@@ -119,6 +140,13 @@ watch(height, (newHeight) => {
         isSavedHeight.value = true
 });
 
+watch(length, (newLength) => {
+    if (+newLength !== +props.data.length)
+        isSavedLength.value = false
+    else
+        isSavedLength.value = true
+});
+
 </script>
 
 <template>
@@ -139,9 +167,15 @@ watch(height, (newHeight) => {
     </div>
     <div v-else class="container odd:bg-gray-ultra-light container-border flex-1 select-none">
         <p class="element"
-            :class="postone ? 'bg-red-full text-white' : +cut === +props.data.elements && +done === +props.data.elements ? 'bg-green-500' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : +cut === +props.data.elements ? 'bg-green-300' : 'bg-orange-400'">
+            :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.data.elements && +done === +props.data.elements ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : +cut === +props.data.elements ? 'bg-green-300' : 'bg-orange-400'">
             {{ props.index + 1 }}</p>
-        <p class="element">{{ props.data.length }}</p>
+
+        <div class="element  flex">
+            <input type="number" v-model="length">
+            <NuxtImg width="20" height="20" v-if="!isSavedLength" src="/icons/checked.svg" decoding="auto"
+                loading="lazy" :ismap="true" @click="saveHandler('length')"
+                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+        </div>
         <div class="element  flex">
             <input type="number" v-model="elements">
             <NuxtImg width="20" height="20" v-if="!isSavedElements" src="/icons/checked.svg" decoding="auto"
@@ -155,14 +189,14 @@ watch(height, (newHeight) => {
                 class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
         </div>
         <div class="element flex"
-            :class="+cut === +props.data.elements ? 'bg-green-500' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            :class="+cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
             <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
                 @click="saveHandler('cut')"
                 class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
         </div>
         <div class="element flex"
-            :class="+done === +props.data.elements ? 'bg-green-500' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            :class="+cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
             <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
                 @click="saveHandler('done')"
@@ -172,6 +206,11 @@ watch(height, (newHeight) => {
             @click="printHandler">Spausdinti</button>
         <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
             :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
+        <div class="element print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+            @click="deleteHandler">
+            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true"
+                class="w-full max-w-6 max-h-6" />
+        </div>
     </div>
 
 </template>

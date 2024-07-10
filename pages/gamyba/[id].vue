@@ -7,11 +7,6 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
-// const type = ref<string>("")
-// const height = ref<string>("")
-// const quantity = ref<string>("")
-// const color = ref<string>("")
-
 const confirmHandler = async () => {
     const response: any = await $fetch(
         "/api/gamyba",
@@ -39,7 +34,7 @@ const commentHandler = async (value: string) => {
         }
     );
     if (response.success) {
-        useGamyba.addComment(order!.value._id, response.data);
+        useGamyba.updateOrder(order!.value._id, response.data);
         setIsError(false);
         setError(response.message);
     } else {
@@ -57,7 +52,7 @@ const deleteHandler = async (value: string, comment: string) => {
     );
 
     if (response.success) {
-        useGamyba.addComment(value, response.data);
+        useGamyba.updateOrder(value, response.data);
         setIsError(false);
         setError(response.message);
     } else {
@@ -75,18 +70,17 @@ const newBindingHandler = async () => {
     );
 
     if (response.success) {
-        useGamyba.addComment(order!.value._id, response.data);
+        useGamyba.updateOrder(order!.value._id, response.data);
         setIsError(false);
         setError(response.message);
-        // type.value = ""
-        // height.value = ""
-        // quantity.value = ""
-        // color.value = ""
 
     } else {
         setError(response.message);
     }
 }
+
+
+
 
 </script>
 
@@ -101,7 +95,7 @@ const newBindingHandler = async () => {
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />
 
-        <div class="flex gap-8 flex-col">
+        <div class="flex gap-4 flex-col">
             <GamybaFence v-for="fence, index in order?.fences" :key="fence._id" :fence="fence" :fenceIndex="index"
                 :_id="order._id" />
         </div>
@@ -125,15 +119,7 @@ const newBindingHandler = async () => {
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
                 :_id="order._id" />
             <BaseButton name="Pridėti naują" class="mt-4" @click="newBindingHandler" />
-            <!-- <div class="mt-4 text-xl font-semibold"> Pridėti naują apkaustą</div>
-            <div class="border flex border-black border-r-0  w-fit print:hidden">
-                <input type="text" class="element w-[387px]" v-model="type" placeholder="tipas" />
-                <input type="number" class="element w-24" v-model="height" placeholder="ilgis" />
-                <input type="number" class="element w-24" v-model="quantity" placeholder="kiekis" />
-                <input type="text" class="element w-24" v-model="color" placeholder="spalva" />
-                <button class=" element hover:bg-red-full hover:text-white w-20"
-                    @click="newBindingHandler">Išsaugoti</button>
-            </div> -->
+
         </div>
     </div>
 </template>

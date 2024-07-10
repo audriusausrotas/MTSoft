@@ -1,4 +1,4 @@
-import type { Gamyba, Bindings } from "~/data/interfaces";
+import type { Gamyba } from "~/data/interfaces";
 
 export const useGamybaStore = defineStore("gamyba", {
   state: () => ({
@@ -18,13 +18,7 @@ export const useGamybaStore = defineStore("gamyba", {
       this.gamybaList = this.gamybaList.filter((item) => item._id !== id);
     },
 
-    addComment(id: string, data: Gamyba) {
-      this.gamybaList = this.gamybaList.map((item) => {
-        if (item._id === id) return data;
-        else return item;
-      });
-    },
-    updateGamyba(id: string, data: Gamyba) {
+    updateOrder(id: string, data: Gamyba) {
       this.gamybaList = this.gamybaList.map((item) => {
         if (item._id === id) return data;
         else return item;
