@@ -204,7 +204,7 @@ watch(length, (newLength) => {
                 class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
         </div>
         <div class="element flex"
-            :class="+cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            :class="+done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done === +props.data.elements ? 'bg-green-500' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
             <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
                 @click="saveHandler('done')"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
 const draggedItemIndex = ref<number | null>(null);
 
@@ -23,19 +23,23 @@ const onDrop = async (event: DragEvent) => {
   }
 };
 
-const updateOrderInDatabase = async (newOrder: string[]) => {
+const updateOrderInDatabase = async (list: string[]) => {
+  const response: any = await $fetch(
+    "/api/gamybaUpdate",
+    {
+      method: 'post',
+      body: { list },
+    }
+  );
 
-  // try {
-  //   await fetch('/api/update-order', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ order: newOrder })
-  //   });
-  // } catch (error) {
-  //   console.error('Failed to update order in the database', error);
-  // }
+  if (response.success) {
+
+    setIsError(false);
+    setError(response.message);
+
+  } else {
+    setError(response.message);
+  }
 };
 </script>
 
