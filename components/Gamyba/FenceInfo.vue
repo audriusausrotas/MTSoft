@@ -15,6 +15,7 @@ const isSavedHeight = ref<boolean>(true)
 const isSavedLength = ref<boolean>(true)
 const isSavedCut = ref<boolean>(true)
 const isSavedDone = ref<boolean>(true)
+const isAdmin = useUser.user?.accountType === "Administratorius"
 
 
 const { setError, setIsError } = useError();
@@ -49,6 +50,10 @@ const saveHandler = async (field: string) => {
 }
 
 const postoneHandler = async () => {
+    if (!isAdmin) {
+        setError("Ištrinti gali tik administratorius");
+        return
+    }
     const response: any = await $fetch(
         "/api/gamyba",
         {
@@ -69,7 +74,7 @@ const postoneHandler = async () => {
 
 const deleteHandler = async () => {
 
-    if (useUser.user?.accountType !== "Administratorius") {
+    if (!isAdmin) {
         setError("Ištrinti gali tik administratorius");
         return
     }
