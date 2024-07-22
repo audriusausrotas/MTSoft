@@ -8,21 +8,21 @@ const order: any = computed(() => {
 });
 
 const confirmHandler = async () => {
-    const response: any = await $fetch(
-        "/api/gamyba",
-        {
-            method: "DELETE",
-            body: { _id: order!.value._id, completed: true },
-        }
-    );
-    if (response.success) {
-        useGamyba.deleteGamybaOrder(order!.value._id);
-        setIsError(false);
-        setError(response.message);
-        navigateTo("/gamyba")
-    } else {
-        setError(response.message);
-    }
+    // const response: any = await $fetch(
+    //     "/api/gamyba",
+    //     {
+    //         method: "DELETE",
+    //         body: { _id: order!.value._id, completed: true },
+    //     }
+    // );
+    // if (response.success) {
+    //     useGamyba.deleteGamybaOrder(order!.value._id);
+    //     setIsError(false);
+    //     setError(response.message);
+    //     navigateTo("/gamyba")
+    // } else {
+    //     setError(response.message);
+    // }
 }
 
 const commentHandler = async (value: string) => {
