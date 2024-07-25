@@ -65,6 +65,11 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
     client: Object,
     creator: Object,
     orderNumber: String,
+    status: {
+      type: String,
+      required: false,
+      default: "",
+    },
     fences: {
       type: [fenceSchema],
       default: [],

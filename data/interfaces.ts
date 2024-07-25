@@ -277,6 +277,7 @@ export interface Gamyba {
   client: Client;
   creator: Creator;
   orderNumber: string;
+  status: string;
   fences: GamybaFence[];
   bindings: Bindings[] | null;
   aditional: Comment[];

@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { GamybaStatus } from "~/data/initialValues"
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
 const useUser = useUserStore()
@@ -24,6 +25,25 @@ const confirmHandler = async () => {
     //     setError(response.message);
     // }
 }
+
+const statusHandler = async (value: string) => {
+    const response: any = await $fetch(
+        "/api/gamybaStatus",
+        {
+            method: "post",
+            body: { _id: order?.value._id, status: value },
+        }
+    );
+    if (response.success) {
+        useGamyba.updateOrder(order!.value._id, response.data);
+        setIsError(false);
+        setError(response.message);
+    } else {
+        setError(response.message);
+    }
+}
+
+
 
 const commentHandler = async (value: string) => {
     const response: any = await $fetch(
@@ -86,11 +106,13 @@ const newBindingHandler = async () => {
 
 <template>
     <div class="flex flex-col gap-8">
-        <div class="flex gap-4 items-center">
-            <BaseInfoField :name="order?.orderNumber" width="w-24" />
-            <BaseInfoField :name="order?.client.address" width="w-96" />
-            <BaseInfoField :name="order?.creator.username" width="w-24" />
-            <BaseButtonWithConfirmation name="užsakymas pagamintas" @onConfirm="confirmHandler" class="print:hidden" />
+        <div class="flex gap-4 items-center flex-wrap">
+            <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." />
+            <BaseInput :name="order?.client.address" width="w-96" label="Adresas" />
+            <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" />
+            <BaseSelectField label="Statusas" :values="GamybaStatus" id="gamybaStatus"
+                :defaultValue="order?.status || GamybaStatus[0]" width="w-60" @onChange="(value: string) => statusHandler(value)
+                " />
         </div>
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />

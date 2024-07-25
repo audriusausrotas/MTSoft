@@ -14,6 +14,13 @@ export const clientInitialValue: Client = {
   email: "",
 };
 
+export const GamybaStatus: string[] = [
+  "Gaminama",
+  "Laukiama",
+  "Pagaminta",
+  "Negaminti",
+];
+
 export const initialWorkData: Works = {
   id: "",
   name: "",
