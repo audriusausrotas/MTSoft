@@ -125,7 +125,10 @@ export const useProjectsStore = defineStore("Projects", {
               .includes(value.toLowerCase()) ||
             project.client.email.toLowerCase().includes(value.toLowerCase()) ||
             project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.username.toLowerCase().includes(value.toLowerCase())
+            project.client.username
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            project.orderNumber.toLowerCase().includes(value.toLowerCase())
         );
 
         this.filteredProjects = [...foundProjects];
