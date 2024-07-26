@@ -140,68 +140,57 @@ watch(color, (newColor) => {
 </script>
 
 <template>
-    <div class="container container-border even:bg-gray-ultra-light">
-        <div class="element" :class="{ 'bg-red-full text-white': postone }">{{ props.index + 1 }}</div>
+    <div class="flex even:bg-gray-ultra-light border-b h-8 border-black w-fit">
+        <p class="w-10 border-r border-black text-center "
+            :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.binding.quantity && +done === +props.binding.quantity ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : +cut === +props.binding.quantity ? 'bg-green-300' : 'bg-orange-400'">
+            {{ props.index + 1 }}</p>
 
-        <div class="element  flex">
+        <div class="w-48 border-r border-black px-1   flex">
             <input type="text" v-model="type">
-            <NuxtImg width="20" height="20" v-if="!isSavedType" src="/icons/checked.svg" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('type')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedType" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('type')" class="hover:cursor-pointer " />
         </div>
 
-        <div class="element  flex">
+        <div class="w-16 border-r border-black px-1   flex">
             <input type="number" v-model="height">
-            <NuxtImg width="20" height="20" v-if="!isSavedHeight" src="/icons/checked.svg" decoding="auto"
-                loading="lazy" :ismap="true" @click="saveHandler('height')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedHeight" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('height')" class="hover:cursor-pointer " />
         </div>
 
-        <div class="element  flex">
+        <div class="w-16 border-r border-black px-1   flex">
             <input type="number" v-model="quantity">
-            <NuxtImg width="20" height="20" v-if="!isSavedQuantity" src="/icons/checked.svg" decoding="auto"
-                loading="lazy" :ismap="true" @click="saveHandler('quantity')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedQuantity" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('quantity')" class="hover:cursor-pointer " />
         </div>
 
-        <div class="element  flex">
+        <div class="w-16 border-r border-black px-1   flex">
             <input type="text" v-model="color">
-            <NuxtImg width="20" height="20" v-if="!isSavedColor" src="/icons/checked.svg" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('color')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedColor" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('color')" class="hover:cursor-pointer " />
         </div>
 
 
-        <div class="element flex"
+        <div class="w-24 border-r border-black px-1  flex"
             :class="+cut === +props.binding.quantity ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
 
-            <NuxtImg width="20" height="20" v-if="!isSavedCut" src="/icons/checked.svg" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('cut')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
+            <NuxtImg width="20" height="20" v-if="!isSavedCut" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer" />
 
         </div>
-        <div class="element flex"
+        <div class="w-24 border-r border-black px-1  flex"
             :class="+done === +props.binding.quantity ? 'bg-green-400' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
-            <NuxtImg width="20" height="20" v-if="!isSavedDone" src="/icons/checked.svg" decoding="auto" loading="lazy"
-                :ismap="true" @click="saveHandler('done')"
-                class="hover:cursor-pointer hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6" />
+            <NuxtImg width="20" height="20" v-if="!isSavedDone" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer" />
         </div>
-        <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
+        <button class=" w-24 border-r border-black print:hidden lg:hover:bg-red-full lg:hover:text-white"
             :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
-        <div class="element print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+        <div class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
             @click="deleteHandler">
-            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true"
-                class="w-full max-w-6 max-h-6" />
+            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true" />
         </div>
     </div>
 
 </template>
-<style scoped>
-.element {
-    border-right: 1px solid black;
-    padding: 4px;
-    text-align: center;
-}
-</style>
+<style scoped></style>

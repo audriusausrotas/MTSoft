@@ -98,10 +98,6 @@ const newBindingHandler = async () => {
         setError(response.message);
     }
 }
-
-
-
-
 </script>
 
 <template>
@@ -126,16 +122,16 @@ const newBindingHandler = async () => {
 
             </div>
 
-            <div class="container container-border border-t border-black flex-1">
-                <p class="element">Nr</p>
-                <p class="element">tipas</p>
-                <p class="element">Ilgis</p>
-                <p class="element">Kiekis</p>
-                <p class="element">spalva</p>
-                <p class="element">Išpjauta</p>
-                <p class="element">Pagaminta</p>
-                <p class="element print:hidden">Veiksmai</p>
-                <p class="element flex justify-center items-center print:hidden">
+            <div class="flex w-fit border-y items-center h-8  border-black select-none">
+                <p class="w-10 border-x border-black h-full flex justify-center items-center ">Nr</p>
+                <p class="w-48 border-r border-black h-full flex justify-center items-center ">tipas</p>
+                <p class="w-16 border-r border-black h-full flex justify-center items-center ">Ilgis</p>
+                <p class="w-16 border-r border-black h-full flex justify-center items-center ">Kiekis</p>
+                <p class="w-16 border-r border-black h-full flex justify-center items-center ">spalva</p>
+                <p class="w-24 border-r border-black h-full flex justify-center items-center ">Išpjauta</p>
+                <p class="w-24 border-r border-black h-full flex justify-center items-center ">Pagaminta</p>
+                <p class="w-24 border-r border-black h-full flex justify-center items-center  print:hidden">Veiksmai</p>
+                <p class="w-10 border-r border-black h-full   flex justify-center items-center print:hidden">
                 </p>
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
@@ -145,22 +141,4 @@ const newBindingHandler = async () => {
         </div>
     </div>
 </template>
-<style scoped>
-.container {
-    display: grid;
-    grid-template-columns: 40px 200px 65px 65px 65px 90px 90px 100px 40px;
-    width: fit-content
-}
-
-.container-border {
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-
-}
-
-.element {
-    border-right: 1px solid black;
-    padding: 4px;
-    text-align: center;
-}
-</style>
+<style scoped></style>

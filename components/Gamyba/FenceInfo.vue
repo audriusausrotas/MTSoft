@@ -164,73 +164,75 @@ watch(length, (newLength) => {
 
 <template>
     <div v-if="props.data.laiptas.exist"
-        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1 select-none">
-        <p class="element">{{ props.index + 1 }}</p>
-        <p class="element">Laiptas</p>
-        <p class="element">{{ props.data.laiptas.direction }}</p>
-        <p class="element">{{ props.data.laiptas.value }} cm</p>
+        class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex  select-none h-8">
+        <p class="w-10 flex items-center justify-center h-full  border-x border-black">{{ props.index + 1 }}</p>
+        <p class="w-20 flex items-center justify-center h-full  border-r border-black">Laiptas</p>
+        <p class="w-24 flex items-center justify-center h-full  border-r border-black">{{ props.data.laiptas.direction
+            }}</p>
+        <p class="w-24 flex items-center justify-center h-full  border-r border-black">{{ props.data.laiptas.value }} cm
+        </p>
+        <p class="flex-1  h-full  border-r border-black"></p>
+        <div class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+            @click="deleteHandler">
+            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true" />
+        </div>
     </div>
     <div v-else-if="props.data.kampas.exist"
-        class="container border-b container-border border-black odd:bg-gray-ultra-light flex-1 select-none">
-        <p class="element">
+        class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex  select-none h-8">
+        <p class="w-10 flex items-center justify-center h-full  border-x border-black">
             {{ props.index + 1 }}</p>
-        <p class="element">Kampas</p>
-        <p class="element">{{ props.data.kampas.value }}</p>
-        <p class="element">laipsnių</p>
+        <p class="w-20 flex items-center justify-center h-full  border-r border-black">Kampas</p>
+        <p class="w-24 flex items-center justify-center h-full  border-r border-black">{{ props.data.kampas.value }}</p>
+        <p class="w-24 flex items-center justify-center h-full  border-r border-black">laipsnių</p>
+        <p class="flex-1  h-full  border-r border-black"></p>
+        <div class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+            @click="deleteHandler">
+            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true" />
+        </div>
     </div>
-    <div v-else class="container odd:bg-gray-ultra-light container-border flex-1 select-none">
-        <p class="element"
+    <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none ">
+        <p class=" w-10 flex items-center justify-center h-full  border-x border-black "
             :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.data.elements && +done === +props.data.elements ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : +cut === +props.data.elements ? 'bg-green-300' : 'bg-orange-400'">
             {{ props.index + 1 }}</p>
 
-        <div class="element  flex">
+        <div class=" w-20 flex items-center justify-center h-full  border-r border-black px-1">
             <input type="number" v-model="length">
-            <NuxtImg width="20" height="20" v-if="!isSavedLength" src="/icons/checked.svg" decoding="auto"
-                loading="lazy" :ismap="true" @click="saveHandler('length')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedLength" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('length')" class="hover:cursor-pointer" />
         </div>
-        <div class="element  flex">
+        <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1">
             <input type="number" v-model="elements">
-            <NuxtImg width="20" height="20" v-if="!isSavedElements" src="/icons/checked.svg" decoding="auto"
-                loading="lazy" :ismap="true" @click="saveHandler('elements')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " /></input>
+            <NuxtImg width="20" height="20" v-if="!isSavedElements" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('elements')" class="hover:cursor-pointer " />
         </div>
-        <div class="element  flex">
+        <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1">
             <input type="number" v-model="height">
-            <NuxtImg width="20" height="20" v-if="!isSavedHeight" src="/icons/checked.svg" decoding="auto"
-                loading="lazy" :ismap="true" @click="saveHandler('height')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
+            <NuxtImg width="20" height="20" v-if="!isSavedHeight" src="/icons/save.svg" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('height')" class="hover:cursor-pointer " />
         </div>
-        <div class="element flex"
+        <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1"
             :class="+cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="cut" type="number" placeholder="Išpjauti" />
-            <NuxtImg v-if="!isSavedCut" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('cut')"
-                class="hover:cursor-pointer  hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6 " />
+            <NuxtImg v-if="!isSavedCut" src="/icons/save.svg" width="20" height="20" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer " />
         </div>
-        <div class="element flex"
+        <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1"
             :class="+done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done === +props.data.elements ? 'bg-green-500' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
             <input v-model="done" type="number" placeholder="Pagaminti" />
-            <NuxtImg v-if="!isSavedDone" src="/icons/checked.svg" decoding="auto" loading="lazy" :ismap="true"
-                @click="saveHandler('done')"
-                class="hover:cursor-pointer hover:bg-pink-500 rounded-md w-full max-w-6 max-h-6" />
+            <NuxtImg v-if="!isSavedDone" src="/icons/save.svg" width="20" height="20" decoding="auto" loading="lazy"
+                :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer" />
         </div>
-        <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
+        <button
+            class=" flex items-center justify-center h-full  border-r border-black w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
             @click="printHandler">Spausdinti</button>
-        <button class=" element print:hidden lg:hover:bg-red-full lg:hover:text-white"
+        <button
+            class=" flex items-center justify-center h-full  border-r border-black  w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
             :class="{ 'bg-red-full text-white': postone }" @click="postoneHandler">Negaminti</button>
-        <div class="element print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+        <div class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
             @click="deleteHandler">
-            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true"
-                class="w-full max-w-6 max-h-6" />
+            <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true" />
         </div>
     </div>
 
 </template>
-<style scoped>
-.element {
-    border-right: 1px solid black;
-    padding: 4px;
-    text-align: center
-}
-</style>
+<style scoped></style>

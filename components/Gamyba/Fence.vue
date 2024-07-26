@@ -77,25 +77,25 @@ watch(() => props.fence.measures, (newMeasures) => {
             <p v-if="props.fence.aditional">{{ props.fence.aditional }} </p>
         </div>
 
-        <div class="container container-border border-t border-black flex-1 select-none">
-            <p class="element hover:cursor-pointer flex gap-1 justify-center" @click="filterByIndex">Nr
+        <div class="flex w-fit border-y items-center h-8  border-black select-none">
+            <p class="hover:cursor-pointer h-full items-center w-10 border-x border-black  flex justify-evenly"
+                @click="filterByIndex">
+                Nr
                 <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" :ismap="true" loading="lazy"
                     :class="filterIndex ? 'rotate-180' : ''" class="transition-all" />
             </p>
-            <p class="element hover:cursor-pointer flex gap-1 justify-center" @click="filterByLength">Ilgis
+            <p class=" hover:cursor-pointer w-20 flex gap-1 justify-center border-r border-black h-full items-center"
+                @click="filterByLength">Ilgis
                 <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" :ismap="true" loading="lazy"
                     :class="filterLength ? 'rotate-180' : ''" class="transition-all" />
             </p>
-            <p class="element">Elementai</p>
-            <p class="element">Aukštis</p>
-            <p class="element">Išpjauti</p>
-            <p class="element">Pagaminti</p>
-            <p class="element print:hidden">Veiksmai</p>
-            <p class="element print:hidden">Veiksmai</p>
-            <p class="element print:hidden"></p>
-
-
-
+            <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Elementai</p>
+            <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Aukštis</p>
+            <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Išpjauti</p>
+            <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Pagaminti</p>
+            <p class=" w-24 flex items-center justify-center h-full  border-r border-black print:hidden">Veiksmai</p>
+            <p class=" w-24 flex items-center justify-center h-full border-r border-black  print:hidden">Veiksmai</p>
+            <p class=" w-10 flex items-center justify-center h-full border-r border-black  print:hidden"></p>
         </div>
 
         <div class="flex flex-col flex-1">
@@ -107,22 +107,4 @@ watch(() => props.fence.measures, (newMeasures) => {
     </div>
 
 </template>
-<style scoped>
-.container {
-    display: grid;
-    grid-template-columns: 40px 80px 100px 100px 100px 100px 100px 100px 40px;
-    row-gap: 10px;
-    width: fit-content
-}
-
-.container-border {
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-}
-
-.element {
-    border-right: 1px solid black;
-    padding: 4px;
-    text-align: center;
-}
-</style>
+<style scoped></style>
