@@ -24,7 +24,6 @@ const deleteHandler = async (): Promise<void> => {
 const clickHandler = () => {
     navigateTo(`/gamyba/${props.order._id}`)
 }
-
 </script>
 
 <template>
