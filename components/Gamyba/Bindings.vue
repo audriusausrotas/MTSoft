@@ -141,7 +141,7 @@ watch(color, (newColor) => {
 
 <template>
     <div class="flex even:bg-gray-ultra-light border-b h-8 border-black w-fit">
-        <p class="w-10 border-r border-black text-center "
+        <p class="w-10 border-x border-black text-center "
             :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.binding.quantity && +done === +props.binding.quantity ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : +cut === +props.binding.quantity ? 'bg-green-300' : 'bg-orange-400'">
             {{ props.index + 1 }}</p>
 
