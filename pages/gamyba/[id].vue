@@ -136,7 +136,7 @@ const newBindingHandler = async () => {
             </div>
             <GamybaBindings v-for="binding, index in order.bindings" :key="binding.id" :binding="binding" :index="index"
                 :_id="order._id" />
-            <BaseButton name="Pridėti naują" class="mt-4" @click="newBindingHandler" />
+            <BaseButton name="Pridėti naują" class="mt-2" @click="newBindingHandler" />
 
         </div>
     </div>

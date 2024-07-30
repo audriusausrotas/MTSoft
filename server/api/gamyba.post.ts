@@ -26,11 +26,22 @@ export default defineEventHandler(async (event) => {
   } else {
     //main bindings array
     const bindings: Bindings[] = [];
+    //fence sides with bindings
+    const front: BindingItem[] = [];
+    const left: BindingItem[] = [];
+    const back: BindingItem[] = [];
+    const right: BindingItem[] = [];
+
+    ////////////////////////////////////////////////////////////////
 
     //adds bindings as new or update quantity of existing
-    const addBindings = (color: string, height: number, type: string) => {
+    const addBindings = (
+      color: string,
+      height: number,
+      type: string,
+      quantity: number
+    ) => {
       let found = false;
-      const quantity = type === "Centrinis" || type === "Elka" ? 2 : 1;
 
       for (const binding of bindings) {
         if (
@@ -59,12 +70,7 @@ export default defineEventHandler(async (event) => {
       found = false;
     };
 
-    //fence sides with bindings
-    const front: BindingItem[] = [];
-    const left: BindingItem[] = [];
-    const back: BindingItem[] = [];
-    const right: BindingItem[] = [];
-
+    //loops via fences
     project.fenceMeasures.forEach((item) => {
       const bindingItem: BindingItem = {
         bindings: item.bindings === "Taip" ? true : false,
@@ -73,132 +79,54 @@ export default defineEventHandler(async (event) => {
         lastHeight: item.measures[item.measures.length - 1].height,
       };
 
+      // adds existing fences for corner calculation
       if (item.side === "Priekis") front.push(bindingItem);
-      if (item.side === "Kairė") left.push(bindingItem);
-      if (item.side === "Galas") back.push(bindingItem);
-      if (item.side === "Dešinė") right.push(bindingItem);
+      else if (item.side === "Kairė") left.push(bindingItem);
+      else if (item.side === "Galas") back.push(bindingItem);
+      else if (item.side === "Dešinė") right.push(bindingItem);
 
-      if (item.bindings === "Taip") {
-        let lastHeight = 0;
-        let stepHeight = 0;
-        let stepDirection = "";
+      const color = item.color;
+      const isBindings = item.bindings === "Taip" ? true : false;
+      let lastHeight = 0;
+      let stepHeight = 0;
+      let stepDirection = "";
+      let cornerRadius = 0;
+      let wasGates = false;
+      let wasCorner = false;
+      let wasStep = false;
 
-        item.measures.forEach((measure, index) => {
-          if (measure.laiptas.exist) {
-            stepDirection = measure.laiptas.direction;
-            stepHeight = measure.laiptas.value;
-            return;
-          }
-
-          const color = item.color;
-          let height = measure.height;
-          const type = measure.kampas.exist
-            ? "Kampinis " + measure.kampas.value
-            : measure.gates.exist
-            ? "Elka"
-            : "Centrinis";
-
-          if (lastHeight > height) {
-            height = lastHeight;
-            if (stepDirection === "Žemyn") height += stepHeight;
-          } else if (lastHeight < height) {
-            if (stepDirection === "Aukštyn") height += stepHeight;
-          } else {
-            height += stepHeight;
-          }
-
-          stepHeight = 0;
-          stepDirection = "";
-          lastHeight = measure.height;
-
-          if (index !== 0) {
-            addBindings(color, height, type);
-          }
-        });
-      }
-    });
-
-    // calculate middle bindings
-    const calculateMiddle = (array: BindingItem[]) => {
-      if (array.length > 1) {
-        let lastElement: BindingItem | null = null;
-
-        for (const item of array) {
-          if (lastElement) {
-            if (lastElement.bindings && item.bindings) {
-              if (item.bindings) {
-                if (
-                  lastElement.lastHeight === item.firstHeight ||
-                  lastElement.lastHeight > item.firstHeight
-                ) {
-                  addBindings(
-                    lastElement.color,
-                    lastElement.lastHeight,
-                    "Centrinis"
-                  );
-                } else {
-                  addBindings(item.color, item.firstHeight, "Centrinis");
-                }
-              } else {
-                addBindings(lastElement.color, lastElement.lastHeight, "Elka");
-              }
-            } else {
-              if (item.bindings) {
-                addBindings(item.color, item.firstHeight, "Elka");
-              }
-            }
-            lastElement = item;
-          } else {
-            lastElement = item;
-          }
-        }
-      }
-    };
-
-    calculateMiddle(front);
-    calculateMiddle(left);
-    calculateMiddle(back);
-    calculateMiddle(right);
-
-    // calculate corner bindings
-    const calculateCorners = (a: BindingItem[], b: BindingItem[]) => {
-      const firstElement = a[a.length - 1];
-      const secondElement = b[0];
-      if (a.length > 0 && b.length > 0) {
-        if (firstElement.bindings && secondElement.bindings) {
-          let length = 0;
-          let color = "";
-          if (firstElement.lastHeight > secondElement.firstHeight) {
-            length = firstElement.lastHeight;
-            color = firstElement.color;
-          } else {
-            length = secondElement.firstHeight;
-            color = secondElement.color;
-          }
-          addBindings(color, length, "Kampinis");
+      item.measures.forEach((measure, index) => {
+        if (measure.gates.exist) {
+          addBindings(color, measure.height, "Koja dviguba", 2);
+          wasGates = true;
+        } else if (measure.kampas.exist) {
+          cornerRadius = measure.kampas.value;
+          wasCorner = true;
+        } else if (measure.laiptas.exist) {
+          stepDirection = measure.laiptas.direction;
+          stepHeight = measure.laiptas.value;
+          wasStep = true;
         } else {
-          if (firstElement.bindings) {
-            addBindings(firstElement.color, firstElement.lastHeight, "Elka");
-          }
-          if (secondElement.bindings) {
-            addBindings(secondElement.color, secondElement.firstHeight, "Elka");
-          }
-        }
-      } else {
-        if (a.length > 0 && firstElement.bindings) {
-          addBindings(firstElement.color, firstElement.lastHeight, "Elka");
-        }
+          if (wasGates) {
+          } else if (wasCorner) {
+          } else if (wasStep) {
+          } else {
+            if (lastHeight === measure.height) {
+              isBindings && addBindings(color, lastHeight, "Centrinis", 2);
+              addBindings(
+                color,
+                measure.height,
+                isBindings ? "Koja vienguba" : "Koja dviguba",
+                2
+              );
+            }
 
-        if (b.length > 0 && secondElement.bindings) {
-          addBindings(secondElement.color, secondElement.firstHeight, "Elka");
+            lastHeight = measure.height;
+          }
         }
-      }
-    };
-
-    calculateCorners(front, left);
-    calculateCorners(left, back);
-    calculateCorners(back, right);
-    calculateCorners(right, front);
+      });
+    });
+    ////////////////////////////////////////////////////////////////
 
     const newFences: GamybaFence[] = project.fenceMeasures.map((item) => {
       return {
@@ -207,7 +135,7 @@ export default defineEventHandler(async (event) => {
           ...measure,
           cut: undefined,
           done: undefined,
-          postone: false,
+          postone: measure.gates.exist ? true : false,
         })),
       };
     });

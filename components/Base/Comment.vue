@@ -6,6 +6,7 @@ const emit = defineEmits(['onSave', 'onDelete']);
 const newComment = ref<string>("")
 
 const saveHandler = (): void => {
+    if (newComment.value.trim().length === 0) return
     emit('onSave', newComment.value);
     newComment.value = '';
 }
