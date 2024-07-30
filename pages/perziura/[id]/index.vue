@@ -176,6 +176,7 @@ const gamybaHandler = async () => {
     setIsError(false);
     setError(response.message);
     useGamyba.addGamyba(response.data)
+    console.log(response.data.bindings)
   } else {
     setError(response.message);
   }

@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
           binding.height === height &&
           binding.type === type
         ) {
-          binding.quantity = binding.quantity || 0 + quantity;
+          binding.quantity = binding.quantity! + quantity;
           found = true;
           break;
         }
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
           color,
           height,
           type,
-          quantity: quantity,
+          quantity,
           cut: undefined,
           done: undefined,
           postone: false,
@@ -96,6 +96,26 @@ export default defineEventHandler(async (event) => {
       let wasStep = false;
 
       item.measures.forEach((measure, index) => {
+        if (index === 0) {
+          lastHeight = measure.height;
+          addBindings(
+            color,
+            measure.height,
+            isBindings ? "Koja vienguba" : "Koja dviguba",
+            1
+          );
+          return;
+        }
+
+        if (index === item.measures.length - 1) {
+          addBindings(
+            color,
+            measure.height,
+            isBindings ? "Koja vienguba" : "Koja dviguba",
+            1
+          );
+        }
+
         if (measure.gates.exist) {
           addBindings(color, measure.height, "Koja dviguba", 2);
           wasGates = true;
@@ -113,6 +133,24 @@ export default defineEventHandler(async (event) => {
           } else {
             if (lastHeight === measure.height) {
               isBindings && addBindings(color, lastHeight, "Centrinis", 2);
+              addBindings(
+                color,
+                measure.height,
+                isBindings ? "Koja vienguba" : "Koja dviguba",
+                2
+              );
+            } else if (lastHeight > measure.height) {
+              isBindings && addBindings(color, lastHeight, "Centrinis", 2);
+
+              addBindings(
+                color,
+                lastHeight,
+                isBindings ? "Koja vienguba" : "Koja dviguba",
+                2
+              );
+            } else if (lastHeight < measure.height) {
+              isBindings && addBindings(color, measure.height, "Centrinis", 2);
+
               addBindings(
                 color,
                 measure.height,
@@ -140,7 +178,17 @@ export default defineEventHandler(async (event) => {
       };
     });
 
-    const newGamyba = new gamybaSchema({
+    // const newGamyba = new gamybaSchema({
+    //   _id: project._id.toString(),
+    //   creator: { ...project.creator },
+    //   client: { ...project.client },
+    //   orderNumber: project.orderNumber,
+    //   fences: [...newFences],
+    //   aditional: [],
+    //   bindings,
+    // });
+
+    const newGamyba = {
       _id: project._id.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
@@ -148,15 +196,15 @@ export default defineEventHandler(async (event) => {
       fences: [...newFences],
       aditional: [],
       bindings,
-    });
-    //@ts-ignore
-    const data = await newGamyba.save();
+    };
+    // @ts-ignore
+    // const data = await newGamyba.save();
 
-    if (!data) return { success: false, data: null, message: "Įvyko klaida" };
+    // if (!data) return { success: false, data: null, message: "Įvyko klaida" };
 
-    project.status = "Gaminama";
-    //@ts-ignore
-    await project.save();
+    // project.status = "Gaminama";
+    // @ts-ignore
+    // await project.save();
 
     return { success: true, data: newGamyba, message: "Perduota gamybai" };
   }
