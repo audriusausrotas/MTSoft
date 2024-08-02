@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       quantity: number
     ) => {
       let found = false;
-
+      type.includes("Koja") && console.log(height + " - " + quantity);
       for (const binding of bindings) {
         if (
           binding.color === color &&
@@ -87,6 +87,11 @@ export default defineEventHandler(async (event) => {
 
       const color = item.color;
       const isBindings = item.bindings === "Taip" ? true : false;
+      const legWidth = item.type.includes("Dilė")
+        ? "20 mm"
+        : item.type.includes("40/105")
+        ? "40 mm"
+        : "55 mm";
       let lastHeight = 0;
       let stepHeight = 0;
       let stepDirection = "";
@@ -96,28 +101,52 @@ export default defineEventHandler(async (event) => {
       let wasStep = false;
 
       item.measures.forEach((measure, index) => {
-        if (index === 0) {
+        const notSpecial =
+          !measure.laiptas.exist &&
+          !measure.kampas.exist &&
+          !measure.gates.exist;
+
+        if (index === 0 && notSpecial) {
           lastHeight = measure.height;
           addBindings(
             color,
             measure.height,
-            isBindings ? "Koja vienguba" : "Koja dviguba",
+            isBindings
+              ? "Koja vienguba " + legWidth
+              : "Koja dviguba " + legWidth,
             1
           );
           return;
         }
 
-        if (index === item.measures.length - 1) {
+        if (index === item.measures.length - 1 && notSpecial) {
           addBindings(
             color,
             measure.height,
-            isBindings ? "Koja vienguba" : "Koja dviguba",
+            isBindings
+              ? "Koja vienguba " + legWidth
+              : "Koja dviguba " + legWidth,
             1
           );
         }
 
+        // PASITIKRINT SITA
+        if (index === item.measures.length - 1 && measure.gates.exist) {
+          const maxHeight = Math.max(lastHeight, measure.height);
+
+          addBindings(
+            color,
+            maxHeight,
+            isBindings
+              ? "Koja vienguba " + legWidth
+              : "Koja dviguba " + legWidth,
+            1
+          );
+
+          isBindings && addBindings(color, maxHeight, "Elka", 2);
+        }
+
         if (measure.gates.exist) {
-          addBindings(color, measure.height, "Koja dviguba", 2);
           wasGates = true;
         } else if (measure.kampas.exist) {
           cornerRadius = measure.kampas.value;
@@ -128,36 +157,92 @@ export default defineEventHandler(async (event) => {
           wasStep = true;
         } else {
           if (wasGates) {
+            // LIKO VARTAI
+          } else if (wasCorner && wasStep) {
+            const maxHeight =
+              stepDirection === "Aukštyn"
+                ? lastHeight + stepHeight - (lastHeight - measure.height)
+                : measure.height + stepHeight - (measure.height - lastHeight);
+
+            isBindings &&
+              addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
+
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+            addBindings(
+              color,
+              stepDirection === "Aukštyn" ? measure.height : lastHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+
+            wasCorner = false;
+            wasStep = false;
+            lastHeight = measure.height;
           } else if (wasCorner) {
+            const maxHeight = Math.max(lastHeight, measure.height);
+            isBindings &&
+              addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
+
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              2
+            );
+
+            wasCorner = false;
+            lastHeight = measure.height;
           } else if (wasStep) {
+            const maxHeight =
+              stepDirection === "Aukštyn"
+                ? lastHeight + stepHeight - (lastHeight - measure.height)
+                : measure.height + stepHeight - (measure.height - lastHeight);
+
+            isBindings && addBindings(color, maxHeight, "Centrinis", 2);
+
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+
+            addBindings(
+              color,
+              stepDirection === "Aukštyn" ? measure.height : lastHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+            wasStep = false;
+            lastHeight = measure.height;
           } else {
-            if (lastHeight === measure.height) {
-              isBindings && addBindings(color, lastHeight, "Centrinis", 2);
-              addBindings(
-                color,
-                measure.height,
-                isBindings ? "Koja vienguba" : "Koja dviguba",
-                2
-              );
-            } else if (lastHeight > measure.height) {
-              isBindings && addBindings(color, lastHeight, "Centrinis", 2);
+            const maxHeight = Math.max(lastHeight, measure.height);
 
-              addBindings(
-                color,
-                lastHeight,
-                isBindings ? "Koja vienguba" : "Koja dviguba",
-                2
-              );
-            } else if (lastHeight < measure.height) {
-              isBindings && addBindings(color, measure.height, "Centrinis", 2);
+            isBindings && addBindings(color, maxHeight, "Centrinis", 2);
 
-              addBindings(
-                color,
-                measure.height,
-                isBindings ? "Koja vienguba" : "Koja dviguba",
-                2
-              );
-            }
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              2
+            );
 
             lastHeight = measure.height;
           }
@@ -196,6 +281,7 @@ export default defineEventHandler(async (event) => {
       orderNumber: project.orderNumber,
       fences: [...newFences],
       aditional: [],
+      status: "Negaminti",
       bindings,
     };
     /////////////////////////////////////////////////////////////
