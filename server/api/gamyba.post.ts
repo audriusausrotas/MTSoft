@@ -188,6 +188,7 @@ export default defineEventHandler(async (event) => {
     //   bindings,
     // });
 
+    ///////////////////////////// sita istrint /////////////////////
     const newGamyba = {
       _id: project._id.toString(),
       creator: { ...project.creator },
@@ -197,6 +198,7 @@ export default defineEventHandler(async (event) => {
       aditional: [],
       bindings,
     };
+    /////////////////////////////////////////////////////////////
     // @ts-ignore
     // const data = await newGamyba.save();
 
