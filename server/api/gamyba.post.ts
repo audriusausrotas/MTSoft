@@ -4,6 +4,7 @@ import type {
   Project,
   Bindings,
   BindingItem,
+  Measure,
 } from "~/data/interfaces";
 import { v4 } from "uuid";
 
@@ -27,12 +28,11 @@ export default defineEventHandler(async (event) => {
     //main bindings array
     const bindings: Bindings[] = [];
     //fence sides with bindings
-    const front: BindingItem[] = [];
-    const left: BindingItem[] = [];
-    const back: BindingItem[] = [];
-    const right: BindingItem[] = [];
-
-    ////////////////////////////////////////////////////////////////
+    let front: BindingItem | null = null;
+    let left: BindingItem | null = null;
+    let back: BindingItem | null = null;
+    let right: BindingItem | null = null;
+    const fenceSequence: string[] = [];
 
     //adds bindings as new or update quantity of existing
     const addBindings = (
@@ -42,7 +42,6 @@ export default defineEventHandler(async (event) => {
       quantity: number
     ) => {
       let found = false;
-      type.includes("Koja") && console.log(height + " - " + quantity);
       for (const binding of bindings) {
         if (
           binding.color === color &&
@@ -75,15 +74,16 @@ export default defineEventHandler(async (event) => {
       const bindingItem: BindingItem = {
         bindings: item.bindings === "Taip" ? true : false,
         color: item.color,
-        firstHeight: item.measures[0].height,
-        lastHeight: item.measures[item.measures.length - 1].height,
+        firstHeight: item.measures[0],
+        lastHeight: item.measures[item.measures.length - 1],
       };
 
       // adds existing fences for corner calculation
-      if (item.side === "Priekis") front.push(bindingItem);
-      else if (item.side === "Kairė") left.push(bindingItem);
-      else if (item.side === "Galas") back.push(bindingItem);
-      else if (item.side === "Dešinė") right.push(bindingItem);
+      fenceSequence.push(item.side);
+      if (item.side === "Priekis") front = bindingItem;
+      else if (item.side === "Kairė") left = bindingItem;
+      else if (item.side === "Galas") back = bindingItem;
+      else if (item.side === "Dešinė") right = bindingItem;
 
       const color = item.color;
       const isBindings = item.bindings === "Taip" ? true : false;
@@ -130,24 +130,22 @@ export default defineEventHandler(async (event) => {
           );
         }
 
-        // PASITIKRINT SITA
-        if (index === item.measures.length - 1 && measure.gates.exist) {
-          const maxHeight = Math.max(lastHeight, measure.height);
-
-          addBindings(
-            color,
-            maxHeight,
-            isBindings
-              ? "Koja vienguba " + legWidth
-              : "Koja dviguba " + legWidth,
-            1
-          );
-
-          isBindings && addBindings(color, maxHeight, "Elka", 2);
-        }
-
         if (measure.gates.exist) {
+          if (index !== 0 && !wasGates) {
+            const maxHeight = Math.max(lastHeight, measure.height);
+
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+            isBindings && addBindings(color, maxHeight, "Elka", 2);
+          }
           wasGates = true;
+          if (index === 0) lastHeight = measure.height;
         } else if (measure.kampas.exist) {
           cornerRadius = measure.kampas.value;
           wasCorner = true;
@@ -157,7 +155,21 @@ export default defineEventHandler(async (event) => {
           wasStep = true;
         } else {
           if (wasGates) {
-            // LIKO VARTAI
+            const maxHeight = Math.max(lastHeight, measure.height);
+
+            addBindings(
+              color,
+              maxHeight,
+              isBindings
+                ? "Koja vienguba " + legWidth
+                : "Koja dviguba " + legWidth,
+              1
+            );
+
+            isBindings && addBindings(color, maxHeight, "Elka", 2);
+
+            wasGates = false;
+            lastHeight = measure.height;
           } else if (wasCorner && wasStep) {
             const maxHeight =
               stepDirection === "Aukštyn"
@@ -249,7 +261,89 @@ export default defineEventHandler(async (event) => {
         }
       });
     });
-    ////////////////////////////////////////////////////////////////
+
+    // calculate corner bindings
+    const calculateCorners = (first: BindingItem, last: BindingItem) => {
+      if (first.bindings && last.bindings) {
+        if (first.lastHeight.gates.exist) {
+          addBindings(last.color, last.firstHeight.height, "Elka", 2);
+        } else if (last.firstHeight.gates.exist) {
+          addBindings(first.color, first.lastHeight.height, "Elka", 2);
+        } else {
+          const maxHeight = Math.max(
+            first.lastHeight.height,
+            last.firstHeight.height
+          );
+          addBindings(first.color, maxHeight, "Kampas 90", 1);
+        }
+      } else if (first.bindings) {
+        addBindings(first.color, first.lastHeight.height, "Elka", 2);
+      } else if (last.bindings) {
+        addBindings(last.color, last.firstHeight.height, "Elka", 2);
+      }
+    };
+
+    let lastCorner = "";
+
+    fenceSequence.forEach((item, index) => {
+      if (index === 0) {
+        lastCorner = item;
+      } else {
+        if (item === "Priekis" && lastCorner === "Kairė") {
+          calculateCorners(front!, left!);
+        }
+        if (item === "Priekis" && lastCorner === "Dešinė") {
+          calculateCorners(front!, right!);
+          lastCorner = item;
+        }
+        if (item === "Kairė" && lastCorner === "Priekis") {
+          calculateCorners(left!, front!);
+          lastCorner = item;
+        }
+        if (item === "Kairė" && lastCorner === "Galas") {
+          calculateCorners(left!, back!);
+          lastCorner = item;
+        }
+        if (item === "Dešinė" && lastCorner === "Priekis") {
+          calculateCorners(right!, front!);
+          lastCorner = item;
+        }
+        if (item === "Dešinė" && lastCorner === "Galas") {
+          calculateCorners(right!, back!);
+          lastCorner = item;
+        }
+        if (item === "Galas" && lastCorner === "Kairė") {
+          calculateCorners(back!, left!);
+          lastCorner = item;
+        }
+        if (item === "Galas" && lastCorner === "Dešinė") {
+          calculateCorners(back!, right!);
+          lastCorner = item;
+        } else if (index === fenceSequence.length - 1) {
+          const firstFence = fenceSequence[0];
+          const lastFence = fenceSequence[fenceSequence.length - 1];
+
+          const first =
+            firstFence === "Priekis"
+              ? front
+              : firstFence === "Kairė"
+              ? left
+              : firstFence === "Galas"
+              ? back
+              : right;
+          const last =
+            lastFence === "Priekis"
+              ? front
+              : lastFence === "Kairė"
+              ? left
+              : lastFence === "Galas"
+              ? back
+              : right;
+
+          calculateCorners(first!, last!);
+        }
+      }
+    });
 
     const newFences: GamybaFence[] = project.fenceMeasures.map((item) => {
       return {
@@ -263,36 +357,24 @@ export default defineEventHandler(async (event) => {
       };
     });
 
-    // const newGamyba = new gamybaSchema({
-    //   _id: project._id.toString(),
-    //   creator: { ...project.creator },
-    //   client: { ...project.client },
-    //   orderNumber: project.orderNumber,
-    //   fences: [...newFences],
-    //   aditional: [],
-    //   bindings,
-    // });
-
-    ///////////////////////////// sita istrint /////////////////////
-    const newGamyba = {
+    const newGamyba = new gamybaSchema({
       _id: project._id.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,
       fences: [...newFences],
       aditional: [],
-      status: "Negaminti",
       bindings,
-    };
-    /////////////////////////////////////////////////////////////
-    // @ts-ignore
-    // const data = await newGamyba.save();
+    });
 
-    // if (!data) return { success: false, data: null, message: "Įvyko klaida" };
-
-    // project.status = "Gaminama";
     // @ts-ignore
-    // await project.save();
+    const data = await newGamyba.save();
+
+    if (!data) return { success: false, data: null, message: "Įvyko klaida" };
+
+    project.status = "Gaminama";
+    // @ts-ignore
+    await project.save();
 
     return { success: true, data: newGamyba, message: "Perduota gamybai" };
   }

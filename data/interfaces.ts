@@ -351,6 +351,6 @@ export interface Montavimas {
 export interface BindingItem {
   bindings: boolean;
   color: string;
-  firstHeight: number;
-  lastHeight: number;
+  firstHeight: Measure;
+  lastHeight: Measure;
 }
