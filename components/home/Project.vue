@@ -185,6 +185,12 @@ checkGates();
           <p>Peržiūrėti</p>
         </div>
 
+        <div v-if="!props.archive" @click="linkHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
+          <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
+          <p>Kopijuoti nuorodą</p>
+        </div>
+
         <div v-if="!props.archive" @click="editHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
           <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" height="20" />
@@ -197,11 +203,7 @@ checkGates();
           <p>Kopijuoti projektą</p>
         </div>
 
-        <div v-if="!props.archive" @click="linkHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
-          <p>Kopijuoti nuorodą</p>
-        </div>
+
 
         <div @click="archiveHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">

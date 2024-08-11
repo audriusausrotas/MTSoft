@@ -80,8 +80,13 @@ export default defineEventHandler(async (event) => {
           !measure.gates.exist;
 
         if (index === 0) {
-          if (item.startBinding !== "Nėra" && isBindings)
-            addBindings(color, measure.height, item.startBinding, 1);
+          if (item.startBinding !== "Nėra" && isBindings) {
+            const quantity =
+              item.startBinding === "Elka" || item.startBinding === "Centrinis"
+                ? 2
+                : 1;
+            addBindings(color, measure.height, item.startBinding, quantity);
+          }
 
           if (notSpecial) {
             lastHeight = measure.height;

@@ -142,7 +142,7 @@ watch(color, (newColor) => {
 <template>
     <div class="flex even:bg-gray-ultra-light border-b h-8 border-black w-fit">
         <p class="w-10 border-x border-black text-center "
-            :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.binding.quantity && +done === +props.binding.quantity ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : +cut === +props.binding.quantity ? 'bg-green-300' : 'bg-orange-400'">
+            :class="postone ? 'bg-red-full text-white' : +cut === 0 || cut === undefined ? 'bg-transparent' : +cut === +props.binding.quantity && +done === +props.binding.quantity ? 'bg-green-500' : +cut > +props.binding.quantity ? 'bg-red-full' : +cut === +props.binding.quantity ? 'bg-green-300' : 'bg-orange-400'">
             {{ props.index + 1 }}</p>
 
         <div class="w-48 border-r border-black px-1   flex">
@@ -171,15 +171,15 @@ watch(color, (newColor) => {
 
 
         <div class="w-24 border-r border-black px-1  flex"
-            :class="+cut === +props.binding.quantity ? 'bg-green-400' : +cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
-            <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full"/>
+            :class="+cut === +props.binding.quantity ? 'bg-green-400' : +cut === 0 || cut === undefined ? 'bg-transparent' : +cut > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full" />
             <NuxtImg width="20" height="20" v-if="!isSavedCut" src="/icons/save.svg" decoding="auto" loading="lazy"
                 :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer" />
 
         </div>
         <div class="w-24 border-r border-black px-1  flex"
-            :class="+done === +props.binding.quantity ? 'bg-green-400' : +done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
-            <input v-model="done" type="number" placeholder="Pagaminti" class="w-full"/>
+            :class="+done === +props.binding.quantity ? 'bg-green-400' : +done === 0 || done === undefined ? 'bg-transparent' : +done > +props.binding.quantity ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="done" type="number" placeholder="Pagaminti" class="w-full" />
             <NuxtImg width="20" height="20" v-if="!isSavedDone" src="/icons/save.svg" decoding="auto" loading="lazy"
                 :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer" />
         </div>

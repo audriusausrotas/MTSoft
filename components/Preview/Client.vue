@@ -3,13 +3,12 @@ const props = defineProps(["offer"]);
 </script>
 
 <template>
-  <div class="flex flex-col gap-12 justify-evenly flex-wrap  ">
-    <div class="font-semibold text-3xl flex justify-evenly w-full">
-      <h3>
-        Pasiūlymo Nr.: {{ props.offer?.orderNumber }}
-      </h3>
-      <h6>Atsakingas: {{ props.offer.creator.username }}</h6>
+  <div class="flex flex-col gap-4 justify-evenly flex-wrap  ">
+    <div class=" flex justify-center gap-4 w-full">
+      <BaseInput :disable="true" :name="props.offer?.orderNumber" label="Užsakymo nr" />
+      <BaseInput :disable="true" :name="props.offer.creator.username" label="Atsakingas" />
     </div>
+
     <div class="flex gap-4 justify-center flex-wrap">
       <BaseInput :disable="true" :name="props.offer?.client?.username" label="klientas" />
       <BaseInput :disable="true" :name="props.offer?.client?.address" label="adresas" />

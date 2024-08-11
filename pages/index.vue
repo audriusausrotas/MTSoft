@@ -31,7 +31,7 @@ const statusFilters = ["Visi", ...status];
       <BaseSelectField label="Statusas" :values="statusFilters" id="statusFilter"
         :defaultValue="useProjects.selectedStatusFilter" width="w-40" @onChange="(value: string) => useProjects.changeStatusFilter(value)
         " />
-      <BaseInput placeholder="Paieška" label="Paieška" width="w-96" variant="light" @onChange="(value: string): void =>
+      <BaseInput placeholder="Paieška" label="Paieška" width="w-full" class="pr-16 flex-1" variant="light" @onChange="(value: string): void =>
         useProjects.searchProjects(value)
         ">
         <NuxtImg src="/icons/search.svg" width="14" height="14" alt="search icon" decoding="auto" loading="lazy"

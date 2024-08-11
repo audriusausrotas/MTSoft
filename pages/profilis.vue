@@ -11,6 +11,7 @@ const lastName = ref<string>("");
 const phone = ref<string>("");
 const isLoading = ref<boolean>(false);
 
+
 const saveHandler = async () => {
   isLoading.value = true;
   const reqData = {
@@ -66,12 +67,10 @@ const saveHandler = async () => {
 
         <h5 class="font-semibold normal-case">{{ useUser.user?.phone }}</h5>
 
-        <BaseInput :name="url" @onChange="(v) => (url = v)" placeholder="Nuotraukos nuoroda" width="full"
-          :disable="true">
-          <NuxtImg src="/icons/link.svg" width="20" height="20" decoding="auto" loading="lazy" :ismap="true" />
-        </BaseInput>
       </div>
     </div>
+
+
 
     <div class="flex py-8 border-b gap-14">
       <BaseInput :name="lastName" @onChange="(v) => (lastName = v)" placeholder="Pavardė" label="Pavardė"

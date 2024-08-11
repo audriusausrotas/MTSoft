@@ -192,7 +192,7 @@ watch(length, (newLength) => {
     </div>
     <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none ">
         <p class=" w-10 flex items-center justify-center h-full  border-x border-black "
-            :class="postone ? 'bg-red-full text-white' : +cut === 0 ? 'bg-transparent' : +cut === +props.data.elements && +done === +props.data.elements ? 'bg-green-500' : cut === undefined ? 'bg-transparent' : +cut > +props.data.elements ? 'bg-red-full' : +cut === +props.data.elements ? 'bg-green-300' : 'bg-orange-400'">
+            :class="postone ? 'bg-red-full text-white' : +cut === 0 || cut === undefined ? 'bg-transparent' : +cut === +props.data.elements && +done === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : +cut === +props.data.elements ? 'bg-green-300' : 'bg-orange-400'">
             {{ props.index + 1 }}</p>
 
         <div class=" w-20 flex items-center justify-center h-full  border-r border-black px-1">
@@ -211,14 +211,14 @@ watch(length, (newLength) => {
                 :ismap="true" @click="saveHandler('height')" class="hover:cursor-pointer " />
         </div>
         <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1"
-            :class="+cut === 0 ? 'bg-transparent' : cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
-            <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full"/>
+            :class="+cut === 0 || cut === undefined ? 'bg-transparent' : +cut === +props.data.elements ? 'bg-green-500' : +cut > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full" />
             <NuxtImg v-if="!isSavedCut" src="/icons/save.svg" width="20" height="20" decoding="auto" loading="lazy"
                 :ismap="true" @click="saveHandler('cut')" class="hover:cursor-pointer " />
         </div>
         <div class=" w-24 flex items-center justify-center h-full  border-r border-black px-1"
-            :class="+done === 0 ? 'bg-transparent' : done === undefined ? 'bg-transparent' : +done === +props.data.elements ? 'bg-green-500' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
-            <input v-model="done" type="number" placeholder="Pagaminti" class="w-full"/>
+            :class="+done === 0 || done === undefined ? 'bg-transparent' : +done === +props.data.elements ? 'bg-green-500' : +done > +props.data.elements ? 'bg-red-full' : 'bg-orange-500'">
+            <input v-model="done" type="number" placeholder="Pagaminti" class="w-full" />
             <NuxtImg v-if="!isSavedDone" src="/icons/save.svg" width="20" height="20" decoding="auto" loading="lazy"
                 :ismap="true" @click="saveHandler('done')" class="hover:cursor-pointer" />
         </div>

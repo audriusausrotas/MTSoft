@@ -31,7 +31,7 @@ const props = defineProps(["offer",])
         <OfferWork v-for="(work, index) in props.offer?.works" :key="work.id" :work="work" :index="index" />
       </div>
     </div>
-    <div class="flex gap-8 justify-between flex-wrap ">
+    <div class="flex gap-8 justify-evenly flex-wrap ">
       <PreviewMeasures v-for=" (fence, index ) in props.offer?.fenceMeasures" :key="fence.id" :fence="fence"
         :index="index" :showFull="true" />
     </div>

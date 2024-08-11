@@ -92,7 +92,7 @@ const newBindingHandler = async () => {
                 :defaultValue="order?.status || GamybaStatus[0]" width="w-60" @onChange="(value: string) => statusHandler(value)
                 " />
         </div>
-        <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
+        <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler" class="max-w-[896px]"
             @onDelete="deleteHandler" />
 
         <div class="flex gap-4 flex-col">
