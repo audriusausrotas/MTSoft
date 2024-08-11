@@ -56,6 +56,8 @@ const fenceSchema = new Schema({
   elements: Number,
   totalLength: Number,
   totalQuantity: Number,
+  startBinding: String,
+  endBinding: String,
   measures: { type: [measureSchema], default: [] },
 });
 

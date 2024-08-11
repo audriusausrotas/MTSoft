@@ -34,6 +34,8 @@ export const useCalculationsStore = defineStore("calculations", {
         elements: 0,
         totalLength: 0,
         totalQuantity: 0,
+        startBinding: "Elka",
+        endBinding: "Elka",
         measures: [createInitialMeasure()],
       };
 
@@ -104,6 +106,14 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateMaterial(index: number, value: string): void {
       this.fences[index].material = value;
+    },
+
+    updateStartBinding(index: number, value: string): void {
+      this.fences[index].startBinding = value;
+    },
+
+    updateEndBinding(index: number, value: string): void {
+      this.fences[index].endBinding = value;
     },
 
     updateSeeThrough(index: number, value: string): void {

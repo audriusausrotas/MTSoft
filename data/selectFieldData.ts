@@ -133,6 +133,15 @@ export const accountTypes: string[] = [
   "Montavimas",
 ];
 
+export const bindings: string[] = [
+  "Elka",
+  "Galinis",
+  "Kampas",
+  "Centrinis",
+  "Nėra",
+  "Kita",
+];
+
 export const accountStatus: string[] = ["Patvirtintas", "Nepatvirtintas"];
 
 export const laiptasDirection: string[] = ["Aukštyn", "Žemyn"];

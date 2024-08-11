@@ -8,24 +8,6 @@ const order: any = computed(() => {
     return useGamyba.gamybaList.find((item) => item._id === route.params.id)
 });
 
-const confirmHandler = async () => {
-    // const response: any = await $fetch(
-    //     "/api/gamyba",
-    //     {
-    //         method: "DELETE",
-    //         body: { _id: order!.value._id, completed: true },
-    //     }
-    // );
-    // if (response.success) {
-    //     useGamyba.deleteGamybaOrder(order!.value._id);
-    //     setIsError(false);
-    //     setError(response.message);
-    //     navigateTo("/gamyba")
-    // } else {
-    //     setError(response.message);
-    // }
-}
-
 const statusHandler = async (value: string) => {
     const response: any = await $fetch(
         "/api/gamybaStatus",

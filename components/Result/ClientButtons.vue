@@ -69,7 +69,7 @@ const clearHandler = () => {
 <template>
 
 
-  <div class="flex gap-4 flex-wrap lg:sticky top-0 z-50 bg-white py-4 border-b ">
+  <div class="flex gap-4 flex-wrap lg:sticky top-0 z-40 bg-white py-4 border-b ">
     <div class="flex gap-4">
       <BaseButton name="išsaugoti sąmatą" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="išvalyti viską" @click="clearHandler" />

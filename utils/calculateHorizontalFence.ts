@@ -8,6 +8,8 @@ export default function calculateHorizontalFence(
 
   let fenceExist: boolean = false;
 
+  if (item.services === "Tik Montavimas") return;
+
   const initialFenceData = {
     ...item,
     length: item.totalLength,

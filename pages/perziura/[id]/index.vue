@@ -272,6 +272,6 @@ watch(
     </div>
     <PreviewClient :offer="offer" />
     <ResultTotalElement :results="offer" />
-    <previewTrello :offer="offer" :hidePrices="false" />
+    <PreviewMain :offer="offer" />
   </div>
 </template>
