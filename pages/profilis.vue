@@ -11,6 +11,27 @@ const lastName = ref<string>("");
 const phone = ref<string>("");
 const isLoading = ref<boolean>(false);
 
+const changeHandler = async (event: any) => {
+  const file = event.target.files[0];
+  const formData = new FormData();
+  formData.append("file", file)
+
+  const response: any = await $fetch("/api/upload", {
+    method: "post",
+    body: formData,
+  });
+
+  if (response.success) {
+    url.value = response.data
+    saveHandler()
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+  isLoading.value = false;
+}
+
 
 const saveHandler = async () => {
   isLoading.value = true;
@@ -66,6 +87,8 @@ const saveHandler = async () => {
         <h5 class="font-semibold normal-case">{{ useUser.user?.email }}</h5>
 
         <h5 class="font-semibold normal-case">{{ useUser.user?.phone }}</h5>
+
+        <input type="file" id="file" @change="changeHandler">
 
       </div>
     </div>
