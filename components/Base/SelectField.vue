@@ -21,13 +21,13 @@ const changeHandler = (value: string): void => {
 </script>
 
 <template>
-  <div class="flex flex-col  gap-1 select-none">
+  <div class="flex flex-col self-end gap-1 capitalize select-none">
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
       props.label
     }}</label>
     <div class="relative selct-none h-10" :class="props.width ? `${props.width}` : 'w-48'">
       <div @click="props.disable ? '' : (isOpen = !isOpen)"
-        class="flex justify-between gap-3 py-2 pl-4 border border-dark-light rounded-lg" :class="[
+        class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg  shadow-sm" :class="[
       props.variant !== 'light'
         ? 'bg-gray-ultra-light'
         : props.disable

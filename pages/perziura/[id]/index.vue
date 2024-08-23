@@ -7,6 +7,7 @@ const useProjects = useProjectsStore();
 const useGates = useGateStore();
 const useUsers = useUserStore();
 const useGamyba = useGamybaStore()
+const useMontavimas = useMontavimasStore()
 
 const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
@@ -187,6 +188,7 @@ const montavimasHandler = async () => {
     body: { _id: offer!._id },
   });
   if (response.success) {
+    useMontavimas.addMontavimas(response.data)
     setIsError(false);
     setError(response.message);
   } else {

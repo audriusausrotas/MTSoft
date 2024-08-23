@@ -22,7 +22,7 @@ const deleteHandler = (comment: string): void => {
         <div class="flex gap-4 items-end flex-wrap print:hidden">
             <BaseInput label="Naujas komentaras" class="flex-1" width="w-full" variant="light" :name="newComment"
                 @onChange="(value: string) => newComment = value" />
-            <BaseButton name="Issaugoti komentara" @click="saveHandler" />
+            <BaseButton name="Issaugoti komentara" @click="saveHandler" class="md:w-60 w-full" />
         </div>
         <BaseCommentElement v-for="comment in props.commentsArray" :key="v4()" :comment="comment" :id="props.id"
             @onDelete="deleteHandler" />

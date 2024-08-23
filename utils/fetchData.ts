@@ -34,6 +34,17 @@ export async function fetchGamyba() {
   }
 }
 
+export async function fetchMontavimas() {
+  const useMontavimas = useMontavimasStore();
+  if (useMontavimas.montavimasList.length === 0) {
+    console.log("fecina montavima");
+    const { data }: any = await useFetch("/api/montavimas");
+    if (data.value.success) {
+      useMontavimas.addAll(data.value.data);
+    }
+  }
+}
+
 export async function fetchProjects() {
   const useProjects = useProjectsStore();
   if (useProjects.projects.length === 0) {

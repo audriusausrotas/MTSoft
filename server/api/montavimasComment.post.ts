@@ -1,12 +1,14 @@
-import type { Gamyba, Comment } from "~/data/interfaces";
+import type { Montavimas, Comment } from "~/data/interfaces";
 import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
   const { _id, comment, username } = await readBody(event);
   const _idObject = new mongoose.Types.ObjectId(_id);
-  const data: Gamyba | null = await gamybaSchema.findOne({ _id: _idObject });
+  const data: Montavimas | null = await montavimasSchema.findOne({
+    _id: _idObject,
+  });
 
-  if (!data) return { success: false, data: null, message: "Gamybos nėra" };
+  if (!data) return { success: false, data: null, message: "Montavimo nėra" };
 
   const newComment: Comment = {
     comment,

@@ -21,6 +21,13 @@ export const GamybaStatus: string[] = [
   "Negaminti",
 ];
 
+export const MontavimasStatus: string[] = [
+  "Montuojama",
+  "Laukiama",
+  "Sumontuota",
+  "Nemontuoti",
+];
+
 export const initialWorkData: Works = {
   id: "",
   name: "",

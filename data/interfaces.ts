@@ -274,6 +274,38 @@ export interface FenceMeasure {
   seeThrough: number[];
 }
 
+export interface Montavimas {
+  _id: string;
+  client: Client;
+  creator: Creator;
+  orderNumber: string;
+  worker: string;
+  status: string;
+  fences: GamybaFence[];
+  bindings: Bindings[] | null;
+  aditional: Comment[];
+}
+
+export interface MontavimasMeasure {
+  length: number;
+  height: number;
+  MeasureSpace: number;
+  elements: number;
+  gates: GateInfo;
+  done: number | undefined;
+  postone: boolean;
+  kampas: {
+    exist: boolean;
+    value: number;
+    aditional: string;
+  };
+  laiptas: {
+    exist: boolean;
+    value: number;
+    direction: string;
+  };
+}
+
 export interface Gamyba {
   _id: string;
   client: Client;
@@ -283,6 +315,27 @@ export interface Gamyba {
   fences: GamybaFence[];
   bindings: Bindings[] | null;
   aditional: Comment[];
+}
+
+export interface MontavimasFence {
+  id: string;
+  side: string;
+  type: string;
+  color: string;
+  material: string;
+  services: string;
+  seeThrough: string;
+  direction: string;
+  parts: string;
+  aditional: string;
+  twoSided: string;
+  bindings: string;
+  anchoredPoles: string;
+  space: number;
+  elements: number;
+  totalLength: number;
+  totalQuantity: number;
+  measures: MontavimasMeasure[];
 }
 
 export interface GamybaFence {

@@ -3,8 +3,15 @@
 const props = defineProps(["order", "index"])
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore()
+const useUser = useUserStore()
 
 const deleteHandler = async (): Promise<void> => {
+
+    if (useUser.user?.accountType !== "Administratorius") {
+        setError("Ištrinti gali tik administratorius");
+        return
+    }
+
     const response: any = await $fetch(
         "/api/gamyba",
         {

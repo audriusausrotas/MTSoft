@@ -6,7 +6,6 @@
     <Navigation class="print:hidden" />
     <div
       class="w-full px-8 py-12 print:px:0 print:py-0 border print:border-none flex flex-col gap-8 print:rounded-none rounded-3xl">
-      <PreviewNavigation class="print:hidden" />
       <slot />
     </div>
   </div>

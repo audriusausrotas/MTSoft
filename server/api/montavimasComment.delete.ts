@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const objectId = new mongoose.Types.ObjectId(_id);
 
-  const data = await gamybaSchema.findOne(objectId);
+  const data = await montavimasSchema.findOne(objectId);
 
   if (!data)
     return { success: false, data: null, message: "užsakymas nerastas" };

@@ -1,5 +1,4 @@
 import { useCookie } from "nuxt/app";
-import type { User } from "~/data/interfaces";
 import {
   fetchUser,
   fetchGates,
@@ -8,6 +7,7 @@ import {
   fetchProducts,
   fetchUsers,
   fetchArchive,
+  fetchMontavimas,
 } from "~/utils/fetchData";
 
 export default defineNuxtRouteMiddleware(async (to) => {
@@ -48,6 +48,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       await fetchUsers();
       await fetchGates();
       await fetchGamyba();
+      await fetchMontavimas();
     } else {
       switch (useUser.user?.accountType) {
         case "Vartonas":
@@ -67,8 +68,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
           break;
 
         case "Montavimas":
+          await fetchMontavimas();
           if (to.path !== "/profilis") {
-            if (to.path !== "/montavimas") return navigateTo("/montavimas");
+            if (!to.path.includes("/montavimas"))
+              return navigateTo("/montavimas");
           }
           break;
 
