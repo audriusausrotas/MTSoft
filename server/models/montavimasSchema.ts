@@ -37,6 +37,19 @@ const measureSchema = new Schema({
   laiptas: { type: laiptasSchema, default: () => ({}) },
 });
 
+const resultSchema = new Schema({
+  type: { type: String, default: "" },
+  quantity: { type: Number, default: 0 },
+  height: { type: Number, default: 0 },
+  color: { type: String, default: "" },
+  width: { type: Number, default: 0 },
+});
+
+const workSchema = new Schema({
+  name: { type: String, default: "" },
+  quantity: { type: Number, default: 0 },
+});
+
 const fenceSchema = new Schema({
   id: String,
   side: String,
@@ -74,6 +87,14 @@ export const montavimasSchema = defineMongooseModel<Montavimas>(
     },
     fences: {
       type: [fenceSchema],
+      default: [],
+    },
+    results: {
+      type: [resultSchema],
+      default: [],
+    },
+    works: {
+      type: [workSchema],
       default: [],
     },
     aditional: {

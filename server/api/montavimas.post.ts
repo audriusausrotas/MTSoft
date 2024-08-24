@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
       measures: item.measures.map((measure) => ({
         ...measure,
         done: undefined,
-        postone: measure.gates.exist ? true : false,
+        postone: false,
       })),
     };
   });
@@ -28,12 +28,31 @@ export default defineEventHandler(async (event) => {
   if (montavimasExist) {
     return { success: false, data: null, message: "Objektas jau montuojamas" };
   } else {
+    const newResults = project.results.map((item) => {
+      return {
+        type: item.type,
+        quantity: item.quantity,
+        height: item.height,
+        width: item.width,
+        color: item.color,
+      };
+    });
+
+    const newWorks = project.works.map((item) => {
+      return {
+        name: item.name,
+        quantity: item.quantity,
+      };
+    });
+
     const newMontavimas = new montavimasSchema({
       _id: project._id.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,
-      fences: [...newFences],
+      fences: newFences,
+      results: newResults,
+      works: newWorks,
       aditional: [],
     });
 

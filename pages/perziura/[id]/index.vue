@@ -23,6 +23,7 @@ const gigastaUsers = useUsers.users.filter(user =>
   user.accountType === "Gigasta").map(user => user.email)
 
 
+
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
     method: "patch",

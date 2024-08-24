@@ -8,6 +8,8 @@ const order: any = computed(() => {
     return useMontavimas.montavimasList.find((item) => item._id === route.params.id)
 });
 
+console.log(order.value)
+
 const statusHandler = async (value: string) => {
     const response: any = await $fetch(
         "/api/montavimasStatus",

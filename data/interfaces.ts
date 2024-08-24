@@ -282,7 +282,8 @@ export interface Montavimas {
   worker: string;
   status: string;
   fences: GamybaFence[];
-  bindings: Bindings[] | null;
+  results: Result[];
+  works: Works[];
   aditional: Comment[];
 }
 
