@@ -51,6 +51,9 @@ const clickHandler = () => {
         </div>
         <p class="flex items-center justify-center h-8 hover:cursor-pointer " @click="clickHandler">
             {{ order?.client.address }}</p>
+        <p v-if="useUser.user?.accountType === 'Administratorius'"
+            class="flex flex-1 items-center justify-center h-8 border-black">
+            {{ order?.worker }}</p>
     </div>
 </template>
 <style scoped></style>
