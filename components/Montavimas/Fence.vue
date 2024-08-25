@@ -9,7 +9,10 @@ const isVertical = verticals.includes(props.fence.type)
 <template>
     <div class="flex gap-1 flex-col">
         <div>
-            <p v-if="props.fence.aditional">{{ props.fence.aditional }} </p>
+            <p v-if="props.fence.aditional" class="w-[312px] text-justify border border-black p-2">
+                <span class="font-bold">Komentarai:</span>
+                {{ props.fence.aditional }}
+            </p>
         </div>
         <div class="flex flex-col divide-y divide-black border border-black font-semibold xl:text-lg bg-gray-light">
             <div class="flex divide-x divide-black text-center">
