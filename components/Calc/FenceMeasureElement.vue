@@ -65,17 +65,17 @@ watch(
         @onChange="(value: boolean): void => toggleCheckbox(value)" :checked="isChecked" />
 
 
-      <BaseInput v-if="props.measure.kampas.exist" width="w-24" :disable="true" name="Kampas" />
+      <BaseInput v-if="props.measure.kampas.exist" width="w-24" :disable="true" name="Kampas" label="tipas" />
       <BaseInput v-if="props.measure.kampas.exist" width="w-24" variant="light" placeholder="Laipsnis" type="number"
-        :name="props.measure.kampas.value" @onChange="(value: string): void =>
+        label="laipsnis" :name="props.measure.kampas.value" @onChange="(value: string): void =>
         useCalculations.updateMeasureKampas(
           props.index,
           value,
           props.measureIndex
         )
         " />
-      <BaseInput v-if="props.measure.kampas.exist" width="w-32" variant="light" placeholder="Papildoma"
-        :name="props.measure.kampas.aditional" @onChange="(value: string): void =>
+      <BaseInput v-if="props.measure.kampas.exist" width="w-32" variant="light" label="komentaras"
+        placeholder="Papildoma" :name="props.measure.kampas.aditional" @onChange="(value: string): void =>
         useCalculations.updateMeasureKampasAditional(
           props.index,
           value,
@@ -83,17 +83,17 @@ watch(
         )
         " />
 
-      <BaseInput v-if="props.measure.laiptas.exist" width="w-24" :disable="true" name="Laiptas" />
+      <BaseInput v-if="props.measure.laiptas.exist" width="w-24" :disable="true" name="Laiptas" label="tipas" />
       <BaseInput v-if="props.measure.laiptas.exist" variant="light" width="w-24" placeholder="Aukštis" type="number"
-        :name="props.measure.laiptas.value" @onChange="(value: string): void =>
+        label="aukštis" :name="props.measure.laiptas.value" @onChange="(value: string): void =>
         useCalculations.updateMeasureLaiptas(
           props.index,
           value,
           props.measureIndex
         )
         " />
-      <BaseSelectField v-if="props.measure.laiptas.exist" label="Tvoros tipas" :values="laiptasDirection"
-        id="laiptasDirection" :defaultValue="props.measure.laiptas.direction" width="w-32" @onChange="(value: string) => useCalculations.updateMeasureLaiptasDirection(
+      <BaseSelectField v-if="props.measure.laiptas.exist" :values="laiptasDirection" id="laiptasDirection"
+        label="kryptis" :defaultValue="props.measure.laiptas.direction" width="w-32" @onChange="(value: string) => useCalculations.updateMeasureLaiptasDirection(
         props.index,
         value,
         props.measureIndex

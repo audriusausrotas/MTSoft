@@ -13,10 +13,12 @@ export const useUserStore = defineStore("user", {
     },
 
     logout() {
+      const router = useRouter();
       this.user = null;
       const cookie = useCookie("mtud");
       cookie.value = null;
       this.users = [];
+      router.replace("/login");
     },
 
     async setUsers(users: User[]) {

@@ -11,9 +11,10 @@ const useMontavimas = useMontavimasStore()
 
 const allUsers = useUsers.users.map((item) => item.username);
 const isLoading = ref<boolean>(false);
-const isOpen = ref<boolean>(false);
-const isOpen2 = ref<boolean>(false);
-const open = ref<boolean>(false);
+const isOpenGates = ref<boolean>(false);
+const isOpenGates2 = ref<boolean>(false);
+const isOpenMontavimas = ref<boolean>(false);
+const isOpenAdvance = ref<boolean>(false);
 const offer = useProjects.projects.find((item) => item._id === route.params.id);
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
@@ -21,6 +22,8 @@ const provider = ref<string>("")
 const vartonasUsers = useUsers.users.filter(user => user.accountType === "Vartonas").map(user => user.email)
 const gigastaUsers = useUsers.users.filter(user =>
   user.accountType === "Gigasta").map(user => user.email)
+const workers = useUsers.users.filter(user =>
+  user.accountType === "Montavimas").map(user => user.email)
 
 
 
@@ -40,8 +43,8 @@ const statusHandler = async (value: string) => {
 
 const setProvider = (value: string) => {
   provider.value = value
-  isOpen.value = false
-  isOpen2.value = true
+  isOpenGates.value = false
+  isOpenGates2.value = true
 }
 
 const sendEmailHandler = async () => {
@@ -84,7 +87,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
     setError(response.message);
   }
   isLoading.value = false;
-  isOpen2.value = false;
+  isOpenGates2.value = false;
   provider.value = ""
 };
 
@@ -107,7 +110,7 @@ const gateCancelHadnler = async (): Promise<void> => {
 
 const cancelHandler = () => {
   advance.value = 0
-  open.value = false
+  isOpenAdvance.value = false
 }
 
 const changeCreatorHandler = async (value: string) => {
@@ -183,10 +186,10 @@ const gamybaHandler = async () => {
   }
 }
 
-const montavimasHandler = async () => {
+const montavimasHandler = async (value: string) => {
   const response: any = await $fetch("/api/montavimas", {
     method: "post",
-    body: { _id: offer!._id },
+    body: { _id: offer!._id, worker: value },
   });
   if (response.success) {
     useMontavimas.addMontavimas(response.data)
@@ -195,7 +198,9 @@ const montavimasHandler = async () => {
   } else {
     setError(response.message);
   }
+  isOpenMontavimas.value = false
 }
+
 
 
 const checkGates = () => {
@@ -224,10 +229,10 @@ watch(
       <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
 
       <div>
-        <BaseButton v-if="!open" name="Paliktas avansas" @click="open = !open" />
-        <div v-else-if="open" class="flex overflow-hidden border rounded-lg">
+        <BaseButton v-if="!isOpenAdvance" name="Paliktas avansas" @click="isOpenAdvance = !isOpenAdvance" />
+        <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
           <input placeholder="Avansas" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
-            v-model="advance" :autofocus="open" @keyup.enter="advanceHandler" />
+            v-model="advance" :autofocus="isOpenAdvance" @keyup.enter="advanceHandler" />
           <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer" @click="advanceHandler">
             OK
           </button>
@@ -241,9 +246,9 @@ watch(
 
       <div v-if="gateExist">
         <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
-        <BaseButton v-else-if="!gateOrdered && !isOpen && !isOpen2" name="Užsakyti vartus" @click="isOpen = true"
-          :isLoading="isLoading" />
-        <div v-else-if="!gateOrdered && isOpen"
+        <BaseButton v-else-if="!gateOrdered && !isOpenGates && !isOpenGates2" name="Užsakyti vartus"
+          @click="isOpenGates = true" :isLoading="isLoading" />
+        <div v-else-if="!gateOrdered && isOpenGates"
           class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
           <button @click="setProvider('Vartonas')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
             Vartonas
@@ -253,17 +258,25 @@ watch(
           </button>
         </div>
 
-        <BaseSelectField v-else-if="!gateOrdered && isOpen2"
+        <BaseSelectField v-else-if="!gateOrdered && isOpenGates2"
           :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers" id="userSelect"
           defaultValue="Priskirti vartotoja" width="w-60" @onChange="(value: string) => gateOrderHadnler(value)
         " />
 
       </div>
       <BaseButtonWithConfirmation name="Į gamybą" @onConfirm="gamybaHandler" :isLoading="isLoading" />
-      <BaseButtonWithConfirmation name="Į montavimą" @onConfirm="montavimasHandler" :isLoading="isLoading" />
-      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
 
+      <div>
+        <BaseButton v-if="!isOpenMontavimas" name="Į montavimą" @click="isOpenMontavimas = true"
+          :isLoading="isLoading" />
+        <BaseSelectField v-else :values="workers" id="workersList" defaultValue="Pasirinkti montuotoją" width="w-60"
+          @onChange="(value: string) => montavimasHandler(value)
+        " />
+
+      </div>
+      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
     </div>
+
     <div class="flex gap-4">
       <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
         @onChange="(value: string) => statusHandler(value)

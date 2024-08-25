@@ -1,7 +1,7 @@
 import type { Montavimas, MontavimasFence, Project } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
-  const { _id } = await readBody(event);
+  const { _id, worker } = await readBody(event);
 
   const project: Project | null = await projectSchema.findById({ _id });
 
@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
         height: item.height,
         width: item.width,
         color: item.color,
+        category: item.category,
       };
     });
 
@@ -54,6 +55,7 @@ export default defineEventHandler(async (event) => {
       results: newResults,
       works: newWorks,
       aditional: [],
+      worker,
     });
 
     // @ts-ignore

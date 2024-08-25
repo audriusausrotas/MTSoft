@@ -24,9 +24,9 @@ watch(
 </script>
 
 <template>
-  <TopBar class="print:hidden" />
-  <div class="flex flex-col items-center gap-8 lg:px-12 lg:py-10 m-auto sm:items-start sm:flex-row max-w-custom">
-    <Navigation v-if="showSidebar" class="print:hidden" />
+  <TopBar v-if="useUser?.user" class="print:hidden" />
+  <div class="flex flex-col items-center gap-8 lg:px-12 lg:py-10 p-4 m-auto md:items-start md:flex-row max-w-custom">
+    <Navigation v-if="useUser?.user && showSidebar" class="print:hidden hidden md:flex" />
     <div class="w-full px-8 py-12 border rounded-3xl">
       <slot />
     </div>

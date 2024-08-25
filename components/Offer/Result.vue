@@ -23,7 +23,7 @@ else measurement.value = "vnt";
     <div class="border sm:hidden w-full"></div>
     <div class="flex-1">
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
-      <div class="flex print:gap-4 gap-2 md:gap-8">
+      <div class="flex print:gap-4 gap-2 sm:gap-8">
         <span class="w-fit">{{ props.result.type }}</span>
         <span v-if="props.result.seeThrough">{{
         props.result.seeThrough

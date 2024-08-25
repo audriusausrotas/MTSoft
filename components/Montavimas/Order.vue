@@ -27,7 +27,6 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const clickHandler = () => {
-    console.log("asfd")
     navigateTo(`/montavimas/${props.order._id}`)
 }
 

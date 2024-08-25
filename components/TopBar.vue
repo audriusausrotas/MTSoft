@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { topBarLinks } from "~/data/initialValues";
-
-const router = useRouter();
 const route = useRoute();
 const useUser = useUserStore();
 
 const isOpen = ref<boolean>(false);
+const isMenuOpen = ref<boolean>(false);
 const initials = computed(() => useUser?.user?.username.slice(0, 2));
 const currentPath = ref("")
 
@@ -21,6 +20,10 @@ function routeHandler(newPath: string) {
 }
 routeHandler(route.path);
 
+function logoutHandler(): void {
+  useUser.logout();
+}
+
 watch(
   () => route.path,
   (newPath) => {
@@ -28,27 +31,27 @@ watch(
   }
 );
 
-function logoutHandler(): void {
-  useUser.logout();
-  router.replace("/login");
-}
 </script>
 
 <template>
-  <div v-if="useUser?.user" class="shadow-bottom ">
-    <div class="flex flex-col items-center gap-4 px-12 py-4 m-auto sm:flex-row max-w-custom">
-      <div class="flex flex-col items-center justify-center flex-1 sm:flex-row sm:justify-between">
+  <div class="shadow-bottom ">
+    <div class="flex items-center gap-4 px-12 py-4 m-auto  max-w-custom">
+      <div class="flex items-center flex-1 flex-row justify-between">
         <NuxtImg src="/images/logo.png" alt="Moderni Tvora logotipas" width="86" height="48" decoding="auto"
-          loading="lazy" :ismap="true" />
-
-        <div v-if="useUser.user.accountType === 'Administratorius'" class="flex gap-4 justify-center flex-wrap flex-1">
+          loading="lazy" :ismap="true" class="hidden lg:block" />
+        <div v-if="useUser.user!.accountType === 'Administratorius'"
+          class="flex gap-4 md:justify-center flex-wrap flex-1">
           <NuxtLink v-for="link in topBarLinks" :to="link.link"
-            class="flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white"
+            class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden"
             :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
             <NuxtImg v-if="link.iconPath !== ''" :src="link.iconPath" width="20" height="20" decoding="auto"
               loading="lazy" :ismap="true" />
             {{ link.name }}
           </NuxtLink>
+          <div class="flex md:hidden" @click="isMenuOpen = !isMenuOpen">
+            <NuxtImg src="/icons/hamburger.svg" width="24" height="24" decoding="auto" loading="lazy" :ismap="true" />
+
+          </div>
         </div>
         <div v-else>
           <NuxtLink :to="currentMenu?.link"
@@ -60,28 +63,43 @@ function logoutHandler(): void {
         </div>
       </div>
 
-      <div class="h-0 border-0 sm:h-12 sm:border"></div>
+      <div class="h-0 border-0 sm:h-12 sm:border hidden md:block"></div>
       <div @click="() => {
-    isOpen = !isOpen;
-  }
-    " class="relative flex items-center gap-2 select-none hover:cursor-pointer">
+            isOpen = !isOpen;
+          }
+            " class="relative flex items-center gap-2 select-none hover:cursor-pointer">
         <div
-          class="flex items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full">
-          <NuxtImg v-if="useUser.user.photo !== ''" :src="useUser.user?.photo"
-            class="object-cover object-center w-full h-full" width="48" height="48" decoding="auto" loading="lazy"
+          class="md:flex hidden  items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full">
+          <NuxtImg v-if="useUser.user!.photo !== ''" :src="useUser.user?.photo"
+            class="object-cover object-center w-full h-full " width="48" height="48" decoding="auto" loading="lazy"
             :ismap="true" />
           <p v-else>{{ initials }}</p>
         </div>
 
-        <div>{{ useUser.user.username }}</div>
+        <div>{{ useUser.user!.username }}</div>
         <NuxtImg src="/icons/arrowDown.svg" width="8" height="8" decoding="auto" loading="lazy" :ismap="true" />
 
-        <div v-if="isOpen" class="absolute left-0 flex flex-col overflow-hidden bg-white border rounded-md top-14">
+        <div v-if="isOpen"
+          class="absolute left-0 flex flex-col overflow-hidden bg-white border rounded-md top-8 md:top-14 z-50">
           <NuxtLink to="/profilis" class="px-6 py-2 hover:text-white hover:bg-red-full">Profilis</NuxtLink>
           <div @click="logoutHandler" class="px-6 py-2 hover:text-white hover:bg-red-full hover:cursor-pointer">
             Atsijungti
           </div>
         </div>
+      </div>
+    </div>
+    <div v-if="isMenuOpen" class="flex md:hidden border-t p-4 top-14 left-0 w-full ">
+      <div class="flex-1">
+        <NuxtLink v-for="link in topBarLinks" :to="link.link"
+          class="flex gap-2 px-4 py-2 rounded-md w-40  hover:bg-red-full hover:text-white "
+          :class="currentPath === link.name ? 'bg-red-full text-white' : ''">
+          <NuxtImg v-if="link.iconPath !== ''" :src="link.iconPath" width="20" height="20" decoding="auto"
+            loading="lazy" :ismap="true" />
+          {{ link.name }}
+        </NuxtLink>
+      </div>
+      <div class="flex-1">
+        <Navigation />
       </div>
     </div>
   </div>

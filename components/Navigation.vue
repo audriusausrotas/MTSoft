@@ -41,7 +41,7 @@ watch(
 <template>
   <nav v-if="useUser?.user?.accountType === 'Administratorius' ||
     useUser?.user?.accountType === 'Paprastas vartotojas'
-    " class="lg:sticky flex flex-col items-center gap-10 top-8 w-44">
+    " class="md:sticky  flex-col  items-center gap-10 top-8 w-44">
     <div>
       <div class="flex items-center gap-2">
         <h4 class="text-sm capitalize">panelė</h4>

@@ -102,6 +102,19 @@ export interface Result {
   width: number | null;
 }
 
+export interface MontavimasResult {
+  type: string;
+  category: string;
+  quantity: number;
+  height: number;
+  twoSided: string;
+  direction: string;
+  seeThrough: string;
+  space: number;
+  color: string;
+  width: number | null;
+}
+
 export interface OtherParts {
   color: string;
   quantity: number;
@@ -234,6 +247,11 @@ export interface Works {
   isNew: boolean;
 }
 
+export interface MontavimasWorks {
+  name: string;
+  quantity: number;
+}
+
 export interface ResponseProducts {
   success: boolean;
   data: Product[];
@@ -282,8 +300,8 @@ export interface Montavimas {
   worker: string;
   status: string;
   fences: GamybaFence[];
-  results: Result[];
-  works: Works[];
+  results: MontavimasResult[];
+  works: MontavimasWorks[];
   aditional: Comment[];
 }
 

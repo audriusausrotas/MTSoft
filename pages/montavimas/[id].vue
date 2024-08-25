@@ -8,8 +8,6 @@ const order: any = computed(() => {
     return useMontavimas.montavimasList.find((item) => item._id === route.params.id)
 });
 
-console.log(order.value)
-
 const statusHandler = async (value: string) => {
     const response: any = await $fetch(
         "/api/montavimasStatus",
@@ -90,6 +88,37 @@ const deleteHandler = async (value: string, comment: string) => {
         </div>
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />
+
+        <div class="flex flex-col gap-8">
+            <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
+            <div class="flex flex-col">
+                <div class="border-y border-black font-semibold hidden gap-10 px-2 py-2 sm:flex">
+                    <div class="w-6 text-center">Nr</div>
+                    <div class="flex-1">Pavadinimas</div>
+                    <div class="w-20">Kiekis</div>
+                </div>
+                <div class="border-dark-full">
+                    <OfferResult v-for="(result, index) in order.results" :key="result.id" :result="result"
+                        :hidePrices="true" :index="index" />
+                </div>
+            </div>
+            <div class="text-2xl font-semibold text-black text-center ">Darbai</div>
+            <div class="flex flex-col">
+                <div class="border-y border-black font-semibold gap-10 px-2 py-2 hidden sm:flex">
+                    <div class="w-6 text-center">Nr</div>
+                    <div class="flex-1">Pavadinimas</div>
+                    <div class="w-20">Kiekis</div>
+                </div>
+                <div class="print:border-b border-dark-full">
+                    <OfferWork v-for="(work, index) in order.works" :key="work.id" :work="work" :hidePrices="true"
+                        :index="index" />
+                </div>
+            </div>
+            <div class="flex gap-8 justify-evenly flex-wrap ">
+                <PreviewMeasures v-for=" (fence, index ) in order.fenceMeasures" :key="fence.id" :fence="fence"
+                    :index="index" :showFull="true" />
+            </div>
+        </div>
 
         <div class="flex gap-8 flex-wrap justify-center">
             <MontavimasFence v-for="fence, index in order?.fences" :key="fence._id" :fence="fence" :fenceIndex="index"

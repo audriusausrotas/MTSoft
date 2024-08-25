@@ -43,6 +43,7 @@ const resultSchema = new Schema({
   height: { type: Number, default: 0 },
   color: { type: String, default: "" },
   width: { type: Number, default: 0 },
+  category: { type: String, default: "" },
 });
 
 const workSchema = new Schema({
