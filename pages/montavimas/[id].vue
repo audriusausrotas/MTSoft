@@ -7,6 +7,8 @@ const route = useRoute();
 const order: any = computed(() => {
     return useMontavimas.montavimasList.find((item) => item._id === route.params.id)
 });
+const workers = useUser.users.filter(user =>
+    user.accountType === "Montavimas").map(user => user.email)
 
 const statusHandler = async (value: string) => {
     const response: any = await $fetch(
@@ -61,18 +63,39 @@ const deleteHandler = async (value: string, comment: string) => {
     }
 }
 
+const changeCreatorHandler = async (value: string) => {
+    const response: any = await $fetch("/api/changeWorker", {
+        method: "post",
+        body: { _id: order.value._id, value },
+    });
+    if (response.success) {
+        useMontavimas.changeWorker(order.value._id, value);
+        setIsError(false);
+        setError(response.message);
+    } else {
+        setError(response.message);
+    }
+};
+
 </script>
 
 <template>
     <div class="flex flex-col gap-8">
+        <div>
+            <BaseSelectField v-if="useUser.user?.accountType === 'Administratorius'" :values="workers"
+                id="changeCreator" :defaultValue="order.worker" label="Montuotojas" width="w-60" @onChange="(value: string) => changeCreatorHandler(value)
+                " class="" />
+        </div>
         <div class="flex gap-4 items-center flex-col xl:flex-row ">
             <div class="flex gap-4 flex-1  w-full">
+
+
                 <BaseInput width="w-full" :disable="true" label="Užsakymo Nr." class="flex-1 min-w-fit">
                     {{ order?.orderNumber }}
                 </BaseInput>
                 <BaseSelectField label="Statusas" :values="MontavimasStatus" width="w-full" class="min-w-fit flex-1"
                     id="montavimasStatus" :defaultValue="order?.status || MontavimasStatus[0]" @onChange="(value: string) => statusHandler(value)
-                    " />
+                " />
             </div>
             <div class="flex-1 w-full">
                 <BaseInput :disable="true" :name="order?.client.address" width="w-full" label="Adresas" />

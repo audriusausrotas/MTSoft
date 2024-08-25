@@ -26,6 +26,15 @@ export const useMontavimasStore = defineStore("montavimas", {
         else return item;
       });
     },
+
+    changeWorker(id: string, value: string) {
+      this.montavimasList = this.montavimasList.map((item) => {
+        if (item._id === id) {
+          item.worker = value;
+          return item;
+        } else return item;
+      });
+    },
   },
 
   getters: {},
