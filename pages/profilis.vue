@@ -11,26 +11,26 @@ const lastName = ref<string>("");
 const phone = ref<string>("");
 const isLoading = ref<boolean>(false);
 
-const changeHandler = async (event: any) => {
-  const file = event.target.files[0];
-  const formData = new FormData();
-  formData.append("file", file)
+// const changeHandler = async (event: any) => {
+//   const file = event.target.files[0];
+//   const formData = new FormData();
+//   formData.append("file", file)
 
-  const response: any = await $fetch("/api/upload", {
-    method: "post",
-    body: formData,
-  });
+//   const response: any = await $fetch("/api/upload", {
+//     method: "post",
+//     body: formData,
+//   });
 
-  if (response.success) {
-    url.value = response.data
-    saveHandler()
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-  isLoading.value = false;
-}
+//   if (response.success) {
+//     url.value = response.data
+//     saveHandler()
+//     setIsError(false);
+//     setError(response.message);
+//   } else {
+//     setError(response.message);
+//   }
+//   isLoading.value = false;
+// }
 
 
 const saveHandler = async () => {
@@ -62,6 +62,7 @@ const saveHandler = async () => {
   }
   isLoading.value = false;
 };
+
 </script>
 
 <template>
@@ -88,14 +89,15 @@ const saveHandler = async () => {
 
         <h5 class="font-semibold normal-case">{{ useUser.user?.phone }}</h5>
 
-        <input type="file" id="file" @change="changeHandler">
+
+
 
       </div>
     </div>
 
 
 
-    <div class="flex py-8 border-b gap-14">
+    <div class=" flex py-8 border-b gap-14">
       <BaseInput :name="lastName" @onChange="(v) => (lastName = v)" placeholder="Pavardė" label="Pavardė"
         width="w-64" />
       <BaseInput :name="phone" @onChange="(v) => (phone = v)" placeholder="Telefono numeris" label="Telefono numeris"

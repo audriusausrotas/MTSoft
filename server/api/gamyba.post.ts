@@ -1,5 +1,6 @@
 import type { Gamyba, GamybaFence, Project, Bindings } from "~/data/interfaces";
 import { v4 } from "uuid";
+import { fenceBoards } from "~/data/selectFieldData";
 
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
@@ -58,6 +59,8 @@ export default defineEventHandler(async (event) => {
 
     //loops via fences
     project.fenceMeasures.forEach((item) => {
+      if (item.type === "Segmentas" || fenceBoards.includes(item.type)) return;
+
       const color = item.color;
       const isBindings = item.bindings === "Taip" ? true : false;
       const legWidth = item.type.includes("Dilė")
@@ -249,17 +252,21 @@ export default defineEventHandler(async (event) => {
       });
     });
 
-    const newFences: GamybaFence[] = project.fenceMeasures.map((item) => {
-      return {
-        ...item,
-        measures: item.measures.map((measure) => ({
-          ...measure,
-          cut: undefined,
-          done: undefined,
-          postone: measure.gates.exist ? true : false,
-        })),
-      };
-    });
+    const newFences: GamybaFence[] = project.fenceMeasures
+      .filter(
+        (item) => item.type !== "Segmentas" && !fenceBoards.includes(item.type)
+      )
+      .map((item) => {
+        return {
+          ...item,
+          measures: item.measures.map((measure) => ({
+            ...measure,
+            cut: undefined,
+            done: undefined,
+            postone: measure.gates.exist ? true : false,
+          })),
+        };
+      });
 
     const newGamyba = new gamybaSchema({
       _id: project._id.toString(),

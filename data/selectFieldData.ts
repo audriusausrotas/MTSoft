@@ -88,6 +88,19 @@ export const verticals: string[] = [
   "Emka",
 ];
 
+export const fenceBoards: string[] = [
+  "Alba",
+  "Dija",
+  "Standard",
+  "Sigma",
+  "Astra",
+  "Polo",
+  "EVA",
+  "EVA3",
+  "Estetic",
+  "Emka",
+];
+
 export const pramatomumas: string[] = [
   "Aklina",
   "Nepramatoma",
