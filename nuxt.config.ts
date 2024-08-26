@@ -9,12 +9,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    "nuxt-mongoose",
-    "@pinia/nuxt",
-    "@nuxt/image",
-    "@nuxtjs/cloudinary",
-  ],
+  modules: ["nuxt-mongoose", "@pinia/nuxt", "@nuxt/image"],
   mongoose: {
     uri: process.env.MONGODB_URI,
     options: {},
@@ -22,13 +17,5 @@ export default defineNuxtConfig({
   },
   pinia: {
     storesDirs: ["./store/**"],
-  },
-  cloudinary: {
-    cloudName: "dwndoufbt",
-    uploadPreset: "defaultSigned",
-    apiKey: "756325126456533",
-    analytics: true,
-    cloud: {},
-    url: {},
   },
 });
