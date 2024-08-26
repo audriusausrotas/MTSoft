@@ -195,7 +195,12 @@ export interface User {
   phone: string;
   verified: boolean;
   accountType: string;
-  photo: string;
+  photo: Photo;
+}
+
+export interface Photo {
+  id: string;
+  url: string;
 }
 
 export interface ResponseUser {

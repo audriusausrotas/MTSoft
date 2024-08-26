@@ -70,7 +70,7 @@ watch(
             " class="relative flex items-center gap-2 select-none hover:cursor-pointer">
         <div
           class="md:flex hidden  items-center justify-center w-12 h-12 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full">
-          <NuxtImg v-if="useUser.user!.photo !== ''" :src="useUser.user?.photo"
+          <NuxtImg v-if="useUser.user?.photo?.url && useUser.user.photo.url !== ''" :src="useUser.user?.photo?.url"
             class="object-cover object-center w-full h-full " width="48" height="48" decoding="auto" loading="lazy"
             :ismap="true" />
           <p v-else>{{ initials }}</p>

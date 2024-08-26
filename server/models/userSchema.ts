@@ -28,9 +28,9 @@ export const userSchema = defineMongooseModel<User>(
       default: "Paprastas vartotojas",
     },
     photo: {
-      type: String,
+      type: Object,
       required: false,
-      default: "",
+      default: {},
     },
   },
   { collection: "users" }

@@ -1,12 +1,7 @@
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
-  const { url, password, _id, newPassword, phone, lastName } = await readBody(
-    event
-  );
-
-  if (password !== newPassword)
-    return { success: false, data: null, message: "Slaptažodžiai nesutampa" };
+  const { _id, field, value } = await readBody(event);
 
   const data = await userSchema.findById(_id);
 
@@ -17,12 +12,12 @@ export default defineEventHandler(async (event) => {
       message: "Vartotojas nerastas",
     };
 
-  if (url.trim() !== "") data.photo = url;
-  if (phone.trim() !== "") data.phone = phone;
-  if (lastName.trim() !== "") data.lastName = lastName;
-
-  if (password.trim() !== "") {
-    data.password = await bcrypt.hash(password, +process.env.SALT!);
+  if (field === "phone") data.phone = value;
+  if (field === "name") data.lastName = value;
+  if (field === "password") {
+    if (value.trim() !== "") {
+      data.password = await bcrypt.hash(value, +process.env.SALT!);
+    }
   }
 
   const newData = await data.save();

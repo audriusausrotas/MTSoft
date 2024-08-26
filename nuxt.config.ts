@@ -9,7 +9,12 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["nuxt-mongoose", "@pinia/nuxt", "@nuxt/image"],
+  modules: [
+    "nuxt-mongoose",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "@nuxtjs/cloudinary",
+  ],
   mongoose: {
     uri: process.env.MONGODB_URI,
     options: {},
