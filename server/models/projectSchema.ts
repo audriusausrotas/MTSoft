@@ -49,6 +49,11 @@ export const projectSchema = defineMongooseModel<Project>(
       required: false,
       default: "Nepatvirtintas",
     },
+    files: {
+      type: [String],
+      required: false,
+      default: [],
+    },
     creator: Object,
     orderNumber: String,
     totalPrice: Number,

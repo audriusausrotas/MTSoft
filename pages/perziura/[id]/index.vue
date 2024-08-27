@@ -25,6 +25,14 @@ const gigastaUsers = useUsers.users.filter(user =>
 const workers = useUsers.users.filter(user =>
   user.accountType === "Montavimas").map(user => user.email)
 
+const cloudConfig = useRuntimeConfig();
+const config = {
+  cloud: {
+    apiKey: cloudConfig.public.cloudApiKey,
+    cloudName: cloudConfig.public.cloudName
+  },
+}
+
 
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
@@ -200,6 +208,27 @@ const montavimasHandler = async (value: string) => {
   isOpenMontavimas.value = false
 }
 
+const photosHandler = async (result: any) => {
+  const url = result.info.secure_url
+  const id = result.info.public_id
+
+  console.log(result)
+
+
+  // const response: any = await $fetch("/api/profile", {
+  //   method: "put",
+  //   body: { url, public_id: id },
+  // });
+  // if (response.success) {
+  //   setIsError(false);
+  //   setError(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
+
+
+
+}
 
 
 const checkGates = () => {
@@ -220,6 +249,7 @@ watch(
   },
   { deep: true }
 );
+
 </script>
 
 <template>
@@ -242,6 +272,12 @@ watch(
           </button>
         </div>
       </div>
+
+      <CldUploadWidget v-slot="{ open }" signatureEndpoint="/api/cloudinarySignature" :config="config"
+        uploadPreset="defaultSigned" @success="photosHandler">
+        <BaseButton @click="open">Įkelti
+          nuotrauką</BaseButton>
+      </CldUploadWidget>
 
       <div v-if="gateExist">
         <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />

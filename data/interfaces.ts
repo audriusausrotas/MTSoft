@@ -31,6 +31,7 @@ export interface Project {
   orderNumber: string;
   dateCreated: string;
   dateExparation: string;
+  files: string[];
 }
 
 export interface Client {

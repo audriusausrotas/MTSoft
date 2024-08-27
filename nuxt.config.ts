@@ -15,12 +15,24 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/cloudinary",
   ],
+
   mongoose: {
     uri: process.env.MONGODB_URI,
     options: {},
     modelsDir: "models",
   },
+
   pinia: {
     storesDirs: ["./store/**"],
+  },
+
+  runtimeConfig: {
+    // The private keys which are only available within server-side
+    // apiSecret: "123",
+    // Keys within public, will be also exposed to the client-side
+    public: {
+      cloudApiKey: process.env.CLOUD_API_KEY,
+      cloudName: process.env.CLOUD_NAME,
+    },
   },
 });

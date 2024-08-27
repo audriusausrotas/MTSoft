@@ -105,6 +105,7 @@ export const useResultsStore = defineStore("results", {
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
       selectedResult.category = value.category;
+      selectedResult.quantity = 1;
       this.recalculateTotals(index);
     },
 
@@ -113,6 +114,7 @@ export const useResultsStore = defineStore("results", {
       selectedResult.name = value.name;
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
+      selectedResult.quantity = 1;
       this.recalculateTotals(index);
     },
 

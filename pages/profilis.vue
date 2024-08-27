@@ -3,27 +3,25 @@ import type { ResponseUser } from "~/data/interfaces";
 
 const { setError, setIsError } = useError();
 const useUser = useUserStore();
-const initials = computed(() => useUser.user?.username.slice(0, 2));
+const initials = useUser.user?.username.slice(0, 2);
 const newPassword = ref<string>("");
 const password = ref<string>("");
 const lastName = ref<string>(useUser.user?.lastName || "");
 const phone = ref<string>(useUser.user?.phone || "");
 const isSavedPhone = ref<boolean>(true);
 const isSavedName = ref<boolean>(true);
-const isLoading = ref<boolean>(false);
+
+
+const cloudConfig = useRuntimeConfig();
 const config = {
   cloud: {
-    apiKey: '756325126456533',
-    cloudName: 'dwndoufbt'
+    apiKey: cloudConfig.public.cloudApiKey,
+    cloudName: cloudConfig.public.cloudName
   },
 }
 
-
 const saveHandler = async (field: string) => {
-  isLoading.value = true;
-
   let value = ""
-
   if (field === "phone") value = phone.value!
   else if (field === "name") value = lastName.value!
   else if (field === "password") {
@@ -57,32 +55,18 @@ const saveHandler = async (field: string) => {
   } else {
     setError(response.message);
   }
-  isLoading.value = false;
 };
-
-// const deleteHandler = async () => {
-//   const response = await $fetch("/api/cloudinary", {
-//     method: "delete",
-//     body: { id: "aaaa" },
-//   });
-//   if (response.success) {
-//     setIsError(false);
-//     setError(response.message);
-//   } else {
-//     setError(response.message);
-//   }
-// }
 
 const successHandler = async (result: any) => {
   const url = result.info.secure_url
   const id = result.info.public_id
 
-  isLoading.value = true;
+  const oldPhotoId = useUser.user?.photo.id
+
   const response: ResponseUser = await $fetch("/api/profile", {
     method: "put",
     body: { url, public_id: id },
   });
-
   if (response.success) {
     useUser.setUser(response.data);
     setIsError(false);
@@ -90,8 +74,16 @@ const successHandler = async (result: any) => {
   } else {
     setError(response.message);
   }
-  isLoading.value = false;
+
+  const deleteResponse = await $fetch("/api/cloudinary", {
+    method: "delete",
+    body: { id: oldPhotoId },
+  });
+  if (!deleteResponse.success) setError(deleteResponse.message);
+
 }
+
+
 
 
 watch(phone, (newPhone) => {
@@ -161,7 +153,7 @@ watch(lastName, (newName) => {
         placeholder="Naujas slaptažodis" />
       <BaseInput :name="password" type="password" @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį" />
-      <BaseButton name="Pakeisti slaptažodį" @click="saveHandler" :isLoading="isLoading" />
+      <BaseButton name="Pakeisti slaptažodį" @click="saveHandler" />
     </div>
   </div>
 </template>
