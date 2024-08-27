@@ -31,7 +31,7 @@ export interface Project {
   orderNumber: string;
   dateCreated: string;
   dateExparation: string;
-  files: string[];
+  files: Photo[];
 }
 
 export interface Client {
@@ -309,6 +309,7 @@ export interface Montavimas {
   results: MontavimasResult[];
   works: MontavimasWorks[];
   aditional: Comment[];
+  files: Photo[];
 }
 
 export interface MontavimasMeasure {
@@ -340,6 +341,7 @@ export interface Gamyba {
   fences: GamybaFence[];
   bindings: Bindings[] | null;
   aditional: Comment[];
+  files: Photo[];
 }
 
 export interface MontavimasFence {
@@ -420,12 +422,6 @@ export interface Bindings {
   cut: number | undefined;
   done: number | undefined;
   postone: boolean;
-}
-
-export interface Montavimas {
-  _id: string;
-  client: Client;
-  creator: Creator;
 }
 
 export interface BindingItem {

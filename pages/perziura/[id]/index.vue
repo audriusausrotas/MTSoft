@@ -25,15 +25,6 @@ const gigastaUsers = useUsers.users.filter(user =>
 const workers = useUsers.users.filter(user =>
   user.accountType === "Montavimas").map(user => user.email)
 
-const cloudConfig = useRuntimeConfig();
-const config = {
-  cloud: {
-    apiKey: cloudConfig.public.cloudApiKey,
-    cloudName: cloudConfig.public.cloudName
-  },
-}
-
-
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
     method: "patch",
@@ -208,26 +199,19 @@ const montavimasHandler = async (value: string) => {
   isOpenMontavimas.value = false
 }
 
-const photosHandler = async (result: any) => {
-  const url = result.info.secure_url
-  const id = result.info.public_id
+const photosHandler = async (photo: { url: string, id: string }) => {
 
-  console.log(result)
-
-
-  // const response: any = await $fetch("/api/profile", {
-  //   method: "put",
-  //   body: { url, public_id: id },
-  // });
-  // if (response.success) {
-  //   setIsError(false);
-  //   setError(response.message);
-  // } else {
-  //   setError(response.message);
-  // }
-
-
-
+  const response: any = await $fetch("/api/uploadPhotos", {
+    method: "post",
+    body: { ...photo, category: "projects", _id: offer!._id },
+  });
+  if (response.success) {
+    useProjects.addPhoto(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
 }
 
 
@@ -254,74 +238,95 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
-    <div class="flex gap-4 flex-wrap items-end">
-      <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
 
-      <div>
-        <BaseButton v-if="!isOpenAdvance" name="Paliktas avansas" @click="isOpenAdvance = !isOpenAdvance" />
-        <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
-          <input placeholder="Avansas" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
-            v-model="advance" :autofocus="isOpenAdvance" @keyup.enter="advanceHandler" />
-          <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer" @click="advanceHandler">
-            OK
-          </button>
-
-          <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
-            @click="cancelHandler">
-            X
-          </button>
-        </div>
-      </div>
-
-      <CldUploadWidget v-slot="{ open }" signatureEndpoint="/api/cloudinarySignature" :config="config"
-        uploadPreset="defaultSigned" @success="photosHandler">
-        <BaseButton @click="open">Įkelti
-          nuotrauką</BaseButton>
-      </CldUploadWidget>
-
-      <div v-if="gateExist">
-        <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
-        <BaseButton v-else-if="!gateOrdered && !isOpenGates && !isOpenGates2" name="Užsakyti vartus"
-          @click="isOpenGates = true" :isLoading="isLoading" />
-        <div v-else-if="!gateOrdered && isOpenGates"
-          class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
-          <button @click="setProvider('Vartonas')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
-            Vartonas
-          </button>
-          <button @click="setProvider('Gigasta')" class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
-            Gigasta
-          </button>
+    <div class="flex gap-8">
+      <div class=" flex flex-col gap-4 flex-1">
+        <div class="flex gap-4">
+          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
+          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
+          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
         </div>
 
-        <BaseSelectField v-else-if="!gateOrdered && isOpenGates2"
-          :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers" id="userSelect"
-          defaultValue="Priskirti vartotoja" width="w-60" @onChange="(value: string) => gateOrderHadnler(value)
-        " />
+        <div class="flex gap-4">
+          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
+          <a :href="'tel:' + offer?.client?.phone">
+            <BaseInput :disable="true" :name="offer?.client?.phone" label="telefono numeris"
+              class="pointer-events-none" />
+          </a>
+          <a :href="'mailto:' + offer?.client?.email">
+            <BaseInput :disable="true" :name="offer?.client?.email" label="elektroninis pastas"
+              class="pointer-events-none print:hidden" />
+          </a>
+        </div>
 
+        <div class="flex gap-4">
+          <BaseButtonWithConfirmation name="išsiūsti pasiūlymą" @onConfirm="sendEmailHandler" :isLoading="isLoading" />
+          <div>
+            <BaseButton v-if="!isOpenAdvance" name="Paliktas avansas" @click="isOpenAdvance = !isOpenAdvance" />
+            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
+              <input placeholder="Avansas" type="number" class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
+                v-model="advance" :autofocus="isOpenAdvance" @keyup.enter="advanceHandler" />
+              <button class="w-12 text-white bg-dark-full hover:bg-red-full hover:cursor-pointer"
+                @click="advanceHandler">
+                OK
+              </button>
+
+              <button class="w-12 text-white border-l bg-dark-full hover:bg-red-full hover:cursor-pointer"
+                @click="cancelHandler">
+                X
+              </button>
+            </div>
+          </div>
+          <BaseUpload @onSuccess="photosHandler" />
+        </div>
+
+        <div class="flex gap-4">
+          <BaseButtonWithConfirmation name="Į gamybą" @onConfirm="gamybaHandler" :isLoading="isLoading" />
+          <div>
+            <BaseButton v-if="!isOpenMontavimas" name="Į montavimą" @click="isOpenMontavimas = true"
+              :isLoading="isLoading" />
+            <BaseSelectField v-else :values="workers" id="workersList" defaultValue="Pasirinkti montuotoją" width="w-60"
+              @onChange="(value: string) => montavimasHandler(value)
+            " />
+          </div>
+          <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
+        </div>
+
+        <div class="flex gap-4 items-end">
+          <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-60"
+            @onChange="(value: string) => statusHandler(value)
+            " />
+          <BaseSelectField :values="allUsers" id="changeCreator" width="w-60" :defaultValue="offer?.creator.username"
+            label="Atsakingas asmuo" @onChange="(value: string) => changeCreatorHandler(value)
+            " />
+
+          <div v-if="gateExist">
+            <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
+            <BaseButton v-else-if="!gateOrdered && !isOpenGates && !isOpenGates2" name="Užsakyti vartus"
+              @click="isOpenGates = true" :isLoading="isLoading" />
+            <div v-else-if="!gateOrdered && isOpenGates"
+              class="flex items-center justify-center h-10 w-60 capitalize transition-colors rounded-lg shadow-sm divide-x divide-red-full overflow-hidden">
+              <button @click="setProvider('Vartonas')"
+                class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+                Vartonas
+              </button>
+              <button @click="setProvider('Gigasta')"
+                class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full">
+                Gigasta
+              </button>
+            </div>
+            <BaseSelectField v-else-if="!gateOrdered && isOpenGates2"
+              :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers" id="userSelect"
+              defaultValue="Priskirti vartotoja" width="w-60" @onChange="(value: string) => gateOrderHadnler(value)
+            " />
+          </div>
+        </div>
       </div>
-      <BaseButtonWithConfirmation name="Į gamybą" @onConfirm="gamybaHandler" :isLoading="isLoading" />
-
-      <div>
-        <BaseButton v-if="!isOpenMontavimas" name="Į montavimą" @click="isOpenMontavimas = true"
-          :isLoading="isLoading" />
-        <BaseSelectField v-else :values="workers" id="workersList" defaultValue="Pasirinkti montuotoją" width="w-60"
-          @onChange="(value: string) => montavimasHandler(value)
-        " />
-
+      <div class="flex-[2]">
+        <BaseGallery :_id="offer?._id" :files="offer?.files" category="projects" />
       </div>
-      <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
     </div>
 
-    <div class="flex gap-4">
-      <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-40"
-        @onChange="(value: string) => statusHandler(value)
-        " />
-      <BaseSelectField :values="allUsers" id="changeCreator" :defaultValue="offer?.creator.username"
-        label="Atsakingas asmuo" width="w-40" @onChange="(value: string) => changeCreatorHandler(value)
-        " />
-      <BaseInput label="Avansas" width="w-40" :name="offer?.advance + ' €'" :disable="true" />
-    </div>
-    <PreviewClient :offer="offer" />
     <ResultTotalElement :results="offer" />
     <PreviewMain :offer="offer" />
   </div>

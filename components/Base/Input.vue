@@ -29,14 +29,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col h-16  capitalize bg-white">
-    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 text-sm">{{
+  <div class="flex flex-col h-16  bg-white">
+    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 capitalize text-sm">{{
       props.label
     }}</label>
 
-    <div
-      class="flex items-center justify-center h-10 gap-3 px-4 overflow-auto border rounded-lg shadow-sm border-dark-light"
-      :class="[
+    <div class="flex items-center justify-center h-10 gap-3 px-4 border rounded-lg shadow-sm  border-dark-light" :class="[
         props.width ? props.width : 'w-60',
         props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
       ]">

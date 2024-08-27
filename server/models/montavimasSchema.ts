@@ -103,6 +103,11 @@ export const montavimasSchema = defineMongooseModel<Montavimas>(
       required: false,
       default: [],
     },
+    files: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
   },
   { collection: "montavimas" }
 );

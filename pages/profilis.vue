@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ResponseUser } from "~/data/interfaces";
 
 const { setError, setIsError } = useError();
 const useUser = useUserStore();
@@ -10,15 +9,6 @@ const lastName = ref<string>(useUser.user?.lastName || "");
 const phone = ref<string>(useUser.user?.phone || "");
 const isSavedPhone = ref<boolean>(true);
 const isSavedName = ref<boolean>(true);
-
-
-const cloudConfig = useRuntimeConfig();
-const config = {
-  cloud: {
-    apiKey: cloudConfig.public.cloudApiKey,
-    cloudName: cloudConfig.public.cloudName
-  },
-}
 
 const saveHandler = async (field: string) => {
   let value = ""
@@ -57,15 +47,12 @@ const saveHandler = async (field: string) => {
   }
 };
 
-const successHandler = async (result: any) => {
-  const url = result.info.secure_url
-  const id = result.info.public_id
-
+const successHandler = async (photo: any) => {
   const oldPhotoId = useUser.user?.photo.id
 
-  const response: any = await $fetch("/api/profile", {
-    method: "put",
-    body: { url, public_id: id },
+  const response: any = await $fetch("/api/uploadPhotos", {
+    method: "post",
+    body: { ...photo, category: "profile", _id: useUser.user?._id },
   });
   if (response.success) {
     useUser.setUser(response.data);
@@ -82,8 +69,6 @@ const successHandler = async (result: any) => {
   if (!deleteResponse.success) setError(deleteResponse.message);
 
 }
-
-
 
 
 watch(phone, (newPhone) => {
@@ -105,7 +90,7 @@ watch(lastName, (newName) => {
 <template>
   <div class="flex flex-col">
     <div class="flex border-b py-8 gap-14">
-      <div>
+      <div class="bg-black rounded-xl">
         <div class="flex flex-col items-center justify-center overflow-hidden bg-gray-light rounded-t-xl h-60 w-60">
           <NuxtImg v-if="useUser.user?.photo?.url && useUser.user.photo.url !== ''"
             :src="useUser.user?.photo?.url || ''" alt="Vartotojo nuotrauka"
@@ -113,12 +98,7 @@ watch(lastName, (newName) => {
             :ismap="true" />
           <h3 v-else class="text-3xl uppercase">{{ initials }}</h3>
         </div>
-        <CldUploadWidget v-slot="{ open }" signatureEndpoint="/api/cloudinarySignature" :config="config"
-          uploadPreset="defaultSigned" @success="successHandler">
-          <button type="button" @click="open"
-            class="h-12 bg-black rounded-b-xl hover:bg-red-full text-white w-full">Įkelti
-            nuotrauką</button>
-        </CldUploadWidget>
+        <BaseUpload @on-success="successHandler" />
       </div>
 
       <div class="flex flex-col h-60 font-semibold justify-around capitalize">

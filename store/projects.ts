@@ -87,6 +87,13 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
+    addPhoto(project: Project) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === project._id) return project;
+        else return item;
+      });
+    },
+
     filterProjects() {
       if (this.selectedFilter === "Visi") {
         if (this.selectedStatusFilter === "Visi") {

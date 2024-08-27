@@ -86,6 +86,11 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
       required: false,
       default: [],
     },
+    files: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
   },
   { collection: "gamyba" }
 );

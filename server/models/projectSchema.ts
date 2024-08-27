@@ -50,7 +50,7 @@ export const projectSchema = defineMongooseModel<Project>(
       default: "Nepatvirtintas",
     },
     files: {
-      type: [String],
+      type: [Object],
       required: false,
       default: [],
     },
