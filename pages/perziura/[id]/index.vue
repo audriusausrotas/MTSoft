@@ -29,7 +29,7 @@ const cloudConfig = useRuntimeConfig();
 const config = {
   cloud: {
     apiKey: cloudConfig.public.cloudApiKey,
-    cloudName: cloudConfig.public.cloudName
+    cloudName: "dwndoufbt"
   },
 }
 
