@@ -20,6 +20,8 @@ const config = {
   },
 }
 
+console.log(config)
+
 const saveHandler = async (field: string) => {
   let value = ""
   if (field === "phone") value = phone.value!
@@ -32,7 +34,7 @@ const saveHandler = async (field: string) => {
     value = password.value
   }
 
-  const response: ResponseUser = await $fetch("/api/profile", {
+  const response: any = await $fetch("/api/profile", {
     method: "post",
     body: { field, value },
   });
@@ -63,7 +65,7 @@ const successHandler = async (result: any) => {
 
   const oldPhotoId = useUser.user?.photo.id
 
-  const response: ResponseUser = await $fetch("/api/profile", {
+  const response: any = await $fetch("/api/profile", {
     method: "put",
     body: { url, public_id: id },
   });
