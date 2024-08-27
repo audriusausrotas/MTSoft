@@ -31,8 +31,8 @@ export default defineNuxtConfig({
     // apiSecret: "123",
     // Keys within public, will be also exposed to the client-side
     public: {
-      cloudApiKey: process.env.CLOUD_API_KEY,
-      cloudName: process.env.CLOUD_NAME,
+      cloudApiKey: process.env.NUXT_PUBLIC_CLOUD_API_KEY,
+      cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,
     },
   },
 });

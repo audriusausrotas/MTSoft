@@ -20,8 +20,6 @@ const config = {
   },
 }
 
-console.log(config)
-
 const saveHandler = async (field: string) => {
   let value = ""
   if (field === "phone") value = phone.value!
