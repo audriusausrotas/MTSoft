@@ -81,7 +81,7 @@ const changeCreatorHandler = async (value: string) => {
 const photosHandler = async (photo: Photo) => {
     const response: any = await $fetch("/api/uploadPhotos", {
         method: "post",
-        body: { photo, category: "projects", _id: order.value._id },
+        body: { photo, category: "installation", _id: order.value._id },
     });
     if (response.success) {
         useMontavimas.addPhoto(order.value._id, photo);

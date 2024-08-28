@@ -202,7 +202,7 @@ const montavimasHandler = async (value: string) => {
 const photosHandler = async (photo: Photo) => {
   const response: any = await $fetch("/api/uploadPhotos", {
     method: "post",
-    body: { photo, category: "installation", _id: offer!._id },
+    body: { photo, category: "projects", _id: offer!._id },
   });
   if (response.success) {
     useProjects.addPhoto(offer!._id, photo);
