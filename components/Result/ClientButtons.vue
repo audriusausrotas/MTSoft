@@ -38,6 +38,7 @@ const saveHandler = async (): Promise<void> => {
     status: "Nepatvirtintas",
     advance: 0,
     orderNumber: "",
+    files: []
   };
   try {
     const data: any = await $fetch("/api/project", {
@@ -65,6 +66,8 @@ const clearHandler = () => {
   useProjects.clearSelected();
   useBackup.clearBackup()
 };
+
+
 </script>
 <template>
 

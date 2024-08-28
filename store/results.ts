@@ -91,7 +91,6 @@ export const useResultsStore = defineStore("results", {
     updateResultCost(index: number, value: number): void {
       this.results[index].cost = +value;
       this.recalculateTotals(index);
-      this.calculatePriceWithDiscount();
     },
 
     updateWorkCost(index: number, value: string): void {
@@ -115,13 +114,12 @@ export const useResultsStore = defineStore("results", {
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
       selectedResult.quantity = 1;
-      this.recalculateTotals(index);
+      this.recalculateWorkTotals(index);
     },
 
     updateQuantity(index: number, value: number): void {
       this.results[index].quantity = +value;
       this.recalculateTotals(index);
-      this.calculatePriceWithDiscount();
     },
 
     updateSpace(index: number, value: number): void {
@@ -136,7 +134,6 @@ export const useResultsStore = defineStore("results", {
     updatePrice(index: number, value: number): void {
       this.results[index].price = +value;
       this.recalculateTotals(index);
-      this.calculatePriceWithDiscount();
     },
 
     updateWorkQuantity(index: number, value: number): void {
@@ -182,12 +179,9 @@ export const useResultsStore = defineStore("results", {
       let newPrice = 0;
       let newCost = 0;
 
-      this.results.forEach((item) => {
-        newPrice += item.totalPrice;
-        newCost += item.totalCost;
-      });
+      const combinedItems = [...this.results, ...this.works];
 
-      this.works.forEach((item) => {
+      combinedItems.forEach((item) => {
         newPrice += item.totalPrice;
         newCost += item.totalCost;
       });
@@ -196,27 +190,28 @@ export const useResultsStore = defineStore("results", {
       this.totalCost = +newCost.toFixed(2);
       this.totalProfit = +(newPrice - newCost).toFixed(2);
       this.totalMargin = +(
-        Math.round((this.totalProfit / this.totalPrice) * 10000) / 100
+        Math.round(((newPrice - newCost) / newPrice) * 10000) / 100
       ).toFixed(2);
-      this.priceVAT = +(this.totalPrice + this.totalPrice * 0.21).toFixed(2);
+      this.priceVAT = +(newPrice + newPrice * 0.21).toFixed(2);
+      this.calculatePriceWithDiscount();
     },
 
     calculatePriceWithDiscount() {
-      this.priceWithDiscount = +(
-        this.priceVAT -
+      const calculatedDiscount = +(
+        this.totalPrice +
         (this.priceVAT - this.totalPrice) / 2
       ).toFixed(2);
+      this.updateDiscount(calculatedDiscount);
+      console.log("skaiciuoja");
     },
 
     deleteResult(id: string): void {
       this.results = this.results.filter((item) => item.id !== id);
       this.calculateTotals();
-      this.calculatePriceWithDiscount();
     },
     deleteWork(id: string): void {
       this.works = this.works.filter((item) => item.id !== id);
       this.calculateTotals();
-      this.calculatePriceWithDiscount();
     },
 
     clearResults(): void {
@@ -339,7 +334,6 @@ export const useResultsStore = defineStore("results", {
           item.totalCost = totalCost;
           item.profit = profit;
           item.margin = margin;
-
           exist = true;
         }
       });

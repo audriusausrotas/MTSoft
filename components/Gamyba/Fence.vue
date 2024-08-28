@@ -99,7 +99,7 @@ watch(() => props.fence.measures, (newMeasures) => {
         </div>
 
         <div class="flex flex-col flex-1">
-            <GamybaFenceInfo v-for="data in filteredMeasures" :key="data.index" :data="data" :index="data.index"
+            <GamybaFenceInfo v-for="data in filteredMeasures" :key="data._id" :data="data" :index="data.index"
                 :fenceSide="props.fence.side" :total="filteredMeasures.length" :fenceIndex="props.fenceIndex"
                 :_id="props._id" />
             <BaseButton name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
