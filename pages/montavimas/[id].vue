@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { MontavimasStatus } from "~/data/initialValues"
+import type { Photo } from "~/data/interfaces"
 const { setError, setIsError } = useError();
 const useMontavimas = useMontavimasStore()
 const useUser = useUserStore()
@@ -77,6 +78,20 @@ const changeCreatorHandler = async (value: string) => {
     }
 };
 
+const photosHandler = async (photo: Photo) => {
+    const response: any = await $fetch("/api/uploadPhotos", {
+        method: "post",
+        body: { photo, category: "projects", _id: order.value._id },
+    });
+    if (response.success) {
+        useMontavimas.addPhoto(order.value._id, photo);
+        setIsError(false);
+        setError(response.message);
+    } else {
+        setError(response.message);
+    }
+}
+
 </script>
 
 <template>
@@ -109,8 +124,14 @@ const changeCreatorHandler = async (value: string) => {
                 </BaseInput>
             </div>
         </div>
+
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler"
             @onDelete="deleteHandler" />
+        <div class="flex flex-col gap-4 items-center md:items-start">
+            <BaseUpload @onSuccess="photosHandler" />
+            <BaseGallery :_id="order?._id" :files="order?.files" category="installation" />
+        </div>
+
 
         <div class="flex flex-col gap-8">
             <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>

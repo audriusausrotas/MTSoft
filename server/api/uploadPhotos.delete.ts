@@ -39,5 +39,5 @@ export default defineEventHandler(async (event) => {
 
   cloudinary.uploader.destroy(id);
 
-  return { success: true, data: null, message: "Nuotrauka ištrinta" };
+  return { success: true, data: data, message: "Nuotrauka ištrinta" };
 });

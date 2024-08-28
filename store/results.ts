@@ -202,7 +202,6 @@ export const useResultsStore = defineStore("results", {
         (this.priceVAT - this.totalPrice) / 2
       ).toFixed(2);
       this.updateDiscount(calculatedDiscount);
-      console.log("skaiciuoja");
     },
 
     deleteResult(id: string): void {

@@ -47,12 +47,12 @@ const saveHandler = async (field: string) => {
   }
 };
 
-const successHandler = async (photo: any) => {
+const successHandler = async (photo: { url: string, id: string }) => {
   const oldPhotoId = useUser.user?.photo.id
 
   const response: any = await $fetch("/api/uploadPhotos", {
     method: "post",
-    body: { ...photo, category: "profile", _id: useUser.user?._id },
+    body: { photo, category: "profile", _id: useUser.user?._id },
   });
   if (response.success) {
     useUser.setUser(response.data);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { status } from "~/data/selectFieldData";
-
+import type { Photo } from "~/data/interfaces";
 const route = useRoute();
 const { setError, setIsError } = useError();
 const useProjects = useProjectsStore();
@@ -199,14 +199,13 @@ const montavimasHandler = async (value: string) => {
   isOpenMontavimas.value = false
 }
 
-const photosHandler = async (photo: { url: string, id: string }) => {
-
+const photosHandler = async (photo: Photo) => {
   const response: any = await $fetch("/api/uploadPhotos", {
     method: "post",
-    body: { ...photo, category: "projects", _id: offer!._id },
+    body: { photo, category: "installation", _id: offer!._id },
   });
   if (response.success) {
-    useProjects.addPhoto(response.data);
+    useProjects.addPhoto(offer!._id, photo);
     setIsError(false);
     setError(response.message);
   } else {

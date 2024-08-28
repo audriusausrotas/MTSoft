@@ -8,6 +8,18 @@ const deleteHandler = async () => {
         body: { _id: props._id, id: props.file.id, category: props.category },
     });
     if (response.success) {
+        if (props.category === "projects") {
+            const useProjects = useProjectsStore();
+            useProjects.deletePhoto(props._id, props.file.id);
+        }
+        else if ((props.category === "production")) {
+            const useGamyba = useGamybaStore();
+            useGamyba.deletePhoto(props._id, props.file.id);
+        }
+        else if ((props.category === "installation")) {
+            const useMontavimas = useMontavimasStore();
+            useMontavimas.deletePhoto(props._id, props.file.id);
+        }
 
         setIsError(false);
         setError(response.message);

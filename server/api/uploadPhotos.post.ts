@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { url, _id, id, category } = await readBody(event);
+  const { photo, _id, category } = await readBody(event);
 
   let data: any;
 
@@ -28,8 +28,8 @@ export default defineEventHandler(async (event) => {
       message: "Nerastas",
     };
 
-  if (category === "profile") data.photo = { url, id };
-  else data.files.push({ url, id });
+  if (category === "profile") data.photo = photo;
+  else data.files.push(photo);
 
   const result = await data.save();
 
