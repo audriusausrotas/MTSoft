@@ -108,7 +108,7 @@ const photosHandler = async (photo: Photo) => {
                 " />
             <BaseUpload @onSuccess="photosHandler" />
         </div>
-        <BaseGallery :_id="order?._id" :files="order?.files" category="production" />
+        <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
         <BaseComment :commentsArray="order?.aditional" :id="order._id" @onSave="commentHandler" class="max-w-[896px]"
             @onDelete="deleteHandler" />
 

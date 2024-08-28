@@ -129,7 +129,7 @@ const photosHandler = async (photo: Photo) => {
             @onDelete="deleteHandler" />
         <div class="flex flex-col gap-4 items-center md:items-start">
             <BaseUpload @onSuccess="photosHandler" />
-            <BaseGallery :_id="order?._id" :files="order?.files" category="installation" />
+            <BaseGalleryElement :_id="order?._id" :files="order?.files" category="installation" />
         </div>
 
 

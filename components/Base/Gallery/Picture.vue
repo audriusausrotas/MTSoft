@@ -30,7 +30,7 @@ const deleteHandler = async () => {
 </script>
 
 <template>
-    <div class="rounded-lg overflow-hidden w-56 h-40 shadow-lg shadow-gray-full relative ">
+    <div class="rounded-lg overflow-hidden w-56 h-40 shadow-lg  shadow-gray-full relative hover:cursor-pointer ">
         <NuxtImg :src="props.file.url" width="200" height="200" decoding="auto" loading="lazy" :ismap="true"
             class="w-full h-full object-center object-cover" />
         <div class="text-red-500 absolute top-0 right-0 font-bold rounded-sm p-[2px] bg-gray-light text-2xl">

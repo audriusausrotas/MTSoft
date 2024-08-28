@@ -322,7 +322,7 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGallery :_id="offer?._id" :files="offer?.files" category="projects" />
+        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
       </div>
     </div>
 
