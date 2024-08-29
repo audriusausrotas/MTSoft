@@ -6,11 +6,6 @@ const selectedPicture = ref<string>(props.selectedPhoto)
 const closeHandler = () => {
     emit("close")
 }
-
-const changeHandler = (url: string) => {
-    selectedPicture.value = url
-}
-
 </script>
 
 <template>
@@ -18,7 +13,7 @@ const changeHandler = (url: string) => {
         <div
             class="fixed flex flex-col bg-black bg-opacity-60 backdrop-blur-sm gap-2 z-50 scroll select-none top-0 left-0 scroll w-full h-full p-4 ">
             <div class="absolute top-2 right-4 font-bold text-2xl hover:cursor-pointer px-1 py-1" @click="closeHandler">
-                X
+                <NuxtImg src="/icons/close.svg" width="40" height="40" decoding="auto" loading="lazy" :ismap="true" />
             </div>
             <div class="m-auto flex justify-center w-[90%] h-[90%] ">
                 <div class="rounded-xl overflow-hidden">

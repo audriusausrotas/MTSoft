@@ -55,6 +55,25 @@ const filterByIndex = () => {
     filterIndex.value = true
 }
 
+const deleteHandler = async () => {
+    const response: any = await $fetch(
+        "/api/gamybaFence",
+        {
+            method: 'delete',
+            body: { _id: props._id, index: props.fenceIndex },
+        }
+    );
+
+    if (response.success) {
+        useGamyba.updateOrder(props._id, response.data);
+        setIsError(false);
+        setError(response.message);
+
+    } else {
+        setError(response.message);
+    }
+}
+
 filterByIndex()
 
 watch(() => props.fence.measures, (newMeasures) => {
@@ -69,9 +88,12 @@ watch(() => props.fence.measures, (newMeasures) => {
 </script>
 
 <template>
-    <div class="flex flex-col">
-        <div v-if="!isFenceboards" class="flex font-bold text-2xl">
+    <div class="flex flex-col ">
+        <div v-if="!isFenceboards" class="flex gap-4 items-center font-bold text-2xl">
             <p>{{ props.fence.side }} - {{ props.fence.type }} - {{ props.fence.color }}</p>
+            <div class="hover:cursor-pointer" @click="deleteHandler">
+                <NuxtImg width="20" height="20" src="/icons/delete.svg" decoding="auto" loading="lazy" :ismap="true" />
+            </div>
         </div>
         <div>
             <p v-if="props.fence.aditional">{{ props.fence.aditional }} </p>

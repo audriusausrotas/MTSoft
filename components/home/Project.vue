@@ -16,7 +16,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await $fetch(
     props.archive ? "/api/archive" : "/api/project",
     {
-      method: "DELETE",
+      method: "delete",
       body: { _id: props.project._id },
     }
   );

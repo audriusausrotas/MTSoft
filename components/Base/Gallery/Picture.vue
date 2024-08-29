@@ -2,7 +2,9 @@
 const props = defineProps(["_id", "file", "category"])
 const { setError, setIsError } = useError();
 
-const deleteHandler = async () => {
+const deleteHandler = async (event: Event) => {
+    event.stopPropagation();
+
     const response: any = await $fetch("/api/uploadPhotos", {
         method: "delete",
         body: { _id: props._id, id: props.file.id, category: props.category },

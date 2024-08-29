@@ -34,7 +34,7 @@ const clickHandler = () => {
 </script>
 
 <template>
-    <div class="flex gap-4 hover:border-b-red-full border-b  pb-2 w-fit ">
+    <div class="flex gap-4 hover:border-b-red-full border-b   pb-2 w-fit ">
         <div class="flex gap-4 hover:cursor-pointer  items-center " @click="clickHandler">
             <div class="pointer-events-none w-4">{{ index + 1 }}</div>
             <BaseInfoField class="pointer-events-none" :name="props.order.orderNumber" width="w-24"

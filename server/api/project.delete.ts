@@ -1,14 +1,18 @@
+import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
+
 export default defineEventHandler(async (event) => {
-  try {
-    const { _id } = await readBody(event);
-    const data = await projectSchema.findOneAndDelete({ _id });
+  const { _id } = await readBody(event);
 
-    if (!data)
-      return { success: false, data: null, message: "Projektas nerastas" };
+  const project = await projectSchema.findById({ _id });
+  if (!project)
+    return { success: false, data: null, message: "Projektas nerastas" };
 
-    return { success: true, data: null, message: "Projektas ištrintas" };
-  } catch (error) {
-    console.error("Klaida trinant projektą:", error);
-    return { success: false, data: null, message: error };
-  }
+  const data = await projectSchema.findOneAndDelete({ _id });
+
+  if (!data)
+    return { success: false, data: null, message: "Klaida trinant projektą" };
+
+  cloudinaryBachDelete(project.files);
+
+  return { success: true, data: null, message: "Projektas ištrintas" };
 });

@@ -15,6 +15,7 @@ const clickHandler = (url: string) => {
         <BaseGalleryPicture v-for="file in props.files" :key="file.id" :file="file" :_id="props._id"
             :category="props.category" @click="clickHandler(file.url)" />
     </div>
-    <BaseGalleryModal v-if="modalOpen" @close="modalOpen = false" :pictures="props.files" :selectedPhoto="selectedPhoto" />
+    <BaseGalleryModal v-if="modalOpen" @close="modalOpen = false" :pictures="props.files"
+        :selectedPhoto="selectedPhoto" />
 </template>
 <style scoped></style>

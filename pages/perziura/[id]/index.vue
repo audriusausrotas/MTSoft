@@ -200,6 +200,7 @@ const montavimasHandler = async (value: string) => {
 }
 
 const photosHandler = async (photo: Photo) => {
+  console.log(photo)
   const response: any = await $fetch("/api/uploadPhotos", {
     method: "post",
     body: { photo, category: "projects", _id: offer!._id },

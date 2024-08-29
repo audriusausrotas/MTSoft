@@ -1,3 +1,5 @@
+import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
+
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
 
@@ -17,6 +19,8 @@ export default defineEventHandler(async (event) => {
   const data = await archivedProject.save();
 
   await projectSchema.findByIdAndDelete({ _id });
+
+  cloudinaryBachDelete(project.files);
 
   return {
     success: true,
