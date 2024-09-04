@@ -3,7 +3,7 @@ import type { Gamyba } from "~/data/interfaces";
 import { v4 } from "uuid";
 
 export default defineEventHandler(async (event) => {
-  const { _id, type, height, quantity, color } = await readBody(event);
+  const { _id } = await readBody(event);
 
   const objectId = new mongoose.Types.ObjectId(_id);
 

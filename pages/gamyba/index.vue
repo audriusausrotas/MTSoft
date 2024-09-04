@@ -6,6 +6,7 @@ const newOpen = ref<boolean>(false);
 const orderNr = ref<string>("")
 const orderAddress = ref<string>("")
 const orderCreator = ref<string>("")
+const loading = ref<boolean>(false)
 
 const onDragStart = (event: DragEvent) => {
   const target = event.target as HTMLElement;
@@ -13,6 +14,7 @@ const onDragStart = (event: DragEvent) => {
 };
 
 const onDrop = async (event: DragEvent) => {
+  loading.value = true
   const target = event.target as HTMLElement;
   //@ts-ignore
   const droppedItemIndex = Number(target.closest('[data-index]')?.dataset.index);
@@ -28,25 +30,27 @@ const onDrop = async (event: DragEvent) => {
 };
 
 const updateOrderInDatabase = async (list: string[]) => {
-  // const response: any = await $fetch(
-  //   "/api/gamybaUpdate",
-  //   {
-  //     method: 'post',
-  //     body: { list },
-  //   }
-  // );
+  const response: any = await $fetch(
+    "/api/gamybaUpdate",
+    {
+      method: 'post',
+      body: { list },
+    }
+  );
 
-  // if (response.success) {
+  if (response.success) {
+    useGamyba.addAll(response.data)
+    setIsError(false);
+    setError(response.message);
 
-  //   setIsError(false);
-  //   setError(response.message);
-
-  // } else {
-  //   setError(response.message);
-  // }
+  } else {
+    setError(response.message);
+  }
+  loading.value = false
 };
 
 const newHandler = async () => {
+  loading.value = true
 
   const data = { number: orderNr.value, address: orderAddress.value, creator: orderCreator.value }
 
@@ -69,6 +73,7 @@ const newHandler = async () => {
   } else {
     setError(response.message);
   }
+  loading.value = false
 }
 </script>
 
@@ -90,6 +95,10 @@ const newHandler = async () => {
     <div v-for=" (order, index) in useGamyba.gamybaList" :key="order._id" :data-index="index" draggable="true"
       @dragstart="onDragStart" @dragover.prevent @drop="onDrop">
       <GamybaOrder :order="order" :index="index" />
+    </div>
+    <div v-if="loading"
+      class="fixed flex bg-black bg-opacity-60 backdrop-blur-sm z-50 scroll select-none top-0 left-0 scroll w-full h-full justify-center items-center ">
+      <div class="w-14 h-14 border-8 border-red-full border-t-green-500 rounded-full animate-spin"></div>
     </div>
   </div>
 </template>

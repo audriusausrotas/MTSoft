@@ -6,7 +6,6 @@ const useGamyba = useGamybaStore()
 const useUser = useUserStore()
 
 const deleteHandler = async (): Promise<void> => {
-
     if (useUser.user?.accountType !== "Administratorius") {
         setError("Ištrinti gali tik administratorius");
         return
