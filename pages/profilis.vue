@@ -133,7 +133,7 @@ watch(lastName, (newName) => {
         placeholder="Naujas slaptažodis" />
       <BaseInput :name="password" type="password" @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį" />
-      <BaseButton name="Pakeisti slaptažodį" @click="saveHandler" />
+      <BaseButton name="Pakeisti slaptažodį" @click="saveHandler('password')" />
     </div>
   </div>
 </template>
