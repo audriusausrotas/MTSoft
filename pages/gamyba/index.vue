@@ -28,22 +28,22 @@ const onDrop = async (event: DragEvent) => {
 };
 
 const updateOrderInDatabase = async (list: string[]) => {
-  const response: any = await $fetch(
-    "/api/gamybaUpdate",
-    {
-      method: 'post',
-      body: { list },
-    }
-  );
+  // const response: any = await $fetch(
+  //   "/api/gamybaUpdate",
+  //   {
+  //     method: 'post',
+  //     body: { list },
+  //   }
+  // );
 
-  if (response.success) {
+  // if (response.success) {
 
-    setIsError(false);
-    setError(response.message);
+  //   setIsError(false);
+  //   setError(response.message);
 
-  } else {
-    setError(response.message);
-  }
+  // } else {
+  //   setError(response.message);
+  // }
 };
 
 const newHandler = async () => {
