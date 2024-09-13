@@ -24,8 +24,8 @@ export interface Project {
   priceVAT: number;
   priceWithDiscount: number;
   discount: boolean;
-  confirmed: boolean;
-  payed: boolean;
+  confirmed: boolean; //nereik
+  payed: boolean; //nereik
   status: string;
   advance: number;
   orderNumber: string;

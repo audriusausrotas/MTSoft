@@ -9,26 +9,42 @@ export default defineEventHandler(async (event) => {
 
   project.status = value;
   const data = await project.save();
-
   if (!data) return { success: true, data: null, message: "Klaida" };
 
-  if (value === "Baigtas" && project.creator.username === "Audrius") {
-    const currentDate = new Date();
-    const dateFinished = currentDate.toISOString();
+  if (value === "Patvirtintas") {
+    const backupProject = await backupSchema.findById({ _id });
+    if (!backupProject) {
+      const projectData = data.toObject();
+      const newBackup = new backupSchema(projectData);
+      await newBackup.save();
+    }
+  }
 
-    const bonus = new bonusSchema({
-      address: project.client.address,
-      dateFinished: dateFinished,
-      price: project.totalPrice,
-      cost: project.totalCost,
-      profit: project.totalProfit,
-      margin: project.totalMargin,
-      bonus: Math.round(project.totalProfit * 0.03),
-    });
+  if (value === "Baigtas") {
+    await backupSchema.findByIdAndDelete({ _id });
 
-    const bonusData = await bonus.save();
-    if (!bonusData)
-      return { success: true, data: null, message: "Klaida išsaugant bonusus" };
+    if (project.creator.username === "Audrius") {
+      const currentDate = new Date();
+      const dateFinished = currentDate.toISOString();
+
+      const bonus = new bonusSchema({
+        address: project.client.address,
+        dateFinished: dateFinished,
+        price: project.totalPrice,
+        cost: project.totalCost,
+        profit: project.totalProfit,
+        margin: project.totalMargin,
+        bonus: Math.round(project.totalProfit * 0.03),
+      });
+
+      const bonusData = await bonus.save();
+      if (!bonusData)
+        return {
+          success: true,
+          data: null,
+          message: "Klaida išsaugant bonusus",
+        };
+    }
   }
 
   return { success: true, data: data, message: "Būsena atnaujinta" };

@@ -159,7 +159,7 @@ const orderFinishHandler = async () => {
   const archieveResponse: any = await $fetch("/api/archive", {
     method: "POST",
     body: { _id: offer!._id },
-  } as any);
+  });
   if (archieveResponse.success) {
     useProjects.moveToArchive(offer!);
     setIsError(false);
@@ -287,7 +287,7 @@ watch(
               :isLoading="isLoading" />
             <BaseSelectField v-else :values="workers" id="workersList" defaultValue="Pasirinkti montuotoją" width="w-60"
               @onChange="(value: string) => montavimasHandler(value)
-            " />
+                " />
           </div>
           <BaseButtonWithConfirmation name="Baigti užsakymą" @onConfirm="orderFinishHandler" :isLoading="isLoading" />
         </div>
@@ -295,10 +295,10 @@ watch(
         <div class="flex gap-4 items-end">
           <BaseSelectField :values="status" id="orderStatus" :defaultValue="offer?.status" label="Statusas" width="w-60"
             @onChange="(value: string) => statusHandler(value)
-            " />
+              " />
           <BaseSelectField :values="allUsers" id="changeCreator" width="w-60" :defaultValue="offer?.creator.username"
             label="Atsakingas asmuo" @onChange="(value: string) => changeCreatorHandler(value)
-            " />
+              " />
 
           <div v-if="gateExist">
             <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHadnler" />
@@ -318,7 +318,7 @@ watch(
             <BaseSelectField v-else-if="!gateOrdered && isOpenGates2"
               :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers" id="userSelect"
               defaultValue="Priskirti vartotoja" width="w-60" @onChange="(value: string) => gateOrderHadnler(value)
-            " />
+                " />
           </div>
         </div>
       </div>

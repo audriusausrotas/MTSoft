@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   const projectData = project.toObject();
 
-  const archivedProject = new archiveSchema(projectData);
+  const archivedProject = new archiveSchema({ ...projectData });
 
   const data = await archivedProject.save();
 
