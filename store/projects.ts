@@ -5,6 +5,7 @@ export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
     archive: [],
+    filteredArchives: [],
     filteredProjects: [],
     selectedProject: null,
     selectedFilter: "Visi",
@@ -62,6 +63,7 @@ export const useProjectsStore = defineStore("Projects", {
 
     addArchives(data: Project[]) {
       this.archive = [...data];
+      this.filteredArchives = [...data];
     },
 
     changeFilter(data: string) {
@@ -152,6 +154,27 @@ export const useProjectsStore = defineStore("Projects", {
         this.filteredProjects = [...foundProjects];
       } else {
         this.filterProjects();
+      }
+    },
+
+    searchArchive(value: string) {
+      if (value.length > 2) {
+        const foundArchives = this.archive.filter(
+          (archive) =>
+            archive.client.address
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            archive.client.email.toLowerCase().includes(value.toLowerCase()) ||
+            archive.client.phone.toLowerCase().includes(value.toLowerCase()) ||
+            archive.client.username
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            archive.orderNumber.toLowerCase().includes(value.toLowerCase())
+        );
+
+        this.filteredArchives = [...foundArchives];
+      } else {
+        this.filteredArchives = [...this.archive];
       }
     },
   },

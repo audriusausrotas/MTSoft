@@ -218,6 +218,7 @@ export interface ResponseUsers {
 export interface ProjectsState {
   projects: Project[];
   archive: Project[];
+  filteredArchives: Project[];
   filteredProjects: Project[];
   selectedProject: string | null;
   selectedFilter: string;

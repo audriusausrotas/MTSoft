@@ -72,6 +72,7 @@ export async function fetchArchive() {
   const { data: archive }: any = await useFetch("/api/archive");
   if (archive.value.success) {
     useProjects.addArchives([...archive.value.data]);
+    useProjects.addArchives([...archive.value.data]);
   }
 }
 
