@@ -19,7 +19,7 @@ const confirmHandler = () => {
 <template>
     <div>
         <BaseButton v-if="!open" :name="props.name" @click="open = !open" />
-        <div v-else-if="open" class="flex overflow-hidden border rounded-lg h-10">
+        <div v-else-if="open" class="flex h-10 overflow-hidden border rounded-lg">
             <input :placeholder="props.placeholder" :type="type || 'string'"
                 class="px-2 py-1 outline-none w-36 bg-gray-ultra-light" v-model="inputValue" :autofocus="open"
                 @keyup.enter="confirmHandler" />

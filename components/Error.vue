@@ -7,11 +7,11 @@ const { isError } = useError();
   <Teleport to="body">
     <div
       v-if="error"
-      class="fixed justify-center flex w-full top-0 left-0 z-50 pointer-events-none"
+      class="fixed top-0 left-0 z-50 flex justify-center w-full pointer-events-none"
       :class="error ? 'animation' : ''"
     >
       <div
-        class="text-white items-center font-medium capitalize text-xl text-center flex px-8 w-72 min-h-24 rounded-b-3xl justify-center py-4"
+        class="flex items-center justify-center px-8 py-4 text-xl font-medium text-center text-white capitalize w-72 min-h-24 rounded-b-3xl"
         :class="isError ? 'bg-red-full ' : 'bg-green-500 text-black'"
       >
         {{ error }}
