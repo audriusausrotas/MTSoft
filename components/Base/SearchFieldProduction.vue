@@ -1,0 +1,82 @@
+<script setup lang="ts">
+import type { Project } from "~/data/interfaces";
+const props = defineProps(["data", "name", "index"]);
+const emit = defineEmits(["onClick", "onChange", "modalClose"]);
+const inputRef = ref<HTMLInputElement | null>(null);
+const filteredData = reactive<any>([]);
+
+const emitUpdate = (value: string): void => {
+  if (value.length === 0) {
+    filteredData.value = [];
+  }
+  emit("onChange", value);
+  filteredItems(props.name);
+};
+
+const emitClick = (value: Project): void => {
+  emit("onClick", value);
+};
+
+const emitClose = () => {
+  emit("modalClose");
+};
+
+onMounted(() => {
+  filteredData.value = [...props.data];
+  if (inputRef.value) {
+    inputRef.value.focus();
+  }
+});
+
+const filteredItems = (value: string): void => {
+  const regex = new RegExp(value, "i");
+
+  const filteredItemsArray = props.data.filter((item: Project) => {
+    return (
+      regex.test(item.orderNumber) ||
+      regex.test(item.client.address) ||
+      regex.test(item.client.username) ||
+      regex.test(item.client.email)
+    );
+  });
+
+  filteredData.value = [...filteredItemsArray];
+};
+</script>
+
+<template>
+  <div
+    class="relative flex flex-col font-medium border-2 border-red-600 rounded-lg overflow-hidden"
+  >
+    <div class="flex justify-center items-center pr-1 bg-white">
+      <input
+        class="h-10 px-4 overflow-auto bg-white borderoutline-none w-full"
+        placeholder="Ieškoti"
+        :value="props.name"
+        @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
+        ref="inputRef"
+      />
+      <button
+        @click="emitClose"
+        class="bg-red-600 text-white w-8 h-8 flex justify-center items-center rounded-md"
+      >
+        X
+      </button>
+    </div>
+    <ul class="flex flex-col overflow-auto w-full bg-white divide-y max-h-96">
+      <li
+        v-for="item in filteredData.value"
+        :key="item.id"
+        @click="emitClick(item)"
+        class="px-4 py-2 flex justify-between odd:bg-gray-ultra-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+      >
+        <p>
+          {{ item.orderNumber }}
+        </p>
+        <p>
+          {{ item.client.address }}
+        </p>
+      </li>
+    </ul>
+  </div>
+</template>

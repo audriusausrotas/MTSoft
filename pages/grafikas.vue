@@ -28,16 +28,14 @@ function scrollToToday() {
 </script>
 
 <template>
-  <div>
-    <div class="overflow-x-auto flex-nowrap">
-      <div class="flex gap-2">
-        <div
-          v-for="date in calendarDates"
-          :key="date.toString()"
-          class="min-w-32 text-center flex flex-col gap-1 rounded-md bg-stone-100 calendar-item"
-        >
-          <ScheduleDay :date="date" />
-        </div>
+  <div class="overflow-y-auto h-[75vh] w-fit px-2 lg:pr-8">
+    <div class="flex flex-col gap-2">
+      <div
+        v-for="date in calendarDates"
+        :key="date.toString()"
+        class="min-w-32 text-center flex gap-1 rounded-md bg-stone-100 calendar-item relative"
+      >
+        <ScheduleDay :date="date" />
       </div>
     </div>
   </div>
