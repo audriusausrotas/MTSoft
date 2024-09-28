@@ -431,3 +431,11 @@ export interface BindingItem {
   firstHeight: Measure;
   lastHeight: Measure;
 }
+
+export interface Schedule {
+  _id: string;
+  date: string;
+  worker: User;
+  jobs: [Project];
+  comment: string;
+}
