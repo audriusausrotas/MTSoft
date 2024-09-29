@@ -27,6 +27,7 @@ const loadSelectedJobs = () => {
   });
 
   selectedJobs.value = scheduleItem ? scheduleItem.jobs : [];
+  comment.value = scheduleItem ? scheduleItem.comment : "";
 };
 
 loadSelectedJobs();
