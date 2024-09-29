@@ -34,11 +34,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
 
-    if (to.path.includes("archyvas")) {
+    if (to.path.includes("/archyvas")) {
       await fetchArchive();
     }
 
-    if (to.path.includes("grafikas")) {
+    if (to.path.includes("/grafikas")) {
       await fetchUsers();
       await fetchSchedules();
     }
@@ -75,14 +75,17 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
         case "Montavimas":
           await fetchMontavimas();
+          await fetchSchedules();
           if (to.path !== "/profilis" && to.path !== "/grafikas") {
-            if (!to.path.includes("/montavimas")) return navigateTo("/montavimas");
+            if (!to.path.includes("/montavimas")) return navigateTo("/grafikas");
           }
           break;
 
         case "Gamyba":
           await fetchGamyba();
-          if (to.path !== "/profilis") {
+          await fetchUsers();
+          await fetchSchedules();
+          if (to.path !== "/profilis" && to.path !== "/grafikas") {
             if (!to.path.includes("/gamyba")) return navigateTo("/gamyba");
           }
           break;

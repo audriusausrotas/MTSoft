@@ -2,6 +2,7 @@
 const props = defineProps(["job", "isAdmin"]);
 const emit = defineEmits(["onDelete"]);
 const router = useRouter();
+const useUser = useUserStore();
 
 const menuOpen = ref<boolean>(false);
 
@@ -12,7 +13,13 @@ const deleteHandler = () => {
 
 <template>
   <div
-    @click="props.isAdmin ? (menuOpen = true) : router.push(`/montavimas/${props.job._id}`)"
+    @click="
+      props.isAdmin
+        ? (menuOpen = true)
+        : useUser.user?.accountType === 'Gamyba'
+        ? router.push(`/gamyba/${props.job._id}`)
+        : router.push(`/montavimas/${props.job._id}`)
+    "
     class="hover:cursor-pointer hover:bg-red-600 hover:text-white"
   >
     {{ props.job.address }}

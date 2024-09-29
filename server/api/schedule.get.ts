@@ -22,10 +22,10 @@ export default defineEventHandler(async (event) => {
     };
 
   let schedule: Schedule[] = [];
-  if (user.accountType === "Administratorius") {
+  if (user.accountType === "Administratorius" || user.accountType === "Gamyba") {
     schedule = await scheduleSchema.find();
   } else if (user.accountType === "Montavimas") {
-    schedule = await scheduleSchema.find({ "worker.id": user._id });
+    schedule = await scheduleSchema.find({ "worker.lastName": user.lastName });
   }
 
   if (schedule.length === 0)

@@ -1,11 +1,4 @@
-import type {
-  Client,
-  Measure,
-  Result,
-  MenuLinks,
-  FenceMeasure,
-  Works,
-} from "~/data/interfaces";
+import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -14,19 +7,9 @@ export const clientInitialValue: Client = {
   email: "",
 };
 
-export const GamybaStatus: string[] = [
-  "Gaminama",
-  "Laukiama",
-  "Pagaminta",
-  "Negaminti",
-];
+export const GamybaStatus: string[] = ["Gaminama", "Laukiama", "Pagaminta", "Negaminti"];
 
-export const MontavimasStatus: string[] = [
-  "Montuojama",
-  "Laukiama",
-  "Sumontuota",
-  "Nemontuoti",
-];
+export const MontavimasStatus: string[] = ["Montuojama", "Laukiama", "Sumontuota", "Nemontuoti"];
 
 export const initialWorkData: Works = {
   id: "",
@@ -73,6 +56,7 @@ export const topBarLinks: MenuLinks[] = [
   { name: "Vartonas", link: "/vartonas", iconPath: "" },
   { name: "Gigasta", link: "/gigasta", iconPath: "" },
   { name: "Archyvas", link: "/archyvas", iconPath: "" },
+  { name: "Grafikas", link: "/grafikas", iconPath: "" },
 ];
 
 export const adminPanelLinks: MenuLinks[] = [

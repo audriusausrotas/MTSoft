@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Project, Schedule, Job } from "~/data/interfaces";
+import type { Project, Job } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 

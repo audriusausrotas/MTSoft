@@ -177,7 +177,6 @@ const printHandler = () => {
 };
 
 watch(cut, (newCut) => {
-  console.log(newCut);
   if (newCut !== props.data.cut) isSavedCut.value = false;
   else isSavedCut.value = true;
 });

@@ -20,7 +20,6 @@ const isSegment = ref<boolean>(
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
   useCalculations.updateMeasureGate(props.index, value, props.measureIndex);
-  console.log(props.measure)
 }
 
 watch(

@@ -1,18 +1,13 @@
-import type { Montavimas, MontavimasFence, Project } from "~/data/interfaces";
+import type { MontavimasFence, Project } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
   const { _id, worker } = await readBody(event);
 
   const project: Project | null = await projectSchema.findById({ _id });
 
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
 
-  const montavimasList: Montavimas[] = await montavimasSchema.find();
-
-  const montavimasExist = montavimasList.some(
-    (item) => item._id.toString() === project._id.toString()
-  );
+  const montavimas = await montavimasSchema.findOne({ _id: project._id });
 
   const newFences: MontavimasFence[] = project.fenceMeasures.map((item) => {
     return {
@@ -25,8 +20,14 @@ export default defineEventHandler(async (event) => {
     };
   });
 
-  if (montavimasExist) {
-    return { success: false, data: null, message: "Objektas jau montuojamas" };
+  if (montavimas) {
+    if (montavimas.worker.includes(worker)) {
+      return { success: false, data: null, message: "Objektas jau montuojamas" };
+    } else {
+      montavimas.worker.push(worker);
+      const data = await montavimas.save();
+      return { success: true, data: data, message: "Montavimas priskirtas" };
+    }
   } else {
     const newResults = project.results.map((item) => {
       return {
@@ -55,7 +56,7 @@ export default defineEventHandler(async (event) => {
       results: newResults,
       works: newWorks,
       aditional: [],
-      worker,
+      worker: [worker],
     });
 
     // @ts-ignore
