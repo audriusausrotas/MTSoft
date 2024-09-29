@@ -162,9 +162,7 @@ const printHandler = () => {
             <body class="">
                 <p class="padding">${props.clientAddress}</p>
                 <div class="container">
-                    <p class="padding">${props.fenceSide} ${
-    props.index + 1
-  } / ${props.total}</p> 
+                    <p class="padding">${props.fenceSide} ${props.index + 1} / ${props.total}</p> 
                     <div class="borderL"></div>
                     <p class="padding ">${props.orderNr}</p>
                 </div>
@@ -210,24 +208,14 @@ watch(length, (newLength) => {
     v-if="props.data.laiptas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+    <p class="w-10 flex items-center justify-center h-full border-x border-black">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Laiptas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full border-r border-black">Laiptas</p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.laiptas.direction }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.laiptas.value }} cm
     </p>
     <p class="flex-1 h-full border-r border-black"></p>
@@ -249,26 +237,14 @@ watch(length, (newLength) => {
     v-else-if="props.data.kampas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+    <p class="w-10 flex items-center justify-center h-full border-x border-black">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Kampas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full border-r border-black">Kampas</p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.kampas.value }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
-      laipsnių
-    </p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">laipsnių</p>
     <p class="flex-1 h-full border-r border-black"></p>
     <div
       class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
@@ -284,10 +260,7 @@ watch(length, (newLength) => {
       />
     </div>
   </div>
-  <div
-    v-else
-    class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none"
-  >
+  <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none">
     <p
       class="w-10 flex items-center justify-center h-full border-x border-black"
       :class="
@@ -307,9 +280,7 @@ watch(length, (newLength) => {
       {{ props.index + 1 }}
     </p>
 
-    <div
-      class="w-20 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-20 flex items-center justify-center h-full border-r border-black px-1">
       <input type="number" v-model="length" class="w-full" />
       <NuxtImg
         width="20"
@@ -323,9 +294,7 @@ watch(length, (newLength) => {
         class="hover:cursor-pointer"
       />
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
       <input type="number" v-model="elements" class="w-full" />
       <NuxtImg
         width="20"
@@ -339,9 +308,7 @@ watch(length, (newLength) => {
         class="hover:cursor-pointer"
       />
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
       <input type="number" v-model="height" class="w-full" />
       <NuxtImg
         width="20"
@@ -367,12 +334,7 @@ watch(length, (newLength) => {
           : 'bg-orange-500'
       "
     >
-      <input
-        v-model="cut"
-        type="number"
-        placeholder="Išpjauti"
-        class="w-full"
-      />
+      <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full" />
       <NuxtImg
         v-if="!isSavedCut"
         src="/icons/save.svg"
@@ -397,12 +359,7 @@ watch(length, (newLength) => {
           : 'bg-orange-500'
       "
     >
-      <input
-        v-model="done"
-        type="number"
-        placeholder="Pagaminti"
-        class="w-full"
-      />
+      <input v-model="done" type="number" placeholder="Pagaminti" class="w-full" />
       <NuxtImg
         v-if="!isSavedDone"
         src="/icons/save.svg"

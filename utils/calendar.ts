@@ -11,7 +11,14 @@ export function getCalendarRange() {
   let currentDate = new Date(twoWeeksAgo);
 
   while (currentDate <= oneMonthAhead) {
-    dates.push(new Date(currentDate));
+    const dateOnly = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+
+    dates.push(dateOnly);
+
     currentDate.setDate(currentDate.getDate() + 1);
   }
 

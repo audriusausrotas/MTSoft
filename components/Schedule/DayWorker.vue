@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import type { Project } from "~/data/interfaces";
+import type { Project, Schedule, Job } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
+const { setError, setIsError } = useError();
+
 const useProjects = useProjectsStore();
 const useUser = useUserStore();
+const useSchedule = useScheduleStore();
 
-const selectedProject = ref<Project[]>([]);
+const selectedJobs = ref<Job[]>([]);
 const modalOpen = ref<boolean>(false);
 const commentModalOpen = ref<boolean>(false);
 const menuOpen = ref<boolean>(false);
+const canSave = ref<boolean>(false);
 const searchValue = ref<string>("");
 const comment = ref<string>("");
 const isAdmin = useUser.user?.accountType === "Administratorius";
+
+const loadSelectedJobs = () => {
+  const scheduleItem = useSchedule.schedule.find((schedule) => {
+    return (
+      schedule.worker._id === props.worker._id &&
+      new Date(schedule.date).toISOString() === new Date(props.date).toISOString()
+    );
+  });
+
+  selectedJobs.value = scheduleItem ? scheduleItem.jobs : [];
+};
+
+loadSelectedJobs();
 
 const newWorkHandler = () => {
   modalOpen.value = true;
@@ -27,25 +44,45 @@ const newCommentHandler = () => {
 
 const selectHandler = (value: Project) => {
   modalOpen.value = false;
-  selectedProject.value.push(value);
+  selectedJobs.value.push({ _id: value._id, address: value.client.address });
+  canSave.value = true;
 };
 
 const deleteHandler = (id: string) => {
-  selectedProject.value = selectedProject.value.filter((project) => project._id !== id);
+  selectedJobs.value = selectedJobs.value.filter((job) => job._id !== id);
+  canSave.value = true;
 };
 
 const commentDeleteHandler = () => {
   comment.value = "";
   menuOpen.value = false;
+  canSave.value = true;
 };
 
 const cancelHandler = () => {
   commentModalOpen.value = false;
-  comment.value = "";
+  canSave.value = true;
 };
 
-const saveHandler = () => {
-  commentModalOpen.value = false;
+const saveHandler = async () => {
+  const data = {
+    date: props.date,
+    comment: comment.value,
+    selectedJobs: selectedJobs.value,
+    worker: { _id: props.worker._id, lastName: props.worker.lastName },
+  };
+
+  const response: any = await $fetch("/api/schedule", {
+    method: "post",
+    body: data,
+  });
+  if (response.success) {
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+  canSave.value = false;
 };
 </script>
 
@@ -70,6 +107,17 @@ const saveHandler = () => {
       loading="lazy"
       :ismap="true"
       class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-40 rounded-sm"
+    />
+    <NuxtImg
+      v-if="isAdmin && canSave"
+      @click="saveHandler"
+      src="/icons/save.svg"
+      width="20"
+      height="20"
+      decoding="auto"
+      loading="lazy"
+      :ismap="true"
+      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-40 rounded-sm"
     />
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
@@ -98,13 +146,8 @@ const saveHandler = () => {
       </div>
     </div>
 
-    <div
-      v-if="selectedProject.length > 0"
-      v-for="project in selectedProject"
-      :key="project._id"
-      class="relative"
-    >
-      <ScheduleDayJob :project="project" :isAdmin="isAdmin" @onDelete="deleteHandler" />
+    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
+      <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
     </div>
 
     <div
@@ -116,16 +159,10 @@ const saveHandler = () => {
       </div>
       <div class="flex justify">
         <div
-          @click="saveHandler"
+          @click="cancelHandler"
           class="hover:cursor-pointer p-1 flex-1 bg-green-600 hover:bg-red-600 hover:text-white"
         >
-          Išsaugoti
-        </div>
-        <div
-          @click="cancelHandler"
-          class="flex items-center justify-center bg-red-400 w-8 hover:cursor-pointer hover:bg-red-600 hover:text-white"
-        >
-          X
+          Uždaryti
         </div>
       </div>
     </div>

@@ -11,15 +11,11 @@ export default defineEventHandler(async (event: any) => {
     const token = getCookie(event, "mtud");
 
     if (token) {
-      jwt.verify(
-        token,
-        process.env.TOKEN_SECRET as string,
-        (err: any, user: any) => {
-          if (!err && user.verified) {
-            body._id = user.id;
-          }
+      jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
+        if (!err && user.verified) {
+          body._id = user.id;
         }
-      );
+      });
     }
   }
 });

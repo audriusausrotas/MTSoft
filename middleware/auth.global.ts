@@ -8,6 +8,7 @@ import {
   fetchUsers,
   fetchArchive,
   fetchMontavimas,
+  fetchSchedules,
 } from "~/utils/fetchData";
 
 export default defineNuxtRouteMiddleware(async (to) => {
@@ -39,6 +40,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     if (to.path.includes("grafikas")) {
       await fetchUsers();
+      await fetchSchedules();
     }
 
     // fetches data in back/front

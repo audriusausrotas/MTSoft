@@ -72,7 +72,15 @@ export async function fetchArchive() {
   const { data: archive }: any = await useFetch("/api/archive");
   if (archive.value.success) {
     useProjects.addArchives([...archive.value.data]);
-    useProjects.addArchives([...archive.value.data]);
+  }
+}
+
+export async function fetchSchedules() {
+  const useSchedule = useScheduleStore();
+  if (useSchedule.schedule.length > 0) return;
+  const { data: schedules }: any = await useFetch("/api/schedule");
+  if (schedules.value.success) {
+    useSchedule.addSchedules([...schedules.value.data]);
   }
 }
 
@@ -85,10 +93,7 @@ export async function fetchOrder(to: any) {
   });
   if (offer.value.success) {
     const useOffer = useOfferStore();
-    if (
-      offer.value.data.status === "Nepatvirtintas" ||
-      offer.value.data.status === "Netinkamas"
-    ) {
+    if (offer.value.data.status === "Nepatvirtintas" || offer.value.data.status === "Netinkamas") {
       const currentDate = new Date();
       const exparationDate = new Date(offer.value.data.dateExparation);
       if (currentDate < exparationDate) {

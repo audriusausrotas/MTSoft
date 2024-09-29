@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
+
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -32,4 +33,6 @@ export default defineNuxtConfig({
       cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,
     },
   },
+
+  compatibilityDate: "2024-09-29",
 });
