@@ -1,8 +1,6 @@
 import type { MontavimasFence, Project } from "~/data/interfaces";
 
-export default defineEventHandler(async (event) => {
-  const { _id, worker } = await readBody(event);
-
+async function processJob(_id: string, worker: any) {
   const project: Project | null = await projectSchema.findById({ _id });
 
   if (!project)
@@ -69,7 +67,7 @@ export default defineEventHandler(async (event) => {
     if (!data) return { success: false, data: null, message: "Įvyko klaida" };
 
     project.status = "Montuojama";
-    // @ts-ignore
+    //@ts-ignore
     await project.save();
 
     return {
@@ -78,25 +76,4 @@ export default defineEventHandler(async (event) => {
       message: "Perduota montavimui",
     };
   }
-});
-
-// ~/server/api/montavimas.post.ts
-// import { processJob } from "~/utils/jobProcessor";
-
-// export default defineEventHandler(async (event) => {
-//   const { _id, worker } = await readBody(event);
-
-//   // Call the helper function to process the job
-//   const result = await processJob(_id, worker);
-
-//   // Return the result
-//   if (!result.success) {
-//     return { success: false, message: result.message };
-//   }
-
-//   return {
-//     success: true,
-//     data: result.data,
-//     message: result.message,
-//   };
-// });
+}
