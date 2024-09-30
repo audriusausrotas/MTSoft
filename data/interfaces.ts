@@ -304,7 +304,7 @@ export interface Montavimas {
   client: Client;
   creator: Creator;
   orderNumber: string;
-  worker: string[];
+  workers: string[];
   status: string;
   fences: GamybaFence[];
   results: MontavimasResult[];

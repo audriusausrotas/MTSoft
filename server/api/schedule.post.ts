@@ -1,3 +1,6 @@
+import { processJob } from "~/utils/montavimasHelper";
+import { Job } from "~/data/interfaces";
+
 export default defineEventHandler(async (event) => {
   const { date, comment, selectedJobs, worker } = await readBody(event);
 
@@ -19,11 +22,16 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  selectedJobs.forEach(async (job: Job) => {
+    await processJob(job._id.toString(), worker.lastName);
+  });
+
   const existingSchedule = await scheduleSchema.findOne({ date, worker });
   if (existingSchedule) {
     existingSchedule.comment = comment;
     existingSchedule.jobs = selectedJobs;
     const data = await existingSchedule.save();
+
     return {
       success: true,
       data: data,
@@ -36,6 +44,7 @@ export default defineEventHandler(async (event) => {
       jobs: selectedJobs,
       worker,
     });
+
     const data = await newSchedule.save();
 
     return {
@@ -45,29 +54,3 @@ export default defineEventHandler(async (event) => {
     };
   }
 });
-
-import type { Job } from "~/data/interfaces";
-
-// export default defineEventHandler(async (event) => {
-//   const { selectedJobs, worker } = await readBody(event);
-
-//   const jobResults = await Promise.all(
-//     selectedJobs.map(async (job: Job) => {
-//       return await processJob(job._id, worker);
-//     })
-//   );
-
-//   const hasErrors = jobResults.some((result) => !result.success);
-//   if (hasErrors) {
-//     const errorMessages = jobResults
-//       .filter((result) => !result.success)
-//       .map((result) => result.message);
-//     return { success: false, message: `Errors: ${errorMessages.join(", ")}` };
-//   }
-
-//   return {
-//     success: true,
-//     message: "All jobs processed successfully",
-//     data: jobResults,
-//   };
-// });

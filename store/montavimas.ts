@@ -15,24 +15,13 @@ export const useMontavimasStore = defineStore("montavimas", {
     },
 
     deleteMontavimasOrder(id: string) {
-      this.montavimasList = this.montavimasList.filter(
-        (item) => item._id !== id
-      );
+      this.montavimasList = this.montavimasList.filter((item) => item._id !== id);
     },
 
     updateOrder(id: string, data: Montavimas) {
       this.montavimasList = this.montavimasList.map((item) => {
         if (item._id === id) return data;
         else return item;
-      });
-    },
-
-    changeWorker(id: string, value: string) {
-      this.montavimasList = this.montavimasList.map((item) => {
-        if (item._id === id) {
-          item.worker = value;
-          return item;
-        } else return item;
       });
     },
     addPhoto(id: string, photo: { url: string; id: string }) {

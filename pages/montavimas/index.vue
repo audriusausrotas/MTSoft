@@ -12,11 +12,11 @@ const filteredMontavimas = computed(() => {
     if (filteredUser.value === "Visi") return useMontavimas.montavimasList;
     else
       return useMontavimas.montavimasList.filter((item) =>
-        item.worker.includes(filteredUser.value)
+        item.workers.includes(filteredUser.value)
       );
   } else {
     return useMontavimas.montavimasList.filter((item) =>
-      item.worker.includes(useUser.user?.lastName!)
+      item.workers.includes(useUser.user?.lastName!)
     );
   }
 });

@@ -1,10 +1,9 @@
 import type { MontavimasFence, Project } from "~/data/interfaces";
 
-async function processJob(_id: string, worker: any) {
-  const project: Project | null = await projectSchema.findById({ _id });
+export async function processJob(_id: string, worker: string) {
+  const project: Project | null = await projectSchema.findById(_id);
 
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
 
   const montavimas = await montavimasSchema.findOne({ _id: project._id });
 
@@ -20,14 +19,14 @@ async function processJob(_id: string, worker: any) {
   });
 
   if (montavimas) {
-    if (montavimas.worker.includes(worker)) {
+    if (montavimas.workers.includes(worker)) {
       return {
         success: false,
         data: null,
         message: "Objektas jau montuojamas",
       };
     } else {
-      montavimas.worker.push(worker);
+      montavimas.workers.push(worker);
       const data = await montavimas.save();
       return { success: true, data: data, message: "Montavimas priskirtas" };
     }
@@ -59,17 +58,15 @@ async function processJob(_id: string, worker: any) {
       results: newResults,
       works: newWorks,
       aditional: [],
-      worker: [worker],
+      workers: [worker],
     });
 
     const data = await newMontavimas.save();
-
     if (!data) return { success: false, data: null, message: "Įvyko klaida" };
 
     project.status = "Montuojama";
     //@ts-ignore
     await project.save();
-
     return {
       success: true,
       data: newMontavimas,

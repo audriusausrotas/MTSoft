@@ -79,7 +79,7 @@ const clickHandler = () => {
       v-if="useUser.user?.accountType === 'Administratorius'"
       class="flex flex-1 items-center justify-center h-8 border-black"
     >
-      {{ order?.worker.join(", ") }}
+      {{ order?.workers.join(", ") }}
     </p>
   </div>
 </template>

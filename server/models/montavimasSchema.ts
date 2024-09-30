@@ -80,7 +80,7 @@ export const montavimasSchema = defineMongooseModel<Montavimas>(
     client: Object,
     creator: Object,
     orderNumber: String,
-    worker: [String],
+    workers: [String],
     status: {
       type: String,
       required: false,
