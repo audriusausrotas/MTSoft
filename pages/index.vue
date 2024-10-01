@@ -22,44 +22,65 @@ const users = [
 ];
 
 const statusFilters = ["Visi", ...status];
-
-// const backupHandler = async () => {
-//   const response: any = await $fetch("/api/backup");
-//   if (response.success) {
-//     setIsError(false);
-//     setError(response.message);
-//   } else {
-//     setError(response.message);
-//   }
-// }
-
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div class="flex gap-4 flex-wrap items-end">
-      <BaseSelectField label="Vartotojas" :values="users" id="userFilter" :defaultValue="userLetters" width="w-40"
-        @onChange="(value: string) => useProjects.changeFilter(value)
-          " />
-      <BaseSelectField label="Statusas" :values="statusFilters" id="statusFilter"
-        :defaultValue="useProjects.selectedStatusFilter" width="w-40" @onChange="(value: string) => useProjects.changeStatusFilter(value)
-          " />
-      <BaseInput placeholder="Paieška" label="Paieška" width="w-full" class="pr-16 flex-1" variant="light" @onChange="(value: string): void =>
-        useProjects.searchProjects(value)
-        ">
-        <NuxtImg src="/icons/search.svg" width="14" height="14" alt="search icon" decoding="auto" loading="lazy"
-          :ismap="true" />
-      </BaseInput>
-      <!-- 
-      <BaseButton name="Create Backup" @click="backupHandler" />
-      -->
+  <div class="flex flex-col items-center gap-8">
+    <div class="flex justify-between w-full flex-wrap">
+      <div class="flex gap-4 items-end flex-wrap">
+        <BaseButton>
+          <NuxtLink to="/naujas">Naujas projektas</NuxtLink>
+        </BaseButton>
+        <BaseInput
+          placeholder="Paieška"
+          label="Paieška"
+          width="w-full"
+          class="w-60"
+          variant="light"
+          @onChange="(value: string): void => useProjects.searchProjects(value)"
+        >
+          <NuxtImg
+            src="/icons/search.svg"
+            width="14"
+            height="14"
+            alt="search icon"
+            decoding="auto"
+            loading="lazy"
+            :ismap="true"
+          />
+        </BaseInput>
+      </div>
+      <div class="flex gap-4 flex-wrap">
+        <BaseSelectField
+          label="Vartotojas"
+          :values="users"
+          id="userFilter"
+          :defaultValue="userLetters"
+          width="w-40"
+          @onChange="(value: string) => useProjects.changeFilter(value)
+        "
+        />
+        <BaseSelectField
+          label="Statusas"
+          :values="statusFilters"
+          id="statusFilter"
+          :defaultValue="useProjects.selectedStatusFilter"
+          width="w-40"
+          @onChange="(value: string) => useProjects.changeStatusFilter(value)
+          "
+        />
+      </div>
     </div>
 
     <div class="flex flex-col gap-4">
-      <HomeProject v-for="(project, index) in useProjects.filteredProjects" :key="project._id" :index="index"
-        :length="useProjects.filteredProjects.length" :project="project" />
+      <HomeProject
+        v-for="(project, index) in useProjects.filteredProjects"
+        :key="project._id"
+        :index="index"
+        :length="useProjects.filteredProjects.length"
+        :project="project"
+      />
     </div>
-
   </div>
 </template>
 <style scoped></style>

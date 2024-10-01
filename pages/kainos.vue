@@ -19,7 +19,7 @@ const useProducts = useProductsStore();
             <th class="w-8 p-3 rounded-tr-2xl"></th>
           </tr>
         </thead>
-        <tbody class="divide-y">
+        <tbody>
           <tr
             v-for="(product, index) in useProducts.products"
             :key="product._id"

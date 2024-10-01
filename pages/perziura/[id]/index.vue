@@ -73,11 +73,16 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   if (response.success) {
     useGates.addGate(response.data, provider.value);
 
+    const link =
+      useUsers.user?.accountType === "Vartonas"
+        ? "https://modernitvora.vercel.app/vartonas"
+        : "https://modernitvora.vercel.app/gigasta";
+
     const emailResponse: any = await $fetch("/api/mail", {
       method: "put",
       body: {
         to: name,
-        message: `Turi naują užsakymą "${response.data.client.address}"`,
+        message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
         title: "Naujas užsakymas",
       },
     });
@@ -223,7 +228,9 @@ const photosHandler = async (photo: Photo) => {
 
 const checkGates = () => {
   const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
-  gateOrdered.value = allGates.some((item) => item._id.toString() === offer?._id.toString());
+  gateOrdered.value = allGates.some(
+    (item) => item._id.toString() === offer?._id.toString()
+  );
 };
 
 checkGates();
@@ -231,7 +238,9 @@ checkGates();
 const gateExist =
   offer?.gates.length &&
   offer?.gates.length > 0 &&
-  offer?.gates.some((item) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai");
+  offer?.gates.some(
+    (item) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai"
+  );
 
 watch(
   useGates.gates,
@@ -247,13 +256,29 @@ watch(
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
-          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
-          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.orderNumber"
+            label="Užsakymo nr"
+          />
+          <BaseInput
+            label="Avansas"
+            :name="offer?.advance + ' €'"
+            :disable="true"
+          />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.username"
+            label="klientas"
+          />
         </div>
 
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.address"
+            label="adresas"
+          />
           <a :href="'tel:' + offer?.client?.phone">
             <BaseInput
               :disable="true"
@@ -284,7 +309,10 @@ watch(
               name="Paliktas avansas"
               @click="isOpenAdvance = !isOpenAdvance"
             />
-            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
+            <div
+              v-else-if="isOpenAdvance"
+              class="flex overflow-hidden border rounded-lg"
+            >
               <input
                 placeholder="Avansas"
                 type="number"
@@ -403,7 +431,11 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
+        <BaseGalleryElement
+          :_id="offer?._id"
+          :files="offer?.files"
+          category="projects"
+        />
       </div>
     </div>
 

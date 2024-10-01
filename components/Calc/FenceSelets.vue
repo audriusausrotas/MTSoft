@@ -10,7 +10,6 @@ import {
   services,
   parts,
   twoSided,
-  bindings
 } from "~/data/selectFieldData";
 
 const props = defineProps(["index"]);
@@ -20,7 +19,7 @@ const currentFence = useCalculations.fences[props.index];
 const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
 const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
-const needBindings = ref<boolean>(true)
+const needBindings = ref<boolean>(true);
 
 const isOpen = ref<boolean>(false);
 
@@ -37,16 +36,15 @@ watch(
       !isSegment.value
     ) {
       if (newValue.bindings === "Taip") {
-        useCalculations.updateBindings(props.index, "Taip")
-        needBindings.value = true
+        useCalculations.updateBindings(props.index, "Taip");
+        needBindings.value = true;
+      } else {
+        useCalculations.updateBindings(props.index, "Ne");
+        needBindings.value = false;
       }
-      else {
-        useCalculations.updateBindings(props.index, "Ne")
-        needBindings.value = false
-      };
     } else {
       useCalculations.updateBindings(props.index, "Ne");
-      needBindings.value = false
+      needBindings.value = false;
     }
   },
   { deep: true }
@@ -55,73 +53,164 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
-      <BaseSelectField label="Tvoros pusė" :values="fenceSide" id="fenceSide" :defaultValue="currentFence.side"
-        width="w-60" @onChange="(value: string) => useCalculations.updateSide(props.index, value)
-        " />
+    <div
+      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
+    >
+      <BaseSelectField
+        label="Tvoros pusė"
+        :values="fenceSide"
+        id="fenceSide"
+        :defaultValue="currentFence.side"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateSide(props.index, value)
+        "
+      />
 
-      <BaseSelectField label="Tvoros tipas" :values="fenceTypes" id="fenceType" :defaultValue="currentFence.type"
-        width="w-60" @onChange="(value: string) => useCalculations.updateType(props.index, value)
-        " />
+      <BaseSelectField
+        label="Tvoros tipas"
+        :values="fenceTypes"
+        id="fenceType"
+        :defaultValue="currentFence.type"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateType(props.index, value)
+        "
+      />
 
-      <BaseSelectField label="Tvoros spalva" :values="fenceColors" id="fenceColor" :defaultValue="currentFence.color"
-        width="w-60" @onChange="(value: string) => useCalculations.updateColor(props.index, value)
-        " />
+      <BaseSelectField
+        label="Tvoros spalva"
+        :values="fenceColors"
+        id="fenceColor"
+        :defaultValue="currentFence.color"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateColor(props.index, value)
+        "
+      />
 
-      <BaseSelectField v-if="!isSegment" label="Skardos Tipas" :values="fenceMaterials" id="fenceMaterials"
-        :defaultValue="currentFence.material" width="w-60" @onChange="(value: string) => useCalculations.updateMaterial(props.index, value)
-        " />
+      <BaseSelectField
+        v-if="!isSegment"
+        label="Skardos Tipas"
+        :values="fenceMaterials"
+        id="fenceMaterials"
+        :defaultValue="currentFence.material"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateMaterial(props.index, value)
+        "
+      />
 
-      <BaseSelectField v-if="!isFenceBoards && !isSegment" label="Pramatomumas" :values="pramatomumas" id="seeThrough"
-        :defaultValue="currentFence.seeThrough" width="w-60" @onChange="(value: string) => useCalculations.updateSeeThrough(props.index, value)
-        " />
+      <BaseSelectField
+        v-if="!isFenceBoards && !isSegment"
+        label="Pramatomumas"
+        :values="pramatomumas"
+        id="seeThrough"
+        :defaultValue="currentFence.seeThrough"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateSeeThrough(props.index, value)
+        "
+      />
 
-      <BaseSelectField v-if="!isSegment" label="tvoros kryptis" :values="fenceDirection" id="fenceDirection"
-        :defaultValue="currentFence.direction" width="w-60" @onChange="(value: string) => useCalculations.updateDirection(props.index, value)
-        " />
+      <BaseSelectField
+        v-if="!isSegment"
+        label="tvoros kryptis"
+        :values="fenceDirection"
+        id="fenceDirection"
+        :defaultValue="currentFence.direction"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateDirection(props.index, value)
+        "
+      />
 
-      <BaseSelectField label="Paslaugos" :values="services" id="services" :defaultValue="currentFence.services"
-        width="w-60" @onChange="(value: string) => useCalculations.updateServices(props.index, value)
-        " />
+      <BaseSelectField
+        label="Paslaugos"
+        :values="services"
+        id="services"
+        :defaultValue="currentFence.services"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateServices(props.index, value)
+        "
+      />
 
-      <BaseSelectField label="Detalės" :values="parts" id="parts" :defaultValue="currentFence.parts" width="w-60"
+      <BaseSelectField
+        label="Detalės"
+        :values="parts"
+        id="parts"
+        :defaultValue="currentFence.parts"
+        width="w-60"
         @onChange="(value: string) => useCalculations.updateParts(props.index, value)
-        " />
+        "
+      />
 
-      <BaseSelectField v-if="isFenceBoards" label="Dvipusė" :values="twoSided" id="twoSided"
-        :defaultValue="currentFence.twoSided" width="w-60" @onChange="(value: string) => useCalculations.updateTwoSided(props.index, value)
-        " />
+      <BaseSelectField
+        v-if="isFenceBoards"
+        label="Dvipusė"
+        :values="twoSided"
+        id="twoSided"
+        :defaultValue="currentFence.twoSided"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateTwoSided(props.index, value)
+        "
+      />
 
-      <BaseInput v-if="isFenceBoards" placeholder="Tarpas Tarp Elementų" type="number" variant="light"
-        label="tarpas tarp elementų" width="w-60" :name="currentFence.space" @onChange="(value: number) =>
+      <BaseInput
+        v-if="isFenceBoards"
+        placeholder="Tarpas Tarp Elementų"
+        type="number"
+        variant="light"
+        label="tarpas tarp elementų"
+        width="w-60"
+        :name="currentFence.space"
+        @onChange="(value: number) =>
         useCalculations.updateSpace(props.index,
           value,
         )
-        " />
-      <BaseSelectField v-if="!isSegment && !isFenceBoards" label="Apkaustai" :values="twoSided" id="bingings"
-        :defaultValue="currentFence.bindings" width="w-60" @onChange="(value: string) => useCalculations.updateBindings(props.index, value)
-        " />
-      <BaseSelectField v-if="needPoles" label="ankeriuojami stulpai" :values="twoSided" id="anchoredPoles"
-        :defaultValue="currentFence.anchoredPoles" width="w-60" @onChange="(value: string) => useCalculations.updateAnchoredPoles(props.index, value)
-        " />
-      <BaseSelectField v-if="!isFenceBoards && !isSegment && needBindings" label="Pradžios apkaustas" :values="bindings"
-        id="startBinding" :defaultValue="currentFence.startBinding" width="w-60" @onChange="(value: string) => useCalculations.updateStartBinding(props.index, value)
-        " />
-      <BaseSelectField v-if="!isFenceBoards && !isSegment && needBindings" label="Pabaigos apkaustas" :values="bindings"
-        id="endBinding" :defaultValue="currentFence.endBinding" width="w-60" @onChange="(value: string) => useCalculations.updateEndBinding(props.index, value)
-        " />
+        "
+      />
+      <BaseSelectField
+        v-if="!isSegment && !isFenceBoards"
+        label="Apkaustai"
+        :values="twoSided"
+        id="bingings"
+        :defaultValue="currentFence.bindings"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateBindings(props.index, value)
+        "
+      />
+      <BaseSelectField
+        v-if="needPoles"
+        label="ankeriuojami stulpai"
+        :values="twoSided"
+        id="anchoredPoles"
+        :defaultValue="currentFence.anchoredPoles"
+        width="w-60"
+        @onChange="(value: string) => useCalculations.updateAnchoredPoles(props.index, value)
+        "
+      />
     </div>
     <div>
-      <div class="flex gap-2 hover:cursor-pointer select-none" @click="isOpen = !isOpen">
+      <div
+        class="flex gap-2 hover:cursor-pointer select-none"
+        @click="isOpen = !isOpen"
+      >
         <p class="text-md">Papildoma Informacija</p>
-        <NuxtImg src="icons/arrowDown.svg" width="10" :class="isOpen ? 'rotate-180' : ''" class="transition-all" />
+        <NuxtImg
+          src="icons/arrowDown.svg"
+          width="10"
+          :class="isOpen ? 'rotate-180' : ''"
+          class="transition-all"
+        />
       </div>
-      <BaseInput v-if="isOpen" placeholder="Papildoma informacija" variant="light" width="w-full max-w-[1008px]"
-        class="mb-8" :name="currentFence.aditional" @onChange="(value: string) =>
+      <BaseInput
+        v-if="isOpen"
+        placeholder="Papildoma informacija"
+        variant="light"
+        width="w-full max-w-[1008px]"
+        class="mb-8"
+        :name="currentFence.aditional"
+        @onChange="(value: string) =>
         useCalculations.updateAditional(props.index,
           value,
         )
-        " />
+        "
+      />
     </div>
   </div>
 </template>

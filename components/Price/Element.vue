@@ -67,7 +67,7 @@ const saveHandler = async (): Promise<void> => {
 </script>
 
 <template>
-  <td class="p-2">{{ props.index + 1 }}</td>
+  <td class="p-2 align-middle">{{ props.index + 1 }}</td>
   <td class="p-2">
     <BaseInput
       :name="productName"

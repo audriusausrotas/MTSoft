@@ -32,7 +32,7 @@ export default function calculateResults() {
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
-      if (!onlyServices) fenceTemp = [...temp];
+      if (!onlyServices) fenceTemp = [...(temp || [])];
       if (!onlyParts) {
         if (item.bindings === "Taip")
           results.addTotalFenceWithBindings(item.totalQuantity);
@@ -166,6 +166,9 @@ export default function calculateResults() {
 
             isTogether = false;
           } else {
+            //////////////////////////////////////////////
+            //         cia rasom if (!isFence) return   <-- istestuot
+            /////////////////////////////////////////////
             if (!isTogether) {
               if (!onlyServices) results.removePole(item.color);
               if (!onlyServices && measure.gates.option !== "Segmentiniai")

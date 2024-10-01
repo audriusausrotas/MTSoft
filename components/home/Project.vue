@@ -6,7 +6,7 @@ const useProjects = useProjectsStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
 const useGates = useGateStore();
-const useBackup = useBackupStore()
+const useBackup = useBackupStore();
 const open = ref<boolean>(false);
 const gateOrdered = ref(false);
 
@@ -35,15 +35,15 @@ const editHandler = () => {
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
-  useBackup.clearBackup()
+  useBackup.clearBackup();
   useCalculations.setProject({
     client: props.project.client,
     fenceMeasures: props.project.fenceMeasures,
   });
   useResults.setProject(props.project);
-  useBackup.addBackup(props.project.results, props.project.works)
+  useBackup.addBackup(props.project.results, props.project.works);
   useProjects.setSelectedProject(props.project._id);
-  navigateTo("/samata");
+  navigateTo("/naujas");
 };
 
 const linkHandler = () => {
@@ -93,7 +93,7 @@ const copyHandler = async () => {
     });
     if (data.success) {
       useProjects.addProject(data.data);
-      setIsError(false)
+      setIsError(false);
       setError(data.message);
     } else {
       setError(data.message);
@@ -123,7 +123,6 @@ const archiveHandler = async () => {
   }
 };
 
-
 const checkGates = () => {
   const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
   gateOrdered.value = allGates.some(
@@ -135,85 +134,173 @@ checkGates();
 </script>
 
 <template>
-  <div class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4">
-    <div class="font-semibold text-xl w-8">{{ length - index }}</div>
+  <div
+    class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4"
+  >
+    <div class="font-semibold text-xl w-7">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative">
-      <div v-if="props.project.gates.length > 0 && props.project.status !== 'Nepatvirtintas'"
-        class="absolute top-1 right-1  w-2 h-2 rounded-full bg-green-500"
-        :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'">
-      </div>
+      <div
+        v-if="
+          props.project.gates.length > 0 &&
+          props.project.status !== 'Nepatvirtintas'
+        "
+        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
+        :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'"
+      ></div>
       <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
     </div>
 
     <div class="relative">
-      <div v-if="props.project.advance" class="absolute top-1 right-1  w-2 h-2 rounded-full bg-green-500"></div>
-      <BaseInfoField :name="props.project?.discount
-      ? props.project?.priceWithDiscount + '€'
-      : props.project?.priceVAT + ' €'
-      " width="w-28" />
+      <div
+        v-if="props.project.advance"
+        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
+      ></div>
+      <BaseInfoField
+        :name="
+          props.project?.discount
+            ? props.project?.priceWithDiscount + '€'
+            : props.project?.priceVAT + ' €'
+        "
+        width="w-24"
+      />
     </div>
 
-    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
-    <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
-    <BaseInfoField :name="props.project?.status" width="w-40" :class="props.project?.status === 'Nepatvirtintas'
-      ? 'bg-orange-300'
-      : props.project?.status === 'Netinkamas'
-        ? 'bg-red-full'
-        : props.project?.status === 'Tinkamas'
+    <BaseInfoField
+      :name="props.project?.client?.phone"
+      width="w-32"
+      :tel="true"
+    />
+    <BaseInfoField
+      :name="props.project?.client?.email"
+      width="w-80 "
+      :email="true"
+    />
+    <BaseInfoField
+      :name="props.project?.status"
+      width="w-36"
+      :class="
+        props.project?.status === 'Nepatvirtintas'
+          ? 'bg-orange-300'
+          : props.project?.status === 'Netinkamas'
+          ? 'bg-red-full'
+          : props.project?.status === 'Tinkamas'
           ? 'bg-pink-400 '
-          : props.project?.status === 'Vartai Sumontuoti' ?
-            'bg-violet-500 animate-pulse text-white'
-            : 'bg-green-400'
-      " />
-    <div class="relative hover:bg-red-full p-2  rounded-lg hover:cursor-pointer" :class="open && 'bg-red-full'"
-      @click="open = !open">
-      <NuxtImg src="/icons/menu.svg" width="16" height="16" decoding="auto" loading="lazy" :ismap="true" />
-      <div v-if="open"
+          : props.project?.status === 'Vartai Sumontuoti'
+          ? 'bg-violet-500 animate-pulse text-white'
+          : 'bg-green-400'
+      "
+    />
+    <div
+      class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
+      :class="open && 'bg-red-full'"
+      @click="open = !open"
+    >
+      <NuxtImg
+        src="/icons/menu.svg"
+        width="16"
+        height="16"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+      />
+      <div
+        v-if="open"
         class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
-        :class="props.archive ? 'h-28' : 'h-64'">
-
-        <div v-if="!props.archive" @click="openInNewHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/newtab.svg" alt="edit button" width="20" height="20" />
+        :class="props.archive ? 'h-28' : 'h-64'"
+      >
+        <div
+          v-if="!props.archive"
+          @click="openInNewHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/newtab.svg"
+            alt="edit button"
+            width="20"
+            height="20"
+          />
           <p>Atidaryti pasiūlymą</p>
         </div>
 
-        <div @click="previewHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" height="20" />
+        <div
+          @click="previewHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/eye.svg"
+            alt="eye button"
+            width="20"
+            height="20"
+          />
           <p>Peržiūrėti</p>
         </div>
 
-        <div v-if="!props.archive" @click="linkHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
+        <div
+          v-if="!props.archive"
+          @click="linkHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/link.svg"
+            alt="link button"
+            width="20"
+            height="20"
+          />
           <p>Kopijuoti nuorodą</p>
         </div>
 
-        <div v-if="!props.archive" @click="editHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" height="20" />
+        <div
+          v-if="!props.archive"
+          @click="editHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/edit.svg"
+            alt="edit button"
+            width="20"
+            height="20"
+          />
           <p>Redaguoti</p>
         </div>
 
-        <div v-if="!props.archive" @click="copyHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
+        <div
+          v-if="!props.archive"
+          @click="copyHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/pageflip.svg"
+            alt="edit button"
+            width="20"
+            height="20"
+          />
           <p>Kopijuoti projektą</p>
         </div>
 
-
-
-        <div @click="archiveHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/archive.svg" alt="delete button" width="20" height="20" />
+        <div
+          @click="archiveHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/archive.svg"
+            alt="delete button"
+            width="20"
+            height="20"
+          />
           <p v-if="!props.archive">Archyvuoti</p>
           <p v-else>Sugrąžinti</p>
         </div>
-        <div @click="deleteHandler"
-          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white">
-          <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
+        <div
+          @click="deleteHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            alt="delete button"
+            width="20"
+            height="20"
+          />
           <p>Ištrinti</p>
         </div>
       </div>

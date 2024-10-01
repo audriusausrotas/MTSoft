@@ -20,8 +20,10 @@ const onDragStart = (event: DragEvent) => {
 const onDrop = async (event: DragEvent) => {
   loading.value = true;
   const target = event.target as HTMLElement;
-  //@ts-ignore
-  const droppedItemIndex = Number(target.closest("[data-index]")?.dataset.index);
+  const droppedItemIndex = Number(
+    //@ts-ignore
+    target.closest("[data-index]")?.dataset.index
+  );
 
   if (draggedItemIndex.value !== null && droppedItemIndex !== null) {
     const draggedItem = useGamyba.gamybaList[draggedItemIndex.value];
@@ -29,7 +31,9 @@ const onDrop = async (event: DragEvent) => {
     useGamyba.gamybaList.splice(droppedItemIndex, 0, draggedItem);
     draggedItemIndex.value = null;
 
-    await updateOrderInDatabase(useGamyba.gamybaList.map((item: any) => item._id));
+    await updateOrderInDatabase(
+      useGamyba.gamybaList.map((item: any) => item._id)
+    );
   }
 };
 
@@ -52,7 +56,11 @@ const updateOrderInDatabase = async (list: string[]) => {
 const newHandler = async () => {
   loading.value = true;
 
-  const data = { number: orderNr.value, address: orderAddress.value, creator: orderCreator.value };
+  const data = {
+    number: orderNr.value,
+    address: orderAddress.value,
+    creator: orderCreator.value,
+  };
 
   const response: any = await $fetch("/api/gamybaNew", {
     method: "post",
@@ -76,8 +84,12 @@ const newHandler = async () => {
 
 <template>
   <div class="flex flex-col gap-4 select-none">
-    <div class="pl-8 flex gap-4">
-      <BaseButton v-if="!newOpen" name="Sukurti naują" @click="newOpen = true" />
+    <div class="flex justify-center gap-4">
+      <BaseButton
+        v-if="!newOpen"
+        name="Sukurti naują"
+        @click="newOpen = true"
+      />
       <div v-else class="flex flex-col gap-4">
         <BaseButton name="Išsaugoti užsakymą" @click="newHandler" />
         <div class="flex gap-4">

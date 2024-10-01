@@ -108,14 +108,6 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].material = value;
     },
 
-    updateStartBinding(index: number, value: string): void {
-      this.fences[index].startBinding = value;
-    },
-
-    updateEndBinding(index: number, value: string): void {
-      this.fences[index].endBinding = value;
-    },
-
     updateSeeThrough(index: number, value: string): void {
       this.fences[index].seeThrough = value;
       this.calculateAllElements(index);
