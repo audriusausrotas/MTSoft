@@ -13,9 +13,7 @@ const users = [
   ...new Set(
     useProjects.projects.map((item) => {
       return user.users.find((usr) =>
-        usr.username
-          .toLowerCase()
-          .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+        usr.username.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
       )!.username;
     })
   ),
@@ -26,16 +24,16 @@ const statusFilters = ["Visi", ...status];
 
 <template>
   <div class="flex flex-col items-center gap-8">
-    <div class="flex justify-between w-full flex-wrap">
-      <div class="flex gap-4 items-end flex-wrap">
+    <div class="flex w-full gap-4 items-center flex-wrap justify-center">
+      <div class="flex gap-4 items-end justify-center flex-wrap">
         <BaseButton>
           <NuxtLink to="/naujas">Naujas projektas</NuxtLink>
         </BaseButton>
+
         <BaseInput
           placeholder="Paieška"
           label="Paieška"
-          width="w-full"
-          class="w-60"
+          width="w-60 "
           variant="light"
           @onChange="(value: string): void => useProjects.searchProjects(value)"
         >
@@ -50,13 +48,13 @@ const statusFilters = ["Visi", ...status];
           />
         </BaseInput>
       </div>
-      <div class="flex gap-4 flex-wrap">
+      <div class="flex gap-4 justify-center flex-wrap">
         <BaseSelectField
           label="Vartotojas"
           :values="users"
           id="userFilter"
           :defaultValue="userLetters"
-          width="w-40"
+          width="w-60"
           @onChange="(value: string) => useProjects.changeFilter(value)
         "
         />
@@ -65,7 +63,7 @@ const statusFilters = ["Visi", ...status];
           :values="statusFilters"
           id="statusFilter"
           :defaultValue="useProjects.selectedStatusFilter"
-          width="w-40"
+          width="w-60"
           @onChange="(value: string) => useProjects.changeStatusFilter(value)
           "
         />

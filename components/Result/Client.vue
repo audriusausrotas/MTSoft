@@ -5,7 +5,6 @@ const open = ref(true);
 
 <template>
   <div>
-    <CalcTitle :open="open" name="Kliento Duomenys" @onClick="open = !open" />
     <div v-if="open" clflex-wraps="flex flex-col gap-8 mt-8">
       <div class="flex flex-wrap justify-center gap-4 xl:justify-normal">
         <BaseInput

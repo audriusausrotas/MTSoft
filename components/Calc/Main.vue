@@ -13,10 +13,8 @@ const calculateResultsHandler = () => {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div
-      class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b"
-    >
+  <div class="flex w-full flex-col">
+    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
       <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
     </div>

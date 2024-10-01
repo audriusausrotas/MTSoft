@@ -22,13 +22,8 @@ const changeHandler = (value: string): void => {
 
 <template>
   <div class="flex flex-col self-end gap-1 select-none">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
-      props.label
-    }}</label>
-    <div
-      class="relative selct-none h-10"
-      :class="[props.width ? `${props.width}` : 'w-48']"
-    >
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
+    <div class="relative selct-none h-10" :class="[props.width ? `${props.width}` : 'w-48']">
       <div
         @click="props.disable ? '' : (isOpen = !isOpen)"
         class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg shadow-sm"
@@ -46,9 +41,7 @@ const changeHandler = (value: string): void => {
           <NuxtImg
             v-if="props.name === 'verified'"
             :src="
-              props.defaultValue === 'patvirtintas'
-                ? '/icons/ellipseg.svg'
-                : '/icons/ellipser.svg'
+              props.defaultValue === 'patvirtintas' ? '/icons/ellipseg.svg' : '/icons/ellipser.svg'
             "
             width="8"
             height="8"
@@ -69,7 +62,7 @@ const changeHandler = (value: string): void => {
       </div>
       <div
         v-if="isOpen"
-        class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border max-h-52 rounded-xl top-10 border-dark-light"
+        class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border shadow-lg max-h-52 rounded-lg top-10 border-dark-light"
         :class="[props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light', props.values.some((item: string) => item.includes('@'))]"
       >
         <div

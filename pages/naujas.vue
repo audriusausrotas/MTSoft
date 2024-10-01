@@ -72,30 +72,33 @@ const clearHandler = () => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full items-center gap-10">
-    <ResultClient />
-    <div class="flex gap-4 w-full text-center">
+  <div class="flex flex-col w-full items-center gap-10 select-none">
+    <div
+      class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"
+    >
       <div
         @click="skaiciuokle = true"
-        class="flex-1 border p-2 rounded-md border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+        class="flex-1 p-2 border-dark-light hover:cursor-pointer min-w-28 hover:bg-red-600 hover:text-white"
         :class="skaiciuokle ? 'bg-red-full text-white' : ''"
       >
         Skaičiuotklė
       </div>
       <div
         @click="skaiciuokle = false"
-        class="flex-1 border p-2 rounded-md border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+        class="flex-1 p-2 border-dark-light hover:cursor-pointer min-w-28 hover:bg-red-full hover:text-white"
         :class="skaiciuokle ? '' : 'bg-red-full text-white'"
       >
         Sąmata
       </div>
-
-      <BaseButton
-        name="išsaugoti sąmatą"
+      <button
         @click="saveHandler"
         :isLoading="isLoading"
-      />
+        class="bg-dark-full text-white flex-1 hover:bg-red-full"
+      >
+        Išsaugoti projektą
+      </button>
     </div>
+    <ResultClient />
     <CalcMain v-if="skaiciuokle" @onCalculate="skaiciuokle = false" />
     <ResultMain v-else @onClear="clearHandler" />
   </div>
