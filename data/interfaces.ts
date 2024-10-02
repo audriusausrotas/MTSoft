@@ -59,8 +59,6 @@ export interface Fence {
   elements: number;
   totalLength: number;
   totalQuantity: number;
-  startBinding: string;
-  endBinding: string;
   measures: Measure[];
 }
 

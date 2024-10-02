@@ -8,9 +8,7 @@ const gateOpen = ref<boolean>(false);
 </script>
 
 <template>
-  <div
-    class="gap-4 md:justify-center flex-wrap flex-1 hidden md:flex font-semibold"
-  >
+  <div class="gap-4 md:justify-center flex-wrap flex-1 hidden md:flex">
     <div
       v-for="link in navigationLinks"
       :key="link.name"
@@ -55,11 +53,7 @@ const gateOpen = ref<boolean>(false);
             :key="lnk.name"
             :to="lnk.link"
             class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
-            :class="
-              props.currentPath === lnk.name
-                ? 'bg-red-full text-white'
-                : 'text-black'
-            "
+            :class="props.currentPath === lnk.name ? 'bg-red-full text-white' : 'text-black'"
             >{{ lnk.name }}</NuxtLink
           >
         </div>
@@ -73,11 +67,7 @@ const gateOpen = ref<boolean>(false);
             :key="lnk.name"
             :to="lnk.link"
             class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
-            :class="
-              props.currentPath === lnk.name
-                ? 'bg-red-full text-white'
-                : 'text-black'
-            "
+            :class="props.currentPath === lnk.name ? 'bg-red-full text-white' : 'text-black'"
             >{{ lnk.name }}</NuxtLink
           >
         </div>
