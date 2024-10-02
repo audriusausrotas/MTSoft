@@ -521,6 +521,15 @@ export const useCalculationsStore = defineStore("calculations", {
             direction,
             this.fences[lastIndex].measures.length - 1
           );
+
+          // handle gates
+        } else if (item.startsWith("v.")) {
+          const temp = item.replace("v.", "");
+          const lastIndex = this.fences.length - 1;
+          this.addMeasure(lastIndex);
+          const lastMeasure = this.fences[lastIndex].measures.length - 1;
+          this.updateMeasureLength(lastIndex, lastMeasure, +temp);
+          // nebaigta
         }
       });
     },
