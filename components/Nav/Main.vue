@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { navigationLinks, optionLinks, gateLinks } from "~/data/initialValues";
-
 const useUser = useUserStore();
 const route = useRoute();
 
@@ -43,9 +41,9 @@ watch(
           <NavMobile :currentPath="currentPath" />
         </template>
         <template v-else>
-          <NavDesktopOther :useUser="useUser" :navigationLinks="navigationLinks" />
+          <NavDesktopOther :useUser="useUser" />
         </template>
-        <NavUser :useUser="useUser" />
+        <NavUser :useUser="useUser" class="self-start" />
       </div>
     </div>
   </div>

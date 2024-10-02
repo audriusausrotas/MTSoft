@@ -6,7 +6,7 @@ import {
   fenceMeasures,
   clientInitialValue,
 } from "~/data/initialValues";
-import { pramatomumas, verticals } from "~/data/selectFieldData";
+import { pramatomumas, verticals, fenceTypes } from "~/data/selectFieldData";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
@@ -324,6 +324,205 @@ export const useCalculationsStore = defineStore("calculations", {
     setProject(project: any) {
       this.fences = [...project.fenceMeasures];
       this.client = { ...project.client };
+    },
+
+    lazerCalculate(text: string) {
+      const tempArr = text.replace(/\n/g, " ");
+      const splitArr = tempArr.split(" ");
+
+      const formatNumbers = (nr: string) => {
+        let temp = nr.replace(".", "");
+        if (temp.length > 3) {
+          temp = temp.slice(0, -1) + "." + temp.slice(-1);
+        }
+        return temp;
+      };
+
+      const capitalize = (string: string) => {
+        const words = string.split(" ");
+        const capitalizedWords = words.map((word) => {
+          const firstLetter = word.charAt(0).toUpperCase();
+          const restOfWord = word.slice(1);
+          return firstLetter + restOfWord;
+        });
+        return capitalizedWords.join(" ");
+      };
+
+      splitArr.forEach((item) => {
+        item = item.toLowerCase();
+
+        if (item === "m") return;
+
+        // email
+        if (item.includes("@")) {
+          this.updateClientEmail(item);
+        }
+
+        // phone
+        else if (item.startsWith("tel.")) {
+          const temp = item.replace("tel.", "");
+          this.updateClientPhone(temp);
+        }
+
+        // address
+        else if (item.startsWith("ad.")) {
+          const temp = item.replace("ad.", "").replace(",", " ");
+          this.updateClientAddress(capitalize(temp));
+
+          // client
+        } else if (item.startsWith("kl.")) {
+          const temp = item.replace("kl.", "").replace(",", " ");
+          this.updateClientUsername(capitalize(temp));
+
+          // create front fence
+        } else if (item === "p" || item === "priekis") {
+          this.addFence();
+          this.updateSide(this.fences.length - 1, "Priekis");
+
+          // create left fence
+        } else if (item === "k" || item === "kaire" || item === "kairė") {
+          this.addFence();
+          this.updateSide(this.fences.length - 1, "Kairė");
+
+          // create right fence
+        } else if (
+          item === "d" ||
+          item === "desine" ||
+          item === "dešinė" ||
+          item === "desinė" ||
+          item === "dešine"
+        ) {
+          this.addFence();
+          this.updateSide(this.fences.length - 1, "Dešinė");
+
+          // create back fence
+        } else if (item === "g" || item === "galas") {
+          this.addFence();
+          this.updateSide(this.fences.length - 1, "Galas");
+
+          // total fence height
+        } else if (item.startsWith("ba")) {
+          const temp = item.replace("ba", "");
+          const formated = formatNumbers(temp);
+          this.oneHeight(this.fences.length - 1, +formated);
+
+          // fence color
+        } else if (item.startsWith("ral.")) {
+          let temp = item.replace("ral.", "");
+          this.updateColor(this.fences.length - 1, temp);
+
+          // fence type
+        } else if (item.startsWith("tt.")) {
+          const temp = item.replace("tt.", "");
+          let found = "Nerasta";
+          if (fenceTypes.includes(capitalize(temp))) {
+            found = capitalize(temp);
+          } else {
+            if (temp === "60x90") found = "Daimond 60/90";
+            else if (temp === "60x90v") found = "Daimond 60/90 Vertical";
+            else if (temp === "40x105") found = "Daimond 40/105";
+            else if (temp === "60x120") found = "Daimond 60/120";
+            else if (temp === "zaliuzi") found = "Žaliuzi";
+            else if (temp === "egle") found = "Eglė";
+            else if (temp === "dile") found = "Dilė";
+          }
+          this.updateType(this.fences.length - 1, found);
+
+          // fence seethrough
+        } else if (item.startsWith("pr.")) {
+          const temp = item.replace("pr.", "");
+          let found = "Nerasta";
+          pramatomumas.forEach((type) => {
+            if (type.toLowerCase() === temp) found === type;
+            else {
+              if (temp === "vidutiniska") found = "Vidutiniška";
+              else if (temp === "25") found = "25% Pramatomumas";
+              else if (temp === "50") found = "50% pramatomumas";
+              else found = temp;
+            }
+          });
+          this.updateSeeThrough(this.fences.length - 1, found);
+
+          // bindings
+        } else if (item.startsWith("apk.")) {
+          const temp = item.replace("apk.", "");
+          let found = "Nerasta";
+          if (temp === "taip") found = "Taip";
+          else if (temp === "ne") found = "Ne";
+          this.updateBindings(this.fences.length - 1, found);
+
+          // fence direction
+        } else if (item === "horizontali") {
+          this.updateDirection(this.fences.length - 1, "Horizontali");
+        } else if (item === "vertikali") {
+          this.updateDirection(this.fences.length - 1, "Vertikali");
+
+          // anchored poles
+        } else if (item === "ankeriuojami") {
+          this.updateAnchoredPoles(this.fences.length - 1, "Taip");
+          this.updateParts(this.fences.length - 1, "Tik Stulpai");
+
+          // parts
+        } else if (item === "stulpai") {
+          this.updateParts(this.fences.length - 1, "Tik Stulpai");
+        } else if (item === "borteliai") {
+          this.updateParts(this.fences.length - 1, "Tik Borteliai");
+        } else if (item === "tvora") {
+          this.updateParts(this.fences.length - 1, "Be Bortelių Ir Stulpų");
+
+          // services
+        } else if (item === "darbai") {
+          this.updateServices(this.fences.length - 1, "Tik Montavimas");
+        } else if (item === "medziagos" || item === "medžiagos") {
+          this.updateServices(this.fences.length - 1, "Tik Medžiagos");
+
+          // two sided
+        } else if (item === "dvipuse" || item === "dvipusė") {
+          this.updateTwoSided(this.fences.length - 1, "Taip");
+
+          // space between elements
+        } else if (item.startsWith("tarpas.")) {
+          const temp = item.replace("tarpas.", "");
+          this.updateSpace(this.fences.length - 1, +temp);
+
+          // corner
+        } else if (item.startsWith("k.")) {
+          const temp = item.replace("k.", "");
+          const lastIndex = this.fences.length - 1;
+          this.addKampas(lastIndex);
+          this.updateMeasureKampas(
+            lastIndex,
+            temp,
+            this.fences[lastIndex].measures.length - 1
+          );
+
+          // step
+        } else if (item.startsWith("la.") || item.startsWith("lz.")) {
+          const lastIndex = this.fences.length - 1;
+          let measure = "";
+          let direction = "";
+
+          if (item.startsWith("la.")) {
+            measure = item.replace("la.", "");
+            direction = "Aukštyn";
+          } else {
+            measure = item.replace("lz.", "");
+            direction = "Žemyn";
+          }
+
+          this.addLaiptas(lastIndex);
+          this.updateMeasureLaiptas(
+            lastIndex,
+            measure,
+            this.fences[lastIndex].measures.length - 1
+          );
+          this.updateMeasureLaiptasDirection(
+            lastIndex,
+            direction,
+            this.fences[lastIndex].measures.length - 1
+          );
+        }
+      });
     },
   },
 

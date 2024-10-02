@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { navigationLinks } from "~/data/initialValues";
+import { navigationLinks, optionLinks, gateLinks } from "~/data/initialValues";
 
 const props = defineProps(["currentPath"]);
 
 const isMenuOpen = ref<boolean>(false);
+const gateOpen = ref<boolean>(false);
+const optionsOpen = ref<boolean>(false);
 </script>
 
 <template>
-  <div class="flex md:hidden" @click="isMenuOpen = !isMenuOpen">
+  <div class="flex flex-col gap-1 md:hidden">
     <NuxtImg
+      @click="isMenuOpen = !isMenuOpen"
       src="/icons/hamburger.svg"
       width="24"
       height="24"
@@ -16,27 +19,72 @@ const isMenuOpen = ref<boolean>(false);
       loading="lazy"
       :ismap="true"
     />
-  </div>
-  <div v-if="isMenuOpen" class="flex md:hidden border-t p-4 top-14 left-0 w-full">
-    <div class="flex-1">
-      <NuxtLink
+
+    <div v-if="isMenuOpen" class="flex flex-col">
+      <div
         v-for="link in navigationLinks"
         :key="link.name"
-        :to="link.link"
-        class="flex gap-2 px-4 py-2 rounded-md w-40 hover:bg-red-full hover:text-white"
-        :class="props.currentPath === link.name ? 'bg-red-full text-white' : ''"
+        @click="
+          link.name === 'Vartai'
+            ? (gateOpen = !gateOpen)
+            : link.name === 'Nustatymai'
+            ? (optionsOpen = !optionsOpen)
+            : ''
+        "
       >
-        <NuxtImg
-          v-if="link.iconPath !== ''"
-          :src="link.iconPath"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
-        {{ link.name }}
-      </NuxtLink>
+        <NuxtLink
+          :to="link.link"
+          class="rounded-md flex gap-1 px-2"
+          :class="
+            props.currentPath === link.name ? 'bg-red-full text-white' : ''
+          "
+        >
+          {{ link.name }}
+          <NuxtImg
+            v-if="link.name === 'Vartai' || link.name === 'Nustatymai'"
+            src="/icons/arrowDown.svg"
+            width="8"
+            height="8"
+            decoding="auto"
+            loading="lazy"
+            :ismap="true"
+          />
+        </NuxtLink>
+
+        <div
+          v-if="gateOpen && link.name === 'Vartai'"
+          class="flex flex-col pl-4"
+        >
+          <NuxtLink
+            v-for="lnk in gateLinks"
+            :key="lnk.name"
+            :to="lnk.link"
+            class="px-2 py-1 rounded-md"
+            :class="
+              props.currentPath === lnk.name ? 'bg-red-full text-white' : ''
+            "
+          >
+            {{ lnk.name }}
+          </NuxtLink>
+        </div>
+
+        <div
+          v-if="optionsOpen && link.name === 'Nustatymai'"
+          class="flex flex-col pl-4"
+        >
+          <NuxtLink
+            v-for="lnk in optionLinks"
+            :key="lnk.name"
+            :to="lnk.link"
+            class="px-2 py-1 rounded-md"
+            :class="
+              props.currentPath === lnk.name ? 'bg-red-full text-white' : ''
+            "
+          >
+            {{ lnk.name }}
+          </NuxtLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { MenuLinks } from "~/data/interfaces";
-const props = defineProps(["useUser", "navigationLinks"]);
+import { navigationLinks } from "~/data/initialValues";
 
-const currentMenu = props.navigationLinks.filter(
-  (item: MenuLinks) => item.name === props.useUser.user?.accountType || item.name === "Grafikas"
+const props = defineProps(["useUser"]);
+
+const currentMenu = navigationLinks.filter(
+  (item: MenuLinks) =>
+    item.name === props.useUser.user?.accountType || item.name === "Grafikas"
 );
 </script>
 

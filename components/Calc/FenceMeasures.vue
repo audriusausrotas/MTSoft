@@ -6,7 +6,7 @@ const useCalculations = useCalculationsStore();
 
 watch(
   () => useCalculations.fences[props.index].measures,
-  (newMeasures, oldMeasures) => {
+  (newMeasures) => {
     let totalM: number = 0;
     let totalQuantity: number = 0;
     newMeasures.forEach((item: Measure) => {
