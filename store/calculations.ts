@@ -1,7 +1,11 @@
 import type { Measure, Calculations, Fence } from "~/data/interfaces";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import { createInitialMeasure, fenceMeasures, clientInitialValue } from "~/data/initialValues";
+import {
+  createInitialMeasure,
+  fenceMeasures,
+  clientInitialValue,
+} from "~/data/initialValues";
 import { pramatomumas, verticals, fenceTypes } from "~/data/selectFieldData";
 
 export const useCalculationsStore = defineStore("calculations", {
@@ -131,7 +135,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].measures[measureIndex].gates.bankette = value;
     },
 
-    updateGateDirection(index: number, value: string, measureIndex: number): void {
+    updateGateDirection(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].gates.direction = value;
     },
 
@@ -156,7 +164,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.calculateAllElements(index);
     },
 
-    updateMeasureGate(index: number, value: boolean, measureIndex: number): void {
+    updateMeasureGate(
+      index: number,
+      value: boolean,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].gates.exist = value;
     },
 
@@ -165,7 +177,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.calculateAllElements(index);
     },
 
-    updateGateAditional(index: number, value: string, measureIndex: number): void {
+    updateGateAditional(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].gates.aditional = value;
     },
 
@@ -177,19 +193,35 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].anchoredPoles = value;
     },
 
-    updateMeasureKampas(index: number, value: string, measureIndex: number): void {
+    updateMeasureKampas(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].kampas.value = +value;
     },
 
-    updateMeasureKampasAditional(index: number, value: string, measureIndex: number): void {
+    updateMeasureKampasAditional(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].kampas.aditional = value;
     },
 
-    updateMeasureLaiptas(index: number, value: string, measureIndex: number): void {
+    updateMeasureLaiptas(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].laiptas.value = +value;
     },
 
-    updateMeasureLaiptasDirection(index: number, value: string, measureIndex: number): void {
+    updateMeasureLaiptasDirection(
+      index: number,
+      value: string,
+      measureIndex: number
+    ): void {
       this.fences[index].measures[measureIndex].laiptas.direction = value;
     },
 
@@ -236,12 +268,20 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences = this.fences.filter((fence) => fence.id !== id);
     },
 
-    updateMeasureHeight(index: number, measureIndex: number, value: number): void {
+    updateMeasureHeight(
+      index: number,
+      measureIndex: number,
+      value: number
+    ): void {
       this.fences[index].measures[measureIndex].height = +value;
       this.calculateElements(index, measureIndex);
     },
 
-    updateMeasureLength(index: number, measureIndex: number, value: number): void {
+    updateMeasureLength(
+      index: number,
+      measureIndex: number,
+      value: number
+    ): void {
       this.fences[index].measures[measureIndex].length = +value;
       this.calculateElements(index, measureIndex);
     },
@@ -257,7 +297,9 @@ export const useCalculationsStore = defineStore("calculations", {
       const measure = fence.measures[measureIndex];
       const isFenceBoards = verticals.includes(fence.type);
       const seeThroughIndex = pramatomumas.indexOf(fence.seeThrough);
-      const fenceDataIndex = fenceMeasures.findIndex((element) => element.name === fence.type);
+      const fenceDataIndex = fenceMeasures.findIndex(
+        (element) => element.name === fence.type
+      );
       let elements = 0;
       if (isFenceBoards) {
         elements = calculateFenceBoards(
@@ -290,7 +332,8 @@ export const useCalculationsStore = defineStore("calculations", {
 
       let lastHeight: number = 0;
 
-      const formatHeight = (number: string): number => +number.replace(",", ".") * unit;
+      const formatHeight = (number: string): number =>
+        +number.replace(",", ".") * unit;
 
       const formatLength = (number: string): number => {
         const value = +number.replace(",", ".") * unit;
@@ -480,7 +523,11 @@ export const useCalculationsStore = defineStore("calculations", {
           checkFence();
           const lastIndex = this.fences.length - 1;
           this.addKampas(lastIndex);
-          this.updateMeasureKampas(lastIndex, temp, this.fences[lastIndex].measures.length - 1);
+          this.updateMeasureKampas(
+            lastIndex,
+            temp,
+            this.fences[lastIndex].measures.length - 1
+          );
 
           // step
         } else if (item.startsWith("la.") || item.startsWith("lz.")) {
@@ -498,7 +545,11 @@ export const useCalculationsStore = defineStore("calculations", {
           }
 
           this.addLaiptas(lastIndex);
-          this.updateMeasureLaiptas(lastIndex, measure, this.fences[lastIndex].measures.length - 1);
+          this.updateMeasureLaiptas(
+            lastIndex,
+            measure,
+            this.fences[lastIndex].measures.length - 1
+          );
           this.updateMeasureLaiptasDirection(
             lastIndex,
             direction,
@@ -534,7 +585,8 @@ export const useCalculationsStore = defineStore("calculations", {
 
           if (!auto) this.updateAutomatics(lastIndex, "Ne", lastMeasure);
           if (!bankette) this.updateBankette(lastIndex, "Ne", lastMeasure);
-          if (lock) this.updateGateLock(lastIndex, "Elektromagnetinė", lastMeasure);
+          if (lock)
+            this.updateGateLock(lastIndex, "Elektromagnetinė", lastMeasure);
           this.updateMeasureLength(lastIndex, lastMeasure, formatLength(item));
           this.updateMeasureHeight(lastIndex, lastMeasure, lastHeight);
 
@@ -542,17 +594,15 @@ export const useCalculationsStore = defineStore("calculations", {
         } else if (/^[0-9]*\.?[0-9]+$/.test(item)) {
           checkFence();
           let lastIndex = this.fences.length - 1;
-          const lastMeasure = this.fences[lastIndex].measures.length - 1;
-          const lastElement = this.fences[lastIndex].measures[lastMeasure];
+          // const lastMeasure = this.fences[lastIndex].measures.length - 1;
+          // const lastElement = this.fences[lastIndex].measures[lastMeasure];
 
-          if (lastIndex < 0) this.addFence();
-
-          if (
-            (lastElement.length !== 0 && lastElement.height !== 0) ||
-            lastElement.laiptas.exist ||
-            lastElement.kampas.exist
-          )
-            this.addMeasure(lastIndex);
+          // if (
+          //   (lastElement.length !== 0 && lastElement.height !== 0) ||
+          //   lastElement.laiptas.exist ||
+          //   lastElement.kampas.exist
+          // )
+          this.addMeasure(lastIndex);
 
           this.updateMeasureLength(
             lastIndex,
@@ -575,7 +625,7 @@ export const useCalculationsStore = defineStore("calculations", {
             this.fences[lastIndex].measures.length - 1,
             formatHeight(temp)
           );
-        }
+        } else return;
       });
     },
   },
