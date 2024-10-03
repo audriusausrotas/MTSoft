@@ -34,7 +34,7 @@ export const useCalculationsStore = defineStore("calculations", {
         elements: 0,
         totalLength: 0,
         totalQuantity: 0,
-        measures: [createInitialMeasure()],
+        measures: [],
       };
 
       this.fences.push(initialFence);
@@ -233,11 +233,24 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].totalQuantity = +value.toFixed(2);
     },
 
+    updateFenceTotals(index: number) {
+      let totalM: number = 0;
+      let totalQuantity: number = 0;
+      this.fences[index].measures.forEach((item: Measure) => {
+        if (!item.length || !item.height) return;
+        totalM += +item.length!;
+        totalQuantity += item.length! * item.height!;
+      });
+      this.updateTotalLength(index, totalM / 100);
+      this.updateTotalQuantity(index, totalQuantity / 10000);
+    },
+
     oneHeight(index: number, height: number) {
       this.fences[index].measures.forEach((item, i) => {
         item.height = height;
         this.calculateElements(index, i);
       });
+      this.updateFenceTotals(index);
     },
 
     copyLast(index: number): void {
@@ -275,6 +288,7 @@ export const useCalculationsStore = defineStore("calculations", {
     ): void {
       this.fences[index].measures[measureIndex].height = +value;
       this.calculateElements(index, measureIndex);
+      this.updateFenceTotals(index);
     },
 
     updateMeasureLength(
@@ -284,6 +298,7 @@ export const useCalculationsStore = defineStore("calculations", {
     ): void {
       this.fences[index].measures[measureIndex].length = +value;
       this.calculateElements(index, measureIndex);
+      this.updateFenceTotals(index);
     },
 
     calculateAllElements(index: number) {
@@ -322,6 +337,57 @@ export const useCalculationsStore = defineStore("calculations", {
     setProject(project: any) {
       this.fences = [...project.fenceMeasures];
       this.client = { ...project.client };
+    },
+
+    calculatefromTotalLength(index: number, totalLength: number) {
+      const totalMeasures: number[] = [];
+      if (+totalLength > 0) {
+        const measures = Math.floor(+totalLength / 250);
+        const modula = +totalLength % 250;
+        for (let i = 0; i < measures; i++) {
+          totalMeasures.push(250);
+        }
+        if (modula > 0) totalMeasures.push(modula);
+      } else return;
+
+      const checkCalculations = (): void => {
+        const lastElement = totalMeasures.length - 1;
+        const isShort = totalMeasures.some((item) => item === 250);
+        if (totalMeasures[lastElement] < 200 && isShort) {
+          totalMeasures[lastElement] += 50;
+          for (let i = lastElement - 1; i >= 0; i--) {
+            if (totalMeasures[i] === 250) {
+              totalMeasures[i] -= 50;
+              break;
+            }
+          }
+          if (totalMeasures[lastElement] < 200 && isShort) checkCalculations();
+        }
+      };
+      checkCalculations();
+
+      totalMeasures.forEach((item) => {
+        let lastElement: Measure =
+          this.fences[index].measures[this.fences[index].measures.length - 1];
+
+        if (!lastElement) {
+          this.addMeasure(index);
+          lastElement = this.fences[index].measures[0];
+        }
+
+        if (
+          lastElement.length !== 0 ||
+          lastElement.kampas.exist ||
+          lastElement.laiptas.exist
+        ) {
+          this.addMeasure(index);
+        }
+        this.updateMeasureLength(
+          index,
+          this.fences[index].measures.length - 1,
+          item
+        );
+      });
     },
 
     //   calculation from Bosh lazer app
@@ -420,6 +486,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
           // total fence height
         } else if (item.startsWith("ba.")) {
+          checkFence();
           const temp = item.replace("ba.", "");
           const formated = formatHeight(temp);
           lastHeight = formated;
@@ -594,14 +661,7 @@ export const useCalculationsStore = defineStore("calculations", {
         } else if (/^[0-9]*\.?[0-9]+$/.test(item)) {
           checkFence();
           let lastIndex = this.fences.length - 1;
-          // const lastMeasure = this.fences[lastIndex].measures.length - 1;
-          // const lastElement = this.fences[lastIndex].measures[lastMeasure];
 
-          // if (
-          //   (lastElement.length !== 0 && lastElement.height !== 0) ||
-          //   lastElement.laiptas.exist ||
-          //   lastElement.kampas.exist
-          // )
           this.addMeasure(lastIndex);
 
           this.updateMeasureLength(
@@ -625,6 +685,16 @@ export const useCalculationsStore = defineStore("calculations", {
             this.fences[lastIndex].measures.length - 1,
             formatHeight(temp)
           );
+
+          // calculate from long length
+        } else if (item.startsWith("i.")) {
+          const temp = item.replace("i.", "");
+          checkFence();
+          this.calculatefromTotalLength(
+            this.fences.length - 1,
+            formatHeight(temp)
+          );
+          this.oneHeight(this.fences.length - 1, lastHeight);
         } else return;
       });
     },
