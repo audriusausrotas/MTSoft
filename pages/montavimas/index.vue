@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { User, Montavimas } from "~/data/interfaces";
+import type { User, Montavimas } from "~/data/interfaces";
 const useMontavimas = useMontavimasStore();
 const useUser = useUserStore();
 const filteredUser = ref<string>("Visi");
@@ -28,7 +28,7 @@ const changeFilter = (value: string) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap flex-col max-w-96 w-full m-auto gap-4">
+  <div class="flex flex-col gap-4">
     <BaseSelectField
       v-if="useUser.user?.accountType === 'Administratorius'"
       label="Montuotojas"
@@ -39,8 +39,10 @@ const changeFilter = (value: string) => {
       @onChange="(value: string) => changeFilter(value)
       "
     />
-    <div v-for="(order, index) in filteredMontavimas" :key="order._id" :dataIndex="index">
-      <MontavimasOrder :order="order" :index="index" />
+    <div class="flex flex-wrap gap-4">
+      <div v-for="(order, index) in filteredMontavimas" :key="order._id" :dataIndex="index">
+        <MontavimasOrder :order="order" :index="index" />
+      </div>
     </div>
   </div>
 </template>

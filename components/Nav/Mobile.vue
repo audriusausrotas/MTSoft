@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { navigationLinks, optionLinks, gateLinks } from "~/data/initialValues";
+import { navigationLinks, optionLinks } from "~/data/initialValues";
 
 const props = defineProps(["currentPath"]);
 
 const isMenuOpen = ref<boolean>(false);
-const gateOpen = ref<boolean>(false);
 const optionsOpen = ref<boolean>(false);
 </script>
 
@@ -24,24 +23,16 @@ const optionsOpen = ref<boolean>(false);
       <div
         v-for="link in navigationLinks"
         :key="link.name"
-        @click="
-          link.name === 'Vartai'
-            ? (gateOpen = !gateOpen)
-            : link.name === 'Nustatymai'
-            ? (optionsOpen = !optionsOpen)
-            : ''
-        "
+        @click="link.name === 'Nustatymai' ? (optionsOpen = !optionsOpen) : ''"
       >
         <NuxtLink
           :to="link.link"
           class="rounded-md flex gap-1 px-2"
-          :class="
-            props.currentPath === link.name ? 'bg-red-full text-white' : ''
-          "
+          :class="props.currentPath === link.name ? 'bg-red-full text-white' : ''"
         >
           {{ link.name }}
           <NuxtImg
-            v-if="link.name === 'Vartai' || link.name === 'Nustatymai'"
+            v-if="link.name === 'Nustatymai'"
             src="/icons/arrowDown.svg"
             width="8"
             height="8"
@@ -51,35 +42,13 @@ const optionsOpen = ref<boolean>(false);
           />
         </NuxtLink>
 
-        <div
-          v-if="gateOpen && link.name === 'Vartai'"
-          class="flex flex-col pl-4"
-        >
-          <NuxtLink
-            v-for="lnk in gateLinks"
-            :key="lnk.name"
-            :to="lnk.link"
-            class="px-2 py-1 rounded-md"
-            :class="
-              props.currentPath === lnk.name ? 'bg-red-full text-white' : ''
-            "
-          >
-            {{ lnk.name }}
-          </NuxtLink>
-        </div>
-
-        <div
-          v-if="optionsOpen && link.name === 'Nustatymai'"
-          class="flex flex-col pl-4"
-        >
+        <div v-if="optionsOpen && link.name === 'Nustatymai'" class="flex flex-col pl-4">
           <NuxtLink
             v-for="lnk in optionLinks"
             :key="lnk.name"
             :to="lnk.link"
             class="px-2 py-1 rounded-md"
-            :class="
-              props.currentPath === lnk.name ? 'bg-red-full text-white' : ''
-            "
+            :class="props.currentPath === lnk.name ? 'bg-red-full text-white' : ''"
           >
             {{ lnk.name }}
           </NuxtLink>

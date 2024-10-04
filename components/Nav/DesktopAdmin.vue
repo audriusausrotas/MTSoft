@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { navigationLinks, optionLinks, gateLinks } from "~/data/initialValues";
+import { navigationLinks, optionLinks } from "~/data/initialValues";
 
 const props = defineProps(["currentPath"]);
 
 const optionsOpen = ref<boolean>(false);
-const gateOpen = ref<boolean>(false);
 </script>
 
 <template>
@@ -12,20 +11,8 @@ const gateOpen = ref<boolean>(false);
     <div
       v-for="link in navigationLinks"
       :key="link.name"
-      @mouseenter="
-        link.name === 'Vartai'
-          ? (gateOpen = true)
-          : link.name === 'Nustatymai'
-          ? (optionsOpen = true)
-          : ''
-      "
-      @mouseleave="
-        link.name === 'Vartai'
-          ? (gateOpen = false)
-          : link.name === 'Nustatymai'
-          ? (optionsOpen = false)
-          : ''
-      "
+      @mouseenter="link.name === 'Nustatymai' ? (optionsOpen = true) : ''"
+      @mouseleave="link.name === 'Nustatymai' ? (optionsOpen = false) : ''"
       class=""
     >
       <NuxtLink
@@ -43,20 +30,6 @@ const gateOpen = ref<boolean>(false);
           :ismap="true"
         />
         {{ link.name }}
-
-        <div
-          v-if="link.name === 'Vartai' && gateOpen"
-          class="absolute top-10 left-0 w-40 z-40 bg-white shadow-lg rounded-md border border-dark-light"
-        >
-          <NuxtLink
-            v-for="lnk in gateLinks"
-            :key="lnk.name"
-            :to="lnk.link"
-            class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
-            :class="props.currentPath === lnk.name ? 'bg-red-full text-white' : 'text-black'"
-            >{{ lnk.name }}</NuxtLink
-          >
-        </div>
 
         <div
           v-if="link.name === 'Nustatymai' && optionsOpen"

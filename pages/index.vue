@@ -3,8 +3,6 @@ import { status } from "~/data/selectFieldData";
 const useProjects = useProjectsStore();
 const user = useUserStore();
 
-const { setError, setIsError } = useError();
-
 const userLetters = user.user?.username;
 useProjects.changeFilter(userLetters ? userLetters : "Visi");
 

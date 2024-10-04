@@ -14,7 +14,7 @@ export async function fetchUser() {
 
 export async function fetchGates() {
   const useGates = useGateStore();
-  if (Object.keys(useGates.gates).length > 0) return;
+  if (useGates.gates.length > 0) return;
   const { data }: any = await useFetch("/api/gates");
   if (data.value.success) {
     useGates.addGates(data.value.data);

@@ -21,7 +21,7 @@ const changeHandler = (value: string): void => {
 </script>
 
 <template>
-  <div class="flex flex-col self-end gap-1 select-none">
+  <div class="flex flex-col gap-1 select-none">
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
     <div class="relative selct-none h-10" :class="[props.width ? `${props.width}` : 'w-48']">
       <div

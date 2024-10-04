@@ -13,13 +13,10 @@ const gateOrdered = ref(false);
 const { setError, setIsError } = useError();
 
 const deleteHandler = async (): Promise<void> => {
-  const response: any = await $fetch(
-    props.archive ? "/api/archive" : "/api/project",
-    {
-      method: "delete",
-      body: { _id: props.project._id },
-    }
-  );
+  const response: any = await $fetch(props.archive ? "/api/archive" : "/api/project", {
+    method: "delete",
+    body: { _id: props.project._id },
+  });
   if (response.success) {
     props.archive
       ? useProjects.deleteArchive(props.project._id)
@@ -48,9 +45,7 @@ const editHandler = () => {
 
 const linkHandler = () => {
   navigator.clipboard
-    .writeText(
-      "https://modernitvora.vercel.app/pasiulymas/" + props.project._id
-    )
+    .writeText("https://modernitvora.vercel.app/pasiulymas/" + props.project._id)
     .then(() => {
       setIsError(false);
       setError("Nuoroda nukopijuota");
@@ -67,10 +62,7 @@ const previewHandler = () => {
 };
 
 const openInNewHandler = () => {
-  window.open(
-    "https://modernitvora.vercel.app/pasiulymas/" + props.project._id,
-    "_blank"
-  );
+  window.open("https://modernitvora.vercel.app/pasiulymas/" + props.project._id, "_blank");
 };
 
 const copyHandler = async () => {
@@ -124,8 +116,7 @@ const archiveHandler = async () => {
 };
 
 const checkGates = () => {
-  const allGates = [...useGates.gates.vartonas, ...useGates.gates.gigasta];
-  gateOrdered.value = allGates.some(
+  gateOrdered.value = useGates.gates.some(
     (item) => item._id.toString() === props.project?._id.toString()
   );
 };
@@ -141,10 +132,7 @@ checkGates();
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative">
       <div
-        v-if="
-          props.project.gates.length > 0 &&
-          props.project.status !== 'Nepatvirtintas'
-        "
+        v-if="props.project.gates.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'"
       ></div>
@@ -166,16 +154,8 @@ checkGates();
       />
     </div>
 
-    <BaseInfoField
-      :name="props.project?.client?.phone"
-      width="w-32"
-      :tel="true"
-    />
-    <BaseInfoField
-      :name="props.project?.client?.email"
-      width="w-80 "
-      :email="true"
-    />
+    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
     <BaseInfoField
       :name="props.project?.status"
       width="w-36"
@@ -214,12 +194,7 @@ checkGates();
           @click="openInNewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/newtab.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/newtab.svg" alt="edit button" width="20" height="20" />
           <p>Atidaryti pasiūlymą</p>
         </div>
 
@@ -227,12 +202,7 @@ checkGates();
           @click="previewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/eye.svg"
-            alt="eye button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" height="20" />
           <p>Peržiūrėti</p>
         </div>
 
@@ -241,12 +211,7 @@ checkGates();
           @click="linkHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/link.svg"
-            alt="link button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
           <p>Kopijuoti nuorodą</p>
         </div>
 
@@ -255,12 +220,7 @@ checkGates();
           @click="editHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/edit.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/edit.svg" alt="edit button" width="20" height="20" />
           <p>Redaguoti</p>
         </div>
 
@@ -269,12 +229,7 @@ checkGates();
           @click="copyHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/pageflip.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
           <p>Kopijuoti projektą</p>
         </div>
 
@@ -282,12 +237,7 @@ checkGates();
           @click="archiveHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/archive.svg"
-            alt="delete button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/archive.svg" alt="delete button" width="20" height="20" />
           <p v-if="!props.archive">Archyvuoti</p>
           <p v-else>Sugrąžinti</p>
         </div>
@@ -295,12 +245,7 @@ checkGates();
           @click="deleteHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/delete.svg"
-            alt="delete button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
           <p>Ištrinti</p>
         </div>
       </div>

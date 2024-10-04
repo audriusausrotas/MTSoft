@@ -1,11 +1,4 @@
-import type {
-  Client,
-  Measure,
-  Result,
-  MenuLinks,
-  FenceMeasure,
-  Works,
-} from "~/data/interfaces";
+import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -14,19 +7,9 @@ export const clientInitialValue: Client = {
   email: "",
 };
 
-export const GamybaStatus: string[] = [
-  "Gaminama",
-  "Laukiama",
-  "Pagaminta",
-  "Negaminti",
-];
+export const GamybaStatus: string[] = ["Gaminama", "Laukiama", "Pagaminta", "Negaminti"];
 
-export const MontavimasStatus: string[] = [
-  "Montuojama",
-  "Laukiama",
-  "Sumontuota",
-  "Nemontuoti",
-];
+export const MontavimasStatus: string[] = ["Montuojama", "Laukiama", "Sumontuota", "Nemontuoti"];
 
 export const initialWorkData: Works = {
   id: "",
@@ -71,7 +54,7 @@ export const navigationLinks: MenuLinks[] = [
     iconPath: "",
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
-  { name: "Vartai", link: "#", iconPath: "" },
+  { name: "Vartai", link: "/vartai", iconPath: "" },
   { name: "Nustatymai", link: "#", iconPath: "" },
 ];
 
@@ -81,11 +64,6 @@ export const optionLinks: MenuLinks[] = [
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
   { name: "Archyvas", link: "/archyvas", iconPath: "" },
-];
-
-export const gateLinks: MenuLinks[] = [
-  { name: "Vartonas", link: "/Vartonas", iconPath: "" },
-  { name: "Gigasta", link: "/Gigasta", iconPath: "" },
 ];
 
 export const createInitialMeasure = (): Measure => ({

@@ -3,19 +3,9 @@ export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
   const _idObject = new mongoose.Types.ObjectId(_id);
 
-  const gatesVartonas = await gateSchemaVartonas.find();
-  const gatesGigasta = await gateSchemaGigasta.find();
+  const data = await gateSchema.findByIdAndDelete(_idObject);
 
-  let isSuccess;
-
-  if (gatesVartonas.some((item) => item._id.toString() === _id.toString())) {
-    isSuccess = await gateSchemaVartonas.findByIdAndDelete(_idObject);
-  }
-  if (gatesGigasta.some((item) => item._id.toString() === _id.toString())) {
-    isSuccess = await gateSchemaGigasta.findByIdAndDelete(_idObject);
-  }
-
-  if (isSuccess)
+  if (data)
     return {
       success: true,
       data: null,

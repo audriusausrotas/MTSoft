@@ -4,10 +4,16 @@ import { navigationLinks } from "~/data/initialValues";
 
 const props = defineProps(["useUser"]);
 
-const currentMenu = navigationLinks.filter(
-  (item: MenuLinks) =>
-    item.name === props.useUser.user?.accountType || item.name === "Grafikas"
+let currentMenu = navigationLinks.filter(
+  (item: MenuLinks) => item.name === props.useUser.user?.accountType || item.name === "Grafikas"
 );
+
+if (
+  props.useUser.user?.accountType === "Vartonas" ||
+  props.useUser.user?.accountType === "Gigasta"
+) {
+  currentMenu = navigationLinks.filter((item: MenuLinks) => item.name === "Vartai");
+}
 </script>
 
 <template>

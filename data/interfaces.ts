@@ -150,11 +150,6 @@ export interface Gate {
   option: string;
 }
 
-export interface GateObject {
-  vartonas: GateSchema[];
-  gigasta: GateSchema[];
-}
-
 export interface GateSchema {
   _id: string;
   measure: string;

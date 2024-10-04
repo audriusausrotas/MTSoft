@@ -61,7 +61,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
           await fetchGates();
           await fetchUsers();
           if (to.path !== "/profilis") {
-            if (to.path !== "/vartonas") return navigateTo("/vartonas");
+            if (!to.path.includes("/vartai")) return navigateTo("/vartai");
           }
           break;
 
@@ -69,7 +69,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
           await fetchGates();
           await fetchUsers();
           if (to.path !== "/profilis") {
-            if (to.path !== "/gigasta") return navigateTo("/gigasta");
+            if (!to.path.includes("/vartai")) return navigateTo("/vartai");
           }
           break;
 

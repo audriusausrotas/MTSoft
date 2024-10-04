@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { laserInstructions } from "~/data/laserInstruction";
 const emit = defineEmits(["onCalculate"]);
 const useCalculations = useCalculationsStore();
 
@@ -8,6 +9,7 @@ const units = ref<string>("Metrai");
 const precision = ref<string>("Žemyn");
 const unitValues = ["Metrai", "Centimetrai", "Milimetrai"];
 const precisionValues = ["Žemyn", "Standartas", "Andriaus"];
+const instructionOpen = ref<boolean>(false);
 
 const createFenceHandler = () => {
   useCalculations.addFence();
@@ -50,6 +52,44 @@ const confirmHandler = () => {
             :defaultValue="precision"
             @onChange="(value) => (precision = value)"
           />
+          <div
+            @mouseenter="instructionOpen = true"
+            @mouseleave="instructionOpen = false"
+            class="relative hover:cursor-pointer"
+          >
+            <NuxtImg
+              src="/icons/info.svg"
+              alt="information"
+              width="20"
+              height="20"
+              decoding="auto"
+              loading="lazy"
+              :ismap="true"
+              class="mt-5"
+            />
+            <div
+              v-if="instructionOpen"
+              class="absolute top-10 right-0 bg-white border rounded-md border-dark-light h-[500px] overflow-auto md:block hidden"
+            >
+              <div
+                class="flex gap-4 divide-x-2 border-b-2 border-dark-full divide-dark-full font-semibold"
+              >
+                <div class="w-40 p-4">Pavadinimas</div>
+                <div class="w-40 p-4">Komanda</div>
+                <div class="w-48 p-4">Pavyzdys</div>
+                <div class="w-80 p-4">Paaiškinimas</div>
+              </div>
+              <div
+                v-for="instruction in laserInstructions"
+                class="flex gap-4 divide-x border-b border-dark-full divide-dark-full"
+              >
+                <div class="w-40 p-4">{{ instruction.name }}</div>
+                <div class="w-40 p-4">{{ instruction.command }}</div>
+                <div class="w-48 p-4">{{ instruction.example }}</div>
+                <div class="w-80 p-4">{{ instruction.aditional }}</div>
+              </div>
+            </div>
+          </div>
         </div>
         <textarea
           v-model="textArea"

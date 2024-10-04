@@ -26,10 +26,7 @@ function logoutHandler(): void {
         class="md:flex hidden items-center justify-center w-10 h-10 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full"
       >
         <NuxtImg
-          v-if="
-            props.useUser.user?.photo?.url &&
-            props.useUser.user.photo.url !== ''
-          "
+          v-if="props.useUser.user?.photo?.url && props.useUser.user.photo.url !== ''"
           :src="props.useUser.user?.photo?.url"
           class="object-cover object-center w-full h-full"
           width="48"
@@ -46,8 +43,8 @@ function logoutHandler(): void {
       </div>
       <NuxtImg
         src="/icons/arrowDown.svg"
-        width="8"
-        height="8"
+        width="10"
+        height="10"
         decoding="auto"
         loading="lazy"
         :ismap="true"
@@ -57,9 +54,7 @@ function logoutHandler(): void {
         v-if="isOpen"
         class="absolute right-0 flex flex-col overflow-hidden bg-white border rounded-md top-8 md:top-14 z-50"
       >
-        <NuxtLink
-          to="/profilis"
-          class="px-6 py-2 hover:text-white hover:bg-red-full"
+        <NuxtLink to="/profilis" class="px-6 py-2 hover:text-white hover:bg-red-full"
           >Profilis</NuxtLink
         >
         <div
