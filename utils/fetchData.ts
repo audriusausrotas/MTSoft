@@ -66,17 +66,12 @@ export async function fetchUsers() {
   }
 }
 
-export async function fetchArchive() {
-  const useProjects = useProjectsStore();
-  if (useProjects.archive.length > 0) return;
-  const { data: archive }: any = await useFetch("/api/archive");
-  if (archive.value.success) {
-    useProjects.addArchives([...archive.value.data]);
-  }
+export async function fetchArchive(id: string | string[]) {
+  const { data }: any = await useFetch("/api/archive", { method: "PUT", body: { id } });
+  return data.value.data;
 }
 export async function fetchArchives() {
   const useProjects = useProjectsStore();
-  console.log("fecina archyvus");
   const { data: archive }: any = await useFetch("/api/archives");
   if (archive.value.success) {
     useProjects.addArchives([...archive.value.data]);

@@ -1,5 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const data = await archiveSchema.find();
+  const { id } = await readBody(event);
+  const data = await archiveSchema.findById(id);
 
   if (!data)
     return {
@@ -7,8 +8,6 @@ export default defineEventHandler(async (event) => {
       data: null,
       message: "Archyvuotų projektų nerasta",
     };
-
-  data.reverse();
 
   return {
     success: true,

@@ -6,7 +6,6 @@ import {
   fetchProjects,
   fetchProducts,
   fetchUsers,
-  fetchArchive,
   fetchArchives,
   fetchMontavimas,
   fetchSchedules,
@@ -35,7 +34,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
 
-    if (to.path.includes("/archyvas")) {
+    if (to.path === "/archyvas") {
       await fetchArchives();
     }
 

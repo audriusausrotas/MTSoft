@@ -120,16 +120,12 @@ export const useProjectsStore = defineStore("Projects", {
       } else {
         if (this.selectedStatusFilter === "Visi") {
           this.filteredProjects = this.projects.filter((item) =>
-            item.creator.username
-              .toLowerCase()
-              .startsWith(this.selectedFilter.toLowerCase())
+            item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase())
           );
         } else {
           this.filteredProjects = this.projects.filter(
             (item) =>
-              item.creator.username
-                .toLowerCase()
-                .startsWith(this.selectedFilter.toLowerCase()) &&
+              item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase()) &&
               item.status === this.selectedStatusFilter
           );
         }
@@ -140,14 +136,10 @@ export const useProjectsStore = defineStore("Projects", {
       if (value.length > 2) {
         const foundProjects = this.projects.filter(
           (project) =>
-            project.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            project.client.address.toLowerCase().includes(value.toLowerCase()) ||
             project.client.email.toLowerCase().includes(value.toLowerCase()) ||
             project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.username
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            project.client.username.toLowerCase().includes(value.toLowerCase()) ||
             project.orderNumber.toLowerCase().includes(value.toLowerCase())
         );
 
@@ -161,14 +153,10 @@ export const useProjectsStore = defineStore("Projects", {
       if (value.length > 2) {
         const foundArchives = this.archive.filter(
           (archive) =>
-            archive.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            archive.client.address.toLowerCase().includes(value.toLowerCase()) ||
             archive.client.email.toLowerCase().includes(value.toLowerCase()) ||
             archive.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            archive.client.username
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            archive.client.username.toLowerCase().includes(value.toLowerCase()) ||
             archive.orderNumber.toLowerCase().includes(value.toLowerCase())
         );
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
+import { fetchArchieves } from "~/utils/fetchData";
 
 const props = defineProps(["project", "index", "length", "archive"]);
 const useProjects = useProjectsStore();
