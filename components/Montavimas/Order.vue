@@ -40,7 +40,7 @@ const clickHandler = () => {
 
 <template>
   <div
-    class="flex flex-col w-96 divide-y rounded-md overflow-hidden select-none divide-black border border-black hover:scale-105 transition-transform text-sm sm:text-base"
+    class="flex flex-col w-[378px] divide-y rounded-md overflow-hidden select-none divide-black border border-black hover:scale-105 transition-transform text-sm sm:text-base font-semibold"
   >
     <div class="flex">
       <div class="flex flex-1 hover:cursor-pointer" @click="clickHandler" :class="statusColor">
@@ -68,15 +68,12 @@ const clickHandler = () => {
         </div>
       </div>
     </div>
-    <p
-      class="flex items-center justify-center h-8 hover:cursor-pointer font-bold"
-      @click="clickHandler"
-    >
+    <p class="flex items-center justify-center h-8 hover:cursor-pointer" @click="clickHandler">
       {{ order?.client.address }}
     </p>
     <p
       v-if="useUser.user?.accountType === 'Administratorius'"
-      class="flex flex-1 items-center justify-center h-8 border-black"
+      class="flex flex-1 items-center justify-center h-8 border-black bg-stone-300"
     >
       {{ order?.workers.join(", ") }}
     </p>

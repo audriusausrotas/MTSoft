@@ -74,6 +74,14 @@ export async function fetchArchive() {
     useProjects.addArchives([...archive.value.data]);
   }
 }
+export async function fetchArchives() {
+  const useProjects = useProjectsStore();
+  console.log("fecina archyvus");
+  const { data: archive }: any = await useFetch("/api/archives");
+  if (archive.value.success) {
+    useProjects.addArchives([...archive.value.data]);
+  }
+}
 
 export async function fetchSchedules() {
   const useSchedule = useScheduleStore();

@@ -17,13 +17,10 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
     value: value,
   };
 
-  const data: { data: User; message: string; success: boolean } = await $fetch(
-    "/api/userChanges",
-    {
-      method: "post",
-      body: postData,
-    }
-  );
+  const data: { data: User; message: string; success: boolean } = await $fetch("/api/userChanges", {
+    method: "post",
+    body: postData,
+  });
   if (data.success) {
     useUser.updateUser(data.data);
     setIsError(false);
@@ -41,11 +38,13 @@ const confirmHandler = async () => {
   };
 
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    const data: { data: null; message: string; success: boolean } =
-      await $fetch("/api/userChanges", {
+    const data: { data: null; message: string; success: boolean } = await $fetch(
+      "/api/userChanges",
+      {
         method: "delete",
         body: postData,
-      });
+      }
+    );
 
     if (data.success) {
       useUser.deleteUser(selectedUser.value);
@@ -69,12 +68,12 @@ const deleteHandler = (id: string) => {
 
 <template>
   <div class="w-full">
-    <div class="flex pb-6 text-gray-400 capitalize">
+    <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>
-      <p class="flex-[5]">el. paštas</p>
-      <p class="flex-[4]">paskyros statusas</p>
-      <p class="flex-[4]">paskyros tipas</p>
+      <p class="flex-[6]">el. paštas</p>
+      <p class="flex-[3]">paskyros statusas</p>
+      <p class="flex-[3]">paskyros tipas</p>
       <div class="flex-1"></div>
     </div>
 
@@ -83,17 +82,15 @@ const deleteHandler = (id: string) => {
       :key="user._id"
       class="flex py-2 capitalize border-b"
     >
-      <div class="flex-1">{{ index + 1 }}</div>
-      <p class="flex-[3] flex items-center">
-        {{ user.username }} {{ user.lastName }}
-      </p>
+      <div class="flex-1 pl-3">{{ index + 1 }}</div>
+      <p class="flex-[3] flex items-center">{{ user.username }} {{ user.lastName }}</p>
 
-      <div class="flex-[5] flex lowercase items-center">{{ user.email }}</div>
+      <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
       <BaseSelectField
         :id="user._id"
         name="verified"
-        class="flex-[4]"
+        class="flex-[3]"
         :values="accountStatus"
         :defaultValue="user?.verified ? 'patvirtintas' : 'nepatvirtintas'"
         @onChange="(value: string) => userChangesHandler(user._id, 'verify', value)"
@@ -103,15 +100,12 @@ const deleteHandler = (id: string) => {
         :id="user._id"
         :values="accountTypes"
         width="w-52"
-        class="flex-[4]"
+        class="flex-[3]"
         :defaultValue="user?.accountType"
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
-      <div
-        class="flex justify-end flex-1 hover:cursor-pointer"
-        @click="deleteHandler(user._id)"
-      >
+      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
         <NuxtImg
           src="/icons/delete.svg"
           alt="delete button "
@@ -143,11 +137,7 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton
-            name="patvirtinti"
-            @click="confirmHandler"
-            :isLoading="isLoading"
-          />
+          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
         </div>
       </div>
     </div>

@@ -132,7 +132,7 @@ checkGates();
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative">
       <div
-        v-if="props.project.gates.length > 0 && props.project.status !== 'Nepatvirtintas'"
+        v-if="props.project.gates?.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'"
       ></div>

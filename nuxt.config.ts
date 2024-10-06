@@ -2,10 +2,6 @@
 export default defineNuxtConfig({
   devtools: {
     enabled: true,
-
-    timeline: {
-      enabled: true,
-    },
   },
   css: ["~/assets/css/main.css"],
 
@@ -16,12 +12,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    "nuxt-mongoose",
-    "@pinia/nuxt",
-    "@nuxt/image",
-    "@nuxtjs/cloudinary",
-  ],
+  modules: ["nuxt-mongoose", "@pinia/nuxt", "@nuxt/image", "@nuxtjs/cloudinary"],
 
   mongoose: {
     uri: process.env.MONGODB_URI,
