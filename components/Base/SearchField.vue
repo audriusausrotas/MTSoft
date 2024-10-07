@@ -47,7 +47,7 @@ const filteredItems = (value: string): void => {
   <div class="relative flex flex-col font-medium gap-1">
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
     <input
-      class="h-10 px-4 overflow-auto bg-white border rounded-lg shadow-sm outline-none border-dark-light"
+      class="h-10 px-4 overflow-auto bg-white rounded-lg shadow-sm outline-none costom-border"
       :id="props.label"
       :class="props.width ? props.width : 'w-60'"
       placeholder="Pavadinimas"
@@ -70,3 +70,8 @@ const filteredItems = (value: string): void => {
     </ul>
   </div>
 </template>
+<style scoped>
+.costom-border {
+  border: 1px solid lightgray;
+}
+</style>

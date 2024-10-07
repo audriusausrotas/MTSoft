@@ -7,7 +7,7 @@ const useProduct = useProductsStore();
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4 py-4">
+  <div class="flex flex-wrap items-center justify-center gap-4 py-4">
     <div class="">{{ props.index + 1 }}</div>
 
     <div class="flex flex-col gap-2">
@@ -32,9 +32,7 @@ const useProduct = useProductsStore();
           type="number"
           :name="props.work.quantity"
           :disable="false"
-          @onChange="
-            (value) => useResults.updateWorkQuantity(props.index, value)
-          "
+          @onChange="(value) => useResults.updateWorkQuantity(props.index, value)"
         />
 
         <BaseInput
@@ -56,32 +54,12 @@ const useProduct = useProductsStore();
       </div>
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput
-        label="Viso Savikaina"
-        :name="props.work.totalCost"
-        disable="true"
-        width="w-24"
-      />
-      <BaseInput
-        label="Viso kaina"
-        :name="props.work.totalPrice"
-        disable="true"
-        width="w-24"
-      />
+      <BaseInput label="Viso Savikaina" :name="props.work.totalCost" disable="true" width="w-24" />
+      <BaseInput label="Viso kaina" :name="props.work.totalPrice" disable="true" width="w-24" />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput
-        label="marža"
-        :name="props.work.margin + ' %'"
-        disable="true"
-        width="w-24"
-      />
-      <BaseInput
-        label="Pelnas"
-        :name="props.work.profit"
-        disable="true"
-        width="w-24"
-      />
+      <BaseInput label="marža" :name="props.work.margin + ' %'" disable="true" width="w-24" />
+      <BaseInput label="Pelnas" :name="props.work.profit" disable="true" width="w-24" />
     </div>
 
     <NuxtImg
