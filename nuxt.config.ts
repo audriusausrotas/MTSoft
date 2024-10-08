@@ -13,8 +13,6 @@ export default defineNuxtConfig({
     },
   },
 
-  plugins: ["~/plugins/disable-scrolling.js"],
-
   modules: [
     "nuxt-mongoose",
     "@pinia/nuxt",
