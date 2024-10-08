@@ -12,6 +12,6 @@ export default defineEventHandler(async (event) => {
   return {
     success: true,
     data: data,
-    message: "Archyvuoti projektai rasti",
+    message: "",
   };
 });

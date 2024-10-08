@@ -21,7 +21,6 @@ const buttonHandler = async () => {
 
   if (response.success) {
     await router.replace("/vartai");
-    useGates.removeGates(gate.value!._id);
     setIsError(false);
     setError(response.message);
   } else {

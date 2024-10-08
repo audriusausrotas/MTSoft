@@ -18,19 +18,22 @@ export const useProjectsStore = defineStore("Projects", {
     },
 
     addProject(project: Project): void {
-      let projectExist = false;
-      this.projects = this.projects.map((item) => {
-        if (item._id === project._id) {
-          projectExist = true;
-          return project;
-        } else {
-          return item;
-        }
-      });
-      if (!projectExist) {
-        this.projects.unshift(project);
+      if (this.projects.length === 0) this.projects.push(project);
+      else {
+        // let projectExist = false;
+        this.projects = this.projects.map((item) => {
+          if (item._id === project._id) {
+            // projectExist = true;
+            return project;
+          } else {
+            return item;
+          }
+        });
+        // if (!projectExist) {
+        //   this.projects.unshift(project);
+        // }
+        // this.filterProjects();
       }
-      this.filterProjects();
     },
     deleteProject(id: String): void {
       this.projects = this.projects.filter((item) => item._id !== id);
@@ -64,6 +67,15 @@ export const useProjectsStore = defineStore("Projects", {
     addArchives(data: Project[]) {
       this.archive = [...data];
       this.filteredArchives = [...data];
+    },
+
+    addArchive(data: Project) {
+      if (this.archive.length === 0) this.archive.push(data);
+      else
+        this.archive = this.archive.map((item) => {
+          if (item._id === data._id) return data;
+          else return item;
+        });
     },
 
     changeFilter(data: string) {

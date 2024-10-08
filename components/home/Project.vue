@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
-import { fetchArchieves } from "~/utils/fetchData";
 
 const props = defineProps(["project", "index", "length", "archive"]);
 const useProjects = useProjectsStore();
@@ -29,18 +28,41 @@ const deleteHandler = async (): Promise<void> => {
   }
 };
 
-const editHandler = () => {
+const fetchProject = async () => {
+  const response: any = await $fetch("/api/projectSingle", {
+    method: "post",
+    body: { _id: props.project._id },
+  });
+  if (response.success) {
+    useProjects.addProject(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const editHandler = async () => {
   useCalculations.clearAll();
   useResults.clearAll();
   useProjects.clearSelected();
   useBackup.clearBackup();
-  useCalculations.setProject({
-    client: props.project.client,
-    fenceMeasures: props.project.fenceMeasures,
+
+  const response: any = await $fetch("/api/projectSingle", {
+    method: "post",
+    body: { _id: props.project._id },
   });
-  useResults.setProject(props.project);
-  useBackup.addBackup(props.project.results, props.project.works);
-  useProjects.setSelectedProject(props.project._id);
+  if (response.success) {
+    useProjects.addProject(response.data);
+  }
+
+  useCalculations.setProject({
+    client: response.data.client,
+    fenceMeasures: response.data.fenceMeasures,
+  });
+  useResults.setProject(response.data);
+  useBackup.addBackup(response.data.results, response.data.works);
+  useProjects.setSelectedProject(response.data._id);
   navigateTo("/naujas");
 };
 

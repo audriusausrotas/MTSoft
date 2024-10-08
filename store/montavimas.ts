@@ -10,6 +10,16 @@ export const useMontavimasStore = defineStore("montavimas", {
       this.montavimasList = [...data];
     },
 
+    addOne(data: Montavimas) {
+      if (this.montavimasList.length === 0) this.montavimasList.push(data);
+      else {
+        this.montavimasList = this.montavimasList.map((item) => {
+          if (item._id === data._id) return data;
+          else return item;
+        });
+      }
+    },
+
     addMontavimas(data: Montavimas) {
       this.montavimasList.push(data);
     },

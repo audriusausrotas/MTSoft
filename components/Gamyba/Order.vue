@@ -3,6 +3,7 @@ const props = defineProps(["order", "index"]);
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
 const useUser = useUserStore();
+const router = useRouter();
 
 const deleteHandler = async (): Promise<void> => {
   if (useUser.user?.accountType !== "Administratorius") {
@@ -11,11 +12,12 @@ const deleteHandler = async (): Promise<void> => {
   }
 
   const response: any = await $fetch("/api/gamyba", {
-    method: "DELETE",
+    method: "delete",
     body: { _id: props.order._id, completed: false },
   });
   if (response.success) {
     useGamyba.deleteGamybaOrder(props.order._id);
+    await router.replace("/gamyba");
     setIsError(false);
     setError(response.message);
   } else {

@@ -36,4 +36,6 @@ export default defineNuxtConfig({
       cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,
     },
   },
+
+  compatibilityDate: "2024-10-08",
 });

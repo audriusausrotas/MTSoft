@@ -70,7 +70,7 @@ export const gamybaSchema = defineMongooseModel<Gamyba>(
     status: {
       type: String,
       required: false,
-      default: "",
+      default: "Negaminti",
     },
     fences: {
       type: [fenceSchema],

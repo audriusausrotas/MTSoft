@@ -49,11 +49,10 @@ const saveHandler = async (): Promise<void> => {
       body: newProject,
     });
     if (data.success) {
-      useProjects.addProject(data.data);
+      await navigateTo("/");
       clearHandler();
       setIsError(false);
       setError(data.message);
-      await navigateTo("/");
     } else {
       setError(data.message);
     }

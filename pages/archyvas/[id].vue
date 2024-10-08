@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { fetchArchive } from "~/utils/fetchData";
 const route = useRoute();
-const offer = await fetchArchive(route.params.id);
+const useProject = useProjectsStore();
+const offer = computed(() => {
+  return useProject.archive.find((item) => item._id === route.params.id);
+});
 </script>
 <template>
   <div class="flex flex-col gap-4">

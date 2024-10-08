@@ -176,7 +176,7 @@ const printHandler = () => {
 
     <BaseComment
       :commentsArray="order?.aditional"
-      :id="order._id"
+      :id="order?._id"
       @onSave="commentHandler"
       class="max-w-[896px]"
       @onDelete="deleteHandler"
@@ -213,7 +213,7 @@ const printHandler = () => {
       </div>
 
       <GamybaBindings
-        v-for="(binding, index) in order.bindings"
+        v-for="(binding, index) in order?.bindings"
         :key="binding.id"
         :binding="binding"
         :index="index"

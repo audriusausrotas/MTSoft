@@ -1,4 +1,3 @@
-// utils/fetchUtils.ts
 export async function fetchUser() {
   const useUser = useUserStore();
 
@@ -14,43 +13,70 @@ export async function fetchUser() {
 
 export async function fetchGates() {
   const useGates = useGateStore();
-  if (useGates.gates.length > 0) return;
   const { data }: any = await useFetch("/api/gates");
   if (data.value.success) {
     useGates.addGates(data.value.data);
   }
 }
 
-export async function fetchGamyba() {
+export async function fetchGate(id: any) {
+  const useGates = useGateStore();
+  const { data }: any = await useFetch("/api/gate", { method: "post", body: { _id: id } });
+  if (data.value.success) {
+    useGates.addSelectedGate(data.value.data);
+  }
+}
+
+export async function fetchGamybas() {
   const useGamyba = useGamybaStore();
-  if (useGamyba.gamybaList.length > 0) return;
   const { data }: any = await useFetch("/api/gamyba");
   if (data.value.success) {
     useGamyba.addAll(data.value.data);
   }
 }
 
-export async function fetchMontavimas() {
+export async function fetchGamyba(id: any) {
+  const useGamyba = useGamybaStore();
+  const { data }: any = await useFetch("/api/gamyb", { method: "post", body: { _id: id } });
+  if (data.value.success) {
+    useGamyba.addOne(data.value.data);
+  }
+}
+
+export async function fetchMontavimus() {
   const useMontavimas = useMontavimasStore();
-  if (useMontavimas.montavimasList.length > 0) return;
   const { data }: any = await useFetch("/api/montavimas");
   if (data.value.success) {
     useMontavimas.addAll(data.value.data);
   }
 }
 
+export async function fetchMontavima(id: any) {
+  const useMontavimas = useMontavimasStore();
+  const { data }: any = await useFetch("/api/montavima", { method: "post", body: { _id: id } });
+  if (data.value.success) {
+    useMontavimas.addOne(data.value.data);
+  }
+}
+
 export async function fetchProjects() {
   const useProjects = useProjectsStore();
-  if (useProjects.projects.length > 0) return;
   const { data }: any = await useFetch("/api/project");
   if (data.value.success) {
     useProjects.addProjects(data.value.data);
   }
 }
 
+export async function fetchProject(id: any) {
+  const useProjects = useProjectsStore();
+  const { data }: any = await useFetch("/api/projectSingle", { method: "post", body: { _id: id } });
+  if (data.value.success) {
+    useProjects.addProject(data.value.data);
+  }
+}
+
 export async function fetchProducts() {
   const useProducts = useProductsStore();
-  if (useProducts.products.length > 0) return;
   const { data }: any = await useFetch("/api/products");
   if (data.value.success) {
     useProducts.addProducts(data.value.data);
@@ -66,21 +92,24 @@ export async function fetchUsers() {
   }
 }
 
-export async function fetchArchive(id: string | string[]) {
+export async function fetchArchive(id: any) {
+  const useProjects = useProjectsStore();
   const { data }: any = await useFetch("/api/archive", { method: "PUT", body: { id } });
-  return data.value.data;
+  if (data.value.success) {
+    useProjects.addArchive(data.value.data);
+  }
 }
+
 export async function fetchArchives() {
   const useProjects = useProjectsStore();
   const { data: archive }: any = await useFetch("/api/archives");
   if (archive.value.success) {
-    useProjects.addArchives([...archive.value.data]);
+    useProjects.addArchives(archive.value.data);
   }
 }
 
 export async function fetchSchedules() {
   const useSchedule = useScheduleStore();
-  if (useSchedule.schedule.length > 0) return;
   const { data: schedules }: any = await useFetch("/api/schedule");
   if (schedules.value.success) {
     useSchedule.addSchedules([...schedules.value.data]);

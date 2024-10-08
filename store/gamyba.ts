@@ -10,6 +10,16 @@ export const useGamybaStore = defineStore("gamyba", {
       this.gamybaList = [...data];
     },
 
+    addOne(data: Gamyba) {
+      if (this.gamybaList.length === 0) this.gamybaList.push(data);
+      else {
+        this.gamybaList = this.gamybaList.map((item) => {
+          if (item._id === data._id) return data;
+          else return item;
+        });
+      }
+    },
+
     addGamyba(data: Gamyba) {
       this.gamybaList.push(data);
     },

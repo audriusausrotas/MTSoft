@@ -3,5 +3,15 @@ export default defineEventHandler(async (event) => {
 
   if (!data) return { success: false, data: null, message: "Vartai nerasti" };
 
-  return { success: true, data, message: "" };
+  const lightData = data.map((item) => {
+    return {
+      _id: item._id,
+      client: { address: item.client.address },
+      measure: item.measure,
+      manager: item.manager,
+      orderNr: item.orderNr,
+    };
+  });
+
+  return { success: true, data: lightData, message: "" };
 });
