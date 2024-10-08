@@ -47,7 +47,6 @@ onMounted(() => {
     >
       <slot />
       <input
-        v-disable-scrolling
         v-if="!props.disable"
         :value="props.name"
         :placeholder="props.placeholder"
@@ -57,7 +56,7 @@ onMounted(() => {
         @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
         @keyup.enter="handleEnterKey"
         ref="inputRef"
-        class="w-full h-full bg-inherit nonscroll"
+        class="w-full h-full bg-inherit"
       />
       <p v-else-if="props.disable && props.name">{{ props.name }}</p>
     </div>
