@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+
   css: ["~/assets/css/main.css"],
 
   postcss: {
@@ -12,7 +13,14 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["nuxt-mongoose", "@pinia/nuxt", "@nuxt/image", "@nuxtjs/cloudinary"],
+  plugins: ["~/plugins/disable-scrolling.js"],
+
+  modules: [
+    "nuxt-mongoose",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "@nuxtjs/cloudinary",
+  ],
 
   mongoose: {
     uri: process.env.MONGODB_URI,
@@ -30,6 +38,4 @@ export default defineNuxtConfig({
       cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,
     },
   },
-
-  compatibilityDate: "2024-09-29",
 });

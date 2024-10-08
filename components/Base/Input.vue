@@ -34,9 +34,12 @@ onMounted(() => {
     class="flex flex-col bg-white"
     :class="[props.width ? props.width : 'w-60', props.label ? 'h-16' : 'h-10']"
   >
-    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 capitalize text-sm">{{
-      props.label
-    }}</label>
+    <label
+      v-if="props.label"
+      :for="props.label"
+      class="pl-2 pb-1 capitalize text-sm"
+      >{{ props.label }}</label
+    >
 
     <div
       class="flex items-center justify-center h-10 gap-3 px-4 border rounded-lg shadow-sm border-dark-light"
@@ -44,6 +47,7 @@ onMounted(() => {
     >
       <slot />
       <input
+        v-disable-scrolling
         v-if="!props.disable"
         :value="props.name"
         :placeholder="props.placeholder"
@@ -53,7 +57,7 @@ onMounted(() => {
         @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
         @keyup.enter="handleEnterKey"
         ref="inputRef"
-        class="w-full h-full bg-inherit"
+        class="w-full h-full bg-inherit nonscroll"
       />
       <p v-else-if="props.disable && props.name">{{ props.name }}</p>
     </div>
