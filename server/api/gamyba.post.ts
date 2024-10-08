@@ -87,14 +87,6 @@ export default defineEventHandler(async (event) => {
         }
 
         if (index === 0) {
-          if (item.startBinding !== "Nėra" && isBindings) {
-            const quantity =
-              item.startBinding === "Elka" || item.startBinding === "Centrinis"
-                ? 2
-                : 1;
-            addBindings(color, measure.height, item.startBinding, quantity);
-          }
-
           if (notSpecial) {
             lastHeight = measure.height;
             addBindings(color, measure.height, "Koja vienguba " + legWidth, 1);
@@ -103,9 +95,6 @@ export default defineEventHandler(async (event) => {
         }
 
         if (index === item.measures.length - 1) {
-          if (item.endBinding !== "Nėra" && isBindings)
-            addBindings(color, measure.height, item.endBinding, 1);
-
           if (notSpecial)
             addBindings(color, measure.height, "Koja vienguba " + legWidth, 1);
         }
@@ -232,6 +221,7 @@ export default defineEventHandler(async (event) => {
       fences: [...newFences],
       aditional: [],
       bindings,
+      status: "Negaminti",
     });
 
     // @ts-ignore
