@@ -109,10 +109,10 @@ const printHandler = () => {
                         align-items: center;
                         font-size: 22px;
                         font-weight: bold;
-                        border: 1px solid black; 
+                        border: 1px solid black;
                     }
                     body p {
-                        margin: 0; 
+                        margin: 0;
                         padding: 0;
                     }
                     .container {
@@ -135,10 +135,75 @@ const printHandler = () => {
             <body class="">
                 <p class="padding">${order.value?.client.address}</p>
                 <div class="container">
-                    <p class="padding"></p> 
+                    <p class="padding"></p>
                     <div class="borderL"></div>
                     <p class="padding ">${order.value?.orderNumber}</p>
                 </div>
+            </body>
+        </html>
+    `;
+};
+const bindingPrintHandler = () => {
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString("en-CA").replace(/-/g, ".");
+
+  const printContent = `
+        <html>
+            <head>
+                <title>Print</title>
+                <style>
+                    @media print {
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                    }
+                    body {
+                        width: 100vw;
+                        height: fit-content;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        text-align: center;
+                        font-size: 22px;
+                        font-weight: bold;
+                        border: 2px solid black; 
+                    }
+                    body p {
+                        margin: 0; 
+                        padding: 0;
+                    }
+                    .container {
+                        width:100%;
+                        display: flex;
+                        justify-content: space-between;
+                  
+                    }
+                    .borderB {
+                        width: 100%;
+                        border-bottom: 2px solid black;
+                    }
+                    .padding {
+                        padding: 10px;
+                    }
+                    .borderL {
+                        border-left: 2px solid black;
+                    }
+                    .bigText {
+                         font-size: 40px;
+                    }
+                </style>
+            </head>
+            <body class="">
+            <div class="container borderB">
+              <p class="padding ">${order.value?.orderNumber}</p>
+              <div class="borderL"></div>
+              <p class="padding">${formattedDate}</p> 
+            </div>
+              <p class="padding borderB">${order.value?.client.address}</p>
+              <p class="padding bigText">Papildomos Detalės</p> 
             </body>
         </html>
     `;
@@ -195,7 +260,15 @@ const printHandler = () => {
     </div>
 
     <div class="flex flex-col select-none">
-      <div class="text-2xl font-bold">Apkaustai</div>
+      <div class="flex gap-4 items-center mb-2">
+        <p class="text-2xl font-bold">Apkaustai</p>
+        <button
+          class="font-semibold border px-4 py-1 rounded-md bg-red-600 text-white"
+          @click="bindingPrintHandler"
+        >
+          Spausdinti lipduką
+        </button>
+      </div>
       <div class="flex w-fit border-y items-center h-8 border-black select-none">
         <p class="w-10 border-x border-black h-full flex justify-center items-center">Nr</p>
         <p class="w-48 border-r border-black h-full flex justify-center items-center">tipas</p>
