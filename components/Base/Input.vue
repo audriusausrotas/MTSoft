@@ -34,12 +34,9 @@ onMounted(() => {
     class="flex flex-col bg-white"
     :class="[props.width ? props.width : 'w-60', props.label ? 'h-16' : 'h-10']"
   >
-    <label
-      v-if="props.label"
-      :for="props.label"
-      class="pl-2 pb-1 capitalize text-sm"
-      >{{ props.label }}</label
-    >
+    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 capitalize text-sm">{{
+      props.label
+    }}</label>
 
     <div
       class="flex items-center justify-center h-10 gap-3 px-4 border rounded-lg shadow-sm border-dark-light"

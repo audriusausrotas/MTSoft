@@ -18,23 +18,10 @@ const deleteHandler = async (): Promise<void> => {
     body: { _id: props.project._id },
   });
   if (response.success) {
+    console.log(props.project._id);
     props.archive
       ? useProjects.deleteArchive(props.project._id)
       : useProjects.deleteProject(props.project._id);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-};
-
-const fetchProject = async () => {
-  const response: any = await $fetch("/api/projectSingle", {
-    method: "post",
-    body: { _id: props.project._id },
-  });
-  if (response.success) {
-    useProjects.addProject(response.data);
     setIsError(false);
     setError(response.message);
   } else {

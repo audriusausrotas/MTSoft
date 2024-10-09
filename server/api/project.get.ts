@@ -6,6 +6,9 @@ export default defineEventHandler(async () => {
   data.reverse();
 
   const lightData = data.map((item) => {
+    const lightGates = item.gates.map((gate) => {
+      return { _id: gate._id };
+    });
     return {
       _id: item._id,
       orderNumber: item.orderNumber,
@@ -16,6 +19,7 @@ export default defineEventHandler(async () => {
       advance: item.advance,
       status: item.status,
       creator: item.creator,
+      gates: lightGates,
     };
   });
 

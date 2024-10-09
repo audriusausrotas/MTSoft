@@ -20,19 +20,13 @@ export const useProjectsStore = defineStore("Projects", {
     addProject(project: Project): void {
       if (this.projects.length === 0) this.projects.push(project);
       else {
-        // let projectExist = false;
         this.projects = this.projects.map((item) => {
           if (item._id === project._id) {
-            // projectExist = true;
             return project;
           } else {
             return item;
           }
         });
-        // if (!projectExist) {
-        //   this.projects.unshift(project);
-        // }
-        // this.filterProjects();
       }
     },
     deleteProject(id: String): void {
@@ -41,6 +35,7 @@ export const useProjectsStore = defineStore("Projects", {
     },
     deleteArchive(id: String): void {
       this.archive = this.archive.filter((item) => item._id !== id);
+      this.filteredArchives = this.filteredArchives.filter((item) => item._id !== id);
     },
     setSelectedProject(data: string) {
       this.selectedProject = data;

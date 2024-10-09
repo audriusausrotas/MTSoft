@@ -106,7 +106,6 @@ const gateCancelHadnler = async (): Promise<void> => {
     body: { _id: offer?._id },
   });
   if (response.success) {
-    useGates.removeGates(offer!._id);
     gateOrdered.value = false;
     setIsError(false);
     setError(response.message);

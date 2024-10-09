@@ -10,12 +10,11 @@ export const useGateStore = defineStore("gate", {
       this.gates = [...data];
     },
 
-    // removeGates(id: string) {
-    //   if (this.gates.some((item) => item._id === id)) {
-    //     this.gates = this.gates.filter((item) => item._id !== id);
-    //   }
-    // },
-    // kazkas negerai trinant vartus... wtf!!!!!!!!!!!!
+    removeGates(id: string) {
+      if (this.gates.some((item) => item._id === id)) {
+        this.gates = this.gates.filter((item) => item._id !== id);
+      }
+    },
 
     addGate(data: GateSchema) {
       this.gates.push(data);

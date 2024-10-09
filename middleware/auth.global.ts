@@ -61,7 +61,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     if (to.path === "/") {
-      await fetchProjects();
+      await Promise.all([fetchProjects(), fetchGates()]);
     }
 
     if (to.path === `/perziura/${to.params.id}`) {
@@ -85,7 +85,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     if (to.path === "/montavimas") {
-      Promise.all([fetchMontavimus(), fetchSchedules()]);
+      await Promise.all([fetchMontavimus(), fetchSchedules()]);
     }
 
     if (to.path === `/montavimas/${to.params.id}`) {
@@ -120,7 +120,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
   } else {
-    if (process.server) {
+    if (import.meta.server) {
       const success = await fetchOrder(to);
       if (!success) {
         const pathName = to.name?.toString();

@@ -13,6 +13,10 @@ const vartonasUsers = useUser.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => user.email);
 
+const gigastaUsers = useUser.users
+  .filter((user) => user.accountType === "Gigasta")
+  .map((user) => user.email);
+
 const buttonHandler = async () => {
   const response: any = await $fetch("/api/gates", {
     method: "patch",
@@ -78,8 +82,8 @@ const updateHandler = async (change: string, value: any) => {
         @onChange="(value: string) => updateHandler('status', value)"
       />
       <BaseSelectField
-        :values="vartonasUsers"
-        id="vartonasUsers"
+        :values="gate?.manager?.includes('vartonas') ? vartonasUsers : gigastaUsers"
+        id="currentUsers"
         :defaultValue="gate?.manager"
         width="w-60"
         @onChange="(value: string) => updateHandler('manager', value)"
@@ -109,7 +113,7 @@ const updateHandler = async (change: string, value: any) => {
           "
         />
         <BaseInput
-          :name="gate?.dateCreated.slice(0, 10)"
+          :name="gate?.dateCreated?.slice(0, 10)"
           width="w-72 "
           label="užsakymo data:"
           :disable="true"
@@ -117,26 +121,26 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput :name="gate?.client.username" width="w-72" label="klientas" :disable="true" />
-        <BaseInput :name="gate?.client.address" width="w-72" label="adresas" :disable="true" />
-        <BaseInput :name="gate?.client.phone" width="w-72" label="telefonas" :disable="true" />
+        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
+        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
+        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>
         <BaseInput
-          :name="gate?.creator.username"
+          :name="gate?.creator?.username"
           width="w-72"
           label="atsakingas asmuo"
           :disable="true"
         />
         <BaseInput
-          :name="gate?.creator.phone"
+          :name="gate?.creator?.phone"
           width="w-72"
           label="Telefono numeris"
           :disable="true"
         />
         <BaseInput
-          :name="gate?.creator.email"
+          :name="gate?.creator?.email"
           width="w-72"
           label="Elektroninis paštas"
           :disable="true"
