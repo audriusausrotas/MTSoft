@@ -142,7 +142,12 @@ const printHandler = () => {
             </body>
         </html>
     `;
+  const printWindow = window.open("", "", "width=800,height=600");
+  printWindow?.document.write(printContent);
+  printWindow?.document.close();
+  printWindow?.print();
 };
+
 const bindingPrintHandler = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-CA").replace(/-/g, ".");
@@ -234,7 +239,7 @@ const bindingPrintHandler = () => {
 
     <div class="flex flex-wrap gap-4">
       <BaseUpload @onSuccess="photosHandler" />
-      <BaseButton name="spausdinti lipduką" @click="printHandler" />
+      <!-- <BaseButton name="spausdinti lipduką" @click="printHandler" /> -->
     </div>
 
     <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
