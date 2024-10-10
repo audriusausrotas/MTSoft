@@ -1,5 +1,6 @@
 export default defineEventHandler(async (event) => {
   const {
+    _id,
     client,
     fenceMeasures,
     results,
@@ -19,6 +20,12 @@ export default defineEventHandler(async (event) => {
     advance,
   } = await readBody(event);
 
+  let projectExist = null;
+
+  if (_id) projectExist = await projectSchema.findById(_id);
+
+  const creatorUsername = projectExist ? projectExist.creator.username : creator.username;
+
   const currentDate = new Date();
 
   const dateCreated = currentDate.toISOString();
@@ -28,12 +35,12 @@ export default defineEventHandler(async (event) => {
 
   const dateExparation = expirationDate.toISOString();
 
-  const firstThreeLetters = creator.username.substring(0, 3).toUpperCase();
+  const firstThreeLetters = creatorUsername.substring(0, 3).toUpperCase();
   let newOrderNumbers = "0001";
 
   const userProjects = await projectSchema.find({
     $and: [
-      { "creator.username": creator.username },
+      { "creator.username": creatorUsername },
       { orderNumber: { $regex: `^${firstThreeLetters}`, $options: "i" } },
     ],
   });
@@ -47,8 +54,7 @@ export default defineEventHandler(async (event) => {
       (a, b) => extractOrderNumber(a) - extractOrderNumber(b)
     );
 
-    let lastOrder =
-      sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
+    let lastOrder = sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
 
     let orderNumbers = parseInt(lastOrder.split("-")[1]);
     orderNumbers++;
@@ -58,30 +64,45 @@ export default defineEventHandler(async (event) => {
 
   const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
 
-  const project = new projectSchema({
-    creator,
-    client,
-    fenceMeasures,
-    results,
-    orderNumber,
-    works,
-    gates,
-    totalPrice,
-    totalCost,
-    totalProfit,
-    totalMargin,
-    priceVAT,
-    priceWithDiscount,
-    discount,
-    confirmed,
-    payed,
-    status,
-    advance,
-    dateCreated,
-    dateExparation,
-  });
+  if (projectExist) {
+    const newProjectData = projectExist.toObject() as any;
+    delete newProjectData._id;
+    newProjectData.orderNumber = orderNumber;
+    newProjectData.dateCreated = dateCreated;
+    newProjectData.dateExparation = dateExparation;
+    newProjectData.status = "Nepatvirtintas";
+    newProjectData.advance = 0;
 
-  const data = await project.save();
+    const newProject = new projectSchema(newProjectData);
+    const data = await newProject.save();
 
-  return { success: true, data: data, message: "Projektas išsaugotas" };
+    return { success: true, data: data, message: "Projektas nukopijuotas" };
+  } else {
+    const project = new projectSchema({
+      creator,
+      client,
+      fenceMeasures,
+      results,
+      orderNumber,
+      works,
+      gates,
+      totalPrice,
+      totalCost,
+      totalProfit,
+      totalMargin,
+      priceVAT,
+      priceWithDiscount,
+      discount,
+      confirmed,
+      payed,
+      status,
+      advance,
+      dateCreated,
+      dateExparation,
+    });
+
+    const data = await project.save();
+
+    return { success: true, data: data, message: "Projektas išsaugotas" };
+  }
 });

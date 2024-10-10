@@ -268,7 +268,7 @@ const bindingPrintHandler = () => {
       <div class="flex gap-4 items-center mb-2">
         <p class="text-2xl font-bold">Apkaustai</p>
         <button
-          class="font-semibold border px-4 py-1 rounded-md bg-red-600 text-white"
+          class="font-semibold border px-4 py-1 rounded-md bg-dark-full hover:bg-red-600 text-white"
           @click="bindingPrintHandler"
         >
           Spausdinti lipduką

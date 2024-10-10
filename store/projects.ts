@@ -18,7 +18,7 @@ export const useProjectsStore = defineStore("Projects", {
     },
 
     addProject(project: Project): void {
-      if (this.projects.length === 0) this.projects.push(project);
+      if (this.projects.length === 0) this.projects.unshift(project);
       else {
         this.projects = this.projects.map((item) => {
           if (item._id === project._id) {
@@ -29,6 +29,12 @@ export const useProjectsStore = defineStore("Projects", {
         });
       }
     },
+
+    copyProject(project: Project): void {
+      this.projects.unshift(project);
+      this.filterProjects();
+    },
+
     deleteProject(id: String): void {
       this.projects = this.projects.filter((item) => item._id !== id);
       this.filterProjects();
