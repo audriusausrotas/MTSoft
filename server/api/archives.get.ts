@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     return {
       _id: item._id,
       orderNumber: item.orderNumber,
-      client: { address: item.client.address, email: item.client.email, phone: item.client.phone },
+      client: item.client,
       priceVAT: item.priceVAT,
       priceWithDiscount: item.priceWithDiscount,
       status: item.status,
