@@ -56,6 +56,15 @@ export const fenceTypes: string[] = [
   "Emka",
 ];
 
+export const retailFenceTypes: string[] = [
+  "Daimond 60/90 metras",
+  "Daimond 60/120 metras",
+  "Daimond 40/105 metras",
+  "Plank 40/110 metras",
+  "Žaliuzi 60/65 metras",
+  "Namelis 60/105 metras",
+];
+
 export const horizontals: string[] = [
   "Daimond 60/90",
   "Daimond 40/105",
@@ -112,11 +121,7 @@ export const pramatomumas: string[] = [
 
 export const fenceDirection: string[] = ["Vertikali", "Horizontali"];
 
-export const services: string[] = [
-  "Medžiagos, Montavimas",
-  "Tik Medžiagos",
-  "Tik Montavimas",
-];
+export const services: string[] = ["Medžiagos, Montavimas", "Tik Medžiagos", "Tik Montavimas"];
 
 export const parts: string[] = [
   "Borteliai, Stulpai",

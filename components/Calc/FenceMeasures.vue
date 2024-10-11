@@ -9,8 +9,7 @@ const useCalculations = useCalculationsStore();
   </div>
   <div class="flex flex-wrap justify-evenly">
     <CalcFenceMeasureElement
-      v-for="(measure, measureIndex) in useCalculations.fences[props.index]
-        .measures"
+      v-for="(measure, measureIndex) in useCalculations.fences[props.index].measures"
       :key="v4()"
       :measureIndex="measureIndex"
       :index="props.index"

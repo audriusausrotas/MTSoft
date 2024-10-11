@@ -7,12 +7,14 @@ export interface Response {
 export interface Calculations {
   client: Client;
   fences: Fence[];
+  retail: boolean;
 }
 
 export interface Project {
   _id: string;
   creator: Creator;
   client: Client;
+  retail: boolean;
   fenceMeasures: Fence[];
   results: Result[];
   works: Works[];
@@ -116,8 +118,15 @@ export interface OtherParts {
   color: string;
   quantity: number;
   height: number;
+  type?: string;
 }
 
+export interface RetailLegs {
+  color: string;
+  quantity: number;
+  height: number;
+  type: string;
+}
 export interface Fences {
   type: string;
   color: string;

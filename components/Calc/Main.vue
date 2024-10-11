@@ -24,6 +24,14 @@ const confirmHandler = () => {
   useCalculations.lazerCalculate(textArea.value, units.value, precision.value);
   modalOpen.value = false;
 };
+
+const retailHandler = (value: string) => {
+  if (value === "Didmena") {
+    useCalculations.updateRetail(true);
+  } else {
+    useCalculations.updateRetail(false);
+  }
+};
 </script>
 
 <template>
@@ -99,6 +107,13 @@ const confirmHandler = () => {
         />
       </BaseModal>
       <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
+      <BaseSelectField
+        :values="['Didmena', 'Mažmena']"
+        id="parts"
+        :defaultValue="useCalculations.retail ? 'Didmena' : 'Mažmena'"
+        width="w-60"
+        @onChange="retailHandler"
+      />
     </div>
 
     <div v-for="(fence, index) in useCalculations.fences" :key="fence.id">
