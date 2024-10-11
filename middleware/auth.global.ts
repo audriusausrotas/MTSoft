@@ -74,6 +74,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     if (to.path === "/grafikas") {
       await fetchSchedules();
+      if (useUser.user?.accountType === "Administratorius") await fetchProjects();
     }
 
     if (to.path === "/gamyba") {
