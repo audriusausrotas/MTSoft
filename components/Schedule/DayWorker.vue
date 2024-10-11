@@ -107,7 +107,7 @@ const saveHandler = async () => {
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-40 rounded-sm"
+      class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-30 rounded-sm"
     />
     <NuxtImg
       v-if="isAdmin && canSave"
@@ -118,12 +118,12 @@ const saveHandler = async () => {
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-40 rounded-sm"
+      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-30 rounded-sm"
     />
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
-    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-30 text-white">
+    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -168,7 +168,7 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div v-if="modalOpen" class="absolute top-0 left-0 w-full min-w-96 z-50 rounded-lg">
+    <div v-if="modalOpen" class="absolute top-0 left-0 w-full min-w-96 z-20 rounded-lg">
       <BaseSearchFieldProduction
         width="w-full"
         :data="useProjects.projects"

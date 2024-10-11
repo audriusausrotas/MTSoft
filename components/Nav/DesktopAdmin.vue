@@ -33,7 +33,7 @@ const optionsOpen = ref<boolean>(false);
 
         <div
           v-if="link.name === 'Nustatymai' && optionsOpen"
-          class="absolute top-10 left-0 w-40 z-40 bg-white shadow-lg rounded-md border border-dark-light"
+          class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
         >
           <NuxtLink
             v-for="lnk in optionLinks"

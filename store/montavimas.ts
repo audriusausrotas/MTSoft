@@ -28,6 +28,15 @@ export const useMontavimasStore = defineStore("montavimas", {
       this.montavimasList = this.montavimasList.filter((item) => item._id !== id);
     },
 
+    deleteMontavimasWorker(id: string, worker: string) {
+      this.montavimasList = this.montavimasList.map((montavimas) => {
+        if (montavimas._id === id) {
+          montavimas.workers = montavimas.workers.filter((item) => item !== worker);
+          return montavimas;
+        } else return montavimas;
+      });
+    },
+
     updateOrder(id: string, data: Montavimas) {
       this.montavimasList = this.montavimasList.map((item) => {
         if (item._id === id) return data;

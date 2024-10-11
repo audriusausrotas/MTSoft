@@ -72,31 +72,29 @@ const photosHandler = async (photo: Photo) => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <div></div>
     <div class="flex gap-4 items-center flex-col xl:flex-row">
-      <div class="flex gap-4 flex-1 w-full">
-        <BaseInput width="w-full" :disable="true" label="Užsakymo Nr." class="flex-1 min-w-fit">
+      <div class="flex gap-4 flex-wrap justify-center md:justify-between">
+        <BaseInput width="w-28" :disable="true" label="Užsakymo Nr." class="">
           {{ order?.orderNumber }}
         </BaseInput>
         <BaseSelectField
           label="Statusas"
           :values="MontavimasStatus"
-          width="w-full"
-          class="min-w-fit flex-1"
+          width="w-36"
+          class=""
           id="montavimasStatus"
           :defaultValue="order?.status || MontavimasStatus[0]"
           @onChange="(value: string) => statusHandler(value)
                 "
         />
+
+        <BaseInput :disable="true" :name="order?.client.address" width="min-w-60" label="Adresas" />
       </div>
-      <div class="flex-1 w-full">
-        <BaseInput :disable="true" :name="order?.client.address" width="w-full" label="Adresas" />
-      </div>
-      <div class="flex gap-4 flex-1 w-full">
-        <BaseInput :disable="true" label="Kliento Nr." width="w-full" class="flex-1">
+      <div class="flex gap-4">
+        <BaseInput :disable="true" label="Kliento Nr." width="w-28" class="flex-1">
           <a :href="'tel:' + order?.client.phone">{{ order?.client.phone }}</a>
         </BaseInput>
-        <BaseInput :disable="true" width="w-full" label="Vadybininkas" class="flex-1">
+        <BaseInput :disable="true" width="w-28" label="Vadybininkas" class="flex-1">
           <a :href="'tel:' + order?.creator.phone">{{ order?.creator.username }}</a>
         </BaseInput>
       </div>
