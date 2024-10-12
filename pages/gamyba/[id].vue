@@ -1,4 +1,4 @@
-<script setup lang="ts">
+-<script setup lang="ts">
 import { GamybaStatus } from "~/data/initialValues";
 import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
