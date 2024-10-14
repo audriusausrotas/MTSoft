@@ -6,14 +6,15 @@ const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 const { setError, setIsError } = useError();
 
 const useProjects = useProjectsStore();
-const useUser = useUserStore();
 const useSchedule = useScheduleStore();
+const useGamyba = useGamybaStore();
+const useUser = useUserStore();
 
-const selectedJobs = ref<Job[]>([]);
-const modalOpen = ref<boolean>(false);
 const commentModalOpen = ref<boolean>(false);
+const modalOpen = ref<boolean>(false);
 const menuOpen = ref<boolean>(false);
 const canSave = ref<boolean>(false);
+const selectedJobs = ref<Job[]>([]);
 const searchValue = ref<string>("");
 const comment = ref<string>("");
 const isAdmin = useUser.user?.accountType === "Administratorius";
@@ -108,7 +109,7 @@ const saveHandler = async () => {
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-40 rounded-sm"
+      class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-30 rounded-sm"
     />
     <NuxtImg
       v-if="isAdmin && canSave"
@@ -119,14 +120,14 @@ const saveHandler = async () => {
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-40 rounded-sm"
+      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-30 rounded-sm"
     />
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
     <div
       v-if="menuOpen"
-      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-30 text-white"
+      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white"
     >
       <div
         v-if="isAdmin"
@@ -184,11 +185,15 @@ const saveHandler = async () => {
 
     <div
       v-if="modalOpen"
-      class="absolute top-0 left-0 w-full min-w-96 z-50 rounded-lg"
+      class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg"
     >
       <BaseSearchFieldProduction
         width="w-full"
-        :data="useProjects.projects"
+        :data="
+          props.worker.accountType === 'Gamyba'
+            ? useGamyba.gamybaList
+            : useProjects.projects
+        "
         :name="searchValue"
         @onChange="(value) => (searchValue = value)"
         @modalClose="modalOpen = false"

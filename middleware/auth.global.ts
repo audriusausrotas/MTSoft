@@ -45,7 +45,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
         case "Montavimas":
           if (to.path !== "/profilis" && to.path !== "/grafikas") {
-            if (!to.path.includes("/montavimas")) return navigateTo("/grafikas");
+            if (!to.path.includes("/montavimas"))
+              return navigateTo("/grafikas");
           }
           break;
 
@@ -74,6 +75,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     if (to.path === "/grafikas") {
       await fetchSchedules();
+      await fetchGamybas();
+      if (useUser.user?.accountType === "Administratorius")
+        await fetchProjects();
     }
 
     if (to.path === "/gamyba") {
@@ -115,7 +119,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     if (to.path === "/bonusai") {
-      if (useUser.user?.username !== "Audrius" && useUser.user?.username !== "Andrius") {
+      if (
+        useUser.user?.username !== "Audrius" &&
+        useUser.user?.username !== "Andrius"
+      ) {
         return navigateTo("/");
       }
     }

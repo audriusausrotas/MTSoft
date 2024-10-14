@@ -26,7 +26,7 @@ const deleteHandler = () => {
   </div>
   <div
     v-if="menuOpen"
-    class="absolute left-0 z-50 bg-blue-600 border overflow-hidden border-stone-500 w-full h-fit"
+    class="absolute left-0 z-30 bg-blue-600 border overflow-hidden border-stone-500 w-full h-fit"
   >
     <NuxtLink
       :to="
@@ -38,16 +38,10 @@ const deleteHandler = () => {
     >
       Atidaryti darbą
     </NuxtLink>
-    <div
-      class="hover:cursor-pointer hover:bg-red-600 text-white"
-      @click="deleteHandler"
-    >
+    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="deleteHandler">
       Ištrinti darbą
     </div>
-    <div
-      class="hover:cursor-pointer hover:bg-red-600 text-white"
-      @click="menuOpen = false"
-    >
+    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
       Uždaryti meniu
     </div>
   </div>

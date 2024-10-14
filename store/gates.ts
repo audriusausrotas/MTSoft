@@ -21,13 +21,8 @@ export const useGateStore = defineStore("gate", {
     },
 
     addSelectedGate(data: GateSchema) {
-      if (this.gates.length === 0) this.gates.push(data);
-      else {
-        this.gates = this.gates.map((item) => {
-          if (item._id === data._id) return data;
-          else return item;
-        });
-      }
+      this.gates = [];
+      this.gates.push(data);
     },
 
     updateGate(data: GateSchema, id: string) {

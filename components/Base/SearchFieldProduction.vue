@@ -48,9 +48,9 @@ const filteredItems = (value: string): void => {
   <div
     class="relative flex flex-col font-medium border-2 border-red-600 rounded-lg overflow-hidden"
   >
-    <div class="flex justify-center items-center pr-1 bg-white">
+    <div class="flex justify-center items-center pr-1">
       <input
-        class="h-10 px-4 overflow-auto bg-white borderoutline-none w-full"
+        class="h-10 px-4 overflow-auto border outline-none w-full"
         placeholder="Ieškoti"
         :value="props.name"
         @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
@@ -63,14 +63,14 @@ const filteredItems = (value: string): void => {
         X
       </button>
     </div>
-    <ul class="flex flex-col overflow-auto w-full bg-white divide-y max-h-96">
+    <ul class="flex flex-col overflow-auto w-full divide-y max-h-96">
       <li
         v-for="item in filteredData.value"
         :key="item.id"
         @click="emitClick(item)"
-        class="px-4 py-2 flex justify-between odd:bg-gray-ultra-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+        class="px-2 py-2 flex justify-between items-center odd:bg-gray-ultra-light hover:cursor-pointer hover:bg-red-full hover:text-white"
       >
-        <p>
+        <p class="w-24">
           {{ item.orderNumber }}
         </p>
         <p>

@@ -22,9 +22,19 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  selectedJobs.forEach(async (job: Job) => {
-    await processJob(job._id.toString(), worker.lastName);
-  });
+  const workerFound = await userSchema.findById(worker._id);
+  if (!workerFound)
+    return {
+      success: false,
+      data: null,
+      message: "Darbuotojas nerastas",
+    };
+
+  if (workerFound.accountType !== "Gamyba") {
+    selectedJobs.forEach(async (job: Job) => {
+      await processJob(job._id.toString(), worker.lastName);
+    });
+  }
 
   const existingSchedule = await scheduleSchema.findOne({ date, worker });
   if (existingSchedule) {

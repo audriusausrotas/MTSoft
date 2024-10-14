@@ -83,32 +83,16 @@ const openInNewHandler = () => {
 };
 
 const copyHandler = async () => {
-  const newProject: Project = {
-    ...props.project,
-    _id: "",
-    orderNumber: "",
-    dateCreated: "",
-    dateExparation: "",
-    confirmed: false,
-    payed: false,
-    status: "Nepatvirtintas",
-    advance: false,
-  };
-
-  try {
-    const data: any = await $fetch("/api/project", {
-      method: useProjects.selectedProject ? "put" : "post",
-      body: newProject,
-    });
-    if (data.success) {
-      useProjects.addProject(data.data);
-      setIsError(false);
-      setError(data.message);
-    } else {
-      setError(data.message);
-    }
-  } catch (error: any) {
-    setError(error);
+  const data: any = await $fetch("/api/project", {
+    method: "post",
+    body: { _id: props.project._id },
+  });
+  if (data.success) {
+    useProjects.copyProject(data.data);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
 };
 

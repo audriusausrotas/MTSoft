@@ -1,10 +1,9 @@
 import type { Fence, Fences } from "~/data/interfaces";
 
-export default function calculateHorizontalFence(
-  fenceTemp: Fences[],
-  item: Fence
-) {
+export default function calculateHorizontalFence(fenceTemp: Fences[], item: Fence) {
   const tempFence: Fences[] = [...fenceTemp];
+  const useCalculate = useCalculationsStore();
+  const retail = useCalculate.retail;
 
   let fenceExist: boolean = false;
 
@@ -14,7 +13,7 @@ export default function calculateHorizontalFence(
     ...item,
     length: item.totalLength,
     height: 0,
-    quantity: item.totalQuantity,
+    quantity: retail ? calculateRetail(item) : item.totalQuantity,
     elements: 0,
   };
   tempFence.forEach((fenceItem) => {
@@ -26,9 +25,13 @@ export default function calculateHorizontalFence(
       fenceItem.seeThrough === item.seeThrough &&
       fenceItem.direction === item.direction
     ) {
-      fenceItem.length += item.totalLength || 0;
-      fenceItem.quantity += item.totalQuantity || 0;
-      fenceExist = true;
+      if (retail) {
+        fenceItem.quantity += calculateRetail(item);
+      } else {
+        fenceItem.length += item.totalLength || 0;
+        fenceItem.quantity += item.totalQuantity || 0;
+        fenceExist = true;
+      }
     }
   });
   if (!fenceExist) {
@@ -36,4 +39,12 @@ export default function calculateHorizontalFence(
   }
 
   return tempFence;
+}
+
+function calculateRetail(item: Fence) {
+  let tempTotalElements = 0;
+  item.measures.forEach((element) => {
+    tempTotalElements += (element.length / 100) * element.elements;
+  });
+  return tempTotalElements;
 }

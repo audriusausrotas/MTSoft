@@ -39,6 +39,7 @@ export async function fetchGamyba(id: any) {
   const useGamyba = useGamybaStore();
   const { data }: any = await useFetch("/api/gamyb", { method: "post", body: { _id: id } });
   if (data.value.success) {
+    useGamyba.clearGamyba();
     useGamyba.addOne(data.value.data);
   }
 }

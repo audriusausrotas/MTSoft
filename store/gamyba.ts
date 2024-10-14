@@ -53,6 +53,9 @@ export const useGamybaStore = defineStore("gamyba", {
         } else return item;
       });
     },
+    clearGamyba() {
+      this.gamybaList = [];
+    },
   },
 
   getters: {},

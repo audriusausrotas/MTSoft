@@ -1,3 +1,4 @@
+// import { socket } from "~/components/socket";
 export default defineEventHandler(async (event) => {
   const { number, address, creator } = await readBody(event);
 
@@ -15,6 +16,8 @@ export default defineEventHandler(async (event) => {
   const data = await newGamyba.save();
 
   if (!data) return { success: false, data, message: "Įvyko klaida" };
+
+  // socket.emit("aaaa", data);
 
   return { success: true, data: newGamyba, message: "Užsakymas sukurtas" };
 });

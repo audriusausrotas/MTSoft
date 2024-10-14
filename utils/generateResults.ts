@@ -3,6 +3,7 @@ import { defaultValues } from "~/data/initialValues";
 
 export default function generateResults() {
   const results = useResultsStore();
+  const useCalculations = useCalculationsStore();
   const useBackup = useBackupStore();
 
   if (results.fences.length > 0) {
@@ -24,14 +25,10 @@ export default function generateResults() {
 
   if (results.segments.length > 0) {
     results.segments.forEach((item) => {
-      if (item.height <= 113)
-        createResultElement({ ...item, type: defaultValues.segment103 });
-      else if (item.height <= 133)
-        createResultElement({ ...item, type: defaultValues.segment123 });
-      else if (item.height <= 163)
-        createResultElement({ ...item, type: defaultValues.segment153 });
-      else if (item.height <= 183)
-        createResultElement({ ...item, type: defaultValues.segment173 });
+      if (item.height <= 113) createResultElement({ ...item, type: defaultValues.segment103 });
+      else if (item.height <= 133) createResultElement({ ...item, type: defaultValues.segment123 });
+      else if (item.height <= 163) createResultElement({ ...item, type: defaultValues.segment153 });
+      else if (item.height <= 183) createResultElement({ ...item, type: defaultValues.segment173 });
       else createResultElement({ ...item, type: defaultValues.segment203 });
     });
   }
@@ -116,9 +113,7 @@ export default function generateResults() {
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
         type: defaultValues.rivets,
@@ -129,9 +124,7 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
         type: defaultValues.bolts,
@@ -140,11 +133,21 @@ export default function generateResults() {
     });
   }
 
+  if (results.retailLegs.length > 0) {
+    results.retailLegs.forEach((item) => {
+      createResultElement({
+        ...item,
+        type: item.type,
+        quantity: item.quantity / 100,
+      });
+    });
+  }
+
   if (results.bindingsLength.length > 0) {
     results.bindingsLength.forEach((item) => {
       createResultElement({
         ...item,
-        type: defaultValues.bindings,
+        type: useCalculations.retail ? defaultValues.retailBindings : defaultValues.bindings,
         quantity: item.quantity / 100,
       });
     });

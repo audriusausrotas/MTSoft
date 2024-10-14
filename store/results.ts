@@ -1,14 +1,7 @@
 import { defineStore } from "pinia";
 import { initialResultData, initialWorkData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type {
-  Result,
-  Fences,
-  Gate,
-  OtherParts,
-  Works,
-  Product,
-} from "~/data/interfaces";
+import type { Result, Fences, Gate, OtherParts, Works, Product } from "~/data/interfaces";
 import { verticals } from "~/data/selectFieldData";
 
 export const useResultsStore = defineStore("results", {
@@ -41,6 +34,7 @@ export const useResultsStore = defineStore("results", {
     totalSegments: 0 as number,
     segmentHolders: [] as OtherParts[],
     gates: [] as Gate[],
+    retailLegs: [] as OtherParts[],
     totalPrice: 0 as number,
     totalCost: 0 as number,
     totalProfit: 0 as number,
@@ -154,8 +148,7 @@ export const useResultsStore = defineStore("results", {
       result.totalPrice = +(result.price * result.quantity).toFixed(2);
       result.totalCost = +(result.cost * result.quantity).toFixed(2);
       result.profit = +(result.totalPrice - result.totalCost).toFixed(2);
-      const marginValue =
-        ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
+      const marginValue = ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
       result.margin = +marginValue.toFixed(2);
       this.calculateTotals();
     },
@@ -165,8 +158,7 @@ export const useResultsStore = defineStore("results", {
       work.totalPrice = Math.round(work.price * work.quantity);
       work.totalCost = Math.round(work.cost * work.quantity);
       work.profit = work.totalPrice - work.totalCost;
-      const marginValue =
-        ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
+      const marginValue = ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
       work.margin = parseFloat(marginValue.toFixed(2));
       this.calculateTotals();
     },
@@ -189,18 +181,15 @@ export const useResultsStore = defineStore("results", {
       this.totalPrice = +newPrice.toFixed(2);
       this.totalCost = +newCost.toFixed(2);
       this.totalProfit = +(newPrice - newCost).toFixed(2);
-      this.totalMargin = +(
-        Math.round(((newPrice - newCost) / newPrice) * 10000) / 100
-      ).toFixed(2);
+      this.totalMargin = +(Math.round(((newPrice - newCost) / newPrice) * 10000) / 100).toFixed(2);
       this.priceVAT = +(newPrice + newPrice * 0.21).toFixed(2);
       this.calculatePriceWithDiscount();
     },
 
     calculatePriceWithDiscount() {
-      const calculatedDiscount = +(
-        this.totalPrice +
-        (this.priceVAT - this.totalPrice) / 2
-      ).toFixed(2);
+      const calculatedDiscount = +(this.totalPrice + (this.priceVAT - this.totalPrice) / 2).toFixed(
+        2
+      );
       this.updateDiscount(calculatedDiscount);
     },
 
@@ -244,6 +233,7 @@ export const useResultsStore = defineStore("results", {
       this.bindingsLength = [];
       this.segments = [];
       this.segmentHolders = [];
+      this.retailLegs = [];
       this.totalFences = 0;
       this.totalFencesWithBindings = 0;
       this.totalFenceboards = 0;
@@ -324,9 +314,7 @@ export const useResultsStore = defineStore("results", {
           const totalPrice = work.price * work.quantity;
           const totalCost = work.cost * work.quantity;
           const profit = totalPrice - totalCost;
-          const margin = +(
-            Math.round((profit / totalPrice) * 10000) / 100
-          ).toFixed(2);
+          const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
 
           item.quantity = work.quantity;
           item.totalPrice = totalPrice;
@@ -350,20 +338,11 @@ export const useResultsStore = defineStore("results", {
 
     addAnchoredPoles(color: string, height: number): void {
       let quantity = 0;
-      if (
-        this.anchoredPoles.length === 0 &&
-        this.anchoredGatePoles.length === 0
-      )
-        quantity++;
+      if (this.anchoredPoles.length === 0 && this.anchoredGatePoles.length === 0) quantity++;
       const doesExist = this.anchoredPoles.some((item) => item.color === color);
       if (!doesExist) quantity++;
       if (quantity === 0) quantity++;
-      this.anchoredPoles = this.addPart(
-        this.anchoredPoles,
-        color,
-        quantity,
-        height
-      );
+      this.anchoredPoles = this.addPart(this.anchoredPoles, color, quantity, height);
     },
 
     removePole(color: string): void {
@@ -385,12 +364,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     addAnchoredGatePoles(color: string, quantity: number): void {
-      this.anchoredGatePoles = this.addPart(
-        this.anchoredGatePoles,
-        color,
-        +quantity,
-        3
-      );
+      this.anchoredGatePoles = this.addPart(this.anchoredGatePoles, color, +quantity, 3);
     },
 
     addCrossbars(color: string): void {
@@ -402,37 +376,22 @@ export const useResultsStore = defineStore("results", {
       this.totalElements += elements;
 
       if (verticals.includes(type)) {
-        this.bolts = this.addPart(
-          this.bolts,
-          color,
-          Math.ceil(elements) * 4,
-          0
-        );
+        this.bolts = this.addPart(this.bolts, color, Math.ceil(elements) * 4, 0);
       } else {
-        this.rivets = this.addPart(
-          this.rivets,
-          color,
-          Math.ceil(elements) * 4,
-          0
-        );
+        this.rivets = this.addPart(this.rivets, color, Math.ceil(elements) * 4, 0);
       }
     },
 
+    addRetailLeg(height: number, color: string, type: string): void {
+      this.retailLegs = this.addPart(this.retailLegs, color, height * 2, 0, type);
+    },
+
     addBindingsLength(height: number, color: string): void {
-      if (this.bindingsLength.length === 0) {
-        this.bindingsLength = this.addPart(
-          this.bindingsLength,
-          color,
-          height * 2,
-          0
-        );
+      const useCalculate = useCalculationsStore();
+      if (this.bindingsLength.length === 0 && !useCalculate.retail) {
+        this.bindingsLength = this.addPart(this.bindingsLength, color, height * 2, 0);
       }
-      this.bindingsLength = this.addPart(
-        this.bindingsLength,
-        color,
-        height * 2,
-        0
-      );
+      this.bindingsLength = this.addPart(this.bindingsLength, color, height * 2, 0);
     },
 
     addSegment(height: number, color: string): void {
@@ -441,36 +400,21 @@ export const useResultsStore = defineStore("results", {
       const holdersCount = +height < 130 ? 2 : +height < 170 ? 3 : 4;
 
       if (this.segmentHolders.length === 0) {
-        this.segmentHolders = this.addPart(
-          this.segmentHolders,
-          color,
-          holdersCount,
-          0
-        );
+        this.segmentHolders = this.addPart(this.segmentHolders, color, holdersCount, 0);
       }
-      this.segmentHolders = this.addPart(
-        this.segmentHolders,
-        color,
-        holdersCount,
-        0
-      );
+      this.segmentHolders = this.addPart(this.segmentHolders, color, holdersCount, 0);
     },
-    addPart(
-      array: OtherParts[],
-      color: string,
-      quantity: number,
-      height: number
-    ) {
+    addPart(array: OtherParts[], color: string, quantity: number, height: number, type?: string) {
       let tempArr = [...array];
       let itemExist = false;
       tempArr.forEach((item) => {
-        if (item.color === color && height === item.height) {
+        if (item.color === color && height === item.height && item.type === type) {
           item.quantity += quantity;
           itemExist = true;
         }
       });
       if (!itemExist) {
-        tempArr.push({ color, quantity, height });
+        tempArr.push({ color, quantity, height, type });
       }
       return tempArr;
     },

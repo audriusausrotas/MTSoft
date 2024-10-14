@@ -2,12 +2,13 @@ import type { Measure, Calculations, Fence } from "~/data/interfaces";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { createInitialMeasure, fenceMeasures, clientInitialValue } from "~/data/initialValues";
-import { pramatomumas, verticals, fenceTypes } from "~/data/selectFieldData";
+import { pramatomumas, verticals, fenceTypes, retailFenceTypes } from "~/data/selectFieldData";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
     client: { ...clientInitialValue },
     fences: [],
+    retail: false,
   }),
 
   actions: {
@@ -15,7 +16,7 @@ export const useCalculationsStore = defineStore("calculations", {
       const initialFence: Fence = {
         id: uuidv4(),
         side: "Priekis",
-        type: "Daimond 60/90",
+        type: this.retail ? "Daimond 60/90 metras" : "Daimond 60/90",
         color: "7016",
         material: "Matinė",
         seeThrough: "Nepramatoma",
@@ -39,6 +40,7 @@ export const useCalculationsStore = defineStore("calculations", {
     clearAll() {
       this.client = { ...clientInitialValue };
       this.fences = [];
+      this.retail = false;
     },
 
     addMeasure(index: number): void {
@@ -67,6 +69,19 @@ export const useCalculationsStore = defineStore("calculations", {
         },
       };
       this.fences[index].measures.push(laiptas);
+    },
+
+    updateRetail(value: boolean) {
+      this.retail = value;
+      this.fences = this.fences.map((item) => {
+        if (value) {
+          item.type = retailFenceTypes[0];
+          return item;
+        } else {
+          item.type = fenceTypes[0];
+          return item;
+        }
+      });
     },
 
     updateClientAddress(data: string): void {
@@ -233,6 +248,7 @@ export const useCalculationsStore = defineStore("calculations", {
     clearFields(): void {
       this.client = { ...clientInitialValue };
       this.fences;
+      this.retail = false;
     },
 
     deleteMeasure(index: number, measureIndex: number): void {
@@ -259,6 +275,10 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].measures[measureIndex].length = +value;
       this.calculateElements(index, measureIndex);
       this.updateFenceTotals(index);
+    },
+
+    updateMeasureElements(index: number, measureIndex: number, value: number): void {
+      this.fences[index].measures[measureIndex].elements = +value;
     },
 
     calculateAllElements(index: number) {

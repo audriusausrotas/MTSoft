@@ -15,17 +15,40 @@ const statusColor = computed(() =>
 );
 
 const deleteHandler = async (): Promise<void> => {
+  const confirmed = confirm("Ar tikrai norite ištrinti darbą?");
+
+  if (confirmed) {
+    if (useUser.user?.accountType !== "Administratorius") {
+      setError("Ištrinti gali tik administratorius");
+      return;
+    }
+
+    const response: any = await $fetch("/api/montavimas", {
+      method: "delete",
+      body: { _id: props.order._id },
+    });
+    if (response.success) {
+      useMontavimas.deleteMontavimasOrder(props.order._id);
+      setIsError(false);
+      setError(response.message);
+    } else {
+      setError(response.message);
+    }
+  }
+};
+
+const workerDeleteHandler = async (worker: string) => {
   if (useUser.user?.accountType !== "Administratorius") {
     setError("Ištrinti gali tik administratorius");
     return;
   }
 
-  const response: any = await $fetch("/api/montavimas", {
+  const response: any = await $fetch("/api/montavimasWorker", {
     method: "delete",
-    body: { _id: props.order._id },
+    body: { _id: props.order._id, worker },
   });
   if (response.success) {
-    useMontavimas.deleteMontavimasOrder(props.order._id);
+    useMontavimas.deleteMontavimasWorker(props.order._id, worker);
     setIsError(false);
     setError(response.message);
   } else {
@@ -54,7 +77,7 @@ const clickHandler = () => {
           {{ order?.creator.username }}
         </p>
         <div
-          @click="deleteHandler"
+          @click.stop="deleteHandler"
           class="flex items-center justify-center w-8 h-8 hover:cursor-pointer hover:bg-red-200"
         >
           <NuxtImg
@@ -71,12 +94,24 @@ const clickHandler = () => {
     <p class="flex items-center justify-center h-8 hover:cursor-pointer" @click="clickHandler">
       {{ order?.client.address }}
     </p>
-    <p
+    <div
       v-if="useUser.user?.accountType === 'Administratorius'"
-      class="flex flex-1 items-center justify-center h-8 border-black bg-stone-300"
+      class="flex flex-1 items-center justify-around h-8 border-black bg-stone-300"
     >
-      {{ order?.workers.join(", ") }}
-    </p>
+      <div v-for="worker in props.order.workers" :key="worker" class="flex gap-1">
+        <p>{{ worker }}</p>
+        <NuxtImg
+          @click="workerDeleteHandler(worker)"
+          src="/icons/delete.svg"
+          width="16"
+          height="16"
+          decoding="auto"
+          :ismap="true"
+          loading="lazy"
+          class="hover:cursor-pointer hover:bg-green-500"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <style scoped></style>
