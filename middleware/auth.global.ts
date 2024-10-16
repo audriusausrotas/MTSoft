@@ -4,17 +4,6 @@ import { useCookie } from "nuxt/app";
 export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
   const cookie = useCookie("mtud");
-
-
-//   if (to.path.includes("acme-challenge")) {
-//     console.log("ACME challenge request allowed");
-//     return; 
-//   }
-
-//   if (to.path.includes("/api/githook")) {
-//     console.log("kreipiasi")
-//     return; 
-//   }
     
     if (!to.path.includes("pasiulymas")) {
       // authentificate in server from cookie
