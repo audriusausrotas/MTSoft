@@ -5,7 +5,9 @@ const calendarDates = ref<Date[]>([]);
 const workers = computed(() =>
   useUser.users.filter((worker) => {
     if (useUser.user?.accountType === "Administratorius") {
-      return worker.accountType === "Gamyba" || worker.accountType === "Montavimas";
+      return (
+        worker.accountType === "Gamyba" || worker.accountType === "Montavimas"
+      );
     } else {
       return worker._id === useUser.user?._id;
     }
@@ -29,13 +31,15 @@ function scrollToToday() {
   if (todayIndex !== -1) {
     const scrollableContainer = document.querySelector(".overflow-y-auto");
 
-    const todayElement = document.querySelectorAll(".calendar-item")[todayIndex];
+    const todayElement =
+      document.querySelectorAll(".calendar-item")[todayIndex];
 
     if (todayElement && scrollableContainer) {
       const rect = todayElement.getBoundingClientRect();
       const containerRect = scrollableContainer.getBoundingClientRect();
       const alt = useUser.user?.accountType === "Montavimas" ? 0 : 44;
-      const y = rect.top - containerRect.top + scrollableContainer.scrollTop - alt;
+      const y =
+        rect.top - containerRect.top + scrollableContainer.scrollTop - alt;
 
       scrollableContainer.scrollTo({
         top: y,
