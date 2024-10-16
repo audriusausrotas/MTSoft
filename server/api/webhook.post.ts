@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
+  console.log(body)
   console.log("veikia?")
 console.log("action" + body.action)
   // Check if the action is a push
