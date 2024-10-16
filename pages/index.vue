@@ -11,13 +11,19 @@ const users = [
   ...new Set(
     useProjects.projects.map((item) => {
       return user.users.find((usr) =>
-        usr.username.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+        usr.username
+          .toLowerCase()
+          .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
       )!.username;
     })
   ),
 ];
 
 const statusFilters = ["Visi", ...status];
+
+const getBackup = async () => {
+  const response: any = await $fetch("/api/backup");
+};
 </script>
 
 <template>

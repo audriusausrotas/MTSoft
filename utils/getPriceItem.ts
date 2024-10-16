@@ -24,12 +24,18 @@ export default function getPriceItem(name: string) {
       return returnProduct;
     }
   } else {
+    console.log(name);
+    console.log(findProduct());
     return findProduct();
   }
 
   function findProduct() {
     return (
-      products.products.find((product) => product.name.includes(name)) || null
+      products.products.find(
+        (product) => product.name.toLowerCase() === name.toLowerCase()
+      ) ||
+      products.products.find((product) => product.name.includes(name)) ||
+      null
     );
   }
 }
