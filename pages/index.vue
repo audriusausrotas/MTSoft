@@ -11,9 +11,7 @@ const users = [
   ...new Set(
     useProjects.projects.map((item) => {
       return user.users.find((usr) =>
-        usr.username
-          .toLowerCase()
-          .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+        usr.username.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
       )!.username;
     })
   ),
@@ -33,6 +31,7 @@ const getBackup = async () => {
         <BaseButton>
           <NuxtLink to="/naujas">Naujas projektas</NuxtLink>
         </BaseButton>
+        <div>Veikia!!!</div>
 
         <BaseInput
           placeholder="Paieška"
