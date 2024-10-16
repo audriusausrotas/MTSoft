@@ -1,17 +1,15 @@
 // server/middleware/webhook.js
 import { exec } from 'child_process';
 
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body)
-  console.log("veikia?")
-console.log("action" + body.action)
-  // Check if the action is a push
-  if (body.action === 'push') {
+  console.log(body);
+  console.log("Webhook triggered");
+
+  // Check if the ref is pointing to the main branch
+  if (body.ref === 'refs/heads/main') {
     return new Promise((resolve, reject) => {
-      // Execute the deployment commands
-      console.log("executina")
+      console.log("Running deployment commands...");
       exec('git pull && npm install && npm run build && pm2 restart MTSoft', { cwd: 'C:/MTwebsite/MTSoft' }, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error: ${error.message}`);
