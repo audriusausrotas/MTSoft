@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (event: any) => {
+    const url = event.node.req.url;
+
   if (
     event.node.req.url.includes("auth") ||
     event.node.req.url.includes("userChanges") ||
@@ -19,3 +21,4 @@ export default defineEventHandler(async (event: any) => {
     }
   }
 });
+
