@@ -31,7 +31,6 @@ const getBackup = async () => {
         <BaseButton>
           <NuxtLink to="/naujas">Naujas projektas</NuxtLink>
         </BaseButton>
-        <div>Veikia!!!</div>
 
         <BaseInput
           placeholder="Paieška"
