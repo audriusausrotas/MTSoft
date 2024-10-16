@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   if (body.action === 'push') {
     return new Promise((resolve, reject) => {
       // Execute the deployment commands
-      // exec('git pull && npm install && npm run build && pm2 restart MTSoft', { cwd: 'C:/MTwebsite/MTSoft' }, (error, stdout, stderr) => {
-      exec('pm2 restart MTSoft', { cwd: 'C:/MTwebsite/MTSoft' }, (error, stdout, stderr) => {
+      exec('git pull && npm install && npm run build && pm2 restart MTSoft', { cwd: 'C:/MTwebsite/MTSoft' }, (error, stdout, stderr) => {
+      
         if (error) {
           console.error(`Error: ${error.message}`);
           return reject(createError({ statusCode: 500, statusMessage: 'Deployment failed' }));
