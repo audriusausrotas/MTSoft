@@ -4,6 +4,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const useUser = useUserStore();
   const cookie = useCookie("mtud");
 
+  if (to.path === "/api/webhook") {
+    return; 
+  }
+
   if (!to.path.includes("pasiulymas")) {
     // authentificate in server from cookie
     if (cookie.value) {
