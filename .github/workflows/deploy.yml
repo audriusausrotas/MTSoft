@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'  # Use your desired Node.js version
+          node-version: '20.18.0'  # Specify the exact Node.js version
 
       - name: Install dependencies
         run: npm install
@@ -43,4 +43,8 @@ jobs:
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
 
         run: |
-          echo y | "C:\Program Files\PuTTY\plink.exe" -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
+          $env:VPS_PASSWORD = $env:VPS_PASSWORD
+          $env:VPS_USERNAME = $env:VPS_USERNAME
+          $env:VPS_IP = $env:VPS_IP
+          $env:PROJECT_PATH = $env:PROJECT_PATH
+          echo y | & "C:\Program Files\PuTTY\plink.exe" -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
