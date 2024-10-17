@@ -9,11 +9,17 @@ useProjects.changeFilter(userLetters ? userLetters : "Visi");
 const users = [
   "Visi",
   ...new Set(
-    useProjects.projects.map((item) => {
-      return user.users.find((usr) =>
-        usr.username.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
-      )!.username;
-    })
+    useProjects?.projects
+      ?.map((item) => {
+        if (user?.users && item?.orderNumber) {
+          const matchedUser = user.users.find((usr) =>
+            usr?.username?.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+          );
+          return matchedUser?.username;
+        }
+        return undefined;
+      })
+      .filter(Boolean)
   ),
 ];
 
