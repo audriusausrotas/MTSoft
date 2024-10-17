@@ -43,6 +43,8 @@ export default defineEventHandler(async (event) => {
       config.tokenSecret
     );
 
+    
+
     data.password = "";
 
     setCookie(event, "mtud", token, {
