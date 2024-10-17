@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -30,18 +30,17 @@ jobs:
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_IP: ${{ secrets.VPS_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          CLOUDINARY_API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
-          CLOUDINARY_API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
-          CLOUDINARY_CLOUD_NAME: ${{secrets.CLOUDINARY_CLOUD_NAME}}
-          MONGODB_URI: ${{secrets.MONGODB_URI}}
-          NODEMAILER_PASS_ANDRIUS: ${{secrets.NODEMAILER_PASS_ANDRIUS}}
-          NODEMAILER_PASS_AUDRIUS: ${{secrets.NODEMAILER_PASS_AUDRIUS}}
-          NODEMAILER_PASS_HARIS: ${{secrets.NODEMAILER_PASS_HARIS}}
-          NUXT_PUBLIC_CLOUD_API_KEY: ${{secrets.NUXT_PUBLIC_CLOUD_API_KEY}}
-          NUXT_PUBLIC_CLOUD_NAME: ${{secrets.NUXT_PUBLIC_CLOUD_NAME}}
-          SALT: ${{secrets.SALT}}
-          TOKEN_SECRET: ${{secrets.TOKEN_SECRET}}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          NODEMAILER_PASS_ANDRIUS: ${{ secrets.NODEMAILER_PASS_ANDRIUS }}
+          NODEMAILER_PASS_AUDRIUS: ${{ secrets.NODEMAILER_PASS_AUDRIUS }}
+          NODEMAILER_PASS_HARIS: ${{ secrets.NODEMAILER_PASS_HARIS }}
+          NUXT_PUBLIC_CLOUD_API_KEY: ${{ secrets.NUXT_PUBLIC_CLOUD_API_KEY }}
+          NUXT_PUBLIC_CLOUD_NAME: ${{ secrets.NUXT_PUBLIC_CLOUD_NAME }}
+          SALT: ${{ secrets.SALT }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
 
         run: |
-          echo y | plink -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
-
+          echo y | "C:\Program Files\PuTTY\plink.exe" -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
