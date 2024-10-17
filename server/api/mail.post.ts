@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 export default defineEventHandler(async (event: any) => {
   const { _id, to, link } = await readBody(event);
   const data: User | null = await userSchema.findById(_id);
+  const config = useRuntimeConfig();
 
   if (!data)
     return {
@@ -15,11 +16,11 @@ export default defineEventHandler(async (event: any) => {
   let fromPass: string = "";
 
   if (data.email.includes("audrius")) {
-    fromPass = process.env.NODEMAILER_PASS_AUDRIUS!;
+    fromPass = config.nodemailerPassAudrius!;
   } else if (data.email.includes("andrius")) {
-    fromPass = process.env.NODEMAILER_PASS_ANDRIUS!;
+    fromPass = config.nodemailerPassAndrius!;
   } else if (data.email.includes("pardavimai")) {
-    fromPass = process.env.NODEMAILER_PASS_HARIS!;
+    fromPass = config.nodemailerPassHaris!;
   }
 
   let htmlContent = `

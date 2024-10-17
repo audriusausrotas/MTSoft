@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
   const { _id, field, value } = await readBody(event);
+  const config = useRuntimeConfig();
 
   const data = await userSchema.findById(_id);
 
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (field === "name") data.lastName = value;
   if (field === "password") {
     if (value.trim() !== "") {
-      data.password = await bcrypt.hash(value, +process.env.SALT!);
+      data.password = await bcrypt.hash(value, +config.salt!);
     }
   }
 

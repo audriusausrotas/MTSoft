@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
 import { setCookie } from "h3";
 import jwt from "jsonwebtoken";
+import { useRuntimeConfig } from "#imports";
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const { email, password } = await readBody(event);
 
   if (!email || !password)
@@ -15,15 +17,11 @@ export default defineEventHandler(async (event) => {
     };
   if (email.length < 4)
     return {
-      success: false,
-      data: null,
-      message: "Elektroninis paštas per trumpas",
+      success: false, data: null, message: "Elektroninis paštas per trumpas",
     };
   if (password.length < 4)
     return {
-      success: false,
-      data: null,
-      message: "Slaptažodis per trumpas",
+      success: false, data: null, message: "Slaptažodis per trumpas",
     };
 
   const data = await userSchema.findOne({ email });
@@ -42,7 +40,7 @@ export default defineEventHandler(async (event) => {
         verified: data.verified,
         accountType: data.accountType,
       },
-      process.env.TOKEN_SECRET! as string
+      config.tokenSecret
     );
 
     data.password = "";
@@ -56,3 +54,4 @@ export default defineEventHandler(async (event) => {
     return { success: false, data: null, message: "Neteisingas slaptažodis" };
   }
 });
+

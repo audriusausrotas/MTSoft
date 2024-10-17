@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { Photo } from "~/data/interfaces";
 export default defineEventHandler(async (event) => {
   const { _id, id, category } = await readBody(event);
+  const config = useRuntimeConfig();
 
   let data: any;
 
@@ -32,9 +33,9 @@ export default defineEventHandler(async (event) => {
   await data.save();
 
   cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: config.cloudinaryCloudName,
+    api_key: config.cloudinaryApiKey,
+    api_secret: config.cloudinaryApiSecret,
   });
 
   cloudinary.uploader.destroy(id);

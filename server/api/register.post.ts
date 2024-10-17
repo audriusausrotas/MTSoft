@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
   const { email, password, retypePassword, username } = await readBody(event);
+  const config = useRuntimeConfig();
 
   if (!email || !password || !retypePassword || !username)
     return {
@@ -45,7 +46,7 @@ export default defineEventHandler(async (event) => {
   const user = new userSchema({
     username,
     email,
-    password: await bcrypt.hash(password, +process.env.SALT! as number),
+    password: await bcrypt.hash(password, +config.salt! as number),
   });
 
   const data = await user.save();

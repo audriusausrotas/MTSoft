@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: {
     enabled: true,
@@ -31,6 +30,15 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    salt: process.env.SALT,
+    tokenSecret: process.env.TOKEN_SECRET,
+    mongodbUri: process.env.MONGODB_URI,
+    nodemailerPassAudrius: process.env.NODEMAILER_PASS_AUDRIUS,
+    nodemailerPassAndrius: process.env.NODEMAILER_PASS_ANDRIUS,
+    nodemailerPassHaris: process.env.NODEMAILER_PASS_HARIS,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     public: {
       cloudApiKey: process.env.NUXT_PUBLIC_CLOUD_API_KEY,
       cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,
