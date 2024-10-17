@@ -30,17 +30,17 @@ jobs:
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_IP: ${{ secrets.VPS_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          CLOUDINARY_API_KEY: ${{secrect.CLOUDINARY_API_KEY}}
-          CLOUDINARY_API_SECRET: ${{secrect.CLOUDINARY_API_SECRET}}
-          CLOUDINARY_CLOUD_NAME: ${{secrect.CLOUDINARY_CLOUD_NAME}}
-          MONGODB_URI: ${{secrect.MONGODB_URI}}
-          NODEMAILER_PASS_ANDRIUS: ${{secrect.NODEMAILER_PASS_ANDRIUS}}
-          NODEMAILER_PASS_AUDRIUS: ${{secrect.NODEMAILER_PASS_AUDRIUS}}
-          NODEMAILER_PASS_HARIS: ${{secrect.NODEMAILER_PASS_HARIS}}
-          NUXT_PUBLIC_CLOUD_API_KEY: ${{secrect.NUXT_PUBLIC_CLOUD_API_KEY}}
-          NUXT_PUBLIC_CLOUD_NAME: ${{secrect.NUXT_PUBLIC_CLOUD_NAME}}
-          SALT: ${{secrect.SALT}}
-          TOKEN_SECRET: ${{secrect.TOKEN_SECRET:}}
+          CLOUDINARY_API_KEY: ${{secrects.CLOUDINARY_API_KEY}}
+          CLOUDINARY_API_SECRET: ${{secrects.CLOUDINARY_API_SECRET}}
+          CLOUDINARY_CLOUD_NAME: ${{secrects.CLOUDINARY_CLOUD_NAME}}
+          MONGODB_URI: ${{secrects.MONGODB_URI}}
+          NODEMAILER_PASS_ANDRIUS: ${{secrects.NODEMAILER_PASS_ANDRIUS}}
+          NODEMAILER_PASS_AUDRIUS: ${{secrects.NODEMAILER_PASS_AUDRIUS}}
+          NODEMAILER_PASS_HARIS: ${{secrects.NODEMAILER_PASS_HARIS}}
+          NUXT_PUBLIC_CLOUD_API_KEY: ${{secrects.NUXT_PUBLIC_CLOUD_API_KEY}}
+          NUXT_PUBLIC_CLOUD_NAME: ${{secrects.NUXT_PUBLIC_CLOUD_NAME}}
+          SALT: ${{secrects.SALT}}
+          TOKEN_SECRET: ${{secrects.TOKEN_SECRET:}}
 
         run: |
           echo y | plink -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
