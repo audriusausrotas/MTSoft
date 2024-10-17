@@ -1,0 +1,47 @@
+name: Deploy Nuxt 3 App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Use your desired Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the application
+        run: npm run build
+
+      - name: Deploy to VPS
+        env:
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_IP: ${{ secrets.VPS_IP }}
+          PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+          CLOUDINARY_API_KEY: ${{secrect.CLOUDINARY_API_KEY}}
+          CLOUDINARY_API_SECRET: ${{secrect.CLOUDINARY_API_SECRET}}
+          CLOUDINARY_CLOUD_NAME: ${{secrect.CLOUDINARY_CLOUD_NAME}}
+          MONGODB_URI: ${{secrect.MONGODB_URI}}
+          NODEMAILER_PASS_ANDRIUS: ${{secrect.NODEMAILER_PASS_ANDRIUS}}
+          NODEMAILER_PASS_AUDRIUS: ${{secrect.NODEMAILER_PASS_AUDRIUS}}
+          NODEMAILER_PASS_HARIS: ${{secrect.NODEMAILER_PASS_HARIS}}
+          NUXT_PUBLIC_CLOUD_API_KEY: ${{secrect.NUXT_PUBLIC_CLOUD_API_KEY}}
+          NUXT_PUBLIC_CLOUD_NAME: ${{secrect.NUXT_PUBLIC_CLOUD_NAME}}
+          SALT: ${{secrect.SALT}}
+          TOKEN_SECRET: ${{secrect.TOKEN_SECRET:}}
+
+        run: |
+          echo y | plink -pw $env:VPS_PASSWORD $env:VPS_USERNAME@$env:VPS_IP "cd $env:PROJECT_PATH && git pull && npm install && npm run build && pm2 restart MTSoft"
+
