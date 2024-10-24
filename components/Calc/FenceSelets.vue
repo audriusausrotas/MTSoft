@@ -26,12 +26,16 @@ const isOpen = ref<boolean>(false);
 watch(
   () => useCalculations.fences[props.index],
   (newValue) => {
-    needPoles.value = newValue.parts.includes("Stulpai");
-    isFenceBoards.value = verticals.includes(newValue.type as string);
-    isSegment.value = newValue.type.includes("Segmentas");
+    needPoles.value = newValue?.parts?.includes("Stulpai");
+    isFenceBoards.value = verticals.includes(newValue?.type as string);
+    isSegment.value = newValue?.type?.includes("Segmentas");
 
-    if (newValue.direction === "Horizontali" && !isFenceBoards.value && !isSegment.value) {
-      if (newValue.bindings === "Taip") {
+    if (
+      newValue?.direction === "Horizontali" &&
+      !isFenceBoards.value &&
+      !isSegment.value
+    ) {
+      if (newValue?.bindings === "Taip") {
         useCalculations.updateBindings(props.index, "Taip");
         needBindings.value = true;
       } else {
@@ -49,7 +53,9 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
+    <div
+      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
+    >
       <BaseSelectField
         label="Tvoros pusė"
         :values="fenceSide"
@@ -191,7 +197,10 @@ watch(
       />
     </div>
     <div>
-      <div class="flex gap-2 hover:cursor-pointer select-none" @click="isOpen = !isOpen">
+      <div
+        class="flex gap-2 hover:cursor-pointer select-none"
+        @click="isOpen = !isOpen"
+      >
         <p class="text-md">Papildoma Informacija</p>
         <NuxtImg
           src="icons/arrowDown.svg"

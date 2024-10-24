@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Project } from "~/data/interfaces";
-
 const props = defineProps(["project", "index", "length", "archive"]);
 const useProjects = useProjectsStore();
 const useResults = useResultsStore();
@@ -45,9 +43,11 @@ const editHandler = async () => {
     useProjects.addProject(response.data);
   }
 
+  console.log(response.data);
   useCalculations.setProject({
     client: response.data.client,
     fenceMeasures: response.data.fenceMeasures,
+    retail: response.data.retail,
   });
   useResults.setProject(response.data);
   useBackup.addBackup(response.data.results, response.data.works);

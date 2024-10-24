@@ -36,7 +36,9 @@ const retailHandler = (value: string) => {
 
 <template>
   <div class="flex w-full flex-col">
-    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
+    <div
+      class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b"
+    >
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
       <BaseButton name="Iš lazerio" @click="modalOpen = true" />
       <BaseModal
@@ -106,7 +108,7 @@ const retailHandler = (value: string) => {
           class="border border-dark-light w-full h-96 p-2 rounded-md"
         />
       </BaseModal>
-      <BaseButton name="Skaičiuoti sąmatą" @click="calculateResultsHandler" />
+      <BaseButton name="skaičiuoti sąmatą" @click="calculateResultsHandler" />
       <BaseSelectField
         :values="['Didmena', 'Mažmena']"
         id="parts"

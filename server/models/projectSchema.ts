@@ -11,8 +11,7 @@ export const projectSchema = defineMongooseModel<Project>(
     },
     retail: {
       type: Boolean,
-      required: false,
-      default: false,
+      required: true,
     },
     fenceMeasures: {
       type: [Object],

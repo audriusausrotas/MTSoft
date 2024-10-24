@@ -13,7 +13,9 @@ const users = [
       ?.map((item) => {
         if (user?.users && item?.orderNumber) {
           const matchedUser = user.users.find((usr) =>
-            usr?.username?.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+            usr?.username
+              ?.toLowerCase()
+              .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
           );
           return matchedUser?.username;
         }
@@ -25,18 +27,29 @@ const users = [
 
 const statusFilters = ["Visi", ...status];
 
-const getBackup = async () => {
-  const response: any = await $fetch("/api/backup");
+const newProjectHandler = () => {
+  const useResults = useResultsStore();
+  const useCalculations = useCalculationsStore();
+  const useBackup = useBackupStore();
+
+  useCalculations.clearAll();
+  useResults.clearAll();
+  useProjects.clearSelected();
+  useBackup.clearBackup();
+
+  navigateTo("/naujas");
 };
+
+// const getBackup = async () => {
+//   const response: any = await $fetch("/api/backup");
+// };
 </script>
 
 <template>
   <div class="flex flex-col items-center gap-8">
     <div class="flex w-full gap-4 items-center flex-wrap justify-center">
       <div class="flex gap-4 items-end justify-center flex-wrap">
-        <BaseButton>
-          <NuxtLink to="/naujas">Naujas projektas</NuxtLink>
-        </BaseButton>
+        <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
         <BaseInput
           placeholder="Paieška"
           label="Paieška"

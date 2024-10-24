@@ -26,14 +26,17 @@ export default function calculateResults() {
       item.parts !== "Tik Stulpai" &&
       item.parts !== "Be Bortelių Ir Stulpų" &&
       item.anchoredPoles === "Ne";
-    const hasCrossbars: boolean = verticals.some((vertical) => vertical === item.type);
+    const hasCrossbars: boolean = verticals.some(
+      (vertical) => vertical === item.type
+    );
 
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       if (!onlyServices) fenceTemp = [...(temp || [])];
       if (!onlyParts) {
-        if (item.bindings === "Taip") results.addTotalFenceWithBindings(item.totalQuantity);
+        if (item.bindings === "Taip")
+          results.addTotalFenceWithBindings(item.totalQuantity);
         else results.addTotalFence(item.totalQuantity);
       }
     }
@@ -42,7 +45,8 @@ export default function calculateResults() {
     let lastBindingHeight: number = 0;
 
     item.measures.forEach((measure) => {
-      const isFence = !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
+      const isFence =
+        !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
 
       // calculate gates
       if (measure.gates.exist) {
@@ -82,13 +86,16 @@ export default function calculateResults() {
 
       // calculate total elements
       if (!isSegment) {
-        if (!onlyServices) results.addTotalElements(measure.elements, item.color, item.type);
+        if (!onlyServices)
+          results.addTotalElements(measure.elements, item.color, item.type);
 
         // calculate bindings
 
-        if (item.direction === "Horizontali" && item.bindings === "Taip" && !measure.gates.exist) {
-          if (!onlyServices) results.addBindingsLength(measure.height, item.color);
-          if (!onlyServices && !useCalculations.retail) lastBindingHeight = measure.height;
+        if (item.direction === "Horizontali" && item.bindings === "Taip") {
+          if (!onlyServices)
+            results.addBindingsLength(measure.height, item.color);
+          if (!onlyServices && !useCalculations.retail)
+            lastBindingHeight = measure.height;
         }
       }
 
@@ -96,7 +103,9 @@ export default function calculateResults() {
       if (useCalculations.retail) {
         if (item.direction !== "Horizontali" || measure.gates.exist) return;
         const type =
-          item.bindings === "Taip" ? defaultValues.retailSingleLeg : defaultValues.retailDoubleLeg;
+          item.bindings === "Taip"
+            ? defaultValues.retailSingleLeg
+            : defaultValues.retailDoubleLeg;
         results.addRetailLeg(measure.height, item.color, type);
       }
 
@@ -122,27 +131,16 @@ export default function calculateResults() {
 
       // calculate poles
       if (polesNeeded) {
-        let poleHeight = 0;
-
-        if (isSegment) {
-          if (measure.height < 130) {
-            poleHeight = 2.4;
-          } else {
-            poleHeight = 3;
-          }
-        } else {
-          poleHeight = 3;
-        }
-
         if (item.anchoredPoles === "Taip") {
           // count anchored poles
           if (!measure.gates.exist) {
-            if (!onlyServices) results.addAnchoredPoles(item.color, poleHeight);
-
-            if (results.totalAnchoredPoles === 0 && !onlyParts) results.addTotalAnchoredPoles();
-            if (!onlyParts) results.addTotalAnchoredPoles();
-
-            isTogether = false;
+            if (isFence) {
+              if (!onlyServices) results.addAnchoredPoles(item.color, 3);
+              if (results.totalAnchoredPoles === 0 && !onlyParts)
+                results.addTotalAnchoredPoles();
+              if (!onlyParts) results.addTotalAnchoredPoles();
+              isTogether = false;
+            }
           } else {
             if (!isTogether) {
               if (!onlyServices) results.removeAnchoredPole(item.color);
@@ -158,12 +156,13 @@ export default function calculateResults() {
         } else {
           //count regular poles
           if (!measure.gates.exist) {
-            if (!onlyServices) results.addPoles(item.color, poleHeight);
-
-            if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
-            if (!onlyParts) results.addTotalPoles();
-
-            isTogether = false;
+            if (isFence) {
+              if (!onlyServices) results.addPoles(item.color, 3);
+              if (results.totalPoles === 0 && !onlyParts)
+                results.addTotalPoles();
+              if (!onlyParts) results.addTotalPoles();
+              isTogether = false;
+            }
           } else {
             //////////////////////////////////////////////
             //         cia rasom if (!isFence) return   <-- istestuot

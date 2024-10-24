@@ -24,8 +24,6 @@ export default function getPriceItem(name: string) {
       return returnProduct;
     }
   } else {
-    console.log(name);
-    console.log(findProduct());
     return findProduct();
   }
 

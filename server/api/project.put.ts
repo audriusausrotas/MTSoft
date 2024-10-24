@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     priceVAT,
     priceWithDiscount,
     discount,
+    retail,
   } = await readBody(event);
 
   const currentDate = new Date();
@@ -23,7 +24,8 @@ export default defineEventHandler(async (event) => {
   const dateExparation = expirationDate.toISOString();
 
   const orderExist = await projectSchema.findById({ _id });
-  if (!orderExist) return { success: false, data: null, message: "Projektas nerastas" };
+  if (!orderExist)
+    return { success: false, data: null, message: "Projektas nerastas" };
 
   orderExist.client = client;
   orderExist.fenceMeasures = fenceMeasures;
@@ -39,6 +41,7 @@ export default defineEventHandler(async (event) => {
   orderExist.discount = discount;
   orderExist.dateCreated = dateCreated;
   orderExist.dateExparation = dateExparation;
+  orderExist.retail = retail;
 
   const data = await orderExist.save();
   return { success: true, data: data, message: "Projektas išsaugotas" };
