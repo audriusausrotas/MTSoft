@@ -27,7 +27,7 @@ export default defineEventHandler(async (event: any) => {
   <html>
 <body>
     <p style="font-weight: 500"">Laba diena.</p> 
-    <p style="font-weight: 500"">Tvoros pasiūlymą galite peržiūrėti paspaudę and žemiau esančios nuorodos:</p>
+    <p style="font-weight: 500"">Tvoros pasiūlymą galite peržiūrėti paspaudę ant žemiau esančios nuorodos:</p>
     <a href="https://modernitvora.vercel.app/pasiulymas/${link}" style="font-size: large; font-weight: 500"> Tvoros pasiūlymas</a>
     <br/>
     <br/>
