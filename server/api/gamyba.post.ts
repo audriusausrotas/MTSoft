@@ -85,6 +85,7 @@ export default defineEventHandler(async (event) => {
         if (!isBindings) {
           addBindings(color, measure.height, "Koja Dviguba " + legWidth, 2);
         } else {
+          // if first element is fence, adds one leg
           if (index === 0) {
             if (notSpecial) {
               lastHeight = measure.height;
@@ -94,6 +95,10 @@ export default defineEventHandler(async (event) => {
                 "Koja vienguba " + legWidth,
                 1
               );
+            } else {
+              if (measure.laiptas.exist) wasStep = true;
+              if (measure.kampas.exist) wasCorner = true;
+              if (measure.gates.exist) wasGates = true;
             }
             return;
           }
