@@ -36,6 +36,7 @@ export interface Project {
 }
 
 export interface Client {
+  _id?: string;
   address: string;
   username: string;
   phone: string;

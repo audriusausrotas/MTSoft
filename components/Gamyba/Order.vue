@@ -6,6 +6,8 @@ const useUser = useUserStore();
 const router = useRouter();
 
 const deleteHandler = async (): Promise<void> => {
+  confirm("Ar tikrai norite ištrinti projektą?");
+
   if (useUser.user?.accountType !== "Administratorius") {
     setError("Ištrinti gali tik administratorius");
     return;
@@ -50,9 +52,20 @@ const clickHandler = () => {
           : 'bg-green-500'
       "
     />
-    <BaseInfoField class="pointer-events-none" :name="order?.client?.address" width="w-96" />
-    <BaseInfoField class="pointer-events-none" :name="order?.creator?.username" width="w-24" />
-    <div @click.stop="deleteHandler" class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
+    <BaseInfoField
+      class="pointer-events-none"
+      :name="order?.client?.address"
+      width="w-96"
+    />
+    <BaseInfoField
+      class="pointer-events-none"
+      :name="order?.creator?.username"
+      width="w-24"
+    />
+    <div
+      @click.stop="deleteHandler"
+      class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1"
+    >
       <NuxtImg
         src="/icons/delete.svg"
         width="24"

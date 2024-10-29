@@ -79,6 +79,7 @@ const postoneHandler = async () => {
 };
 
 const deleteHandler = async () => {
+  confirm("Ar tikrai norite ištrinti gaminį?");
   const response: any = await $fetch("/api/bindings", {
     method: "delete",
     body: { _id: props._id, bindingId: props.binding.id },

@@ -1,9 +1,6 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>
-    <ClientsNew />
-    <ClientsList />
-  </div>
+  <div></div>
 </template>
 <style scoped></style>

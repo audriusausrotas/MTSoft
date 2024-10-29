@@ -10,6 +10,8 @@ const clickHandler = () => {
 };
 
 const deleteHandler = async () => {
+  confirm("Ar tikrai norite ištrinti projektą?");
+
   const response: any = await $fetch("/api/gates", {
     method: "delete",
     body: { _id: props.gate._id },
@@ -30,7 +32,11 @@ const deleteHandler = async () => {
       class="flex gap-1 sm:gap-4 justify-evenly gap-y-4 pb-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput :name="props.gate.orderNr" width="w-36 order-2" :disable="true" />
+      <BaseInput
+        :name="props.gate.orderNr"
+        width="w-36 order-2"
+        :disable="true"
+      />
       <BaseInput
         :name="props.gate.client.address"
         width="w-full md:w-80 order-6 md:order-3"
@@ -53,7 +59,9 @@ const deleteHandler = async () => {
       </div>
 
       <BaseInfoField
-        v-if="useUser.user?.accountType === 'Administratorius' && props.gate.manager"
+        v-if="
+          useUser.user?.accountType === 'Administratorius' && props.gate.manager
+        "
         :name="props.gate.manager.split('@')[0]"
         width="w-32 order-4 "
         class="capitalize"

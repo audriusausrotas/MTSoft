@@ -63,6 +63,7 @@ const filterByIndex = () => {
 };
 
 const deleteHandler = async () => {
+  confirm("Ar tikrai norite ištrinti tvorą?");
   const response: any = await $fetch("/api/gamybaFence", {
     method: "delete",
     body: { _id: props._id, index: props.fenceIndex },
@@ -100,7 +101,7 @@ watch(
         {{ props.fence.side }} - {{ props.fence.type }} -
         {{ props.fence.color }}
       </p>
-      <div class="hover:cursor-pointer" @click="deleteHandler">
+      <div v-if="isAdmin" class="hover:cursor-pointer" @click="deleteHandler">
         <NuxtImg
           width="20"
           height="20"

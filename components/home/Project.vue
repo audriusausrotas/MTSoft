@@ -11,6 +11,8 @@ const gateOrdered = ref(false);
 const { setError, setIsError } = useError();
 
 const deleteHandler = async (): Promise<void> => {
+  confirm("Ar tikrai norite ištrinti projektą?");
+
   const response: any = await $fetch(
     props.archive ? "/api/archive" : "/api/project",
     {

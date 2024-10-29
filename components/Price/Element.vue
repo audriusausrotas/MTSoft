@@ -18,6 +18,8 @@ const editHandler = (): void => {
 };
 
 const deleteHandler = async (): Promise<void> => {
+  confirm("Ar tikrai norite ištrinti produktą?");
+
   const data: ResponseUser = await $fetch("/api/product", {
     method: "delete",
     body: { _id: props.product._id },
