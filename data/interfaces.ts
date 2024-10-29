@@ -32,6 +32,7 @@ export interface Project {
   dateCreated: string;
   dateExparation: string;
   files: Photo[];
+  comments: Comment[];
 }
 
 export interface Client {

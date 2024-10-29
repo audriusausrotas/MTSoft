@@ -1,10 +1,13 @@
--<script setup lang="ts">
+-
+<script setup lang="ts">
 import { GamybaStatus } from "~/data/initialValues";
 import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
 const useUser = useUserStore();
 const route = useRoute();
+
+const isAdmin = useUser.user?.accountType === "Administratorius";
 const order: any = computed(() => {
   return useGamyba.gamybaList.find((item) => item._id === route.params.id);
 });
@@ -225,7 +228,11 @@ const bindingPrintHandler = () => {
     <div class="flex gap-4 items-end flex-wrap">
       <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." />
       <BaseInput :name="order?.client.address" width="w-96" label="Adresas" />
-      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" />
+      <BaseInput
+        :name="order?.creator.username"
+        width="w-28"
+        label="Vadybininkas"
+      />
 
       <BaseSelectField
         label="Statusas"
@@ -242,7 +249,11 @@ const bindingPrintHandler = () => {
       <!-- <BaseButton name="spausdinti lipduką" @click="printHandler" /> -->
     </div>
 
-    <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
+    <BaseGalleryElement
+      :_id="order?._id"
+      :files="order?.files"
+      category="production"
+    />
 
     <BaseComment
       :commentsArray="order?.aditional"
@@ -267,25 +278,53 @@ const bindingPrintHandler = () => {
     <div class="flex flex-col select-none">
       <div class="flex gap-4 items-center mb-2">
         <p class="text-2xl font-bold">Apkaustai</p>
-        <button
-          class="font-semibold border px-4 py-1 rounded-md bg-dark-full hover:bg-red-600 text-white"
-          @click="bindingPrintHandler"
-        >
-          Spausdinti lipduką
-        </button>
       </div>
-      <div class="flex w-fit border-y items-center h-8 border-black select-none">
-        <p class="w-10 border-x border-black h-full flex justify-center items-center">Nr</p>
-        <p class="w-48 border-r border-black h-full flex justify-center items-center">tipas</p>
-        <p class="w-16 border-r border-black h-full flex justify-center items-center">Ilgis</p>
-        <p class="w-16 border-r border-black h-full flex justify-center items-center">Kiekis</p>
-        <p class="w-16 border-r border-black h-full flex justify-center items-center">spalva</p>
-        <p class="w-24 border-r border-black h-full flex justify-center items-center">Išpjauta</p>
-        <p class="w-24 border-r border-black h-full flex justify-center items-center">Pagaminta</p>
-        <p class="w-24 border-r border-black h-full flex justify-center items-center print:hidden">
+      <div
+        class="flex w-fit border-y items-center h-8 border-black select-none"
+      >
+        <p
+          class="w-10 border-x border-black h-full flex justify-center items-center"
+        >
+          Nr
+        </p>
+        <p
+          class="w-48 border-r border-black h-full flex justify-center items-center"
+        >
+          tipas
+        </p>
+        <p
+          class="w-16 border-r border-black h-full flex justify-center items-center"
+        >
+          Ilgis
+        </p>
+        <p
+          class="w-16 border-r border-black h-full flex justify-center items-center"
+        >
+          Kiekis
+        </p>
+        <p
+          class="w-16 border-r border-black h-full flex justify-center items-center"
+        >
+          spalva
+        </p>
+        <p
+          class="w-24 border-r border-black h-full flex justify-center items-center"
+        >
+          Išpjauta
+        </p>
+        <p
+          class="w-24 border-r border-black h-full flex justify-center items-center"
+        >
+          Pagaminta
+        </p>
+        <p
+          v-if="isAdmin"
+          class="w-24 border-r border-black h-full flex justify-center items-center print:hidden"
+        >
           Veiksmai
         </p>
         <p
+          v-if="isAdmin"
           class="w-10 border-r border-black h-full flex justify-center items-center print:hidden"
         ></p>
       </div>
@@ -297,7 +336,14 @@ const bindingPrintHandler = () => {
         :index="index"
         :_id="order._id"
       />
-      <BaseButton name="Pridėti naują" class="mt-2" @click="newBindingHandler" />
+      <div class="flex gap-4 flex-wrap mt-2">
+        <BaseButton
+          v-if="isAdmin"
+          @click="newBindingHandler"
+          name="Pridėti naują"
+        />
+        <BaseButton @click="bindingPrintHandler" name="Spausdinti lipduką" />
+      </div>
     </div>
   </div>
 </template>

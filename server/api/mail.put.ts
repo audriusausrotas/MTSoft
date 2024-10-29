@@ -2,8 +2,8 @@ import type { User } from "~/data/interfaces";
 import nodemailer from "nodemailer";
 
 export default defineEventHandler(async (event: any) => {
-  const { _id, to, message, title } = await readBody(event);
-  const data: User | null = await userSchema.findById(_id);
+  const { userId, to, message, title } = await readBody(event);
+  const data: User | null = await userSchema.findById(userId);
   const config = useRuntimeConfig();
 
   if (!data)

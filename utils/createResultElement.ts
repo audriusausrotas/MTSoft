@@ -98,7 +98,7 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (verticals.includes(item.type)) {
+  if (verticals.includes(item.type) && !useBackup.backupExist) {
     newPrice = +((product.price * item.height) / 100).toFixed(2);
     newCost = +((product.cost * item.height) / 100).toFixed(2);
   }

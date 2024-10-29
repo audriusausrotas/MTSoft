@@ -1,9 +1,9 @@
 import type { User } from "~/data/interfaces";
 
 export default defineEventHandler(async (event: any) => {
-  const { _id, value, userId, changeType } = await readBody(event);
+  const { selectedUserId, value, userId, changeType } = await readBody(event);
 
-  const data: User | null = await userSchema.findById(_id);
+  const data: User | null = await userSchema.findById(userId);
 
   if (data?.accountType !== "Administratorius")
     return {
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event: any) => {
       message: "Vartotojas nerastas",
     };
 
-  const selectedUser: any = await userSchema.findById(userId);
+  const selectedUser: any = await userSchema.findById(selectedUserId);
 
   if (!selectedUser)
     return {

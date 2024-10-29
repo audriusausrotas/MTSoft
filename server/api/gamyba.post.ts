@@ -83,7 +83,8 @@ export default defineEventHandler(async (event) => {
           !measure.gates.exist;
 
         if (!isBindings) {
-          addBindings(color, measure.height, "Koja Dviguba " + legWidth, 2);
+          if (notSpecial)
+            addBindings(color, measure.height, "Koja Dviguba " + legWidth, 2);
         } else {
           // if first element is fence, adds one leg
           if (index === 0) {

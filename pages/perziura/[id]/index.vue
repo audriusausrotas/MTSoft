@@ -15,7 +15,9 @@ const isOpenGates = ref<boolean>(false);
 const isOpenGates2 = ref<boolean>(false);
 const isOpenMontavimas = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
-const offer = useProjects.projects.find((item) => item._id === route.params.id);
+const offer = computed(() =>
+  useProjects.projects.find((item) => item._id === route.params.id)
+);
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
 const provider = ref<string>("");
@@ -32,7 +34,7 @@ const workers = useUsers.users
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
     method: "patch",
-    body: { _id: offer!._id, value },
+    body: { _id: offer!.value!._id, value },
   });
   if (response.success) {
     useProjects.updateStatus(response.data);
@@ -53,7 +55,7 @@ const sendEmailHandler = async () => {
   isLoading.value = true;
   const response: any = await $fetch("/api/mail", {
     method: "post",
-    body: { to: offer?.client.email, link: offer?._id },
+    body: { to: offer?.value?.client.email, link: offer?.value?._id },
   });
   if (response.success) {
     setIsError(false);
@@ -68,12 +70,12 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   isLoading.value = true;
   const response: any = await $fetch("/api/gates", {
     method: "post",
-    body: { _id: offer?._id, value: provider.value, manager: name },
+    body: { _id: offer?.value?._id, value: provider.value, manager: name },
   });
   if (response.success) {
     useGates.addGate(response.data);
 
-    const link = `https://modernitvora.vercel.app/vartai/${offer?._id}`;
+    const link = `https://modernitvora.vercel.app/vartai/${offer?.value?._id}`;
 
     const emailResponse: any = await $fetch("/api/mail", {
       method: "put",
@@ -103,7 +105,7 @@ const gateCancelHadnler = async (): Promise<void> => {
   isLoading.value = true;
   const response: any = await $fetch("/api/gates", {
     method: "delete",
-    body: { _id: offer?._id },
+    body: { _id: offer?.value?._id },
   });
   if (response.success) {
     gateOrdered.value = false;
@@ -123,7 +125,7 @@ const cancelHandler = () => {
 const changeCreatorHandler = async (value: string) => {
   const response: any = await $fetch("/api/projectCreator", {
     method: "PATCH",
-    body: { _id: offer!._id, value },
+    body: { _id: offer!.value!._id, value },
   });
   if (response.success) {
     useProjects.changeCreator(response.data);
@@ -138,11 +140,11 @@ const advanceHandler = async () => {
   isLoading.value = true;
   const response: any = await $fetch("/api/advance", {
     method: "post",
-    body: { _id: offer!._id, advance: advance.value },
+    body: { _id: offer!.value?._id, advance: advance.value },
   });
   if (response.success) {
     useProjects.changeAdvance(response.data);
-    offer!.advance = advance.value;
+    offer!.value!.advance = advance.value;
     setIsError(false);
     setError(response.message);
   } else {
@@ -155,7 +157,7 @@ const advanceHandler = async () => {
 const orderFinishHandler = async () => {
   const response: any = await $fetch("/api/project", {
     method: "PATCH",
-    body: { _id: offer!._id, value: "Baigtas" },
+    body: { _id: offer!.value!._id, value: "Baigtas" },
   });
   if (response.success) {
     useProjects.updateStatus(response.data);
@@ -167,10 +169,10 @@ const orderFinishHandler = async () => {
 
   const archieveResponse: any = await $fetch("/api/archive", {
     method: "POST",
-    body: { _id: offer!._id },
+    body: { _id: offer!.value!._id },
   });
   if (archieveResponse.success) {
-    useProjects.moveToArchive(offer!);
+    useProjects.moveToArchive(offer!.value!);
     setIsError(false);
     setError(archieveResponse.message);
     navigateTo("/");
@@ -182,7 +184,7 @@ const orderFinishHandler = async () => {
 const gamybaHandler = async () => {
   const response: any = await $fetch("/api/gamyba", {
     method: "post",
-    body: { _id: offer!._id },
+    body: { _id: offer!.value!._id },
   });
   if (response.success) {
     setIsError(false);
@@ -196,7 +198,7 @@ const gamybaHandler = async () => {
 const montavimasHandler = async (value: string) => {
   const response: any = await $fetch("/api/montavimas", {
     method: "post",
-    body: { _id: offer!._id, worker: value },
+    body: { _id: offer!.value!._id, worker: value },
   });
   if (response.success) {
     useMontavimas.addMontavimas(response.data);
@@ -211,10 +213,45 @@ const montavimasHandler = async (value: string) => {
 const photosHandler = async (photo: Photo) => {
   const response: any = await $fetch("/api/uploadPhotos", {
     method: "post",
-    body: { photo, category: "projects", _id: offer!._id },
+    body: { photo, category: "projects", _id: offer!.value!._id },
   });
   if (response.success) {
-    useProjects.addPhoto(offer!._id, photo);
+    useProjects.addPhoto(offer!.value!._id, photo);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const addComment = async (value: any) => {
+  const response: any = await $fetch("/api/projectComments", {
+    method: "post",
+    body: {
+      _id: offer?.value!._id,
+      comment: value,
+      username: useUsers.user?.username,
+    },
+  });
+  if (response.success) {
+    useProjects.updateStatus(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const deleteComment = async (value: any) => {
+  const response: any = await $fetch("/api/projectComments", {
+    method: "delete",
+    body: {
+      _id: offer?.value!._id,
+      comment: value,
+    },
+  });
+  if (response.success) {
+    useProjects.updateStatus(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -223,15 +260,19 @@ const photosHandler = async (photo: Photo) => {
 };
 
 const checkGates = () => {
-  gateOrdered.value = useGates.gates.some((item) => item._id.toString() === offer?._id.toString());
+  gateOrdered.value = useGates.gates.some(
+    (item) => item._id.toString() === offer?.value?._id.toString()
+  );
 };
 
 checkGates();
 
 const gateExist =
-  offer?.gates.length &&
-  offer?.gates.length > 0 &&
-  offer?.gates.some((item) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai");
+  offer?.value?.gates.length &&
+  offer?.value?.gates.length > 0 &&
+  offer?.value?.gates.some(
+    (item) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai"
+  );
 
 watch(
   useGates.gates,
@@ -247,13 +288,29 @@ watch(
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
-          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
-          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.orderNumber"
+            label="Užsakymo nr"
+          />
+          <BaseInput
+            label="Avansas"
+            :name="offer?.advance + ' €'"
+            :disable="true"
+          />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.username"
+            label="klientas"
+          />
         </div>
 
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.address"
+            label="adresas"
+          />
           <a :href="'tel:' + offer?.client?.phone">
             <BaseInput
               :disable="true"
@@ -284,7 +341,10 @@ watch(
               name="Paliktas avansas"
               @click="isOpenAdvance = !isOpenAdvance"
             />
-            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
+            <div
+              v-else-if="isOpenAdvance"
+              class="flex overflow-hidden border rounded-lg"
+            >
               <input
                 placeholder="Avansas"
                 type="number"
@@ -403,11 +463,22 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
+        <BaseGalleryElement
+          :_id="offer?._id"
+          :files="offer?.files"
+          category="projects"
+        />
       </div>
     </div>
+    <BaseComment
+      :commentsArray="offer?.comments"
+      :id="offer?._id"
+      @onSave="(value) => addComment(value)"
+      @onDelete="(id, comment) => deleteComment(comment)"
+    />
 
     <ResultTotalElement :results="offer" />
+
     <PreviewMain :offer="offer" />
   </div>
 </template>

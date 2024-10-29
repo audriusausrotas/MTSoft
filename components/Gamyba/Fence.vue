@@ -11,7 +11,9 @@ const props = defineProps([
 
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
+const useUser = useUserStore();
 
+const isAdmin = useUser.user?.accountType === "Administratorius";
 const filterIndex = ref<boolean>(false);
 const filterLength = ref<boolean>(false);
 
@@ -172,11 +174,13 @@ watch(
         Veiksmai
       </p>
       <p
+        v-if="isAdmin"
         class="w-24 flex items-center justify-center h-full border-r border-black print:hidden"
       >
         Veiksmai
       </p>
       <p
+        v-if="isAdmin"
         class="w-10 flex items-center justify-center h-full border-r border-black print:hidden"
       ></p>
     </div>
@@ -195,6 +199,7 @@ watch(
         :clientAddress="props.clientAddress"
       />
       <BaseButton
+        v-if="isAdmin"
         name="Pridėti naują"
         class="mt-2"
         @click="newMeasureHandler"

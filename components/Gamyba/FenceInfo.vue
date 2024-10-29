@@ -65,10 +65,6 @@ const saveHandler = async (field: string) => {
 };
 
 const postoneHandler = async () => {
-  if (!isAdmin) {
-    setError("Ištrinti gali tik administratorius");
-    return;
-  }
   const response: any = await $fetch("/api/gamyba", {
     method: "patch",
     body: {
@@ -91,11 +87,6 @@ const postoneHandler = async () => {
 };
 
 const deleteHandler = async () => {
-  if (!isAdmin) {
-    setError("Ištrinti gali tik administratorius");
-    return;
-  }
-
   const response: any = await $fetch("/api/gamybaMeasure", {
     method: "delete",
     body: {
@@ -240,6 +231,7 @@ watch(length, (newLength) => {
     </p>
     <p class="flex-1 h-full border-r border-black"></p>
     <div
+      v-if="isAdmin"
       class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
       @click="deleteHandler"
     >
@@ -279,6 +271,7 @@ watch(length, (newLength) => {
     </p>
     <p class="flex-1 h-full border-r border-black"></p>
     <div
+      v-if="isAdmin"
       class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
       @click="deleteHandler"
     >
@@ -430,6 +423,7 @@ watch(length, (newLength) => {
       Spausdinti
     </button>
     <button
+      v-if="isAdmin"
       class="flex items-center justify-center h-full border-r border-black w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
       :class="{ 'bg-red-full text-white': postone }"
       @click="postoneHandler"
@@ -437,6 +431,7 @@ watch(length, (newLength) => {
       Negaminti
     </button>
     <div
+      v-if="isAdmin"
       class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
       @click="deleteHandler"
     >

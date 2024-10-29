@@ -46,6 +46,11 @@ export const projectSchema = defineMongooseModel<Project>(
       required: false,
       default: [],
     },
+    comments: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
     creator: Object,
     orderNumber: String,
     totalPrice: Number,

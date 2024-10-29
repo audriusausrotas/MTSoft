@@ -32,11 +32,11 @@ const deleteHandler = (): void => {
       <div class="flex flex-wrap gap-10 m-auto">
         <p>
           Bendras Ilgis:
-          {{ useCalculations.fences[props.index].totalLength || 0 }} m
+          {{ useCalculations.fences[props.index]?.totalLength || 0 }} m
         </p>
         <p class="flex">
           Kvadratiniai metrai:
-          {{ useCalculations.fences[props.index].totalQuantity || 0 }} m<span
+          {{ useCalculations.fences[props.index]?.totalQuantity || 0 }} m<span
             class="text-[10px] font-semibold"
             >2</span
           >

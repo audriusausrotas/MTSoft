@@ -1,16 +1,16 @@
 import type { User } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
-  const { _id } = await readBody(event);
+  const { userId } = await readBody(event);
 
-  if (!_id)
+  if (!userId)
     return {
       success: false,
       data: null,
       message: "Žetonas neegzistuoja",
     };
 
-  const data: User | null = await userSchema.findById({ _id });
+  const data: User | null = await userSchema.findById(userId);
 
   if (!data)
     return {

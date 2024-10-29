@@ -2,9 +2,9 @@ import type { User } from "~/data/interfaces";
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event: any) => {
-  const { _id, password, userId } = await readBody(event);
+  const { selectedUserId, password, userId } = await readBody(event);
 
-  const data: User | null = await userSchema.findById(_id);
+  const data: User | null = await userSchema.findById(userId);
 
   if (data?.accountType !== "Administratorius")
     return {
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event: any) => {
       message: "Vartotojas nerastas",
     };
 
-  const selectedUser: any = await userSchema.findById(userId);
+  const selectedUser: any = await userSchema.findById(selectedUserId);
 
   if (!selectedUser)
     return {
@@ -32,11 +32,11 @@ export default defineEventHandler(async (event: any) => {
   const isPasswordValid = await bcrypt.compare(password, data.password);
 
   if (isPasswordValid) {
-    await userSchema.findByIdAndDelete(userId);
+    await userSchema.findByIdAndDelete(selectedUserId);
 
     return {
       success: true,
-      data: userId,
+      data: selectedUserId,
       message: "Pakeitimai atlikti",
     };
   } else {

@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
-  const { _id, field, value } = await readBody(event);
+  const { userId, field, value } = await readBody(event);
   const config = useRuntimeConfig();
 
-  const data = await userSchema.findById(_id);
+  const data = await userSchema.findById(userId);
 
   if (!data)
     return {

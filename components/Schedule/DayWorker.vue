@@ -49,6 +49,7 @@ const selectHandler = (value: Project) => {
   modalOpen.value = false;
   selectedJobs.value.push({ _id: value._id, address: value.client.address });
   canSave.value = true;
+  searchValue.value = "";
 };
 
 const deleteHandler = (id: string) => {

@@ -43,7 +43,6 @@ const editHandler = async () => {
     useProjects.addProject(response.data);
   }
 
-  console.log(response.data);
   useCalculations.setProject({
     client: response.data.client,
     fenceMeasures: response.data.fenceMeasures,
