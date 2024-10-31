@@ -7,7 +7,7 @@ export const useScheduleStore = defineStore("schedule", {
 
   actions: {
     addSchedules(schedules: Schedule[]) {
-      this.schedule = schedules;
+      this.schedule = [...schedules];
     },
   },
 

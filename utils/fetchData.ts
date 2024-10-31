@@ -21,7 +21,10 @@ export async function fetchGates() {
 
 export async function fetchGate(id: any) {
   const useGates = useGateStore();
-  const { data }: any = await useFetch("/api/gate", { method: "post", body: { _id: id } });
+  const { data }: any = await useFetch("/api/gate", {
+    method: "post",
+    body: { _id: id },
+  });
   if (data.value.success) {
     useGates.addSelectedGate(data.value.data);
   }
@@ -37,7 +40,10 @@ export async function fetchGamybas() {
 
 export async function fetchGamyba(id: any) {
   const useGamyba = useGamybaStore();
-  const { data }: any = await useFetch("/api/gamyb", { method: "post", body: { _id: id } });
+  const { data }: any = await useFetch("/api/gamyb", {
+    method: "post",
+    body: { _id: id },
+  });
   if (data.value.success) {
     useGamyba.clearGamyba();
     useGamyba.addOne(data.value.data);
@@ -54,7 +60,10 @@ export async function fetchMontavimus() {
 
 export async function fetchMontavima(id: any) {
   const useMontavimas = useMontavimasStore();
-  const { data }: any = await useFetch("/api/montavima", { method: "post", body: { _id: id } });
+  const { data }: any = await useFetch("/api/montavima", {
+    method: "post",
+    body: { _id: id },
+  });
   if (data.value.success) {
     useMontavimas.addOne(data.value.data);
   }
@@ -70,7 +79,10 @@ export async function fetchProjects() {
 
 export async function fetchProject(id: any) {
   const useProjects = useProjectsStore();
-  const { data }: any = await useFetch("/api/projectSingle", { method: "post", body: { _id: id } });
+  const { data }: any = await useFetch("/api/projectSingle", {
+    method: "post",
+    body: { _id: id },
+  });
   if (data.value.success) {
     useProjects.addProject(data.value.data);
   }
@@ -89,13 +101,16 @@ export async function fetchUsers() {
   if (useUser.users.length > 0) return;
   const { data }: any = await useFetch("/api/users");
   if (data.value.success) {
-    useUser.setUsers([...data.value.data]);
+    useUser.setUsers(data.value.data);
   }
 }
 
 export async function fetchArchive(id: any) {
   const useProjects = useProjectsStore();
-  const { data }: any = await useFetch("/api/archive", { method: "PUT", body: { id } });
+  const { data }: any = await useFetch("/api/archive", {
+    method: "PUT",
+    body: { id },
+  });
   if (data.value.success) {
     useProjects.addArchive(data.value.data);
   }
@@ -113,7 +128,15 @@ export async function fetchSchedules() {
   const useSchedule = useScheduleStore();
   const { data: schedules }: any = await useFetch("/api/schedule");
   if (schedules.value.success) {
-    useSchedule.addSchedules([...schedules.value.data]);
+    useSchedule.addSchedules(schedules.value.data);
+  }
+}
+
+export async function fetchClients() {
+  const useClients = useClientsStore();
+  const { data: clients }: any = await useFetch("/api/clients");
+  if (clients.value.success) {
+    useClients.setClients(clients.value.data);
   }
 }
 
@@ -126,7 +149,10 @@ export async function fetchOrder(to: any) {
   });
   if (offer.value.success) {
     const useOffer = useOfferStore();
-    if (offer.value.data.status === "Nepatvirtintas" || offer.value.data.status === "Netinkamas") {
+    if (
+      offer.value.data.status === "Nepatvirtintas" ||
+      offer.value.data.status === "Netinkamas"
+    ) {
       const currentDate = new Date();
       const exparationDate = new Date(offer.value.data.dateExparation);
       if (currentDate < exparationDate) {

@@ -1,17 +1,32 @@
 <script setup lang="ts">
+const { setError, setIsError } = useError();
+const useClients = useClientsStore();
+
 const open = ref<boolean>(false);
 const username = ref<string>("");
 const email = ref<string>("");
 const phone = ref<string>("");
 const address = ref<string>("");
 
-const saveHandler = () => {
+const saveHandler = async () => {
   const client = {
     username: username.value,
     email: email.value,
     phone: phone.value,
     address: address.value,
   };
+
+  const response: any = await $fetch("/api/clients", {
+    method: "post",
+    body: client,
+  });
+  if (response.success) {
+    useClients.addClient(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
 
   cancelHandler();
 };
@@ -34,10 +49,26 @@ const cancelHandler = () => {
         <BaseButton name="Atšaukti" @click="cancelHandler" />
       </div>
       <div class="flex gap-4 flex-wrap">
-        <BaseInput label="Vardas" placeholder="vardas" />
-        <BaseInput label="el. paštas" placeholder="el. paštas" />
-        <BaseInput label="telefono numeris" placeholder="telefono numeris" />
-        <BaseInput label="adresas" placeholder="adresas" />
+        <BaseInput
+          label="Vardas"
+          placeholder="vardas"
+          @onChange="(value) => (username = value)"
+        />
+        <BaseInput
+          label="el. paštas"
+          placeholder="el. paštas"
+          @onChange="(value) => (email = value)"
+        />
+        <BaseInput
+          label="telefono numeris"
+          placeholder="telefono numeris"
+          @onChange="(value) => (phone = value)"
+        />
+        <BaseInput
+          label="adresas"
+          placeholder="adresas"
+          @onChange="(value) => (address = value)"
+        />
       </div>
     </div>
   </div>
