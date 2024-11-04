@@ -71,6 +71,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     if (to.path === "/naujas") {
       await fetchProducts();
+      await fetchClients();
     }
 
     if (to.path === "/grafikas") {

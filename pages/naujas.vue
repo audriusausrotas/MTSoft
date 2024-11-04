@@ -41,6 +41,7 @@ const saveHandler = async (): Promise<void> => {
     advance: 0,
     orderNumber: "",
     files: [],
+    comments: [],
   };
   try {
     const data: any = await $fetch("/api/project", {
