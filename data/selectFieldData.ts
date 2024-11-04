@@ -39,21 +39,22 @@ export const fenceColors: string[] = [
 export const fenceTypes: string[] = [
   "Daimond 60/90",
   "Daimond 40/105",
-  "Alba",
+  "Tvoralentė Alba",
   "Segmentas",
   "Plank",
   "Žaliuzi",
   "Eglė",
-  "Dilė",
-  "Dija",
-  "Standard",
-  "Sigma",
-  "Astra",
-  "Polo",
-  "EVA",
-  "EVA3",
-  "Estetic",
-  "Emka",
+  "Dilė 105mm",
+  "Dilė 135mm",
+  "Dilė 190mm",
+  "Tvoralentė Standard",
+  "Tvoralentė Sigma",
+  "Tvoralentė Astra",
+  "Tvoralentė Polo",
+  "Tvoralentė EVA",
+  "Tvoralentė EVA3",
+  "Tvoralentė Estetic",
+  "Tvoralentė Emka",
 ];
 
 export const retailFenceTypes: string[] = [
@@ -121,7 +122,11 @@ export const pramatomumas: string[] = [
 
 export const fenceDirection: string[] = ["Vertikali", "Horizontali"];
 
-export const services: string[] = ["Medžiagos, Montavimas", "Tik Medžiagos", "Tik Montavimas"];
+export const services: string[] = [
+  "Medžiagos, Montavimas",
+  "Tik Medžiagos",
+  "Tik Montavimas",
+];
 
 export const parts: string[] = [
   "Borteliai, Stulpai",

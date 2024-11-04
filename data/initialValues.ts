@@ -1,4 +1,11 @@
-import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
+import type {
+  Client,
+  Measure,
+  Result,
+  MenuLinks,
+  FenceMeasure,
+  Works,
+} from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -7,9 +14,19 @@ export const clientInitialValue: Client = {
   email: "",
 };
 
-export const GamybaStatus: string[] = ["Gaminama", "Laukiama", "Pagaminta", "Negaminti"];
+export const GamybaStatus: string[] = [
+  "Gaminama",
+  "Laukiama",
+  "Pagaminta",
+  "Negaminti",
+];
 
-export const MontavimasStatus: string[] = ["Montuojama", "Laukiama", "Sumontuota", "Nemontuoti"];
+export const MontavimasStatus: string[] = [
+  "Montuojama",
+  "Laukiama",
+  "Sumontuota",
+  "Nemontuoti",
+];
 
 export const initialWorkData: Works = {
   id: "",
@@ -153,19 +170,7 @@ export const fenceMeasures: FenceMeasure[] = [
     seeThrough: [2, 3, 4, 5, 4.5, 9],
   },
   {
-    name: "Daimond 60/90 metras",
-    height: 9,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-  {
     name: "Daimond 40/105",
-    height: 10.5,
-    width: 4,
-    seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
-  },
-  {
-    name: "Daimond 40/105 metras",
     height: 10.5,
     width: 4,
     seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
@@ -177,28 +182,28 @@ export const fenceMeasures: FenceMeasure[] = [
     seeThrough: [1, 2, 3, 4, 5.5, 11],
   },
   {
-    name: "Plank 40/110 metras",
-    height: 11,
-    width: 4,
-    seeThrough: [1, 2, 3, 4, 5.5, 11],
-  },
-  {
     name: "Žaliuzi",
     height: 6.5,
     width: 6,
     seeThrough: [1.5, 2, 3, 4, 3.25, 6.5],
   },
   {
-    name: "Dilė",
+    name: "Dilė 105mm",
     height: 10.6,
     width: 2,
     seeThrough: [1, 2, 3, 4, 4.3, 8.6],
   },
   {
-    name: "Dija",
-    height: 10.9,
-    width: 1.8,
-    seeThrough: [1, 2, 3, 4, 5.45, 10.9],
+    name: "Dilė 135mm",
+    height: 10.6,
+    width: 2,
+    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
+  },
+  {
+    name: "Dilė 190mm",
+    height: 10.6,
+    width: 2,
+    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
   },
   {
     name: "Eglė",
@@ -207,55 +212,55 @@ export const fenceMeasures: FenceMeasure[] = [
     seeThrough: [0, 0, 1, 2, 5.5, 11],
   },
   {
-    name: "Alba",
+    name: "Tvoralentė Alba",
     height: 10.9,
     width: 1.8,
     seeThrough: [1, 2, 3, 4, 5.45, 10.9],
   },
   {
-    name: "Standard",
+    name: "Tvoralentė Standard",
     height: 11.5,
     width: 1.8,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
   {
-    name: "Sigma",
+    name: "Tvoralentė Sigma",
     height: 11.8,
     width: 2.3,
     seeThrough: [1, 2, 3, 4, 5.9, 11.8],
   },
   {
-    name: "Astra",
+    name: "Tvoralentė Astra",
     height: 9.1,
     width: 1.5,
     seeThrough: [1, 2, 3, 4, 4.5, 9.1],
   },
   {
-    name: "Polo",
+    name: "Tvoralentė Polo",
     height: 11,
     width: 1.6,
     seeThrough: [1, 2, 3, 4, 5.5, 11],
   },
   {
-    name: "EVA",
+    name: "Tvoralentė EVA",
     height: 11.5,
     width: 1,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
   {
-    name: "EVA3",
+    name: "Tvoralentė EVA3",
     height: 11.5,
     width: 1,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
   {
-    name: "Estetic",
+    name: "Tvoralentė Estetic",
     height: 11.5,
     width: 1.8,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
   {
-    name: "Emka",
+    name: "Tvoralentė Emka",
     height: 11.5,
     width: 1.8,
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
@@ -265,5 +270,41 @@ export const fenceMeasures: FenceMeasure[] = [
     height: 0,
     width: 250,
     seeThrough: [0, 0, 0, 0, 0, 0],
+  },
+  {
+    name: "Daimond 60/90 metras",
+    height: 9,
+    width: 6,
+    seeThrough: [2, 3, 4, 5, 4.5, 9],
+  },
+  {
+    name: "Daimond 60/120 metras",
+    height: 9,
+    width: 6,
+    seeThrough: [2, 3, 4, 5, 4.5, 9],
+  },
+  {
+    name: "Daimond 40/105 metras",
+    height: 10.5,
+    width: 4,
+    seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
+  },
+  {
+    name: "Plank 40/110 metras",
+    height: 11,
+    width: 4,
+    seeThrough: [1, 2, 3, 4, 5.5, 11],
+  },
+  {
+    name: "Žaliuzi 60/65 metras",
+    height: 6.5,
+    width: 6,
+    seeThrough: [2, 3, 4, 5, 4.5, 9],
+  },
+  {
+    name: "Namelis 60/105 metras",
+    height: 10.5,
+    width: 6,
+    seeThrough: [2, 3, 4, 5, 4.5, 9],
   },
 ];
