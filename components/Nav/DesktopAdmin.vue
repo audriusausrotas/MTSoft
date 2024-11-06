@@ -8,13 +8,7 @@ const optionsOpen = ref<boolean>(false);
 
 <template>
   <div class="gap-4 md:justify-center flex-wrap flex-1 hidden md:flex">
-    <div
-      v-for="link in navigationLinks"
-      :key="link.name"
-      @mouseenter="link.name === 'Nustatymai' ? (optionsOpen = true) : ''"
-      @mouseleave="link.name === 'Nustatymai' ? (optionsOpen = false) : ''"
-      class=""
-    >
+    <div v-for="link in navigationLinks" :key="link.name">
       <NuxtLink
         :to="link.link"
         class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative"
@@ -30,21 +24,31 @@ const optionsOpen = ref<boolean>(false);
           :ismap="true"
         />
         {{ link.name }}
-
-        <div
-          v-if="link.name === 'Nustatymai' && optionsOpen"
-          class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
-        >
-          <NuxtLink
-            v-for="lnk in optionLinks"
-            :key="lnk.name"
-            :to="lnk.link"
-            class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
-            :class="props.currentPath === lnk.name ? 'bg-red-full text-white' : 'text-black'"
-            >{{ lnk.name }}</NuxtLink
-          >
-        </div>
       </NuxtLink>
+    </div>
+    <div
+      @mouseenter="optionsOpen = true"
+      @mouseleave="optionsOpen = false"
+      class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative hover:cursor-pointer"
+    >
+      <p>Admin</p>
+      <div
+        v-if="optionsOpen"
+        class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
+      >
+        <NuxtLink
+          v-for="link in optionLinks"
+          :key="link.name"
+          :to="link.link"
+          class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
+          :class="
+            props.currentPath === link.name
+              ? 'bg-red-full text-white'
+              : 'text-black'
+          "
+          >{{ link.name }}</NuxtLink
+        >
+      </div>
     </div>
   </div>
 </template>

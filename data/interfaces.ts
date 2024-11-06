@@ -451,3 +451,12 @@ export interface Schedule {
   jobs: [Job];
   comment: string;
 }
+
+export interface Value {
+  value: string;
+}
+
+export interface Selects {
+  name: string;
+  values: Value[];
+}
