@@ -457,6 +457,7 @@ export interface Value {
 }
 
 export interface Selects {
+  _id?: string;
   name: string;
   values: Value[];
 }

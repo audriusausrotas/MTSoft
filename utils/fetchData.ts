@@ -175,3 +175,11 @@ export async function fetchOrder(to: any) {
   }
   return success;
 }
+
+export async function fetchSelects() {
+  const useSettings = useSettingsStore();
+  const { data: selects }: any = await useFetch("/api/selects");
+  if (selects.value.success) {
+    useSettings.addData(selects.value.data);
+  }
+}

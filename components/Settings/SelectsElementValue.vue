@@ -1,9 +1,23 @@
 <script setup lang="ts">
-const props = defineProps(["value", "editable", "index", "valueIndex"]);
+const props = defineProps(["value", "editable", "index", "valueIndex", "_id"]);
 const useSettings = useSettingsStore();
+const { setError, setIsError } = useError();
 
-const deleteHandler = () => {
-  useSettings.deleteSelect(props.index, props.valueIndex);
+const deleteHandler = async () => {
+  const data: any = await $fetch("/api/selects", {
+    method: "put",
+    body: {
+      _id: props._id,
+      value: props.value,
+    },
+  });
+  if (data.success) {
+    useSettings.deleteSelectData(props.index, props.valueIndex);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
 };
 </script>
 
@@ -15,11 +29,11 @@ const deleteHandler = () => {
       :variant="props.editable ? 'light' : ''"
       @onChange="
         (value: string): void =>
-          useSettings.updateSelect(props.index, props.valueIndex, value)
+          useSettings.updateSelectData(props.index, props.valueIndex, value)
       "
     />
     <NuxtImg
-      v-if="props.editable"
+      v-if="!props.editable"
       @click="deleteHandler"
       src="/icons/delete.svg"
       width="20"

@@ -80,7 +80,7 @@ const clearHandler = () => {
         class="flex-1 p-2 border-dark-light hover:cursor-pointer min-w-28 hover:bg-red-600 hover:text-white"
         :class="skaiciuokle ? 'bg-red-full text-white' : ''"
       >
-        Skaičiuotklė
+        Skaičiuoklė
       </div>
       <div
         @click="skaiciuokle = false"

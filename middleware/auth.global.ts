@@ -59,6 +59,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
         default:
           break;
       }
+    } else {
+      //fetch settings
+      await fetchSelects();
     }
 
     if (to.path === "/") {
