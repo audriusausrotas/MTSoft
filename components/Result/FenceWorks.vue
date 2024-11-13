@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Works } from "~/data/interfaces";
-const props = defineProps(["work", "index"]);
+const props = defineProps(["work", "index", "works"]);
 
 const useResults = useResultsStore();
 const useProduct = useProductsStore();
@@ -14,7 +14,7 @@ const useProduct = useProductsStore();
       <BaseSearchField
         width="w-80"
         label="Pavadinimas"
-        :data="useProduct.works"
+        :data="props.works"
         @OnClick="
           (value: Works) => {
             useResults.selectWork(props.index, value);
@@ -32,7 +32,9 @@ const useProduct = useProductsStore();
           type="number"
           :name="props.work.quantity"
           :disable="false"
-          @onChange="(value) => useResults.updateWorkQuantity(props.index, value)"
+          @onChange="
+            (value) => useResults.updateWorkQuantity(props.index, value)
+          "
         />
 
         <BaseInput
@@ -54,12 +56,32 @@ const useProduct = useProductsStore();
       </div>
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput label="Viso Savikaina" :name="props.work.totalCost" disable="true" width="w-24" />
-      <BaseInput label="Viso kaina" :name="props.work.totalPrice" disable="true" width="w-24" />
+      <BaseInput
+        label="Viso Savikaina"
+        :name="props.work.totalCost"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Viso kaina"
+        :name="props.work.totalPrice"
+        disable="true"
+        width="w-24"
+      />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput label="marža" :name="props.work.margin + ' %'" disable="true" width="w-24" />
-      <BaseInput label="Pelnas" :name="props.work.profit" disable="true" width="w-24" />
+      <BaseInput
+        label="marža"
+        :name="props.work.margin + ' %'"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Pelnas"
+        :name="props.work.profit"
+        disable="true"
+        width="w-24"
+      />
     </div>
 
     <NuxtImg

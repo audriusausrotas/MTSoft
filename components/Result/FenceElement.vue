@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { verticals, horizontals } from "../../data/selectFieldData";
 import type { Product } from "~/data/interfaces";
-const props = defineProps(["result", "index"]);
+const props = defineProps(["result", "index", "parts"]);
 
 const useResults = useResultsStore();
-const useProduct = useProductsStore();
-
 const isFenceboard = computed(() => {
   if (verticals.some((item) => props.result?.type?.includes(item))) {
     return true;
@@ -37,7 +35,10 @@ const showAditionalHorizontal = computed(() => {
 });
 
 const colorEditable = computed(
-  () => props.result.isNew || props.result.color === "Kita" || props.result.category !== "tvoros"
+  () =>
+    props.result.isNew ||
+    props.result.color === "Kita" ||
+    props.result.category !== "tvoros"
 );
 
 const spaceEditable = computed(
@@ -56,7 +57,7 @@ const spaceEditable = computed(
       <BaseSearchField
         width="w-full"
         label="Pavadinimas"
-        :data="useProduct.parts"
+        :data="props.parts"
         @OnClick="(value: Product) => {
       useResults.selectItem(props.index, value);
     }
@@ -104,7 +105,12 @@ const spaceEditable = computed(
     </div>
 
     <div v-if="showAditionalVertical" class="flex flex-col gap-2">
-      <BaseInput variant="light" label="ilgis" :name="$props.result.height" width="w-24" />
+      <BaseInput
+        variant="light"
+        label="ilgis"
+        :name="$props.result.height"
+        width="w-24"
+      />
       <BaseInput
         v-if="isFenceboard"
         :name="props.result.space"
@@ -147,11 +153,26 @@ const spaceEditable = computed(
         :name="props.result.totalCost"
         disable="true"
       />
-      <BaseInput width="w-24" label="viso kaina" :name="props.result.totalPrice" disable="true" />
+      <BaseInput
+        width="w-24"
+        label="viso kaina"
+        :name="props.result.totalPrice"
+        disable="true"
+      />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" disable="true" />
-      <BaseInput width="w-24" :name="props.result.profit" label="pelnas" disable="true" />
+      <BaseInput
+        width="w-24"
+        label="marža"
+        :name="props.result.margin + ' %'"
+        disable="true"
+      />
+      <BaseInput
+        width="w-24"
+        :name="props.result.profit"
+        label="pelnas"
+        disable="true"
+      />
     </div>
 
     <NuxtImg

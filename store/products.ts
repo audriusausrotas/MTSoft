@@ -12,13 +12,6 @@ export const useProductsStore = defineStore("products", {
   actions: {
     addProducts(data: any) {
       this.products = [...data];
-      data.forEach((item: Product) => {
-        if (item.category === "Darbai") {
-          this.works.push(item);
-        } else {
-          this.parts.push(item);
-        }
-      });
     },
 
     updateSearch(value: string): void {

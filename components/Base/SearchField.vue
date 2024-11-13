@@ -31,8 +31,9 @@ onMounted(() => {
 
 const filteredItems = (value: string): void => {
   const regex = new RegExp(value, "i");
-  const filteredItemsArray = props.data.filter((item: Product) => regex.test(item.name));
-
+  const filteredItemsArray = props.data.filter((item: Product) =>
+    regex.test(item.name)
+  );
   filteredData.value = [...filteredItemsArray];
 
   if (filteredItemsArray.length === 0) {
@@ -45,7 +46,9 @@ const filteredItems = (value: string): void => {
 
 <template>
   <div class="relative flex flex-col font-medium gap-1">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
+      props.label
+    }}</label>
     <input
       class="h-10 px-4 overflow-auto bg-white rounded-lg shadow-sm outline-none costom-border"
       :id="props.label"
