@@ -81,14 +81,6 @@ export const useResultsStore = defineStore("results", {
       this.works.push(newWork);
     },
 
-    updateName(index: number, value: string): void {
-      this.results[index].type = value;
-    },
-
-    updateWorkName(index: number, value: string): void {
-      this.works[index].name = value;
-    },
-
     updateResultCost(index: number, value: number): void {
       this.results[index].cost = +value;
       this.recalculateTotals(index);

@@ -62,9 +62,6 @@ const spaceEditable = computed(
       useResults.selectItem(props.index, value);
     }
       "
-        @onChange="(value) => useResults.updateName(props.index, value)"
-        :name="props.result.type"
-        :index="props.index"
       />
 
       <div class="flex gap-2">

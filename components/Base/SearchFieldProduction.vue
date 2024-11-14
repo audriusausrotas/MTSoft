@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
-const props = defineProps(["data", "name", "index"]);
-const emit = defineEmits(["onClick", "onChange", "modalClose"]);
+const props = defineProps(["data"]);
+const emit = defineEmits(["onClick", "modalClose"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const filteredData = reactive<any>([]);
-
-const emitUpdate = (value: string): void => {
-  if (value.length === 0) {
-    filteredData.value = [];
-  }
-  emit("onChange", value);
-  filteredItems(props.name);
-};
+const input = ref<string>("");
 
 const emitClick = (value: Project): void => {
   emit("onClick", value);
@@ -42,6 +35,10 @@ const filteredItems = (value: string): void => {
 
   filteredData.value = [...filteredItemsArray];
 };
+
+watch(input, (newValue) => {
+  filteredItems(newValue);
+});
 </script>
 
 <template>
@@ -52,8 +49,7 @@ const filteredItems = (value: string): void => {
       <input
         class="h-10 px-4 overflow-auto border outline-none w-full"
         placeholder="Ieškoti"
-        :value="props.name"
-        @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
+        v-model="input"
         ref="inputRef"
       />
       <button

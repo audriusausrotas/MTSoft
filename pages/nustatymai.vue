@@ -22,11 +22,11 @@ const selected = ref<string>("bendri");
         Tvorų nustatymai
       </div>
       <div
-        @click="selected = 'vartotojai'"
+        @click="selected = 'skaiciuokle'"
         class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
-        :class="selected === 'vartotojai' ? 'bg-red-full text-white' : ''"
+        :class="selected === 'skaiciuokle' ? 'bg-red-full text-white' : ''"
       >
-        Vartotojų nustatymai
+        Skačiuoklės nustatymai
       </div>
       <div
         @click="selected = 'pasirinkimai'"
@@ -38,7 +38,7 @@ const selected = ref<string>("bendri");
     </div>
     <SettingsGeneral v-if="selected === 'bendri'" />
     <SettingsFences v-else-if="selected === 'tvoros'" />
-    <SettingsUsers v-else-if="selected === 'vartotojai'" />
+    <SettingsCalc v-else-if="selected === 'skaiciuokle'" />
     <SettingsSelect v-else-if="selected === 'pasirinkimai'" />
   </div>
 </template>

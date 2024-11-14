@@ -3,7 +3,6 @@ import type { Works } from "~/data/interfaces";
 const props = defineProps(["work", "index", "works"]);
 
 const useResults = useResultsStore();
-const useProduct = useProductsStore();
 </script>
 
 <template>
@@ -20,9 +19,6 @@ const useProduct = useProductsStore();
             useResults.selectWork(props.index, value);
           }
         "
-        @onChange="(value) => useResults.updateWorkName(props.index, value)"
-        :name="props.work.name"
-        :index="props.index"
       />
       <div class="flex gap-4">
         <BaseInput

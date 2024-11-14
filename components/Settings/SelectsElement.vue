@@ -15,7 +15,7 @@ const saveHandler = async () => {
     },
   });
   if (data.success) {
-    useSettings.updateSelect(props.index, data.data.values);
+    // useSettings.updateSelect(props.index, data.data.values);
     setIsError(false);
     setError(data.message);
   } else {
@@ -26,7 +26,7 @@ const saveHandler = async () => {
 
 const newHandler = () => {
   editable.value = true;
-  useSettings.addSelectData(props.index);
+  // useSettings.addSelectData(props.index);
 };
 
 const deleteHandler = async () => {
@@ -35,7 +35,7 @@ const deleteHandler = async () => {
     body: { _id: props.data._id },
   });
   if (data.success) {
-    useSettings.deleteSelect(props.index);
+    // useSettings.deleteSelect(props.index);
     setIsError(false);
     setError(data.message);
   } else {

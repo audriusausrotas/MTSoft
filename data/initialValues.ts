@@ -143,7 +143,6 @@ export const defaultValues = {
   polesWork: "Tvoros stulpo betonavimas",
   gatesPoleWork: "Vartų stulpo betonavimas",
   gateBnkette: "Vartų pamato betonavimas",
-  poleAnchoringWork: "Ankeriuojamo stulpo Montavimas",
   bordersWork: "Pamatėlio montavimas",
   transport: "Transportas",
   fenceWork: "Tvoros montavimas",

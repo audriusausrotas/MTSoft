@@ -1,24 +1,14 @@
 <script setup lang="ts">
 import type { Client, Project } from "~/data/interfaces";
-const props = defineProps(["data", "name"]);
-const emit = defineEmits(["onClick", "onChange", "modalClose"]);
+const props = defineProps(["data"]);
+const emit = defineEmits(["onClick"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const filteredData = reactive<any>([]);
-
-const emitUpdate = (value: string): void => {
-  if (value.length === 0) {
-    filteredData.value = [];
-  }
-  emit("onChange", value);
-  filteredItems(props.name);
-};
+const input = ref<string>("");
 
 const emitClick = (value: Project): void => {
+  input.value = "";
   emit("onClick", value);
-};
-
-const emitClose = () => {
-  emit("modalClose");
 };
 
 onMounted(() => {
@@ -41,6 +31,10 @@ const filteredItems = (value: string): void => {
 
   filteredData.value = [...filteredItemsArray];
 };
+
+watch(input, (newValue) => {
+  filteredItems(newValue);
+});
 </script>
 
 <template>
@@ -51,16 +45,9 @@ const filteredItems = (value: string): void => {
       <input
         class="h-10 px-4 overflow-auto border outline-none w-full"
         placeholder="Ieškoti"
-        :value="props.name"
-        @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
+        v-model="input"
         ref="inputRef"
       />
-      <button
-        @click="emitClose"
-        class="bg-red-600 text-white w-8 h-8 flex justify-center items-center rounded-md"
-      >
-        X
-      </button>
     </div>
     <ul class="flex flex-col overflow-auto w-full divide-y max-h-96">
       <li

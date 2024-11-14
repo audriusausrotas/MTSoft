@@ -1,45 +1,20 @@
-import type { Selects, Value } from "~/data/interfaces";
+import type { DefaultValues, Selects, Value } from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
     general: [] as any,
     fence: [] as any,
-    users: [] as any[],
+    defaultValues: {} as DefaultValues,
     selects: [] as Selects[],
   }),
 
   actions: {
-    addData(data: any) {
-      // this.general = [...data.general];
-      // this.fence = [...data.fence];
-      // this.users = [...data.users];
-      this.selects = [...data];
+    addDefaultValues(data: DefaultValues) {
+      this.defaultValues = data;
     },
 
-    addSelect(select: Selects) {
-      this.selects.unshift(select);
-    },
-
-    updateSelect(index: number, newValues: Value[]) {
-      this.selects[index].values = [...newValues];
-    },
-
-    deleteSelect(index: number) {
-      this.selects = this.selects.filter((item, ind) => ind !== index);
-    },
-
-    addSelectData(index: number) {
-      this.selects[index].values.push({ value: "" });
-    },
-
-    deleteSelectData(index: number, valueIndex: number) {
-      this.selects[index].values = this.selects[index].values.filter(
-        (value, i) => i !== valueIndex
-      );
-    },
-
-    updateSelectData(index: number, valueIndex: number, value: string) {
-      this.selects[index].values[valueIndex].value = value;
+    changeDefaultValue(value: string, field: keyof DefaultValues) {
+      this.defaultValues[field] = value;
     },
   },
 

@@ -61,7 +61,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     } else {
       //fetch settings
-      await fetchSelects();
+      // await fetchSelects();
+      await fetchDefaultValues();
     }
 
     if (to.path === "/") {
@@ -116,6 +117,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     if (to.path === "/vartotojai") {
       await fetchUsers();
+    }
+
+    if (to.path === "/nustatymai") {
+      await fetchProducts();
     }
 
     if (to.path === "/archyvas") {

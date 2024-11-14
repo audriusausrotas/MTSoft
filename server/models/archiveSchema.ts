@@ -29,20 +29,10 @@ export const archiveSchema = defineMongooseModel<Project>(
       required: false,
       default: [],
     },
-    confirmed: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     advance: {
       type: Number,
       required: false,
       default: 0,
-    },
-    payed: {
-      type: Boolean,
-      required: false,
-      default: false,
     },
     status: {
       type: String,

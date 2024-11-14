@@ -461,3 +461,54 @@ export interface Selects {
   name: string;
   values: Value[];
 }
+
+export interface DefaultValues {
+  poleMain: string;
+  poleAlt: string;
+  gatePoleMain: string;
+  gatePoleAlt: string;
+  border: string;
+  borderHolder: string;
+  crossbar: string;
+  crossbarHolders: string;
+  rivets: string;
+  bolts: string;
+  bindings: string;
+  retailBindings: string;
+  retailDoubleLeg: string;
+  retailSingleLeg: string;
+  segment103: string;
+  segment123: string;
+  segment153: string;
+  segment173: string;
+  segment203: string;
+  segmentHolders: string;
+  gates: string;
+  gates2: string;
+  gatesAuto: string;
+  gates2Auto: string;
+  smallGates: string;
+  smallGates2: string;
+  smallGatesSegment: string;
+  segmentGatesWork: string;
+  segmentGateWork: string;
+  gateSegment: string;
+  polesWork: string;
+  gatesPoleWork: string;
+  gateBnkette: string;
+  bordersWork: string;
+  transport: string;
+  fenceWork: string;
+  totalFencesWithBindings: string;
+  bindingWork: string;
+  fenceboardWork: string;
+  crossbarWork: string;
+  segmentWork: string;
+  anchoredPoleMain: string;
+  anchoredPoleAlt: string;
+  anchoredPolesWork: string;
+  anchoredGatePoleMain: string;
+  anchoredGatePoleAlt: string;
+  anchoredGatePolesWork: string;
+  dileCork: string;
+}

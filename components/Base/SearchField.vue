@@ -1,36 +1,23 @@
 <script setup lang="ts">
 import type { Product } from "~/data/interfaces";
-const props = defineProps(["width", "data", "name", "index", "label"]);
+const props = defineProps(["width", "data", "label"]);
 const emit = defineEmits(["onClick", "onChange"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const filteredData = reactive<any>([]);
 const open = ref<boolean>(false);
-
-const emitUpdate = (value: string): void => {
-  if (value.length === 0) {
-    filteredData.value = [];
-    open.value = false;
-  } else {
-    open.value = true;
-  }
-
-  emit("onChange", value);
-  filteredItems(props.name);
-};
+const shouldClose = ref<boolean>(false);
+const input = ref<string>("");
 
 const emitClick = (value: Product): void => {
+  shouldClose.value = true;
+  input.value = value.name;
   emit("onClick", value);
   open.value = false;
 };
 
-onMounted(() => {
-  if (inputRef.value) {
-    inputRef.value.focus();
-  }
-});
-
 const filteredItems = (value: string): void => {
-  const regex = new RegExp(value, "i");
+  const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "");
+  const regex = new RegExp(escapedValue, "i");
   const filteredItemsArray = props.data.filter((item: Product) =>
     regex.test(item.name)
   );
@@ -42,20 +29,37 @@ const filteredItems = (value: string): void => {
     open.value = true;
   }
 };
+
+watch(input, (newValue) => {
+  if (shouldClose.value) {
+    open.value = false;
+    shouldClose.value = false;
+  } else {
+    if (newValue.length > 1) filteredItems(newValue);
+    else open.value = false;
+  }
+});
+
+onMounted(() => {
+  if (inputRef.value) {
+    inputRef.value.focus();
+  }
+});
 </script>
 
 <template>
-  <div class="relative flex flex-col font-medium gap-1">
+  <div
+    class="relative flex flex-col font-medium gap-1"
+    :class="props.width ? props.width : 'w-60'"
+  >
     <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
       props.label
     }}</label>
     <input
-      class="h-10 px-4 overflow-auto bg-white rounded-lg shadow-sm outline-none costom-border"
+      class="h-10 px-4 overflow-auto bg-white rounded-lg shadow-sm outline-none costom-border w-full"
       :id="props.label"
-      :class="props.width ? props.width : 'w-60'"
       placeholder="Pavadinimas"
-      :value="props.name"
-      @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
+      v-model="input"
       ref="inputRef"
     />
     <ul

@@ -180,6 +180,14 @@ export async function fetchSelects() {
   const useSettings = useSettingsStore();
   const { data: selects }: any = await useFetch("/api/selects");
   if (selects.value.success) {
-    useSettings.addData(selects.value.data);
+    // useSettings.addData(selects.value.data);
+  }
+}
+
+export async function fetchDefaultValues() {
+  const useSettings = useSettingsStore();
+  const { data: defaultValues }: any = await useFetch("/api/defaultValues");
+  if (defaultValues.value.success) {
+    useSettings.addDefaultValues(defaultValues.value.data);
   }
 }
