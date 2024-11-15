@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { Product } from "~/data/interfaces";
-const props = defineProps(["width", "data", "label"]);
+const props = defineProps(["width", "data", "label", "name"]);
 const emit = defineEmits(["onClick", "onChange"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const filteredData = reactive<any>([]);
 const open = ref<boolean>(false);
 const shouldClose = ref<boolean>(false);
-const input = ref<string>("");
+const input = ref<string>(props.name);
 
 const emitClick = (value: Product): void => {
   shouldClose.value = true;

@@ -57,6 +57,7 @@ const spaceEditable = computed(
       <BaseSearchField
         width="w-full"
         label="Pavadinimas"
+        :name="props.result.type"
         :data="props.parts"
         @OnClick="(value: Product) => {
       useResults.selectItem(props.index, value);

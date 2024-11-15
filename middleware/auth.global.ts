@@ -62,7 +62,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     } else {
       //fetch settings
       // await fetchSelects();
-      await fetchDefaultValues();
     }
 
     if (to.path === "/") {
@@ -74,8 +73,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     if (to.path === "/naujas") {
-      await fetchProducts();
-      await fetchClients();
+      await Promise.all([
+        fetchProducts(),
+        fetchClients(),
+        fetchDefaultValues(),
+      ]);
+      // await fetchProducts();
+      // await fetchClients();
+      // await fetchDefaultValues();
     }
 
     if (to.path === "/grafikas") {
@@ -120,7 +125,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     if (to.path === "/nustatymai") {
-      await fetchProducts();
+      await Promise.all([fetchProducts(), fetchDefaultValues()]);
     }
 
     if (to.path === "/archyvas") {

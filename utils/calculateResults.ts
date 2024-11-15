@@ -5,11 +5,11 @@ import type { Fences } from "~/data/interfaces";
 import calculateHorizontalFence from "~/utils/calculateHorizontalFence";
 import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
-import { defaultValues } from "~/data/initialValues";
 
 export default function calculateResults() {
-  const results = useResultsStore();
   const useCalculations = useCalculationsStore();
+  const useSettings = useSettingsStore();
+  const results = useResultsStore();
 
   results.clearAll();
 
@@ -104,8 +104,8 @@ export default function calculateResults() {
         if (item.direction !== "Horizontali" || measure.gates.exist) return;
         const type =
           item.bindings === "Taip"
-            ? defaultValues.retailSingleLeg
-            : defaultValues.retailDoubleLeg;
+            ? useSettings.defaultValues.retailSingleLeg
+            : useSettings.defaultValues.retailDoubleLeg;
         results.addRetailLeg(measure.height, item.color, type);
       }
 

@@ -3,6 +3,7 @@ import type { Works } from "~/data/interfaces";
 const props = defineProps(["work", "index", "works"]);
 
 const useResults = useResultsStore();
+console.log(props.work);
 </script>
 
 <template>
@@ -14,6 +15,7 @@ const useResults = useResultsStore();
         width="w-80"
         label="Pavadinimas"
         :data="props.works"
+        :name="props.work.name"
         @OnClick="
           (value: Works) => {
             useResults.selectWork(props.index, value);

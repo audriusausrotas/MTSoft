@@ -2,8 +2,8 @@
 const results = useResultsStore();
 const useProducts = useProductsStore();
 
-const parts = [];
-const works = [];
+const parts: any = [];
+const works: any = [];
 
 useProducts?.products?.forEach((item) => {
   if (item.category === "Darbai") {
