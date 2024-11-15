@@ -1,11 +1,13 @@
-import type { DefaultValues, Selects, Value } from "~/data/interfaces";
+import type { DefaultValues, SelectValues } from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
     general: [] as any,
     fence: [] as any,
     defaultValues: {} as DefaultValues,
-    selects: [] as Selects[],
+    selectValues: {
+      fenceMaterials: ["aaaa", "bbbb", "cccc"],
+    } as SelectValues,
   }),
 
   actions: {

@@ -10,7 +10,7 @@ import {
   verticals,
   services,
   parts,
-  twoSided,
+  yesno,
 } from "~/data/selectFieldData";
 
 const props = defineProps(["index"]);
@@ -153,7 +153,7 @@ watch(
       <BaseSelectField
         v-if="isFenceBoards"
         label="Dvipusė"
-        :values="twoSided"
+        :values="yesno"
         id="twoSided"
         :defaultValue="currentFence.twoSided"
         width="w-60"
@@ -178,7 +178,7 @@ watch(
       <BaseSelectField
         v-if="!isSegment && !isFenceBoards"
         label="Apkaustai"
-        :values="twoSided"
+        :values="yesno"
         id="bingings"
         :defaultValue="currentFence.bindings"
         width="w-60"
@@ -188,7 +188,7 @@ watch(
       <BaseSelectField
         v-if="needPoles"
         label="ankeriuojami stulpai"
-        :values="twoSided"
+        :values="yesno"
         id="anchoredPoles"
         :defaultValue="currentFence.anchoredPoles"
         width="w-60"

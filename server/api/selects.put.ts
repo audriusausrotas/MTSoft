@@ -6,8 +6,8 @@ export default defineEventHandler(async (event) => {
   if (!data) {
     return { success: false, data: null, message: "Užsakymas nerastas" };
   }
-  const newValues = data.values.filter((item) => item.value !== value.value);
-  data.values = [...newValues];
+  // const newValues = data.values.filter((item) => item.value !== value.value);
+  // data.values = [...newValues];
 
   const newData = await data.save();
 

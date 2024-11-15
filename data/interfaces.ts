@@ -452,14 +452,21 @@ export interface Schedule {
   comment: string;
 }
 
-export interface Value {
-  value: string;
+export interface SelectValues {
+  fenceMaterials: string[];
+  gateOption: string[];
+  gateLock: string[];
+  gateTypes: string[];
+  fenceColors: string[];
+  fenceTypes: string[];
+  retailFenceTypes: string[];
+  status: string[];
+  accountTypes: string[];
 }
 
 export interface Selects {
-  _id?: string;
   name: string;
-  values: Value[];
+  values: string[];
 }
 
 export interface DefaultValues {

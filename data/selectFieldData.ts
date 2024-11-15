@@ -136,7 +136,7 @@ export const parts: string[] = [
   "Be Bortelių Ir Stulpų",
 ];
 
-export const twoSided: string[] = ["Taip", "Ne"];
+export const yesno: string[] = ["Taip", "Ne"];
 
 export const status: string[] = [
   "Nepatvirtintas",

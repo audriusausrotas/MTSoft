@@ -7,8 +7,6 @@ export default defineEventHandler(async (event) => {
     return { success: false, data: null, message: "Užsakymas nerastas" };
   }
 
-  data.values = [...values];
-
   const newData = await data.save();
 
   return { success: true, data: newData, message: "Sukurta" };
