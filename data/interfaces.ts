@@ -464,11 +464,6 @@ export interface SelectValues {
   accountTypes: string[];
 }
 
-export interface Selects {
-  name: string;
-  values: string[];
-}
-
 export interface DefaultValues {
   poleMain: string;
   poleAlt: string;

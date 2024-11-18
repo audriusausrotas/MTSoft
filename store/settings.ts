@@ -6,7 +6,15 @@ export const useSettingsStore = defineStore("settings", {
     fence: [] as any,
     defaultValues: {} as DefaultValues,
     selectValues: {
-      fenceMaterials: ["aaaa", "bbbb", "cccc"],
+      fenceMaterials: ["matine", "blizgi", "ice crystal"],
+      fenceColors: ["7016", "8019", "8017"],
+      fenceTypes: ["daimond", "dile", "plank"],
+      retailFenceTypes: ["daimond metras", "plank metras", "namelis"],
+      status: ["patvirtintas", "tinkamas", "netinkamas"],
+      accountTypes: ["adminas", "vartonas"],
+      gateTypes: ["gaminami", "segmentiniai"],
+      gateOption: ["stumdomi ", "varstomi", "segmentiniai"],
+      gateLock: ["paprasta", "elektromagnetine"],
     } as SelectValues,
   }),
 

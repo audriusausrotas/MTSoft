@@ -114,6 +114,12 @@ useProducts?.products?.forEach((item) => {
       name="Tvorralenčių skersinis"
     />
     <SettingsCalcElement
+      :value="useSettings.defaultValues.crossbarHolders"
+      :data="holders"
+      field="crossbarHolders"
+      name="Skersinio laikiklis"
+    />
+    <SettingsCalcElement
       :value="useSettings.defaultValues.rivets"
       :data="other"
       field="rivets"
