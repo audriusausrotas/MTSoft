@@ -52,7 +52,6 @@ const selectHandler = (value: Client) => {
       placeholder="Telefono Numeris"
       variant="light"
       label="Telefono Numeris"
-      type="number"
       :name="useCalculations.client.phone"
       @onChange="(value: string) => useCalculations.updateClientPhone(value)"
     />

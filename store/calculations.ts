@@ -77,13 +77,14 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateRetail(value: boolean) {
       const useSettings = useSettingsStore();
+
       this.retail = value;
       this.fences = this.fences.map((item) => {
         if (value) {
-          item.type = useSettings.selectValues.retailFenceTypes[0].value;
+          item.type = useSettings.selectValues.retailFenceTypes[0];
           return item;
         } else {
-          item.type = useSettings.selectValues.fenceTypes[0].value;
+          item.type = useSettings.selectValues.fenceTypes[0];
           return item;
         }
       });
@@ -337,15 +338,14 @@ export const useCalculationsStore = defineStore("calculations", {
       const measure = fence.measures[measureIndex];
       const isFenceBoards = verticals.includes(fence.type);
       const seeThroughIndex = pramatomumas.indexOf(fence.seeThrough);
-      const fenceDataIndex = fenceMeasures.findIndex(
-        (element) => element.name === fence.type
-      );
+      const fenceData = fenceMeasures.find((item) => item.name === fence.type);
+
       let elements = 0;
       if (isFenceBoards) {
         elements = calculateFenceBoards(
           measure.length,
           fence.space,
-          fenceMeasures[fenceDataIndex].height,
+          fenceData!.height,
           fence.twoSided
         );
         this.fences[index].elements += elements;
@@ -353,12 +353,12 @@ export const useCalculationsStore = defineStore("calculations", {
         if (measure.height) {
           elements =
             (measure.height - 1) /
-            (fenceMeasures[fenceDataIndex].seeThrough[seeThroughIndex] +
-              fenceMeasures[fenceDataIndex].height);
+            (fenceData!.seeThrough[seeThroughIndex] + fenceData!.height);
         }
       }
       measure.elements = Math.round(elements);
     },
+
     setProject(project: any) {
       this.fences = [...project.fenceMeasures];
       this.client = { ...project.client };
@@ -541,7 +541,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
           if (
             useSettings.selectValues.fenceTypes.some(
-              (item) => item.value === capitalize(temp)
+              (item) => item === capitalize(temp)
             )
           ) {
             found = capitalize(temp);

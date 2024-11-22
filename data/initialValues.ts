@@ -199,7 +199,31 @@ export const fenceMeasures: FenceMeasure[] = [
     seeThrough: [1, 2, 3, 4, 5.75, 11.5],
   },
   {
-    name: "Segmentas",
+    name: "Segmentas tvorai, 2,5x1,03 m, 4mm",
+    height: 0,
+    width: 250,
+    seeThrough: [0, 0, 0, 0, 0, 0],
+  },
+  {
+    name: "Segmentas tvorai, 2,5x1,23 m, 4mm",
+    height: 0,
+    width: 250,
+    seeThrough: [0, 0, 0, 0, 0, 0],
+  },
+  {
+    name: "Segmentas tvorai, 2,5x1,53 m, 4mm",
+    height: 0,
+    width: 250,
+    seeThrough: [0, 0, 0, 0, 0, 0],
+  },
+  {
+    name: "Segmentas tvorai, 2,5x1,73 m, 4mm",
+    height: 0,
+    width: 250,
+    seeThrough: [0, 0, 0, 0, 0, 0],
+  },
+  {
+    name: "Segmentas tvorai, 2,5x2,03 m, 4mm",
     height: 0,
     width: 250,
     seeThrough: [0, 0, 0, 0, 0, 0],
