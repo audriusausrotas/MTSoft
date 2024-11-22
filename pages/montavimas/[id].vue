@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { MontavimasStatus } from "~/data/initialValues";
+import { MontavimasStatus } from "~/data/selectFieldData";
 import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const useMontavimas = useMontavimasStore();
 const useUser = useUserStore();
 const route = useRoute();
 const order: any = computed(() => {
-  return useMontavimas.montavimasList.find((item) => item._id === route.params.id);
+  return useMontavimas.montavimasList.find(
+    (item) => item._id === route.params.id
+  );
 });
 const workers = useUser.users
   .filter((user) => user.accountType === "Montavimas")
@@ -29,7 +31,11 @@ const statusHandler = async (value: string) => {
 const commentHandler = async (value: string) => {
   const response: any = await $fetch("/api/montavimasComment", {
     method: "post",
-    body: { _id: order?.value._id, comment: value, username: useUser.user?.username },
+    body: {
+      _id: order?.value._id,
+      comment: value,
+      username: useUser.user?.username,
+    },
   });
   if (response.success) {
     useMontavimas.updateOrder(order!.value._id, response.data);
@@ -88,14 +94,31 @@ const photosHandler = async (photo: Photo) => {
                 "
         />
 
-        <BaseInput :disable="true" :name="order?.client.address" width="min-w-60" label="Adresas" />
+        <BaseInput
+          :disable="true"
+          :name="order?.client.address"
+          width="min-w-60"
+          label="Adresas"
+        />
       </div>
       <div class="flex gap-4">
-        <BaseInput :disable="true" label="Kliento Nr." width="w-28" class="flex-1">
+        <BaseInput
+          :disable="true"
+          label="Kliento Nr."
+          width="w-28"
+          class="flex-1"
+        >
           <a :href="'tel:' + order?.client.phone">{{ order?.client.phone }}</a>
         </BaseInput>
-        <BaseInput :disable="true" width="w-28" label="Vadybininkas" class="flex-1">
-          <a :href="'tel:' + order?.creator.phone">{{ order?.creator.username }}</a>
+        <BaseInput
+          :disable="true"
+          width="w-28"
+          label="Vadybininkas"
+          class="flex-1"
+        >
+          <a :href="'tel:' + order?.creator.phone">{{
+            order?.creator.username
+          }}</a>
         </BaseInput>
       </div>
     </div>
@@ -108,13 +131,19 @@ const photosHandler = async (photo: Photo) => {
     />
     <div class="flex flex-col gap-4 items-center md:items-start">
       <BaseUpload @onSuccess="photosHandler" />
-      <BaseGalleryElement :_id="order?._id" :files="order?.files" category="installation" />
+      <BaseGalleryElement
+        :_id="order?._id"
+        :files="order?.files"
+        category="installation"
+      />
     </div>
 
     <div class="flex flex-col gap-8">
       <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
       <div class="flex flex-col">
-        <div class="border-y border-black font-semibold hidden gap-10 px-2 py-2 sm:flex">
+        <div
+          class="border-y border-black font-semibold hidden gap-10 px-2 py-2 sm:flex"
+        >
           <div class="w-6 text-center">Nr</div>
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>
@@ -131,7 +160,9 @@ const photosHandler = async (photo: Photo) => {
       </div>
       <div class="text-2xl font-semibold text-black text-center">Darbai</div>
       <div class="flex flex-col">
-        <div class="border-y border-black font-semibold gap-10 px-2 py-2 hidden sm:flex">
+        <div
+          class="border-y border-black font-semibold gap-10 px-2 py-2 hidden sm:flex"
+        >
           <div class="w-6 text-center">Nr</div>
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>

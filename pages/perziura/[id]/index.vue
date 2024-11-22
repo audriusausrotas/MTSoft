@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { status } from "~/data/selectFieldData";
 import type { Photo } from "~/data/interfaces";
 const route = useRoute();
 const { setError, setIsError } = useError();
+const useMontavimas = useMontavimasStore();
 const useProjects = useProjectsStore();
+const useSettings = useSettingsStore();
+const useGamyba = useGamybaStore();
 const useGates = useGateStore();
 const useUsers = useUserStore();
-const useGamyba = useGamybaStore();
-const useMontavimas = useMontavimasStore();
 
-const allUsers = useUsers.users.map((item) => item.username);
+const allUsers = useUsers.users.map((item) => {
+  return item.username;
+});
 const isLoading = ref<boolean>(false);
 const isOpenGates = ref<boolean>(false);
 const isOpenGates2 = ref<boolean>(false);
@@ -23,13 +25,19 @@ const advance = ref<number>(0);
 const provider = ref<string>("");
 const vartonasUsers = useUsers.users
   .filter((user) => user.accountType === "Vartonas")
-  .map((user) => user.email);
+  .map((user) => {
+    return user.email;
+  });
 const gigastaUsers = useUsers.users
   .filter((user) => user.accountType === "Gigasta")
-  .map((user) => user.email);
+  .map((user) => {
+    return user.email;
+  });
 const workers = useUsers.users
   .filter((user) => user.accountType === "Montavimas")
-  .map((user) => user.lastName);
+  .map((user) => {
+    return user.lastName;
+  });
 
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
@@ -403,7 +411,7 @@ watch(
 
         <div class="flex gap-4 items-end">
           <BaseSelectField
-            :values="status"
+            :values="useSettings.selectValues.status"
             id="orderStatus"
             :defaultValue="offer?.status"
             label="Statusas"

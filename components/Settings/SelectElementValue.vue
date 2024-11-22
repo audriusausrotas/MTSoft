@@ -1,23 +1,30 @@
-div
 <script setup lang="ts">
-const { setError, setIsError } = useError();
-const props = defineProps(["value", "editable", "index"]);
+const props = defineProps(["value", "editable", "index", "field", "disable"]);
 
+const { setError, setIsError } = useError();
 const useSettings = useSettingsStore();
 
-const deleteHandler = () => {};
+const deleteHandler = async () => {
+  const response: any = await $fetch("/api/selects", {
+    method: "delete",
+    body: { field: props.field, index: props.index },
+  });
+  if (response.success) {
+    useSettings.deleteSelectValue(props.field, props.index);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
   <div class="relative">
-    <BaseInput
-      :disable="!props.editable"
-      :name="props.value"
-      :variant="props.editable ? 'light' : ''"
-      placeholder="Pasirinkimas"
-      @on-change=""
-    />
+    <BaseInfoField :name="props.value" width="w-72" />
+
     <NuxtImg
+      v-if="props.editable"
       @click="deleteHandler"
       width="20"
       height="20"

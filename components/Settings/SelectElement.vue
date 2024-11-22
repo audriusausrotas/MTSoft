@@ -1,34 +1,46 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+import type { Product } from "~/data/interfaces";
+
 const props = defineProps(["data", "field", "name"]);
+const { setError, setIsError } = useError();
 const useSettings = useSettingsStore();
+const useProducts = useProductsStore();
 
+const fenceTypes = props.field.toLowerCase().includes("fencetypes");
 const editable = ref<boolean>(false);
-const values = ref<string[]>([...props.data]);
 
-const clickHandler = () => {
-  //   useSettings.changeDefaultValue(value.name, props.field);
-};
+const fences = ref<Product[]>([]);
 
-const saveHandler = async () => {
-  //   const response: any = await $fetch("/api/defaultValues", {
-  //     method: "post",
-  //     body: { value: props.value, field: props.field },
-  //   });
-  //   if (response.success) {
-  //     editable.value = false;
-  //     setIsError(false);
-  //     setError(response.message);
-  //   } else {
-  //     setError(response.message);
-  //   }
+useProducts?.products?.forEach((item) => {
+  switch (item.category.toLowerCase()) {
+    case "tvoros":
+      fences.value.push(item);
+      break;
+    default:
+      break;
+  }
+});
+
+const saveHandler = async (value: string) => {
+  const response: any = await $fetch("/api/selects", {
+    method: "post",
+    body: { field: props.field, value },
+  });
+  if (response.success) {
+    useSettings.newSelectValue(props.field, value);
+    editable.value = false;
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
 };
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 border-b pb-8 border-red-full">
     <div class="flex gap-4 items-center">
-      <BaseInfoField width="w-96" :name="props.name" />
+      <p class="font-bold text-2xl">{{ props.name }}</p>
       <NuxtImg
         v-if="!editable"
         @click="editable = true"
@@ -43,7 +55,7 @@ const saveHandler = async () => {
       />
       <div v-else class="flex gap-2">
         <NuxtImg
-          @click="saveHandler"
+          @click="editable = false"
           width="20"
           height="20"
           src="/icons/save.svg"
@@ -52,25 +64,29 @@ const saveHandler = async () => {
           :ismap="true"
           class="hover:cursor-pointer hover:scale-125 transition-transform"
         />
-        <NuxtImg
-          @click="saveHandler"
-          width="20"
-          height="20"
-          src="/icons/plus.svg"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          class="hover:cursor-pointer hover:scale-125 transition-transform"
-        />
       </div>
     </div>
+    <BaseButtonWithInput
+      v-if="!fenceTypes"
+      name="pridėti naują"
+      @onConfirm="saveHandler"
+      class="w-fit"
+    />
+    <SettingsSelectSearchField
+      v-else
+      class="font-normal"
+      :data="fences"
+      name="Pridėti naują"
+      @onConfirm="saveHandler"
+    />
     <div class="flex gap-4 flex-wrap">
       <SettingsSelectElementValue
-        v-for="(value, index) in values"
+        v-for="(value, index) in props.data"
         :key="value"
         :editable="editable"
         :index="index"
         :value="value"
+        :field="props.field"
       />
     </div>
   </div>

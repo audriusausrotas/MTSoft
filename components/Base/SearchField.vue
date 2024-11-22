@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Product } from "~/data/interfaces";
-const props = defineProps(["width", "data", "label", "name"]);
+const props = defineProps(["width", "data", "label", "name", "disable"]);
 const emit = defineEmits(["onClick", "onChange"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const filteredData = reactive<any>([]);
@@ -56,9 +56,11 @@ onMounted(() => {
       props.label
     }}</label>
     <input
-      class="h-10 px-4 overflow-auto bg-white rounded-lg shadow-sm outline-none costom-border w-full"
+      class="h-10 px-4 overflow-auto rounded-lg shadow-sm outline-none costom-border w-full"
+      :class="props.disable ? 'bg-gray-ultra-light' : 'bg-white'"
       :id="props.label"
       placeholder="Pavadinimas"
+      :disabled="props.disable"
       v-model="input"
       ref="inputRef"
     />

@@ -6,12 +6,7 @@ import {
   fenceMeasures,
   clientInitialValue,
 } from "~/data/initialValues";
-import {
-  pramatomumas,
-  verticals,
-  fenceTypes,
-  retailFenceTypes,
-} from "~/data/selectFieldData";
+import { pramatomumas, verticals } from "~/data/selectFieldData";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
@@ -81,13 +76,14 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateRetail(value: boolean) {
+      const useSettings = useSettingsStore();
       this.retail = value;
       this.fences = this.fences.map((item) => {
         if (value) {
-          item.type = retailFenceTypes[0];
+          item.type = useSettings.selectValues.retailFenceTypes[0].value;
           return item;
         } else {
-          item.type = fenceTypes[0];
+          item.type = useSettings.selectValues.fenceTypes[0].value;
           return item;
         }
       });
@@ -422,6 +418,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     //   calculation from Bosh lazer app
     lazerCalculate(text: string, units: string, precision: string) {
+      const useSettings = useSettingsStore();
       const tempArr: string = text.replace(/\n/g, " ");
       const splitArr: string[] = tempArr.split(" ");
       const unit = units === "Metrai" ? 100 : units === "Milimetrai" ? 0.1 : 1;
@@ -541,7 +538,12 @@ export const useCalculationsStore = defineStore("calculations", {
           const temp = item.replace("tt.", "");
           checkFence();
           let found = "Nerasta";
-          if (fenceTypes.includes(capitalize(temp))) {
+
+          if (
+            useSettings.selectValues.fenceTypes.some(
+              (item) => item.value === capitalize(temp)
+            )
+          ) {
             found = capitalize(temp);
           } else {
             if (temp === "60x90") found = "Daimond 60/90";

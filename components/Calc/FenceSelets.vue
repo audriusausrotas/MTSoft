@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import {
-  fenceColors,
-  fenceTypes,
-  retailFenceTypes,
-  fenceMaterials,
   fenceSide,
   fenceDirection,
   pramatomumas,
@@ -14,9 +10,11 @@ import {
 } from "~/data/selectFieldData";
 
 const props = defineProps(["index"]);
-const useCalculations = useCalculationsStore();
-const currentFence = useCalculations.fences[props.index];
 
+const useSettings = useSettingsStore();
+const useCalculations = useCalculationsStore();
+
+const currentFence = useCalculations.fences[props.index];
 const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
 const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
@@ -69,7 +67,7 @@ watch(
       <BaseSelectField
         v-if="useCalculations.retail"
         label="Tvoros tipas"
-        :values="retailFenceTypes"
+        :values="useSettings.selectValues.retailFenceTypes"
         id="fenceType"
         :defaultValue="currentFence.type"
         width="w-60"
@@ -79,7 +77,7 @@ watch(
       <BaseSelectField
         v-else
         label="Tvoros tipas"
-        :values="fenceTypes"
+        :values="useSettings.selectValues.fenceTypes"
         id="fenceType"
         :defaultValue="currentFence.type"
         width="w-60"
@@ -89,7 +87,7 @@ watch(
 
       <BaseSelectField
         label="Tvoros spalva"
-        :values="fenceColors"
+        :values="useSettings.selectValues.fenceColors"
         id="fenceColor"
         :defaultValue="currentFence.color"
         width="w-60"
@@ -100,7 +98,7 @@ watch(
       <BaseSelectField
         v-if="!isSegment"
         label="Skardos Tipas"
-        :values="fenceMaterials"
+        :values="useSettings.selectValues.fenceMaterials"
         id="fenceMaterials"
         :defaultValue="currentFence.material"
         width="w-60"

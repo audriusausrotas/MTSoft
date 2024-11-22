@@ -1,3 +1,4 @@
+import { sign } from "jsonwebtoken";
 import type { DefaultValues, SelectValues } from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
@@ -6,15 +7,15 @@ export const useSettingsStore = defineStore("settings", {
     fence: [] as any,
     defaultValues: {} as DefaultValues,
     selectValues: {
-      fenceMaterials: ["matine", "blizgi", "ice crystal"],
-      fenceColors: ["7016", "8019", "8017"],
-      fenceTypes: ["daimond", "dile", "plank"],
-      retailFenceTypes: ["daimond metras", "plank metras", "namelis"],
-      status: ["patvirtintas", "tinkamas", "netinkamas"],
-      accountTypes: ["adminas", "vartonas"],
-      gateTypes: ["gaminami", "segmentiniai"],
-      gateOption: ["stumdomi ", "varstomi", "segmentiniai"],
-      gateLock: ["paprasta", "elektromagnetine"],
+      fenceMaterials: [],
+      fenceColors: [],
+      fenceTypes: [],
+      retailFenceTypes: [],
+      status: [],
+      accountTypes: [],
+      gateTypes: [],
+      gateOption: [],
+      gateLock: [],
     } as SelectValues,
   }),
 
@@ -23,8 +24,22 @@ export const useSettingsStore = defineStore("settings", {
       this.defaultValues = data;
     },
 
+    addSelectData(data: SelectValues) {
+      this.selectValues = data;
+    },
+
     changeDefaultValue(value: string, field: keyof DefaultValues) {
       this.defaultValues[field] = value;
+    },
+
+    newSelectValue(field: keyof SelectValues, value: string) {
+      this.selectValues[field].push(value);
+    },
+
+    deleteSelectValue(field: keyof SelectValues, index: number) {
+      this.selectValues[field] = this.selectValues[field].filter(
+        (item, ind) => ind !== index
+      );
     },
   },
 

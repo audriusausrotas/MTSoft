@@ -1,9 +1,15 @@
+import { SelectValues } from "~/data/interfaces";
+
 export default defineEventHandler(async (event) => {
-  const { _id } = await readBody(event);
+  const { field, index } = await readBody(event);
+  const data = await selectSchema.findOne();
 
-  const select = await selectSchema.findByIdAndDelete(_id);
+  if (!data) {
+    return { success: false, message: "klaida" };
+  }
 
-  if (!select) return { success: false, data: null, message: "Klaida" };
+  data[field as keyof SelectValues].splice(index, 1);
+  await data.save();
 
-  return { success: true, data: null, message: "Ištrinta" };
+  return { success: true, data, message: "Išsaugota" };
 });

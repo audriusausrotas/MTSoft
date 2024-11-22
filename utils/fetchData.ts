@@ -180,7 +180,7 @@ export async function fetchSelects() {
   const useSettings = useSettingsStore();
   const { data: selects }: any = await useFetch("/api/selects");
   if (selects.value.success) {
-    // useSettings.addData(selects.value.data);
+    useSettings.addSelectData(selects.value.data);
   }
 }
 

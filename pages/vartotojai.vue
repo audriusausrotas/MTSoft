@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { accountTypes, accountStatus } from "~/data/selectFieldData";
+import { accountStatus } from "~/data/selectFieldData";
 
 const { setError, setIsError } = useError();
+const useSettings = useSettingsStore();
 const useUser = useUserStore();
 const password = ref<string>("");
 const modalOpen = ref<boolean>(false);
@@ -99,7 +100,7 @@ const deleteHandler = (id: string) => {
 
       <BaseSelectField
         :id="user._id"
-        :values="accountTypes"
+        :values="useSettings.selectValues.accountTypes"
         width="w-52"
         class="flex-[3]"
         :defaultValue="user?.accountType"

@@ -28,7 +28,7 @@ const selectHandler = (value: Client) => {
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        @click="open = false"
+        @click="open = !open"
         class="hover:cursor-pointer transition-transform hover:scale-125"
       />
       <div v-if="open" class="absolute bg-white top-14 py-1 left-0 w-96 z-50">

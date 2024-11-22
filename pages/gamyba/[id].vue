@@ -1,6 +1,6 @@
 -
 <script setup lang="ts">
-import { GamybaStatus } from "~/data/initialValues";
+import { GamybaStatus } from "~/data/selectFieldData";
 import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();

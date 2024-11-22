@@ -1,15 +1,13 @@
 export default defineEventHandler(async (event) => {
-  const { name } = await readBody(event);
+  const { field, value } = await readBody(event);
 
-  const doesExist = await selectSchema.findOne({ name });
+  const data = await selectSchema.findOneAndUpdate(
+    {},
+    { $push: { [field]: value } },
+    { new: true, upsert: true }
+  );
 
-  if (doesExist) {
-    return { success: false, data: null, message: "Nustatymas jau egzistuoja" };
-  }
+  if (!data) return { success: true, data: null, message: "Klaida" };
 
-  const newSelect = new selectSchema({ name, values: [] });
-
-  const data = await newSelect.save();
-
-  return { success: true, data, message: "" };
+  return { success: true, data, message: "Išsaugota" };
 });

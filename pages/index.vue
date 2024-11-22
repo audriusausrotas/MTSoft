@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { status } from "~/data/selectFieldData";
 const useProjects = useProjectsStore();
+const useSettings = useSettingsStore();
 const user = useUserStore();
 
-const userLetters = user.user?.username;
-useProjects.changeFilter(userLetters ? userLetters : "Visi");
+const username = user.user?.username;
+useProjects.changeFilter(username ? username : "Visi");
 
 const users = [
   "Visi",
@@ -25,7 +25,7 @@ const users = [
   ),
 ];
 
-const statusFilters = ["Visi", ...status];
+const statusFilters = ["Visi", ...useSettings.selectValues.status];
 
 const newProjectHandler = () => {
   const useResults = useResultsStore();
@@ -39,10 +39,6 @@ const newProjectHandler = () => {
 
   navigateTo("/naujas");
 };
-
-// const getBackup = async () => {
-//   const response: any = await $fetch("/api/backup");
-// };
 </script>
 
 <template>
@@ -73,7 +69,7 @@ const newProjectHandler = () => {
           label="Vartotojas"
           :values="users"
           id="userFilter"
-          :defaultValue="userLetters"
+          :defaultValue="username"
           width="w-60"
           @onChange="(value: string) => useProjects.changeFilter(value)
         "

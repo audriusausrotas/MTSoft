@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import {
-  yesno,
-  gateTypes,
-  gateLock,
-  gateDirection,
-  laiptasDirection,
-  gateOption,
-} from "~/data/selectFieldData";
+import { yesno, gateDirection, laiptasDirection } from "~/data/selectFieldData";
 const props = defineProps(["measureIndex", "index", "measure", "lastElement"]);
+
 const useCalculations = useCalculationsStore();
+const useSettings = useSettingsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
@@ -212,7 +207,7 @@ watch(
 
       <BaseSelectField
         v-if="props.measure.length > 200"
-        :values="gateTypes"
+        :values="useSettings.selectValues.gateTypes"
         id="gateTypes"
         label="vartų tipas"
         :defaultValue="props.measure.gates.type"
@@ -252,7 +247,7 @@ watch(
           props.measure.length <= 200 &&
           props.measure.gates.option !== 'Segmentiniai'
         "
-        :values="gateLock"
+        :values="useSettings.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"
         :defaultValue="props.measure.gates.lock"
@@ -263,7 +258,7 @@ watch(
 
       <BaseSelectField
         v-if="props.measure.length <= 200"
-        :values="gateOption"
+        :values="useSettings.selectValues.gateOption"
         id="gateOption"
         label="Vartelių tipas"
         :defaultValue="props.measure.gates.option"
