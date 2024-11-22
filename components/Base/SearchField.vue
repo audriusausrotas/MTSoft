@@ -15,6 +15,17 @@ const emitClick = (value: Product): void => {
   open.value = false;
 };
 
+const emitUpdate = (value: string): void => {
+  if (value.length === 0) {
+    filteredData.value = [];
+    open.value = false;
+  } else {
+    open.value = true;
+  }
+  emit("onChange", value);
+  filteredItems(props.name);
+};
+
 const filteredItems = (value: string): void => {
   const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "");
   const regex = new RegExp(escapedValue, "i");
@@ -61,7 +72,8 @@ onMounted(() => {
       :id="props.label"
       placeholder="Pavadinimas"
       :disabled="props.disable"
-      v-model="input"
+      :value="props.name"
+      @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
       ref="inputRef"
     />
     <ul

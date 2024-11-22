@@ -59,6 +59,7 @@ const spaceEditable = computed(
         label="Pavadinimas"
         :name="props.result.type"
         :data="props.parts"
+        @onChange="(value) => useResults.updateName(props.index, value)"
         @OnClick="(value: Product) => {
       useResults.selectItem(props.index, value);
     }
