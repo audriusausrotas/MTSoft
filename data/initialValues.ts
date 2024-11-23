@@ -1,11 +1,4 @@
-import type {
-  Client,
-  Measure,
-  Result,
-  MenuLinks,
-  FenceMeasure,
-  Works,
-} from "~/data/interfaces";
+import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -236,7 +229,7 @@ export const fenceMeasures: FenceMeasure[] = [
   },
   {
     name: "Daimond 60/120 metras",
-    height: 9,
+    height: 12,
     width: 6,
     seeThrough: [2, 3, 4, 5, 4.5, 9],
   },
