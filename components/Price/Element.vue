@@ -41,7 +41,7 @@ const saveHandler = async (): Promise<void> => {
     productCategory.value === props.product.category
   ) {
     disable.value = true;
-    return Promise.resolve();
+    return;
   }
 
   const newData = {

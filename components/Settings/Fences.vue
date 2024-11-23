@@ -1,6 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const useProducts = useProductsStore();
+
+const fences = useProducts.products.filter(
+  (item) => item.category.trim().toLowerCase() === "tvoros"
+);
+</script>
 
 <template>
-  <div></div>
+  <div class="flex flex-wrap gap-20 justify-around">
+    <SettingsFencesElement v-for="fence in fences" :fence="fence" />
+  </div>
 </template>
 <style scoped></style>

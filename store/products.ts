@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
-import type { Product, ProductsState } from "~/data/interfaces";
+import type { Product, ProductsState, SeeThrough, SeeThroughOptions } from "~/data/interfaces";
 
 export const useProductsStore = defineStore("products", {
   state: (): ProductsState => ({
     products: [],
-    parts: [],
-    works: [],
     searchValue: "",
   }),
 
@@ -23,9 +21,7 @@ export const useProductsStore = defineStore("products", {
     },
 
     updateProduct(data: Product): void {
-      this.products = this.products.map((item) =>
-        item._id === data._id ? data : item
-      );
+      this.products = this.products.map((item) => (item._id === data._id ? data : item));
     },
     deleteProduct(_id: string): void {
       this.products = this.products.filter((item) => item._id !== _id);

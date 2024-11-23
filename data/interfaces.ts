@@ -229,8 +229,6 @@ export interface ProjectsState {
 
 export interface ProductsState {
   products: Product[];
-  parts: Product[];
-  works: Product[];
   searchValue: string;
 }
 
@@ -240,7 +238,28 @@ export interface Product {
   price: number;
   cost: number;
   category: string;
-  image: string;
+  image?: string;
+  height?: number;
+  width?: number;
+  type?: string;
+  isFenceBoard?: boolean;
+  defaultDirection?: string;
+  seeThrough?: SeeThrough;
+}
+
+export interface SeeThrough {
+  Aklina: SeeThroughOptions;
+  Nepramatoma: SeeThroughOptions;
+  Vidutiniška: SeeThroughOptions;
+  Pramatoma: SeeThroughOptions;
+  "25% Pramatomumas": SeeThroughOptions;
+  "50% Pramatomumas": SeeThroughOptions;
+}
+
+export interface SeeThroughOptions {
+  space: number;
+  price: number;
+  cost: number;
 }
 
 export interface Works {

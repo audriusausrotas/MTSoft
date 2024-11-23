@@ -11,7 +11,7 @@ const props = defineProps([
 const emit = defineEmits(["onChange"]);
 
 const isOpen = ref<boolean>(false);
-const selectedValue = ref<string>(props.defaultValue);
+const selectedValue = ref<string>(props?.defaultValue);
 
 const changeHandler = (value: string): void => {
   selectedValue.value = value;
@@ -22,13 +22,8 @@ const changeHandler = (value: string): void => {
 
 <template>
   <div class="flex flex-col gap-1 select-none">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
-      props.label
-    }}</label>
-    <div
-      class="relative selct-none h-10"
-      :class="[props.width ? `${props.width}` : 'w-48']"
-    >
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
+    <div class="relative selct-none h-10" :class="[props.width ? `${props.width}` : 'w-48']">
       <div
         @click="props.disable ? '' : (isOpen = !isOpen)"
         class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg shadow-sm"
@@ -39,16 +34,14 @@ const changeHandler = (value: string): void => {
             ? 'bg-gray-ultra-light'
             : 'bg-white',
           props.disable ? '' : 'cursor-pointer',
-          props.defaultValue.includes('@') ? 'lowercase' : 'capitalize',
+          props?.defaultValue?.includes('@') ? 'lowercase' : 'capitalize',
         ]"
       >
         <div class="flex gap-3">
           <NuxtImg
             v-if="props.name === 'verified'"
             :src="
-              props.defaultValue === 'patvirtintas'
-                ? '/icons/ellipseg.svg'
-                : '/icons/ellipser.svg'
+              props.defaultValue === 'patvirtintas' ? '/icons/ellipseg.svg' : '/icons/ellipser.svg'
             "
             width="8"
             height="8"

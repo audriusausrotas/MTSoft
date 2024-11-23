@@ -3,10 +3,12 @@ import type { Product } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const props = defineProps(["value", "data", "field", "name"]);
 const useSettings = useSettingsStore();
+const input = ref<string>("");
 
 const editable = ref<boolean>(false);
 
 const clickHandler = (value: Product) => {
+  input.value = value.name;
   useSettings.changeDefaultValue(value.name, props.field);
 };
 
@@ -51,15 +53,13 @@ const saveHandler = async () => {
       class="hover:cursor-pointer hover:scale-125 transition-transform"
     />
     <BaseInfoField width="w-96" :name="props.name" />
-    <BaseInfoField
-      v-if="!editable"
-      width="w-full max-w-[500px] "
-      :name="props.value"
-    />
+    <BaseInfoField v-if="!editable" width="w-full max-w-[500px] " :name="props.value" />
     <BaseSearchField
       v-else
       width="w-full max-w-[500px]"
       :data="props.data"
+      :name="input"
+      @onChange="(value) => (input = value)"
       @OnClick="clickHandler"
     />
   </div>

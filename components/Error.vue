@@ -21,7 +21,7 @@ const { isError } = useError();
 </template>
 <style scoped>
 .animation {
-  animation: slide 3s;
+  animation: slide 2s;
 }
 
 @keyframes slide {
