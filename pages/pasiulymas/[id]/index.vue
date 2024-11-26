@@ -411,5 +411,19 @@ const cancelHandler = async () => {
       :isLoading="isLoading"
     />
   </div>
+  <div class="flex gap-1 justify-center">
+    <p>Patvirtindamas užsakymą, patvirtinu, jog susipažinau ir sutinku su</p>
+    <NuxtLink
+      :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/tvoros_informacija`"
+      class="text-blue-600"
+      >taisyklėmis</NuxtLink
+    >
+    <p>ir</p>
+    <NuxtLink
+      :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/privatumas`"
+      class="text-blue-600"
+      >privatumo politika.</NuxtLink
+    >
+  </div>
 </template>
 <style scoped></style>

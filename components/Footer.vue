@@ -78,7 +78,7 @@
           <div class="flex flex-col gap-2">
             <a href="tel:++37066347011" class="flex gap-2">
               <NuxtImg
-                src="/icons/email.svg"
+                src="/icons/call.svg"
                 alt="Moderni Tvora logotipas"
                 width="20"
                 height="20"
@@ -91,7 +91,7 @@
 
             <a href="mailto:info@modernitvora.lt" class="flex gap-2">
               <NuxtImg
-                src="/icons/call.svg"
+                src="/icons/email.svg"
                 alt="Moderni Tvora logotipas"
                 width="20"
                 height="20"
