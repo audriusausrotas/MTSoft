@@ -415,18 +415,18 @@ const cancelHandler = async () => {
     <p>Patvirtindamas užsakymą, patvirtinu, jog susipažinau ir sutinku su</p>
     <NuxtLink
       :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/bendra_informacija`"
-      class="font-semibold text-blue-600 hover:text-red-600"
+      class="font-medium text-blue-600 hover:text-red-600"
       >taisyklėmis,
     </NuxtLink>
     <NuxtLink
       :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/tvoros_informacija`"
-      class="font-semibold text-blue-600 hover:text-red-600"
+      class="font-medium text-blue-600 hover:text-red-600"
       >tvoros informacija</NuxtLink
     >
     <p>bei</p>
     <NuxtLink
       :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/privatumas`"
-      class="font-semibold text-blue-600 hover:text-red-600"
+      class="font-medium text-blue-600 hover:text-red-600"
       >privatumo politika.</NuxtLink
     >
   </div>
