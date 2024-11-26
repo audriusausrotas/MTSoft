@@ -418,7 +418,7 @@ const cancelHandler = async () => {
       class="text-blue-600"
       >taisyklėmis</NuxtLink
     >
-    <p>ir</p>
+    <p>bei</p>
     <NuxtLink
       :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/privatumas`"
       class="text-blue-600"
