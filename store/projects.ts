@@ -4,9 +4,15 @@ import type { ProjectsState, Project } from "~/data/interfaces";
 export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
+    filteredProjects: [],
     archive: [],
     filteredArchives: [],
-    filteredProjects: [],
+    backup: [],
+    filteredBackup: [],
+    deleted: [],
+    filteredDeleted: [],
+    unconfirmed: [],
+    filteredUnconfirmed: [],
     selectedProject: null,
     selectedFilter: "Visi",
     selectedStatusFilter: "Visi",
@@ -15,6 +21,26 @@ export const useProjectsStore = defineStore("Projects", {
   actions: {
     addProjects(data: any) {
       this.projects = [...data];
+    },
+
+    addArchives(data: Project[]) {
+      this.archive = [...data];
+      this.filteredArchives = [...data];
+    },
+
+    addBackup(data: Project[]) {
+      this.archive = [...data];
+      this.filteredBackup = [...data];
+    },
+
+    addDeleted(data: Project[]) {
+      this.archive = [...data];
+      this.filteredDeleted = [...data];
+    },
+
+    addUnconfirmed(data: Project[]) {
+      this.archive = [...data];
+      this.filteredUnconfirmed = [...data];
     },
 
     addProject(project: Project): void {
@@ -39,15 +65,54 @@ export const useProjectsStore = defineStore("Projects", {
       this.projects = this.projects.filter((item) => item._id !== id);
       this.filterProjects();
     },
+
     deleteArchive(id: String): void {
       this.archive = this.archive.filter((item) => item._id !== id);
       this.filteredArchives = this.filteredArchives.filter(
         (item) => item._id !== id
       );
     },
+
+    deleteBackup(id: String): void {
+      this.backup = this.backup.filter((item) => item._id !== id);
+      this.filteredBackup = this.filteredBackup.filter(
+        (item) => item._id !== id
+      );
+    },
+
+    deleteDeleted(id: String): void {
+      this.deleted = this.deleted.filter((item) => item._id !== id);
+      this.filteredDeleted = this.filteredDeleted.filter(
+        (item) => item._id !== id
+      );
+    },
+
+    deleteUnconfirmed(id: String): void {
+      this.unconfirmed = this.unconfirmed.filter((item) => item._id !== id);
+      this.filteredUnconfirmed = this.filteredUnconfirmed.filter(
+        (item) => item._id !== id
+      );
+    },
+
+    recoverBackup(data: Project) {
+      this.projects.unshift(data);
+      this.deleteBackup(data._id);
+    },
+
+    recoverDeleted(data: Project) {
+      this.projects.unshift(data);
+      this.deleteDeleted(data._id);
+    },
+
+    recoverUnconfirmed(data: Project) {
+      this.projects.unshift(data);
+      this.deleteUnconfirmed(data._id);
+    },
+
     setSelectedProject(data: string) {
       this.selectedProject = data;
     },
+
     clearSelected() {
       this.selectedProject = null;
     },
@@ -66,11 +131,6 @@ export const useProjectsStore = defineStore("Projects", {
     moveToProjects(data: Project) {
       this.projects.unshift(data);
       this.deleteArchive(data._id);
-    },
-
-    addArchives(data: Project[]) {
-      this.archive = [...data];
-      this.filteredArchives = [...data];
     },
 
     addArchive(data: Project) {

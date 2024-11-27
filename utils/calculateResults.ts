@@ -26,6 +26,7 @@ export default function calculateResults() {
       item.parts !== "Tik Stulpai" &&
       item.parts !== "Be Bortelių Ir Stulpų" &&
       item.anchoredPoles === "Ne";
+
     const hasCrossbars: boolean = verticals.some(
       (vertical) => vertical === item.type
     );

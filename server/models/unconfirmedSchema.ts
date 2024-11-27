@@ -1,14 +1,15 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
 import type { Project } from "~/data/interfaces";
 
-export const backupSchema = defineMongooseModel<Project>(
-  "backupSchema",
+export const unconfirmedSchema = defineMongooseModel<Project>(
+  "unconfirmedSchema",
   {
     client: {
       type: Object,
       required: false,
       default: {},
     },
+    retail: Boolean,
     fenceMeasures: {
       type: [Object],
       required: false,
@@ -29,6 +30,7 @@ export const backupSchema = defineMongooseModel<Project>(
       required: false,
       default: [],
     },
+
     advance: {
       type: Number,
       required: false,
@@ -40,6 +42,11 @@ export const backupSchema = defineMongooseModel<Project>(
       default: "Nepatvirtintas",
     },
     files: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
+    comments: {
       type: [Object],
       required: false,
       default: [],
@@ -56,5 +63,5 @@ export const backupSchema = defineMongooseModel<Project>(
     dateCreated: String,
     dateExparation: String,
   },
-  { collection: "backup" }
+  { collection: "projectsUnconfirmed" }
 );

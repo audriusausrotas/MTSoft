@@ -4,7 +4,10 @@ const useUser = useUserStore();
 const calendarDates = ref<Date[]>([]);
 const workers = computed(() =>
   useUser.users.filter((worker) => {
-    if (useUser.user?.accountType === "Administratorius") {
+    if (
+      useUser.user?.accountType === "Administratorius" ||
+      useUser.user?.accountType === "Sandėlys"
+    ) {
       return (
         worker.accountType === "Gamyba" || worker.accountType === "Montavimas"
       );
@@ -54,7 +57,10 @@ function scrollToToday() {
   <div class="overflow-y-auto h-[75vh] w-full px-1 lg:pr-8">
     <div class="flex flex-col gap-1">
       <div
-        v-if="useUser.user?.accountType === 'Administratorius'"
+        v-if="
+          useUser.user?.accountType === 'Administratorius' ||
+          useUser.user?.accountType === 'Sandėlys'
+        "
         class="flex gap-1 sticky top-0 left-0 z-40 bg-white text-white"
       >
         <p

@@ -158,7 +158,7 @@ export async function fetchOrder(to: any) {
       if (currentDate < exparationDate) {
         useOffer.setOffer({ ...offer.value.data });
       } else {
-        const data: any = await $fetch("/api/archive", {
+        const data: any = await $fetch("/api/unconfirmed", {
           method: "post",
           body: { _id: offer.value.data._id },
         } as any);

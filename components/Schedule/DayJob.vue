@@ -16,7 +16,8 @@ const deleteHandler = () => {
     @click="
       props.isAdmin
         ? (menuOpen = true)
-        : useUser.user?.accountType === 'Gamyba'
+        : useUser.user?.accountType === 'Gamyba' ||
+          useUser.user?.accountType === 'Sandėlys'
         ? router.push(`/gamyba/${props.job._id}`)
         : router.push(`/montavimas/${props.job._id}`)
     "
@@ -38,10 +39,16 @@ const deleteHandler = () => {
     >
       Atidaryti darbą
     </NuxtLink>
-    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="deleteHandler">
+    <div
+      class="hover:cursor-pointer hover:bg-red-600 text-white"
+      @click="deleteHandler"
+    >
       Ištrinti darbą
     </div>
-    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
+    <div
+      class="hover:cursor-pointer hover:bg-red-600 text-white"
+      @click="menuOpen = false"
+    >
       Uždaryti meniu
     </div>
   </div>

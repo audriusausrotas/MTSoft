@@ -4,15 +4,23 @@ import { navigationLinks } from "~/data/initialValues";
 
 const props = defineProps(["useUser"]);
 
+const isSandelys =
+  props.useUser.user?.accountType === "Sandėlys" ? "Gamyba" : "";
+
 let currentMenu = navigationLinks.filter(
-  (item: MenuLinks) => item.name === props.useUser.user?.accountType || item.name === "Grafikas"
+  (item: MenuLinks) =>
+    item.name === props.useUser.user?.accountType ||
+    item.name === "Grafikas" ||
+    item.name === isSandelys
 );
 
 if (
   props.useUser.user?.accountType === "Vartonas" ||
   props.useUser.user?.accountType === "Gigasta"
 ) {
-  currentMenu = navigationLinks.filter((item: MenuLinks) => item.name === "Vartai");
+  currentMenu = navigationLinks.filter(
+    (item: MenuLinks) => item.name === "Vartai"
+  );
 }
 </script>
 

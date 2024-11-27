@@ -7,6 +7,15 @@ export default defineEventHandler(async (event) => {
   if (!project)
     return { success: false, data: null, message: "Projektas nerastas" };
 
+  const projectData = project.toObject();
+
+  const deletedProject = new deletedSchema({ ...projectData });
+
+  const deletedData = await deletedProject.save();
+
+  if (!deletedData)
+    return { success: false, data: null, message: "Klaida trinant projektą" };
+
   const data = await projectSchema.findOneAndDelete({ _id });
 
   if (!data)

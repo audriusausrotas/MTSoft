@@ -1,5 +1,6 @@
 import { Schedule } from "~/data/interfaces";
 import jwt from "jsonwebtoken";
+import { use } from "h3";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
@@ -23,7 +24,11 @@ export default defineEventHandler(async (event) => {
     };
 
   let schedule: Schedule[] = [];
-  if (user.accountType === "Administratorius" || user.accountType === "Gamyba") {
+  if (
+    user.accountType === "Administratorius" ||
+    user.accountType === "Gamyba" ||
+    user.accountType === "Sandėlys"
+  ) {
     schedule = await scheduleSchema.find();
   } else if (user.accountType === "Montavimas") {
     schedule = await scheduleSchema.find({ "worker.lastName": user.lastName });

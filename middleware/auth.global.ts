@@ -56,6 +56,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
           }
           break;
 
+        case "Sandėlys":
+          if (to.path !== "/profilis" && to.path !== "/grafikas") {
+            if (!to.path.includes("/gamyba")) return navigateTo("/gamyba");
+          }
+          break;
+
         default:
           break;
       }
