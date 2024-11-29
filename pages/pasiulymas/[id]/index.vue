@@ -411,7 +411,7 @@ const cancelHandler = async () => {
       :isLoading="isLoading"
     />
   </div>
-  <div class="flex gap-1 justify-center flex-wrap text-center">
+  <div class="flex gap-1 justify-center flex-wrap text-center print:hidden">
     <p>Patvirtindamas užsakymą, patvirtinu, jog susipažinau ir sutinku su</p>
     <NuxtLink
       :to="`https://modernitvora.vercel.app/pasiulymas/${offer.offer._id}/bendra_informacija`"
