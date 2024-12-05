@@ -1,5 +1,8 @@
-import { sign } from "jsonwebtoken";
-import type { DefaultValues, SelectValues } from "~/data/interfaces";
+import type {
+  DefaultValues,
+  SelectValues,
+  UserRights,
+} from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -39,6 +42,15 @@ export const useSettingsStore = defineStore("settings", {
     deleteSelectValue(field: keyof SelectValues, index: number) {
       this.selectValues[field] = this.selectValues[field].filter(
         (item, ind) => ind !== index
+      );
+    },
+
+    updateUserRights(data: UserRights) {
+      this.general.userRights = this.general.userRights.map(
+        (item: UserRights) => {
+          if (item.accountType === data.accountType) return data;
+          else return item;
+        }
       );
     },
   },

@@ -539,3 +539,13 @@ export interface DefaultValues {
   anchoredGatePolesWork: string;
   dileCork: string;
 }
+
+export interface UserRights {
+  accountType: string;
+  project: boolean;
+  schedule: boolean;
+  production: boolean;
+  installation: boolean;
+  gate: boolean;
+  admin: boolean;
+}
