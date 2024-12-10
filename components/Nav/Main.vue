@@ -1,14 +1,48 @@
 <script setup lang="ts">
+import { navigationLinks, optionLinks } from "~/data/initialValues";
+import type { MenuLinks } from "~/data/interfaces";
+
+const useSettings = useSettingsStore();
 const useUser = useUserStore();
 const route = useRoute();
 
 const currentPath = ref("");
 
+const userRights = useSettings.userRights.find(
+  (item) => item.accountType === useUser?.user?.accountType
+);
+
+const adminLinks = userRights?.admin ? optionLinks : null;
+
+const currentLinks: MenuLinks[] = navigationLinks.filter((link) => {
+  if (link.name === "Projektai" && userRights?.project) return true;
+  else if (link.name === "Grafikas" && userRights?.schedule) return true;
+  else if (link.name === "Gamyba" && userRights?.production) return true;
+  else if (link.name === "Montavimas" && userRights?.installation) return true;
+  else if (link.name === "Vartai" && userRights?.gate) return true;
+  else return false;
+});
+
 function routeHandler(newPath: string) {
-  if (newPath === "/") currentPath.value = "Projektai";
-  else {
-    const path = newPath.replace("/", "");
-    currentPath.value = path[0]?.toUpperCase() + path.slice(1);
+  switch (newPath) {
+    case "/":
+      currentPath.value = "Projektai";
+      break;
+    case "/grafikas":
+      currentPath.value = "Grafikas";
+      break;
+    case "/gamyba":
+      currentPath.value = "Gamyba";
+      break;
+    case "/montavimas":
+      currentPath.value = "Montavimas";
+      break;
+    case "/vartai":
+      currentPath.value = "Vartai";
+      break;
+    default:
+      currentPath.value = "Admin";
+      break;
   }
 }
 routeHandler(route.path);
@@ -36,13 +70,16 @@ watch(
           class="hidden lg:block"
         />
 
-        <template v-if="useUser.user?.accountType === 'Administratorius'">
-          <NavDesktopAdmin :currentPath="currentPath" />
-          <NavMobile :currentPath="currentPath" />
-        </template>
-        <template v-else>
-          <NavDesktopOther :useUser="useUser" />
-        </template>
+        <NavDesktop
+          :currentPath="currentPath"
+          :currentLinks="currentLinks"
+          :adminLinks="adminLinks"
+        />
+        <NavMobile
+          :currentPath="currentPath"
+          :currentLinks="currentLinks"
+          :adminLinks="adminLinks"
+        />
         <NavUser :useUser="useUser" class="self-start" />
       </div>
     </div>

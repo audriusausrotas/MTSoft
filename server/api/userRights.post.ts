@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
   } = await readBody(event);
 
   let doesExist = await userRightsSchema.findOne({ accountType });
-
   if (doesExist) {
     doesExist.project = project;
     doesExist.schedule = schedule;
@@ -31,10 +30,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const data = await doesExist.save();
-
   return {
     success: true,
-    data: data,
+    data,
     message: "Išsaugota",
   };
 });

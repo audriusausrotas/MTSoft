@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore("settings", {
     general: [] as any,
     fence: [] as any,
     defaultValues: {} as DefaultValues,
+    userRights: [] as UserRights[],
     selectValues: {
       fenceMaterials: [],
       fenceColors: [],
@@ -31,6 +32,10 @@ export const useSettingsStore = defineStore("settings", {
       this.selectValues = data;
     },
 
+    addUserRights(data: UserRights[]) {
+      this.userRights = [...data];
+    },
+
     changeDefaultValue(value: string, field: keyof DefaultValues) {
       this.defaultValues[field] = value;
     },
@@ -46,12 +51,10 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     updateUserRights(data: UserRights) {
-      this.general.userRights = this.general.userRights.map(
-        (item: UserRights) => {
-          if (item.accountType === data.accountType) return data;
-          else return item;
-        }
-      );
+      this.userRights = this.userRights.map((item: UserRights) => {
+        if (item.accountType === data.accountType) return data;
+        else return item;
+      });
     },
   },
 

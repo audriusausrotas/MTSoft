@@ -191,3 +191,11 @@ export async function fetchDefaultValues() {
     useSettings.addDefaultValues(defaultValues.value.data);
   }
 }
+
+export async function fetchUserRights() {
+  const useSettings = useSettingsStore();
+  const { data: userRights }: any = await useFetch("/api/userRights");
+  if (userRights.value.success) {
+    useSettings.addUserRights(userRights.value.data);
+  }
+}

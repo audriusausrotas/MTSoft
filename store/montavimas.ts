@@ -25,13 +25,17 @@ export const useMontavimasStore = defineStore("montavimas", {
     },
 
     deleteMontavimasOrder(id: string) {
-      this.montavimasList = this.montavimasList.filter((item) => item._id !== id);
+      this.montavimasList = this.montavimasList.filter(
+        (item) => item._id !== id
+      );
     },
 
     deleteMontavimasWorker(id: string, worker: string) {
       this.montavimasList = this.montavimasList.map((montavimas) => {
         if (montavimas._id === id) {
-          montavimas.workers = montavimas.workers.filter((item) => item !== worker);
+          montavimas.workers = montavimas.workers.filter(
+            (item) => item !== worker
+          );
           return montavimas;
         } else return montavimas;
       });

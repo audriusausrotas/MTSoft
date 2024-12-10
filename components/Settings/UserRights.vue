@@ -1,13 +1,26 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
-const installationBox = ref<boolean>(false);
 const props = defineProps(["accountType"]);
+const { setError, setIsError } = useError();
+const useSettings = useSettingsStore();
+
+const installationBox = ref<boolean>(false);
 const productionBox = ref<boolean>(false);
 const scheduleBox = ref<boolean>(false);
 const projectBox = ref<boolean>(false);
 const editable = ref<boolean>(false);
 const adminBox = ref<boolean>(false);
 const gateBox = ref<boolean>(false);
+
+for (const user of useSettings.userRights) {
+  if (user.accountType === props.accountType) {
+    installationBox.value = user.installation;
+    productionBox.value = user.production;
+    scheduleBox.value = user.schedule;
+    projectBox.value = user.project;
+    adminBox.value = user.admin;
+    gateBox.value = user.gate;
+  }
+}
 
 const saveHandler = async () => {
   const data = {
@@ -20,18 +33,19 @@ const saveHandler = async () => {
     admin: adminBox.value,
   };
 
-  const response: any = $fetch("/api/userRights", {
+  const response: any = await $fetch("/api/userRights", {
     method: "post",
     body: data,
   });
+
   if (response.success) {
+    useSettings.updateUserRights(response.data);
+    editable.value = false;
     setIsError(false);
     setError(response.message);
   } else {
     setError(response.message);
   }
-
-  editable.value = false;
 };
 </script>
 

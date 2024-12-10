@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { navigationLinks, optionLinks } from "~/data/initialValues";
-
-const props = defineProps(["currentPath"]);
+const props = defineProps(["currentPath", "currentLinks", "adminLinks"]);
 
 const optionsOpen = ref<boolean>(false);
 </script>
 
 <template>
-  <div class="gap-4 md:justify-center flex-wrap flex-1 hidden md:flex">
-    <div v-for="link in navigationLinks" :key="link.name">
+  <div class="gap-4 sm:justify-center flex-wrap flex-1 hidden sm:flex">
+    <div v-for="link in props.currentLinks" :key="link.name">
       <NuxtLink
         :to="link.link"
-        class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative"
+        class="sm:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative"
         :class="props.currentPath === link.name ? 'bg-red-full text-white' : ''"
       >
         <NuxtImg
@@ -27,9 +25,11 @@ const optionsOpen = ref<boolean>(false);
       </NuxtLink>
     </div>
     <div
+      v-if="props.adminLinks"
       @mouseenter="optionsOpen = true"
       @mouseleave="optionsOpen = false"
       class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative hover:cursor-pointer"
+      :class="props.currentPath === 'Admin' ? 'bg-red-full text-white' : ''"
     >
       <p>Admin</p>
       <div
@@ -37,7 +37,7 @@ const optionsOpen = ref<boolean>(false);
         class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
       >
         <NuxtLink
-          v-for="link in optionLinks"
+          v-for="link in props.adminLinks"
           :key="link.name"
           :to="link.link"
           class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"

@@ -9,17 +9,19 @@ const workers = useUser.users
   .map((user: User) => user.lastName);
 
 const filteredMontavimas = computed(() => {
-  if (useUser.user?.accountType === "Administratorius") {
+  if (
+    useUser.user?.accountType === "Administratorius" ||
+    useUser.user?.accountType === "Sandėlys"
+  ) {
     if (filteredUser.value === "Visi") return useMontavimas.montavimasList;
     else
       return useMontavimas.montavimasList.filter((item: Montavimas) =>
         item.workers.includes(filteredUser.value)
       );
-  } else {
+  } else
     return useMontavimas.montavimasList.filter((item: Montavimas) =>
       item.workers.includes(useUser.user?.lastName!)
     );
-  }
 });
 
 const changeFilter = (value: string) => {
@@ -40,7 +42,11 @@ const changeFilter = (value: string) => {
       "
     />
     <div class="flex flex-wrap gap-4">
-      <div v-for="(order, index) in filteredMontavimas" :key="order._id" :dataIndex="index">
+      <div
+        v-for="(order, index) in filteredMontavimas"
+        :key="order._id"
+        :dataIndex="index"
+      >
         <MontavimasOrder :order="order" :index="index" />
       </div>
     </div>
