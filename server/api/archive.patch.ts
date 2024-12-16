@@ -1,7 +1,17 @@
 export default defineEventHandler(async (event) => {
-  const { _id } = await readBody(event);
+  const { _id, location } = await readBody(event);
 
-  const archivedProject = await archiveSchema.findById({ _id });
+  let archivedProject = null;
+
+  if (location === "archive") {
+    archivedProject = await archiveSchema.findById(_id);
+  } else if (location === "unconfirmed") {
+    archivedProject = await unconfirmedSchema.findById(_id);
+  } else if (location === "deleted") {
+    archivedProject = await deletedSchema.findById(_id);
+  } else if (location === "backup") {
+    archivedProject = await backupSchema.findById(_id);
+  }
 
   if (!archivedProject)
     return {
@@ -22,7 +32,15 @@ export default defineEventHandler(async (event) => {
 
   const data = await project.save();
 
-  await archiveSchema.findByIdAndDelete({ _id });
+  if (location === "archive") {
+    await archiveSchema.findByIdAndDelete({ _id });
+  } else if (location === "unconfirmed") {
+    await unconfirmedSchema.findByIdAndDelete({ _id });
+  } else if (location === "deleted") {
+    await deletedSchema.findByIdAndDelete({ _id });
+  } else if (location === "backup") {
+    await backupSchema.findByIdAndDelete({ _id });
+  }
 
   return {
     success: true,

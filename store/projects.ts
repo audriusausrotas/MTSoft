@@ -5,14 +5,6 @@ export const useProjectsStore = defineStore("Projects", {
   state: (): ProjectsState => ({
     projects: [],
     filteredProjects: [],
-    archive: [],
-    filteredArchives: [],
-    backup: [],
-    filteredBackup: [],
-    deleted: [],
-    filteredDeleted: [],
-    unconfirmed: [],
-    filteredUnconfirmed: [],
     selectedProject: null,
     selectedFilter: "Visi",
     selectedStatusFilter: "Visi",
@@ -21,26 +13,6 @@ export const useProjectsStore = defineStore("Projects", {
   actions: {
     addProjects(data: any) {
       this.projects = [...data];
-    },
-
-    addArchives(data: Project[]) {
-      this.archive = [...data];
-      this.filteredArchives = [...data];
-    },
-
-    addBackup(data: Project[]) {
-      this.archive = [...data];
-      this.filteredBackup = [...data];
-    },
-
-    addDeleted(data: Project[]) {
-      this.archive = [...data];
-      this.filteredDeleted = [...data];
-    },
-
-    addUnconfirmed(data: Project[]) {
-      this.archive = [...data];
-      this.filteredUnconfirmed = [...data];
     },
 
     addProject(project: Project): void {
@@ -66,49 +38,6 @@ export const useProjectsStore = defineStore("Projects", {
       this.filterProjects();
     },
 
-    deleteArchive(id: String): void {
-      this.archive = this.archive.filter((item) => item._id !== id);
-      this.filteredArchives = this.filteredArchives.filter(
-        (item) => item._id !== id
-      );
-    },
-
-    deleteBackup(id: String): void {
-      this.backup = this.backup.filter((item) => item._id !== id);
-      this.filteredBackup = this.filteredBackup.filter(
-        (item) => item._id !== id
-      );
-    },
-
-    deleteDeleted(id: String): void {
-      this.deleted = this.deleted.filter((item) => item._id !== id);
-      this.filteredDeleted = this.filteredDeleted.filter(
-        (item) => item._id !== id
-      );
-    },
-
-    deleteUnconfirmed(id: String): void {
-      this.unconfirmed = this.unconfirmed.filter((item) => item._id !== id);
-      this.filteredUnconfirmed = this.filteredUnconfirmed.filter(
-        (item) => item._id !== id
-      );
-    },
-
-    recoverBackup(data: Project) {
-      this.projects.unshift(data);
-      this.deleteBackup(data._id);
-    },
-
-    recoverDeleted(data: Project) {
-      this.projects.unshift(data);
-      this.deleteDeleted(data._id);
-    },
-
-    recoverUnconfirmed(data: Project) {
-      this.projects.unshift(data);
-      this.deleteUnconfirmed(data._id);
-    },
-
     setSelectedProject(data: string) {
       this.selectedProject = data;
     },
@@ -122,24 +51,6 @@ export const useProjectsStore = defineStore("Projects", {
         if (item._id === project._id) return project;
         else return item;
       });
-    },
-    moveToArchive(data: Project) {
-      this.archive.unshift(data);
-      this.deleteProject(data._id);
-    },
-
-    moveToProjects(data: Project) {
-      this.projects.unshift(data);
-      this.deleteArchive(data._id);
-    },
-
-    addArchive(data: Project) {
-      if (this.archive.length === 0) this.archive.push(data);
-      else
-        this.archive = this.archive.map((item) => {
-          if (item._id === data._id) return data;
-          else return item;
-        });
     },
 
     changeFilter(data: string) {
@@ -230,27 +141,6 @@ export const useProjectsStore = defineStore("Projects", {
         this.filteredProjects = [...foundProjects];
       } else {
         this.filterProjects();
-      }
-    },
-
-    searchArchive(value: string) {
-      if (value.length > 2) {
-        const foundArchives = this.archive.filter(
-          (archive) =>
-            archive.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
-            archive.client.email.toLowerCase().includes(value.toLowerCase()) ||
-            archive.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            archive.client.username
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
-            archive.orderNumber.toLowerCase().includes(value.toLowerCase())
-        );
-
-        this.filteredArchives = [...foundArchives];
-      } else {
-        this.filteredArchives = [...this.archive];
       }
     },
   },

@@ -1,10 +1,16 @@
 export default defineEventHandler(async (event) => {
   try {
-    const { _id } = await readBody(event);
-    const data = await archiveSchema.findOneAndDelete({ _id });
+    const { _id, location } = await readBody(event);
 
-    if (!data)
-      return { success: false, data: null, message: "Projektas nerastas" };
+    if (location === "archive") {
+      await archiveSchema.findOneAndDelete({ _id });
+    } else if (location === "unconfirmed") {
+      await unconfirmedSchema.findOneAndDelete({ _id });
+    } else if (location === "deleted") {
+      await deletedSchema.findOneAndDelete({ _id });
+    } else if (location === "backup") {
+      await deletedSchema.findOneAndDelete({ _id });
+    }
 
     return { success: true, data: null, message: "Projektas ištrintas" };
   } catch (error) {

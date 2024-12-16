@@ -42,14 +42,14 @@ const newProjectHandler = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-8">
-    <div class="flex w-full gap-4 items-center flex-wrap justify-center">
-      <div class="flex gap-4 items-end justify-center flex-wrap">
+  <div class="flex flex-col w-full items-center gap-8">
+    <div class="flex gap-4 flex-wrap w-full max-w-[1160px] justify-center">
+      <div class="flex gap-4 items-end flex-1 justify-center flex-wrap">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
         <BaseInput
           placeholder="Paieška"
           label="Paieška"
-          width="w-60 "
+          width="flex-1"
           variant="light"
           @onChange="(value: string): void => useProjects.searchProjects(value)"
         >
@@ -93,6 +93,7 @@ const newProjectHandler = () => {
         :index="index"
         :length="useProjects.filteredProjects.length"
         :project="project"
+        location="projects"
       />
     </div>
   </div>

@@ -1,12 +1,25 @@
 export default defineEventHandler(async (event) => {
   const { id } = await readBody(event);
-  const data = await archiveSchema.findById(id);
+
+  let data = await archiveSchema.findById(id);
+
+  if (!data) {
+    data = await unconfirmedSchema.findById(id);
+  }
+
+  if (!data) {
+    data = await deletedSchema.findById(id);
+  }
+
+  if (!data) {
+    data = await backupSchema.findById(id);
+  }
 
   if (!data)
     return {
-      success: false,
+      success: true,
       data: null,
-      message: "Archyvuotų projektų nerasta",
+      message: "Projektas nerastas",
     };
 
   return {

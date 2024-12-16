@@ -106,21 +106,42 @@ export async function fetchUsers() {
 }
 
 export async function fetchArchive(id: any) {
-  const useProjects = useProjectsStore();
+  const useArchives = useArchivesStore();
   const { data }: any = await useFetch("/api/archive", {
     method: "PUT",
     body: { id },
   });
   if (data.value.success) {
-    useProjects.addArchive(data.value.data);
+    useArchives.addProjectToOpen(data.value.data);
   }
 }
 
 export async function fetchArchives() {
-  const useProjects = useProjectsStore();
+  const useArchives = useArchivesStore();
   const { data: archive }: any = await useFetch("/api/archives");
   if (archive.value.success) {
-    useProjects.addArchives(archive.value.data);
+    useArchives.addArchives(archive.value.data);
+  }
+}
+export async function fetchUnconfirmed() {
+  const useArchives = useArchivesStore();
+  const { data: archive }: any = await useFetch("/api/unconfirmed");
+  if (archive.value.success) {
+    useArchives.addUnconfirmed(archive.value.data);
+  }
+}
+export async function fetchDeleted() {
+  const useArchives = useArchivesStore();
+  const { data: archive }: any = await useFetch("/api/deleted");
+  if (archive.value.success) {
+    useArchives.addDeleted(archive.value.data);
+  }
+}
+export async function fetchBackup() {
+  const useArchives = useArchivesStore();
+  const { data: archive }: any = await useFetch("/api/backup");
+  if (archive.value.success) {
+    useArchives.addBackup(archive.value.data);
   }
 }
 

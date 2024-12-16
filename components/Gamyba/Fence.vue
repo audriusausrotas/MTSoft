@@ -63,7 +63,8 @@ const filterByIndex = () => {
 };
 
 const deleteHandler = async () => {
-  confirm("Ar tikrai norite ištrinti tvorą?");
+  const confirmed = confirm("Ar tikrai norite ištrinti tvorą?");
+  if (!confirmed) return;
   const response: any = await $fetch("/api/gamybaFence", {
     method: "delete",
     body: { _id: props._id, index: props.fenceIndex },

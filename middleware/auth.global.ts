@@ -26,7 +26,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
 
     // fetch settings for everyone
-    await Promise.all([fetchUserRights()]);
+    await fetchUserRights();
 
     const useSettings = useSettingsStore();
     const userRights = useSettings.userRights.find(
@@ -157,9 +157,33 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
         break;
 
-      case "/archyvas":
+      case "/archyvas/archyvas":
         if (userRights?.admin) {
           await fetchArchives();
+        } else {
+          return navigateTo(middlewareHelper(userRights!));
+        }
+        break;
+
+      case "/archyvas/nepasitvirtine":
+        if (userRights?.admin) {
+          await fetchUnconfirmed();
+        } else {
+          return navigateTo(middlewareHelper(userRights!));
+        }
+        break;
+
+      case "/archyvas/istrinti":
+        if (userRights?.admin) {
+          await fetchDeleted();
+        } else {
+          return navigateTo(middlewareHelper(userRights!));
+        }
+        break;
+
+      case "/archyvas/atsargines_kopijos":
+        if (userRights?.admin) {
+          await fetchBackup();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }

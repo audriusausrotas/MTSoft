@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const props = defineProps(["project", "index", "length", "archive"]);
+const props = defineProps(["project", "index", "length", "location"]);
 const useProjects = useProjectsStore();
+const useArchives = useArchivesStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
 const useGates = useGateStore();
@@ -11,19 +12,20 @@ const gateOrdered = ref(false);
 const { setError, setIsError } = useError();
 
 const deleteHandler = async (): Promise<void> => {
-  confirm("Ar tikrai norite ištrinti projektą?");
+  const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
+  if (!confirmed) return;
 
   const response: any = await $fetch(
-    props.archive ? "/api/archive" : "/api/project",
+    props.location === "projects" ? "/api/project" : "/api/archive",
     {
       method: "delete",
-      body: { _id: props.project._id },
+      body: { _id: props.project._id, location: props.location },
     }
   );
   if (response.success) {
-    props.archive
-      ? useProjects.deleteArchive(props.project._id)
-      : useProjects.deleteProject(props.project._id);
+    props.location === "projects"
+      ? useProjects.deleteProject(props.project._id)
+      : useArchives.deleteArchive(props.project._id, props.location);
     setIsError(false);
     setError(response.message);
   } else {
@@ -71,16 +73,18 @@ const linkHandler = () => {
 };
 
 const previewHandler = () => {
-  props.archive
-    ? navigateTo("/archyvas/" + props.project._id)
-    : navigateTo("/perziura/" + props.project._id);
+  navigateTo("/perziura/" + props.project._id);
 };
 
 const openInNewHandler = () => {
-  window.open(
-    "https://modernitvora.vercel.app/pasiulymas/" + props.project._id,
-    "_blank"
-  );
+  if (props.location === "projects") {
+    window.open(
+      "https://modernitvora.vercel.app/pasiulymas/" + props.project._id,
+      "_blank"
+    );
+  } else {
+    navigateTo("/archyvas/" + props.project._id);
+  }
 };
 
 const copyHandler = async () => {
@@ -98,22 +102,20 @@ const copyHandler = async () => {
 };
 
 const archiveHandler = async () => {
-  try {
-    const data: any = await $fetch("/api/archive", {
-      method: props.archive ? "PATCH" : "POST",
-      body: { _id: props.project._id },
-    } as any);
-    if (data.success) {
-      props.archive
-        ? useProjects.moveToProjects(props.project)
-        : useProjects.moveToArchive(props.project);
-      setIsError(false);
-      setError(data.message);
+  const data: any = await $fetch("/api/archive", {
+    method: props.location === "projects" ? "post" : "patch",
+    body: { _id: props.project._id, location: props.location },
+  } as any);
+  if (data.success) {
+    if (props.location === "projects") {
+      useProjects.deleteProject(props.project._id);
     } else {
-      setError(data.message);
+      useArchives.deleteArchive(props.project._id, props.location);
     }
-  } catch (error: any) {
-    setError(error);
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
   }
 };
 
@@ -200,10 +202,9 @@ checkGates();
       <div
         v-if="open"
         class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
-        :class="props.archive ? 'h-28' : 'h-64'"
+        :class="props.location !== 'projects' ? 'h-28' : 'h-64'"
       >
         <div
-          v-if="!props.archive"
           @click="openInNewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -217,6 +218,7 @@ checkGates();
         </div>
 
         <div
+          v-if="props.location === 'projects'"
           @click="previewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -230,7 +232,7 @@ checkGates();
         </div>
 
         <div
-          v-if="!props.archive"
+          v-if="props.location === 'projects'"
           @click="linkHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -244,7 +246,7 @@ checkGates();
         </div>
 
         <div
-          v-if="!props.archive"
+          v-if="props.location === 'projects'"
           @click="editHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -258,7 +260,7 @@ checkGates();
         </div>
 
         <div
-          v-if="!props.archive"
+          v-if="props.location === 'projects'"
           @click="copyHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
@@ -281,7 +283,7 @@ checkGates();
             width="20"
             height="20"
           />
-          <p v-if="!props.archive">Archyvuoti</p>
+          <p v-if="props.location === 'projects'">Archyvuoti</p>
           <p v-else>Sugrąžinti</p>
         </div>
         <div

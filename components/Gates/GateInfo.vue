@@ -10,7 +10,8 @@ const clickHandler = () => {
 };
 
 const deleteHandler = async () => {
-  confirm("Ar tikrai norite ištrinti projektą?");
+  const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
+  if (!confirmed) return;
 
   const response: any = await $fetch("/api/gates", {
     method: "delete",

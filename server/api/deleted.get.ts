@@ -1,11 +1,11 @@
 export default defineEventHandler(async (event) => {
-  const data = await backupSchema.find();
+  const data = await deletedSchema.find();
 
   if (!data)
     return {
       success: false,
       data: null,
-      message: "Atsarginių kopijų nerasta",
+      message: "Ištrintų projektų nerasta",
     };
 
   data.reverse();

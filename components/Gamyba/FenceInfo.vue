@@ -87,7 +87,8 @@ const postoneHandler = async () => {
 };
 
 const deleteHandler = async () => {
-  confirm("Ar tikrai norite ištrinti matavimą?");
+  const confirmed = confirm("Ar tikrai norite ištrinti matavimą?");
+  if (!confirmed) return;
   const response: any = await $fetch("/api/gamybaMeasure", {
     method: "delete",
     body: {

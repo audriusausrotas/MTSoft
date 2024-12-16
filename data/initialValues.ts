@@ -1,4 +1,11 @@
-import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
+import type {
+  Client,
+  Measure,
+  Result,
+  MenuLinks,
+  FenceMeasure,
+  Works,
+} from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -58,7 +65,7 @@ export const optionLinks: MenuLinks[] = [
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
-  { name: "Archyvas", link: "/archyvas", iconPath: "" },
+  { name: "Archyvas", link: "/archyvas/archyvas", iconPath: "" },
 ];
 
 export const createInitialMeasure = (): Measure => ({

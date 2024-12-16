@@ -1,30 +1,51 @@
 import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
 
 export default defineEventHandler(async (event) => {
-  const { _id } = await readBody(event);
+  try {
+    // Parse the request body
+    const { _id } = await readBody(event);
 
-  const project = await projectSchema.findById({ _id });
+    // Fetch the project by ID
+    const project = await projectSchema.findById(_id);
+    if (!project) {
+      return {
+        success: false,
+        data: null,
+        message: "Project not found",
+      };
+    }
 
-  if (!project)
+    // Backup project data to the unconfirmed schema
+    const projectData = project.toObject();
+    const unconfirmedProject = new unconfirmedSchema({ ...projectData });
+    const savedData = await unconfirmedProject.save();
+
+    if (!savedData) {
+      return {
+        success: false,
+        data: null,
+        message: "Klaida perkeliant projektą",
+      };
+    }
+
+    // Delete project from the main schema
+    await projectSchema.findByIdAndDelete(_id);
+    await backupSchema.findByIdAndDelete({ _id });
+
+    // Delete associated files in Cloudinary
+    await cloudinaryBachDelete(project.files);
+
+    return {
+      success: true,
+      data: savedData,
+      message: "Projektas perkeltas ",
+    };
+  } catch (err: any) {
+    console.error("Klaida perkeliant projektą: ", err.message);
     return {
       success: false,
       data: null,
-      message: "Projektas nerastas",
+      message: "Klaida perkeliant projektą: " + err.message,
     };
-
-  const projectData = project.toObject();
-
-  const unconfirmedProject = new unconfirmedSchema({ ...projectData });
-
-  const data = await unconfirmedProject.save();
-
-  await projectSchema.findByIdAndDelete({ _id });
-
-  cloudinaryBachDelete(project.files);
-
-  return {
-    success: true,
-    data: data,
-    message: "Projektas perkeltas į nepatvirtintus",
-  };
+  }
 });

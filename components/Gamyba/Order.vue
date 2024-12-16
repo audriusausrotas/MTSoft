@@ -6,7 +6,8 @@ const useUser = useUserStore();
 const router = useRouter();
 
 const deleteHandler = async (): Promise<void> => {
-  confirm("Ar tikrai norite ištrinti projektą?");
+  const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
+  if (!confirmed) return;
 
   if (useUser.user?.accountType !== "Administratorius") {
     setError("Ištrinti gali tik administratorius");

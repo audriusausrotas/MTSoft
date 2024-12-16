@@ -220,7 +220,13 @@ export interface ResponseUsers {
 export interface ProjectsState {
   projects: Project[];
   filteredProjects: Project[];
-  archive: Project[];
+  selectedProject: string | null;
+  selectedFilter: string;
+  selectedStatusFilter: string;
+}
+
+export interface ArchivesState {
+  archives: Project[];
   filteredArchives: Project[];
   backup: Project[];
   filteredBackup: Project[];
@@ -228,9 +234,7 @@ export interface ProjectsState {
   filteredDeleted: Project[];
   unconfirmed: Project[];
   filteredUnconfirmed: Project[];
-  selectedProject: string | null;
-  selectedFilter: string;
-  selectedStatusFilter: string;
+  projectToOpen: Project | null;
 }
 
 export interface ProductsState {

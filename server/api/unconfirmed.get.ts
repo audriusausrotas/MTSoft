@@ -1,11 +1,11 @@
 export default defineEventHandler(async (event) => {
-  const data = await backupSchema.find();
+  const data = await unconfirmedSchema.find();
 
   if (!data)
     return {
       success: false,
       data: null,
-      message: "Atsarginių kopijų nerasta",
+      message: "Nepatvirtintų projektų nerasta",
     };
 
   data.reverse();

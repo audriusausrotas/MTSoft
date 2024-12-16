@@ -1,16 +1,19 @@
 <script setup lang="ts">
-const useProjects = useProjectsStore();
+const props = defineProps(["data", "location"]);
+const useArchives = useArchivesStore();
+
+const searchArchive = (value: string) => {
+  useArchives.searchArchive(value, props.location);
+};
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col items-center gap-4">
     <BaseInput
       placeholder="Paieška"
-      label="Paieška"
-      width="w-full"
-      class="pr-16 flex-1"
+      width="w-full max-w-[1160px]"
       variant="light"
-      @onChange="(value: string): void => useProjects.searchArchive(value)"
+      @onChange="(value: string): void => searchArchive(value)"
     >
       <NuxtImg
         src="/icons/search.svg"
@@ -23,12 +26,12 @@ const useProjects = useProjectsStore();
       />
     </BaseInput>
     <HomeProject
-      v-for="(project, index) in useProjects?.filteredArchives"
+      v-for="(project, index) in props.data"
       :key="project._id"
       :index="index"
-      :length="useProjects.filteredArchives.length"
+      :length="props.data.length"
       :project="project"
-      :archive="true"
+      :location="props.location"
     />
   </div>
 </template>
