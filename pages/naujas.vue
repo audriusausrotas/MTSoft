@@ -14,6 +14,10 @@ const isLoading = ref<boolean>(false);
 
 //patikrint ar yra versijos projekte ir atvaizduot
 
+const versions = useProjects.projects.find((project) => {
+  project._id === useProjects.selectedProject;
+})?.versions;
+
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   const newProject: Project = {
@@ -75,9 +79,9 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
-    <div>
+    <div v-if="versions">
       <p>Projekto versijos:</p>
-      <div></div>
+      <div>asdf</div>
     </div>
     <div
       class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"
