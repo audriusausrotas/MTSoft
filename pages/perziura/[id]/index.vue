@@ -169,23 +169,22 @@ const orderFinishHandler = async () => {
   });
   if (response.success) {
     useProjects.updateStatus(response.data);
+    const archieveResponse: any = await $fetch("/api/archive", {
+      method: "POST",
+      body: { _id: offer!.value!._id },
+    });
+    if (archieveResponse.success) {
+      useProjects.deleteProject(offer!.value!._id);
+      setIsError(false);
+      setError(archieveResponse.message);
+      navigateTo("/");
+    } else {
+      setError(archieveResponse.message);
+    }
     setIsError(false);
     setError(response.message);
   } else {
     setError(response.message);
-  }
-
-  const archieveResponse: any = await $fetch("/api/archive", {
-    method: "POST",
-    body: { _id: offer!.value!._id },
-  });
-  if (archieveResponse.success) {
-    useProjects.moveToArchive(offer!.value!);
-    setIsError(false);
-    setError(archieveResponse.message);
-    navigateTo("/");
-  } else {
-    setError(archieveResponse.message);
   }
 };
 

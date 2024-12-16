@@ -12,6 +12,8 @@ const { setError, setIsError } = useError();
 const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
+//patikrint ar yra versijos projekte ir atvaizduot
+
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   const newProject: Project = {
@@ -42,6 +44,7 @@ const saveHandler = async (): Promise<void> => {
     orderNumber: "",
     files: [],
     comments: [],
+    versions: [],
   };
   try {
     const data: any = await $fetch("/api/project", {
@@ -72,6 +75,10 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
+    <div>
+      <p>Projekto versijos:</p>
+      <div></div>
+    </div>
     <div
       class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"
     >

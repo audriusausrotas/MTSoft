@@ -33,6 +33,12 @@ export interface Project {
   dateExparation: string;
   files: Photo[];
   comments: Comment[];
+  versions: Version[];
+}
+export interface Version {
+  name: string;
+  id: string;
+  date: string;
 }
 
 export interface Client {

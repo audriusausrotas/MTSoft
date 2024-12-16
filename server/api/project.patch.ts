@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
 
   project.status = value;
   const data = await project.save();
+
   if (!data) return { success: true, data: null, message: "Klaida" };
 
   if (value === "Patvirtintas") {
