@@ -67,10 +67,6 @@ const saveHandler = async (): Promise<void> => {
   isLoading.value = false;
 };
 
-const versionsHandler = (id: string) => {
-  window.open("/archyvas/" + id, "_blank");
-};
-
 const clearHandler = () => {
   useCalculations.clearAll();
   useResults.clearAll();
@@ -86,15 +82,12 @@ const clearHandler = () => {
       class="flex gap-4 w-full flex-wrap"
     >
       <p class="font-medium text-xl">Projekto versijos:</p>
-      <div
+      <NewVersion
         v-for="(version, index) in versions"
         :key="version.id"
-        class="flex gap-4 border rounded-md py-1 px-4 border-dark-full hover:cursor-pointer hover:bg-red-600 hover:text-white hover:border-transparent"
-        @click="versionsHandler(version.id)"
-      >
-        <p>V.{{ index }}</p>
-        <p>{{ version.date.slice(0, 10) }}</p>
-      </div>
+        :version="version"
+        :index="index"
+      />
     </div>
     <div
       class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"
