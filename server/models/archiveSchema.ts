@@ -39,6 +39,11 @@ export const archiveSchema = defineMongooseModel<Project>(
       required: false,
       default: "Nepatvirtintas",
     },
+    versions: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
     creator: Object,
     orderNumber: String,
     totalPrice: Number,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Project } from "~/data/interfaces";
+import type { Project, Version } from "~/data/interfaces";
 
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
@@ -12,11 +12,9 @@ const { setError, setIsError } = useError();
 const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
-//patikrint ar yra versijos projekte ir atvaizduot
-
-const versions = useProjects.projects.find((project) => {
-  project._id === useProjects.selectedProject;
-})?.versions;
+const versions: Version[] | undefined = useProjects.projects.find(
+  (project) => project._id === useProjects.selectedProject
+)?.versions;
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -69,6 +67,10 @@ const saveHandler = async (): Promise<void> => {
   isLoading.value = false;
 };
 
+const versionsHandler = (id: string) => {
+  window.open("/archyvas/" + id, "_blank");
+};
+
 const clearHandler = () => {
   useCalculations.clearAll();
   useResults.clearAll();
@@ -79,9 +81,17 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
-    <div v-if="versions">
-      <p>Projekto versijos:</p>
-      <div>asdf</div>
+    <div v-if="versions" class="flex gap-4 w-full flex-wrap">
+      <p class="font-medium text-xl">Projekto versijos:</p>
+      <div
+        v-for="(version, index) in versions"
+        :key="version.id"
+        class="flex gap-4 border rounded-md py-1 px-4 border-dark-full hover:cursor-pointer hover:bg-red-600 hover:text-white hover:border-transparent"
+        @click="versionsHandler(version.id)"
+      >
+        <p>V.{{ index }}</p>
+        <p>{{ version.date.slice(0, 10) }}</p>
+      </div>
     </div>
     <div
       class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"

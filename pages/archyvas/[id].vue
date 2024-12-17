@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: false,
+});
 const useArchive = useArchivesStore();
 const offer = useArchive.projectToOpen;
 
@@ -6,9 +9,9 @@ const open = ref<boolean>(true);
 </script>
 
 <template>
-  <div class="max-w-[1200px] w-full">
+  <div class="max-w-[1200px] m-auto my-10 w-full">
     <div
-      class="flex border rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
+      class="flex border flex-wrap rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
     >
       <div
         class="flex-1 flex items-center justify-center hover:bg-red-600 h-10 hover:cursor-pointer hover:text-white"

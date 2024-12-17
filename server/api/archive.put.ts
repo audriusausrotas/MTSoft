@@ -15,6 +15,10 @@ export default defineEventHandler(async (event) => {
     data = await backupSchema.findById(id);
   }
 
+  if (!data) {
+    data = await versionsSchema.findById(id);
+  }
+
   if (!data)
     return {
       success: true,

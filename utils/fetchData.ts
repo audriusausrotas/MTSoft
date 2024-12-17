@@ -108,7 +108,7 @@ export async function fetchUsers() {
 export async function fetchArchive(id: any) {
   const useArchives = useArchivesStore();
   const { data }: any = await useFetch("/api/archive", {
-    method: "PUT",
+    method: "put",
     body: { id },
   });
   if (data.value.success) {

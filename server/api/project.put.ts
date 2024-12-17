@@ -1,3 +1,5 @@
+import { Project } from "~/data/interfaces";
+
 export default defineEventHandler(async (event) => {
   const {
     _id,
@@ -24,9 +26,28 @@ export default defineEventHandler(async (event) => {
   const dateExparation = expirationDate.toISOString();
 
   const orderExist = await projectSchema.findById({ _id });
+
   if (!orderExist)
     return { success: false, data: null, message: "Projektas nerastas" };
 
+  const versionObject: Project = orderExist.toObject();
+  delete versionObject._id;
+
+  const newVersion = new versionsSchema(versionObject);
+  const version = await newVersion.save();
+
+  if (!version)
+    return {
+      success: false,
+      data: null,
+      message: "Klaida išsaugant versiją",
+    };
+
+  orderExist.versions?.push({
+    id: version._id,
+    date: dateCreated,
+  });
+  orderExist.dateCreated = dateCreated;
   orderExist.client = client;
   orderExist.fenceMeasures = fenceMeasures;
   orderExist.results = results;
@@ -39,7 +60,6 @@ export default defineEventHandler(async (event) => {
   orderExist.priceVAT = priceVAT;
   orderExist.priceWithDiscount = priceWithDiscount;
   orderExist.discount = discount;
-  orderExist.dateCreated = dateCreated;
   orderExist.dateExparation = dateExparation;
   orderExist.retail = retail;
 

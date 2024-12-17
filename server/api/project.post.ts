@@ -1,3 +1,5 @@
+import { Project } from "~/data/interfaces";
+
 export default defineEventHandler(async (event) => {
   const {
     _id,
@@ -69,10 +71,11 @@ export default defineEventHandler(async (event) => {
   const orderNumber = `${firstThreeLetters}-${newOrderNumbers}`;
 
   if (projectExist) {
-    const newProjectData = projectExist.toObject() as any;
+    const newProjectData = projectExist.toObject() as Project;
+
     delete newProjectData._id;
-    newProjectData.orderNumber = orderNumber;
     newProjectData.dateCreated = dateCreated;
+    newProjectData.orderNumber = orderNumber;
     newProjectData.dateExparation = dateExparation;
     newProjectData.status = "Nepatvirtintas";
     newProjectData.advance = 0;

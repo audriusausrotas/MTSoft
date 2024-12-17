@@ -83,7 +83,7 @@ const openInNewHandler = () => {
       "_blank"
     );
   } else {
-    navigateTo("/archyvas/" + props.project._id);
+    window.open("/archyvas/" + props.project._id, "_blank");
   }
 };
 

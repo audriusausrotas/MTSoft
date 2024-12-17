@@ -11,7 +11,7 @@ export interface Calculations {
 }
 
 export interface Project {
-  _id: string;
+  _id?: string;
   creator: Creator;
   client: Client;
   retail: boolean;
@@ -36,7 +36,6 @@ export interface Project {
   versions: Version[];
 }
 export interface Version {
-  name: string;
   id: string;
   date: string;
 }

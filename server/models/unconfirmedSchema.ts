@@ -51,6 +51,11 @@ export const unconfirmedSchema = defineMongooseModel<Project>(
       required: false,
       default: [],
     },
+    versions: {
+      type: [Object],
+      required: false,
+      default: [],
+    },
     creator: Object,
     orderNumber: String,
     totalPrice: Number,

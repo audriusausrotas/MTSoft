@@ -1,8 +1,8 @@
 import { defineMongooseModel } from "#nuxt/mongoose";
 import type { Project } from "~/data/interfaces";
 
-export const backupSchema = defineMongooseModel<Project>(
-  "backupSchema",
+export const versionsSchema = defineMongooseModel<Project>(
+  "versionsSchema",
   {
     client: {
       type: Object,
@@ -39,11 +39,6 @@ export const backupSchema = defineMongooseModel<Project>(
       required: false,
       default: "Nepatvirtintas",
     },
-    files: {
-      type: [Object],
-      required: false,
-      default: [],
-    },
     versions: {
       type: [Object],
       required: false,
@@ -61,5 +56,5 @@ export const backupSchema = defineMongooseModel<Project>(
     dateCreated: String,
     dateExparation: String,
   },
-  { collection: "backup" }
+  { collection: "projectsVersions" }
 );
