@@ -3,7 +3,8 @@ import type { MontavimasFence, Project } from "~/data/interfaces";
 export async function processJob(_id: string, worker: string) {
   const project: Project | null = await projectSchema.findById(_id);
 
-  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project)
+    return { success: false, data: null, message: "Projektas nerastas" };
 
   const montavimas = await montavimasSchema.findOne({ _id: project._id });
 
@@ -50,7 +51,7 @@ export async function processJob(_id: string, worker: string) {
     });
 
     const newMontavimas = new montavimasSchema({
-      _id: project._id.toString(),
+      _id: project._id?.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,

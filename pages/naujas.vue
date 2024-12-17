@@ -81,7 +81,10 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
-    <div v-if="versions" class="flex gap-4 w-full flex-wrap">
+    <div
+      v-if="versions && versions.length > 0"
+      class="flex gap-4 w-full flex-wrap"
+    >
       <p class="font-medium text-xl">Projekto versijos:</p>
       <div
         v-for="(version, index) in versions"

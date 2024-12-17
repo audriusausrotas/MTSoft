@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Photo } from "~/data/interfaces";
+import type { Photo, Version } from "~/data/interfaces";
 const route = useRoute();
 const { setError, setIsError } = useError();
 const useMontavimas = useMontavimasStore();
@@ -38,6 +38,8 @@ const workers = useUsers.users
   .map((user) => {
     return user.lastName;
   });
+
+const versions: Version[] | undefined = offer.value?.versions;
 
 const statusHandler = async (value: string) => {
   const response: any = await $fetch("/api/project", {
@@ -174,7 +176,7 @@ const orderFinishHandler = async () => {
       body: { _id: offer!.value!._id },
     });
     if (archieveResponse.success) {
-      useProjects.deleteProject(offer!.value!._id);
+      offer?.value?._id && useProjects.deleteProject(offer.value._id);
       setIsError(false);
       setError(archieveResponse.message);
       navigateTo("/");
@@ -223,7 +225,7 @@ const photosHandler = async (photo: Photo) => {
     body: { photo, category: "projects", _id: offer!.value!._id },
   });
   if (response.success) {
-    useProjects.addPhoto(offer!.value!._id, photo);
+    offer?.value?._id && useProjects.addPhoto(offer!.value!._id, photo);
     setIsError(false);
     setError(response.message);
   } else {
@@ -266,9 +268,13 @@ const deleteComment = async (value: any) => {
   }
 };
 
+const versionsHandler = (id: string) => {
+  window.open("/archyvas/" + id, "_blank");
+};
+
 const checkGates = () => {
   gateOrdered.value = useGates.gates.some(
-    (item) => item._id.toString() === offer?.value?._id.toString()
+    (item) => item._id.toString() === offer.value!._id!.toString()
   );
 };
 
@@ -292,6 +298,21 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
+    <div
+      v-if="versions && versions.length > 0"
+      class="flex gap-4 w-full flex-wrap"
+    >
+      <p class="font-medium text-xl">Projekto versijos:</p>
+      <div
+        v-for="(version, index) in versions"
+        :key="version.id"
+        class="flex gap-4 border rounded-md py-1 px-4 border-dark-full hover:cursor-pointer hover:bg-red-600 hover:text-white hover:border-transparent"
+        @click="versionsHandler(version.id)"
+      >
+        <p>V.{{ index }}</p>
+        <p>{{ version.date.slice(0, 10) }}</p>
+      </div>
+    </div>
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">

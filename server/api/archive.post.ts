@@ -1,4 +1,5 @@
 import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
+import { deleteVersions } from "~/utils/deleteProjectVersions";
 
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
@@ -21,6 +22,11 @@ export default defineEventHandler(async (event) => {
   await projectSchema.findByIdAndDelete({ _id });
 
   cloudinaryBachDelete(project.files);
+
+  const response = await deleteVersions(project.versions);
+
+  if (!response.success)
+    return { success: false, data: null, message: "Klaida trinant versijas" };
 
   return {
     success: true,
