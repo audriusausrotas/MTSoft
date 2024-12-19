@@ -135,8 +135,6 @@ export default function generateResults() {
         type: useSettings.defaultValues.crossbar,
       });
     });
-    console.log(useSettings.defaultValues.crossbar);
-    console.log(useSettings.defaultValues.crossbarHolders);
     results.crossbarHolders.forEach((item) => {
       createResultElement({
         ...item,

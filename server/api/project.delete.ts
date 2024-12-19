@@ -10,6 +10,8 @@ export default defineEventHandler(async (event) => {
 
   const projectData = project.toObject();
 
+  projectData.dateExparation = new Date().toISOString();
+
   const deletedProject = new deletedSchema({ ...projectData });
 
   const deletedData = await deletedProject.save();

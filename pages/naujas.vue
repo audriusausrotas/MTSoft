@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Project, Version } from "~/data/interfaces";
+import type { Project } from "~/data/interfaces";
 
 const useCalculations = useCalculationsStore();
 const useProjects = useProjectsStore();
@@ -12,9 +12,11 @@ const { setError, setIsError } = useError();
 const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
-const versions: Version[] | undefined = useProjects.projects.find(
-  (project) => project._id === useProjects.selectedProject
-)?.versions;
+const project = computed(() => {
+  return useProjects.projects.find(
+    (item) => item._id === useProjects.selectedProject
+  );
+});
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -78,15 +80,16 @@ const clearHandler = () => {
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
     <div
-      v-if="versions && versions.length > 0"
+      v-if="project && project.versions.length > 0"
       class="flex gap-4 w-full flex-wrap"
     >
       <p class="font-medium text-xl">Projekto versijos:</p>
       <NewVersion
-        v-for="(version, index) in versions"
+        v-for="(version, index) in project.versions"
         :key="version.id"
         :version="version"
         :index="index"
+        :projectId="project._id"
       />
     </div>
     <div

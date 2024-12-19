@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const props = defineProps(["version", "index", "projectId"]);
+const useCalculations = useCalculationsStore();
+const useResults = useResultsStore();
+const useProjects = useProjectsStore();
+const useBackup = useBackupStore();
+const { setError, setIsError } = useError();
 
 const open = ref<boolean>(false);
 
@@ -8,11 +13,47 @@ const versionsHandler = () => {
   window.open("/archyvas/" + props.version.id, "_blank");
 };
 
-const returnHandler = () => {
+const returnHandler = async () => {
+  const response: any = await $fetch("/api/rollbackVersion", {
+    method: "post",
+    body: { _id: props.version.id, projectId: props.projectId },
+  });
+
+  if (response.success) {
+    useCalculations.clearAll();
+    useResults.clearAll();
+    useProjects.clearSelected();
+    useBackup.clearBackup();
+
+    response.data._id = props.projectId;
+
+    useProjects.addProject(response.data);
+    useCalculations.setProject({
+      client: response.data.client,
+      fenceMeasures: response.data.fenceMeasures,
+      retail: response.data.retail,
+    });
+    useResults.setProject(response.data);
+    useBackup.addBackup(response.data.results, response.data.works);
+    useProjects.setSelectedProject(props.projectId);
+  }
   open.value = false;
 };
 
-const deleteHandler = () => {
+const deleteHandler = async () => {
+  const response: any = await $fetch("/api/version", {
+    method: "delete",
+    body: { _id: props.version.id, projectId: props.projectId },
+  });
+
+  if (response.success) {
+    useProjects.updateStatus(response.data);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+
   open.value = false;
 };
 </script>

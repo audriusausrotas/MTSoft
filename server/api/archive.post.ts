@@ -15,6 +15,8 @@ export default defineEventHandler(async (event) => {
 
   const projectData = project.toObject();
 
+  projectData.dateExparation = new Date().toISOString();
+
   const archivedProject = new archiveSchema({ ...projectData });
 
   const data = await archivedProject.save();

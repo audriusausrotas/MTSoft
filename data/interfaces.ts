@@ -36,6 +36,7 @@ export interface Project {
   versions: Version[];
 }
 export interface Version {
+  _id?: string;
   id: string;
   date: string;
 }
