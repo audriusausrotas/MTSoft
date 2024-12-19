@@ -120,6 +120,7 @@ export interface MontavimasResult {
   space: number;
   color: string;
   width: number | null;
+  delivered: boolean;
 }
 
 export interface OtherParts {

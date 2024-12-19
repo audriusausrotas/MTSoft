@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
 
 export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
@@ -9,6 +10,8 @@ export default defineEventHandler(async (event) => {
 
   if (!data)
     return { success: false, data: null, message: "užsakymas nerastas" };
+
+  cloudinaryBachDelete(data.files);
 
   return { success: true, data: null, message: "Uzsakymas istrintas" };
 });

@@ -2,14 +2,17 @@
 import { MontavimasStatus } from "~/data/selectFieldData";
 import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
+
 const useMontavimas = useMontavimasStore();
 const useUser = useUserStore();
 const route = useRoute();
+
 const order: any = computed(() => {
   return useMontavimas.montavimasList.find(
     (item) => item._id === route.params.id
   );
 });
+
 const workers = useUser.users
   .filter((user) => user.accountType === "Montavimas")
   .map((user) => user.lastName);
@@ -68,6 +71,20 @@ const photosHandler = async (photo: Photo) => {
   });
   if (response.success) {
     useMontavimas.addPhoto(order.value._id, photo);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const deliverHandler = async (value: boolean, measureIndex: number) => {
+  const response: any = await $fetch("/api/delivered", {
+    method: "post",
+    body: { _id: order.value._id, measureIndex, value },
+  });
+  if (response.success) {
+    useMontavimas.updateOrder(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -147,15 +164,30 @@ const photosHandler = async (photo: Photo) => {
           <div class="w-6 text-center">Nr</div>
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>
+          <div class="w-20">Medžiagos pristatytos</div>
         </div>
-        <div class="border-dark-full">
+        <div
+          v-for="(result, index) in order.results"
+          class="flex print:border-b border-dark-full gap-10"
+        >
           <OfferResult
-            v-for="(result, index) in order.results"
             :key="result.id"
             :result="result"
             :hidePrices="true"
             :index="index"
+            class="flex-1"
           />
+          <div class="w-20 flex justify-center items-center pr-2">
+            <BaseCheckField
+              :name="'vartai' + index"
+              @onChange="
+                (value: boolean) =>
+                  deliverHandler(value, index)
+              "
+              :checked="result.delivered"
+              height="h-10"
+            />
+          </div>
         </div>
       </div>
       <div class="text-2xl font-semibold text-black text-center">Darbai</div>
@@ -167,13 +199,17 @@ const photosHandler = async (photo: Photo) => {
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>
         </div>
-        <div class="print:border-b border-dark-full">
+
+        <div
+          v-for="(work, index) in order.works"
+          class="flex print:border-b border-dark-full gap-10"
+        >
           <OfferWork
-            v-for="(work, index) in order.works"
             :key="work.id"
             :work="work"
             :hidePrices="true"
             :index="index"
+            class="flex-1"
           />
         </div>
       </div>

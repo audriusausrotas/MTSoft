@@ -44,11 +44,13 @@ const resultSchema = new Schema({
   color: { type: String, default: "" },
   width: { type: Number, default: 0 },
   category: { type: String, default: "" },
+  delivered: { type: Boolean, required: false, default: false },
 });
 
 const workSchema = new Schema({
   name: { type: String, default: "" },
   quantity: { type: Number, default: 0 },
+  delivered: { type: Boolean, required: false, default: false },
 });
 
 const fenceSchema = new Schema({

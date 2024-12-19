@@ -1,3 +1,5 @@
+import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
+
 export default defineEventHandler(async (event) => {
   try {
     const { _id } = await readBody(event);
@@ -5,6 +7,8 @@ export default defineEventHandler(async (event) => {
 
     if (!data)
       return { success: false, data: null, message: "Projektas nerastas" };
+
+    cloudinaryBachDelete(data.files);
 
     return { success: true, data: null, message: "Projektas ištrintas" };
   } catch (error) {

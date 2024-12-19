@@ -40,6 +40,7 @@ export async function processJob(_id: string, worker: string) {
         width: item.width,
         color: item.color,
         category: item.category,
+        delivered: false,
       };
     });
 
@@ -47,6 +48,7 @@ export async function processJob(_id: string, worker: string) {
       return {
         name: item.name,
         quantity: item.quantity,
+        delivered: false,
       };
     });
 
