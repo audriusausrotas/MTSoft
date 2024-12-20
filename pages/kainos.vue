@@ -3,7 +3,25 @@ const useProducts = useProductsStore();
 </script>
 <template>
   <div class="flex flex-col gap-8">
-    <PriceNew />
+    <div class="flex gap-4 flex-wrap">
+      <PriceNew />
+      <BaseInput
+        placeholder="Paieška"
+        width="flex-1"
+        variant="light"
+        @onChange="(value: string): void => useProjects.searchProjects(value)"
+      >
+        <NuxtImg
+          src="/icons/search.svg"
+          width="14"
+          height="14"
+          alt="search icon"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
+      </BaseInput>
+    </div>
     <div class="overflow-auto">
       <table class="w-full">
         <thead
@@ -21,7 +39,7 @@ const useProducts = useProductsStore();
         </thead>
         <tbody>
           <tr
-            v-for="(product, index) in useProducts.products"
+            v-for="(product, index) in useProducts.filteredProducts"
             :key="product._id"
           >
             <PriceElement :index="index" :product="product" />

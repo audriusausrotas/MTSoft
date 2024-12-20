@@ -244,11 +244,6 @@ export interface ArchivesState {
   projectToOpen: Project | null;
 }
 
-export interface ProductsState {
-  products: Product[];
-  searchValue: string;
-}
-
 export interface Product {
   _id: string;
   name: string;

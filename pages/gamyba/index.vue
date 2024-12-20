@@ -27,8 +27,8 @@ const postonedOrders = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 select-none mb-12">
-    <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 select-none mb-12 max-w-[690px]">
+    <div class="flex gap-4 flex-wrap">
       <GamybaNewOrder />
       <BaseInput
         placeholder="Paieška"

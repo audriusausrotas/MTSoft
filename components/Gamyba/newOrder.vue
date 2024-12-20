@@ -47,7 +47,7 @@ const cancelHandler = () => {
 <template>
   <BaseButton v-if="!newOpen" name="Sukurti naują" @click="newOpen = true" />
 
-  <div v-else class="flex flex-col gap-4">
+  <div v-else class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <BaseButton name="Išsaugoti užsakymą" @click="newHandler" />
       <BaseButton name="Atšaukti" @click="cancelHandler" />
@@ -65,7 +65,7 @@ const cancelHandler = () => {
       />
       <BaseInput
         placeholder="Adresas"
-        width="w-96"
+        width="min-w-40 flex-1"
         :name="orderAddress"
         @onChange="
           (value) => {
