@@ -14,7 +14,7 @@ const filteredGates = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 w-full max-w-[910px]">
     <BaseInput
       placeholder="Paieška"
       width="flex-1"

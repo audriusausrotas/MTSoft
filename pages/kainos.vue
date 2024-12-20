@@ -2,14 +2,14 @@
 const useProducts = useProductsStore();
 </script>
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8 w-full">
     <div class="flex gap-4 flex-wrap">
       <PriceNew />
       <BaseInput
         placeholder="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string): void => useProjects.searchProjects(value)"
+        @onChange="(value: string): void => useProducts.searchProduct(value)"
       >
         <NuxtImg
           src="/icons/search.svg"

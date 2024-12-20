@@ -31,7 +31,7 @@ const changeFilter = (value: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 w-full max-w-[1170px]">
     <div class="flex gap-4">
       <BaseSelectField
         v-if="useUser.user?.accountType === 'Administratorius'"
@@ -45,7 +45,7 @@ const changeFilter = (value: string) => {
       />
       <BaseInput
         placeholder="Paieška"
-        width="max-w-[910px] w-full"
+        width="w-full"
         variant="light"
         label="Paieška"
         @onChange="
