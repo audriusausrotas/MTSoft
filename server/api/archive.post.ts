@@ -21,7 +21,8 @@ export default defineEventHandler(async (event) => {
 
   const data = await archivedProject.save();
 
-  await projectSchema.findByIdAndDelete({ _id });
+  await projectSchema.findByIdAndDelete(_id);
+  await montavimasSchema.findByIdAndDelete(_id);
 
   cloudinaryBachDelete(project.files);
 

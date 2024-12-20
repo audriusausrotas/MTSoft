@@ -13,13 +13,14 @@ const filteredMontavimas = computed(() => {
     useUser.user?.accountType === "Administratorius" ||
     useUser.user?.accountType === "Sandėlys"
   ) {
-    if (filteredUser.value === "Visi") return useMontavimas.montavimasList;
+    if (filteredUser.value === "Visi")
+      return useMontavimas.filteredMontavimasList;
     else
-      return useMontavimas.montavimasList.filter((item: Montavimas) =>
+      return useMontavimas.filteredMontavimasList.filter((item: Montavimas) =>
         item.workers.includes(filteredUser.value)
       );
   } else
-    return useMontavimas.montavimasList.filter((item: Montavimas) =>
+    return useMontavimas.filteredMontavimasList.filter((item: Montavimas) =>
       item.workers.includes(useUser.user?.lastName!)
     );
 });
@@ -31,16 +32,37 @@ const changeFilter = (value: string) => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <BaseSelectField
-      v-if="useUser.user?.accountType === 'Administratorius'"
-      label="Montuotojas"
-      :values="['Visi', ...workers]"
-      id="userFilter"
-      defaultValue="Visi"
-      width="w-60"
-      @onChange="(value: string) => changeFilter(value)
+    <div class="flex gap-4">
+      <BaseSelectField
+        v-if="useUser.user?.accountType === 'Administratorius'"
+        label="Montuotojas"
+        :values="['Visi', ...workers]"
+        id="userFilter"
+        defaultValue="Visi"
+        width="w-60"
+        @onChange="(value: string) => changeFilter(value)
       "
-    />
+      />
+      <BaseInput
+        placeholder="Paieška"
+        width="max-w-[910px] w-full"
+        variant="light"
+        label="Paieška"
+        @onChange="
+          (value: string): void => useMontavimas.searchMontavimas(value)
+        "
+      >
+        <NuxtImg
+          src="/icons/search.svg"
+          width="14"
+          height="14"
+          alt="search icon"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
+      </BaseInput>
+    </div>
     <div class="flex flex-wrap gap-4">
       <div
         v-for="(order, index) in filteredMontavimas"

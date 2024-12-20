@@ -3,11 +3,13 @@ import type { Montavimas } from "~/data/interfaces";
 export const useMontavimasStore = defineStore("montavimas", {
   state: () => ({
     montavimasList: [] as Montavimas[],
+    filteredMontavimasList: [] as Montavimas[],
   }),
 
   actions: {
     addAll(data: Montavimas[]) {
       this.montavimasList = [...data];
+      this.updateFilteredMontavimasList();
     },
 
     addOne(data: Montavimas) {
@@ -18,10 +20,12 @@ export const useMontavimasStore = defineStore("montavimas", {
           else return item;
         });
       }
+      this.updateFilteredMontavimasList();
     },
 
     addMontavimas(data: Montavimas) {
       this.montavimasList.push(data);
+      this.updateFilteredMontavimasList();
     },
 
     deleteMontavimasOrder(id: string) {
@@ -39,6 +43,7 @@ export const useMontavimasStore = defineStore("montavimas", {
           return montavimas;
         } else return montavimas;
       });
+      this.updateFilteredMontavimasList();
     },
 
     updateOrder(id: string, data: Montavimas) {
@@ -47,6 +52,7 @@ export const useMontavimasStore = defineStore("montavimas", {
         else return item;
       });
     },
+
     addPhoto(id: string, photo: { url: string; id: string }) {
       this.montavimasList = this.montavimasList.map((item) => {
         if (item._id === id) {
@@ -64,7 +70,28 @@ export const useMontavimasStore = defineStore("montavimas", {
         } else return item;
       });
     },
-  },
 
-  getters: {},
+    searchMontavimas(value: string) {
+      if (value.length > 2) {
+        const foundProjects = this.montavimasList.filter(
+          (project) =>
+            project.client.address
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            project.creator.username
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            project.orderNumber.toLowerCase().includes(value.toLowerCase())
+        );
+
+        this.filteredMontavimasList = [...foundProjects];
+      } else {
+        this.updateFilteredMontavimasList();
+      }
+    },
+
+    updateFilteredMontavimasList() {
+      this.filteredMontavimasList = [...this.montavimasList];
+    },
+  },
 });

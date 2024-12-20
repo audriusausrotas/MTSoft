@@ -24,6 +24,8 @@ export default defineEventHandler(async (event) => {
   if (!data)
     return { success: false, data: null, message: "Klaida trinant projektą" };
 
+  await montavimasSchema.findByIdAndDelete(_id);
+
   cloudinaryBachDelete(project.files);
 
   const response = await deleteVersions(project.versions);
