@@ -13,7 +13,10 @@ const emitUpdate = (value: boolean): void => {
     class="flex flex-col text-sm items-center gap-4 justify-start"
     :class="props.height ? props.height : 'h-[64px]'"
   >
-    <label :for="props.name" class="capitalize cursor-pointer select-none"
+    <label
+      v-if="props.label"
+      :for="props.name"
+      class="capitalize cursor-pointer select-none"
       >{{ props.label }}
     </label>
     <input

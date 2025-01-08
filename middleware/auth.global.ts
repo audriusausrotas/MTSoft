@@ -133,6 +133,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
         break;
 
+      case "/pasiulymai":
+        if (userRights?.admin) {
+          await fetchPotentialClients();
+        } else {
+          return navigateTo(middlewareHelper(userRights!));
+        }
+        break;
+
       case "/klientai":
         if (userRights?.admin) {
           await fetchClients();
@@ -151,7 +159,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
       case "/nustatymai":
         if (userRights?.admin) {
-          await Promise.all([fetchProducts(), fetchDefaultValues()]);
+          await Promise.all([
+            fetchProducts(),
+            fetchDefaultValues(),
+            fetchUserRights(),
+            fetchSelects(),
+          ]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }

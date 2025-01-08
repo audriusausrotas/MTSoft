@@ -555,3 +555,13 @@ export interface UserRights {
   gate: boolean;
   admin: boolean;
 }
+
+export interface PotentialClient {
+  _id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  status: string;
+  send: boolean;
+}

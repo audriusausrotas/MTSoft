@@ -220,3 +220,13 @@ export async function fetchUserRights() {
     useSettings.addUserRights(userRights.value.data);
   }
 }
+
+export async function fetchPotentialClients() {
+  const usePotentialClients = usePotentialClientsStore();
+  const { data: potentialClients }: any = await useFetch(
+    "/api/potentialClients"
+  );
+  if (potentialClients.value.success) {
+    usePotentialClients.addPotentialClients(potentialClients.value.data);
+  }
+}

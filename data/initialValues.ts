@@ -61,6 +61,7 @@ export const navigationLinks: MenuLinks[] = [
 ];
 
 export const optionLinks: MenuLinks[] = [
+  { name: "Pasiūlymai", link: "/pasiulymai", iconPath: "" },
   { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
