@@ -17,7 +17,7 @@ const sendHandler = async () => {
     body: {
       to: recipients,
       message: `testas`,
-      title: "testuojam",
+      title: "Komercinis pasiūlymas",
     },
   });
   if (response.success) {

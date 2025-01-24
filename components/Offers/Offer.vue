@@ -1,6 +1,8 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div></div>
+  <div class="flex flex-col gap-8">
+    <OffersSteelInfo />
+  </div>
 </template>
 <style scoped></style>

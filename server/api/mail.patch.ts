@@ -34,7 +34,7 @@ export default defineEventHandler(async (event: any) => {
   for (const recipient of to) {
     const emailResult = await sendEmail({
       to: recipient.email,
-      subject: title || "Tvoros pasiūlymas",
+      subject: title,
       html,
       user,
     });
