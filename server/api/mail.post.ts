@@ -1,29 +1,18 @@
+import { sendEmail } from "~/utils/emailHelper";
 import type { User } from "~/data/interfaces";
-import nodemailer from "nodemailer";
 
 export default defineEventHandler(async (event: any) => {
-  const { userId, to, link } = await readBody(event);
-  const data: User | null = await userSchema.findById(userId);
-  const config = useRuntimeConfig();
+  const { userId, to, link, title } = await readBody(event);
 
-  if (!data)
+  const user: User | null = await userSchema.findById(userId);
+
+  if (!user)
     return {
       success: false,
-      data: null,
       message: "Vartotojas nerastas",
     };
 
-  let fromPass: string = "";
-
-  if (data.email.includes("audrius")) {
-    fromPass = config.nodemailerPassAudrius!;
-  } else if (data.email.includes("andrius")) {
-    fromPass = config.nodemailerPassAndrius!;
-  } else if (data.email.includes("pardavimai")) {
-    fromPass = config.nodemailerPassHaris!;
-  }
-
-  let htmlContent = `
+  let html = `
   <html>
 <body>
     <p style="font-weight: 500"">Laba diena.</p> 
@@ -42,11 +31,11 @@ export default defineEventHandler(async (event: any) => {
         <img height="auto" src="https://ci3.googleusercontent.com/mail-sig/AIorK4zCu_lclbKFFFaK1zc3I3KLAa0ziF68nA82jn1EFei1wF9QSJorYDnoF8DsH2GJm4mGsk5a0vM"/>
         <span style="font-size: small"><br/></span>
         <span style="font-size: small"><br/></span>
-        <span style="color:var(--textColor);background-color:var(--backgroundColor);font-family:Arial, Helvetica, sans-serif;font-size: small">${data.username} ${data.lastName}</span>
+        <span style="color:var(--textColor);background-color:var(--backgroundColor);font-family:Arial, Helvetica, sans-serif;font-size: small">${user.username} ${user.lastName}</span>
         <span style="font-size: small"><br/></span>
-        <a style="color:rgb(10, 132, 255);font-family:Arial, Helvetica, sans-serif;font-size: small" href="tel:${data.phone}">${data.phone}</a>
+        <a style="color:rgb(10, 132, 255);font-family:Arial, Helvetica, sans-serif;font-size: small" href="tel:${user.phone}">${user.phone}</a>
         <span style="font-size: small"><br/></span>
-        <a style="font-family:Arial, Helvetica, sans-serif;font-size: small" href="mailto:${data.email}" target="_blank">${data.email}</a>
+        <a style="font-family:Arial, Helvetica, sans-serif;font-size: small" href="mailto:${user.email}" target="_blank">${user.email}</a>
         <span style="font-size: small"><br/></span>
         <a style="font-family:Arial, Helvetica, sans-serif;font-size: small" href="mailto:info@modernitvora.lt" target="_blank">info@modernitvora.lt</a>
         <span style="font-size: small"><br/></span>
@@ -63,31 +52,16 @@ export default defineEventHandler(async (event: any) => {
   </html>
 `;
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: data.email,
-      pass: fromPass,
-    },
+  const emailResult = await sendEmail({
+    to,
+    subject: title || "Tvoros pasiūlymas",
+    html,
+    user,
   });
 
-  try {
-    await transporter.sendMail({
-      from: "Moderni Tvora " + data.email,
-      to: to,
-      subject: "Tvoros pasiūlymas",
-      html: htmlContent,
-    });
-    return {
-      success: true,
-      data: null,
-      message: "Pasiūlymas išsiūstas",
-    };
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      message: "Klaida: " + error,
-    };
-  }
+  return {
+    success: emailResult.success,
+    data: null,
+    message: emailResult.success ? "Pasiūlymas išsiūstas" : emailResult.message,
+  };
 });

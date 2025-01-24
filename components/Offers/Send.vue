@@ -7,7 +7,26 @@ const { setError, setIsError } = useError();
 const filteredData = reactive<any>([]);
 const input = ref<string>("");
 
-const sendHandler = async () => {};
+const sendHandler = async () => {
+  const recipients = usePotentialClients.potentialClients.filter(
+    (client) => client.send
+  );
+
+  const response: any = await $fetch("/api/mail", {
+    method: "patch",
+    body: {
+      to: recipients,
+      message: `testas`,
+      title: "testuojam",
+    },
+  });
+  if (response.success) {
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 
 const selectAllHandler = async () => {
   const response: any = await $fetch("/api/potentialClients", {
@@ -38,6 +57,7 @@ const selectNoneHandler = async () => {
 };
 
 const searchHandler = (value: string) => {
+  input.value = value;
   if (value.length > 2) {
     const foundProjects = usePotentialClients.potentialClients.filter(
       (client: PotentialClient) =>
@@ -59,7 +79,7 @@ onMounted(() => {
 watch(
   () => usePotentialClients.potentialClients,
   (newClients) => {
-    filteredData.value = [...newClients];
+    if (input.value.length === 0) filteredData.value = [...newClients];
   }
 );
 </script>

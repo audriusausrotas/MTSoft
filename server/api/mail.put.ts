@@ -1,29 +1,18 @@
+import { sendEmail } from "~/utils/emailHelper";
 import type { User } from "~/data/interfaces";
-import nodemailer from "nodemailer";
 
 export default defineEventHandler(async (event: any) => {
   const { userId, to, message, title } = await readBody(event);
-  const data: User | null = await userSchema.findById(userId);
-  const config = useRuntimeConfig();
 
-  if (!data)
+  const user: User | null = await userSchema.findById(userId);
+
+  if (!user)
     return {
       success: false,
-      data: null,
       message: "Vartotojas nerastas",
     };
 
-  let fromPass: string = "";
-
-  if (data.email.includes("audrius")) {
-    fromPass = config.nodemailerPassAudrius!;
-  } else if (data.email.includes("andrius")) {
-    fromPass = config.nodemailerPassAndrius!;
-  } else if (data.email.includes("pardavimai")) {
-    fromPass = config.nodemailerPassHaris!;
-  }
-
-  let htmlContent = `
+  let html = `
   <html>
 <body>
     <p style="font-weight: 500"">Labas.</p> 
@@ -33,31 +22,16 @@ export default defineEventHandler(async (event: any) => {
   </html>
 `;
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: data.email,
-      pass: fromPass,
-    },
+  const emailResult = await sendEmail({
+    to,
+    subject: title || "Tvoros pasiūlymas",
+    html,
+    user,
   });
 
-  try {
-    await transporter.sendMail({
-      from: "Moderni Tvora " + data.email,
-      to: to,
-      subject: title,
-      html: htmlContent,
-    });
-    return {
-      success: true,
-      data: null,
-      message: "Pasiūlymas išsiūstas",
-    };
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      message: "Klaida: " + error,
-    };
-  }
+  return {
+    success: emailResult.success,
+    data: null,
+    message: emailResult.success ? "Pasiūlymas išsiūstas" : emailResult.message,
+  };
 });
