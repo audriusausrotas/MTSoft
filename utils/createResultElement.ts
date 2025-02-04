@@ -129,6 +129,7 @@ export default function createResultElement(item: any) {
     category: product.category,
     width: item.width || null,
   };
+  console.log(resultData);
 
   results.results.push(resultData);
 }

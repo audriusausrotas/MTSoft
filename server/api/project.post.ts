@@ -79,6 +79,7 @@ export default defineEventHandler(async (event) => {
     newProjectData.dateExparation = dateExparation;
     newProjectData.status = "Nepatvirtintas";
     newProjectData.advance = 0;
+    newProjectData.versions = [];
 
     const newProject = new projectSchema(newProjectData);
     const data = await newProject.save();

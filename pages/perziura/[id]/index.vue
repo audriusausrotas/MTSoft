@@ -23,16 +23,19 @@ const offer = computed(() =>
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
 const provider = ref<string>("");
+
 const vartonasUsers = useUsers.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => {
     return user.email;
   });
+
 const gigastaUsers = useUsers.users
   .filter((user) => user.accountType === "Gigasta")
   .map((user) => {
     return user.email;
   });
+
 const workers = useUsers.users
   .filter((user) => user.accountType === "Montavimas")
   .map((user) => {

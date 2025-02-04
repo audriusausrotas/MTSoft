@@ -55,7 +55,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
         break;
 
-      case "/naujas":
+      case "/skaiciuokle":
         if (userRights?.project) {
           await Promise.all([
             fetchProducts(),

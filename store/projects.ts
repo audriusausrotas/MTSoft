@@ -53,6 +53,17 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
+    deleteVersion(versionId: string, projectId: string) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === projectId) {
+          item.versions = item.versions.filter(
+            (version) => version._id !== versionId
+          );
+          return item;
+        } else return item;
+      });
+    },
+
     changeFilter(data: string) {
       this.selectedFilter = data;
       this.filterProjects();

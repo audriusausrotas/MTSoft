@@ -47,13 +47,14 @@ const deleteHandler = async () => {
   });
 
   if (response.success) {
-    useProjects.updateStatus(response.data);
     setIsError(false);
     setError(response.message);
   } else {
+    // useProjects.deleteVersion(props.version.id, props.projectId);
     setError(response.message);
   }
 
+  useProjects.updateStatus(response.data);
   open.value = false;
 };
 </script>

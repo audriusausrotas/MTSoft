@@ -55,7 +55,7 @@ const editHandler = async () => {
   useResults.setProject(response.data);
   useBackup.addBackup(response.data.results, response.data.works);
   useProjects.setSelectedProject(response.data._id);
-  navigateTo("/naujas");
+  navigateTo("/skaiciuokle");
 };
 
 const linkHandler = () => {

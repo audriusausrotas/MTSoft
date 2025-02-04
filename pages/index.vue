@@ -37,7 +37,7 @@ const newProjectHandler = () => {
   useProjects.clearSelected();
   useBackup.clearBackup();
 
-  navigateTo("/naujas");
+  navigateTo("/skaiciuokle");
 };
 </script>
 

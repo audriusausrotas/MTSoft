@@ -84,7 +84,7 @@ const clearHandler = () => {
       class="flex gap-4 w-full flex-wrap"
     >
       <p class="font-medium text-xl">Projekto versijos:</p>
-      <NewVersion
+      <CalcVersions
         v-for="(version, index) in project.versions"
         :key="version.id"
         :version="version"
