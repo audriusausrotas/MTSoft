@@ -1,28 +1,161 @@
+<script setup lang="ts">
+const fences = [
+  {
+    name: "Daimond 60/90",
+    imgDetail: "daimond6090s",
+    imgView: "daimond6090",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Daimond 40/105",
+    imgDetail: "daimond40105s",
+    imgView: "daimond40105",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Daimond Vertikal",
+    imgDetail: "daimond40105s",
+    imgView: "daimondVertical",
+
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Plank",
+    imgDetail: "planks",
+    imgView: "plank",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Eglė Plus",
+    imgDetail: "nameliss",
+    imgView: "namelis",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Eglė",
+    imgDetail: "egles",
+    imgView: "egle",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Žaliuzi",
+    imgDetail: "zaliuzis",
+    imgView: "zaliuzi",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+  {
+    name: "Dilė",
+    imgDetail: "diles",
+    imgView: "dile",
+    stepNepr: "12",
+    stepVid: "13",
+    premPriceM: "2.84",
+    premPriceMVat: "3.44",
+    ecoPriceM: "2.54",
+    ecoPriceMVat: "3.07",
+    premPriceM2Nepr: "25.35",
+    premPriceM2VatNepr: "30.67",
+    ecoPriceM2Nepr: "22.7",
+    ecoPriceM2VatNepr: "30.67",
+    premPriceM2Vid: "25.35",
+    premPriceM2VatVid: "30.67",
+    ecoPriceM2Vid: "22.7",
+    ecoPriceM2VatVid: "30.67",
+  },
+];
+</script>
+
 <template>
-  <OffersFenceCard
-    name="Daimond 60/90"
-    pp="2.84"
-    ppv="3.44"
-    spp="25.35"
-    sppv="30.67"
-    ep="2.54"
-    epv="3.07"
-    sep="22.7"
-    sepv="27.46"
-    img1="daimond6090s"
-    img2="daimond6090"
-  />
-  <OffersFenceCard
-    name="Daimond 40/105"
-    pp="2.84"
-    ppv="3.44"
-    spp="25.35"
-    sppv="30.67"
-    ep="2.54"
-    epv="3.07"
-    sep="22.7"
-    sepv="27.46"
-    img1="daimond40105s"
-    img2="daimond6090"
-  />
+  <OffersFenceCard v-for="fence in fences" :key="fence.name" :fence="fence" />
 </template>
