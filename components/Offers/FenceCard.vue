@@ -24,7 +24,7 @@ const props = defineProps([
           {{ name }} - Nepramatoma
         </div>
         <div
-          class="grid grid-cols-3 h-fit border-[3px] rounded-md border-black font-medium"
+          class="grid grid-cols-3 h-fit border-[3px] rounded-md border-gray-500"
         >
           <div
             class="px-2 py-1 border-b-[3px] border-r border-inherit font-bold"
@@ -75,19 +75,19 @@ const props = defineProps([
           {{ name }} - Vidutinis pramatomumas
         </div>
         <div
-          class="grid grid-cols-3 h-fit border-2 rounded-md border-gray-500 min-w-fit"
+          class="grid grid-cols-3 h-fit border-[3px] rounded-md border-gray-500 min-w-fit"
         >
           <div
-            class="px-2 py-1 border-b-2 border-r border-inherit font-semibold"
+            class="px-2 py-1 border-b-[3px] border-r border-inherit font-semibold"
           >
             Skardos tipas
           </div>
           <div
-            class="px-2 py-1 border-b-2 border-inherit border-r font-semibold"
+            class="px-2 py-1 border-b-[3px] border-inherit border-r font-semibold"
           >
             Premium
           </div>
-          <div class="px-2 py-1 border-b-2 border-inherit font-semibold">
+          <div class="px-2 py-1 border-b-[3px] border-inherit font-semibold">
             Eco
           </div>
           <div class="px-2 py-1 border-b border-inherit border-r">
@@ -97,13 +97,13 @@ const props = defineProps([
             {{ pp }} €/m
           </div>
           <div class="px-2 py-1 border-b border-inherit">{{ ep }} €/m</div>
-          <div class="px-2 py-1 border-b-2 border-inherit border-r flex">
+          <div class="px-2 py-1 border-b-[3px] border-inherit border-r flex">
             Kaina be PVM
           </div>
-          <div class="px-2 py-1 border-b-2 border-inherit border-r flex">
+          <div class="px-2 py-1 border-b-[3px] border-inherit border-r flex">
             {{ spp }} €/m <span class="text-[12px] items-start mr-1">2</span>
           </div>
-          <div class="px-2 py-1 border-b-2 border-inherit flex">
+          <div class="px-2 py-1 border-b-[3px] border-inherit flex">
             {{ sep }} €/m <span class="text-[12px] items-start mr-1">2</span>
           </div>
           <div class="px-2 py-1 border-b border-inherit border-r">
