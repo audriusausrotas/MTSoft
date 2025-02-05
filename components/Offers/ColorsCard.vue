@@ -1,7 +1,7 @@
 <template>
   <OffersBoxWrap>
     <div class="text-2xl font-bold text-center">Standartinės spalvos</div>
-    <div class="flex gap-8 flex-wrap justify-center">
+    <div class="flex gap-10 flex-wrap justify-center">
       <NuxtImg
         :src="`/images/colors/7016.png`"
         alt="Rombo tipo tvora"
