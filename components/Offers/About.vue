@@ -22,7 +22,7 @@
           <a
             class="py-3 w-72 text-center border-b-[3px] hover:scale-110 border-red-600 hover:bg-red-600 hover:rounded-md transition-all"
             href="tel:+37067517745"
-            >+37067517745</a
+            >+370 675 17745</a
           >
 
           <NuxtLink
@@ -41,9 +41,10 @@
         </div>
       </div>
       <div class="text-justify">
-        Moderni tvora - viena didžiausių tvorų gamintoju Lietuvoje. Per 9
-        gyvavimo metus, įmonė padare kažką labai naglo ir bla bla bla bla bla.
-        Aš nesugalvoju. Susisiekite nurodytais kontaktais.
+        „Moderni Tvora“ – šiuolaikiškus tvorų sprendimus siūlanti įmonė. Ilgametę patirtį turinti
+        profesionalų komanda specializuojasi skardinių tvorų gamyboje. Didelį dėmesį skiria gaminių
+        kokybei bei valdymo procesams, kurie užtikrina aukščiausią gaminių kokybę ir greitą bei
+        skalndų užsakymų įgyvendinimą.
       </div>
     </div>
   </OffersBoxWrap>

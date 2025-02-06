@@ -29,7 +29,9 @@
       <div class="px-4 py-1 border-b border-inherit border-r">3000 mm</div>
       <div class="px-4 py-1 border-b border-inherit">2500 mm</div>
       <div class="px-4 py-1 border-b border-inherit border-r">Metalinės dangos masė (g/m2)</div>
-      <div class="px-4 py-1 border-b border-inherit border-r">ZM 130 (cinko, magnio mišinys)</div>
+      <div class="px-4 py-1 border-b border-inherit border-r">
+        ZM 130 (cinko, magnio mišinys. Zn atitikmuo 260 g)
+      </div>
       <div class="px-4 py-1 border-b border-inherit">---</div>
       <div class="px-4 py-1 border-r border-inherit">Padengimas</div>
       <div class="px-4 py-1 border-r border-inherit">
