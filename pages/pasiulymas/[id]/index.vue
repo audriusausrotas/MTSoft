@@ -29,7 +29,7 @@ const downloadAsPDF = async () => {
   const contentWidth = content!.offsetWidth / 3.5;
   const contentHeight = content!.offsetHeight / 3.5;
 
-  if (process.client) {
+  if (import.meta.client) {
     //@ts-ignore
     import("html2pdf.js").then((html2pdf) => {
       const options = {
