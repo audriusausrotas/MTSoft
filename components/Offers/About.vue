@@ -2,15 +2,23 @@
 
 <template>
   <OffersBoxWrap class="bg-gray-600 text-white">
-    <div class="flex flex-col gap-8 flex-wrap text-xl">
-      <div class="flex gap-8">
+    <div class="flex flex-col gap-4 sm:gap-8 text-base md:text-xl">
+      <div class="flex gap-4 sm:gap-8 flex-wrap">
+        <NuxtImg
+          src="/images/logo.png"
+          alt="Rombo tipo tvora"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+          class="object-contain w-auto h-44 rounded-md self-center m-auto sm:hidden"
+        />
         <NuxtImg
           src="/images/stipriausi.jpg"
           alt="Rombo tipo tvora"
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="object-contain w-auto h-60 rounded-md"
+          class="object-contain w-auto h-60 rounded-md self-center m-auto hidden sm:block"
         />
         <div class="flex gap-2 flex-col m-auto">
           <a

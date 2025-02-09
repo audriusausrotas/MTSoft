@@ -1,15 +1,14 @@
 <template>
   <OffersBoxWrap>
     <div class="text-2xl font-bold text-center">Standartinės spalvos</div>
-    <div class="flex gap-10 flex-wrap justify-center">
+    <div class="flex gap-10 flex-wrap justify-evenly sm:justify-center">
       <NuxtImg
         :src="`/images/colors/7016.png`"
         alt="Rombo tipo tvora"
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
       <NuxtImg
         :src="`/images/colors/7024.png`"
@@ -17,8 +16,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
 
       <NuxtImg
@@ -27,8 +25,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
       <NuxtImg
         :src="`/images/colors/8017.png`"
@@ -36,8 +33,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
 
       <NuxtImg
@@ -46,8 +42,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
       <NuxtImg
         :src="`/images/colors/9005.png`"
@@ -55,8 +50,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
       <NuxtImg
         :src="`/images/colors/8004.png`"
@@ -64,8 +58,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
       <NuxtImg
         :src="`/images/colors/3009.png`"
@@ -73,8 +66,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        width="194"
-        height="84"
+        class="sm:w-48 sm:h-20"
       />
     </div>
   </OffersBoxWrap>

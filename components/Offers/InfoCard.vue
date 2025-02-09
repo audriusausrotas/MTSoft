@@ -1,7 +1,7 @@
 <template>
   <OffersBoxWrap>
     <div class="text-2xl font-bold text-center">Bendra informacija</div>
-    <div class="divide-y">
+    <div class="divide-y text-justify">
       <li>Tvoros gamybos terminas 7 darbo dieno. Ekstra užsakymai per 2-3 darbo dienas.</li>
       <li>Tvora pakuojama pakais su numeriais, kurie atitinka tvoros tarpų numeraciją.</li>
       <li>Tvorą pristatome visoje Lietuvoje.</li>
