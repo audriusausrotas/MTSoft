@@ -39,7 +39,7 @@ const fences = [
     ecoPriceM2VatVid: "23.47",
   },
   {
-    name: "Daimond Vertikal",
+    name: "Daimond Vertical",
     imgDetail: "daimond40105s",
     imgView: "daimondVertical",
     stepNepr: "13",

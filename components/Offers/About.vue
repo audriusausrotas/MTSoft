@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <OffersBoxWrap class="bg-gray-600 text-white">
+  <OffersBoxWrap class="bg-gray-600 text-white m-4">
     <div class="flex flex-col gap-4 sm:gap-8 text-base md:text-xl">
       <div class="flex gap-4 sm:gap-8 flex-wrap">
         <NuxtImg

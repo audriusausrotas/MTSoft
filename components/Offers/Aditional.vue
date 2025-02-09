@@ -3,7 +3,7 @@
     <div class="font-bold text-2xl text-center">Papildomos detalės</div>
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col">
-        <div class="grid grid-cols-3 h-fit border-2 rounded-md border-black">
+        <div class="grid grid-cols-[1.2fr_1fr_1fr] h-fit border-2 rounded-md border-black">
           <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
             Lankstinys Premium
           </div>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="flex flex-col">
-        <div class="grid grid-cols-3 h-fit border-2 rounded-md border-black">
+        <div class="grid grid-cols-[1.2fr_1fr_1fr] h-fit border-2 rounded-md border-black">
           <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">Lankstinys Eco</div>
           <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Kaina be PVM</div>
           <div class="px-2 py-1 border-b-2 border-inherit font-bold">Kaina su PvM</div>
