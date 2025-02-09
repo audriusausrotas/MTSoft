@@ -9,7 +9,7 @@ const props = defineProps(["fence"]);
       <div class="flex flex-col gap-2 max-w-[420px]">
         <div class="flex flex-col">
           <div class="text-center font-bold text-lg">{{ props.fence.name }} metro kaina</div>
-          <div class="grid grid-cols-3 border-2 rounded-md border-black">
+          <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
             <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">Skardos tipas</div>
             <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
             <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
@@ -33,7 +33,7 @@ const props = defineProps(["fence"]);
           <div class="text-center font-bold text-lg">
             Nepramatoma - montavimo žingsnis {{ props.fence.stepNepr }} cm
           </div>
-          <div class="grid grid-cols-3 border-2 rounded-md border-black">
+          <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
             <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">Skardos tipas</div>
             <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
             <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
@@ -60,7 +60,7 @@ const props = defineProps(["fence"]);
           <div class="text-center font-bold text-lg">
             Vidutinė - montavimo žingsnis {{ props.fence.stepVid }} cm
           </div>
-          <div class="grid grid-cols-3 border-2 rounded-md border-black">
+          <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
             <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">Skardos tipas</div>
             <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
             <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>

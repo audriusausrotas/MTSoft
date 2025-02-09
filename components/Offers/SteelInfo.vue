@@ -1,7 +1,7 @@
 <template>
   <OffersBoxWrap>
     <div class="text-2xl font-bold text-center">Skardos informacija</div>
-    <div class="sm:grid grid-cols-3 border-2 border-black rounded-md hidden">
+    <div class="sm:grid grid-cols-[1.2fr_1fr_1fr] border-2 border-black rounded-md hidden">
       <div class="px-4 py-1 border-b border-inherit border-r">Skardos tipas</div>
       <div class="px-4 py-1 border-b border-inherit border-r font-bold">Premium</div>
       <div class="px-4 py-1 border-b border-inherit font-bold">Eco</div>
