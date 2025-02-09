@@ -18,9 +18,12 @@
           <div class="px-2 py-1 border-b border-inherit border-r flex">Tvoros stulpo apkaustas</div>
           <div class="px-2 py-1 border-b border-inherit border-r flex">1.78 €/m</div>
           <div class="px-2 py-1 border-b border-inherit flex">2.15 €/m</div>
-          <div class="px-2 py-1 border-inherit border-r">Nestandartiniai lankstiniai</div>
-          <div class="px-2 py-1 border-inherit border-r">Pagal gaminį</div>
-          <div class="px-2 py-1 border-inherit">Pagal gaminį</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">Nestandartiniai lankstiniai</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">Pagal gaminį</div>
+          <div class="px-2 py-1 border-b border-inherit">Pagal gaminį</div>
+          <div class="px-2 py-1 border-inherit border-r">Kniedės 4 x 8 mm</div>
+          <div class="px-2 py-1 border-inherit border-r">25 €/1000 vnt</div>
+          <div class="px-2 py-1 border-inherit">30.25 €/1000 vnt</div>
         </div>
       </div>
       <div class="flex flex-col">
@@ -37,9 +40,12 @@
           <div class="px-2 py-1 border-b border-inherit border-r flex">Tvoros stulpo apkaustas</div>
           <div class="px-2 py-1 border-b border-inherit border-r flex">1.65 €/m</div>
           <div class="px-2 py-1 border-b border-inherit flex">2.00 €/m</div>
-          <div class="px-2 py-1 border-inherit border-r">Nestandartiniai lankstiniai</div>
-          <div class="px-2 py-1 border-inherit border-r">Pagal gaminį</div>
-          <div class="px-2 py-1 border-inherit">Pagal gaminį</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">Nestandartiniai lankstiniai</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">Pagal gaminį</div>
+          <div class="px-2 py-1 border-b border-inherit">Pagal gaminį</div>
+          <div class="px-2 py-1 border-inherit border-r">Kniedės 4 x 8 mm</div>
+          <div class="px-2 py-1 border-inherit border-r">25 €/1000 vnt</div>
+          <div class="px-2 py-1 border-inherit">30.25 €/1000 vnt</div>
         </div>
       </div>
     </div>

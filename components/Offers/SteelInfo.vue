@@ -32,7 +32,7 @@
       <div class="px-4 py-1 border-b border-inherit border-r">
         ZM 130 (cinko, magnio mišinys. Zn atitikmuo 260 g)
       </div>
-      <div class="px-4 py-1 border-b border-inherit">---</div>
+      <div class="px-4 py-1 border-b border-inherit">Zn 100</div>
       <div class="px-4 py-1 border-r border-inherit">Padengimas</div>
       <div class="px-4 py-1 border-r border-inherit">
         min. 35 mikronų dviejų sluoksnių dengimo sistema

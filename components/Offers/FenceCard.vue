@@ -29,7 +29,7 @@ const props = defineProps(["fence"]);
           </div>
         </div>
 
-        <div class="flex flex-col">
+        <div v-if="props.fence.premPriceM2Nepr" class="flex flex-col">
           <div class="text-center font-bold text-lg">
             Nepramatoma - montavimo žingsnis {{ props.fence.stepNepr }} cm
           </div>
@@ -56,7 +56,7 @@ const props = defineProps(["fence"]);
           </div>
         </div>
 
-        <div class="flex flex-col">
+        <div v-if="props.fence.premPriceM2Vid" class="flex flex-col">
           <div class="text-center font-bold text-lg">
             Vidutinė - montavimo žingsnis {{ props.fence.stepVid }} cm
           </div>
