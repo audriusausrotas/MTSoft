@@ -10,7 +10,7 @@
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="object-cover w-auto rounded-md self-center flex-1"
+          class="object-cover rounded-md self-center flex-1 w-full h-full"
         />
       </div>
       <div class="flex gap-4 flex-wrap">
@@ -119,7 +119,7 @@
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="object-cover object-top max-h-[800px] min-h-[560px] rounded-md self-center flex-1 md:block hidden"
+          class="object-cover object-top max-h-[800px] min-h-[560px] rounded-md self-center flex-1 md:block hidden w-full h-full"
         />
       </div>
     </div>
