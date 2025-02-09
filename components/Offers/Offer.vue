@@ -3,7 +3,7 @@
     <OffersAbout class="print:break-after-page" />
     <OffersInfoCard />
     <OffersSteelInfo class="print:break-after-page" />
-    <OffersOfferFences class="print:break-after-page" />
+    <OffersOfferFences />
     <OffersColorsCard />
     <OffersAditional />
   </div>
