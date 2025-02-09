@@ -1,8 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <OffersBoxWrap class="bg-gray-600 text-white mx-2">
-    <div class="flex flex-col gap-4 sm:gap-8 text-base md:text-xl">
+  <OffersBoxWrap class="bg-gray-600 text-white mx-2 print:text-black">
+    <div class="flex flex-col gap-4 sm:gap-8 text-base md:text-xl items-between">
+      <div class="hidden print:block text-4xl font-bold m-auto mb-20">Komercinis pasiūlymas</div>
       <div class="flex gap-4 sm:gap-8 flex-wrap">
         <NuxtImg
           src="/images/logo.png"
@@ -54,6 +55,14 @@
         kokybei bei valdymo procesams, kurie užtikrina aukščiausią gaminių kokybę ir greitą bei
         skalndų užsakymų įgyvendinimą.
       </div>
+      <NuxtImg
+        src="/images/stipriausi.jpg"
+        alt="Rombo tipo tvora"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+        class="object-contain w-auto h-60 rounded-md self-center m-auto hidden print:block mt-[200px]"
+      />
     </div>
   </OffersBoxWrap>
 </template>
