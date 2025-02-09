@@ -157,5 +157,10 @@ const fences = [
 </script>
 
 <template>
-  <OffersFenceCard v-for="fence in fences" :key="fence.name" :fence="fence" />
+  <OffersFenceCard
+    v-for="fence in fences"
+    :key="fence.name"
+    :fence="fence"
+    class="print:break-after-page"
+  />
 </template>

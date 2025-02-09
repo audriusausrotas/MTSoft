@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col gap-8">
-    <OffersAbout />
-    <OffersSteelInfo />
+    <OffersAbout class="print:break-after-page" />
     <OffersInfoCard />
-    <OffersOfferFences />
+    <OffersSteelInfo class="print:break-after-page" />
+    <OffersOfferFences class="print:break-after-page" />
     <OffersColorsCard />
     <OffersAditional />
   </div>

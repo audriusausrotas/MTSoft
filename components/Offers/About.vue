@@ -10,7 +10,7 @@
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="object-contain w-auto h-44 rounded-md self-center m-auto sm:hidden"
+          class="object-contain w-auto h-44 rounded-md self-center m-auto lg:hidden"
         />
         <NuxtImg
           src="/images/stipriausi.jpg"
@@ -18,7 +18,7 @@
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="object-contain w-auto h-60 rounded-md self-center m-auto hidden sm:block"
+          class="object-contain w-auto h-60 rounded-md self-center m-auto hidden lg:block"
         />
         <div class="flex gap-2 flex-col m-auto">
           <a

@@ -5,7 +5,7 @@ const props = defineProps(["fence"]);
 <template>
   <OffersBoxWrap>
     <div class="font-bold text-2xl text-center">{{ props.fence.name }}</div>
-    <div class="flex flex-wrap xl:justify-between justify-center gap-4 xl:gap-0 w-full">
+    <div class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full">
       <div class="flex flex-col gap-2 max-w-[420px]">
         <div class="flex flex-col">
           <div class="text-center font-bold text-lg">{{ props.fence.name }} metro kaina</div>
@@ -86,26 +86,23 @@ const props = defineProps(["fence"]);
         </div>
       </div>
 
-      <div class="h-[410px]">
-        <NuxtImg
-          :src="`/images/${props.fence.imgDetail}.jpg`"
-          alt="Rombo tipo tvora maketas"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          class="h-full w-auto object-contain"
-        />
-      </div>
-      <div class="max-w-[600px] max-h-[410px]">
-        <NuxtImg
-          :src="`/images/${props.fence.imgView}.jpg`"
-          alt="Rombo tipo tvora"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          class="h-full w-auto object-contain"
-        />
-      </div>
+      <NuxtImg
+        :src="`/images/${props.fence.imgDetail}.jpg`"
+        alt="Rombo tipo tvora maketas"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+        class="h-[410px] w-auto object-contain"
+      />
+
+      <NuxtImg
+        :src="`/images/${props.fence.imgView}.jpg`"
+        alt="Rombo tipo tvora"
+        decoding="auto"
+        loading="lazy"
+        :ismap="true"
+        class="h-[410px] w-[600px] object-contain"
+      />
     </div>
   </OffersBoxWrap>
 </template>

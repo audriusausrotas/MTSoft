@@ -8,7 +8,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
       <NuxtImg
         :src="`/images/colors/7024.png`"
@@ -16,7 +16,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
 
       <NuxtImg
@@ -25,7 +25,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
       <NuxtImg
         :src="`/images/colors/8017.png`"
@@ -33,7 +33,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
 
       <NuxtImg
@@ -42,7 +42,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
       <NuxtImg
         :src="`/images/colors/9005.png`"
@@ -50,7 +50,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
       <NuxtImg
         :src="`/images/colors/8004.png`"
@@ -58,7 +58,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
       <NuxtImg
         :src="`/images/colors/3009.png`"
@@ -66,7 +66,7 @@
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        class="sm:w-48 sm:h-20"
+        class="sm:w-48 w-40"
       />
     </div>
   </OffersBoxWrap>
