@@ -4,7 +4,7 @@
     <OffersInfoCard />
     <OffersSteelInfo class="print:break-after-page" />
     <OffersOfferFences />
-    <OffersColorsCard />
     <OffersAditional />
+    <OffersColorsCard />
   </div>
 </template>
