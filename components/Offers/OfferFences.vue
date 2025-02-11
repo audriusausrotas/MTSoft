@@ -22,7 +22,7 @@ const fences = [
   {
     name: "Daimond 60/130",
     imgDetail: "daimond60130s",
-    imgView: "daimond6090",
+    imgView: "daimond60130",
     stepNepr: "16",
     stepVid: "17",
     premPriceM: "3.53",
@@ -60,7 +60,7 @@ const fences = [
   {
     name: "Daimond Vertical",
     imgDetail: "daimond40105s",
-    imgView: "daimondVertical",
+    imgView: "daimondVertical2",
     stepNepr: "13",
     stepVid: "15",
     premPriceM: "3.12",

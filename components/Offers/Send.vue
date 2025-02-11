@@ -3,11 +3,13 @@ import type { PotentialClient } from "~/data/interfaces";
 
 const usePotentialClients = usePotentialClientsStore();
 const { setError, setIsError } = useError();
+const loading = ref<boolean>(false);
 
 const filteredData = reactive<any>([]);
 const input = ref<string>("");
 
 const sendHandler = async () => {
+  loading.value = true;
   const recipients = usePotentialClients.potentialClients.filter(
     (client) => client.send
   );
@@ -16,7 +18,7 @@ const sendHandler = async () => {
     method: "patch",
     body: {
       to: recipients,
-      message: `testas`,
+      message: ``,
       title: "Komercinis pasiūlymas",
     },
   });
@@ -26,6 +28,7 @@ const sendHandler = async () => {
   } else {
     setError(response.message);
   }
+  loading.value = false;
 };
 
 const selectAllHandler = async () => {
@@ -87,7 +90,11 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center">
-      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" />
+      <BaseButton
+        name="siūsti pasiūlymą"
+        @click="sendHandler"
+        :isLoading="loading"
+      />
       <BaseButton name="pažymėti visus" @click="selectAllHandler" />
       <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
       <BaseInput

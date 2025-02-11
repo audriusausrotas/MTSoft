@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export async function sendEmail({ to, subject, html, user }: any) {
+export async function sendEmail({ to, subject, html, user, attachments }: any) {
   const config = useRuntimeConfig();
 
   let fromPass: string = "";
@@ -27,6 +27,7 @@ export async function sendEmail({ to, subject, html, user }: any) {
       to,
       subject: subject,
       html,
+      attachments,
     });
     return {
       success: true,
