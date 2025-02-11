@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["fence"]);
+const props = defineProps(["fence", "retail"]);
 </script>
 
 <template>
@@ -11,8 +11,11 @@ const props = defineProps(["fence"]);
       <div
         class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
       >
-        <div class="flex flex-col gap-2 max-w-[420px]">
-          <div class="flex flex-col">
+        <div
+          class="flex flex-col gap-2 max-w-[420px]"
+          :class="props.retail ? '' : 'justify-around'"
+        >
+          <div v-if="retail" class="flex flex-col">
             <div class="text-center font-bold text-lg">
               {{ props.fence.name }} metro kaina
             </div>
