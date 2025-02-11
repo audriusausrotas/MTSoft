@@ -1,6 +1,5 @@
 import { sendEmail } from "~/utils/emailHelper";
 import type { User } from "~/data/interfaces";
-import fs from "fs";
 import path from "path";
 
 export default defineEventHandler(async (event: any) => {
@@ -14,7 +13,7 @@ export default defineEventHandler(async (event: any) => {
       message: "Vartotojas nerastas",
     };
 
-  const filePath = path.resolve("data/kainininkas.pdf");
+  const filePath = path.resolve("data/Kainininkas.pdf");
 
   const success = [];
 
@@ -59,13 +58,13 @@ export default defineEventHandler(async (event: any) => {
       subject: title,
       html,
       user,
-      // attachments: [
-      //   {
-      //     filename: "kainininkas.pdf",
-      //     path: filePath,
-      //     contentType: "application/pdf",
-      //   },
-      // ],
+      attachments: [
+        {
+          filename: "Kainininkas.pdf",
+          path: filePath,
+          contentType: "application/pdf",
+        },
+      ],
     });
 
     success.push({ success: emailResult.success, email: recipient.email });
