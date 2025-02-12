@@ -7,11 +7,17 @@ export default defineEventHandler(async (event) => {
   const results = await archiveSchema
     .find(
       {
-        $or: [
-          { "client.address": { $regex: search, $options: "i" } },
-          { "client.username": { $regex: search, $options: "i" } },
-          { "client.phone": { $regex: search, $options: "i" } },
-          { "client.email": { $regex: search, $options: "i" } },
+        $and: [
+          {
+            $or: [
+              { "client.address": { $regex: search, $options: "i" } },
+              { "client.username": { $regex: search, $options: "i" } },
+              { "client.phone": { $regex: search, $options: "i" } },
+              { "client.email": { $regex: search, $options: "i" } },
+            ],
+          },
+          { gates: { $exists: true, $ne: [] } },
+          { status: "Baigtas" },
         ],
       },
       {
