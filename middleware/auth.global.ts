@@ -29,6 +29,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
 
+    // vartonas service worker rerouting
+    if (useUser.user?.accountType.toLowerCase() === "servisas") {
+      if (to.path !== "/servisas") {
+        return navigateTo("/servisas");
+      } else {
+        return;
+      }
+    }
+
     // fetch settings for everyone
     await fetchUserRights();
 
@@ -40,12 +49,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     switch (to.path) {
       case "/":
         if (userRights?.project) {
-          await Promise.all([
-            fetchProjects(),
-            fetchGates(),
-            fetchUsers(),
-            fetchSelects(),
-          ]);
+          await Promise.all([fetchProjects(), fetchGates(), fetchUsers(), fetchSelects()]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -61,11 +65,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
       case "/skaiciuokle":
         if (userRights?.project) {
-          await Promise.all([
-            fetchProducts(),
-            fetchClients(),
-            fetchDefaultValues(),
-          ]);
+          await Promise.all([fetchProducts(), fetchClients(), fetchDefaultValues()]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -74,8 +74,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       case "/grafikas":
         if (userRights?.schedule) {
           await Promise.all([fetchSchedules(), fetchGamybas()]);
-          if (useUser.user?.accountType === "Administratorius")
-            await fetchProjects();
+          if (useUser.user?.accountType === "Administratorius") await fetchProjects();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -215,10 +214,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         break;
 
       case "/bonusai":
-        if (
-          useUser.user?.username !== "Audrius" &&
-          useUser.user?.username !== "Andrius"
-        ) {
+        if (useUser.user?.username !== "Audrius" && useUser.user?.username !== "Andrius") {
           return navigateTo("/");
         }
         break;
