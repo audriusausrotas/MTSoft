@@ -4,6 +4,8 @@ import type { PotentialClient } from "~/data/interfaces";
 const usePotentialClients = usePotentialClientsStore();
 const { setError, setIsError } = useError();
 const loading = ref<boolean>(false);
+const files = ref<any>([]);
+const text = ref<string>("");
 
 const filteredData = reactive<any>([]);
 const input = ref<string>("");
@@ -75,6 +77,14 @@ const searchHandler = (value: string) => {
   }
 };
 
+const handleFileChange = (event: any) => {
+  files.value = Array.from(event.target.files);
+};
+
+const removeFile = (index: number) => {
+  files.value.splice(index, 1);
+};
+
 onMounted(() => {
   filteredData.value = [...usePotentialClients.potentialClients];
 });
@@ -89,7 +99,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-8">
-    <div class="flex gap-4 items-center">
+    <div class="flex gap-4 items-center flex-wrap">
       <BaseButton
         name="siūsti pasiūlymą"
         @click="sendHandler"
@@ -97,6 +107,22 @@ watch(
       />
       <BaseButton name="pažymėti visus" @click="selectAllHandler" />
       <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
+
+      <div class="relative bg-dark-full text-white w-60 h-10 rounded-lg">
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          @change="handleFileChange"
+          class="inset-0 opacity-0 cursor-pointer w-full h-full"
+        />
+        <label
+          for="file-upload"
+          class="absolute w-60 h-10 top-0 left-0 rounded-lg hover:cursor-pointer flex items-center justify-center"
+        >
+          Upload File
+        </label>
+      </div>
       <BaseInput
         :name="input"
         @onChange="searchHandler"
@@ -112,6 +138,37 @@ watch(
           loading="lazy"
           :ismap="true"
       /></BaseInput>
+    </div>
+
+    <div v-if="files.length" class="flex flex-col gap-1">
+      <p class="text-lg">Įkelti failai:</p>
+      <ul class="text-white flex gap-2 flex-wrap">
+        <li
+          v-for="(file, index) in files"
+          :key="index"
+          class="bg-dark-full px-2 py-1 rounded-lg text-sm"
+        >
+          {{ file.name }}
+          <button
+            @click="removeFile(index)"
+            class="ml-2 text-red-600 hover:text-black hover:bg-red-600 transition w-5 rounded-md"
+          >
+            ✕
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <label for="text">Teskstas klientui</label>
+      <textarea
+        v-model="text"
+        name="message"
+        id="text"
+        class="w-full h-auto border border-dark-light rounded-lg p-2"
+      ></textarea>
+
+      >
     </div>
 
     <div class="flex flex-col">
