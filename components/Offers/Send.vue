@@ -12,9 +12,7 @@ const input = ref<string>("");
 
 const sendHandler = async () => {
   loading.value = true;
-  const recipients = usePotentialClients.potentialClients.filter(
-    (client) => client.send
-  );
+  const recipients = usePotentialClients.potentialClients.filter((client) => client.send);
 
   const response: any = await $fetch("/api/mail", {
     method: "patch",
@@ -100,11 +98,7 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
-      <BaseButton
-        name="siūsti pasiūlymą"
-        @click="sendHandler"
-        :isLoading="loading"
-      />
+      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
       <BaseButton name="pažymėti visus" @click="selectAllHandler" />
       <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
 
@@ -123,12 +117,7 @@ watch(
           Upload File
         </label>
       </div>
-      <BaseInput
-        :name="input"
-        @onChange="searchHandler"
-        variant="light"
-        placeholder="Paieška"
-      >
+      <BaseInput :name="input" @onChange="searchHandler" variant="light" placeholder="Paieška">
         <NuxtImg
           src="/icons/search.svg"
           width="14"
