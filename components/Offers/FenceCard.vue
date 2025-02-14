@@ -11,11 +11,8 @@ const props = defineProps(["fence", "retail"]);
       <div
         class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
       >
-        <div
-          class="flex flex-col gap-2 max-w-[420px]"
-          :class="props.retail ? '' : 'justify-around'"
-        >
-          <div v-if="retail" class="flex flex-col">
+        <div class="flex flex-col gap-2 w-[400px] justify-evenly">
+          <div v-if="props.fence.premPriceM" class="flex flex-col">
             <div class="text-center font-bold text-lg">
               {{ props.fence.name }} metro kaina
             </div>
@@ -149,7 +146,7 @@ const props = defineProps(["fence", "retail"]);
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="h-[410px] w-auto object-contain"
+          class="h-[400px] min-w-[320px] w-auto object-contain"
         />
 
         <NuxtImg
@@ -158,7 +155,7 @@ const props = defineProps(["fence", "retail"]);
           decoding="auto"
           loading="lazy"
           :ismap="true"
-          class="h-[410px] w-[600px] object-contain"
+          class="h-[410px] max-w-[580px] w-full object-contain"
         />
       </div>
     </div>
