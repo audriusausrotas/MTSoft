@@ -10,24 +10,59 @@ const text = ref<string>("");
 const filteredData = reactive<any>([]);
 const input = ref<string>("");
 
+// const sendHandler = async () => {
+//   loading.value = true;
+
+//   const recipients = usePotentialClients.potentialClients.filter(
+//     (client) => client.send
+//   );
+
+//   const response: any = await $fetch("/api/mail", {
+//     method: "patch",
+//     body: {
+//       to: recipients,
+//       message: text.value,
+//       title: "Komercinis pasiūlymas",
+//     },
+//   });
+//   if (response.success) {
+//     setIsError(false);
+//     setError(response.message);
+//   } else {
+//     setError(response.message);
+//   }
+//   loading.value = false;
+// };
+
 const sendHandler = async () => {
   loading.value = true;
-  const recipients = usePotentialClients.potentialClients.filter((client) => client.send);
+
+  const recipients = usePotentialClients.potentialClients.filter(
+    (client) => client.send
+  );
+
+  const formData = new FormData();
+  formData.append("message", text.value);
+  formData.append("title", "Komercinis pasiūlymas");
+  formData.append("to", JSON.stringify(recipients));
+
+  // Append files to FormData
+  files.value.forEach((file: any, index: number) => {
+    formData.append(`file${index}`, file);
+  });
 
   const response: any = await $fetch("/api/mail", {
     method: "patch",
-    body: {
-      to: recipients,
-      message: ``,
-      title: "Komercinis pasiūlymas",
-    },
+    body: formData,
   });
+
   if (response.success) {
     setIsError(false);
     setError(response.message);
   } else {
     setError(response.message);
   }
+
   loading.value = false;
 };
 
@@ -98,7 +133,11 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
-      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
+      <BaseButton
+        name="siūsti pasiūlymą"
+        @click="sendHandler"
+        :isLoading="loading"
+      />
       <BaseButton name="pažymėti visus" @click="selectAllHandler" />
       <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
 
@@ -117,7 +156,13 @@ watch(
           Upload File
         </label>
       </div>
-      <BaseInput :name="input" @onChange="searchHandler" variant="light" placeholder="Paieška">
+      <BaseInput
+        :name="input"
+        @onChange="searchHandler"
+        variant="light"
+        placeholder="Paieška"
+        width="flex-1"
+      >
         <NuxtImg
           src="/icons/search.svg"
           width="14"
@@ -156,8 +201,6 @@ watch(
         id="text"
         class="w-full h-auto border border-dark-light rounded-lg p-2"
       ></textarea>
-
-      >
     </div>
 
     <div class="flex flex-col">
