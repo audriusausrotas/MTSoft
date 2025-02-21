@@ -10,30 +10,6 @@ const text = ref<string>("");
 const filteredData = reactive<any>([]);
 const input = ref<string>("");
 
-// const sendHandler = async () => {
-//   loading.value = true;
-
-//   const recipients = usePotentialClients.potentialClients.filter(
-//     (client) => client.send
-//   );
-
-//   const response: any = await $fetch("/api/mail", {
-//     method: "patch",
-//     body: {
-//       to: recipients,
-//       message: text.value,
-//       title: "Komercinis pasiūlymas",
-//     },
-//   });
-//   if (response.success) {
-//     setIsError(false);
-//     setError(response.message);
-//   } else {
-//     setError(response.message);
-//   }
-//   loading.value = false;
-// };
-
 const sendHandler = async () => {
   loading.value = true;
 
@@ -46,7 +22,6 @@ const sendHandler = async () => {
   formData.append("title", "Komercinis pasiūlymas");
   formData.append("to", JSON.stringify(recipients));
 
-  // Append files to FormData
   files.value.forEach((file: any, index: number) => {
     formData.append(`file${index}`, file);
   });
