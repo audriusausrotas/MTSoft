@@ -55,6 +55,9 @@ export default defineEventHandler(async (event) => {
       path: "/",
     });
 
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("Token Secret:", process.env.TOKEN_SECRET);
+
     return { success: true, data: data, message: "" };
   } else {
     return { success: false, data: null, message: "Neteisingas slaptažodis" };
