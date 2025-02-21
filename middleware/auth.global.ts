@@ -13,6 +13,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (cookie.value) {
       if (!useUser.user) {
         const data: any = await fetchUser();
+
         if (!data) {
           if (to.path !== "/login") {
             useUser.logout();

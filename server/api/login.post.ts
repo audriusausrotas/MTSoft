@@ -49,14 +49,11 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, "mtud", token, {
       maxAge: 7776000,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
+      // httpOnly: true,
+      // secure: config.node_env === "production",
+      // sameSite: "strict",
+      // path: "/",
     });
-
-    console.log("NODE_ENV:", process.env.NODE_ENV);
-    console.log("Token Secret:", process.env.TOKEN_SECRET);
 
     return { success: true, data: data, message: "" };
   } else {
