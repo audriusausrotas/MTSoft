@@ -194,7 +194,7 @@ watch(
     </div>
 
     <div>
-      <label for="text">Teskstas klientui</label>
+      <label for="text">Teskstas klientui </label>
       <textarea
         v-model="text"
         name="message"
