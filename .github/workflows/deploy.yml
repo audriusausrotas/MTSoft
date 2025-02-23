@@ -46,6 +46,7 @@ jobs:
           SALT: ${{ secrets.SALT }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           NODE_NO_WARNINGS: "1"
+          NODE_ENV: "production"
 
         run: |
           # Define the environment variables
@@ -59,4 +60,5 @@ jobs:
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm run build"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 restart MTSoft"
+          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 start ecosystem.config.cjs"  
+          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 save"
