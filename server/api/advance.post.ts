@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       data: null,
-      message: "Projektas nerastas",
+      message: "Projektas nerastas.",
     };
 
   project.advance = advance;
