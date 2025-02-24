@@ -47,17 +47,13 @@ export default defineEventHandler(async (event: any) => {
     if (token) {
       try {
         const user: any = await new Promise((resolve, reject) => {
-          jwt.verify(
-            token,
-            config.tokenSecret as string,
-            (err: any, decoded: any) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(decoded);
-              }
+          jwt.verify(token, config.tokenSecret as string, (err: any, decoded: any) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(decoded);
             }
-          );
+          });
         });
 
         if (user && user.verified) {

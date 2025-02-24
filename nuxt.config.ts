@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    node_env: process.env.NODE_ENV,
     public: {
       cloudApiKey: process.env.NUXT_PUBLIC_CLOUD_API_KEY,
       cloudName: process.env.NUXT_PUBLIC_CLOUD_NAME,

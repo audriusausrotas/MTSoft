@@ -17,20 +17,22 @@ export default defineEventHandler(async (event) => {
     };
   if (email.length < 4)
     return {
-      success: false, data: null, message: "Elektroninis paštas per trumpas",
+      success: false,
+      data: null,
+      message: "Elektroninis paštas per trumpas",
     };
   if (password.length < 4)
     return {
-      success: false, data: null, message: "Slaptažodis per trumpas",
+      success: false,
+      data: null,
+      message: "Slaptažodis per trumpas",
     };
 
   const data = await userSchema.findOne({ email });
 
-  if (!data)
-    return { success: false, data: null, message: "Vartotojas nerastas" };
+  if (!data) return { success: false, data: null, message: "Vartotojas nerastas" };
 
-  if (!data.verified)
-    return { success: false, data: null, message: "Vartotojas nepatvirtintas" };
+  if (!data.verified) return { success: false, data: null, message: "Vartotojas nepatvirtintas" };
 
   if (await bcrypt.compare(password, data.password)) {
     const token = jwt.sign(
@@ -43,12 +45,14 @@ export default defineEventHandler(async (event) => {
       config.tokenSecret
     );
 
-    
-
     data.password = "";
 
     setCookie(event, "mtud", token, {
       maxAge: 7776000,
+      // httpOnly: true,
+      // secure: config.node_env === "production",
+      // sameSite: "strict",
+      // path: "/",
     });
 
     return { success: true, data: data, message: "" };
@@ -56,4 +60,3 @@ export default defineEventHandler(async (event) => {
     return { success: false, data: null, message: "Neteisingas slaptažodis" };
   }
 });
-

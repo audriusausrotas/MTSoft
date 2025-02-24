@@ -23,28 +23,28 @@ const currentLinks: MenuLinks[] = navigationLinks.filter((link) => {
   else return false;
 });
 
-function routeHandler(newPath: string) {
-  switch (newPath) {
-    case "/":
-      currentPath.value = "Projektai";
-      break;
-    case "/grafikas":
-      currentPath.value = "Grafikas";
-      break;
-    case "/gamyba":
-      currentPath.value = "Gamyba";
-      break;
-    case "/montavimas":
-      currentPath.value = "Montavimas";
-      break;
-    case "/vartai":
-      currentPath.value = "Vartai";
-      break;
-    default:
-      currentPath.value = "Admin";
-      break;
+const routeHandler = (newPath: string) => {
+  if (newPath.includes("/projektai")) {
+    currentPath.value = "Projektai";
+  } else if (newPath === "/") {
+    currentPath.value = "Projektai";
+  } else if (newPath === "/skaiciuokle") {
+    currentPath.value = "Projektai";
+  } else if (newPath.includes("/perziura")) {
+    currentPath.value = "Projektai";
+  } else if (newPath === "/grafikas") {
+    currentPath.value = "Grafikas";
+  } else if (newPath.includes("/gamyba")) {
+    currentPath.value = "Gamyba";
+  } else if (newPath.includes("/montavimas")) {
+    currentPath.value = "Montavimas";
+  } else if (newPath.includes("/vartai")) {
+    currentPath.value = "Vartai";
+  } else {
+    currentPath.value = "Admin";
   }
-}
+};
+
 routeHandler(route.path);
 
 watch(

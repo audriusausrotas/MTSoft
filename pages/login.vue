@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { ResponseUser } from "~/data/interfaces";
 
+definePageMeta({
+  layout: false,
+});
+
 const { setError, setIsError } = useError();
 const login = ref<boolean>(true);
 const username = ref<string>("");
@@ -38,11 +42,13 @@ const registerHandler = async () => {
     username: username.value,
   };
 
-  const data: { success: boolean; data: ResponseUser; message: string } =
-    await $fetch("/api/register", {
+  const data: { success: boolean; data: ResponseUser; message: string } = await $fetch(
+    "/api/register",
+    {
       method: "post",
       body: loginData,
-    });
+    }
+  );
 
   if (data.success) {
     setIsError(false);
@@ -105,31 +111,17 @@ const clearFields = () => {
         type="password"
       />
 
-      <BaseButton
-        v-if="login"
-        name="login"
-        @click="loginHandler"
-        :isLoading="isLoading"
-      />
-      <BaseButton
-        v-else
-        name="register"
-        @click="registerHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton v-if="login" name="login" @click="loginHandler" :isLoading="isLoading" />
+      <BaseButton v-else name="register" @click="registerHandler" :isLoading="isLoading" />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Registruokis</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Registruokis</span>
       </p>
 
       <p v-else class="self-center mt-4">
         Turi paskyrą?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Prisijunk</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Prisijunk</span>
       </p>
     </div>
   </div>
