@@ -69,20 +69,20 @@
           <div class="px-2 py-1 border-b border-inherit border-r">
             U formos profilis viengubas
           </div>
-          <div class="px-2 py-1 border-b border-inherit border-r">1.09 €/m</div>
-          <div class="px-2 py-1 border-b border-inherit">1.32 €/m</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">0.83 €/m</div>
+          <div class="px-2 py-1 border-b border-inherit">1.01 €/m</div>
           <div class="px-2 py-1 border-b border-inherit border-r">
             U formos profilis dvigubas
           </div>
-          <div class="px-2 py-1 border-b border-inherit border-r">1.94 €/m</div>
-          <div class="px-2 py-1 border-b border-inherit">2.35 €/m</div>
+          <div class="px-2 py-1 border-b border-inherit border-r">1.45 €/m</div>
+          <div class="px-2 py-1 border-b border-inherit">1.81 €/m</div>
           <div class="px-2 py-1 border-b border-inherit border-r flex">
             Tvoros stulpo apkaustas
           </div>
           <div class="px-2 py-1 border-b border-inherit border-r flex">
-            1.65 €/m
+            1.20 €/m
           </div>
-          <div class="px-2 py-1 border-b border-inherit flex">2.00 €/m</div>
+          <div class="px-2 py-1 border-b border-inherit flex">1.56 €/m</div>
           <div class="px-2 py-1 border-b border-inherit border-r">
             Nestandartiniai lankstiniai
           </div>

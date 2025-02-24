@@ -50,7 +50,7 @@ const updateHandler = async (change: string, value: any) => {
     useGates.updateGate(response.data, gate.value!._id);
 
     if (change === "status") {
-      const link = `https://modernitvora.vercel.app/vartai/${gate.value?._id}`;
+      const link = `https://mtsoft.lt/vartai/${gate.value?._id}`;
 
       const data: any = await $fetch("/api/mail", {
         method: "put",

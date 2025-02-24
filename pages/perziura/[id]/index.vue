@@ -88,7 +88,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   if (response.success) {
     useGates.addGate(response.data);
 
-    const link = `https://modernitvora.vercel.app/vartai/${offer?.value?._id}`;
+    const link = `https://mtsoft.lt/vartai/${offer?.value?._id}`;
 
     const emailResponse: any = await $fetch("/api/mail", {
       method: "put",

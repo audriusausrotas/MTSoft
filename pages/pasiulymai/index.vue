@@ -14,13 +14,13 @@ const selected = ref<string>("siusti");
       >
         Siūsti
       </div>
-      <div
+      <!-- <div
         @click="selected = 'pasiulymas'"
         class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
         :class="selected === 'pasiulymas' ? 'bg-red-full text-white' : ''"
       >
         Pasiūlymas
-      </div>
+      </div> -->
       <div
         @click="selected = 'vartotojai'"
         class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
@@ -30,7 +30,7 @@ const selected = ref<string>("siusti");
       </div>
     </div>
     <OffersSend v-if="selected === 'siusti'" />
-    <OffersOffer v-else-if="selected === 'pasiulymas'" />
+    <!-- <OffersOffer v-else-if="selected === 'pasiulymas'" /> -->
     <OffersUsers v-else-if="selected === 'vartotojai'" />
   </div>
 </template>

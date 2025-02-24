@@ -60,9 +60,7 @@ const editHandler = async () => {
 
 const linkHandler = () => {
   navigator.clipboard
-    .writeText(
-      "https://modernitvora.vercel.app/pasiulymas/" + props.project._id
-    )
+    .writeText("https://mtsoft.lt/pasiulymas/" + props.project._id)
     .then(() => {
       setIsError(false);
       setError("Nuoroda nukopijuota");
@@ -78,10 +76,7 @@ const previewHandler = () => {
 
 const openInNewHandler = () => {
   if (props.location === "projects") {
-    window.open(
-      "https://modernitvora.vercel.app/pasiulymas/" + props.project._id,
-      "_blank"
-    );
+    window.open("https://mtsoft.lt/pasiulymas/" + props.project._id, "_blank");
   } else {
     window.open("/archyvas/" + props.project._id, "_blank");
   }

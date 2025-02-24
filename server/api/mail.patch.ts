@@ -43,13 +43,13 @@
 //     <p>Prašome patyrinėti mūsų didmenos kainyną, ir jei nuspręsite pasirinkti mus kaip savo tvorų tiekėją, mes dėsime visas pastangas,
 //         kad atitiktume jūsų lūkesčius.</p>
 //     <br/>
-//     <p>Kainininką galite peržiūrėti paspaudę šią nuorodą: <a href="https://modernitvora.vercel.app/didmena" style="font-size: large; font-weight: 500">Kainininkas</a></p>
+//     <p>Kainininką galite peržiūrėti paspaudę šią nuorodą: <a href="https://mtsoft.lt/didmena" style="font-size: large; font-weight: 500">Kainininkas</a></p>
 
 //     <br/>
 //     <p> Jei turėsite klausimų, nedvejodami kreipkitės.</p>
 //     <br/>
 //     <br/>
-//     <a href="https://modernitvora.vercel.app/didmena/atsisakyti/${recipient._id}" style="font-size: large; font-weight: 500">Atsisakyti naujienlaikraščio prenumeratos</a>
+//     <a href="https://mtsoft.lt/didmena/atsisakyti/${recipient._id}" style="font-size: large; font-weight: 500">Atsisakyti naujienlaikraščio prenumeratos</a>
 // </body>
 //   </html>
 // `;
