@@ -11,6 +11,31 @@ const gateOrdered = ref(false);
 
 const { setError, setIsError } = useError();
 
+const color = computed(() => {
+  switch (props.project?.status) {
+    case "Nepatvirtintas":
+      return "bg-orange-300";
+    case "Netinkamas":
+      return "bg-red-500";
+    case "Tinkamas":
+      return "bg-pink-400";
+    case "Gaminama":
+      return "bg-cyan-400";
+    case "Montuojama":
+      return "bg-indigo-400";
+    case "Laukiam Vartų":
+      return "bg-rose-400";
+    case "Vartai Sumontuoti":
+      return "bg-violet-400";
+    case "Pridavimas":
+      return "bg-fuchsia-400";
+    case "Baigtas":
+      return "bg-stone-400";
+    default:
+      return "bg-green-400";
+  }
+});
+
 const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
   if (!confirmed) return;
@@ -114,6 +139,35 @@ const archiveHandler = async () => {
   }
 };
 
+const extendHandler = async () => {
+  const data: any = await $fetch("/api/projectExtend", {
+    method: "post",
+    body: { _id: props.project._id },
+  } as any);
+  if (data.success) {
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+};
+
+const unconfirmedHandler = async () => {
+  const data: any = await $fetch("/api/unconfirmed", {
+    method: "post",
+    body: { _id: props.project._id },
+  });
+
+  if (data.success) {
+    useProjects.deleteProject(props.project._id);
+
+    setIsError(false);
+    setError(data.message);
+  } else {
+    setError(data.message);
+  }
+};
+
 const checkGates = () => {
   gateOrdered.value = useGates.gates.some(
     (item) => item._id.toString() === props.project?._id.toString()
@@ -131,10 +185,7 @@ checkGates();
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative">
       <div
-        v-if="
-          props.project.gates?.length > 0 &&
-          props.project.status !== 'Nepatvirtintas'
-        "
+        v-if="props.project.gates?.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'"
       ></div>
@@ -144,7 +195,7 @@ checkGates();
     <div class="relative">
       <div
         v-if="props.project.advance"
-        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
+        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500 bg-"
       ></div>
       <BaseInfoField
         :name="
@@ -156,31 +207,9 @@ checkGates();
       />
     </div>
 
-    <BaseInfoField
-      :name="props.project?.client?.phone"
-      width="w-32"
-      :tel="true"
-    />
-    <BaseInfoField
-      :name="props.project?.client?.email"
-      width="w-80 "
-      :email="true"
-    />
-    <BaseInfoField
-      :name="props.project?.status"
-      width="w-36"
-      :class="
-        props.project?.status === 'Nepatvirtintas'
-          ? 'bg-orange-300'
-          : props.project?.status === 'Netinkamas'
-          ? 'bg-red-full'
-          : props.project?.status === 'Tinkamas'
-          ? 'bg-pink-400 '
-          : props.project?.status === 'Vartai Sumontuoti'
-          ? 'bg-violet-500 animate-pulse text-white'
-          : 'bg-green-400'
-      "
-    />
+    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
+    <BaseInfoField :name="props.project?.status" width="w-36" :class="color" />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
@@ -196,19 +225,14 @@ checkGates();
       />
       <div
         v-if="open"
-        class="absolute z-40 flex flex-col top-8 right-0 bg-white border border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
+        class="absolute z-40 flex flex-col top-8 right-0 bg-white border select-none border-dark-light rounded-lg shadow-lg overflow-hidden w-48"
         :class="props.location !== 'projects' ? 'h-28' : 'h-64'"
       >
         <div
           @click="openInNewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/newtab.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/document-forward.svg" alt="edit button" width="20" height="20" />
           <p>Atidaryti pasiūlymą</p>
         </div>
 
@@ -217,12 +241,7 @@ checkGates();
           @click="previewHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/eye.svg"
-            alt="eye button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/eye.svg" alt="eye button" width="20" height="20" />
           <p>Peržiūrėti</p>
         </div>
 
@@ -231,12 +250,7 @@ checkGates();
           @click="linkHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/link.svg"
-            alt="link button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
           <p>Kopijuoti nuorodą</p>
         </div>
 
@@ -245,12 +259,7 @@ checkGates();
           @click="editHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/edit.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/edit-2.svg" alt="edit button" width="20" height="20" />
           <p>Redaguoti</p>
         </div>
 
@@ -259,38 +268,42 @@ checkGates();
           @click="copyHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/pageflip.svg"
-            alt="edit button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
           <p>Kopijuoti projektą</p>
+        </div>
+
+        <div
+          v-if="props.location === 'projects'"
+          @click="extendHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg src="/icons/clock.svg" alt="edit button" width="20" height="20" />
+          <p>Pratęsti galiojimą</p>
         </div>
 
         <div
           @click="archiveHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/archive.svg"
-            alt="delete button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/archive-tick.svg" alt="archive button" width="20" height="20" />
           <p v-if="props.location === 'projects'">Archyvuoti</p>
           <p v-else>Sugrąžinti</p>
         </div>
+
+        <div
+          v-if="props.location === 'projects'"
+          @click="unconfirmedHandler"
+          class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+        >
+          <NuxtImg src="/icons/archive-book.svg" alt="archive button" width="20" height="20" />
+          <p>Nepatvirtintas</p>
+        </div>
+
         <div
           @click="deleteHandler"
           class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
         >
-          <NuxtImg
-            src="/icons/delete.svg"
-            alt="delete button"
-            width="20"
-            height="20"
-          />
+          <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
           <p>Ištrinti</p>
         </div>
       </div>

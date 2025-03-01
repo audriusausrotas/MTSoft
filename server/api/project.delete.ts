@@ -5,8 +5,10 @@ export default defineEventHandler(async (event) => {
   const { _id } = await readBody(event);
 
   const project = await projectSchema.findById({ _id });
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
+  cloudinaryBachDelete(project.files);
+
+  await deleteVersions(project.versions);
 
   const projectData = project.toObject();
 
@@ -16,22 +18,13 @@ export default defineEventHandler(async (event) => {
 
   const deletedData = await deletedProject.save();
 
-  if (!deletedData)
-    return { success: false, data: null, message: "Klaida trinant projektą" };
+  if (!deletedData) return { success: false, data: null, message: "Klaida trinant projektą" };
 
   const data = await projectSchema.findByIdAndDelete({ _id });
 
-  if (!data)
-    return { success: false, data: null, message: "Klaida trinant projektą" };
+  if (!data) return { success: false, data: null, message: "Klaida trinant projektą" };
 
   await montavimasSchema.findByIdAndDelete(_id);
-
-  cloudinaryBachDelete(project.files);
-
-  const response = await deleteVersions(project.versions);
-
-  if (!response.success)
-    return { success: false, data: null, message: "Klaida trinant versijas" };
 
   return { success: true, data: null, message: "Projektas ištrintas" };
 });

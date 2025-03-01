@@ -13,6 +13,11 @@ export default defineEventHandler(async (event) => {
       message: "Projektas nerastas",
     };
 
+  cloudinaryBachDelete(project.files);
+  await deleteVersions(project.versions);
+
+  project.versions = [];
+
   const projectData = project.toObject();
 
   projectData.dateExparation = new Date().toISOString();
@@ -23,13 +28,6 @@ export default defineEventHandler(async (event) => {
 
   await projectSchema.findByIdAndDelete(_id);
   await montavimasSchema.findByIdAndDelete(_id);
-
-  cloudinaryBachDelete(project.files);
-
-  const response = await deleteVersions(project.versions);
-
-  if (!response.success)
-    return { success: false, data: null, message: "Klaida trinant versijas" };
 
   return {
     success: true,

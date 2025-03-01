@@ -1,10 +1,68 @@
 <script setup lang="ts">
+import type { Project } from "~/data/interfaces";
+
 const useProjects = useProjectsStore();
 const useSettings = useSettingsStore();
 const user = useUserStore();
 
 const username = user.user?.username;
 useProjects.changeFilter(username ? username : "Visi");
+
+const projects = computed(() => {
+  const categories = {
+    unconfirmed: [] as Project[],
+    confirmed: [] as Project[],
+    notAccepted: [] as Project[],
+    accepted: [] as Project[],
+    inMaking: [] as Project[],
+    inWorks: [] as Project[],
+    waiting: [] as Project[],
+    mounted: [] as Project[],
+    done: [] as Project[],
+    finished: [] as Project[],
+    other: [] as Project[],
+  };
+
+  useProjects?.filteredProjects.forEach((item) => {
+    switch (item.status) {
+      case "Nepatvirtintas":
+        categories.unconfirmed.push(item);
+        break;
+      case "Patvirtintas":
+        categories.confirmed.push(item);
+        break;
+      case "Netinkamas":
+        categories.notAccepted.push(item);
+        break;
+      case "Tinkamas":
+        categories.accepted.push(item);
+        break;
+      case "Gaminama":
+        categories.inMaking.push(item);
+        break;
+      case "Montuojama":
+        categories.inWorks.push(item);
+        break;
+      case "Laukiam Vartų":
+        categories.waiting.push(item);
+        break;
+      case "Vartai Sumontuoti":
+        categories.mounted.push(item);
+        break;
+      case "Pridavimas":
+        categories.done.push(item);
+        break;
+      case "Baigtas":
+        categories.finished.push(item);
+        break;
+      default:
+        categories.other.push(item);
+        break;
+    }
+  });
+
+  return categories;
+});
 
 const users = [
   "Visi",
@@ -13,9 +71,7 @@ const users = [
       ?.map((item) => {
         if (user?.users && item?.orderNumber) {
           const matchedUser = user.users.find((usr) =>
-            usr?.username
-              ?.toLowerCase()
-              .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+            usr?.username?.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
           );
           return matchedUser?.username;
         }
@@ -87,11 +143,167 @@ const newProjectHandler = () => {
     </div>
 
     <div class="flex flex-col gap-4">
+      <div
+        v-if="projects.done.length"
+        class="text-xl font-semibold p-2 bg-fuchsia-400 rounded-lg text-center"
+      >
+        Pridavimas
+      </div>
       <HomeProject
-        v-for="(project, index) in useProjects.filteredProjects"
+        v-for="(project, index) in projects.done"
         :key="project._id"
         :index="index"
-        :length="useProjects.filteredProjects.length"
+        :length="projects.done.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.notAccepted.length"
+        class="text-xl bg-red-600 font-semibold p-2 rounded-lg text-center"
+      >
+        Netinkami
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.notAccepted"
+        :key="project._id"
+        :index="index"
+        :length="projects.notAccepted.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.accepted.length"
+        class="text-xl font-semibold p-2 bg-pink-400 rounded-lg text-center"
+      >
+        Tinkami
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.accepted"
+        :key="project._id"
+        :index="index"
+        :length="projects.accepted.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.unconfirmed.length"
+        class="text-xl font-semibold p-2 bg-orange-300 rounded-lg text-center"
+      >
+        Nepatvirtinti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.unconfirmed"
+        :key="project._id"
+        :index="index"
+        :length="projects.unconfirmed.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.confirmed.length"
+        class="text-xl font-semibold p-2 bg-green-400 rounded-lg text-center"
+      >
+        Patvirtinti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.confirmed"
+        :key="project._id"
+        :index="index"
+        :length="projects.confirmed.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.inMaking.length"
+        class="text-xl font-semibold p-2 bg-cyan-400 rounded-lg text-center"
+      >
+        Gaminama
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.inMaking"
+        :key="project._id"
+        :index="index"
+        :length="projects.inMaking.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.inWorks.length"
+        class="text-xl font-semibold p-2 bg-indigo-400 rounded-lg text-center"
+      >
+        Montuojama
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.inWorks"
+        :key="project._id"
+        :index="index"
+        :length="projects.inWorks.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.waiting.length"
+        class="text-xl font-semibold p-2 bg-rose-400 rounded-lg text-center"
+      >
+        Laukiam vartų
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.waiting"
+        :key="project._id"
+        :index="index"
+        :length="projects.waiting.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.mounted.length"
+        class="text-xl font-semibold p-2 bg-violet-400 rounded-lg text-center"
+      >
+        Vartai sumontuoti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.mounted"
+        :key="project._id"
+        :index="index"
+        :length="projects.mounted.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.finished.length"
+        class="text-xl font-semibold p-2 bg-gray-400 rounded-lg text-center"
+      >
+        Baigti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.finished"
+        :key="project._id"
+        :index="index"
+        :length="projects.finished.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.other.length"
+        class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
+      >
+        Kiti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.other"
+        :key="project._id"
+        :index="index"
+        :length="projects.other.length"
         :project="project"
         location="projects"
       />
