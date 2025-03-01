@@ -20,7 +20,7 @@ const color = computed(() => {
     case "Tinkamas":
       return "bg-pink-400";
     case "Gaminama":
-      return "bg-cyan-400";
+      return "bg-[#22d3ee]";
     case "Montuojama":
       return "bg-indigo-400";
     case "Laukiam Vartų":
@@ -28,7 +28,7 @@ const color = computed(() => {
     case "Vartai Sumontuoti":
       return "bg-violet-400";
     case "Pridavimas":
-      return "bg-fuchsia-400";
+      return "bg-[#e879f9]";
     case "Baigtas":
       return "bg-stone-400";
     default:
