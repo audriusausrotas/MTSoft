@@ -17,9 +17,7 @@ const isOpenGates = ref<boolean>(false);
 const isOpenGates2 = ref<boolean>(false);
 const isOpenMontavimas = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
-const offer = computed(() =>
-  useProjects.projects.find((item) => item._id === route.params.id)
-);
+const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
 const provider = ref<string>("");
@@ -301,10 +299,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
-    <div
-      v-if="versions && versions.length > 0"
-      class="flex gap-4 w-full flex-wrap"
-    >
+    <div v-if="versions && versions.length > 0" class="flex gap-4 w-full flex-wrap">
       <p class="font-medium text-xl">Projekto versijos:</p>
       <div
         v-for="(version, index) in versions"
@@ -319,29 +314,13 @@ watch(
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">
-          <BaseInput
-            :disable="true"
-            :name="offer?.orderNumber"
-            label="Užsakymo nr"
-          />
-          <BaseInput
-            label="Avansas"
-            :name="offer?.advance + ' €'"
-            :disable="true"
-          />
-          <BaseInput
-            :disable="true"
-            :name="offer?.client?.username"
-            label="klientas"
-          />
+          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
+          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
+          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
         </div>
 
         <div class="flex gap-4">
-          <BaseInput
-            :disable="true"
-            :name="offer?.client?.address"
-            label="adresas"
-          />
+          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
           <a :href="'tel:' + offer?.client?.phone">
             <BaseInput
               :disable="true"
@@ -372,10 +351,7 @@ watch(
               name="Paliktas avansas"
               @click="isOpenAdvance = !isOpenAdvance"
             />
-            <div
-              v-else-if="isOpenAdvance"
-              class="flex overflow-hidden border rounded-lg"
-            >
+            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
               <input
                 placeholder="Avansas"
                 type="number"
@@ -494,11 +470,7 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGalleryElement
-          :_id="offer?._id"
-          :files="offer?.files"
-          category="projects"
-        />
+        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
       </div>
     </div>
     <BaseComment

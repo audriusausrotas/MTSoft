@@ -21,6 +21,13 @@ const loginHandler = async () => {
     method: "post",
     body: loginData,
   });
+
+  // const data: ResponseUser = await $fetch("http://localhost:3001/login", {
+  //   method: "post",
+  //   credentials: "include",
+  //   body: loginData,
+  // });
+
   if (data.success) {
     useUser.setUser(data.data);
     clearFields();

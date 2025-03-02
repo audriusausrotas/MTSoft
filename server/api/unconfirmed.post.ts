@@ -31,8 +31,6 @@ export default defineEventHandler(async (event) => {
     await projectSchema.findByIdAndDelete(_id);
     await backupSchema.findByIdAndDelete(_id);
 
-    await cloudinaryBachDelete(project.files);
-
     return {
       success: true,
       data: savedData,
