@@ -25,6 +25,7 @@ const searchArchive = (value: string) => {
         :ismap="true"
       />
     </BaseInput>
+
     <HomeProject
       v-for="(project, index) in props.data"
       :key="project._id"
