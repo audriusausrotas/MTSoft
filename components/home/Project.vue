@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["project", "index", "length", "location"]);
+const props = defineProps(["project", "index", "length", "location", "color"]);
 const useProjects = useProjectsStore();
 const useArchives = useArchivesStore();
 const useResults = useResultsStore();
@@ -10,31 +10,6 @@ const open = ref<boolean>(false);
 const gateOrdered = ref(false);
 
 const { setError, setIsError } = useError();
-
-const color = computed(() => {
-  switch (props.project?.status) {
-    case "Nepatvirtintas":
-      return "bg-orange-300";
-    case "Netinkamas":
-      return "bg-red-500";
-    case "Tinkamas":
-      return "bg-pink-400";
-    case "Gaminama":
-      return "bg-teal-400";
-    case "Montuojama":
-      return "bg-indigo-400";
-    case "Laukiam Vartų":
-      return "bg-rose-400";
-    case "Vartai Sumontuoti":
-      return "bg-violet-400";
-    case "Pridavimas":
-      return "bg-lime-400";
-    case "Baigtas":
-      return "bg-stone-400";
-    default:
-      return "bg-green-400";
-  }
-});
 
 const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
@@ -209,7 +184,7 @@ checkGates();
 
     <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
     <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
-    <BaseInfoField :name="props.project?.status" width="w-36" :class="color" />
+    <BaseInfoField :name="props.project?.status" width="w-36" :class="props.color" />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"

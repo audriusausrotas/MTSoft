@@ -174,6 +174,7 @@ const removeUnconfirmed = async () => {
         :length="projects.done.length"
         :project="project"
         location="projects"
+        color="bg-lime-400"
       />
 
       <div
@@ -189,6 +190,7 @@ const removeUnconfirmed = async () => {
         :length="projects.notAccepted.length"
         :project="project"
         location="projects"
+        color="bg-red-600"
       />
 
       <div
@@ -204,6 +206,7 @@ const removeUnconfirmed = async () => {
         :length="projects.accepted.length"
         :project="project"
         location="projects"
+        color="bg-pink-400"
       />
 
       <div
@@ -219,6 +222,7 @@ const removeUnconfirmed = async () => {
         :length="projects.unconfirmed.length"
         :project="project"
         location="projects"
+        color="bg-orange-400"
       />
 
       <div
@@ -234,6 +238,7 @@ const removeUnconfirmed = async () => {
         :length="projects.confirmed.length"
         :project="project"
         location="projects"
+        color="bg-green-400"
       />
 
       <div
@@ -249,6 +254,7 @@ const removeUnconfirmed = async () => {
         :length="projects.inMaking.length"
         :project="project"
         location="projects"
+        color="bg-teal-400"
       />
 
       <div
@@ -264,6 +270,7 @@ const removeUnconfirmed = async () => {
         :length="projects.inWorks.length"
         :project="project"
         location="projects"
+        color="bg-indigo-400"
       />
 
       <div
@@ -279,6 +286,7 @@ const removeUnconfirmed = async () => {
         :length="projects.waiting.length"
         :project="project"
         location="projects"
+        color="bg-rose-400"
       />
 
       <div
@@ -294,6 +302,7 @@ const removeUnconfirmed = async () => {
         :length="projects.mounted.length"
         :project="project"
         location="projects"
+        color="bg-violet-400"
       />
 
       <div
@@ -309,6 +318,7 @@ const removeUnconfirmed = async () => {
         :length="projects.finished.length"
         :project="project"
         location="projects"
+        color="bg-gray-400"
       />
 
       <div
@@ -324,6 +334,7 @@ const removeUnconfirmed = async () => {
         :length="projects.other.length"
         :project="project"
         location="projects"
+        color="bg-yellow-400"
       />
     </div>
   </div>
