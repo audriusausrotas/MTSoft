@@ -163,7 +163,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4">
       <div
         v-if="projects.done.length"
-        class="text-xl font-semibold p-2 bg-fuchsia-400 rounded-lg text-center"
+        class="text-xl font-semibold p-2 bg-lime-400 rounded-lg text-center"
       >
         Pridavimas
       </div>
@@ -238,7 +238,7 @@ const removeUnconfirmed = async () => {
 
       <div
         v-if="projects.inMaking.length"
-        class="text-xl font-semibold p-2 bg-cyan-400 rounded-lg text-center"
+        class="text-xl font-semibold p-2 bg-teal-400 rounded-lg text-center"
       >
         Gaminama
       </div>
