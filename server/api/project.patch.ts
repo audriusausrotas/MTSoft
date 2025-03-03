@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (value === "Baigtas") {
+  if (value === "Pridavimas") {
     let materialsList = project.results
       .map(
         (result) => `
@@ -193,7 +193,9 @@ export default defineEventHandler(async (event) => {
       user: project.creator,
       html,
     });
+  }
 
+  if (value === "Baigtas") {
     await backupSchema.findByIdAndDelete(_id);
 
     if (project.creator.username === "Audrius") {
