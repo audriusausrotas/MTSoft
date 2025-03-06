@@ -4,10 +4,17 @@ const route = useRoute();
 
 <template>
   <div class="py-4 shadow-bottom print:hidden">
-    <div class="flex lg:justify-between flex-wrap justify-center max-w-[1200px] m-auto">
+    <div class="flex lg:justify-between flex-wrap justify-center max-w-[1400px] m-auto">
       <NuxtLink to="https://www.modernitvora.lt">
-        <NuxtImg src="/images/logo.png" alt="Moderni Tvora logotipas" width="86" height="48" decoding="auto"
-          loading="lazy" :ismap="true" />
+        <NuxtImg
+          src="/images/logo.png"
+          alt="Moderni Tvora logotipas"
+          width="86"
+          height="48"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
       </NuxtLink>
       <div class="border border-red-full w-full md:hidden"></div>
       <div class="flex justify-center flex-wrap">
@@ -17,7 +24,9 @@ const route = useRoute();
 
         <NuxtLink
           class="hover:text-white py-3 w-48 rounded-lg capitalize text-center hover:bg-red-full hover:cursor-pointer font-medium"
-          to="https://www.modernitvora.lt/lt/about-us" target="_blank">
+          to="https://www.modernitvora.lt/lt/about-us"
+          target="_blank"
+        >
           Apie Mus
         </NuxtLink>
 

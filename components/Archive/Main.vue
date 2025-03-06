@@ -11,7 +11,7 @@ const searchArchive = (value: string) => {
   <div class="flex flex-col items-center gap-4">
     <BaseInput
       placeholder="Paieška"
-      width="w-full max-w-[1160px]"
+      width="w-full "
       variant="light"
       @onChange="(value: string): void => searchArchive(value)"
     >

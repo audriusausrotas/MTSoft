@@ -111,71 +111,50 @@ const removeUnconfirmed = async () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-8">
-    <div class="flex gap-4 flex-wrap w-full max-w-[1160px]">
-      <div class="flex flex-col gap-4">
-        <div class="flex gap-4">
-          <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-          <BaseButtonWithConfirmation
-            name="Išvalyti nepatvirtintus"
-            @onConfirm="removeUnconfirmed"
-          />
-        </div>
-        <div class="flex gap-4">
-          <BaseInput
-            placeholder="Paieška"
-            label="Paieška"
-            width="flex-1"
-            variant="light"
-            @onChange="(value: string): void => useProjects.searchProjects(value)"
-          >
-            <NuxtImg
-              src="/icons/search.svg"
-              width="14"
-              height="14"
-              alt="search icon"
-              decoding="auto"
-              loading="lazy"
-              :ismap="true"
-            />
-          </BaseInput>
-          <BaseSelectField
-            label="Vartotojas"
-            :values="users"
-            id="userFilter"
-            :defaultValue="username"
-            width="w-60"
-            @onChange="(value: string) => useProjects.changeFilter(value)
+    <div class="flex flex-col gap-4 w-full">
+      <div class="flex gap-4 items-end">
+        <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
+        <BaseButtonWithConfirmation name="Išvalyti nepatvirtintus" @onConfirm="removeUnconfirmed" />
+        <BaseSelectField
+          label="Vartotojas"
+          :values="users"
+          id="userFilter"
+          :defaultValue="username"
+          width="w-60"
+          @onChange="(value: string) => useProjects.changeFilter(value)
         "
-          />
-          <BaseSelectField
-            label="Statusas"
-            :values="statusFilters"
-            id="statusFilter"
-            :defaultValue="useProjects.selectedStatusFilter"
-            width="w-60"
-            @onChange="(value: string) => useProjects.changeStatusFilter(value)
+        />
+        <BaseSelectField
+          label="Statusas"
+          :values="statusFilters"
+          id="statusFilter"
+          :defaultValue="useProjects.selectedStatusFilter"
+          width="w-60"
+          @onChange="(value: string) => useProjects.changeStatusFilter(value)
           "
-          />
-        </div>
+        />
       </div>
+
+      <BaseInput
+        placeholder="Paieška"
+        label="Paieška"
+        width="flex-1"
+        variant="light"
+        @onChange="(value: string): void => useProjects.searchProjects(value)"
+      >
+        <NuxtImg
+          src="/icons/search.svg"
+          width="14"
+          height="14"
+          alt="search icon"
+          decoding="auto"
+          loading="lazy"
+          :ismap="true"
+        />
+      </BaseInput>
     </div>
 
-    <div class="flex flex-col gap-4">
-      <div
-        v-if="projects.done.length"
-        class="text-xl font-semibold p-2 bg-lime-400 rounded-lg text-center"
-      >
-        Pridavimas
-      </div>
-      <HomeProject
-        v-for="(project, index) in projects.done"
-        :key="project._id"
-        :index="index"
-        :length="projects.done.length"
-        :project="project"
-        location="projects"
-      />
-
+    <div class="flex flex-col gap-4 w-full">
       <div
         v-if="projects.notAccepted.length"
         class="text-xl bg-red-600 font-semibold p-2 rounded-lg text-center"
@@ -187,6 +166,36 @@ const removeUnconfirmed = async () => {
         :key="project._id"
         :index="index"
         :length="projects.notAccepted.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.mounted.length"
+        class="text-xl font-semibold p-2 bg-violet-400 rounded-lg text-center"
+      >
+        Vartai sumontuoti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.mounted"
+        :key="project._id"
+        :index="index"
+        :length="projects.mounted.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.done.length"
+        class="text-xl font-semibold p-2 bg-lime-400 rounded-lg text-center"
+      >
+        Pridavimas
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.done"
+        :key="project._id"
+        :index="index"
+        :length="projects.done.length"
         :project="project"
         location="projects"
       />
@@ -277,21 +286,6 @@ const removeUnconfirmed = async () => {
         :key="project._id"
         :index="index"
         :length="projects.waiting.length"
-        :project="project"
-        location="projects"
-      />
-
-      <div
-        v-if="projects.mounted.length"
-        class="text-xl font-semibold p-2 bg-violet-400 rounded-lg text-center"
-      >
-        Vartai sumontuoti
-      </div>
-      <HomeProject
-        v-for="(project, index) in projects.mounted"
-        :key="project._id"
-        :index="index"
-        :length="projects.mounted.length"
         :project="project"
         location="projects"
       />

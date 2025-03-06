@@ -5,7 +5,7 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: "max-w-[1200px] w-full",
+    default: "w-full",
   },
   showButtons: {
     type: Boolean,

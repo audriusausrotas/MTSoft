@@ -9,7 +9,7 @@ const open = ref<boolean>(true);
 </script>
 
 <template>
-  <div class="max-w-[1200px] m-auto my-10 w-full">
+  <div class="m-auto my-10 w-full">
     <div
       class="flex border flex-wrap rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
     >

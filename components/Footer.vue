@@ -2,7 +2,7 @@
 
 <template>
   <div class="flex justify-center bg-dark-full py-8 text-white print:hidden">
-    <div class="w-[1200px]">
+    <div class="max-w-[1400px] w-full">
       <div class="flex flex-col items-center gap-8">
         <div class="flex flex-col items-center">
           <NuxtImg

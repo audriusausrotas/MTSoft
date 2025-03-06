@@ -67,7 +67,7 @@ const deleteHandler = (id: string) => {
 </script>
 
 <template>
-  <div class="max-w-[1200px] w-full">
+  <div class="w-full">
     <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>

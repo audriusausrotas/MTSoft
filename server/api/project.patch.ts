@@ -24,6 +24,19 @@ export default defineEventHandler(async (event) => {
   }
 
   if (value === "Pridavimas") {
+    let comments = project.comments
+      .map(
+        (comment) => `
+    <tr>
+      <td>${comment.date.slice(0, 16).replace("T", " ")}</td>
+      <td>${comment.creator}</td>
+      <td>${comment.comment}</td>
+
+
+    </tr>`
+      )
+      .join("");
+
     let materialsList = project.results
       .map(
         (result) => `
@@ -116,6 +129,20 @@ export default defineEventHandler(async (event) => {
         <th>Objektą administravo</th>
         <td>${project.creator.username}</td>
       </tr>
+    </table>
+
+    <h2>Komentarai</h2>
+    <table class="info-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Autorius</th>
+          <th>Komentaras</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${comments}
+      </tbody>
     </table>
 
     <h2>Medžiagos</h2>

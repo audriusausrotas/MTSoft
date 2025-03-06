@@ -13,8 +13,7 @@ const filteredMontavimas = computed(() => {
     useUser.user?.accountType === "Administratorius" ||
     useUser.user?.accountType === "Sandėlys"
   ) {
-    if (filteredUser.value === "Visi")
-      return useMontavimas.filteredMontavimasList;
+    if (filteredUser.value === "Visi") return useMontavimas.filteredMontavimasList;
     else
       return useMontavimas.filteredMontavimasList.filter((item: Montavimas) =>
         item.workers.includes(filteredUser.value)
@@ -31,7 +30,7 @@ const changeFilter = (value: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full max-w-[1170px]">
+  <div class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <BaseSelectField
         v-if="useUser.user?.accountType === 'Administratorius'"
@@ -48,9 +47,7 @@ const changeFilter = (value: string) => {
         width="w-full"
         variant="light"
         label="Paieška"
-        @onChange="
-          (value: string): void => useMontavimas.searchMontavimas(value)
-        "
+        @onChange="(value: string): void => useMontavimas.searchMontavimas(value)"
       >
         <NuxtImg
           src="/icons/search.svg"
@@ -63,12 +60,8 @@ const changeFilter = (value: string) => {
         />
       </BaseInput>
     </div>
-    <div class="flex flex-wrap gap-4">
-      <div
-        v-for="(order, index) in filteredMontavimas"
-        :key="order._id"
-        :dataIndex="index"
-      >
+    <div class="flex flex-wrap gap-4 justify-center">
+      <div v-for="(order, index) in filteredMontavimas" :key="order._id" :dataIndex="index">
         <MontavimasOrder :order="order" :index="index" />
       </div>
     </div>

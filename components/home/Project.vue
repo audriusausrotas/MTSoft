@@ -7,9 +7,19 @@ const useCalculations = useCalculationsStore();
 const useGates = useGateStore();
 const useBackup = useBackupStore();
 const open = ref<boolean>(false);
-const gateOrdered = ref(false);
 
 const { setError, setIsError } = useError();
+
+const time = computed(() => {
+  const today = new Date();
+  const expirationDate = new Date(props.project.dateExparation);
+  return Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+});
+
+const gateOrdered = computed(() => {
+  const test = useGates.gates.some((item) => item._id.toString() === props.project?._id.toString());
+  return test ? "bg-green-500" : "bg-red-500";
+});
 
 const color =
   props.project.status === "Pridavimas"
@@ -165,35 +175,27 @@ const unconfirmedHandler = async () => {
     setError(data.message);
   }
 };
-
-const checkGates = () => {
-  gateOrdered.value = useGates.gates.some(
-    (item) => item._id.toString() === props.project?._id.toString()
-  );
-};
-
-checkGates();
 </script>
 
 <template>
   <div
-    class="flex flex-wrap border-b items-center justify-center w-fit xl:justify-start border-red-full gap-2 pb-4"
+    class="flex flex-wrap border-b items-center justify-center xl:justify-start border-red-full gap-2 pb-4"
   >
     <div class="font-semibold text-xl w-7">{{ length - index }}</div>
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
-    <div class="relative">
+    <div class="relative flex-1">
       <div
         v-if="props.project.gates?.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
-        :class="gateOrdered ? 'bg-green-500' : 'bg-red-full'"
+        :class="gateOrdered"
       ></div>
-      <BaseInfoField :name="props.project?.client?.address" width="w-64 " />
+      <BaseInfoField :name="props.project?.client?.address" width="w-full" />
     </div>
 
     <div class="relative">
       <div
         v-if="props.project.advance"
-        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500 bg-"
+        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
       ></div>
       <BaseInfoField
         :name="
@@ -207,7 +209,16 @@ checkGates();
 
     <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
     <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
-    <BaseInfoField :name="props.project?.status" width="w-36" :class="color" />
+    <div class="relative">
+      <BaseInfoField :name="props.project?.status" width="w-40" :class="color" />
+      <div
+        v-if="props.project?.status === 'Nepatvirtintas'"
+        class="absolute -top-2 -right-2 flex rounded-full w-7 h-7 shadow-md items-center justify-center font-medium"
+        :class="time > 3 ? 'bg-green-400' : 'bg-red-400'"
+      >
+        {{ time }}
+      </div>
+    </div>
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
