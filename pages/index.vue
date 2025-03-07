@@ -16,6 +16,7 @@ const projects = computed(() => {
     confirmed: [] as Project[],
     notAccepted: [] as Project[],
     accepted: [] as Project[],
+    concreted: [] as Project[],
     inMaking: [] as Project[],
     inWorks: [] as Project[],
     waiting: [] as Project[],
@@ -38,6 +39,9 @@ const projects = computed(() => {
         break;
       case "Tinkamas":
         categories.accepted.push(item);
+        break;
+      case "Betonuojama":
+        categories.concreted.push(item);
         break;
       case "Gaminama":
         categories.inMaking.push(item);
@@ -216,21 +220,6 @@ const removeUnconfirmed = async () => {
       />
 
       <div
-        v-if="projects.unconfirmed.length"
-        class="text-xl font-semibold p-2 bg-orange-300 rounded-lg text-center"
-      >
-        Nepatvirtinti
-      </div>
-      <HomeProject
-        v-for="(project, index) in projects.unconfirmed"
-        :key="project._id"
-        :index="index"
-        :length="projects.unconfirmed.length"
-        :project="project"
-        location="projects"
-      />
-
-      <div
         v-if="projects.confirmed.length"
         class="text-xl font-semibold p-2 bg-green-400 rounded-lg text-center"
       >
@@ -245,6 +234,20 @@ const removeUnconfirmed = async () => {
         location="projects"
       />
 
+      <div
+        v-if="projects.concreted.length"
+        class="text-xl font-semibold p-2 bg-emerald-400 rounded-lg text-center"
+      >
+        Betonuojama
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.concreted"
+        :key="project._id"
+        :index="index"
+        :length="projects.concreted.length"
+        :project="project"
+        location="projects"
+      />
       <div
         v-if="projects.inMaking.length"
         class="text-xl font-semibold p-2 bg-teal-400 rounded-lg text-center"
@@ -286,6 +289,21 @@ const removeUnconfirmed = async () => {
         :key="project._id"
         :index="index"
         :length="projects.waiting.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.unconfirmed.length"
+        class="text-xl font-semibold p-2 bg-orange-300 rounded-lg text-center"
+      >
+        Nepatvirtinti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.unconfirmed"
+        :key="project._id"
+        :index="index"
+        :length="projects.unconfirmed.length"
         :project="project"
         location="projects"
       />

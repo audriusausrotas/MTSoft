@@ -4,6 +4,7 @@ const useProjects = useProjectsStore();
 const useArchives = useArchivesStore();
 const useResults = useResultsStore();
 const useCalculations = useCalculationsStore();
+const useSettings = useSettingsStore();
 const useGates = useGateStore();
 const useBackup = useBackupStore();
 const open = ref<boolean>(false);
@@ -32,6 +33,8 @@ const color =
     ? "bg-orange-300"
     : props.project.status === "Patvirtintas"
     ? "bg-green-400 "
+    : props.project.status === "Betonuojama"
+    ? "bg-emerald-400"
     : props.project.status === "Gaminama"
     ? "bg-teal-400"
     : props.project.status === "Montuojama"
@@ -175,6 +178,21 @@ const unconfirmedHandler = async () => {
     setError(data.message);
   }
 };
+
+const statusHandler = async (value: string) => {
+  const response: any = await $fetch("/api/project", {
+    method: "patch",
+    body: { _id: props.project._id, value },
+  });
+  if (response.success) {
+    console.log(response.data.status);
+    useProjects.updateStatus(props.project._id, value);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
@@ -210,11 +228,20 @@ const unconfirmedHandler = async () => {
     <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
     <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
     <div class="relative">
-      <BaseInfoField :name="props.project?.status" width="w-40" :class="color" />
+      <BaseSelectField
+        :values="useSettings.selectValues.status"
+        id="orderStatus"
+        :defaultValue="props.project?.status"
+        width="w-48"
+        @onChange="(value: string) => statusHandler(value)
+              "
+        :class="color"
+      />
+
       <div
         v-if="props.project?.status === 'Nepatvirtintas'"
-        class="absolute -top-2 -right-2 flex rounded-full w-7 h-7 shadow-md items-center justify-center font-medium"
-        :class="time > 3 ? 'bg-green-400' : 'bg-red-400'"
+        class="absolute top-1.5 right-7 flex rounded-full w-7 h-7 shadow-md items-center justify-center font-medium"
+        :class="time < 3 ? 'bg-red-600' : time < 10 ? 'bg-red-400' : ' bg-inherit'"
       >
         {{ time }}
       </div>

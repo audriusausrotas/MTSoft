@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const gamybaList: Gamyba[] = await gamybaSchema.find();
 
   const gamybaExist = gamybaList.some(
-    (item) => item._id.toString() === project._id.toString()
+    (item) => item._id.toString() === project._id!.toString()
   );
 
   if (gamybaExist) {
@@ -230,7 +230,7 @@ export default defineEventHandler(async (event) => {
       });
 
     const newGamyba = new gamybaSchema({
-      _id: project._id.toString(),
+      _id: project._id!.toString(),
       creator: { ...project.creator },
       client: { ...project.client },
       orderNumber: project.orderNumber,

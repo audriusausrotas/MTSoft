@@ -46,19 +46,19 @@ export const useProjectsStore = defineStore("Projects", {
       this.selectedProject = null;
     },
 
-    updateStatus(project: Project) {
+    updateStatus(id: string, value: string) {
       this.projects = this.projects.map((item) => {
-        if (item._id === project._id) return project;
-        else return item;
+        if (item._id === id) {
+          item.status = value;
+          return item;
+        } else return item;
       });
     },
 
     deleteVersion(versionId: string, projectId: string) {
       this.projects = this.projects.map((item) => {
         if (item._id === projectId) {
-          item.versions = item.versions.filter(
-            (version) => version._id !== versionId
-          );
+          item.versions = item.versions.filter((version) => version._id !== versionId);
           return item;
         } else return item;
       });
@@ -118,16 +118,12 @@ export const useProjectsStore = defineStore("Projects", {
       } else {
         if (this.selectedStatusFilter === "Visi") {
           this.filteredProjects = this.projects.filter((item) =>
-            item.creator.username
-              .toLowerCase()
-              .startsWith(this.selectedFilter.toLowerCase())
+            item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase())
           );
         } else {
           this.filteredProjects = this.projects.filter(
             (item) =>
-              item.creator.username
-                .toLowerCase()
-                .startsWith(this.selectedFilter.toLowerCase()) &&
+              item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase()) &&
               item.status === this.selectedStatusFilter
           );
         }
@@ -138,14 +134,10 @@ export const useProjectsStore = defineStore("Projects", {
       if (value.length > 2) {
         const foundProjects = this.projects.filter(
           (project) =>
-            project.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            project.client.address.toLowerCase().includes(value.toLowerCase()) ||
             project.client.email.toLowerCase().includes(value.toLowerCase()) ||
             project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.username
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            project.client.username.toLowerCase().includes(value.toLowerCase()) ||
             project.orderNumber.toLowerCase().includes(value.toLowerCase())
         );
 
