@@ -1,10 +1,11 @@
+//done
+
 export default defineEventHandler(async (event) => {
   try {
     const { _id } = await readBody(event);
     const data = await deletedSchema.findOneAndDelete({ _id });
 
-    if (!data)
-      return { success: false, data: null, message: "Projektas nerastas" };
+    if (!data) return { success: false, data: null, message: "Projektas nerastas" };
 
     return { success: true, data: null, message: "Projektas ištrintas" };
   } catch (error) {

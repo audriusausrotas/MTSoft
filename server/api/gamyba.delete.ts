@@ -1,3 +1,5 @@
+//done
+
 import mongoose from "mongoose";
 import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
 
@@ -8,8 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const data = await gamybaSchema.findOneAndDelete(objectId);
 
-  if (!data)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!data) return { success: false, data: null, message: "užsakymas nerastas" };
 
   cloudinaryBachDelete(data.files);
 

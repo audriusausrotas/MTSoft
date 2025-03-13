@@ -1,3 +1,5 @@
+//done
+
 import type { Montavimas } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {
@@ -11,8 +13,7 @@ export default defineEventHandler(async (event) => {
 
   const newData = await data.save();
 
-  if (!newData)
-    return { success: false, data: null, message: "Klaida saugant projekta" };
+  if (!newData) return { success: false, data: null, message: "Klaida saugant projekta" };
 
   return { success: true, data, message: "Išsaugota" };
 });

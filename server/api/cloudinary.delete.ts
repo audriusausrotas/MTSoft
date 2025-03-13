@@ -1,3 +1,5 @@
+// done
+
 import { v2 as cloudinary } from "cloudinary";
 
 export default defineEventHandler(async (event) => {
@@ -14,4 +16,3 @@ export default defineEventHandler(async (event) => {
 
   return { success: true, data: null, message: "Nuotrauka ištrinta" };
 });
-
