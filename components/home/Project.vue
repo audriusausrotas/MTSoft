@@ -43,6 +43,8 @@ const color =
     ? "bg-blue-400"
     : props.project.status === "Vartai Sumontuoti"
     ? "bg-violet-400"
+    : props.project.status === "Apmokėjimas"
+    ? "bg-fuchsia-400"
     : props.project.status === "Baigtas"
     ? "bg-stone-400"
     : "bg-yellow-400";

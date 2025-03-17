@@ -22,6 +22,7 @@ const projects = computed(() => {
     mounted: [] as Project[],
     done: [] as Project[],
     finished: [] as Project[],
+    payment: [] as Project[],
     other: [] as Project[],
   };
 
@@ -56,6 +57,9 @@ const projects = computed(() => {
         break;
       case "Pridavimas":
         categories.done.push(item);
+        break;
+      case "Apmokėjimas":
+        categories.payment.push(item);
         break;
       case "Baigtas":
         categories.finished.push(item);
@@ -163,6 +167,21 @@ const removeUnconfirmed = async () => {
     </div>
 
     <div class="flex flex-col gap-4 w-full">
+      <div
+        v-if="projects.finished.length"
+        class="text-xl font-semibold p-2 bg-gray-400 rounded-lg text-center"
+      >
+        Baigti
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.finished"
+        :key="project._id"
+        :index="index"
+        :length="projects.finished.length"
+        :project="project"
+        location="projects"
+      />
+
       <div
         v-if="projects.notAccepted.length"
         class="text-xl bg-red-600 font-semibold p-2 rounded-lg text-center"
@@ -313,16 +332,16 @@ const removeUnconfirmed = async () => {
       />
 
       <div
-        v-if="projects.finished.length"
-        class="text-xl font-semibold p-2 bg-gray-400 rounded-lg text-center"
+        v-if="projects.payment.length"
+        class="text-xl font-semibold p-2 bg-fuchsia-400 rounded-lg text-center"
       >
-        Baigti
+        Laukiama apmokėjimo
       </div>
       <HomeProject
-        v-for="(project, index) in projects.finished"
+        v-for="(project, index) in projects.payment"
         :key="project._id"
         :index="index"
-        :length="projects.finished.length"
+        :length="projects.payment.length"
         :project="project"
         location="projects"
       />

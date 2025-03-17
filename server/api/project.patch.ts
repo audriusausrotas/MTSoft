@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (value === "Pridavimas") {
+  if (value === "Apmokėjimas") {
     let comments = project.comments
       .map(
         (comment) => `
