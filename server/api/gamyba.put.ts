@@ -1,12 +1,8 @@
-//done
-
 import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { _id, index, measureIndex, value, field, option } = await readBody(
-      event
-    );
+    const { _id, index, measureIndex, value, field, option } = await readBody(event);
 
     const objectId = new mongoose.Types.ObjectId(_id);
 

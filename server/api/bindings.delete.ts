@@ -1,5 +1,3 @@
-//done
-
 import mongoose from "mongoose";
 import type { User } from "~/data/interfaces";
 
@@ -26,8 +24,7 @@ export default defineEventHandler(async (event) => {
 
   const order = await gamybaSchema.findById(objectId);
 
-  if (!order)
-    return { success: false, data: null, message: "Užsakymas nerastas" };
+  if (!order) return { success: false, data: null, message: "Užsakymas nerastas" };
 
   order!.bindings = order.bindings!.filter((item) => item.id !== bindingId);
 

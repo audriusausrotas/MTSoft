@@ -1,3 +1,5 @@
+\
+
 export default defineEventHandler(async (event) => {
   const { name, price, cost, _id, category } = await readBody(event);
 

@@ -1,5 +1,3 @@
-// done
-
 import mongoose from "mongoose";
 import type { Gamyba } from "~/data/interfaces";
 import { v4 } from "uuid";
@@ -11,8 +9,7 @@ export default defineEventHandler(async (event) => {
 
   const order: Gamyba | null = await gamybaSchema.findById(objectId);
 
-  if (!order)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!order) return { success: false, data: null, message: "užsakymas nerastas" };
 
   const newBinding = {
     id: v4(),

@@ -6,8 +6,7 @@ export default defineEventHandler(async (event) => {
   const _idObject = new mongoose.Types.ObjectId(_id);
   const data: Project | null = await projectSchema.findOne({ _id: _idObject });
 
-  if (!data)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!data) return { success: false, data: null, message: "Projektas nerastas" };
 
   const newComment: Comment = {
     comment,

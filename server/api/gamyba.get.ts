@@ -1,5 +1,3 @@
-//done
-
 import type { Gamyba } from "~/data/interfaces";
 
 export default defineEventHandler(async (event) => {

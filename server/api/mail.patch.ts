@@ -96,6 +96,7 @@
 //   }
 // });
 /////////////////////////////////////////////////////////////
+
 import { sendEmail } from "~/utils/emailHelper";
 import type { User } from "~/data/interfaces";
 import formidable from "formidable";
@@ -106,23 +107,19 @@ export default defineEventHandler(async (event) => {
     const form = formidable({ multiples: true, keepExtensions: true });
 
     // Parse form data and handle the file uploads
-    const { fields, files } = await new Promise<{ fields: any; files: any }>(
-      (resolve, reject) => {
-        form.parse(event.node.req, (err, fields, files) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve({ fields, files });
-          }
-        });
-      }
-    );
+    const { fields, files } = await new Promise<{ fields: any; files: any }>((resolve, reject) => {
+      form.parse(event.node.req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ fields, files });
+        }
+      });
+    });
 
     const userId = event.context.userId;
     const title = Array.isArray(fields.title) ? fields.title[0] : fields.title;
-    const message = Array.isArray(fields.message)
-      ? fields.message[0]
-      : fields.message;
+    const message = Array.isArray(fields.message) ? fields.message[0] : fields.message;
 
     if (!userId) throw new Error("Missing userId");
     if (!fields.to) throw new Error("Missing recipients");

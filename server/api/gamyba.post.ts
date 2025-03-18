@@ -1,5 +1,3 @@
-//done
-
 import type { Gamyba, GamybaFence, Project, Bindings } from "~/data/interfaces";
 import { v4 } from "uuid";
 import { fenceBoards } from "~/data/selectFieldData";
@@ -9,14 +7,11 @@ export default defineEventHandler(async (event) => {
 
   const project: Project | null = await projectSchema.findById({ _id });
 
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
 
   const gamybaList: Gamyba[] = await gamybaSchema.find();
 
-  const gamybaExist = gamybaList.some(
-    (item) => item._id.toString() === project._id!.toString()
-  );
+  const gamybaExist = gamybaList.some((item) => item._id.toString() === project._id!.toString());
 
   if (gamybaExist) {
     return { success: false, data: null, message: "Objektas jau gaminamas" };
@@ -25,19 +20,10 @@ export default defineEventHandler(async (event) => {
     const bindings: Bindings[] = [];
 
     //adds bindings as new or update quantity of existing
-    const addBindings = (
-      color: string,
-      height: number,
-      type: string,
-      quantity: number
-    ) => {
+    const addBindings = (color: string, height: number, type: string, quantity: number) => {
       let found = false;
       for (const binding of bindings) {
-        if (
-          binding.color === color &&
-          binding.height === height &&
-          binding.type === type
-        ) {
+        if (binding.color === color && binding.height === height && binding.type === type) {
           binding.quantity = binding.quantity! + quantity;
           found = true;
           break;
@@ -79,25 +65,16 @@ export default defineEventHandler(async (event) => {
       let wasStep = false;
 
       item.measures.forEach((measure, index) => {
-        const notSpecial =
-          !measure.laiptas.exist &&
-          !measure.kampas.exist &&
-          !measure.gates.exist;
+        const notSpecial = !measure.laiptas.exist && !measure.kampas.exist && !measure.gates.exist;
 
         if (!isBindings) {
-          if (notSpecial)
-            addBindings(color, measure.height, "Koja Dviguba " + legWidth, 2);
+          if (notSpecial) addBindings(color, measure.height, "Koja Dviguba " + legWidth, 2);
         } else {
           // if first element is fence, adds one leg
           if (index === 0) {
             if (notSpecial) {
               lastHeight = measure.height;
-              addBindings(
-                color,
-                measure.height,
-                "Koja vienguba " + legWidth,
-                1
-              );
+              addBindings(color, measure.height, "Koja vienguba " + legWidth, 1);
             } else {
               if (measure.laiptas.exist) wasStep = true;
               if (measure.kampas.exist) wasCorner = true;
@@ -107,13 +84,7 @@ export default defineEventHandler(async (event) => {
           }
 
           if (index === item.measures.length - 1) {
-            if (notSpecial)
-              addBindings(
-                color,
-                measure.height,
-                "Koja vienguba " + legWidth,
-                1
-              );
+            if (notSpecial) addBindings(color, measure.height, "Koja vienguba " + legWidth, 1);
           }
 
           if (measure.gates.exist) {
@@ -148,8 +119,7 @@ export default defineEventHandler(async (event) => {
                   ? lastHeight + stepHeight - (lastHeight - measure.height)
                   : measure.height + stepHeight - (measure.height - lastHeight);
 
-              isBindings &&
-                addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
+              isBindings && addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
 
               addBindings(color, maxHeight, "Koja vienguba " + legWidth, 1);
               addBindings(
@@ -164,8 +134,7 @@ export default defineEventHandler(async (event) => {
               lastHeight = measure.height;
             } else if (wasCorner) {
               const maxHeight = Math.max(lastHeight, measure.height);
-              isBindings &&
-                addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
+              isBindings && addBindings(color, maxHeight, "Kampas " + cornerRadius, 1);
 
               addBindings(
                 color,
@@ -216,9 +185,7 @@ export default defineEventHandler(async (event) => {
     });
 
     const newFences: GamybaFence[] = project.fenceMeasures
-      .filter(
-        (item) => item.type !== "Segmentas" && !fenceBoards.includes(item.type)
-      )
+      .filter((item) => item.type !== "Segmentas" && !fenceBoards.includes(item.type))
       .map((item) => {
         return {
           ...item,

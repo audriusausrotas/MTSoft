@@ -6,8 +6,7 @@ export default defineEventHandler(async (event) => {
 
     const project = await projectSchema.findById(projectId);
 
-    if (!project)
-      return { success: false, data: null, message: "Projektas nerastas" };
+    if (!project) return { success: false, data: null, message: "Projektas nerastas" };
 
     project.versions = project.versions.filter(
       (version) => version.id.toString() !== _id.toString()

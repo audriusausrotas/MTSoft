@@ -1,5 +1,3 @@
-//done
-
 import mongoose from "mongoose";
 import type { User } from "~/data/interfaces";
 
@@ -26,8 +24,7 @@ export default defineEventHandler(async (event) => {
 
   const project = await gamybaSchema.findById(objectId);
 
-  if (!project)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!project) return { success: false, data: null, message: "užsakymas nerastas" };
 
   project.fences[index].measures = project.fences[index].measures.filter(
     (item, index) => index !== measureIndex

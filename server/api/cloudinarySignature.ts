@@ -1,5 +1,3 @@
-//done
-
 import { v2 as cloudinary } from "cloudinary";
 
 export default eventHandler(async (event) => {

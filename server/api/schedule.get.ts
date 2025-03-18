@@ -1,6 +1,5 @@
 import { Schedule } from "~/data/interfaces";
 import jwt from "jsonwebtoken";
-import { use } from "h3";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();

@@ -3,8 +3,7 @@ export default defineEventHandler(async (event) => {
 
   const doesExist = await productSchema.findOne({ name });
 
-  if (doesExist)
-    return { success: false, data: null, message: "Produktas jau egzistuoja" };
+  if (doesExist) return { success: false, data: null, message: "Produktas jau egzistuoja" };
 
   const product = new productSchema({
     name,

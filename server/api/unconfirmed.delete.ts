@@ -5,8 +5,7 @@ export default defineEventHandler(async (event) => {
     const { _id } = await readBody(event);
     const data = await unconfirmedSchema.findOneAndDelete({ _id });
 
-    if (!data)
-      return { success: false, data: null, message: "Projektas nerastas" };
+    if (!data) return { success: false, data: null, message: "Projektas nerastas" };
 
     cloudinaryBachDelete(data.files);
 

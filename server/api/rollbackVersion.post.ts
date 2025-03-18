@@ -3,8 +3,7 @@ export default defineEventHandler(async (event) => {
 
   const project = await projectSchema.findById(projectId);
 
-  if (!project)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!project) return { success: false, data: null, message: "Projektas nerastas" };
 
   const rollbackVersion = await versionsSchema.findById(_id);
 

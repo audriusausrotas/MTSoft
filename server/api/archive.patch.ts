@@ -1,5 +1,3 @@
-//done
-
 export default defineEventHandler(async (event) => {
   const { _id, location } = await readBody(event);
 

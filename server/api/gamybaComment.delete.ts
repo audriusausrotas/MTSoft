@@ -1,4 +1,3 @@
-// done
 import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
@@ -8,8 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const data = await gamybaSchema.findOne(objectId);
 
-  if (!data)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!data) return { success: false, data: null, message: "užsakymas nerastas" };
 
   data.aditional = data.aditional.filter(
     (item) => item.date !== comment.date && item.comment !== comment.comment

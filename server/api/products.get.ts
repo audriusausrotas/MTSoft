@@ -3,8 +3,7 @@ import type { Product } from "~/data/interfaces";
 export default defineEventHandler(async () => {
   const data = await productSchema.find();
 
-  if (!data)
-    return { success: false, data: null, message: "Produktai nerasti" };
+  if (!data) return { success: false, data: null, message: "Produktai nerasti" };
 
   const borteliai: Product[] = [];
   const darbai: Product[] = [];

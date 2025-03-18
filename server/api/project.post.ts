@@ -27,9 +27,7 @@ export default defineEventHandler(async (event) => {
 
   if (_id) projectExist = await projectSchema.findById(_id);
 
-  const creatorUsername = projectExist
-    ? projectExist.creator.username
-    : creator.username;
+  const creatorUsername = projectExist ? projectExist.creator.username : creator.username;
 
   const currentDate = new Date();
 
@@ -59,8 +57,7 @@ export default defineEventHandler(async (event) => {
       (a, b) => extractOrderNumber(a) - extractOrderNumber(b)
     );
 
-    let lastOrder =
-      sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
+    let lastOrder = sortedOrderNumbers[sortedOrderNumbers.length - 1]?.orderNumber;
 
     let orderNumbers = parseInt(lastOrder.split("-")[1]);
     orderNumbers++;

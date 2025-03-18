@@ -1,5 +1,3 @@
-//done
-
 export default defineEventHandler(async (event) => {
   const { username, email, phone, address } = await readBody(event);
 

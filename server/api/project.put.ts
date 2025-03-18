@@ -25,10 +25,9 @@ export default defineEventHandler(async (event) => {
   expirationDate.setDate(currentDate.getDate() + 30);
   const dateExparation = expirationDate.toISOString();
 
-  const orderExist = await projectSchema.findById({ _id });
+  const orderExist = await projectSchema.findById(_id);
 
-  if (!orderExist)
-    return { success: false, data: null, message: "Projektas nerastas" };
+  if (!orderExist) return { success: false, data: null, message: "Projektas nerastas" };
 
   const versionObject: Project = orderExist.toObject();
   delete versionObject._id;

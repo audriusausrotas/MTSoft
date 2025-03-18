@@ -1,13 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const {
-    accountType,
-    project,
-    schedule,
-    production,
-    installation,
-    gate,
-    admin,
-  } = await readBody(event);
+  const { accountType, project, schedule, production, installation, gate, admin } = await readBody(
+    event
+  );
 
   let doesExist = await userRightsSchema.findOne({ accountType });
   if (doesExist) {

@@ -53,7 +53,6 @@ const saveHandler = async () => {
     defaultDirection: defaultDirection.value,
     seeThrough: seeThroughData,
   };
-  console.log(newData);
   const response: any = await $fetch("/api/product", {
     method: "put",
     body: newData,
@@ -61,7 +60,6 @@ const saveHandler = async () => {
 
   if (response.success) {
     useProducts.updateProduct(response.data);
-    console.log(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);

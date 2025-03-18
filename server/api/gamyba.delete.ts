@@ -1,5 +1,3 @@
-//done
-
 import mongoose from "mongoose";
 import cloudinaryBachDelete from "~/utils/cloudinaryBachDelete";
 

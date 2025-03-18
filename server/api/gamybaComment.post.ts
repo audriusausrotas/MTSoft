@@ -1,4 +1,3 @@
-//done
 import type { Gamyba, Comment } from "~/data/interfaces";
 import mongoose from "mongoose";
 

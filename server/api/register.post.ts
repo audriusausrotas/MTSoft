@@ -40,8 +40,7 @@ export default defineEventHandler(async (event) => {
 
   const userExists = await userSchema.findOne({ email });
 
-  if (userExists)
-    return { success: false, data: null, message: "Vartotojas jau egzistuoja" };
+  if (userExists) return { success: false, data: null, message: "Vartotojas jau egzistuoja" };
 
   const user = new userSchema({
     username,

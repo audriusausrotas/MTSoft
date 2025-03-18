@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const data = await montavimasSchema.findOneAndDelete(objectId);
 
-  if (!data)
-    return { success: false, data: null, message: "užsakymas nerastas" };
+  if (!data) return { success: false, data: null, message: "užsakymas nerastas" };
 
   cloudinaryBachDelete(data.files);
 
