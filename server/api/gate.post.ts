@@ -1,3 +1,5 @@
+//done
+
 import mongoose from "mongoose";
 
 export default defineEventHandler(async (event) => {
@@ -7,7 +9,8 @@ export default defineEventHandler(async (event) => {
 
   const gate = await gateSchema.findById(objectId);
 
-  if (!gate) return { success: false, data: null, message: "Užsakymas nerastas" };
+  if (!gate)
+    return { success: false, data: null, message: "Užsakymas nerastas" };
 
   return { success: true, data: gate, message: "Vartai užsakyti" };
 });

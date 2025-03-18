@@ -1,4 +1,6 @@
 // import { socket } from "~/components/socket";
+
+// done
 export default defineEventHandler(async (event) => {
   const { number, address, creator } = await readBody(event);
 

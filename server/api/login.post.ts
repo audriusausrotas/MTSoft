@@ -1,3 +1,5 @@
+//done
+
 import bcrypt from "bcrypt";
 import { setCookie } from "h3";
 import jwt from "jsonwebtoken";
@@ -30,9 +32,11 @@ export default defineEventHandler(async (event) => {
 
   const data = await userSchema.findOne({ email });
 
-  if (!data) return { success: false, data: null, message: "Vartotojas nerastas" };
+  if (!data)
+    return { success: false, data: null, message: "Vartotojas nerastas" };
 
-  if (!data.verified) return { success: false, data: null, message: "Vartotojas nepatvirtintas" };
+  if (!data.verified)
+    return { success: false, data: null, message: "Vartotojas nepatvirtintas" };
 
   if (await bcrypt.compare(password, data.password)) {
     const token = jwt.sign(
