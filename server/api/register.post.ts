@@ -50,7 +50,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await user.save();
 
-  data.password = "";
-
   return { success: true, data: null, message: "Sėkmingai prisiregistruota" };
 });
