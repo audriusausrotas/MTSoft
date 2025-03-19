@@ -46,11 +46,9 @@ const props = defineProps(["fence", "retail"]);
               </div>
               <div class="px-2 py-1 border-r border-inherit flex">
                 {{ props.fence.premPriceMVat }} €/m
-                <span class="text-[12px] items-start mr-1">2</span>
               </div>
               <div class="px-2 py-1 flex">
                 {{ props.fence.ecoPriceMVat }} €/m
-                <span class="text-[12px] items-start mr-1">2</span>
               </div>
             </div>
           </div>
@@ -80,9 +78,11 @@ const props = defineProps(["fence", "retail"]);
               </div>
               <div class="px-2 py-1 border-b border-inherit border-r">
                 {{ props.fence.premPriceM2Nepr }} €/m
+                <span class="text-[12px] items-start mr-1">2</span>
               </div>
               <div class="px-2 py-1 border-b border-inherit">
                 {{ props.fence.ecoPriceM2Nepr }} €/m
+                <span class="text-[12px] items-start mr-1">2</span>
               </div>
               <div class="px-2 py-1 border-r border-inherit">Kaina su PVM</div>
               <div class="px-2 py-1 border-r border-inherit flex">
