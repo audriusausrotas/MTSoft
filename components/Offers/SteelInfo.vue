@@ -13,20 +13,20 @@
       <div class="px-4 py-1 border-b border-inherit font-bold">Eco</div>
       <div class="px-4 py-1 border-b border-inherit border-r">Gamintojas</div>
       <div class="px-4 py-1 border-b border-inherit border-r">Thyssenkrupp</div>
-      <div class="px-4 py-1 border-b border-inherit">Marcegaglia</div>
+      <div class="px-4 py-1 border-b border-inherit">Ukraina</div>
       <div class="px-4 py-1 border-b border-inherit border-r">
         Gamintojo šalis
       </div>
       <div class="px-4 py-1 border-b border-inherit border-r">Vokietija</div>
-      <div class="px-4 py-1 border-b border-inherit">Italija</div>
+      <div class="px-4 py-1 border-b border-inherit">Ukraina</div>
       <div class="px-4 py-1 border-b border-inherit border-r">Garantija</div>
       <div class="px-4 py-1 border-b border-inherit border-r">45 metai</div>
-      <div class="px-4 py-1 border-b border-inherit">5 metai</div>
+      <div class="px-4 py-1 border-b border-inherit">10 metų</div>
       <div class="px-4 py-1 border-b border-inherit border-r">
         Skardos storis
       </div>
       <div class="px-4 py-1 border-b border-inherit border-r">0.5 mm</div>
-      <div class="px-4 py-1 border-b border-inherit">0.45 mm</div>
+      <div class="px-4 py-1 border-b border-inherit">0.42 mm</div>
       <div class="px-4 py-1 border-b border-inherit border-r">
         Skardos identiško atspalvio garantas
       </div>
@@ -53,7 +53,7 @@
       <div class="px-4 py-1 border-r border-inherit">
         min. 35 mikronų dviejų sluoksnių dengimo sistema
       </div>
-      <div class="px-4 py-1">---</div>
+      <div class="px-4 py-1">25 mikronai</div>
     </div>
 
     <div class="sm:hidden grid-cols-2 border-2 border-black rounded-md grid">
