@@ -1,52 +1,43 @@
-import { useCookie } from "nuxt/app";
-
 export default defineNuxtRouteMiddleware(async (to) => {
-  const useUser = useUserStore();
-  const cookie = useCookie("mtud");
+  if (to.path.includes("pasiulymas") && to.path.includes("didmena") && to.path.includes("tvoros")) {
+    // if (to.path.includes("pasiulymas"))
+    //   if (import.meta.server) {
+    //     const success = await fetchOrder(to);
+    //     if (!success) {
+    //       const pathName = to.name?.toString();
+    //       if (!pathName?.includes("negalioja")) {
+    //         return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+    //       }
+    //     }
+    //   }
+  } else {
+    const user: any = await fetchUser();
 
-  if (
-    !to.path.includes("pasiulymas") &&
-    !to.path.includes("didmena") &&
-    !to.path.includes("tvoros")
-  ) {
-    // authentificate in server from cookie
-    if (cookie.value) {
-      if (!useUser.user) {
-        const data: any = await fetchUser();
-
-        if (!data) {
-          if (to.path !== "/login") {
-            useUser.logout();
-            return navigateTo("/login");
-          }
-        } else {
-          await fetchUsers();
-        }
+    if (user.success && user.data) {
+      if (to.path === "/login") {
+        return navigateTo("/");
       }
+      await fetchUsers();
     } else {
       if (to.path !== "/login") {
-        useUser.logout();
         return navigateTo("/login");
       }
     }
 
     // vartonas service worker rerouting
-    if (useUser.user?.accountType.toLowerCase() === "servisas") {
+    if (user.data.accountType.toLowerCase() === "servisas") {
       if (to.path !== "/servisas") {
         return navigateTo("/servisas");
       } else {
         return;
       }
     }
-
     // fetch settings for everyone
     await fetchUserRights();
-
     const useSettings = useSettingsStore();
     const userRights = useSettings.userRights.find(
-      (item) => item.accountType === useUser?.user?.accountType
+      (item) => item.accountType === user.data.accountType
     );
-
     switch (to.path) {
       case "/":
         if (userRights?.project) {
@@ -55,15 +46,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
-      case `/perziura/${to.params.id}`:
-        if (userRights?.project) {
-          await fetchProject(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
       case "/skaiciuokle":
         if (userRights?.project) {
           await Promise.all([fetchProducts(), fetchClients(), fetchDefaultValues()]);
@@ -71,48 +53,28 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/grafikas":
         if (userRights?.schedule) {
-          await Promise.all([fetchSchedules(), fetchGamybas()]);
-          if (useUser.user?.accountType === "Administratorius") await fetchProjects();
+          await Promise.all([fetchSchedules(), fetchProduction()]);
+          if (user.data.accountType === "Administratorius") await fetchProjects();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/gamyba":
         if (userRights?.production) {
-          await fetchGamybas();
+          await fetchProduction();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
-      case `/gamyba/${to.params.id}`:
-        if (userRights?.production) {
-          await fetchGamyba(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
       case "/montavimas":
         if (userRights?.installation) {
-          await Promise.all([fetchMontavimus(), fetchSchedules()]);
+          await Promise.all([fetchInstallation(), fetchSchedules()]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
-      case `/montavimas/${to.params.id}`:
-        if (userRights?.installation) {
-          await fetchMontavima(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
       case "/vartai":
         if (userRights?.gate) {
           await fetchGates();
@@ -120,15 +82,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
-      case `/vartai/${to.params.id}`:
-        if (userRights?.gate) {
-          await fetchGate(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
       case "/kainos":
         if (userRights?.admin) {
           await fetchProducts();
@@ -136,7 +89,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/pasiulymai":
         if (userRights?.admin) {
           await fetchPotentialClients();
@@ -144,7 +96,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/klientai":
         if (userRights?.admin) {
           await fetchClients();
@@ -152,7 +103,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/vartotojai":
         if (userRights?.admin) {
           await Promise.all([fetchUsers(), fetchSelects()]);
@@ -160,7 +110,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/nustatymai":
         if (userRights?.admin) {
           await Promise.all([
@@ -173,7 +122,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/archyvas/archyvas":
         if (userRights?.admin) {
           await fetchArchives();
@@ -181,7 +129,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/archyvas/nepasitvirtine":
         if (userRights?.admin) {
           await fetchUnconfirmed();
@@ -189,7 +136,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/archyvas/istrinti":
         if (userRights?.admin) {
           await fetchDeleted();
@@ -197,7 +143,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
       case "/archyvas/atsargines_kopijos":
         if (userRights?.admin) {
           await fetchBackup();
@@ -205,34 +150,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
-
-      case `/archyvas/${to.params.id}`:
-        if (userRights?.admin) {
-          await fetchArchive(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
       case "/bonusai":
-        if (useUser.user?.username !== "Audrius" && useUser.user?.username !== "Andrius") {
+        if (user.data.username !== "Audrius" && user.data.username !== "Andrius") {
           return navigateTo("/");
         }
         break;
-
       default:
         break;
     }
-  } else {
-    if (to.path.includes("pasiulymas"))
-      if (import.meta.server) {
-        const success = await fetchOrder(to);
-        if (!success) {
-          const pathName = to.name?.toString();
-          if (!pathName?.includes("negalioja")) {
-            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-          }
-        }
-      }
   }
 });

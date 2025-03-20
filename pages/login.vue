@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ResponseUser } from "~/data/interfaces";
-
+import request from "~/utils/request";
 definePageMeta({
   layout: false,
 });
@@ -16,17 +16,10 @@ const useUser = useUserStore();
 
 const loginHandler = async () => {
   isLoading.value = true;
-  const loginData = { email: email.value, password: password.value };
-  const data: ResponseUser = await $fetch("/api/login", {
-    method: "post",
-    body: loginData,
-  });
 
-  // const data: ResponseUser = await $fetch("http://localhost:3001/login", {
-  //   method: "post",
-  //   credentials: "include",
-  //   body: loginData,
-  // });
+  const loginData = { email: email.value, password: password.value };
+
+  const data = await request.post("login", loginData);
 
   if (data.success) {
     useUser.setUser(data.data);
