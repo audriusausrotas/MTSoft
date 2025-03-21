@@ -198,13 +198,16 @@ export async function fetchClients() {
 export async function fetchOrder(to: any) {
   let success = true;
 
-  const { data: offer }: any = await useFetch("/api/order", {
+  const { data: offer }: any = await useFetch("getOrder", {
     method: "post",
     body: { _id: to.params.id },
   });
   if (offer.value.success) {
     const useOffer = useOfferStore();
-    if (offer.value.data.status === "Nepatvirtintas" || offer.value.data.status === "Netinkamas") {
+    if (
+      offer.value.data.status === "Nepatvirtintas" ||
+      offer.value.data.status === "Netinkamas"
+    ) {
       const currentDate = new Date();
       const exparationDate = new Date(offer.value.data.dateExparation);
       if (currentDate < exparationDate) {

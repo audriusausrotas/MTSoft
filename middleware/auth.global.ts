@@ -1,15 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (to.path.includes("pasiulymas") && to.path.includes("didmena") && to.path.includes("tvoros")) {
-    // if (to.path.includes("pasiulymas"))
-    //   if (import.meta.server) {
-    //     const success = await fetchOrder(to);
-    //     if (!success) {
-    //       const pathName = to.name?.toString();
-    //       if (!pathName?.includes("negalioja")) {
-    //         return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-    //       }
-    //     }
-    //   }
+  if (
+    to.path.includes("pasiulymas") &&
+    to.path.includes("didmena") &&
+    to.path.includes("tvoros")
+  ) {
+    if (to.path.includes("pasiulymas"))
+      if (import.meta.server) {
+        const success = await fetchOrder(to);
+        if (!success) {
+          const pathName = to.name?.toString();
+          if (!pathName?.includes("negalioja")) {
+            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+          }
+        }
+      }
   } else {
     const user: any = await fetchUser();
 
@@ -41,14 +45,23 @@ export default defineNuxtRouteMiddleware(async (to) => {
     switch (to.path) {
       case "/":
         if (userRights?.project) {
-          await Promise.all([fetchProjects(), fetchGates(), fetchUsers(), fetchSelects()]);
+          await Promise.all([
+            fetchProjects(),
+            fetchGates(),
+            fetchUsers(),
+            fetchSelects(),
+          ]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
       case "/skaiciuokle":
         if (userRights?.project) {
-          await Promise.all([fetchProducts(), fetchClients(), fetchDefaultValues()]);
+          await Promise.all([
+            fetchProducts(),
+            fetchClients(),
+            fetchDefaultValues(),
+          ]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -56,7 +69,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       case "/grafikas":
         if (userRights?.schedule) {
           await Promise.all([fetchSchedules(), fetchProduction()]);
-          if (user.data.accountType === "Administratorius") await fetchProjects();
+          if (user.data.accountType === "Administratorius")
+            await fetchProjects();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -151,7 +165,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
         break;
       case "/bonusai":
-        if (user.data.username !== "Audrius" && user.data.username !== "Andrius") {
+        if (
+          user.data.username !== "Audrius" &&
+          user.data.username !== "Andrius"
+        ) {
           return navigateTo("/");
         }
         break;
