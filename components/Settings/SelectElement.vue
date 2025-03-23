@@ -22,10 +22,10 @@ useProducts?.products?.forEach((item) => {
 });
 
 const saveHandler = async (value: string) => {
-  const response: any = await $fetch("/api/selects", {
-    method: "post",
-    body: { field: props.field, value },
-  });
+  const requestData = { field: props.field, value };
+
+  const response: any = await request.post("/newSelect", requestData);
+
   if (response.success) {
     useSettings.newSelectValue(props.field, value);
     editable.value = false;

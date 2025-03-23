@@ -9,13 +9,21 @@ const fetchData = async (
   const options: any = {
     method,
     credentials: withCredentials ? "include" : "same-origin",
-    body: body || undefined,
   };
+
+  if (body !== null) {
+    options.body = JSON.stringify(body);
+    options.headers = {
+      ...options.headers,
+      "Content-Type": "application/json",
+    };
+  }
 
   if (import.meta.server && withCredentials) {
     const headers = useRequestHeaders(["cookie"]);
     options.headers = {
       ...headers,
+      ...options.headers,
     };
   }
 
@@ -32,15 +40,15 @@ const fetchData = async (
 export default {
   get: (path: string, withCredentials: boolean = true) =>
     fetchData(path, "GET", null, withCredentials),
-  post: (path: string, body: any, withCredentials: boolean = true) =>
+  post: (path: string, body: any = null, withCredentials: boolean = true) =>
     fetchData(path, "POST", body, withCredentials),
-  patch: (path: string, body: any, withCredentials: boolean = true) =>
+  patch: (path: string, body: any = null, withCredentials: boolean = true) =>
     fetchData(path, "PATCH", body, withCredentials),
-  delete: (path: string, withCredentials: boolean = true) =>
-    fetchData(path, "DELETE", null, withCredentials),
+  delete: (path: string, body: any = null, withCredentials: boolean = true) =>
+    fetchData(path, "DELETE", body, withCredentials),
 
   getNoCredentials: (path: string) => fetchData(path, "GET", null, false),
-  postNoCredentials: (path: string, body: any) => fetchData(path, "POST", body, false),
-  patchNoCredentials: (path: string, body: any) => fetchData(path, "PATCH", body, false),
-  deleteNoCredentials: (path: string) => fetchData(path, "DELETE", null, false),
+  postNoCredentials: (path: string, body: any = null) => fetchData(path, "POST", body, false),
+  patchNoCredentials: (path: string, body: any = null) => fetchData(path, "PATCH", body, false),
+  deleteNoCredentials: (path: string, body: any = null) => fetchData(path, "DELETE", body, false),
 };

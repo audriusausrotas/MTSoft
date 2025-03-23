@@ -17,10 +17,8 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
     value: value,
   };
 
-  const data: any = await $fetch("/api/userChanges", {
-    method: "post",
-    body: postData,
-  });
+  const data: any = await request.patch("updateUser", postData);
+
   if (data.success) {
     useUser.updateUser(data.data);
     setIsError(false);
@@ -32,19 +30,14 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
 
 const confirmHandler = async () => {
   isLoading.value = true;
+
   const postData = {
     selectedUserId: selectedUser.value,
     password: password.value,
   };
 
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    const data: { data: null; message: string; success: boolean } = await $fetch(
-      "/api/userChanges",
-      {
-        method: "delete",
-        body: postData,
-      }
-    );
+    const data = await request.post("deleteUser", postData);
 
     if (data.success) {
       useUser.deleteUser(selectedUser.value);

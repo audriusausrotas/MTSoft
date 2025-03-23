@@ -1,20 +1,16 @@
 <script setup lang="ts">
-const router = useRoute();
+const route = useRoute();
 const showButtons = ref<boolean>(true);
 const text = ref<string>("Ar tikrai norite atsisakyti mūsų pasiūlymų");
 
 const cancelHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "delete",
-    body: { _id: router.params.id },
-  });
+  const response: any = await request.delete(`deleteClient/${route.params.id}`);
 
   if (response.success) {
     text.value = "Prenumerata nutraukta. Linkime gražios dienos";
     showButtons.value = false;
   } else {
-    text.value =
-      "Įvyko klaida. Bandykite dar kartą, arba susisiekite su mūsų administratoriumi";
+    text.value = "Įvyko klaida. Bandykite dar kartą, arba susisiekite su mūsų administratoriumi";
   }
 };
 

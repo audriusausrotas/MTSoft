@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ResponseUser } from "~/data/interfaces";
-import request from "~/utils/request";
 definePageMeta({
   layout: false,
 });
@@ -42,12 +41,9 @@ const registerHandler = async () => {
     username: username.value,
   };
 
-  const data: { success: boolean; data: ResponseUser; message: string } = await $fetch(
-    "/api/register",
-    {
-      method: "post",
-      body: loginData,
-    }
+  const data: { success: boolean; data: ResponseUser; message: string } = await request.post(
+    "register",
+    loginData
   );
 
   if (data.success) {

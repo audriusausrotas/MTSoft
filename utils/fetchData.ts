@@ -198,32 +198,23 @@ export async function fetchClients() {
 export async function fetchOrder(to: any) {
   let success = true;
 
-  const { data: offer }: any = await useFetch("getOrder", {
-    method: "post",
-    body: { _id: to.params.id },
-  });
-  if (offer.value.success) {
-    const useOffer = useOfferStore();
-    if (
-      offer.value.data.status === "Nepatvirtintas" ||
-      offer.value.data.status === "Netinkamas"
-    ) {
-      const currentDate = new Date();
-      const exparationDate = new Date(offer.value.data.dateExparation);
-      if (currentDate < exparationDate) {
-        useOffer.setOffer({ ...offer.value.data });
-      } else {
-        const data: any = await $fetch("/api/unconfirmed", {
-          method: "post",
-          body: { _id: offer.value.data._id },
-        } as any);
+  const data: any = await request.get(`getOrder/${to.params.id}`);
 
-        if (data.success) {
+  if (data.success) {
+    const useOffer = useOfferStore();
+    if (data.data.status === "Nepatvirtintas" || data.data.status === "Netinkamas") {
+      const currentDate = new Date();
+      const exparationDate = new Date(data.data.dateExparation);
+      if (currentDate < exparationDate) {
+        useOffer.setOffer({ ...data.data });
+      } else {
+        const data2: any = await $fetch(`addUnconfirmed/${data.data._id}`);
+        if (data2.success) {
           success = false;
         }
       }
     } else {
-      useOffer.setOffer({ ...offer.value.data });
+      useOffer.setOffer({ ...data.data });
     }
   } else {
     success = false;

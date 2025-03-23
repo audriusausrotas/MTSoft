@@ -45,7 +45,7 @@ const seeThroughData = reactive({
 });
 
 const saveHandler = async () => {
-  const newData = {
+  const requestData = {
     _id: props.fence._id,
     height: height.value,
     width: width.value,
@@ -53,10 +53,7 @@ const saveHandler = async () => {
     defaultDirection: defaultDirection.value,
     seeThrough: seeThroughData,
   };
-  const response: any = await $fetch("/api/product", {
-    method: "put",
-    body: newData,
-  });
+  const response: any = await request.patch("updateFenceData", requestData);
 
   if (response.success) {
     useProducts.updateProduct(response.data);

@@ -3,10 +3,8 @@ const { setError, setIsError } = useError();
 const useClients = useClientsStore();
 
 const deleteHandler = async (_id: string) => {
-  const response: any = await $fetch("/api/clients", {
-    method: "delete",
-    body: { _id },
-  });
+  const response: any = await request.delete(`deleteClient/${_id}`);
+
   if (response.success) {
     useClients.deleteClient(_id);
     setIsError(false);

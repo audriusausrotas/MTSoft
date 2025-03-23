@@ -23,7 +23,7 @@ for (const user of useSettings.userRights) {
 }
 
 const saveHandler = async () => {
-  const data = {
+  const requestData = {
     accountType: props.accountType,
     project: projectBox.value,
     schedule: scheduleBox.value,
@@ -33,10 +33,7 @@ const saveHandler = async () => {
     admin: adminBox.value,
   };
 
-  const response: any = await $fetch("/api/userRights", {
-    method: "post",
-    body: data,
-  });
+  const response: any = await request.post("newUserRights", requestData);
 
   if (response.success) {
     useSettings.updateUserRights(response.data);
@@ -53,52 +50,22 @@ const saveHandler = async () => {
   <div class="flex gap-4">
     <div class="w-48">{{ props.accountType }}</div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="projectBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="projectBox" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="scheduleBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="scheduleBox" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="productionBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="productionBox" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="installationBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="installationBox" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="gateBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="gateBox" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="adminBox"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="adminBox" />
     </div>
     <NuxtImg
       v-if="!editable"

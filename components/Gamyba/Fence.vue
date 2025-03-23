@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import type { Measure } from "~/data/interfaces";
 import { verticals } from "~/data/selectFieldData";
-const props = defineProps([
-  "fence",
-  "fenceIndex",
-  "_id",
-  "orderNr",
-  "clientAddress",
-]);
+const props = defineProps(["fence", "fenceIndex", "_id", "orderNr", "clientAddress"]);
 
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
@@ -20,14 +14,12 @@ const filterLength = ref<boolean>(false);
 const filteredMeasures = ref([...props.fence.measures]);
 
 const isFenceboards =
-  verticals.includes(props.fence.type) ||
-  props.fence.type.includes("Segmentas");
+  verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas");
 
 const newMeasureHandler = async () => {
-  const response: any = await $fetch("/api/gamybaMeasure", {
-    method: "post",
-    body: { _id: props._id, index: props.fenceIndex },
-  });
+  const requestData = { _id: props._id, index: props.fenceIndex };
+
+  const response: any = await request.post("addMeasure", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);
@@ -65,10 +57,10 @@ const filterByIndex = () => {
 const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti tvorą?");
   if (!confirmed) return;
-  const response: any = await $fetch("/api/gamybaFence", {
-    method: "delete",
-    body: { _id: props._id, index: props.fenceIndex },
-  });
+
+  const requestData = { _id: props._id, index: props.fenceIndex };
+
+  const response: any = await request.delete("deleteFence", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);
@@ -94,10 +86,7 @@ watch(
 
 <template>
   <div class="flex flex-col">
-    <div
-      v-if="!isFenceboards"
-      class="flex gap-4 items-center font-bold text-2xl"
-    >
+    <div v-if="!isFenceboards" class="flex gap-4 items-center font-bold text-2xl">
       <p>
         {{ props.fence.side }} - {{ props.fence.type }} -
         {{ props.fence.color }}
@@ -150,29 +139,11 @@ watch(
           class="transition-all"
         />
       </p>
-      <p
-        class="w-24 flex items-center justify-center h-full border-r border-black"
-      >
-        Elementai
-      </p>
-      <p
-        class="w-24 flex items-center justify-center h-full border-r border-black"
-      >
-        Aukštis
-      </p>
-      <p
-        class="w-24 flex items-center justify-center h-full border-r border-black"
-      >
-        Išpjauti
-      </p>
-      <p
-        class="w-24 flex items-center justify-center h-full border-r border-black"
-      >
-        Pagaminti
-      </p>
-      <p
-        class="w-24 flex items-center justify-center h-full border-r border-black print:hidden"
-      >
+      <p class="w-24 flex items-center justify-center h-full border-r border-black">Elementai</p>
+      <p class="w-24 flex items-center justify-center h-full border-r border-black">Aukštis</p>
+      <p class="w-24 flex items-center justify-center h-full border-r border-black">Išpjauti</p>
+      <p class="w-24 flex items-center justify-center h-full border-r border-black">Pagaminti</p>
+      <p class="w-24 flex items-center justify-center h-full border-r border-black print:hidden">
         Veiksmai
       </p>
       <p
@@ -200,12 +171,7 @@ watch(
         :orderNr="props.orderNr"
         :clientAddress="props.clientAddress"
       />
-      <BaseButton
-        v-if="isAdmin"
-        name="Pridėti naują"
-        class="mt-2"
-        @click="newMeasureHandler"
-      />
+      <BaseButton v-if="isAdmin" name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
     </div>
   </div>
 </template>

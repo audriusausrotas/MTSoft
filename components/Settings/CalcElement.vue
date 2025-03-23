@@ -13,10 +13,10 @@ const clickHandler = (value: Product) => {
 };
 
 const saveHandler = async () => {
-  const response: any = await $fetch("/api/defaultValues", {
-    method: "post",
-    body: { value: props.value, field: props.field },
-  });
+  const requestData = { value: props.value, field: props.field };
+
+  const response: any = await request.post("newDefaultValue", requestData);
+
   if (response.success) {
     editable.value = false;
     setIsError(false);

@@ -21,11 +21,8 @@ const gigastaUsers = useUser.users
     return user.email;
   });
 
-const buttonHandler = async () => {
-  const response: any = await $fetch("/api/gates", {
-    method: "patch",
-    body: { _id: gate.value?._id },
-  });
+const finishOrderHandler = async () => {
+  const response: any = await request.delete(`finishOrder/${gate.value?._id}`);
 
   if (response.success) {
     await router.replace("/vartai");
@@ -37,29 +34,28 @@ const buttonHandler = async () => {
 };
 
 const updateHandler = async (change: string, value: any) => {
-  const response: any = await $fetch("/api/gates", {
-    method: "put",
-    body: {
-      _id: gate.value?._id,
-      change,
-      value,
-      username: useUser.user?.username,
-    },
-  });
+  const data = {
+    _id: gate.value?._id,
+    change,
+    value,
+    username: useUser.user?.username,
+  };
+
+  const response: any = await request.patch("updateOrder", data);
+
   if (response.success) {
     useGates.updateGate(response.data, gate.value!._id);
 
     if (change === "status") {
       const link = `https://mtsoft.lt/vartai/${gate.value?._id}`;
 
-      const data: any = await $fetch("/api/mail", {
-        method: "put",
-        body: {
-          to: response.data.manager,
-          message: `Užsakymo ${gate.value?.orderNr}, ${gate.value?.client.address} statusas pakeistas į "${value}". Peržiūrėti galite čia: ${link} "`,
-          title: "Statusas pasikeitė",
-        },
-      });
+      const requestData = {
+        to: response.data.manager,
+        message: `Užsakymo ${gate.value?.orderNr}, ${gate.value?.client.address} statusas pakeistas į "${value}". Peržiūrėti galite čia: ${link} "`,
+        title: "Statusas pasikeitė",
+      };
+
+      const data: any = await request.post("sendGateInfo", requestData);
 
       if (data.success) {
         setIsError(false);
@@ -86,9 +82,7 @@ const updateHandler = async (change: string, value: any) => {
         @onChange="(value: string) => updateHandler('status', value)"
       />
       <BaseSelectField
-        :values="
-          gate?.manager?.includes('vartonas') ? vartonasUsers : gigastaUsers
-        "
+        :values="gate?.manager?.includes('vartonas') ? vartonasUsers : gigastaUsers"
         id="currentUsers"
         :defaultValue="gate?.manager"
         width="w-60"
@@ -99,22 +93,12 @@ const updateHandler = async (change: string, value: any) => {
         placeholder="Užsakymo Nr."
         @onConfirm="(value) => updateHandler('orderNr', value)"
       />
-      <BaseButtonWithConfirmation
-        name="užbaigti užsakymą"
-        @onConfirm="buttonHandler"
-      />
+      <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="finishOrderHandler" />
     </div>
-    <div
-      class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap"
-    >
+    <div class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap">
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Užsakymo duomenys</h3>
-        <BaseInput
-          :name="gate?.orderNr"
-          width="w-72"
-          label="Užsakymo nr:"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
         <BaseInput
           :name="gate?.measure"
           width="w-72"
@@ -137,24 +121,9 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput
-          :name="gate?.client?.username"
-          width="w-72"
-          label="klientas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.address"
-          width="w-72"
-          label="adresas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.phone"
-          width="w-72"
-          label="telefonas"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
+        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
+        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>

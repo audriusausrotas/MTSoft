@@ -16,17 +16,14 @@ const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   if (newName.value.trim() === "") return;
 
-  const newProduct = {
+  const requestData = {
     name: newName.value,
     price: newPrice.value,
     cost: newCost.value,
     category: newCategory.value,
   };
 
-  const data: ResponseProduct = await $fetch("/api/product", {
-    method: "post",
-    body: newProduct,
-  });
+  const data: ResponseProduct = await request.post("newProduct", requestData);
 
   if (data.success) {
     useProducts.newProduct(data.data);
@@ -52,11 +49,7 @@ const clearHandler = (): void => {
   <div class="flex flex-col gap-4">
     <BaseButton v-if="!open" name="pridėti naują" @click="open = true" />
     <div v-else class="flex gap-4">
-      <BaseButton
-        name="išsaugoti"
-        @click="saveHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton name="išsaugoti" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
     <div v-if="open" class="flex items-end gap-2">

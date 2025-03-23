@@ -241,7 +241,6 @@ export interface ArchivesState {
   filteredDeleted: Project[];
   unconfirmed: Project[];
   filteredUnconfirmed: Project[];
-  projectToOpen: Project | null;
 }
 
 export interface Product {

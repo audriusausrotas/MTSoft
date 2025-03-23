@@ -11,16 +11,13 @@ const loading = ref<boolean>(false);
 const newHandler = async () => {
   loading.value = true;
 
-  const data = {
+  const requestData = {
     number: orderNr.value,
     address: orderAddress.value,
     creator: orderCreator.value,
   };
 
-  const response: any = await $fetch("/api/gamybaNew", {
-    method: "post",
-    body: data,
-  });
+  const response: any = await request.post("addNewGamyba", requestData);
 
   if (response.success) {
     useGamyba.addGamyba(response.data);

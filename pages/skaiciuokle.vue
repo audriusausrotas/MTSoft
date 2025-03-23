@@ -13,9 +13,7 @@ const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
 const project = computed(() => {
-  return useProjects.projects.find(
-    (item) => item._id === useProjects.selectedProject
-  );
+  return useProjects.projects.find((item) => item._id === useProjects.selectedProject);
 });
 
 const saveHandler = async (): Promise<void> => {
@@ -51,15 +49,15 @@ const saveHandler = async (): Promise<void> => {
     versions: [],
   };
   try {
-    const data: any = await $fetch("/api/project", {
-      method: useProjects.selectedProject ? "put" : "post",
-      body: newProject,
-    });
+    let data;
+    if (useProjects.selectedProject) data = await request.patch("updateProject", newProject);
+    else data = await request.post("newProject", newProject);
+
     if (data.success) {
-      await navigateTo("/");
       clearHandler();
       setIsError(false);
       setError(data.message);
+      await navigateTo("/");
     } else {
       setError(data.message);
     }
@@ -79,10 +77,7 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
-    <div
-      v-if="project && project.versions.length > 0"
-      class="flex gap-4 w-full flex-wrap"
-    >
+    <div v-if="project && project.versions.length > 0" class="flex gap-4 w-full flex-wrap">
       <p class="font-medium text-xl">Projekto versijos:</p>
       <CalcVersions
         v-for="(version, index) in project.versions"

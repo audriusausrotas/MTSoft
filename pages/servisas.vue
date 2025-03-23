@@ -18,7 +18,7 @@ const searchHandler = async (value: string) => {
       return;
     }
 
-    const response: any = await $fetch(`/api/serviceSearch?q=${value}`);
+    const response: any = await request.get(`serviceCheck?q=${value}`);
     data.value = response.data || [];
   }, 250);
 };

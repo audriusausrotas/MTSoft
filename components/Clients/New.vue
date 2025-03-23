@@ -16,10 +16,7 @@ const saveHandler = async () => {
     address: address.value,
   };
 
-  const response: any = await $fetch("/api/clients", {
-    method: "post",
-    body: client,
-  });
+  const response: any = await request.post("newClient", client);
   if (response.success) {
     useClients.addClient(response.data);
     setIsError(false);
@@ -49,11 +46,7 @@ const cancelHandler = () => {
         <BaseButton name="Atšaukti" @click="cancelHandler" />
       </div>
       <div class="flex gap-4 flex-wrap">
-        <BaseInput
-          label="Vardas"
-          placeholder="vardas"
-          @onChange="(value) => (username = value)"
-        />
+        <BaseInput label="Vardas" placeholder="vardas" @onChange="(value) => (username = value)" />
         <BaseInput
           label="el. paštas"
           placeholder="el. paštas"
@@ -64,11 +57,7 @@ const cancelHandler = () => {
           placeholder="telefono numeris"
           @onChange="(value) => (phone = value)"
         />
-        <BaseInput
-          label="adresas"
-          placeholder="adresas"
-          @onChange="(value) => (address = value)"
-        />
+        <BaseInput label="adresas" placeholder="adresas" @onChange="(value) => (address = value)" />
       </div>
     </div>
   </div>

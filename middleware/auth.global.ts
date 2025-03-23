@@ -1,43 +1,45 @@
+import request from "~/utils/request";
+
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (
-    to.path.includes("pasiulymas") &&
-    to.path.includes("didmena") &&
-    to.path.includes("tvoros")
-  ) {
-    if (to.path.includes("pasiulymas"))
+  if (to.path.includes("pasiulymas") || to.path.includes("didmena") || to.path.includes("tvoros")) {
+    if (to.path.includes("pasiulymas")) {
       if (import.meta.server) {
         const success = await fetchOrder(to);
-        if (!success) {
-          const pathName = to.name?.toString();
-          if (!pathName?.includes("negalioja")) {
+        if (!success)
+          if (!to.name?.toString().includes("negalioja"))
             return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-          }
-        }
       }
+    }
   } else {
     const user: any = await fetchUser();
 
-    if (user.success && user.data) {
-      if (to.path === "/login") {
-        return navigateTo("/");
+    if (user.success) {
+      if (user.data) {
+        if (to.path === "/login") return navigateTo("/");
+      } else {
+        const data = await request.get("logout");
+        if (data.success) {
+          const useUser = useUserStore();
+          useUser.logout();
+          const router = useRouter();
+          router.push("/login");
+        }
+
+        if (to.path !== "/login") return navigateTo("/login");
       }
-      await fetchUsers();
     } else {
-      if (to.path !== "/login") {
-        return navigateTo("/login");
-      }
+      if (to.path !== "/login") return navigateTo("/login");
+      else return;
     }
 
     // vartonas service worker rerouting
-    if (user.data.accountType.toLowerCase() === "servisas") {
-      if (to.path !== "/servisas") {
-        return navigateTo("/servisas");
-      } else {
-        return;
-      }
-    }
+    if (user.data.accountType.toLowerCase() === "servisas")
+      if (to.path !== "/servisas") return navigateTo("/servisas");
+      else return;
+
     // fetch settings for everyone
-    await fetchUserRights();
+    await Promise.all([fetchUsers(), fetchUserRights()]);
+
     const useSettings = useSettingsStore();
     const userRights = useSettings.userRights.find(
       (item) => item.accountType === user.data.accountType
@@ -45,23 +47,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
     switch (to.path) {
       case "/":
         if (userRights?.project) {
-          await Promise.all([
-            fetchProjects(),
-            fetchGates(),
-            fetchUsers(),
-            fetchSelects(),
-          ]);
+          await Promise.all([fetchProjects(), fetchGates(), fetchUsers(), fetchSelects()]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
         break;
       case "/skaiciuokle":
         if (userRights?.project) {
-          await Promise.all([
-            fetchProducts(),
-            fetchClients(),
-            fetchDefaultValues(),
-          ]);
+          await Promise.all([fetchProducts(), fetchClients(), fetchDefaultValues()]);
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -69,8 +62,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       case "/grafikas":
         if (userRights?.schedule) {
           await Promise.all([fetchSchedules(), fetchProduction()]);
-          if (user.data.accountType === "Administratorius")
-            await fetchProjects();
+          if (user.data.accountType === "Administratorius") await fetchProjects();
         } else {
           return navigateTo(middlewareHelper(userRights!));
         }
@@ -165,10 +157,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
         break;
       case "/bonusai":
-        if (
-          user.data.username !== "Audrius" &&
-          user.data.username !== "Andrius"
-        ) {
+        if (user.data.username !== "Audrius" && user.data.username !== "Andrius") {
           return navigateTo("/");
         }
         break;

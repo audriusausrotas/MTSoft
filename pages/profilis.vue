@@ -21,10 +21,7 @@ const saveHandler = async (field: string) => {
     value = password.value;
   }
 
-  const response: any = await $fetch("/api/profile", {
-    method: "post",
-    body: { field, value },
-  });
+  const response: any = await request.patch("updateProfile", { field, value });
 
   if (response.success) {
     useUser.setUser(response.data);
@@ -102,12 +99,7 @@ watch(lastName, (newName) => {
         <div class="flex gap-4 text-4xl">
           <p>{{ useUser.user?.username }}</p>
           <div class="flex">
-            <input
-              type="text"
-              v-model="lastName"
-              placeholder="Pavardė"
-              class="max-w-60"
-            />
+            <input type="text" v-model="lastName" placeholder="Pavardė" class="max-w-60" />
             <div class="flex-1 flex">
               <NuxtImg
                 width="20"
@@ -130,12 +122,7 @@ watch(lastName, (newName) => {
         </div>
         <h5 class="font-semibold normal-case">{{ useUser.user?.email }}</h5>
         <div class="flex">
-          <input
-            type="text"
-            v-model="phone"
-            placeholder="Telefono numeris"
-            class="max-w-32"
-          />
+          <input type="text" v-model="phone" placeholder="Telefono numeris" class="max-w-32" />
           <div class="flex-1">
             <NuxtImg
               width="20"
@@ -165,10 +152,7 @@ watch(lastName, (newName) => {
         @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį"
       />
-      <BaseButton
-        name="Išsaugoti slaptažodį"
-        @click="saveHandler('password')"
-      />
+      <BaseButton name="Išsaugoti slaptažodį" @click="saveHandler('password')" />
     </div>
   </div>
 </template>

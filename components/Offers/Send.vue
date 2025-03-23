@@ -13,9 +13,7 @@ const input = ref<string>("");
 const sendHandler = async () => {
   loading.value = true;
 
-  const recipients = usePotentialClients.potentialClients.filter(
-    (client) => client.send
-  );
+  const recipients = usePotentialClients.potentialClients.filter((client) => client.send);
 
   const formData = new FormData();
   formData.append("message", text.value);
@@ -42,10 +40,10 @@ const sendHandler = async () => {
 };
 
 const selectAllHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "put",
-    body: { all: "yes", value: true },
-  });
+  const requestData = { all: true, value: true };
+
+  const response: any = await request.patch("selectClients", requestData);
+
   if (response.success) {
     usePotentialClients.checkPotentialClients(true);
     setIsError(false);
@@ -56,10 +54,9 @@ const selectAllHandler = async () => {
 };
 
 const selectNoneHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "put",
-    body: { all: "yes", value: false },
-  });
+  const requestData = { all: true, value: false };
+
+  const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
     usePotentialClients.checkPotentialClients(false);
     setIsError(false);
@@ -108,11 +105,7 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
-      <BaseButton
-        name="siūsti pasiūlymą"
-        @click="sendHandler"
-        :isLoading="loading"
-      />
+      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
       <BaseButton name="pažymėti visus" @click="selectAllHandler" />
       <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
 

@@ -8,9 +8,7 @@ const useUser = useUserStore();
 const route = useRoute();
 
 const order: any = computed(() => {
-  return useMontavimas.montavimasList.find(
-    (item) => item._id === route.params.id
-  );
+  return useMontavimas.montavimasList.find((item) => item._id === route.params.id);
 });
 
 const workers = useUser.users
@@ -18,10 +16,10 @@ const workers = useUser.users
   .map((user) => user.lastName);
 
 const statusHandler = async (value: string) => {
-  const response: any = await $fetch("/api/montavimasStatus", {
-    method: "post",
-    body: { _id: order?.value._id, status: value },
-  });
+  const requestData = { _id: order?.value._id, status: value };
+
+  const response: any = await request.patch("updateInstallationStatus", requestData);
+
   if (response.success) {
     useMontavimas.updateOrder(order!.value._id, response.data);
     setIsError(false);
@@ -32,14 +30,14 @@ const statusHandler = async (value: string) => {
 };
 
 const commentHandler = async (value: string) => {
-  const response: any = await $fetch("/api/montavimasComment", {
-    method: "post",
-    body: {
-      _id: order?.value._id,
-      comment: value,
-      username: useUser.user?.username,
-    },
-  });
+  const requestData = {
+    _id: order?.value._id,
+    comment: value,
+    username: useUser.user?.username,
+  };
+
+  const response: any = await request.post("addInstallationComment", requestData);
+
   if (response.success) {
     useMontavimas.updateOrder(order!.value._id, response.data);
     setIsError(false);
@@ -50,10 +48,9 @@ const commentHandler = async (value: string) => {
 };
 
 const deleteHandler = async (value: string, comment: string) => {
-  const response: any = await $fetch("/api/montavimasComment", {
-    method: "delete",
-    body: { _id: value, comment: comment },
-  });
+  const requestData = { _id: value, comment: comment };
+
+  const response: any = await request.delete("deleteInstallationComment", requestData);
 
   if (response.success) {
     useMontavimas.updateOrder(value, response.data);
@@ -79,10 +76,10 @@ const photosHandler = async (photo: Photo) => {
 };
 
 const deliverHandler = async (value: boolean, measureIndex: number) => {
-  const response: any = await $fetch("/api/delivered", {
-    method: "post",
-    body: { _id: order.value._id, measureIndex, value },
-  });
+  const requestData = { _id: order.value._id, measureIndex, value };
+
+  const response: any = await request.patch("partsDelivered", requestData);
+
   if (response.success) {
     useMontavimas.updateOrder(order!.value._id, response.data);
     setIsError(false);
@@ -111,31 +108,14 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
                 "
         />
 
-        <BaseInput
-          :disable="true"
-          :name="order?.client.address"
-          width="min-w-60"
-          label="Adresas"
-        />
+        <BaseInput :disable="true" :name="order?.client.address" width="min-w-60" label="Adresas" />
       </div>
       <div class="flex gap-4">
-        <BaseInput
-          :disable="true"
-          label="Kliento Nr."
-          width="w-28"
-          class="flex-1"
-        >
+        <BaseInput :disable="true" label="Kliento Nr." width="w-28" class="flex-1">
           <a :href="'tel:' + order?.client.phone">{{ order?.client.phone }}</a>
         </BaseInput>
-        <BaseInput
-          :disable="true"
-          width="w-28"
-          label="Vadybininkas"
-          class="flex-1"
-        >
-          <a :href="'tel:' + order?.creator.phone">{{
-            order?.creator.username
-          }}</a>
+        <BaseInput :disable="true" width="w-28" label="Vadybininkas" class="flex-1">
+          <a :href="'tel:' + order?.creator.phone">{{ order?.creator.username }}</a>
         </BaseInput>
       </div>
     </div>
@@ -148,19 +128,13 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
     />
     <div class="flex flex-col gap-4 items-center md:items-start">
       <BaseUpload @onSuccess="photosHandler" />
-      <BaseGalleryElement
-        :_id="order?._id"
-        :files="order?.files"
-        category="installation"
-      />
+      <BaseGalleryElement :_id="order?._id" :files="order?.files" category="installation" />
     </div>
 
     <div class="flex flex-col gap-8">
       <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
       <div class="flex flex-col">
-        <div
-          class="border-y border-black font-semibold hidden gap-10 px-2 py-2 sm:flex"
-        >
+        <div class="border-y border-black font-semibold hidden gap-10 px-2 py-2 sm:flex">
           <div class="w-6 text-center">Nr</div>
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>
@@ -192,9 +166,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
       </div>
       <div class="text-2xl font-semibold text-black text-center">Darbai</div>
       <div class="flex flex-col">
-        <div
-          class="border-y border-black font-semibold gap-10 px-2 py-2 hidden sm:flex"
-        >
+        <div class="border-y border-black font-semibold gap-10 px-2 py-2 hidden sm:flex">
           <div class="w-6 text-center">Nr</div>
           <div class="flex-1">Pavadinimas</div>
           <div class="w-20">Kiekis</div>
@@ -204,13 +176,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
           v-for="(work, index) in order.works"
           class="flex print:border-b border-dark-full gap-10"
         >
-          <OfferWork
-            :key="work.id"
-            :work="work"
-            :hidePrices="true"
-            :index="index"
-            class="flex-1"
-          />
+          <OfferWork :key="work.id" :work="work" :hidePrices="true" :index="index" class="flex-1" />
         </div>
       </div>
       <div class="flex gap-8 justify-evenly flex-wrap">

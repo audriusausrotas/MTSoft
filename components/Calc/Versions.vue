@@ -14,10 +14,9 @@ const versionsHandler = () => {
 };
 
 const returnHandler = async () => {
-  const response: any = await $fetch("/api/rollbackVersion", {
-    method: "post",
-    body: { _id: props.version.id, projectId: props.projectId },
-  });
+  const requestData = { _id: props.version.id, projectId: props.projectId };
+
+  const response: any = await request.patch("versionRollback", requestData);
 
   if (response.success) {
     useCalculations.clearAll();
@@ -28,33 +27,36 @@ const returnHandler = async () => {
     response.data._id = props.projectId;
 
     useProjects.addProject(response.data);
+
     useCalculations.setProject({
       client: response.data.client,
       fenceMeasures: response.data.fenceMeasures,
       retail: response.data.retail,
     });
+
     useResults.setProject(response.data);
+
     useBackup.addBackup(response.data.results, response.data.works);
+
     useProjects.setSelectedProject(props.projectId);
   }
   open.value = false;
 };
 
 const deleteHandler = async () => {
-  const response: any = await $fetch("/api/version", {
-    method: "delete",
-    body: { _id: props.version.id, projectId: props.projectId },
-  });
+  const requestData = { _id: props.version.id, projectId: props.projectId };
+
+  const response: any = await request.delete("deleteVersion", requestData);
 
   if (response.success) {
     setIsError(false);
     setError(response.message);
   } else {
-    // useProjects.deleteVersion(props.version.id, props.projectId);
     setError(response.message);
   }
 
-  useProjects.updateStatus(response.data);
+  useProjects.deleteVersion(props.version.id, props.projectId);
+
   open.value = false;
 };
 </script>

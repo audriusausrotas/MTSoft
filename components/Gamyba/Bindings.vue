@@ -20,27 +20,27 @@ const color = ref<string>(props.binding.color);
 const isAdmin = useUser.user?.accountType === "Administratorius";
 
 const saveHandler = async (field: string) => {
-  const response: any = await $fetch("/api/gamyba", {
-    method: "put",
-    body: {
-      _id: props._id,
-      index: props.index,
-      value:
-        field === "cut"
-          ? +cut.value
-          : field === "done"
-          ? +done.value
-          : field === "type"
-          ? type.value
-          : field === "height"
-          ? +height.value
-          : field === "quantity"
-          ? +quantity.value
-          : color.value,
-      field,
-      option: "bindings",
-    },
-  });
+  const requestData = {
+    _id: props._id,
+    index: props.index,
+    value:
+      field === "cut"
+        ? +cut.value
+        : field === "done"
+        ? +done.value
+        : field === "type"
+        ? type.value
+        : field === "height"
+        ? +height.value
+        : field === "quantity"
+        ? +quantity.value
+        : color.value,
+    field,
+    option: "bindings",
+  };
+
+  const response: any = await request.patch("updateMeasure", requestData);
+
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);
     setIsError(false);
@@ -58,15 +58,14 @@ const saveHandler = async (field: string) => {
 };
 
 const postoneHandler = async () => {
-  const response: any = await $fetch("/api/gamyba", {
-    method: "patch",
-    body: {
-      _id: props._id,
-      index: props.index,
-      value: !postone.value,
-      option: "bindings",
-    },
-  });
+  const requestData = {
+    _id: props._id,
+    index: props.index,
+    value: !postone.value,
+    option: "bindings",
+  };
+
+  const response: any = await request.patch("updatePostone", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);
@@ -81,10 +80,10 @@ const postoneHandler = async () => {
 const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti gaminį?");
   if (!confirmed) return;
-  const response: any = await $fetch("/api/bindings", {
-    method: "delete",
-    body: { _id: props._id, bindingId: props.binding.id },
-  });
+
+  const requestData = { _id: props._id, bindingId: props.binding.id };
+
+  const response: any = await request.delete("deleteBindings", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);
@@ -135,8 +134,7 @@ watch(color, (newColor) => {
           ? 'bg-red-full text-white'
           : +cut === 0 || cut === undefined
           ? 'bg-transparent'
-          : +cut === +props.binding.quantity &&
-            +done === +props.binding.quantity
+          : +cut === +props.binding.quantity && +done === +props.binding.quantity
           ? 'bg-green-500'
           : +cut > +props.binding.quantity
           ? 'bg-red-full'
@@ -220,12 +218,7 @@ watch(color, (newColor) => {
           : 'bg-orange-500'
       "
     >
-      <input
-        v-model="cut"
-        type="number"
-        placeholder="Išpjauti"
-        class="w-full"
-      />
+      <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full" />
       <NuxtImg
         width="20"
         height="20"
@@ -250,12 +243,7 @@ watch(color, (newColor) => {
           : 'bg-orange-500'
       "
     >
-      <input
-        v-model="done"
-        type="number"
-        placeholder="Pagaminti"
-        class="w-full"
-      />
+      <input v-model="done" type="number" placeholder="Pagaminti" class="w-full" />
       <NuxtImg
         width="20"
         height="20"

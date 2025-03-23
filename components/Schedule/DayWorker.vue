@@ -22,8 +22,7 @@ const loadSelectedJobs = () => {
   const scheduleItem = useSchedule.schedule.find((schedule) => {
     return (
       schedule.worker._id === props.worker._id &&
-      new Date(schedule.date).toISOString() ===
-        new Date(props.date).toISOString()
+      new Date(schedule.date).toISOString() === new Date(props.date).toISOString()
     );
   });
 
@@ -46,7 +45,8 @@ const newCommentHandler = () => {
 
 const selectHandler = (value: Project) => {
   modalOpen.value = false;
-  selectedJobs.value.push({ _id: value._id, address: value.client.address });
+
+  selectedJobs.value.push({ _id: value._id!, address: value.client.address });
   canSave.value = true;
 };
 
@@ -67,17 +67,15 @@ const cancelHandler = () => {
 };
 
 const saveHandler = async () => {
-  const data = {
+  const requestData = {
     date: props.date,
     comment: comment.value,
     selectedJobs: selectedJobs.value,
     worker: { _id: props.worker._id, lastName: props.worker.lastName },
   };
 
-  const response: any = await $fetch("/api/schedule", {
-    method: "post",
-    body: data,
-  });
+  const response: any = await request.post("addSchedule", requestData);
+
   if (response.success) {
     setIsError(false);
     setError(response.message);
@@ -124,10 +122,7 @@ const saveHandler = async () => {
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
-    <div
-      v-if="menuOpen"
-      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white"
-    >
+    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -151,12 +146,7 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div
-      v-if="selectedJobs.length > 0"
-      v-for="job in selectedJobs"
-      :key="job._id"
-      class="relative"
-    >
+    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
       <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
     </div>
 
@@ -165,12 +155,7 @@ const saveHandler = async () => {
       class="bg-blue-600 absolute top-0 left-0 w-full h-full flex flex-col justify-end placeholder-white text-white"
     >
       <div class="border-y border-white">
-        <input
-          type="text"
-          placeholder="Komentaras"
-          v-model="comment"
-          class="w-full p-1"
-        />
+        <input type="text" placeholder="Komentaras" v-model="comment" class="w-full p-1" />
       </div>
       <div class="flex justify">
         <div
@@ -182,17 +167,10 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div
-      v-if="modalOpen"
-      class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg"
-    >
+    <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
       <BaseSearchFieldProduction
         width="w-full"
-        :data="
-          props.worker.accountType === 'Gamyba'
-            ? useGamyba.gamybaList
-            : useProjects.projects
-        "
+        :data="props.worker.accountType === 'Gamyba' ? useGamyba.gamybaList : useProjects.projects"
         @modalClose="modalOpen = false"
         @onClick="selectHandler"
       />

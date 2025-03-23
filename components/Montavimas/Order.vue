@@ -23,10 +23,8 @@ const deleteHandler = async (): Promise<void> => {
     return;
   }
 
-  const response: any = await $fetch("/api/montavimas", {
-    method: "delete",
-    body: { _id: props.order._id },
-  });
+  const response: any = await request.delete(`deleteInstallation/${props.order._id}`);
+
   if (response.success) {
     useMontavimas.deleteMontavimasOrder(props.order._id);
     setIsError(false);
@@ -37,15 +35,10 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const workerDeleteHandler = async (worker: string) => {
-  if (useUser.user?.accountType !== "Administratorius") {
-    setError("Ištrinti gali tik administratorius");
-    return;
-  }
+  const requestData = { _id: props.order._id, worker };
 
-  const response: any = await $fetch("/api/montavimasWorker", {
-    method: "delete",
-    body: { _id: props.order._id, worker },
-  });
+  const response: any = await request.delete("deleteWorker", requestData);
+
   if (response.success) {
     useMontavimas.deleteMontavimasWorker(props.order._id, worker);
     setIsError(false);
@@ -65,24 +58,14 @@ const clickHandler = () => {
     class="flex flex-col w-[378px] divide-y rounded-md overflow-hidden select-none divide-black border border-black hover:scale-105 transition-transform text-sm sm:text-base font-semibold"
   >
     <div class="flex">
-      <div
-        class="flex flex-1 hover:cursor-pointer"
-        @click="clickHandler"
-        :class="statusColor"
-      >
-        <p
-          class="flex items-center justify-center w-8 h-8 border-r border-black"
-        >
+      <div class="flex flex-1 hover:cursor-pointer" @click="clickHandler" :class="statusColor">
+        <p class="flex items-center justify-center w-8 h-8 border-r border-black">
           {{ index + 1 }}
         </p>
-        <p
-          class="flex flex-1 items-center justify-center h-8 border-r border-black"
-        >
+        <p class="flex flex-1 items-center justify-center h-8 border-r border-black">
           {{ order?.orderNumber }}
         </p>
-        <p
-          class="flex flex-1 items-center justify-center h-8 border-r border-black"
-        >
+        <p class="flex flex-1 items-center justify-center h-8 border-r border-black">
           {{ order?.creator.username }}
         </p>
         <div
@@ -100,21 +83,14 @@ const clickHandler = () => {
         </div>
       </div>
     </div>
-    <p
-      class="flex items-center justify-center h-8 hover:cursor-pointer"
-      @click="clickHandler"
-    >
+    <p class="flex items-center justify-center h-8 hover:cursor-pointer" @click="clickHandler">
       {{ order?.client.address }}
     </p>
     <div
       v-if="useUser.user?.accountType === 'Administratorius'"
       class="flex flex-1 items-center justify-around h-8 border-black bg-stone-300"
     >
-      <div
-        v-for="worker in props.order.workers"
-        :key="worker"
-        class="flex gap-1"
-      >
+      <div v-for="worker in props.order.workers" :key="worker" class="flex gap-1">
         <p>{{ worker }}</p>
         <NuxtImg
           @click="workerDeleteHandler(worker)"

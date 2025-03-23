@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useProductsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
-import type { ResponseUser, ResponseProduct } from "~/data/interfaces";
 
 const props = defineProps(["product", "index"]);
 const useProducts = useProductsStore();
@@ -21,20 +20,18 @@ const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti produktą?");
   if (!confirmed) return;
 
-  const data: ResponseUser = await $fetch("/api/product", {
-    method: "delete",
-    body: { _id: props.product._id },
-  });
-  if (data.success) {
+  const response = await request.delete(`deleteProduct/${props.product._id}`);
+
+  if (response.success) {
     useProducts.deleteProduct(props.product._id);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
-const saveHandler = async (): Promise<void> => {
+const saveHandler = async () => {
   if (
     props.product.cost === productCost.value &&
     props.product.price === productPrice.value &&
@@ -45,7 +42,7 @@ const saveHandler = async (): Promise<void> => {
     return;
   }
 
-  const newData = {
+  const requestData = {
     _id: props.product._id,
     name: productName.value,
     price: productPrice.value,
@@ -53,18 +50,15 @@ const saveHandler = async (): Promise<void> => {
     category: productCategory.value,
   };
 
-  const data: ResponseProduct = await $fetch("/api/product", {
-    method: "patch",
-    body: newData,
-  });
+  const response = await request.patch("updateProduct", requestData);
 
-  if (data.success) {
-    useProducts.updateProduct(data.data);
+  if (response.success) {
+    useProducts.updateProduct(response.data);
     disable.value = true;
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 </script>

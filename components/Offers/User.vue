@@ -13,10 +13,8 @@ const address = ref<string>(props.client.address);
 const status = ref<string>(props.client.status);
 
 const deleteHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "delete",
-    body: { _id: props.client._id },
-  });
+  const response: any = await request.delete(`deleteClient/${props.client._id}`);
+
   if (response.success) {
     usePotentialClients.deletePotentialClient(props.client._id);
     setIsError(false);
@@ -36,10 +34,8 @@ const saveHandler = async () => {
     status: status.value,
   };
 
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "patch",
-    body: client,
-  });
+  const response: any = await request.patch("updateClient", client);
+
   if (response.success) {
     usePotentialClients.updatePotentialClients(response.data);
     setIsError(false);
@@ -54,11 +50,7 @@ const saveHandler = async () => {
 <template>
   <div
     class="flex w-fit border-b gap-4 items-center px-2 py-1 border"
-    :class="
-      editable
-        ? ' border-green-500 rounded-lg '
-        : 'border-transparent border-b-dark-light'
-    "
+    :class="editable ? ' border-green-500 rounded-lg ' : 'border-transparent border-b-dark-light'"
   >
     <p class="w-6">{{ props.index + 1 }}</p>
     <input type="text" v-model="name" class="w-48" :disabled="!editable" />

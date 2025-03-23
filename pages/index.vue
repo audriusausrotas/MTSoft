@@ -80,9 +80,7 @@ const users = [
       ?.map((item) => {
         if (user?.users && item?.orderNumber) {
           const matchedUser = user.users.find((usr) =>
-            usr?.username
-              ?.toLowerCase()
-              .startsWith(item.orderNumber.slice(0, 3).toLowerCase())
+            usr?.username?.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
           );
           return matchedUser?.username;
         }
@@ -108,7 +106,7 @@ const newProjectHandler = () => {
 };
 
 const removeUnconfirmed = async () => {
-  const response: any = await $fetch("/api/removeUnconfirmed");
+  const response: any = await request.delete("removeUnconfirmed");
   if (response.success) {
     setIsError(false);
     setError(response.message);
@@ -123,10 +121,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation
-          name="Išvalyti nepatvirtintus"
-          @onConfirm="removeUnconfirmed"
-        />
+        <BaseButtonWithConfirmation name="Išvalyti nepatvirtintus" @onConfirm="removeUnconfirmed" />
         <BaseSelectField
           label="Vartotojas"
           :values="users"

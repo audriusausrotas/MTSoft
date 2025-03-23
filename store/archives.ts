@@ -11,7 +11,6 @@ export const useArchivesStore = defineStore("Archives", {
     filteredDeleted: [],
     unconfirmed: [],
     filteredUnconfirmed: [],
-    projectToOpen: null,
   }),
 
   actions: {
@@ -35,27 +34,37 @@ export const useArchivesStore = defineStore("Archives", {
       this.filteredUnconfirmed = [...data];
     },
 
-    addProjectToOpen(data: Project) {
-      this.projectToOpen = data;
-    },
-
-    deleteProjectToOpen() {
-      this.projectToOpen = null;
-    },
-
     deleteArchive(id: String, location: string): void {
+      const useProjects = useProjectsStore();
+
       if (location === "archive") {
+        const project = this.archives.find((item) => item._id === id);
+        if (project) useProjects.addProject(project);
+
         this.archives = this.archives.filter((item) => item._id !== id);
         this.filteredArchives = this.archives.filter((item) => item._id !== id);
-      } else if (location === "unconfirmed") {
-        this.filteredUnconfirmed = this.unconfirmed.filter(
-          (item) => item._id !== id
-        );
+      }
+
+      if (location === "unconfirmed") {
+        const project = this.unconfirmed.find((item) => item._id === id);
+        if (project) useProjects.addProject(project);
+
+        this.filteredUnconfirmed = this.unconfirmed.filter((item) => item._id !== id);
         this.unconfirmed = this.unconfirmed.filter((item) => item._id !== id);
-      } else if (location === "deleted") {
+      }
+
+      if (location === "deleted") {
+        const project = this.deleted.find((item) => item._id === id);
+        if (project) useProjects.addProject(project);
+
         this.filteredDeleted = this.deleted.filter((item) => item._id !== id);
         this.deleted = this.deleted.filter((item) => item._id !== id);
-      } else if (location === "backup") {
+      }
+
+      if (location === "backup") {
+        const project = this.backup.find((item) => item._id === id);
+        if (project) useProjects.addProject(project);
+
         this.filteredBackup = this.backup.filter((item) => item._id !== id);
         this.backup = this.backup.filter((item) => item._id !== id);
       }
@@ -72,23 +81,17 @@ export const useArchivesStore = defineStore("Archives", {
 
     searchArchive(input: string, location: string) {
       if (location === "archive") {
-        if (input.length > 2)
-          this.filteredArchives = this.search(this.filteredArchives, input);
+        if (input.length > 2) this.filteredArchives = this.search(this.filteredArchives, input);
         else this.filteredArchives = [...this.archives];
       } else if (location === "unconfirmed") {
         if (input.length > 2)
-          this.filteredUnconfirmed = this.search(
-            this.filteredUnconfirmed,
-            input
-          );
+          this.filteredUnconfirmed = this.search(this.filteredUnconfirmed, input);
         else this.filteredUnconfirmed = [...this.unconfirmed];
       } else if (location === "deleted") {
-        if (input.length > 2)
-          this.filteredDeleted = this.search(this.filteredDeleted, input);
+        if (input.length > 2) this.filteredDeleted = this.search(this.filteredDeleted, input);
         else this.filteredDeleted = [...this.deleted];
       } else if (location === "backup") {
-        if (input.length > 2)
-          this.filteredBackup = this.search(this.filteredBackup, input);
+        if (input.length > 2) this.filteredBackup = this.search(this.filteredBackup, input);
         else this.filteredBackup = [...this.backup];
       }
     },

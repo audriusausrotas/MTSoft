@@ -14,10 +14,10 @@ const deleteHandler = async (): Promise<void> => {
     return;
   }
 
-  const response: any = await $fetch("/api/gamyba", {
-    method: "delete",
-    body: { _id: props.order._id, completed: false },
-  });
+  const requestData = { _id: props.order._id, completed: false };
+
+  const response: any = await request.delete("deleteProduction", requestData);
+
   if (response.success) {
     useGamyba.deleteGamybaOrder(props.order._id);
     await router.replace("/gamyba");
@@ -53,20 +53,9 @@ const clickHandler = () => {
           : 'bg-green-500'
       "
     />
-    <BaseInfoField
-      class="pointer-events-none"
-      :name="order?.client?.address"
-      width="w-96"
-    />
-    <BaseInfoField
-      class="pointer-events-none"
-      :name="order?.creator?.username"
-      width="w-24"
-    />
-    <div
-      @click.stop="deleteHandler"
-      class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1"
-    >
+    <BaseInfoField class="pointer-events-none" :name="order?.client?.address" width="w-96" />
+    <BaseInfoField class="pointer-events-none" :name="order?.creator?.username" width="w-24" />
+    <div @click.stop="deleteHandler" class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
       <NuxtImg
         src="/icons/delete.svg"
         width="24"

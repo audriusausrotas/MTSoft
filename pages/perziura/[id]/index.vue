@@ -43,12 +43,13 @@ const workers = useUsers.users
 const versions: Version[] | undefined = offer.value?.versions;
 
 const statusHandler = async (value: string) => {
-  const response: any = await $fetch("/api/project", {
-    method: "patch",
-    body: { _id: offer!.value!._id, value },
+  const response: any = await request.patch("updateProjectStatus", {
+    _id: offer!.value!._id,
+    value,
   });
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -64,10 +65,14 @@ const setProvider = (value: string) => {
 
 const sendEmailHandler = async () => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/mail", {
-    method: "post",
-    body: { to: offer?.value?.client.email, link: offer?.value?._id },
-  });
+
+  const requestData = {
+    to: offer?.value?.client.email,
+    link: offer?.value?._id,
+  };
+
+  const response: any = await request.post("sendOffer", requestData);
+
   if (response.success) {
     setIsError(false);
     setError(response.message);
@@ -79,23 +84,24 @@ const sendEmailHandler = async () => {
 
 const gateOrderHadnler = async (name: string): Promise<void> => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/gates", {
-    method: "post",
-    body: { _id: offer?.value?._id, value: provider.value, manager: name },
-  });
+
+  const requestData = { _id: offer?.value?._id, value: provider.value, manager: name };
+
+  const response: any = await request.post("newOrder", requestData);
+
   if (response.success) {
     useGates.addGate(response.data);
 
     const link = `https://mtsoft.lt/vartai/${offer?.value?._id}`;
 
-    const emailResponse: any = await $fetch("/api/mail", {
-      method: "put",
-      body: {
-        to: name,
-        message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
-        title: "Naujas užsakymas",
-      },
-    });
+    const emailRequestData = {
+      to: name,
+      message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
+      title: "Naujas užsakymas",
+    };
+
+    const emailResponse: any = await request.post("sendGateInfo", emailRequestData);
+
     if (emailResponse.success) {
       setIsError(false);
       setError(emailResponse.message);
@@ -114,10 +120,9 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
 
 const gateCancelHandler = async (): Promise<void> => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/gates", {
-    method: "delete",
-    body: { _id: offer?.value?._id },
-  });
+
+  const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
+
   if (response.success) {
     gateOrdered.value = false;
     setIsError(false);
@@ -134,10 +139,10 @@ const cancelHandler = () => {
 };
 
 const changeCreatorHandler = async (value: string) => {
-  const response: any = await $fetch("/api/projectCreator", {
-    method: "PATCH",
-    body: { _id: offer!.value!._id, value },
-  });
+  const requestData = { _id: offer!.value!._id, value };
+
+  const response: any = await request.patch("changeManager", requestData);
+
   if (response.success) {
     useProjects.changeCreator(response.data);
     setIsError(false);
@@ -149,10 +154,11 @@ const changeCreatorHandler = async (value: string) => {
 
 const advanceHandler = async () => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/advance", {
-    method: "post",
-    body: { _id: offer!.value?._id, advance: advance.value },
-  });
+
+  const requestData = { _id: offer!.value?._id, advance: advance.value };
+
+  const response: any = await request.patch("changeAdvance", requestData);
+
   if (response.success) {
     useProjects.changeAdvance(response.data);
     offer!.value!.advance = advance.value;
@@ -166,16 +172,15 @@ const advanceHandler = async () => {
 };
 
 const orderFinishHandler = async () => {
-  const response: any = await $fetch("/api/project", {
-    method: "PATCH",
-    body: { _id: offer!.value!._id, value: "Baigtas" },
-  });
+  const requestData = { _id: offer!.value!._id, value: "Baigtas" };
+
+  const response: any = await request.patch("updateProjectStatus", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
-    const archieveResponse: any = await $fetch("/api/archive", {
-      method: "POST",
-      body: { _id: offer!.value!._id },
-    });
+    useProjects.updateStatus(response.data._id, "Baigtas");
+
+    const archieveResponse: any = await request.post(`addArchive/${offer!.value!._id}`);
+
     if (archieveResponse.success) {
       offer?.value?._id && useProjects.deleteProject(offer.value._id);
       setIsError(false);
@@ -192,10 +197,8 @@ const orderFinishHandler = async () => {
 };
 
 const gamybaHandler = async () => {
-  const response: any = await $fetch("/api/gamyba", {
-    method: "post",
-    body: { _id: offer!.value!._id },
-  });
+  const response: any = await request.post(`newProduction/${offer!.value!._id}`);
+
   if (response.success) {
     setIsError(false);
     setError(response.message);
@@ -206,10 +209,10 @@ const gamybaHandler = async () => {
 };
 
 const montavimasHandler = async (value: string) => {
-  const response: any = await $fetch("/api/montavimas", {
-    method: "post",
-    body: { _id: offer!.value!._id, worker: value },
-  });
+  const requestData = { _id: offer!.value!._id, worker: value };
+
+  const response: any = await request.post("addInstallation", requestData);
+
   if (response.success) {
     useMontavimas.addMontavimas(response.data);
     setIsError(false);
@@ -235,16 +238,16 @@ const photosHandler = async (photo: Photo) => {
 };
 
 const addComment = async (value: any) => {
-  const response: any = await $fetch("/api/projectComments", {
-    method: "post",
-    body: {
-      _id: offer?.value!._id,
-      comment: value,
-      username: useUsers.user?.username,
-    },
-  });
+  const requestData = {
+    _id: offer?.value!._id,
+    comment: value,
+    username: useUsers.user?.username,
+  };
+
+  const response: any = await request.post("addProjectComment", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -253,15 +256,15 @@ const addComment = async (value: any) => {
 };
 
 const deleteComment = async (value: any) => {
-  const response: any = await $fetch("/api/projectComments", {
-    method: "delete",
-    body: {
-      _id: offer?.value!._id,
-      comment: value,
-    },
-  });
+  const requestData = {
+    _id: offer?.value!._id,
+    comment: value,
+  };
+
+  const response: any = await request.delete("deleteProjectComment", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {

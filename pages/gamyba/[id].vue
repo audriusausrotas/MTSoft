@@ -13,10 +13,10 @@ const order: any = computed(() => {
 });
 
 const statusHandler = async (value: string) => {
-  const response: any = await $fetch("/api/gamybaStatus", {
-    method: "post",
-    body: { _id: order?.value._id, status: value },
-  });
+  const requestData = { _id: order?.value._id, status: value };
+
+  const response: any = await request.patch("updateProductionStatus", requestData);
+
   if (response.success) {
     useGamyba.updateOrder(order!.value._id, response.data);
 
@@ -28,14 +28,14 @@ const statusHandler = async (value: string) => {
 };
 
 const commentHandler = async (value: string) => {
-  const response: any = await $fetch("/api/gamybaComment", {
-    method: "post",
-    body: {
-      _id: order?.value._id,
-      comment: value,
-      username: useUser.user?.username,
-    },
-  });
+  const requestData = {
+    _id: order?.value._id,
+    comment: value,
+    username: useUser.user?.username,
+  };
+
+  const response: any = await request.post("addProductionComment", requestData);
+
   if (response.success) {
     useGamyba.updateOrder(order!.value._id, response.data);
     setIsError(false);
@@ -46,10 +46,9 @@ const commentHandler = async (value: string) => {
 };
 
 const deleteHandler = async (value: string, comment: string) => {
-  const response: any = await $fetch("/api/gamybaComment", {
-    method: "delete",
-    body: { _id: value, comment: comment },
-  });
+  const requestData = { _id: value, comment: comment };
+
+  const response = await request.delete("deleteProductionComment", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(value, response.data);
@@ -61,10 +60,7 @@ const deleteHandler = async (value: string, comment: string) => {
 };
 
 const newBindingHandler = async () => {
-  const response: any = await $fetch("/api/bindings", {
-    method: "post",
-    body: { _id: order.value._id },
-  });
+  const response: any = await request.post("addBinding/${order.value._id}");
 
   if (response.success) {
     useGamyba.updateOrder(order!.value._id, response.data);
@@ -88,67 +84,6 @@ const photosHandler = async (photo: Photo) => {
   } else {
     setError(response.message);
   }
-};
-
-const printHandler = () => {
-  const printContent = `
-        <html>
-            <head>
-                <title>Print</title>
-                <style>
-                    @media print {
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            box-sizing: border-box;
-                        }
-                    }
-                    body {
-                        width: 100vw;
-                        height: fit-content;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 22px;
-                        font-weight: bold;
-                        border: 1px solid black;
-                    }
-                    body p {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    .container {
-                        width:100%;
-                        display: flex;
-                        justify-content: space-between;
-                        border-top: 1px solid black;
-                    }
-                    .borderB {
-                        border-bottom: 1px solid black;
-                    }
-                    .padding {
-                        padding: 10px;
-                    }
-                    .borderL {
-                        border-left: 1px solid black;
-                    }
-                </style>
-            </head>
-            <body class="">
-                <p class="padding">${order.value?.client.address}</p>
-                <div class="container">
-                    <p class="padding"></p>
-                    <div class="borderL"></div>
-                    <p class="padding ">${order.value?.orderNumber}</p>
-                </div>
-            </body>
-        </html>
-    `;
-  const printWindow = window.open("", "", "width=800,height=600");
-  printWindow?.document.write(printContent);
-  printWindow?.document.close();
-  printWindow?.print();
 };
 
 const bindingPrintHandler = () => {
@@ -177,17 +112,17 @@ const bindingPrintHandler = () => {
                         text-align: center;
                         font-size: 22px;
                         font-weight: bold;
-                        border: 2px solid black; 
+                        border: 2px solid black;
                     }
                     body p {
-                        margin: 0; 
+                        margin: 0;
                         padding: 0;
                     }
                     .container {
                         width:100%;
                         display: flex;
                         justify-content: space-between;
-                  
+
                     }
                     .borderB {
                         width: 100%;
@@ -208,10 +143,10 @@ const bindingPrintHandler = () => {
             <div class="container borderB">
               <p class="padding ">${order.value?.orderNumber}</p>
               <div class="borderL"></div>
-              <p class="padding">${formattedDate}</p> 
+              <p class="padding">${formattedDate}</p>
             </div>
               <p class="padding borderB">${order.value?.client.address}</p>
-              <p class="padding bigText">Papildomos Detalės</p> 
+              <p class="padding bigText">Papildomos Detalės</p>
             </body>
         </html>
     `;
@@ -228,11 +163,7 @@ const bindingPrintHandler = () => {
     <div class="flex gap-4 items-end flex-wrap">
       <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." />
       <BaseInput :name="order?.client.address" width="w-96" label="Adresas" />
-      <BaseInput
-        :name="order?.creator.username"
-        width="w-28"
-        label="Vadybininkas"
-      />
+      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" />
 
       <BaseSelectField
         label="Statusas"
@@ -249,11 +180,7 @@ const bindingPrintHandler = () => {
       <!-- <BaseButton name="spausdinti lipduką" @click="printHandler" /> -->
     </div>
 
-    <BaseGalleryElement
-      :_id="order?._id"
-      :files="order?.files"
-      category="production"
-    />
+    <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
 
     <BaseComment
       :commentsArray="order?.aditional"
@@ -279,44 +206,14 @@ const bindingPrintHandler = () => {
       <div class="flex gap-4 items-center mb-2">
         <p class="text-2xl font-bold">Apkaustai</p>
       </div>
-      <div
-        class="flex w-fit border-y items-center h-8 border-black select-none"
-      >
-        <p
-          class="w-10 border-x border-black h-full flex justify-center items-center"
-        >
-          Nr
-        </p>
-        <p
-          class="w-48 border-r border-black h-full flex justify-center items-center"
-        >
-          tipas
-        </p>
-        <p
-          class="w-16 border-r border-black h-full flex justify-center items-center"
-        >
-          Ilgis
-        </p>
-        <p
-          class="w-16 border-r border-black h-full flex justify-center items-center"
-        >
-          Kiekis
-        </p>
-        <p
-          class="w-16 border-r border-black h-full flex justify-center items-center"
-        >
-          spalva
-        </p>
-        <p
-          class="w-24 border-r border-black h-full flex justify-center items-center"
-        >
-          Išpjauta
-        </p>
-        <p
-          class="w-24 border-r border-black h-full flex justify-center items-center"
-        >
-          Pagaminta
-        </p>
+      <div class="flex w-fit border-y items-center h-8 border-black select-none">
+        <p class="w-10 border-x border-black h-full flex justify-center items-center">Nr</p>
+        <p class="w-48 border-r border-black h-full flex justify-center items-center">tipas</p>
+        <p class="w-16 border-r border-black h-full flex justify-center items-center">Ilgis</p>
+        <p class="w-16 border-r border-black h-full flex justify-center items-center">Kiekis</p>
+        <p class="w-16 border-r border-black h-full flex justify-center items-center">spalva</p>
+        <p class="w-24 border-r border-black h-full flex justify-center items-center">Išpjauta</p>
+        <p class="w-24 border-r border-black h-full flex justify-center items-center">Pagaminta</p>
         <p
           v-if="isAdmin"
           class="w-24 border-r border-black h-full flex justify-center items-center print:hidden"
@@ -337,11 +234,7 @@ const bindingPrintHandler = () => {
         :_id="order._id"
       />
       <div class="flex gap-4 flex-wrap mt-2">
-        <BaseButton
-          v-if="isAdmin"
-          @click="newBindingHandler"
-          name="Pridėti naują"
-        />
+        <BaseButton v-if="isAdmin" @click="newBindingHandler" name="Pridėti naują" />
         <BaseButton @click="bindingPrintHandler" name="Spausdinti lipduką" />
       </div>
     </div>
