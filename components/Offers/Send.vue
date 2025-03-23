@@ -24,17 +24,17 @@ const sendHandler = async () => {
     formData.append(`file${index}`, file);
   });
 
-  const response: any = await $fetch("/api/mail", {
-    method: "patch",
-    body: formData,
-  });
+  // const response: any = await $fetch("/api/mail", {
+  //   method: "patch",
+  //   body: formData,
+  // });
 
-  if (response.success) {
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
+  // if (response.success) {
+  //   setIsError(false);
+  //   setError(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 
   loading.value = false;
 };

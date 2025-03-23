@@ -49,17 +49,18 @@ const saveHandler = async (): Promise<void> => {
     versions: [],
   };
   try {
-    let data;
-    if (useProjects.selectedProject) data = await request.patch("updateProject", newProject);
-    else data = await request.post("newProject", newProject);
+    let response;
+    if (useProjects.selectedProject) response = await request.patch("updateProject", newProject);
+    else response = await request.post("newProject", newProject);
 
-    if (data.success) {
+    if (response.success) {
+      useProjects.addProject(response.data);
       clearHandler();
       setIsError(false);
-      setError(data.message);
+      setError(response.message);
       await navigateTo("/");
     } else {
-      setError(data.message);
+      setError(response.message);
     }
   } catch (error: any) {
     setError(error);

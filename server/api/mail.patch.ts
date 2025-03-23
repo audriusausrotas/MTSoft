@@ -97,69 +97,69 @@
 // });
 /////////////////////////////////////////////////////////////
 
-import { sendEmail } from "~/utils/emailHelper";
-import type { User } from "~/data/interfaces";
-import formidable from "formidable";
-import fs from "fs";
+// import { sendEmail } from "~/utils/emailHelper";
+// import type { User } from "~/data/interfaces";
+// import formidable from "formidable";
+// import fs from "fs";
 
-export default defineEventHandler(async (event) => {
-  try {
-    const form = formidable({ multiples: true, keepExtensions: true });
+// export default defineEventHandler(async (event) => {
+//   try {
+//     const form = formidable({ multiples: true, keepExtensions: true });
 
-    // Parse form data and handle the file uploads
-    const { fields, files } = await new Promise<{ fields: any; files: any }>((resolve, reject) => {
-      form.parse(event.node.req, (err, fields, files) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ fields, files });
-        }
-      });
-    });
+//     // Parse form data and handle the file uploads
+//     const { fields, files } = await new Promise<{ fields: any; files: any }>((resolve, reject) => {
+//       form.parse(event.node.req, (err, fields, files) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve({ fields, files });
+//         }
+//       });
+//     });
 
-    const userId = event.context.userId;
-    const title = Array.isArray(fields.title) ? fields.title[0] : fields.title;
-    const message = Array.isArray(fields.message) ? fields.message[0] : fields.message;
+//     const userId = event.context.userId;
+//     const title = Array.isArray(fields.title) ? fields.title[0] : fields.title;
+//     const message = Array.isArray(fields.message) ? fields.message[0] : fields.message;
 
-    if (!userId) throw new Error("Missing userId");
-    if (!fields.to) throw new Error("Missing recipients");
+//     if (!userId) throw new Error("Missing userId");
+//     if (!fields.to) throw new Error("Missing recipients");
 
-    const user: User | null = await userSchema.findById(userId);
-    if (!user) {
-      return { success: false, message: "Vartotojas nerastas" };
-    }
+//     const user: User | null = await userSchema.findById(userId);
+//     if (!user) {
+//       return { success: false, message: "Vartotojas nerastas" };
+//     }
 
-    const recipients = JSON.parse(fields.to as string);
+//     const recipients = JSON.parse(fields.to as string);
 
-    const attachments = Object.values(files).map((file: any) => {
-      return {
-        filename: file[0]?.originalFilename,
-        content: fs.createReadStream(file[0]?.filepath),
-        contentType: file[0]?.mimetype,
-      };
-    });
+//     const attachments = Object.values(files).map((file: any) => {
+//       return {
+//         filename: file[0]?.originalFilename,
+//         content: fs.createReadStream(file[0]?.filepath),
+//         contentType: file[0]?.mimetype,
+//       };
+//     });
 
-    const success = [];
+//     const success = [];
 
-    for (const recipient of recipients) {
-      const emailResult = await sendEmail({
-        to: recipient.email,
-        subject: title,
-        html: message,
-        user,
-        attachments,
-      });
+//     for (const recipient of recipients) {
+//       const emailResult = await sendEmail({
+//         to: recipient.email,
+//         subject: title,
+//         html: message,
+//         user,
+//         attachments,
+//       });
 
-      success.push({ success: emailResult.success, email: recipient.email });
-    }
+//       success.push({ success: emailResult.success, email: recipient.email });
+//     }
 
-    return {
-      success: success.every((status) => status.success),
-      message: success.every((status) => status.success)
-        ? "Pasiūlymai išsiųsti"
-        : "Kai kurie pasiūlymai neišsiųsti",
-    };
-  } catch (error) {
-    return { success: false, message: "Server error" };
-  }
-});
+//     return {
+//       success: success.every((status) => status.success),
+//       message: success.every((status) => status.success)
+//         ? "Pasiūlymai išsiųsti"
+//         : "Kai kurie pasiūlymai neišsiųsti",
+//     };
+//   } catch (error) {
+//     return { success: false, message: "Server error" };
+//   }
+// });

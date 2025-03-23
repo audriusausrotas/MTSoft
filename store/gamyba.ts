@@ -42,18 +42,18 @@ export const useGamybaStore = defineStore("gamyba", {
     },
 
     addPhoto(id: string, photo: { url: string; id: string }) {
-      this.gamybaList = this.gamybaList.map((item) => {
-        if (item._id === id) {
-          item.files = [...item.files, photo];
-          return item;
-        } else return item;
-      });
+      // this.gamybaList = this.gamybaList.map((item) => {
+      //   if (item._id === id) {
+      //     item.files = [...item.files, photo];
+      //     return item;
+      //   } else return item;
+      // });
     },
 
-    deletePhoto(id: string, photoID: string) {
+    deletePhoto(id: string, files: string[]) {
       this.gamybaList = this.gamybaList.map((item) => {
         if (item._id === id) {
-          item.files = item.files.filter((item) => item.id !== photoID);
+          item.files = item.files.filter((file: string) => !files.includes(file));
           return item;
         } else return item;
       });
@@ -68,12 +68,8 @@ export const useGamybaStore = defineStore("gamyba", {
       if (value.length > 2) {
         const foundProjects = this.gamybaList.filter(
           (project) =>
-            project.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
-            project.creator.username
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
+            project.client.address.toLowerCase().includes(value.toLowerCase()) ||
+            project.creator.username.toLowerCase().includes(value.toLowerCase()) ||
             project.orderNumber.toLowerCase().includes(value.toLowerCase())
         );
 

@@ -14,9 +14,7 @@ const deleteHandler = async (): Promise<void> => {
     return;
   }
 
-  const requestData = { _id: props.order._id, completed: false };
-
-  const response: any = await request.delete("deleteProduction", requestData);
+  const response: any = await request.delete(`deleteProduction/${props.order._id}`);
 
   if (response.success) {
     useGamyba.deleteGamybaOrder(props.order._id);

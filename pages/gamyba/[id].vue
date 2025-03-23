@@ -1,7 +1,6 @@
 -
 <script setup lang="ts">
 import { GamybaStatus } from "~/data/selectFieldData";
-import type { Photo } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const useGamyba = useGamybaStore();
 const useUser = useUserStore();
@@ -60,7 +59,7 @@ const deleteHandler = async (value: string, comment: string) => {
 };
 
 const newBindingHandler = async () => {
-  const response: any = await request.post("addBinding/${order.value._id}");
+  const response: any = await request.post(`addBinding/${order.value._id}`);
 
   if (response.success) {
     useGamyba.updateOrder(order!.value._id, response.data);
@@ -72,18 +71,18 @@ const newBindingHandler = async () => {
   }
 };
 
-const photosHandler = async (photo: Photo) => {
-  const response: any = await $fetch("/api/uploadPhotos", {
-    method: "post",
-    body: { photo, category: "production", _id: order?.value._id },
-  });
-  if (response.success) {
-    useGamyba.addPhoto(order?.value._id, photo);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
+const photosHandler = async (photo: string) => {
+  //   const response: any = await $fetch("/api/uploadPhotos", {
+  //     method: "post",
+  //     body: { photo, category: "production", _id: order?.value._id },
+  //   });
+  //   if (response.success) {
+  //     // useGamyba.addPhoto(order?.value._id, photo);
+  //     setIsError(false);
+  //     setError(response.message);
+  //   } else {
+  //     setError(response.message);
+  //   }
 };
 
 const bindingPrintHandler = () => {
@@ -177,7 +176,6 @@ const bindingPrintHandler = () => {
 
     <div class="flex flex-wrap gap-4">
       <BaseUpload @onSuccess="photosHandler" />
-      <!-- <BaseButton name="spausdinti lipduką" @click="printHandler" /> -->
     </div>
 
     <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />

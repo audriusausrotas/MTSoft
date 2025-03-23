@@ -47,7 +47,7 @@ const saveHandler = async (field: string) => {
     option: "fences",
   };
 
-  const response: any = await request.patch("/updateMeasure", requestData);
+  const response: any = await request.patch("updateMeasure", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props.data._id, response.data);
@@ -73,7 +73,7 @@ const postoneHandler = async () => {
     option: "fences",
   };
 
-  const response: any = await request.patch("updatePostone", requestData);
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);

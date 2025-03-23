@@ -16,7 +16,7 @@ const postoneHandler = async () => {
     value: !postone.value,
   };
 
-  const response: any = await request.patch("updatePostone", requestData);
+  const response: any = await request.patch("updateInstallationPostone", requestData);
 
   if (response.success) {
     useMontavimas.updateOrder(props._id, response.data);

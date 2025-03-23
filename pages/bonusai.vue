@@ -29,7 +29,7 @@ const getBonuses = async () => {
   const response: { data: Bonus[]; success: boolean; message: string } = await request.get(
     "getBonus"
   );
-  console.log(response);
+
   if (response.success) {
     bonuses.value = [...response.data];
     getYears(response.data);

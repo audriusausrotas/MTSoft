@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MontavimasStatus } from "~/data/selectFieldData";
-import type { Photo } from "~/data/interfaces";
+
 const { setError, setIsError } = useError();
 
 const useMontavimas = useMontavimasStore();
@@ -10,10 +10,6 @@ const route = useRoute();
 const order: any = computed(() => {
   return useMontavimas.montavimasList.find((item) => item._id === route.params.id);
 });
-
-const workers = useUser.users
-  .filter((user) => user.accountType === "Montavimas")
-  .map((user) => user.lastName);
 
 const statusHandler = async (value: string) => {
   const requestData = { _id: order?.value._id, status: value };
@@ -53,7 +49,7 @@ const deleteHandler = async (value: string, comment: string) => {
   const response: any = await request.delete("deleteInstallationComment", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(value, response.data);
+    useMontavimas.deleteMontavimasOrder(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -61,18 +57,18 @@ const deleteHandler = async (value: string, comment: string) => {
   }
 };
 
-const photosHandler = async (photo: Photo) => {
-  const response: any = await $fetch("/api/uploadPhotos", {
-    method: "post",
-    body: { photo, category: "installation", _id: order.value._id },
-  });
-  if (response.success) {
-    useMontavimas.addPhoto(order.value._id, photo);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
+const photosHandler = async (photo: string) => {
+  // const response: any = await $fetch("/api/uploadPhotos", {
+  //   method: "post",
+  //   body: { photo, category: "installation", _id: order.value._id },
+  // });
+  // if (response.success) {
+  //   // useMontavimas.addPhoto(order.value._id, photo);
+  //   setIsError(false);
+  //   setError(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 };
 
 const deliverHandler = async (value: boolean, measureIndex: number) => {

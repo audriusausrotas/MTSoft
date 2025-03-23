@@ -31,7 +31,7 @@ export interface Project {
   orderNumber: string;
   dateCreated: string;
   dateExparation: string;
-  files: Photo[];
+  files: string[];
   comments: Comment[];
   versions: Version[];
 }
@@ -205,12 +205,7 @@ export interface User {
   phone: string;
   verified: boolean;
   accountType: string;
-  photo: Photo;
-}
-
-export interface Photo {
-  id: string;
-  url: string;
+  photo: string;
 }
 
 export interface ResponseUser {
@@ -342,7 +337,7 @@ export interface Montavimas {
   results: MontavimasResult[];
   works: MontavimasWorks[];
   aditional: Comment[];
-  files: Photo[];
+  files: string[];
 }
 
 export interface MontavimasMeasure {
@@ -374,7 +369,7 @@ export interface Gamyba {
   fences: GamybaFence[];
   bindings: Bindings[] | null;
   aditional: Comment[];
-  files: Photo[];
+  files: string[];
 }
 
 export interface MontavimasFence {

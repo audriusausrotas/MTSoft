@@ -39,26 +39,26 @@ const saveHandler = async (field: string) => {
   }
 };
 
-const successHandler = async (photo: { url: string; id: string }) => {
-  const oldPhotoId = useUser.user?.photo.id;
+const successHandler = async (photo: string) => {
+  const oldPhotoId = useUser.user?.photo;
 
-  const response: any = await $fetch("/api/uploadPhotos", {
-    method: "post",
-    body: { photo, category: "profile", _id: useUser.user?._id },
-  });
-  if (response.success) {
-    useUser.setUser(response.data);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
+  // const response: any = await $fetch("/api/uploadPhotos", {
+  //   method: "post",
+  //   body: { photo, category: "profile", _id: useUser.user?._id },
+  // });
+  // if (response.success) {
+  //   useUser.setUser(response.data);
+  //   setIsError(false);
+  //   setError(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 
-  const deleteResponse = await $fetch("/api/cloudinary", {
-    method: "delete",
-    body: { id: oldPhotoId },
-  });
-  if (!deleteResponse.success) setError(deleteResponse.message);
+  // const deleteResponse = await $fetch("/api/cloudinary", {
+  //   method: "delete",
+  //   body: { id: oldPhotoId },
+  // });
+  // if (!deleteResponse.success) setError(deleteResponse.message);
 };
 
 watch(phone, (newPhone) => {
@@ -80,8 +80,8 @@ watch(lastName, (newName) => {
           class="flex flex-col items-center justify-center overflow-hidden bg-gray-light rounded-t-xl h-60 w-60"
         >
           <NuxtImg
-            v-if="useUser.user?.photo?.url && useUser.user.photo.url !== ''"
-            :src="useUser.user?.photo?.url || ''"
+            v-if="useUser.user?.photo && useUser.user.photo !== ''"
+            :src="useUser.user?.photo || ''"
             alt="Vartotojo nuotrauka"
             class="object-cover object-center w-full h-full"
             width="48"

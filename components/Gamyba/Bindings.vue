@@ -65,7 +65,7 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch("updatePostone", requestData);
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     useGamyba.updateOrder(props._id, response.data);

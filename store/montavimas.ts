@@ -49,19 +49,19 @@ export const useMontavimasStore = defineStore("montavimas", {
       });
     },
 
-    addPhoto(id: string, photo: { url: string; id: string }) {
-      this.montavimasList = this.montavimasList.map((item) => {
-        if (item._id === id) {
-          item.files = [...item.files, photo];
-          return item;
-        } else return item;
-      });
-    },
+    // addPhoto(id: string, photo: { url: string; id: string }) {
+    //   this.montavimasList = this.montavimasList.map((item) => {
+    //     if (item._id === id) {
+    //       item.files = [...item.files, photo];
+    //       return item;
+    //     } else return item;
+    //   });
+    // },
 
-    deletePhoto(id: string, photoID: string) {
+    deletePhoto(id: string, files: string[]) {
       this.montavimasList = this.montavimasList.map((item) => {
         if (item._id === id) {
-          item.files = item.files.filter((item) => item.id !== photoID);
+          item.files = item.files.filter((file: string) => !files.includes(file));
           return item;
         } else return item;
       });
