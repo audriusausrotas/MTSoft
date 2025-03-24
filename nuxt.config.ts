@@ -24,6 +24,11 @@ export default defineNuxtConfig({
     storesDirs: ["./store/**"],
   },
 
+  image: {
+    quality: 80,
+    format: ["webp", "jpeg"],
+  },
+
   runtimeConfig: {
     salt: process.env.SALT,
     tokenSecret: process.env.TOKEN_SECRET,

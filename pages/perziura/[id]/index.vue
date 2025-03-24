@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Version } from "~/data/interfaces";
-const route = useRoute();
 const { setError, setIsError } = useError();
 const useMontavimas = useMontavimasStore();
 const useProjects = useProjectsStore();
@@ -8,59 +7,32 @@ const useSettings = useSettingsStore();
 const useGamyba = useGamybaStore();
 const useGates = useGateStore();
 const useUsers = useUserStore();
+const route = useRoute();
 
-const allUsers = useUsers.users.map((item) => {
-  return item.username;
-});
-const isLoading = ref<boolean>(false);
-const isOpenGates = ref<boolean>(false);
-const isOpenGates2 = ref<boolean>(false);
+const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
+const allUsers = useUsers.users.map((item) => item.username);
+
 const isOpenMontavimas = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
-const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
-const fileInput = ref<HTMLInputElement | null>(null);
+const isOpenGates2 = ref<boolean>(false);
+const isOpenGates = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
+const provider = ref<string>("");
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
-const provider = ref<string>("");
-const isUploading = ref(false);
 
-const triggerFileInput = () => {
-  if (fileInput.value) {
-    fileInput.value.click();
-  }
-};
+const uploadFiles = async (data: any) => {
+  const response: any = await $fetch("http://localhost:3001/uploadFiles", {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
 
-const uploadFiles = async () => {
-  if (isUploading.value) return;
-
-  if (fileInput.value && fileInput.value.files && fileInput.value.files.length > 0) {
-    const files = fileInput.value.files;
-
-    const formData = new FormData();
-    Array.from(files).forEach((file) => {
-      formData.append("files", file);
-    });
-
-    formData.append("_id", offer.value?._id ?? "");
-    formData.append("category", "projects");
-
-    isUploading.value = true;
-
-    const response: any = await $fetch("http://localhost:3001/uploadFiles", {
-      method: "POST",
-      body: formData,
-      credentials: "include",
-    });
-
-    if (response.success) {
-      useProjects.deletePhoto(response.data._id, response.data.files);
-      setIsError(false);
-      setError(response.message);
-    } else setError(response.message);
-
-    fileInput.value.value = "";
-    isUploading.value = false;
-  } else setError("Nepasirinkote failų");
+  if (response.success) {
+    useProjects.updatePhoto(response.data._id, response.data.files);
+    setIsError(false);
+    setError(response.message);
+  } else setError(response.message);
 };
 
 const vartonasUsers = useUsers.users
@@ -264,20 +236,6 @@ const montavimasHandler = async (value: string) => {
   isOpenMontavimas.value = false;
 };
 
-const photosHandler = async (photo: string) => {
-  // const response: any = await $fetch("/api/uploadPhotos", {
-  //   method: "post",
-  //   body: { photo, category: "projects", _id: offer!.value!._id },
-  // });
-  // if (response.success) {
-  //   // offer?.value?._id && useProjects.addPhoto(offer!.value!._id, photo);
-  //   setIsError(false);
-  //   setError(response.message);
-  // } else {
-  //   setError(response.message);
-  // }
-};
-
 const addComment = async (value: any) => {
   const requestData = {
     _id: offer?.value!._id,
@@ -419,29 +377,7 @@ watch(
               </button>
             </div>
           </div>
-          <div>
-            <button
-              class="flex items-center justify-center h-10 gap-2 px-4 py-2 capitalize bg-dark-full text-white w-60 rounded-lg shadow-sm hover:bg-red-600"
-              @click="triggerFileInput"
-            >
-              <span v-if="!isUploading">Įkelti paveikslėlius</span>
-              <span
-                v-else
-                :class="isUploading ? 'animate-spin' : ''"
-                class="border-4 border-b-red-full h-8 w-8 rounded-full"
-              ></span>
-            </button>
-
-            <!-- Hidden file input -->
-            <input
-              type="file"
-              ref="fileInput"
-              accept="image/*,application/pdf"
-              multiple
-              style="display: none"
-              @change="uploadFiles"
-            />
-          </div>
+          <BaseUploadButton @upload="uploadFiles" :_id="offer?._id" category="projects" />
         </div>
 
         <div class="flex gap-4">

@@ -57,18 +57,18 @@ const deleteHandler = async (value: string, comment: string) => {
   }
 };
 
-const photosHandler = async (photo: string) => {
-  // const response: any = await $fetch("/api/uploadPhotos", {
-  //   method: "post",
-  //   body: { photo, category: "installation", _id: order.value._id },
-  // });
-  // if (response.success) {
-  //   // useMontavimas.addPhoto(order.value._id, photo);
-  //   setIsError(false);
-  //   setError(response.message);
-  // } else {
-  //   setError(response.message);
-  // }
+const uploadFiles = async (data: any) => {
+  const response: any = await $fetch("http://localhost:3001/uploadFiles", {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
+
+  if (response.success) {
+    useMontavimas.updatePhoto(response.data._id, response.data.files);
+    setIsError(false);
+    setError(response.message);
+  } else setError(response.message);
 };
 
 const deliverHandler = async (value: boolean, measureIndex: number) => {
@@ -123,7 +123,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
       @onDelete="deleteHandler"
     />
     <div class="flex flex-col gap-4 items-center md:items-start">
-      <BaseUpload @onSuccess="photosHandler" />
+      <BaseUploadButton @upload="uploadFiles" :_id="order?._id" category="installation" />
       <BaseGalleryElement :_id="order?._id" :files="order?.files" category="installation" />
     </div>
 

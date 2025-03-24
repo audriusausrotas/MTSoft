@@ -49,19 +49,10 @@ export const useMontavimasStore = defineStore("montavimas", {
       });
     },
 
-    // addPhoto(id: string, photo: { url: string; id: string }) {
-    //   this.montavimasList = this.montavimasList.map((item) => {
-    //     if (item._id === id) {
-    //       item.files = [...item.files, photo];
-    //       return item;
-    //     } else return item;
-    //   });
-    // },
-
-    deletePhoto(id: string, files: string[]) {
+    updatePhoto(id: string, photo: string[]) {
       this.montavimasList = this.montavimasList.map((item) => {
         if (item._id === id) {
-          item.files = item.files.filter((file: string) => !files.includes(file));
+          item.files = [...photo];
           return item;
         } else return item;
       });

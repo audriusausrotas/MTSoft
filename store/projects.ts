@@ -87,19 +87,10 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
-    addPhoto(id: string, photo: string) {
+    updatePhoto(id: string, photo: string[]) {
       this.projects = this.projects.map((item) => {
         if (item._id === id) {
-          item.files = [...item.files, photo];
-          return item;
-        } else return item;
-      });
-    },
-
-    deletePhoto(id: string, files: string[]) {
-      this.projects = this.projects.map((item) => {
-        if (item._id === id) {
-          item.files = item.files.filter((file: string) => !files.includes(file));
+          item.files = [...photo];
           return item;
         } else return item;
       });

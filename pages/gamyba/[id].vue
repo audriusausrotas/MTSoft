@@ -71,19 +71,7 @@ const newBindingHandler = async () => {
   }
 };
 
-const photosHandler = async (photo: string) => {
-  //   const response: any = await $fetch("/api/uploadPhotos", {
-  //     method: "post",
-  //     body: { photo, category: "production", _id: order?.value._id },
-  //   });
-  //   if (response.success) {
-  //     // useGamyba.addPhoto(order?.value._id, photo);
-  //     setIsError(false);
-  //     setError(response.message);
-  //   } else {
-  //     setError(response.message);
-  //   }
-};
+const photosHandler = async (photo: string) => {};
 
 const bindingPrintHandler = () => {
   const today = new Date();
@@ -155,6 +143,20 @@ const bindingPrintHandler = () => {
   printWindow?.document.close();
   printWindow?.print();
 };
+
+const uploadFiles = async (data: any) => {
+  const response: any = await $fetch("http://localhost:3001/uploadFiles", {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
+
+  if (response.success) {
+    useGamyba.updatePhoto(response.data._id, response.data.files);
+    setIsError(false);
+    setError(response.message);
+  } else setError(response.message);
+};
 </script>
 
 <template>
@@ -173,9 +175,8 @@ const bindingPrintHandler = () => {
         @onChange="(value: string) => statusHandler(value)"
       />
     </div>
-
     <div class="flex flex-wrap gap-4">
-      <BaseUpload @onSuccess="photosHandler" />
+      <BaseUploadButton @upload="uploadFiles" :_id="order?._id" category="production" />
     </div>
 
     <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />

@@ -23,7 +23,7 @@ const clickHandler = (url: string) => {
   <BaseGalleryModal
     v-if="modalOpen"
     @close="modalOpen = false"
-    :pictures="props.files"
+    :files="props.files"
     :selectedPhoto="selectedPhoto"
   />
 </template>
