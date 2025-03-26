@@ -3,11 +3,22 @@ import { Socket } from "socket.io-client";
 export default function settingsListeners(socket: Socket) {
   const userStore = useUserStore();
 
-  socket.on("userOnline", (userId) => {
-    // userStore.setUserOnline(userId);
+  socket.on("deleteSelect", (userId) => {
+    // get all selects i think..
+  });
+  socket.on("newSelectValue", (userId) => {
+    // get all selects i think..
   });
 
-  socket.on("userOffline", (userId) => {
-    // userStore.setUserOffline(userId);
+  socket.on("updateFenceSettings", (userId) => {
+    // get all selects i think..
+  });
+
+  socket.on("newDefaultValue", (userId) => {
+    // get all selects i think..
+  });
+
+  socket.on("newUserRights", (userId) => {
+    // get all userRights
   });
 }

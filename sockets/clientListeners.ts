@@ -3,11 +3,11 @@ import { Socket } from "socket.io-client";
 export default function clientListeners(socket: Socket) {
   const userStore = useUserStore();
 
-  socket.on("userOnline", (userId) => {
-    // userStore.setUserOnline(userId);
+  socket.on("deleteClient", (userId) => {
+    // get _id. need to delete from store
   });
 
-  socket.on("userOffline", (userId) => {
-    // userStore.setUserOffline(userId);
+  socket.on("newClient", (userId) => {
+    // get client object
   });
 }

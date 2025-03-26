@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { accountStatus } from "~/data/selectFieldData";
+import request from "~/utils/request";
 
 const { setError, setIsError } = useError();
 const useSettings = useSettingsStore();
@@ -11,7 +12,7 @@ const isLoading = ref<boolean>(false);
 
 const userChangesHandler = async (id: string, type: string, value: string) => {
   const postData = {
-    selectedUserId: id,
+    _id: id,
     changeType: type,
     password: password.value,
     value: value,
@@ -32,7 +33,7 @@ const confirmHandler = async () => {
   isLoading.value = true;
 
   const postData = {
-    selectedUserId: selectedUser.value,
+    _id: selectedUser.value,
     password: password.value,
   };
 
@@ -61,7 +62,9 @@ const deleteHandler = (id: string) => {
 
 <template>
   <div class="w-full">
-    <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
+    <div
+      class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl"
+    >
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>
       <p class="flex-[6]">el. paštas</p>
@@ -76,7 +79,9 @@ const deleteHandler = (id: string) => {
       class="flex py-2 capitalize border-b"
     >
       <div class="flex-1 pl-3">{{ index + 1 }}</div>
-      <p class="flex-[3] flex items-center">{{ user.username }} {{ user.lastName }}</p>
+      <p class="flex-[3] flex items-center">
+        {{ user.username }} {{ user.lastName }}
+      </p>
 
       <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
@@ -98,7 +103,10 @@ const deleteHandler = (id: string) => {
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
-      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
+      <div
+        class="flex justify-end flex-1 hover:cursor-pointer"
+        @click="deleteHandler(user._id)"
+      >
         <NuxtImg
           src="/icons/delete.svg"
           alt="delete button "
@@ -130,7 +138,11 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
+          <BaseButton
+            name="patvirtinti"
+            @click="confirmHandler"
+            :isLoading="isLoading"
+          />
         </div>
       </div>
     </div>

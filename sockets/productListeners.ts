@@ -3,11 +3,15 @@ import { Socket } from "socket.io-client";
 export default function productListeners(socket: Socket) {
   const userStore = useUserStore();
 
-  socket.on("userOnline", (userId) => {
-    // userStore.setUserOnline(userId);
+  socket.on("deleteProduct", () => {
+    // get id
   });
 
-  socket.on("userOffline", (userId) => {
-    // userStore.setUserOffline(userId);
+  socket.on("newProduct", () => {
+    // get product
+  });
+
+  socket.on("updateProduct", () => {
+    // get product
   });
 }
