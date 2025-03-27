@@ -87,7 +87,7 @@ const copyHandler = async () => {
   const data: any = await request.post("newProject", { _id: props._id });
 
   if (data.success) {
-    useProjects.copyProject(data.data);
+    useProjects.addProject(data.data);
     setIsError(false);
     setError(data.message);
   } else {

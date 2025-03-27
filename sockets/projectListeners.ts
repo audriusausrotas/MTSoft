@@ -2,6 +2,7 @@ import { Socket } from "socket.io-client";
 
 export default function projectListeners(socket: Socket) {
   const useProject = useProjectsStore();
+  const useArchives = useArchivesStore();
 
   socket.on("deleteProject", ({ _id }) => {
     useProject.deleteProject(_id);
@@ -24,34 +25,26 @@ export default function projectListeners(socket: Socket) {
   socket.on("updateProjectExparationDate", ({ _id, dateExparation }) => {
     useProject.updateProjectField(_id, "dateExparation", dateExparation);
   });
-  socket.on("updateProjectAddFiles", ({ _id, files }) => {
+  socket.on("updateProjectFiles", ({ _id, files }) => {
     useProject.updateProjectField(_id, "files", files);
   });
 
-  socket.on("updateProjectAddFiles", () => {
-    // get _id and files as an array i think
-  });
-  socket.on("finishProject", () => {
-    // get _id , need to handle everything in store like delete project and add to archive
-  });
-
-  socket.on("updateProject", () => {
-    // get project
-  });
-  socket.on("newProject", () => {
-    // get project
-  });
-  socket.on("newProjectComment", () => {
-    // get id and comment
-  });
-  socket.on("deleteProjectComment", () => {
-    // get get id and comment
+  socket.on("finishProject", ({ _id }) => {
+    const project = useProject.projects.find((item) => item._id === _id);
+    if (project) useArchives.addArchive("archive", project);
+    useProject.deleteProject(_id);
   });
 
-  socket.on("uploadFilesProject", () => {
-    // get _id and files as an array with links need to replace in store
+  socket.on("updateProject", (project) => {
+    useProject.updateProject(project);
   });
-  socket.on("deleteFilesProject", () => {
-    // get _id and files as an array with links need to replace in store
+
+  socket.on("newProject", (project) => {
+    useProject.addProject(project);
   });
+
+  socket.on("newProjectComment", ({ _id, comment }) => {
+    useProject.addComment(_id, comment);
+  });
+  socket.on("deleteProjectComment", ({ _id, comment }) => {});
 }

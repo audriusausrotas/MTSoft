@@ -1,6 +1,18 @@
 <script setup lang="ts">
 const useProducts = useProductsStore();
+const searchQuery = ref<string>("");
+
+const filteredProducts = computed(() => {
+  let filtered = [...useProducts.products];
+  if (searchQuery.value.length > 2) {
+    return filtered.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+  }
+  return filtered;
+});
 </script>
+
 <template>
   <div class="flex flex-col gap-8 w-full">
     <div class="flex gap-4 flex-wrap">
@@ -9,7 +21,7 @@ const useProducts = useProductsStore();
         placeholder="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string): void => useProducts.searchProduct(value)"
+        @onChange="(value: string) => searchQuery = value"
       >
         <NuxtImg
           src="/icons/search.svg"
@@ -24,9 +36,7 @@ const useProducts = useProductsStore();
     </div>
     <div class="overflow-auto">
       <table class="w-full">
-        <thead
-          class="overflow-hidden font-semibold capitalize bg-gray-ultra-light"
-        >
+        <thead class="overflow-hidden font-semibold capitalize bg-gray-ultra-light">
           <tr>
             <th class="w-8 p-3 rounded-tl-2xl">nr</th>
             <th class="min-w-[500px]">pavadinimas</th>
@@ -38,10 +48,7 @@ const useProducts = useProductsStore();
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(product, index) in useProducts.filteredProducts"
-            :key="product._id"
-          >
+          <tr v-for="(product, index) in filteredProducts" :key="product._id">
             <PriceElement :index="index" :product="product" />
           </tr>
         </tbody>

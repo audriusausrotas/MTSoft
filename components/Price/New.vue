@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useProductsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
-import type { ResponseProduct } from "~/data/interfaces";
 
 const useProducts = useProductsStore();
 const open = ref<boolean>(false);
@@ -23,10 +22,10 @@ const saveHandler = async (): Promise<void> => {
     category: newCategory.value,
   };
 
-  const data: ResponseProduct = await request.post("newProduct", requestData);
+  const data: any = await request.post("newProduct", requestData);
 
   if (data.success) {
-    useProducts.newProduct(data.data);
+    if (!useSocketStore().connected) useProducts.newProduct(data.data);
     clearHandler();
     setIsError(false);
     setError(data.message);

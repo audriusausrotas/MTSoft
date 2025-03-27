@@ -9,6 +9,7 @@ import projectListeners from "./projectListeners";
 import scheduleListeners from "./scheduleListeners";
 import settingsListeners from "./settingsListeners";
 import userListeners from "./userListeners";
+import productListeners from "./productListeners";
 
 export default (socket: Socket) => {
   archiveListeners(socket);
@@ -17,7 +18,7 @@ export default (socket: Socket) => {
   InstallationListeners(socket);
   potentialClientListeners(socket);
   productionListeners(socket);
-  productionListeners(socket);
+  productListeners(socket);
   projectListeners(socket);
   scheduleListeners(socket);
   settingsListeners(socket);

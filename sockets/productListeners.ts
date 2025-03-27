@@ -1,17 +1,17 @@
 import { Socket } from "socket.io-client";
 
 export default function productListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const useProduct = useProductsStore();
 
-  socket.on("deleteProduct", () => {
-    // get id
+  socket.on("deleteProduct", ({ _id }) => {
+    useProduct.deleteProduct(_id);
   });
 
-  socket.on("newProduct", () => {
-    // get product
+  socket.on("newProduct", (product) => {
+    useProduct.newProduct(product);
   });
 
-  socket.on("updateProduct", () => {
-    // get product
+  socket.on("updateProduct", (product) => {
+    useProduct.newProduct(product);
   });
 }

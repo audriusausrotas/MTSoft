@@ -22,8 +22,13 @@ export const useSocketStore = defineStore("socket", {
         this.onConnect();
       }
 
-      this.socket.on("connect", this.onConnect);
-      this.socket.on("disconnect", this.onDisconnect);
+      this.socket.on("connect", () => {
+        this.onConnect();
+      });
+
+      this.socket.on("disconnect", () => {
+        this.onDisconnect();
+      });
 
       socketListeners(this.socket as Socket);
 
@@ -48,6 +53,11 @@ export const useSocketStore = defineStore("socket", {
         this.isConnected = false;
         this.transporter = false;
       }
+    },
+  },
+  getters: {
+    connected: (state) => {
+      return state.isConnected && state.transporter;
     },
   },
 });
