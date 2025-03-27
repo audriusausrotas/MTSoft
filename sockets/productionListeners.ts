@@ -36,6 +36,24 @@ export default function productionListeners(socket: Socket) {
     // get get object and _id
   });
   socket.on("newProductionMeasure", (userId) => {
-    // get get object and _id
+    // get get newMeasure, index and _id
+  });
+  socket.on("newProduction", (userId) => {
+    // get get object
+    // need to change status in project to Gaminama  in store with http response
+  });
+
+  socket.on("newProductionComment", () => {
+    // get id and comment
+  });
+  socket.on("deleteProductionComment", () => {
+    // get get id and comment
+  });
+
+  socket.on("uploadFilesProduction", () => {
+    //  get _id and files as an array with links need to replace in store
+  });
+  socket.on("deleteFilesProduction", () => {
+    // get _id and files as an array with links need to replace in store
   });
 }

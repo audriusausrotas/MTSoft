@@ -1,28 +1,43 @@
 <script setup lang="ts">
 const useGamyba = useGamybaStore();
 
+const searchQuery = ref("");
+
+const filteredGamybaList = computed(() => {
+  let list = [...useGamyba.gamybaList];
+
+  if (searchQuery.value.length > 2) {
+    list = list.filter(
+      (project) =>
+        project.client.address
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.creator.username
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase())
+    );
+  }
+
+  return list;
+});
+
 const readyOrders = computed(() => {
-  return useGamyba.filteredGamybaList.filter(
-    (item) => item.status === "Gaminama"
-  );
+  return filteredGamybaList.value.filter((item) => item.status === "Gaminama");
 });
 
 const waitingOrders = computed(() => {
-  return useGamyba.filteredGamybaList.filter(
-    (item) => item.status === "Laukiama"
-  );
+  return filteredGamybaList.value.filter((item) => item.status === "Laukiama");
 });
 
 const finishedOrders = computed(() => {
-  return useGamyba.filteredGamybaList.filter(
-    (item) => item.status === "Pagaminta"
-  );
+  return filteredGamybaList.value.filter((item) => item.status === "Pagaminta");
 });
 
 const postonedOrders = computed(() => {
-  return useGamyba.filteredGamybaList.filter(
-    (item) => item.status === "Negaminti"
-  );
+  return filteredGamybaList.value.filter((item) => item.status === "Negaminti");
 });
 </script>
 
@@ -34,7 +49,8 @@ const postonedOrders = computed(() => {
         placeholder="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string): void => useGamyba.searchGamyba(value)"
+        :name="searchQuery"
+        @onChange="(value: string) => (searchQuery = value)"
       >
         <NuxtImg
           src="/icons/search.svg"

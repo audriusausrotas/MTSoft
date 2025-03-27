@@ -2,12 +2,52 @@
 import type { Project } from "~/data/interfaces";
 
 const { setError, setIsError } = useError();
+
 const useProjects = useProjectsStore();
-const useSettings = useSettingsStore();
 const user = useUserStore();
 
-const username = user.user?.username;
-useProjects.changeFilter(username ? username : "Visi");
+const filterUser = ref<string>(user.user!.username);
+const filterStatus = ref<string>("Visi");
+const searchQuery = ref<string>("");
+
+const filteredProjects = () => {
+  let filtered = [...useProjects.projects];
+
+  if (searchQuery.value.length > 2) {
+    return filtered.filter(
+      (project) =>
+        project.client.address
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.client.email
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.client.phone
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.client.username
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase())
+    );
+  }
+
+  if (filterUser.value !== "Visi") {
+    filtered = filtered.filter((item) =>
+      item.creator.username
+        .toLowerCase()
+        .startsWith(filterUser.value.toLowerCase())
+    );
+  }
+
+  if (filterStatus.value !== "Visi") {
+    filtered = filtered.filter((item) => item.status === filterStatus.value);
+  }
+
+  return filtered;
+};
 
 const projects = computed(() => {
   const categories = {
@@ -26,48 +66,26 @@ const projects = computed(() => {
     other: [] as Project[],
   };
 
-  useProjects?.filteredProjects.forEach((item) => {
-    switch (item.status) {
-      case "Nepatvirtintas":
-        categories.unconfirmed.push(item);
-        break;
-      case "Patvirtintas":
-        categories.confirmed.push(item);
-        break;
-      case "Netinkamas":
-        categories.notAccepted.push(item);
-        break;
-      case "Tinkamas":
-        categories.accepted.push(item);
-        break;
-      case "Betonuojama":
-        categories.concreted.push(item);
-        break;
-      case "Gaminama":
-        categories.inMaking.push(item);
-        break;
-      case "Montuojama":
-        categories.inWorks.push(item);
-        break;
-      case "Laukiam Vartų":
-        categories.waiting.push(item);
-        break;
-      case "Vartai Sumontuoti":
-        categories.mounted.push(item);
-        break;
-      case "Pridavimas":
-        categories.done.push(item);
-        break;
-      case "Apmokėjimas":
-        categories.payment.push(item);
-        break;
-      case "Baigtas":
-        categories.finished.push(item);
-        break;
-      default:
-        categories.other.push(item);
-        break;
-    }
+  const statusToCategory: Record<string, keyof typeof categories> = {
+    Nepatvirtintas: "unconfirmed",
+    Patvirtintas: "confirmed",
+    Netinkamas: "notAccepted",
+    Tinkamas: "accepted",
+    Betonuojama: "concreted",
+    Gaminama: "inMaking",
+    Montuojama: "inWorks",
+    "Laukiam Vartų": "waiting",
+    "Vartai Sumontuoti": "mounted",
+    Pridavimas: "done",
+    Apmokėjimas: "payment",
+    Baigtas: "finished",
+  };
+
+  const allProjects = filteredProjects();
+
+  allProjects.forEach((item: Project) => {
+    const category = statusToCategory[item.status] || "other";
+    categories[category].push(item);
   });
 
   return categories;
@@ -76,21 +94,33 @@ const projects = computed(() => {
 const users = [
   "Visi",
   ...new Set(
-    useProjects?.projects
-      ?.map((item) => {
-        if (user?.users && item?.orderNumber) {
-          const matchedUser = user.users.find((usr) =>
-            usr?.username?.toLowerCase().startsWith(item.orderNumber.slice(0, 3).toLowerCase())
-          );
-          return matchedUser?.username;
-        }
-        return undefined;
-      })
-      .filter(Boolean)
+    useProjects.projects?.map((item) => item.creator.username).filter(Boolean)
   ),
 ];
 
-const statusFilters = ["Visi", ...useSettings.selectValues.status];
+const statusFilters = [
+  "Visi",
+  "Nepatvirtintas",
+  "Patvirtintas",
+  "Netinkamas",
+  "Tinkamas",
+  "Betonuojama",
+  "Gaminama",
+  "Montuojama",
+  "Laukiam Vartų",
+  "Vartai Sumontuoti",
+  "Pridavimas",
+  "Apmokėjimas",
+  "Baigtas",
+];
+
+const changeUserFilter = (userFilter: string) => {
+  filterUser.value = userFilter;
+};
+
+const changeStatusFilter = (statusFilter: string) => {
+  filterStatus.value = statusFilter;
+};
 
 const newProjectHandler = () => {
   const useResults = useResultsStore();
@@ -121,24 +151,25 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation name="Išvalyti nepatvirtintus" @onConfirm="removeUnconfirmed" />
+        <BaseButtonWithConfirmation
+          name="Išvalyti nepatvirtintus"
+          @onConfirm="removeUnconfirmed"
+        />
         <BaseSelectField
           label="Vartotojas"
           :values="users"
           id="userFilter"
-          :defaultValue="username"
+          :defaultValue="filterUser"
           width="w-60"
-          @onChange="(value: string) => useProjects.changeFilter(value)
-        "
+          @onChange="changeUserFilter"
         />
         <BaseSelectField
           label="Statusas"
           :values="statusFilters"
           id="statusFilter"
-          :defaultValue="useProjects.selectedStatusFilter"
+          :defaultValue="filterStatus"
           width="w-60"
-          @onChange="(value: string) => useProjects.changeStatusFilter(value)
-          "
+          @onChange="changeStatusFilter"
         />
       </div>
 
@@ -147,7 +178,7 @@ const removeUnconfirmed = async () => {
         label="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string): void => useProjects.searchProjects(value)"
+        @onChange="(value: string) => searchQuery = value"
       >
         <NuxtImg
           src="/icons/search.svg"
@@ -358,4 +389,3 @@ const removeUnconfirmed = async () => {
     </div>
   </div>
 </template>
-<style scoped></style>

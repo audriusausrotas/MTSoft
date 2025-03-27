@@ -109,20 +109,6 @@ export interface Result {
   width: number | null;
 }
 
-export interface MontavimasResult {
-  type: string;
-  category: string;
-  quantity: number;
-  height: number;
-  twoSided: string;
-  direction: string;
-  seeThrough: string;
-  space: number;
-  color: string;
-  width: number | null;
-  delivered: boolean;
-}
-
 export interface OtherParts {
   color: string;
   quantity: number;
@@ -208,36 +194,6 @@ export interface User {
   photo: string;
 }
 
-export interface ResponseUser {
-  success: boolean;
-  data: User;
-  message: string;
-}
-export interface ResponseUsers {
-  success: boolean;
-  data: User[];
-  message: string;
-}
-
-export interface ProjectsState {
-  projects: Project[];
-  filteredProjects: Project[];
-  selectedProject: string | null;
-  selectedFilter: string;
-  selectedStatusFilter: string;
-}
-
-export interface ArchivesState {
-  archives: Project[];
-  filteredArchives: Project[];
-  backup: Project[];
-  filteredBackup: Project[];
-  deleted: Project[];
-  filteredDeleted: Project[];
-  unconfirmed: Project[];
-  filteredUnconfirmed: Project[];
-}
-
 export interface Product {
   _id: string;
   name: string;
@@ -286,23 +242,6 @@ export interface MontavimasWorks {
   quantity: number;
 }
 
-export interface ResponseProducts {
-  success: boolean;
-  data: Product[];
-  message: string;
-}
-export interface ResponseProduct {
-  success: boolean;
-  data: Product;
-  message: string;
-}
-
-export interface ResponseProject {
-  success: boolean;
-  data: Project;
-  message: string;
-}
-
 export interface MenuLinks {
   name: string;
   link: string;
@@ -334,7 +273,7 @@ export interface Montavimas {
   workers: string[];
   status: string;
   fences: GamybaFence[];
-  results: MontavimasResult[];
+  results: Result[];
   works: MontavimasWorks[];
   aditional: Comment[];
   files: string[];

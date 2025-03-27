@@ -106,11 +106,11 @@ export async function fetchUsers() {
 
 export async function fetchArchives() {
   const useArchives = useArchivesStore();
-  if (!useArchives.archives.length) {
+  if (!useArchives.data.archive.length) {
     try {
       const data: any = await request.get("getArchives");
       if (data.success) {
-        useArchives.addArchives(data.data);
+        useArchives.addArchives("archive", data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -121,11 +121,11 @@ export async function fetchArchives() {
 
 export async function fetchUnconfirmed() {
   const useArchives = useArchivesStore();
-  if (!useArchives.unconfirmed.length) {
+  if (!useArchives.data.unconfirmed.length) {
     try {
       const data: any = await request.get("getUnconfirmed");
       if (data.success) {
-        useArchives.addUnconfirmed(data.data);
+        useArchives.addArchives("unconfirmed", data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -136,11 +136,11 @@ export async function fetchUnconfirmed() {
 
 export async function fetchDeleted() {
   const useArchives = useArchivesStore();
-  if (!useArchives.deleteArchive.length) {
+  if (!useArchives.data.deleted.length) {
     try {
       const data: any = await request.get("getDeleted");
       if (data.success) {
-        useArchives.addDeleted(data.data);
+        useArchives.addArchives("deleted", data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -151,11 +151,11 @@ export async function fetchDeleted() {
 
 export async function fetchBackup() {
   const useArchives = useArchivesStore();
-  if (!useArchives.backup.length) {
+  if (!useArchives.data.backup.length) {
     try {
       const data: any = await request.get("getBackup");
       if (data.success) {
-        useArchives.addBackup(data.data);
+        useArchives.addArchives("backup", data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -202,7 +202,10 @@ export async function fetchOrder(to: any) {
 
   if (data.success) {
     const useOffer = useOfferStore();
-    if (data.data.status === "Nepatvirtintas" || data.data.status === "Netinkamas") {
+    if (
+      data.data.status === "Nepatvirtintas" ||
+      data.data.status === "Netinkamas"
+    ) {
       const currentDate = new Date();
       const exparationDate = new Date(data.data.dateExparation);
       if (currentDate < exparationDate) {
