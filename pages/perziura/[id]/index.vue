@@ -9,7 +9,9 @@ const useGates = useGateStore();
 const useUsers = useUserStore();
 const route = useRoute();
 
-const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
+const offer = computed(() =>
+  useProjects.projects.find((item) => item._id === route.params.id)
+);
 const allUsers = useUsers.users.map((item) => item.username);
 
 const isOpenMontavimas = ref<boolean>(false);
@@ -29,7 +31,7 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    useProjects.updatePhoto(response.data._id, response.data.files);
+    // useProjects.updatePhoto(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -37,12 +39,6 @@ const uploadFiles = async (data: any) => {
 
 const vartonasUsers = useUsers.users
   .filter((user) => user.accountType === "Vartonas")
-  .map((user) => {
-    return user.email;
-  });
-
-const gigastaUsers = useUsers.users
-  .filter((user) => user.accountType === "Gigasta")
   .map((user) => {
     return user.email;
   });
@@ -62,7 +58,7 @@ const statusHandler = async (value: string) => {
   });
 
   if (response.success) {
-    useProjects.updateStatus(response.data._id, value);
+    // useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -98,7 +94,11 @@ const sendEmailHandler = async () => {
 const gateOrderHadnler = async (name: string): Promise<void> => {
   isLoading.value = true;
 
-  const requestData = { _id: offer?.value?._id, value: provider.value, manager: name };
+  const requestData = {
+    _id: offer?.value?._id,
+    value: provider.value,
+    manager: name,
+  };
 
   const response: any = await request.post("newOrder", requestData);
 
@@ -113,7 +113,10 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
       title: "Naujas užsakymas",
     };
 
-    const emailResponse: any = await request.post("sendGateInfo", emailRequestData);
+    const emailResponse: any = await request.post(
+      "sendGateInfo",
+      emailRequestData
+    );
 
     if (emailResponse.success) {
       setIsError(false);
@@ -134,7 +137,9 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
 const gateCancelHandler = async (): Promise<void> => {
   isLoading.value = true;
 
-  const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
+  const response: any = await request.delete(
+    `cancelOrder/${offer?.value?._id}`
+  );
 
   if (response.success) {
     gateOrdered.value = false;
@@ -157,7 +162,7 @@ const changeCreatorHandler = async (value: string) => {
   const response: any = await request.patch("changeManager", requestData);
 
   if (response.success) {
-    useProjects.changeCreator(response.data);
+    // useProjects.changeCreator(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -173,7 +178,7 @@ const advanceHandler = async () => {
   const response: any = await request.patch("changeAdvance", requestData);
 
   if (response.success) {
-    useProjects.changeAdvance(response.data);
+    // useProjects.changeAdvance(response.data);
     offer!.value!.advance = advance.value;
     setIsError(false);
     setError(response.message);
@@ -190,9 +195,11 @@ const orderFinishHandler = async () => {
   const response: any = await request.patch("updateProjectStatus", requestData);
 
   if (response.success) {
-    useProjects.updateStatus(response.data._id, "Baigtas");
+    // useProjects.updateStatus(response.data._id, "Baigtas");
 
-    const archieveResponse: any = await request.post(`addArchive/${offer!.value!._id}`);
+    const archieveResponse: any = await request.post(
+      `addArchive/${offer!.value!._id}`
+    );
 
     if (archieveResponse.success) {
       offer?.value?._id && useProjects.deleteProject(offer.value._id);
@@ -210,7 +217,9 @@ const orderFinishHandler = async () => {
 };
 
 const gamybaHandler = async () => {
-  const response: any = await request.post(`newProduction/${offer!.value!._id}`);
+  const response: any = await request.post(
+    `newProduction/${offer!.value!._id}`
+  );
 
   if (response.success) {
     setIsError(false);
@@ -246,7 +255,7 @@ const addComment = async (value: any) => {
   const response: any = await request.post("addProjectComment", requestData);
 
   if (response.success) {
-    useProjects.updateStatus(response.data._id, value);
+    // useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -260,10 +269,13 @@ const deleteComment = async (value: any) => {
     comment: value,
   };
 
-  const response: any = await request.delete("deleteProjectComment", requestData);
+  const response: any = await request.delete(
+    "deleteProjectComment",
+    requestData
+  );
 
   if (response.success) {
-    useProjects.updateStatus(response.data._id, value);
+    // useProjects.updateStatus(response.data._id, value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -301,7 +313,10 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
-    <div v-if="versions && versions.length > 0" class="flex gap-4 w-full flex-wrap">
+    <div
+      v-if="versions && versions.length > 0"
+      class="flex gap-4 w-full flex-wrap"
+    >
       <p class="font-medium text-xl">Projekto versijos:</p>
       <div
         v-for="(version, index) in versions"
@@ -316,13 +331,29 @@ watch(
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
-          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
-          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.orderNumber"
+            label="Užsakymo nr"
+          />
+          <BaseInput
+            label="Avansas"
+            :name="offer?.advance + ' €'"
+            :disable="true"
+          />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.username"
+            label="klientas"
+          />
         </div>
 
         <div class="flex gap-4">
-          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
+          <BaseInput
+            :disable="true"
+            :name="offer?.client?.address"
+            label="adresas"
+          />
           <a :href="'tel:' + offer?.client?.phone">
             <BaseInput
               :disable="true"
@@ -353,7 +384,10 @@ watch(
               name="Paliktas avansas"
               @click="isOpenAdvance = !isOpenAdvance"
             />
-            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
+            <div
+              v-else-if="isOpenAdvance"
+              class="flex overflow-hidden border rounded-lg"
+            >
               <input
                 placeholder="Avansas"
                 type="number"
@@ -377,7 +411,11 @@ watch(
               </button>
             </div>
           </div>
-          <BaseUploadButton @upload="uploadFiles" :_id="offer?._id" category="projects" />
+          <BaseUploadButton
+            @upload="uploadFiles"
+            :_id="offer?._id"
+            category="projects"
+          />
         </div>
 
         <div class="flex gap-4">
@@ -452,16 +490,10 @@ watch(
               >
                 Vartonas
               </button>
-              <button
-                @click="setProvider('Gigasta')"
-                class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full"
-              >
-                Gigasta
-              </button>
             </div>
             <BaseSelectField
               v-else-if="!gateOrdered && isOpenGates2"
-              :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers"
+              :values="vartonasUsers"
               id="userSelect"
               defaultValue="Priskirti vartotoja"
               width="w-60"
@@ -472,7 +504,11 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
+        <BaseGalleryElement
+          :_id="offer?._id"
+          :files="offer?.files"
+          category="projects"
+        />
       </div>
     </div>
     <BaseComment

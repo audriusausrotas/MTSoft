@@ -1,21 +1,21 @@
 import { Socket } from "socket.io-client";
 
 export default function gateListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const useGate = useGateStore();
 
-  socket.on("newGateOrder", () => {
-    // get gate object
+  socket.on("newGateOrder", (gate) => {
+    useGate.addGate(gate);
   });
 
-  socket.on("changeGateStatus", () => {
-    // get id and status
+  socket.on("changeGateStatus", ({ _id, status }) => {
+    useGate.updateGateStatus(_id, status);
   });
 
-  socket.on("updateGateOrder", () => {
-    // get gate object
+  socket.on("updateGateOrder", ({ gate }) => {
+    useGate.updateGate(gate);
   });
 
-  socket.on("cancelGateOrder", () => {
-    // get gate id
+  socket.on("cancelGateOrder", ({ _id }) => {
+    useGate.removeGates(_id);
   });
 }

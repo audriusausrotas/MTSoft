@@ -1,13 +1,13 @@
 import { Socket } from "socket.io-client";
 
 export default function clientListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const useClient = useClientsStore();
 
-  socket.on("deleteClient", (userId) => {
-    // get _id. need to delete from store
+  socket.on("deleteClient", ({ _id }) => {
+    useClient.deleteClient(_id);
   });
 
-  socket.on("newClient", (userId) => {
-    // get client object
+  socket.on("newClient", (client) => {
+    useClient.addClient(client);
   });
 }

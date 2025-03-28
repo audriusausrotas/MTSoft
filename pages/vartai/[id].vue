@@ -9,14 +9,8 @@ const gate = computed(() => {
 });
 const { setError, setIsError } = useError();
 
-const vartonasUsers = useUser.users
+const gateUsers = useUser.users
   .filter((user) => user.accountType === "Vartonas")
-  .map((user) => {
-    return user.email;
-  });
-
-const gigastaUsers = useUser.users
-  .filter((user) => user.accountType === "Gigasta")
   .map((user) => {
     return user.email;
   });
@@ -82,7 +76,7 @@ const updateHandler = async (change: string, value: any) => {
         @onChange="(value: string) => updateHandler('status', value)"
       />
       <BaseSelectField
-        :values="gate?.manager?.includes('vartonas') ? vartonasUsers : gigastaUsers"
+        :values="gateUsers"
         id="currentUsers"
         :defaultValue="gate?.manager"
         width="w-60"
@@ -93,12 +87,22 @@ const updateHandler = async (change: string, value: any) => {
         placeholder="Užsakymo Nr."
         @onConfirm="(value) => updateHandler('orderNr', value)"
       />
-      <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="finishOrderHandler" />
+      <BaseButtonWithConfirmation
+        name="užbaigti užsakymą"
+        @onConfirm="finishOrderHandler"
+      />
     </div>
-    <div class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap">
+    <div
+      class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap"
+    >
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Užsakymo duomenys</h3>
-        <BaseInput :name="gate?.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
+        <BaseInput
+          :name="gate?.orderNr"
+          width="w-72"
+          label="Užsakymo nr:"
+          :disable="true"
+        />
         <BaseInput
           :name="gate?.measure"
           width="w-72"
@@ -121,9 +125,24 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
-        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
-        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
+        <BaseInput
+          :name="gate?.client?.username"
+          width="w-72"
+          label="klientas"
+          :disable="true"
+        />
+        <BaseInput
+          :name="gate?.client?.address"
+          width="w-72"
+          label="adresas"
+          :disable="true"
+        />
+        <BaseInput
+          :name="gate?.client?.phone"
+          width="w-72"
+          label="telefonas"
+          :disable="true"
+        />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>
