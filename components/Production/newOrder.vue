@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 
 const newOpen = ref<boolean>(false);
 const orderNr = ref<string>("");
@@ -17,10 +17,10 @@ const newHandler = async () => {
     creator: orderCreator.value,
   };
 
-  const response: any = await request.post("addNewGamyba", requestData);
+  const response: any = await request.post("addNewProduction", requestData);
 
   if (response.success) {
-    useGamyba.addGamyba(response.data);
+    useProduction.addProduction(response.data);
     setIsError(false);
     setError(response.message);
     newOpen.value = false;

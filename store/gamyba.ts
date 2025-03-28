@@ -1,43 +1,39 @@
-import type { Gamyba } from "~/data/interfaces";
+import type { Production } from "~/data/interfaces";
 
-export const useGamybaStore = defineStore("gamyba", {
+export const useProductionStore = defineStore("production", {
   state: () => ({
-    gamybaList: [] as Gamyba[],
+    production: [] as Production[],
   }),
 
   actions: {
-    addAll(data: Gamyba[]) {
-      this.gamybaList = [...data];
+    addAll(data: Production[]) {
+      this.production = [...data];
     },
 
-    addOne(data: Gamyba) {
-      this.gamybaList = this.gamybaList.map((item) =>
-        item._id === data._id ? data : item
-      );
+    addOne(data: Production) {
+      this.production = this.production.map((item) => (item._id === data._id ? data : item));
     },
 
-    addGamyba(data: Gamyba) {
-      this.gamybaList.push(data);
+    addProduction(data: Production) {
+      this.production.push(data);
     },
 
-    deleteGamybaOrder(id: string) {
-      this.gamybaList = this.gamybaList.filter((item) => item._id !== id);
+    deleteProductionOrder(id: string) {
+      this.production = this.production.filter((item) => item._id !== id);
     },
 
-    updateOrder(id: string, data: Gamyba) {
-      this.gamybaList = this.gamybaList.map((item) =>
-        item._id === id ? data : item
-      );
+    updateOrder(id: string, data: Production) {
+      this.production = this.production.map((item) => (item._id === id ? data : item));
     },
 
     updatePhoto(id: string, photo: string[]) {
-      this.gamybaList = this.gamybaList.map((item) =>
+      this.production = this.production.map((item) =>
         item._id === id ? { ...item, files: [...photo] } : item
       );
     },
 
-    clearGamyba() {
-      this.gamybaList = [];
+    clearProduction() {
+      this.production = [];
     },
   },
 });

@@ -29,12 +29,12 @@ export async function fetchGates() {
 }
 
 export async function fetchProduction() {
-  const useGamyba = useGamybaStore();
-  if (!useGamyba.gamybaList.length) {
+  const useProduction = useProductionStore();
+  if (!useProduction.production.length) {
     try {
       const data: any = await request.get("getProduction");
       if (data.success) {
-        useGamyba.addAll(data.data);
+        useProduction.addAll(data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -44,13 +44,13 @@ export async function fetchProduction() {
 }
 
 export async function fetchInstallation() {
-  const useMontavimas = useMontavimasStore();
-  if (!useMontavimas.montavimasList.length) {
+  const useInstallation = useInstallationStore();
+  if (!useInstallation.installation.length) {
     try {
       const data: any = await request.get("getWorks");
 
       if (data.success) {
-        useMontavimas.addAll(data.data);
+        useInstallation.addAll(data.data);
       }
     } catch (error) {
       console.log("Serverio klaida: " + error);
@@ -202,10 +202,7 @@ export async function fetchOrder(to: any) {
 
   if (data.success) {
     const useOffer = useOfferStore();
-    if (
-      data.data.status === "Nepatvirtintas" ||
-      data.data.status === "Netinkamas"
-    ) {
+    if (data.data.status === "Nepatvirtintas" || data.data.status === "Netinkamas") {
       const currentDate = new Date();
       const exparationDate = new Date(data.data.dateExparation);
       if (currentDate < exparationDate) {

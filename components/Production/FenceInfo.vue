@@ -10,7 +10,7 @@ const props = defineProps([
   "clientAddress",
 ]);
 
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 
 const cut = ref<string>(props.data.cut);
@@ -50,7 +50,7 @@ const saveHandler = async (field: string) => {
   const response: any = await request.patch("updateMeasure", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props.data._id, response.data);
+    useProduction.updateOrder(props.data._id, response.data);
     setIsError(false);
     setError(response.message);
 
@@ -76,7 +76,7 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -98,7 +98,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteMeasure", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {

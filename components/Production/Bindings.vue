@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["binding", "index", "_id"]);
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 
 const cut = ref<number>(props.binding.cut);
@@ -42,7 +42,7 @@ const saveHandler = async (field: string) => {
   const response: any = await request.patch("updateMeasure", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     setIsError(false);
     setError(response.message);
 
@@ -68,7 +68,7 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -86,7 +86,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteBindings", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {

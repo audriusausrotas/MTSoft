@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
 const { setError, setIsError } = useError();
-const useMontavimas = useMontavimasStore();
+const useInstallation = useInstallationStore();
 const useUser = useUserStore();
 
 const statusColor = computed(() =>
@@ -26,7 +26,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteInstallation/${props.order._id}`);
 
   if (response.success) {
-    useMontavimas.deleteMontavimasOrder(props.order._id);
+    useInstallation.deleteInstallationOrder(props.order._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -40,7 +40,7 @@ const workerDeleteHandler = async (worker: string) => {
   const response: any = await request.delete("deleteWorker", requestData);
 
   if (response.success) {
-    useMontavimas.deleteMontavimasWorker(props.order._id, worker);
+    useInstallation.deleteInstallationWorker(props.order._id, worker);
     setIsError(false);
     setError(response.message);
   } else {

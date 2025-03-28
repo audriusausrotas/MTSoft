@@ -1,14 +1,14 @@
 -
 <script setup lang="ts">
-import { GamybaStatus } from "~/data/selectFieldData";
+import { ProductionStatus } from "~/data/selectFieldData";
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 const route = useRoute();
 
 const isAdmin = useUser.user?.accountType === "Administratorius";
 const order: any = computed(() => {
-  return useGamyba.gamybaList.find((item) => item._id === route.params.id);
+  return useProduction.production.find((item) => item._id === route.params.id);
 });
 
 const statusHandler = async (value: string) => {
@@ -17,7 +17,7 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProductionStatus", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(order!.value._id, response.data);
+    useProduction.updateOrder(order!.value._id, response.data);
 
     setIsError(false);
     setError(response.message);
@@ -36,7 +36,7 @@ const commentHandler = async (value: string) => {
   const response: any = await request.post("addProductionComment", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(order!.value._id, response.data);
+    useProduction.updateOrder(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -50,7 +50,7 @@ const deleteHandler = async (value: string, comment: string) => {
   const response = await request.delete("deleteProductionComment", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(value, response.data);
+    useProduction.updateOrder(value, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -62,7 +62,7 @@ const newBindingHandler = async () => {
   const response: any = await request.post(`addBinding/${order.value._id}`);
 
   if (response.success) {
-    useGamyba.updateOrder(order!.value._id, response.data);
+    useProduction.updateOrder(order!.value._id, response.data);
 
     setIsError(false);
     setError(response.message);
@@ -152,7 +152,7 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    useGamyba.updatePhoto(response.data._id, response.data.files);
+    useProduction.updatePhoto(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -168,9 +168,9 @@ const uploadFiles = async (data: any) => {
 
       <BaseSelectField
         label="Statusas"
-        :values="GamybaStatus"
-        id="gamybaStatus"
-        :defaultValue="order?.status || GamybaStatus[0]"
+        :values="ProductionStatus"
+        id="productionStatus"
+        :defaultValue="order?.status || ProductionStatus[0]"
         width="w-60"
         @onChange="(value: string) => statusHandler(value)"
       />
@@ -182,7 +182,7 @@ const uploadFiles = async (data: any) => {
     <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
 
     <BaseComment
-      :commentsArray="order?.aditional"
+      :commentsArray="order?.comment"
       :id="order?._id"
       @onSave="commentHandler"
       class="max-w-[896px]"
@@ -190,7 +190,7 @@ const uploadFiles = async (data: any) => {
     />
 
     <div class="flex gap-4 flex-col">
-      <GamybaFence
+      <ProductionFence
         v-for="(fence, index) in order?.fences"
         :key="fence._id"
         :fence="fence"
@@ -225,7 +225,7 @@ const uploadFiles = async (data: any) => {
         ></p>
       </div>
 
-      <GamybaBindings
+      <ProductionBindings
         v-for="(binding, index) in order?.bindings"
         :key="binding.id"
         :binding="binding"

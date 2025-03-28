@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import type { Version } from "~/data/interfaces";
 const { setError, setIsError } = useError();
-const useMontavimas = useMontavimasStore();
+const useInstallation = useInstallationStore();
 const useProjects = useProjectsStore();
 const useSettings = useSettingsStore();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useGates = useGateStore();
 const useUsers = useUserStore();
 const route = useRoute();
 
-const offer = computed(() =>
-  useProjects.projects.find((item) => item._id === route.params.id)
-);
+const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
 const allUsers = useUsers.users.map((item) => item.username);
 
-const isOpenMontavimas = ref<boolean>(false);
+const isOpenInstallation = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
 const isOpenGates2 = ref<boolean>(false);
 const isOpenGates = ref<boolean>(false);
@@ -113,10 +111,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
       title: "Naujas užsakymas",
     };
 
-    const emailResponse: any = await request.post(
-      "sendGateInfo",
-      emailRequestData
-    );
+    const emailResponse: any = await request.post("sendGateInfo", emailRequestData);
 
     if (emailResponse.success) {
       setIsError(false);
@@ -137,9 +132,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
 const gateCancelHandler = async (): Promise<void> => {
   isLoading.value = true;
 
-  const response: any = await request.delete(
-    `cancelOrder/${offer?.value?._id}`
-  );
+  const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
 
   if (response.success) {
     gateOrdered.value = false;
@@ -197,9 +190,7 @@ const orderFinishHandler = async () => {
   if (response.success) {
     // useProjects.updateStatus(response.data._id, "Baigtas");
 
-    const archieveResponse: any = await request.post(
-      `addArchive/${offer!.value!._id}`
-    );
+    const archieveResponse: any = await request.post(`addArchive/${offer!.value!._id}`);
 
     if (archieveResponse.success) {
       offer?.value?._id && useProjects.deleteProject(offer.value._id);
@@ -216,33 +207,31 @@ const orderFinishHandler = async () => {
   }
 };
 
-const gamybaHandler = async () => {
-  const response: any = await request.post(
-    `newProduction/${offer!.value!._id}`
-  );
+const productionHandler = async () => {
+  const response: any = await request.post(`newProduction/${offer!.value!._id}`);
 
   if (response.success) {
     setIsError(false);
     setError(response.message);
-    useGamyba.addGamyba(response.data);
+    useProduction.addProduction(response.data);
   } else {
     setError(response.message);
   }
 };
 
-const montavimasHandler = async (value: string) => {
+const installationHandler = async (value: string) => {
   const requestData = { _id: offer!.value!._id, worker: value };
 
   const response: any = await request.post("addInstallation", requestData);
 
   if (response.success) {
-    useMontavimas.addMontavimas(response.data);
+    useInstallation.addInstallation(response.data);
     setIsError(false);
     setError(response.message);
   } else {
     setError(response.message);
   }
-  isOpenMontavimas.value = false;
+  isOpenInstallation.value = false;
 };
 
 const addComment = async (value: any) => {
@@ -269,10 +258,7 @@ const deleteComment = async (value: any) => {
     comment: value,
   };
 
-  const response: any = await request.delete(
-    "deleteProjectComment",
-    requestData
-  );
+  const response: any = await request.delete("deleteProjectComment", requestData);
 
   if (response.success) {
     // useProjects.updateStatus(response.data._id, value);
@@ -313,10 +299,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-12">
-    <div
-      v-if="versions && versions.length > 0"
-      class="flex gap-4 w-full flex-wrap"
-    >
+    <div v-if="versions && versions.length > 0" class="flex gap-4 w-full flex-wrap">
       <p class="font-medium text-xl">Projekto versijos:</p>
       <div
         v-for="(version, index) in versions"
@@ -331,29 +314,13 @@ watch(
     <div class="flex gap-8">
       <div class="flex flex-col gap-4 flex-1">
         <div class="flex gap-4">
-          <BaseInput
-            :disable="true"
-            :name="offer?.orderNumber"
-            label="Užsakymo nr"
-          />
-          <BaseInput
-            label="Avansas"
-            :name="offer?.advance + ' €'"
-            :disable="true"
-          />
-          <BaseInput
-            :disable="true"
-            :name="offer?.client?.username"
-            label="klientas"
-          />
+          <BaseInput :disable="true" :name="offer?.orderNumber" label="Užsakymo nr" />
+          <BaseInput label="Avansas" :name="offer?.advance + ' €'" :disable="true" />
+          <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
         </div>
 
         <div class="flex gap-4">
-          <BaseInput
-            :disable="true"
-            :name="offer?.client?.address"
-            label="adresas"
-          />
+          <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
           <a :href="'tel:' + offer?.client?.phone">
             <BaseInput
               :disable="true"
@@ -384,10 +351,7 @@ watch(
               name="Paliktas avansas"
               @click="isOpenAdvance = !isOpenAdvance"
             />
-            <div
-              v-else-if="isOpenAdvance"
-              class="flex overflow-hidden border rounded-lg"
-            >
+            <div v-else-if="isOpenAdvance" class="flex overflow-hidden border rounded-lg">
               <input
                 placeholder="Avansas"
                 type="number"
@@ -411,24 +375,20 @@ watch(
               </button>
             </div>
           </div>
-          <BaseUploadButton
-            @upload="uploadFiles"
-            :_id="offer?._id"
-            category="projects"
-          />
+          <BaseUploadButton @upload="uploadFiles" :_id="offer?._id" category="projects" />
         </div>
 
         <div class="flex gap-4">
           <BaseButtonWithConfirmation
             name="Į gamybą"
-            @onConfirm="gamybaHandler"
+            @onConfirm="productionHandler"
             :isLoading="isLoading"
           />
           <div>
             <BaseButton
-              v-if="!isOpenMontavimas"
+              v-if="!isOpenInstallation"
               name="Į montavimą"
-              @click="isOpenMontavimas = true"
+              @click="isOpenInstallation = true"
               :isLoading="isLoading"
             />
             <BaseSelectField
@@ -437,7 +397,7 @@ watch(
               id="workersList"
               defaultValue="Pasirinkti montuotoją"
               width="w-60"
-              @onChange="(value: string) => montavimasHandler(value)
+              @onChange="(value: string) => installationHandler(value)
                 "
             />
           </div>
@@ -504,11 +464,7 @@ watch(
         </div>
       </div>
       <div class="flex-[2]">
-        <BaseGalleryElement
-          :_id="offer?._id"
-          :files="offer?.files"
-          category="projects"
-        />
+        <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
       </div>
     </div>
     <BaseComment

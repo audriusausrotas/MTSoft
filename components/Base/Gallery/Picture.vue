@@ -16,13 +16,13 @@ const deleteHandler = async (event: Event) => {
   if (response.success) {
     if (props.category === "projects") {
       const useProjects = useProjectsStore();
-      useProjects.updatePhoto(props._id, response.data.files);
+      // useProjects.updatePhoto(props._id, response.data.files);
     } else if (props.category === "production") {
-      const useGamyba = useGamybaStore();
-      useGamyba.updatePhoto(props._id, response.data.files);
+      const useProduction = useProductionStore();
+      useProduction.updatePhoto(props._id, response.data.files);
     } else if (props.category === "installation") {
-      const useMontavimas = useMontavimasStore();
-      useMontavimas.updatePhoto(props._id, response.data.files);
+      const useInstallation = useInstallationStore();
+      useInstallation.updatePhoto(props._id, response.data.files);
     }
 
     setIsError(false);

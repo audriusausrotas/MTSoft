@@ -9,7 +9,7 @@ const props = defineProps(["fence", "index"]);
     <div class="flex font-bold text-xl">
       <p>{{ props.fence.side }} - {{ props.fence.type }} - {{ props.fence.color }}</p>
     </div>
-    <p v-if="fence.aditional">Komentarai: {{ fence.aditional }}</p>
+    <p v-if="fence.comment">Komentarai: {{ fence.comment }}</p>
     <div class="flex w-fit border-y items-center h-8  border-black select-none">
       <p class="hover:cursor-pointer h-full items-center w-10 border-x border-black  flex justify-evenly">
         Nr

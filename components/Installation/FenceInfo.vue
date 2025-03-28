@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["data", "fenceIndex", "index", "_id"]);
 
-const useMontavimas = useMontavimasStore();
+const useInstallation = useInstallationStore();
 
 const postone = ref<boolean>(props.data.postone);
 const done = ref<boolean>(props.data.done);
@@ -19,7 +19,7 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateInstallationPostone", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(props._id, response.data);
+    // useInstallation.updateOrder(props._id, response.data);
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -39,7 +39,7 @@ const doneHandler = async () => {
   const response: any = await request.patch("updateInstallation", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(props._id, response.data);
+    // useInstallation.updateOrder(props._id, response.data);
     done.value = !done.value;
     setIsError(false);
     setError(response.message);

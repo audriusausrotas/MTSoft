@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 const router = useRouter();
 
@@ -17,7 +17,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteProduction/${props.order._id}`);
 
   if (response.success) {
-    useGamyba.deleteGamybaOrder(props.order._id);
+    useProduction.deleteProductionOrder(props.order._id);
     await router.replace("/gamyba");
     setIsError(false);
     setError(response.message);

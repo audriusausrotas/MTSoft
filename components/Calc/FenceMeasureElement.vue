@@ -7,9 +7,7 @@ const useSettings = useSettingsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
-const isSegment = ref<boolean>(
-  useCalculations.fences[props.index].type.includes("Segmentas")
-);
+const isSegment = ref<boolean>(useCalculations.fences[props.index].type.includes("Segmentas"));
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
@@ -37,19 +35,12 @@ watch(
         label="ilgis"
         type="number"
         variant="light"
-        :active="
-          useCalculations.fences[props.index].measures.length - 1 ===
-          props.measureIndex
-        "
+        :active="useCalculations.fences[props.index].measures.length - 1 === props.measureIndex"
         :name="props.measure.length"
         @EnterPressed="useCalculations.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureLength(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            useCalculations.updateMeasureLength(props.index, props.measureIndex, value)
         "
       />
 
@@ -64,11 +55,7 @@ watch(
         @EnterPressed="useCalculations.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureHeight(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            useCalculations.updateMeasureHeight(props.index, props.measureIndex, value)
         "
       />
 
@@ -81,11 +68,7 @@ watch(
         :name="props.measure.elements"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureElements(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            useCalculations.updateMeasureElements(props.index, props.measureIndex, value)
         "
       />
 
@@ -114,11 +97,7 @@ watch(
         :name="props.measure.kampas.value"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureKampas(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            useCalculations.updateMeasureKampas(props.index, value, props.measureIndex)
         "
       />
       <BaseInput
@@ -127,14 +106,10 @@ watch(
         variant="light"
         label="komentaras"
         placeholder="Papildoma"
-        :name="props.measure.kampas.aditional"
+        :name="props.measure.kampas.comment"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureKampasAditional(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            useCalculations.updateMeasureKampasComment(props.index, value, props.measureIndex)
         "
       />
 
@@ -155,11 +130,7 @@ watch(
         :name="props.measure.laiptas.value"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureLaiptas(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            useCalculations.updateMeasureLaiptas(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -187,15 +158,9 @@ watch(
       />
     </div>
 
-    <div
-      v-if="isChecked"
-      class="flex flex-wrap justify-center md:justify-between gap-2"
-    >
+    <div v-if="isChecked" class="flex flex-wrap justify-center md:justify-between gap-2">
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 &&
-          props.measure.gates.type !== 'Segmentiniai'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.type !== 'Segmentiniai'"
         :values="yesno"
         label="Automatika"
         id="automatics"
@@ -216,9 +181,7 @@ watch(
         "
       />
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 && props.measure.gates.type === 'Stumdomi'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.type === 'Stumdomi'"
         :values="yesno"
         id="bankette"
         label="vartų pamatas"
@@ -229,10 +192,7 @@ watch(
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length <= 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="gateDirection"
         id="gateDirection"
         label="vartelių atidarymas"
@@ -243,10 +203,7 @@ watch(
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length <= 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="useSettings.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"
@@ -272,9 +229,9 @@ watch(
       placeholder="Papidoma informacija"
       variant="light"
       width="w-full"
-      :name="props.measure.gates.aditional"
+      :name="props.measure.gates.comment"
       @onChange="(value: string) =>
-        useCalculations.updateGateAditional(props.index, value, props.measureIndex
+        useCalculations.updateGateComment(props.index, value, props.measureIndex
         )
         "
     />

@@ -7,7 +7,7 @@ const { setError, setIsError } = useError();
 
 const useProjects = useProjectsStore();
 const useSchedule = useScheduleStore();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 
 const commentModalOpen = ref<boolean>(false);
@@ -170,7 +170,9 @@ const saveHandler = async () => {
     <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
       <BaseSearchFieldProduction
         width="w-full"
-        :data="props.worker.accountType === 'Gamyba' ? useGamyba.gamybaList : useProjects.projects"
+        :data="
+          props.worker.accountType === 'Gamyba' ? useProduction.production: useProjects.projects
+        "
         @modalClose="modalOpen = false"
         @onClick="selectHandler"
       />

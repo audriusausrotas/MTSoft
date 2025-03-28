@@ -28,11 +28,7 @@ watch(
     isFenceBoards.value = verticals.includes(newValue?.type as string);
     isSegment.value = newValue?.type?.includes("Segmentas");
 
-    if (
-      newValue?.direction === "Horizontali" &&
-      !isFenceBoards.value &&
-      !isSegment.value
-    ) {
+    if (newValue?.direction === "Horizontali" && !isFenceBoards.value && !isSegment.value) {
       if (newValue?.bindings === "Taip") {
         useCalculations.updateBindings(props.index, "Taip");
         needBindings.value = true;
@@ -51,9 +47,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4">
-    <div
-      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
-    >
+    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
       <BaseSelectField
         label="Tvoros pusė"
         :values="fenceSide"
@@ -195,10 +189,7 @@ watch(
       />
     </div>
     <div>
-      <div
-        class="flex gap-2 hover:cursor-pointer select-none"
-        @click="isOpen = !isOpen"
-      >
+      <div class="flex gap-2 hover:cursor-pointer select-none" @click="isOpen = !isOpen">
         <p class="text-md">Papildoma Informacija</p>
         <NuxtImg
           src="icons/arrowDown.svg"
@@ -213,9 +204,9 @@ watch(
         variant="light"
         width="w-full max-w-[1008px]"
         class="mb-8"
-        :name="currentFence.aditional"
+        :name="currentFence.comment"
         @onChange="(value: string) =>
-        useCalculations.updateAditional(props.index,
+        useCalculations.updateComment(props.index,
           value,
         )
         "

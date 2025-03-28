@@ -4,7 +4,7 @@ import { verticals } from "~/data/selectFieldData";
 const props = defineProps(["fence", "fenceIndex", "_id", "orderNr", "clientAddress"]);
 
 const { setError, setIsError } = useError();
-const useGamyba = useGamybaStore();
+const useProduction = useProductionStore();
 const useUser = useUserStore();
 
 const isAdmin = useUser.user?.accountType === "Administratorius";
@@ -22,7 +22,7 @@ const newMeasureHandler = async () => {
   const response: any = await request.post("addMeasure", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -63,7 +63,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteFence", requestData);
 
   if (response.success) {
-    useGamyba.updateOrder(props._id, response.data);
+    useProduction.updateOrder(props._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -103,7 +103,7 @@ watch(
       </div>
     </div>
     <div>
-      <p v-if="props.fence.aditional">{{ props.fence.aditional }}</p>
+      <p v-if="props.fence.comment">{{ props.fence.comment }}</p>
     </div>
 
     <div class="flex w-fit border-y items-center h-8 border-black select-none">
@@ -159,7 +159,7 @@ watch(
     </div>
 
     <div class="flex flex-col flex-1">
-      <GamybaFenceInfo
+      <ProductionFenceInfo
         v-for="data in filteredMeasures"
         :key="data._id"
         :data="data"

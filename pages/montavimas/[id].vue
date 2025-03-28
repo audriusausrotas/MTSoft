@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { MontavimasStatus } from "~/data/selectFieldData";
+import { InstallationStatus } from "~/data/selectFieldData";
 
 const { setError, setIsError } = useError();
 
-const useMontavimas = useMontavimasStore();
+const useInstallation = useInstallationStore();
 const useUser = useUserStore();
 const route = useRoute();
 
 const order: any = computed(() => {
-  return useMontavimas.montavimasList.find((item) => item._id === route.params.id);
+  return useInstallation.installation.find((item) => item._id === route.params.id);
 });
 
 const statusHandler = async (value: string) => {
@@ -17,7 +17,7 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateInstallationStatus", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(order!.value._id, response.data);
+    // useInstallation.updateOrder(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -35,7 +35,7 @@ const commentHandler = async (value: string) => {
   const response: any = await request.post("addInstallationComment", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(order!.value._id, response.data);
+    // useInstallation.updateOrder(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -49,7 +49,7 @@ const deleteHandler = async (value: string, comment: string) => {
   const response: any = await request.delete("deleteInstallationComment", requestData);
 
   if (response.success) {
-    useMontavimas.deleteMontavimasOrder(value);
+    useInstallation.deleteInstallationOrder(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -65,7 +65,7 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    useMontavimas.updatePhoto(response.data._id, response.data.files);
+    useInstallation.updatePhoto(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -77,7 +77,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
   const response: any = await request.patch("partsDelivered", requestData);
 
   if (response.success) {
-    useMontavimas.updateOrder(order!.value._id, response.data);
+    // useInstallation.updateOrder(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -95,11 +95,11 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
         </BaseInput>
         <BaseSelectField
           label="Statusas"
-          :values="MontavimasStatus"
+          :values="InstallationStatus"
           width="w-36"
           class=""
-          id="montavimasStatus"
-          :defaultValue="order?.status || MontavimasStatus[0]"
+          id="installationStatus"
+          :defaultValue="order?.status || InstallationStatus[0]"
           @onChange="(value: string) => statusHandler(value)
                 "
         />
@@ -117,7 +117,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
     </div>
 
     <BaseComment
-      :commentsArray="order?.aditional"
+      :commentsArray="order?.comment"
       :id="order._id"
       @onSave="commentHandler"
       @onDelete="deleteHandler"
@@ -187,7 +187,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
     </div>
 
     <div class="flex gap-8 flex-wrap justify-center">
-      <MontavimasFence
+      <InstallationFence
         v-for="(fence, index) in order?.fences"
         :key="fence._id"
         :fence="fence"

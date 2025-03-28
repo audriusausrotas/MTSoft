@@ -36,9 +36,7 @@ const retailHandler = (value: string) => {
 
 <template>
   <div class="flex w-full flex-col">
-    <div
-      class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b"
-    >
+    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
       <BaseButton name="Iš lazerio" @click="modalOpen = true" />
       <BaseModal
@@ -96,7 +94,7 @@ const retailHandler = (value: string) => {
                 <div class="w-40 p-4">{{ instruction.name }}</div>
                 <div class="w-40 p-4">{{ instruction.command }}</div>
                 <div class="w-48 p-4">{{ instruction.example }}</div>
-                <div class="w-80 p-4">{{ instruction.aditional }}</div>
+                <div class="w-80 p-4">{{ instruction.comment }}</div>
               </div>
             </div>
           </div>

@@ -65,7 +65,7 @@ export default function calculateResults() {
               ? measure.gates.bankette
               : "",
 
-          aditional: measure.gates.aditional,
+              comment: measure.gates.comment,
           direction: measure.length! < 200 ? measure.gates.direction : "",
           lock: measure.length! < 200 ? measure.gates.lock : "",
           option: measure.gates.option,
