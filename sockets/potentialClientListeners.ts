@@ -1,25 +1,25 @@
 import { Socket } from "socket.io-client";
 
 export default function potentialClientListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const usePotentialClients = usePotentialClientsStore();
 
-  socket.on("deletePotentialClient", () => {
-    // get id to delete
+  socket.on("deletePotentialClient", ({ _id }) => {
+    usePotentialClients.deletePotentialClient(_id);
   });
 
-  socket.on("updatePotentialClient", () => {
-    //
+  socket.on("updatePotentialClient", ({ client }) => {
+    usePotentialClients.updatePotentialClients(client);
   });
 
-  socket.on("selectAll", () => {
-    //get value for all clients
+  socket.on("selectAll", ({ value }) => {
+    usePotentialClients.selectPotentialClients(value);
   });
 
-  socket.on("selectOne", () => {
-    //get { _id, send,  value }
+  socket.on("selectOne", ({ _id, send }) => {
+    usePotentialClients.selectPotentialClient(_id, send);
   });
 
-  socket.on("newPotentialClient", () => {
-    //get potential client object
+  socket.on("newPotentialClient", ({ client }) => {
+    usePotentialClients.addPotentialClient(client);
   });
 }

@@ -73,18 +73,20 @@ export const useInstallationStore = defineStore("installation", {
       });
     },
     deleteComments(_id: string, comment: Comment): void {
-      this.installation = this.installation.map((item) => {
-        if (item._id === _id) {
-          item.comments.unshift(comment);
-          return item;
-        } else return item;
+      this.installation = this.installation.map((project) => {
+        if (project._id === _id) {
+          project.comments = project.comments.filter(
+            (item) => item.date !== comment.date && item.comment !== comment.comment
+          );
+          return project;
+        } else return project;
       });
     },
 
-    updatePhoto(id: string, photo: string[]) {
+    updatePhoto(id: string, files: string[]) {
       this.installation = this.installation.map((item) => {
         if (item._id === id) {
-          item.files = [...photo];
+          item.files = [...files];
           return item;
         } else return item;
       });

@@ -33,12 +33,12 @@ export default function InstallationListeners(socket: Socket) {
     useInstallation.addComment(_id, comment);
   });
   socket.on("deleteInstallationComment", ({ _id, comment }) => {
-    // get{ _id, comment }
+    useInstallation.deleteComments(_id, comment);
   });
   socket.on("uploadFilesInstallation", ({ _id, files }) => {
-    // get _id and files as an array with links need to replace in store
+    useInstallation.updatePhoto(_id, files);
   });
   socket.on("deleteFilesInstallation", ({ _id, files }) => {
-    // get _id and files as an array with links need to replace in store
+    useInstallation.updatePhoto(_id, files);
   });
 }

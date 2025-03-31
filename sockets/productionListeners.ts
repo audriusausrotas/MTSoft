@@ -1,46 +1,49 @@
 import { Socket } from "socket.io-client";
 
 export default function productionListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const useProduction = useProductionStore();
 
-  socket.on("deleteProduction", (userId) => {
-    // get id
-  });
-
-  socket.on("deleteProductionBinding", (userId) => {
-    // get { _id, bindingId }
+  socket.on("deleteProduction", ({ _id }) => {
+    useProduction.deleteProductionOrder(_id);
   });
 
-  socket.on("deleteProductionFence", (userId) => {
-    // get { _id, index }
+  socket.on("deleteProductionBinding", ({ _id, bindingId }) => {
+    useProduction.deleteBinding(_id, bindingId);
   });
 
-  socket.on("deleteProductionMeasure", (userId) => {
-    // get { _id, index, measureIndex }
+  socket.on("deleteProductionFence", ({ _id, index }) => {
+    useProduction.deleteFence(_id, index);
   });
 
-  socket.on("updateProductionPostone", (userId) => {
-    // get { _id, index, measureIndex, value, option }
+  socket.on("deleteProductionMeasure", ({ _id, index, measureIndex }) => {
+    useProduction.deleteMeasure(_id, index, measureIndex);
   });
 
-  socket.on("updateProductionStatus", (userId) => {
-    // get { _id, status }
+  socket.on("updateProductionPostone", ({ _id, index, measureIndex, value, option }) => {
+    useProduction.updateMeasurePostone(_id, index, measureIndex, value, option);
   });
-  socket.on("updateProductionMeasure", (userId) => {
-    // get { _id, index, measureIndex, value, field, option }
+
+  socket.on("updateProductionStatus", ({ _id, status }) => {
+    useProduction.updateStatus(_id, status);
   });
-  socket.on("newProduction", (userId) => {
-    // get { _id, index, measureIndex, value, field, option }
+
+  socket.on("updateProductionMeasure", ({ _id, index, measureIndex, value, field, option }) => {
+    useProduction.updateMeasure(_id, index, measureIndex, value, field, option);
   });
-  socket.on("newProductionBinding", (userId) => {
-    // get get object and _id
+
+  socket.on("newProduction", ({ production }) => {
+    useProduction.addProduction(production);
+    const useProject = useProjectsStore();
+    const foundProject = useProject.projects.find((item) => item._id === production._id);
+    if (foundProject) useProject.updateProjectField(production._id, "status", "Gaminama");
   });
-  socket.on("newProductionMeasure", (userId) => {
-    // get get newMeasure, index and _id
+
+  socket.on("newProductionBinding", ({ _id, binding }) => {
+    useProduction.addNewBinding(_id, binding);
   });
-  socket.on("newProduction", (userId) => {
-    // get get object
-    // need to change status in project to Gaminama  in store with http response
+
+  socket.on("newProductionMeasure", ({ _id, index, newMeasure }) => {
+    useProduction.addNewMeasure(_id, index, newMeasure);
   });
 
   socket.on("newProductionComment", () => {

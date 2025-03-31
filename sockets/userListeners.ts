@@ -1,17 +1,17 @@
 import { Socket } from "socket.io-client";
 
 export default function userListeners(socket: Socket) {
-  const userStore = useUserStore();
+  const useUser = useUserStore();
 
-  socket.on("updateUserProfile", () => {
-    // get user object
+  socket.on("updateUserProfile", ({ user }) => {
+    useUser.updateUser(user);
   });
 
-  socket.on("updateUser", () => {
-    // get user object
+  socket.on("updateUser", ({ user }) => {
+    useUser.updateUser(user);
   });
 
-  socket.on("deleteUser", () => {
-    // get user id, delete from store
+  socket.on("deleteUser", ({ _id }) => {
+    useUser.deleteUser(_id);
   });
 }
