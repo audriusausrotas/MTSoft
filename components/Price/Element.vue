@@ -23,7 +23,7 @@ const deleteHandler = async (): Promise<void> => {
   const response = await request.delete(`deleteProduct/${props.product._id}`);
 
   if (response.success) {
-    useProducts.deleteProduct(props.product._id);
+    !useSocketStore().connected && useProducts.deleteProduct(props.product._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -53,7 +53,7 @@ const saveHandler = async () => {
   const response = await request.patch("updateProduct", requestData);
 
   if (response.success) {
-    useProducts.updateProduct(response.data);
+    !useSocketStore().connected && useProducts.updateProduct(response.data);
     disable.value = true;
     setIsError(false);
     setError(response.message);

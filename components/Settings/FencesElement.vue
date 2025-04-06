@@ -56,7 +56,7 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateFenceData", requestData);
 
   if (response.success) {
-    useProducts.updateProduct(response.data);
+    !useSocketStore().connected && useProducts.updateProduct(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);

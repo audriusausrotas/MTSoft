@@ -17,7 +17,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteProduction/${props.order._id}`);
 
   if (response.success) {
-    useProduction.deleteProductionOrder(props.order._id);
+    !useSocketStore().connected && useProduction.deleteProductionOrder(props.order._id);
     await router.replace("/gamyba");
     setIsError(false);
     setError(response.message);

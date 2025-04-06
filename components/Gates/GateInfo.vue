@@ -16,7 +16,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete(`cancelOrder/${props.gate._id}`);
 
   if (response.success) {
-    useGates.removeGates(props.gate._id);
+    !useSocketStore().connected && useGates.removeGates(props.gate._id);
     setIsError(false);
     setError("Vartų užsakymas ištrintas");
   } else {

@@ -6,8 +6,8 @@ const props = defineProps(["useUser"]);
 const initials = computed(() => props.useUser?.user?.username.slice(0, 2));
 
 async function logoutHandler() {
-  const data = await request.get("logout");
-  if (data.success) {
+  const response = await request.get("logout");
+  if (response.success) {
     const useUser = useUserStore();
     useUser.logout();
     const router = useRouter();

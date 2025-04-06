@@ -4,9 +4,8 @@ import type { Project } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 
 const useProjects = useProjectsStore();
-const user = useUserStore();
 
-const filterUser = ref<string>(user.user!.username);
+const filterUser = ref<string>(useUserStore().user!.username);
 const filterStatus = ref<string>("Visi");
 const searchQuery = ref<string>("");
 
@@ -16,29 +15,17 @@ const filteredProjects = () => {
   if (searchQuery.value.length > 2) {
     return filtered.filter(
       (project) =>
-        project.client.address
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.email
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.phone
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.username
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase())
+        project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered.filter((item) =>
-      item.creator.username
-        .toLowerCase()
-        .startsWith(filterUser.value.toLowerCase())
+      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase())
     );
   }
 
@@ -93,9 +80,7 @@ const projects = computed(() => {
 
 const users = [
   "Visi",
-  ...new Set(
-    useProjects.projects?.map((item) => item.creator.username).filter(Boolean)
-  ),
+  ...new Set(useProjects.projects?.map((item) => item.creator.username).filter(Boolean)),
 ];
 
 const statusFilters = [
@@ -138,6 +123,15 @@ const newProjectHandler = () => {
 const removeUnconfirmed = async () => {
   const response: any = await request.delete("removeUnconfirmed");
   if (response.success) {
+    if (!useSocketStore().connected) {
+      const useArchive = useArchivesStore();
+      const useProject = useProjectsStore();
+      response.data.forEach((item: Project) => {
+        useArchive.addArchive("unconfirmed", item);
+        useProject.deleteProject(item._id!);
+      });
+    }
+
     setIsError(false);
     setError(response.message);
   } else {
@@ -151,10 +145,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation
-          name="Išvalyti nepatvirtintus"
-          @onConfirm="removeUnconfirmed"
-        />
+        <BaseButtonWithConfirmation name="Išvalyti nepatvirtintus" @onConfirm="removeUnconfirmed" />
         <BaseSelectField
           label="Vartotojas"
           :values="users"

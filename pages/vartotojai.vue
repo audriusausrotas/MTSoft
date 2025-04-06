@@ -18,14 +18,14 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
     value: value,
   };
 
-  const data: any = await request.patch("updateUser", postData);
+  const response: any = await request.patch("updateUser", postData);
 
-  if (data.success) {
-    useUser.updateUser(data.data);
+  if (response.success) {
+    !useSocketStore().connected && useUser.updateUser(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
@@ -38,17 +38,17 @@ const confirmHandler = async () => {
   };
 
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    const data = await request.post("deleteUser", postData);
+    const response = await request.post("deleteUser", postData);
 
-    if (data.success) {
-      useUser.deleteUser(selectedUser.value);
+    if (response.success) {
+      !useSocketStore().connected && useUser.deleteUser(selectedUser.value);
       password.value = "";
       selectedUser.value = "";
       modalOpen.value = false;
       setIsError(false);
-      setError(data.message);
+      setError(response.message);
     } else {
-      setError(data.message);
+      setError(response.message);
     }
   }
   isLoading.value = false;
@@ -62,9 +62,7 @@ const deleteHandler = (id: string) => {
 
 <template>
   <div class="w-full">
-    <div
-      class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl"
-    >
+    <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>
       <p class="flex-[6]">el. paštas</p>
@@ -79,9 +77,7 @@ const deleteHandler = (id: string) => {
       class="flex py-2 capitalize border-b"
     >
       <div class="flex-1 pl-3">{{ index + 1 }}</div>
-      <p class="flex-[3] flex items-center">
-        {{ user.username }} {{ user.lastName }}
-      </p>
+      <p class="flex-[3] flex items-center">{{ user.username }} {{ user.lastName }}</p>
 
       <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
@@ -103,10 +99,7 @@ const deleteHandler = (id: string) => {
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
-      <div
-        class="flex justify-end flex-1 hover:cursor-pointer"
-        @click="deleteHandler(user._id)"
-      >
+      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
         <NuxtImg
           src="/icons/delete.svg"
           alt="delete button "
@@ -138,11 +131,7 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton
-            name="patvirtinti"
-            @click="confirmHandler"
-            :isLoading="isLoading"
-          />
+          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
         </div>
       </div>
     </div>

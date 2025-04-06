@@ -14,15 +14,17 @@ const deleteHandler = async (event: Event) => {
   const response: any = await request.delete("deleteFiles", requestData);
 
   if (response.success) {
-    if (props.category === "projects") {
-      const useProjects = useProjectsStore();
-      // useProjects.updatePhoto(props._id, response.data.files);
-    } else if (props.category === "production") {
-      const useProduction = useProductionStore();
-      useProduction.updatePhoto(props._id, response.data.files);
-    } else if (props.category === "installation") {
-      const useInstallation = useInstallationStore();
-      useInstallation.updatePhoto(props._id, response.data.files);
+    if (!useSocketStore().connected) {
+      if (props.category === "projects") {
+        const useProjects = useProjectsStore();
+        useProjects.updateFiles(props._id, response.data.files);
+      } else if (props.category === "production") {
+        const useProduction = useProductionStore();
+        useProduction.updatePhoto(props._id, response.data.files);
+      } else if (props.category === "installation") {
+        const useInstallation = useInstallationStore();
+        useInstallation.updateFiles(props._id, response.data.files);
+      }
     }
 
     setIsError(false);

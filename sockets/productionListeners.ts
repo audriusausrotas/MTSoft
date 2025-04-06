@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 export default function productionListeners(socket: Socket) {
   const useProduction = useProductionStore();
 
-  socket.on("deleteProduction", ({ _id }) => {
+  socket.on("deleteProduction", (_id) => {
     useProduction.deleteProductionOrder(_id);
   });
 
@@ -20,7 +20,7 @@ export default function productionListeners(socket: Socket) {
   });
 
   socket.on("updateProductionPostone", ({ _id, index, measureIndex, value, option }) => {
-    useProduction.updateMeasurePostone(_id, index, measureIndex, value, option);
+    useProduction.updateMeasure(_id, index, measureIndex, value, "postone", option);
   });
 
   socket.on("updateProductionStatus", ({ _id, status }) => {
@@ -31,11 +31,9 @@ export default function productionListeners(socket: Socket) {
     useProduction.updateMeasure(_id, index, measureIndex, value, field, option);
   });
 
-  socket.on("newProduction", ({ production }) => {
+  socket.on("newProduction", (production) => {
     useProduction.addProduction(production);
-    const useProject = useProjectsStore();
-    const foundProject = useProject.projects.find((item) => item._id === production._id);
-    if (foundProject) useProject.updateProjectField(production._id, "status", "Gaminama");
+    useProjectsStore().updateProjectField(production._id, "status", "Gaminama");
   });
 
   socket.on("newProductionBinding", ({ _id, binding }) => {
@@ -46,17 +44,18 @@ export default function productionListeners(socket: Socket) {
     useProduction.addNewMeasure(_id, index, newMeasure);
   });
 
-  socket.on("newProductionComment", () => {
-    // get id and comment
+  socket.on("newProductionComment", ({ _id, comment }) => {
+    useProduction.addComment(_id, comment);
   });
-  socket.on("deleteProductionComment", () => {
-    // get get id and comment
+  socket.on("deleteProductionComment", ({ _id, comment }) => {
+    useProduction.deleteComment(_id, comment);
   });
 
-  socket.on("uploadFilesProduction", () => {
-    //  get _id and files as an array with links need to replace in store
+  socket.on("uploadFilesProduction", ({ _id, files }) => {
+    useProduction.updateFiles(_id, files);
   });
-  socket.on("deleteFilesProduction", () => {
-    // get _id and files as an array with links need to replace in store
+
+  socket.on("deleteFilesProduction", ({ _id, files }) => {
+    useProduction.updateFiles(_id, files);
   });
 }

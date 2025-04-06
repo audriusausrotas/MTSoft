@@ -11,11 +11,11 @@ export default function gateListeners(socket: Socket) {
     useGate.updateGateStatus(_id, status);
   });
 
-  socket.on("updateGateOrder", ({ gate }) => {
+  socket.on("updateGateOrder", (gate) => {
     useGate.updateGate(gate);
   });
 
-  socket.on("cancelGateOrder", ({ _id }) => {
+  socket.on("cancelGateOrder", (_id) => {
     useGate.removeGates(_id);
   });
 }

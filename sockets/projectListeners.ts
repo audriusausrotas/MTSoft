@@ -46,5 +46,7 @@ export default function projectListeners(socket: Socket) {
   socket.on("newProjectComment", ({ _id, comment }) => {
     useProject.addComment(_id, comment);
   });
-  socket.on("deleteProjectComment", ({ _id, comment }) => {});
+  socket.on("deleteProjectComment", ({ _id, comment }) => {
+    useProject.deleteComment(_id, comment);
+  });
 }

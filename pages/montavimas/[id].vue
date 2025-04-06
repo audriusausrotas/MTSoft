@@ -17,7 +17,8 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateInstallationStatus", requestData);
 
   if (response.success) {
-    // useInstallation.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected &&
+      useInstallation.updateStatus(response.data._id, response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -35,7 +36,8 @@ const commentHandler = async (value: string) => {
   const response: any = await request.post("addInstallationComment", requestData);
 
   if (response.success) {
-    // useInstallation.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected &&
+      useInstallation.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -49,7 +51,7 @@ const deleteHandler = async (value: string, comment: string) => {
   const response: any = await request.delete("deleteInstallationComment", requestData);
 
   if (response.success) {
-    useInstallation.deleteInstallationOrder(value);
+    !useSocketStore().connected && useInstallation.deleteInstallationOrder(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -65,7 +67,8 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    useInstallation.updatePhoto(response.data._id, response.data.files);
+    !useSocketStore().connected &&
+      useInstallation.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -77,7 +80,11 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
   const response: any = await request.patch("partsDelivered", requestData);
 
   if (response.success) {
-    // useInstallation.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected &&  useInstallation.updatePartsDelivered(
+      response.data._id,
+      response.data.measureIndex,
+      response.data.value
+    );
     setIsError(false);
     setError(response.message);
   } else {

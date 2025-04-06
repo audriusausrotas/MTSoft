@@ -50,7 +50,15 @@ const saveHandler = async (field: string) => {
   const response: any = await request.patch("updateMeasure", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props.data._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.updateMeasure(
+        props.data._id,
+        props.fenceIndex,
+        props.index,
+        requestData.value,
+        field,
+        requestData.option
+      );
     setIsError(false);
     setError(response.message);
 
@@ -76,7 +84,15 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.updateMeasure(
+        props._id,
+        props.fenceIndex,
+        props.index,
+        requestData.value,
+        "postone",
+        requestData.option
+      );
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -98,7 +114,8 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteMeasure", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.deleteMeasure(props._id, props.fenceIndex, props.index);
     setIsError(false);
     setError(response.message);
   } else {

@@ -19,6 +19,11 @@ const finishOrderHandler = async () => {
   const response: any = await request.delete(`finishOrder/${gate.value?._id}`);
 
   if (response.success) {
+    if (!useSocketStore().connected) {
+      useProjectsStore().updateProjectField(response.data_id, "status", response.data.status);
+      useGates.updateGateStatus(response.data._id, response.data.status);
+    }
+
     await router.replace("/vartai");
     setIsError(false);
     setError(response.message);
@@ -38,7 +43,7 @@ const updateHandler = async (change: string, value: any) => {
   const response: any = await request.patch("updateOrder", data);
 
   if (response.success) {
-    useGates.updateGate(response.data, gate.value!._id);
+    !useSocketStore().connected && useGates.updateGate(response.data);
 
     if (change === "status") {
       const link = `https://mtsoft.lt/vartai/${gate.value?._id}`;
@@ -49,13 +54,13 @@ const updateHandler = async (change: string, value: any) => {
         title: "Statusas pasikeitė",
       };
 
-      const data: any = await request.post("sendGateInfo", requestData);
+      const response2: any = await request.post("sendGateInfo", requestData);
 
-      if (data.success) {
+      if (response2.success) {
         setIsError(false);
-        setError(data.message);
+        setError(response2.message);
       } else {
-        setError(data.message);
+        setError(response2.message);
       }
     }
     setIsError(false);
@@ -87,22 +92,12 @@ const updateHandler = async (change: string, value: any) => {
         placeholder="Užsakymo Nr."
         @onConfirm="(value) => updateHandler('orderNr', value)"
       />
-      <BaseButtonWithConfirmation
-        name="užbaigti užsakymą"
-        @onConfirm="finishOrderHandler"
-      />
+      <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="finishOrderHandler" />
     </div>
-    <div
-      class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap"
-    >
+    <div class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap">
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Užsakymo duomenys</h3>
-        <BaseInput
-          :name="gate?.orderNr"
-          width="w-72"
-          label="Užsakymo nr:"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
         <BaseInput
           :name="gate?.measure"
           width="w-72"
@@ -125,24 +120,9 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput
-          :name="gate?.client?.username"
-          width="w-72"
-          label="klientas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.address"
-          width="w-72"
-          label="adresas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.phone"
-          width="w-72"
-          label="telefonas"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
+        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
+        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>

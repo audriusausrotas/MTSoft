@@ -54,7 +54,7 @@ const saveHandler = async (): Promise<void> => {
     else response = await request.post("newProject", newProject);
 
     if (response.success) {
-      useProjects.addProject(response.data);
+      !useSocketStore().connected && useProjects.addProject(response.data);
       clearHandler();
       setIsError(false);
       setError(response.message);

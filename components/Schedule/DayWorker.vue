@@ -19,7 +19,7 @@ const comment = ref<string>("");
 const isAdmin = useUser.user?.accountType === "Administratorius";
 
 const loadSelectedJobs = () => {
-  const scheduleItem = useSchedule.schedule.find((schedule) => {
+  const scheduleItem = useSchedule.schedules.find((schedule) => {
     return (
       schedule.worker._id === props.worker._id &&
       new Date(schedule.date).toISOString() === new Date(props.date).toISOString()
@@ -77,6 +77,7 @@ const saveHandler = async () => {
   const response: any = await request.post("addSchedule", requestData);
 
   if (response.success) {
+    !useSocketStore().connected && useSchedule.addSchedule(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -171,7 +172,7 @@ const saveHandler = async () => {
       <BaseSearchFieldProduction
         width="w-full"
         :data="
-          props.worker.accountType === 'Gamyba' ? useProduction.production: useProjects.projects
+          props.worker.accountType === 'Gamyba' ? useProduction.production : useProjects.projects
         "
         @modalClose="modalOpen = false"
         @onClick="selectHandler"

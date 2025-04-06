@@ -10,7 +10,7 @@ const deleteHandler = async () => {
   const response = await request.delete("deleteSelect", requestData);
 
   if (response.success) {
-    useSettings.deleteSelectValue(props.field, props.index);
+    !useSocketStore().connected && useSettings.deleteSelectValue(props.field, props.index);
     setIsError(false);
     setError(response.message);
   } else {

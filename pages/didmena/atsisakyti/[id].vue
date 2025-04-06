@@ -2,11 +2,14 @@
 const route = useRoute();
 const showButtons = ref<boolean>(true);
 const text = ref<string>("Ar tikrai norite atsisakyti mūsų pasiūlymų");
+const usePotentialClients = usePotentialClientsStore();
 
 const cancelHandler = async () => {
   const response: any = await request.delete(`deleteClient/${route.params.id}`);
 
   if (response.success) {
+    !useSocketStore().connected &&
+      usePotentialClients.deletePotentialClient(route.params.id.toString());
     text.value = "Prenumerata nutraukta. Linkime gražios dienos";
     showButtons.value = false;
   } else {

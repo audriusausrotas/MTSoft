@@ -29,7 +29,7 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    // useProjects.updatePhoto(response.data._id, response.data.files);
+    !useSocketStore().connected && useProjects.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -56,7 +56,7 @@ const statusHandler = async (value: string) => {
   });
 
   if (response.success) {
-    // useProjects.updateStatus(response.data._id, value);
+    !useSocketStore().connected && useProjects.updateProjectField(response.data._id, "status", value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -101,7 +101,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   const response: any = await request.post("newOrder", requestData);
 
   if (response.success) {
-    useGates.addGate(response.data);
+    !useSocketStore().connected && useGates.addGate(response.data);
 
     const link = `https://mtsoft.lt/vartai/${offer?.value?._id}`;
 
@@ -135,6 +135,7 @@ const gateCancelHandler = async (): Promise<void> => {
   const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
 
   if (response.success) {
+    !useSocketStore().connected && useGates.removeGates(response.data);
     gateOrdered.value = false;
     setIsError(false);
     setError(response.message);
@@ -155,7 +156,8 @@ const changeCreatorHandler = async (value: string) => {
   const response: any = await request.patch("changeManager", requestData);
 
   if (response.success) {
-    // useProjects.changeCreator(response.data);
+    !useSocketStore().connected &&
+      useProjects.updateProjectField(response.data._id, "creator", response.data.user);
     setIsError(false);
     setError(response.message);
   } else {
@@ -171,7 +173,8 @@ const advanceHandler = async () => {
   const response: any = await request.patch("changeAdvance", requestData);
 
   if (response.success) {
-    // useProjects.changeAdvance(response.data);
+    !useSocketStore().connected &&
+      useProjects.updateProjectField(response.data._id, "advance", response.data.value);
     offer!.value!.advance = advance.value;
     setIsError(false);
     setError(response.message);
@@ -188,12 +191,16 @@ const orderFinishHandler = async () => {
   const response: any = await request.patch("updateProjectStatus", requestData);
 
   if (response.success) {
-    // useProjects.updateStatus(response.data._id, "Baigtas");
+    !useSocketStore().connected &&
+      useProjects.updateProjectField(response.data._id, "status", "Baigtas");
 
     const archieveResponse: any = await request.post(`addArchive/${offer!.value!._id}`);
 
     if (archieveResponse.success) {
-      offer?.value?._id && useProjects.deleteProject(offer.value._id);
+      !useSocketStore().connected &&
+        offer?.value?._id &&
+        useProjects.deleteProject(offer.value._id);
+
       setIsError(false);
       setError(archieveResponse.message);
       navigateTo("/");
@@ -211,6 +218,10 @@ const productionHandler = async () => {
   const response: any = await request.post(`newProduction/${offer!.value!._id}`);
 
   if (response.success) {
+    if (!useSocketStore().connected) {
+      useProduction.addProduction(response.data);
+      useProjects.updateProjectField(response.data._id, "status", "Gaminama");
+    }
     setIsError(false);
     setError(response.message);
     useProduction.addProduction(response.data);
@@ -225,7 +236,10 @@ const installationHandler = async (value: string) => {
   const response: any = await request.post("addInstallation", requestData);
 
   if (response.success) {
-    useInstallation.addInstallation(response.data);
+    if (!useSocketStore().connected) {
+      useInstallation.addInstallation(response.data);
+      useProjectsStore().updateProjectField(response.data._id, "status", "Gaminama");
+    }
     setIsError(false);
     setError(response.message);
   } else {
@@ -244,7 +258,7 @@ const addComment = async (value: any) => {
   const response: any = await request.post("addProjectComment", requestData);
 
   if (response.success) {
-    // useProjects.updateStatus(response.data._id, value);
+    !useSocketStore().connected && useProjects.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -261,7 +275,7 @@ const deleteComment = async (value: any) => {
   const response: any = await request.delete("deleteProjectComment", requestData);
 
   if (response.success) {
-    // useProjects.updateStatus(response.data._id, value);
+    !useSocketStore().connected && useProjects.deleteComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {

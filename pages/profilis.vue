@@ -24,7 +24,7 @@ const saveHandler = async (field: string) => {
   const response: any = await request.patch("updateProfile", { field, value });
 
   if (response.success) {
-    useUser.setUser(response.data);
+    !useSocketStore().connected && useUser.setUser(response.data);
 
     if (field === "password") {
       password.value = "";

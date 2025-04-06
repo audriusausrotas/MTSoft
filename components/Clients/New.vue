@@ -18,7 +18,7 @@ const saveHandler = async () => {
 
   const response: any = await request.post("newClient", client);
   if (response.success) {
-    useClients.addClient(response.data);
+    !useSocketStore().connected && useClients.addClient(response.data);
     setIsError(false);
     setError(response.message);
   } else {

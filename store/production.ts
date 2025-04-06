@@ -1,4 +1,4 @@
-import type { Bindings, Production, ProductionMeasure } from "~/data/interfaces";
+import type { Bindings, Production, ProductionMeasure, Comment } from "~/data/interfaces";
 
 export const useProductionStore = defineStore("production", {
   state: () => ({
@@ -69,45 +69,40 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
-    updateMeasurePostone(
-      _id: string,
-      index: number,
-      measureIndex: number,
-      value: boolean,
-      option: string
-    ) {
-      this.production = this.production.map((item) => {
-        if (item._id === _id) {
-          if (option === "bindings") item.bindings![index].postone = value;
-          else item.fences[index].measures[measureIndex].postone = value;
-          return item;
-        } else return item;
-      });
-    },
+    // updateMeasurePostone(
+    //   _id: string,
+    //   index: number,
+    //   measureIndex: number,
+    //   value: boolean,
+    //   option: string
+    // ) {
+    //   this.production = this.production.map((item) => {
+    //     if (item._id === _id) {
+    //       if (option === "bindings") item.bindings![index].postone = value;
+    //       else item.fences[index].measures[measureIndex].postone = value;
+    //       return item;
+    //     } else return item;
+    //   });
+    // },
 
     updateMeasure(
       _id: string,
       index: number,
-      measureIndex: number,
-      value: boolean,
-      field: any,
+      measureIndex: number | null,
+      value: boolean | number | string,
+      field: string,
       option: string
     ) {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
           option === "bindings"
             ? ((item.bindings as any)[index][field] = value)
-            : ((item.fences as any)[index].measures[measureIndex][field] = value);
+            : ((item.fences as any)[index].measures[measureIndex!][field] = value);
 
           return item;
         }
         return item;
       });
-    },
-
-    // speju nereikalingas
-    updateOrder(id: string, data: Production) {
-      this.production = this.production.map((item) => (item._id === id ? data : item));
     },
 
     updateStatus(_id: string, status: string) {
@@ -124,6 +119,38 @@ export const useProductionStore = defineStore("production", {
 
     clearProduction() {
       this.production = [];
+    },
+
+    addComment(_id: string, comment: Comment): void {
+      this.production = this.production.map((project) => {
+        if (project._id === _id) {
+          project.comments = [...project.comments, comment];
+          return project;
+        } else return project;
+      });
+    },
+
+    deleteComment(_id: string, comment: Comment) {
+      this.production = this.production.map((project) => {
+        if (project._id === _id) {
+          project.comments = project.comments.filter(
+            (item) =>
+              item.date !== comment.date &&
+              item.creator !== comment.creator &&
+              item.comment !== comment.comment
+          );
+          return project;
+        } else return project;
+      });
+    },
+
+    updateFiles(_id: string, files: string[]) {
+      this.production = this.production.map((item) => {
+        if (item._id === _id) {
+          item.files = [...files];
+          return item;
+        } else return item;
+      });
     },
   },
 });

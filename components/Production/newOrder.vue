@@ -20,7 +20,7 @@ const newHandler = async () => {
   const response: any = await request.post("addNewProduction", requestData);
 
   if (response.success) {
-    useProduction.addProduction(response.data);
+    !useSocketStore().connected && useProduction.addProduction(response.data);
     setIsError(false);
     setError(response.message);
     newOpen.value = false;

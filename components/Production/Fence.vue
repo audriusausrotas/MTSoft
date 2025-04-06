@@ -22,7 +22,8 @@ const newMeasureHandler = async () => {
   const response: any = await request.post("addMeasure", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.addNewMeasure(props._id, props.fenceIndex, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -63,7 +64,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteFence", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected && useProduction.deleteFence(props._id, props.fenceIndex);
     setIsError(false);
     setError(response.message);
   } else {

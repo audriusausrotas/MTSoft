@@ -9,7 +9,7 @@ const updateHandler = async (value: boolean) => {
   const response: any = await request.patch("selectClients", requestData);
 
   if (response.success) {
-    usePotentialClients.updatePotentialClients(response.data);
+    !useSocketStore().connected && usePotentialClients.updatePotentialClients(response.data);
     setIsError(false);
     setError(response.message);
   } else {

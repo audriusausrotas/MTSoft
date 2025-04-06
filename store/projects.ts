@@ -29,6 +29,20 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
+    deleteComment(_id: string, comment: Comment) {
+      this.projects = this.projects.map((project) => {
+        if (project._id === _id) {
+          project.comments = project.comments.filter(
+            (item) =>
+              item.date !== comment.date &&
+              item.creator !== comment.creator &&
+              item.comment !== comment.comment
+          );
+          return project;
+        } else return project;
+      });
+    },
+
     deleteProject(_id: string): void {
       this.projects = this.projects.filter((item) => item._id !== _id);
     },
@@ -51,6 +65,15 @@ export const useProjectsStore = defineStore("Projects", {
       this.projects = this.projects.map((item) => {
         if (item._id === projectId) {
           item.versions = item.versions.filter((version) => version._id !== versionId);
+          return item;
+        } else return item;
+      });
+    },
+
+    updateFiles(_id: string, files: string[]) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === _id) {
+          item.files = [...files];
           return item;
         } else return item;
       });

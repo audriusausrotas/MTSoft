@@ -49,6 +49,8 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteVersion", requestData);
 
   if (response.success) {
+    !useSocketStore().connected &&
+      useProjects.deleteVersion(response.data._id, response.data.projectId);
     setIsError(false);
     setError(response.message);
   } else {

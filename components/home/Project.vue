@@ -50,7 +50,8 @@ const statusHandler = async (value: string) => {
 
   const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
-    useProjects.updateStatus(props.project._id, value);
+    !useSocketStore().connected &&
+      useProjects.updateProjectField(props.project._id, "status", value);
     setIsError(false);
     setError(response.message);
   } else {

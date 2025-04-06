@@ -8,25 +8,10 @@ export default function archiveListeners(socket: Socket) {
     useArchive.deleteArchive(_id, location);
   });
 
-  socket.on(
-    "restoreArchive",
-    ({
-      _id,
-      location,
-    }: {
-      _id: string;
-      location: keyof typeof useArchive.data;
-    }) => {
-      const project = useArchive.data[location].find(
-        (item) => item._id === _id
-      );
-
-      if (project) {
-        useProject.addProject(project);
-        useArchive.deleteArchive(_id, location);
-      }
-    }
-  );
+  socket.on("restoreArchive", ({ data, location }) => {
+    useProject.addProject(data);
+    useArchive.deleteArchive(data._id, location);
+  });
 
   socket.on("addArchive", (data) => {
     useArchive.addArchive("archive", data);
@@ -38,8 +23,8 @@ export default function archiveListeners(socket: Socket) {
     useProject.deleteProject(data._id);
   });
 
-  // socket.on("addDeleted", (data) => {
-  //   useArchive.addArchive("deleted", data);
-  //   useProject.deleteProject(data._id);
-  // });
+  socket.on("addDeleted", (data) => {
+    useArchive.addArchive("deleted", data);
+    useProject.deleteProject(data._id);
+  });
 }

@@ -22,15 +22,15 @@ const saveHandler = async (): Promise<void> => {
     category: newCategory.value,
   };
 
-  const data: any = await request.post("newProduct", requestData);
+  const response: any = await request.post("newProduct", requestData);
 
-  if (data.success) {
-    if (!useSocketStore().connected) useProducts.newProduct(data.data);
+  if (response.success) {
+    !useSocketStore().connected && useProducts.newProduct(response.data);
     clearHandler();
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };

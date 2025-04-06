@@ -6,7 +6,7 @@ const deleteHandler = async (_id: string) => {
   const response: any = await request.delete(`deleteClient/${_id}`);
 
   if (response.success) {
-    useClients.deleteClient(_id);
+    !useSocketStore().connected && useClients.deleteClient(_id);
     setIsError(false);
     setError(response.message);
   } else {

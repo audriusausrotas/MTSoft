@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 export default function productListeners(socket: Socket) {
   const useProduct = useProductsStore();
 
-  socket.on("deleteProduct", ({ _id }) => {
+  socket.on("deleteProduct", (_id) => {
     useProduct.deleteProduct(_id);
   });
 

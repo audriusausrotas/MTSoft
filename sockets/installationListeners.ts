@@ -4,10 +4,11 @@ export default function InstallationListeners(socket: Socket) {
   const useInstallation = useInstallationStore();
 
   socket.on("newInstallation", (data) => {
-    useInstallation.addOne(data);
+    useInstallation.addInstallation(data);
+    useProjectsStore().updateProjectField(data._id, "status", "Gaminama");
   });
 
-  socket.on("deleteInstallationOrder", ({ _id }) => {
+  socket.on("deleteInstallationOrder", (_id) => {
     useInstallation.deleteInstallationOrder(_id);
   });
 
@@ -36,9 +37,9 @@ export default function InstallationListeners(socket: Socket) {
     useInstallation.deleteComments(_id, comment);
   });
   socket.on("uploadFilesInstallation", ({ _id, files }) => {
-    useInstallation.updatePhoto(_id, files);
+    useInstallation.updateFiles(_id, files);
   });
   socket.on("deleteFilesInstallation", ({ _id, files }) => {
-    useInstallation.updatePhoto(_id, files);
+    useInstallation.updateFiles(_id, files);
   });
 }

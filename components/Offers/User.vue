@@ -16,7 +16,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete(`deleteClient/${props.client._id}`);
 
   if (response.success) {
-    usePotentialClients.deletePotentialClient(props.client._id);
+    !useSocketStore().connected && usePotentialClients.deletePotentialClient(props.client._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -37,7 +37,7 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateClient", client);
 
   if (response.success) {
-    usePotentialClients.updatePotentialClients(response.data);
+    !useSocketStore().connected && usePotentialClients.updatePotentialClients(response.data);
     setIsError(false);
     setError(response.message);
     editable.value = false;

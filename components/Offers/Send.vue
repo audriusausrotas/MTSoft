@@ -48,7 +48,7 @@ const selectAllHandler = async () => {
   const response: any = await request.patch("selectClients", requestData);
 
   if (response.success) {
-    usePotentialClients.checkPotentialClients(true);
+    !useSocketStore().connected && usePotentialClients.selectPotentialClients(true);
     setIsError(false);
     setError(response.message);
   } else {
@@ -61,7 +61,7 @@ const selectNoneHandler = async () => {
 
   const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
-    usePotentialClients.checkPotentialClients(false);
+    !useSocketStore().connected && usePotentialClients.selectPotentialClients(false);
     setIsError(false);
     setError(response.message);
   } else {

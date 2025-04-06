@@ -19,7 +19,8 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateInstallationPostone", requestData);
 
   if (response.success) {
-    // useInstallation.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useInstallation.updatePostone(props._id, props.fenceIndex, props.index, !postone.value);
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -39,7 +40,8 @@ const doneHandler = async () => {
   const response: any = await request.patch("updateInstallation", requestData);
 
   if (response.success) {
-    // useInstallation.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useInstallation.updateDone(props._id, props.fenceIndex, props.index, !done.value);
     done.value = !done.value;
     setIsError(false);
     setError(response.message);

@@ -23,9 +23,11 @@ const deleteHandler = async () => {
   else response = await request.delete("deleteArchive", requestData);
 
   if (response.success) {
-    props.location === "projects"
-      ? useProjects.deleteProject(props._id)
-      : useArchives.deleteArchive(props._id, props.location);
+    if (!useSocketStore().connected) {
+      props.location === "projects"
+        ? useProjects.deleteProject(props._id)
+        : useArchives.deleteArchive(props._id, props.location);
+    }
     setIsError(false);
     setError(response.message);
   } else {
@@ -84,14 +86,14 @@ const openInNewHandler = () => {
 };
 
 const copyHandler = async () => {
-  const data: any = await request.post("newProject", { _id: props._id });
+  const response: any = await request.post("newProject", { _id: props._id });
 
-  if (data.success) {
-    useProjects.addProject(data.data);
+  if (response.success) {
+    !useSocketStore().connected && useProjects.addProject(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
@@ -104,8 +106,10 @@ const archiveHandler = async () => {
   else response = await request.patch("restoreArchive", requestData);
 
   if (response.success) {
-    if (props.location === "projects") useProjects.deleteProject(props._id);
-    else useArchives.deleteArchive(props._id, props.location);
+    if (!useSocketStore().connected) {
+      if (props.location === "projects") useProjects.addProject(response.data.data);
+      else useArchives.deleteArchive(props._id, props.location);
+    }
 
     setIsError(false);
     setError(response.message);
@@ -118,6 +122,12 @@ const extendHandler = async () => {
   const response: any = await request.patch(`extendExparationDate/${props._id}`);
 
   if (response.success) {
+    !useSocketStore().connected &&
+      useProjects.updateProjectField(
+        response.data._id,
+        "dateExparation",
+        response.data.dateExparation
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -126,15 +136,15 @@ const extendHandler = async () => {
 };
 
 const unconfirmedHandler = async () => {
-  const data: any = await request.post(`addUnconfirmed/${props._id}`);
+  const response: any = await request.post(`addUnconfirmed/${props._id}`);
 
-  if (data.success) {
-    useProjects.deleteProject(props._id);
+  if (response.success) {
+    !useSocketStore().connected && useProjects.deleteProject(response.data._id);
 
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 </script>

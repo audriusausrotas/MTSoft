@@ -412,7 +412,7 @@ export interface BindingItem {
   lastHeight: Measure;
 }
 
-export interface WorkerInfo {
+export interface Worker {
   _id: string;
   lastName: string;
 }
@@ -425,8 +425,8 @@ export interface Job {
 export interface Schedule {
   _id: string;
   date: string;
-  worker: WorkerInfo;
-  jobs: [Job];
+  worker: Worker;
+  jobs: [Job] | [];
   comment: string;
 }
 

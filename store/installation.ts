@@ -10,10 +10,6 @@ export const useInstallationStore = defineStore("installation", {
       this.installation = [...data];
     },
 
-    addOne(data: Installation) {
-      this.installation.push(data);
-    },
-
     addInstallation(data: Installation) {
       this.installation.push(data);
     },
@@ -83,9 +79,9 @@ export const useInstallationStore = defineStore("installation", {
       });
     },
 
-    updatePhoto(id: string, files: string[]) {
+    updateFiles(_id: string, files: string[]) {
       this.installation = this.installation.map((item) => {
-        if (item._id === id) {
+        if (item._id === _id) {
           item.files = [...files];
           return item;
         } else return item;

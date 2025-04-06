@@ -36,7 +36,7 @@ const saveHandler = async () => {
   const response: any = await request.post("newUserRights", requestData);
 
   if (response.success) {
-    useSettings.updateUserRights(response.data);
+    !useSocketStore().connected && useSettings.updateUserRights(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);

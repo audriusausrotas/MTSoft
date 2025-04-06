@@ -17,8 +17,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       if (user.data) {
         if (to.path === "/login") return navigateTo("/");
       } else {
-        const data = await request.get("logout");
-        if (data.success) {
+        const response = await request.get("logout");
+        if (response.success) {
           const useUser = useUserStore();
           useUser.logout();
           const router = useRouter();

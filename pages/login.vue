@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ResponseUser } from "~/data/interfaces";
 definePageMeta({
   layout: false,
 });
@@ -18,16 +17,16 @@ const loginHandler = async () => {
 
   const loginData = { email: email.value, password: password.value };
 
-  const data = await request.post("login", loginData);
+  const response = await request.post("login", loginData);
 
-  if (data.success) {
-    useUser.setUser(data.data);
+  if (response.success) {
+    useUser.setUser(response.data);
     clearFields();
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
     await navigateTo("/");
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };
@@ -41,18 +40,15 @@ const registerHandler = async () => {
     username: username.value,
   };
 
-  const data: { success: boolean; data: ResponseUser; message: string } = await request.post(
-    "register",
-    loginData
-  );
+  const response: any = await request.post("register", loginData);
 
-  if (data.success) {
+  if (response.success) {
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
     clearFields();
     changeLogin();
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };

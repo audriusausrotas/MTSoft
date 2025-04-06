@@ -17,7 +17,7 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProductionStatus", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected && useProduction.updateStatus(order!.value._id, value);
 
     setIsError(false);
     setError(response.message);
@@ -28,15 +28,15 @@ const statusHandler = async (value: string) => {
 
 const commentHandler = async (value: string) => {
   const requestData = {
-    _id: order?.value._id,
+    _id: order.value._id,
     comment: value,
-    username: useUser.user?.username,
+    username: useUser.user!.username,
   };
 
   const response: any = await request.post("addProductionComment", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected && useProduction.addComment(order!.value._id, response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -50,7 +50,7 @@ const deleteHandler = async (value: string, comment: string) => {
   const response = await request.delete("deleteProductionComment", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(value, response.data);
+    !useSocketStore().connected && useProduction.deleteComment(value, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -62,7 +62,8 @@ const newBindingHandler = async () => {
   const response: any = await request.post(`addBinding/${order.value._id}`);
 
   if (response.success) {
-    useProduction.updateOrder(order!.value._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.addNewBinding(response.data._id, response.data.data);
 
     setIsError(false);
     setError(response.message);
@@ -152,7 +153,8 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    useProduction.updatePhoto(response.data._id, response.data.files);
+    !useSocketStore().connected &&
+      useProduction.updatePhoto(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);

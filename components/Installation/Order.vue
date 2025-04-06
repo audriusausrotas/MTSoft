@@ -26,7 +26,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteInstallation/${props.order._id}`);
 
   if (response.success) {
-    useInstallation.deleteInstallationOrder(props.order._id);
+    !useSocketStore().connected && useInstallation.deleteInstallationOrder(props.order._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -40,7 +40,8 @@ const workerDeleteHandler = async (worker: string) => {
   const response: any = await request.delete("deleteWorker", requestData);
 
   if (response.success) {
-    useInstallation.deleteInstallationWorker(props.order._id, worker);
+    !useSocketStore().connected &&
+      useInstallation.deleteInstallationWorker(props.order._id, worker);
     setIsError(false);
     setError(response.message);
   } else {

@@ -27,7 +27,7 @@ const saveHandler = async (value: string) => {
   const response: any = await request.post("newSelect", requestData);
 
   if (response.success) {
-    useSettings.newSelectValue(props.field, value);
+    !useSocketStore().connected && useSettings.newSelectValue(props.field, value);
     editable.value = false;
     setIsError(false);
     setError(response.message);

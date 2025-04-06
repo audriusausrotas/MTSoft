@@ -13,11 +13,12 @@ const clickHandler = (value: Product) => {
 };
 
 const saveHandler = async () => {
-  const requestData = { value: props.value, field: props.field };
+  const requestData = { value: input.value, field: props.field };
 
   const response: any = await request.post("newDefaultValue", requestData);
 
   if (response.success) {
+    !useSocketStore().connected && useSettings.changeDefaultValue(input.value, props.field);
     editable.value = false;
     setIsError(false);
     setError(response.message);

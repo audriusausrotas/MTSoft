@@ -42,7 +42,15 @@ const saveHandler = async (field: string) => {
   const response: any = await request.patch("updateMeasure", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.updateMeasure(
+        props._id,
+        props.index,
+        null,
+        requestData.value,
+        field,
+        requestData.option
+      );
     setIsError(false);
     setError(response.message);
 
@@ -68,7 +76,15 @@ const postoneHandler = async () => {
   const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected &&
+      useProduction.updateMeasure(
+        props._id,
+        props.index,
+        null,
+        requestData.value,
+        "postone",
+        requestData.option
+      );
     postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
@@ -86,7 +102,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteBindings", requestData);
 
   if (response.success) {
-    useProduction.updateOrder(props._id, response.data);
+    !useSocketStore().connected && useProduction.deleteBinding(props._id, props.binding.id);
     setIsError(false);
     setError(response.message);
   } else {

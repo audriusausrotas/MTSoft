@@ -49,14 +49,14 @@ const orderStatusHandler = async (value: boolean) => {
 
   const requestData = { _id: offer.offer._id, value };
 
-  const data: any = await request.patch(`changeOrderStatus`, requestData);
+  const response: any = await request.patch(`changeOrderStatus`, requestData);
 
-  if (data.success) {
-    offer.offer = { ...data.data };
+  if (response.success) {
+    offer.offer = { ...response.data };
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   showButtons.value = offer.offer?.status === "Nepatvirtintas";
   isLoading.value = false;
