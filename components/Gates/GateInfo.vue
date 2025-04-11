@@ -92,7 +92,7 @@ const deleteHandler = async () => {
     </div>
     <div
       @click="deleteHandler"
-      class="hover:cursor-pointer hover:bg-red-200 flex items-center justify-center w-8 h-8 rounded-md order-7"
+      class="hover:cursor-pointer hover:bg-red-200 flex items-center justify-center w-8 h-8 rounded-md"
     >
       <NuxtImg
         src="/icons/delete.svg"
