@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
       measure: item.measure,
       manager: item.manager,
       orderNr: item.orderNr,
+      dateCreated: item.dateCreated,
     };
   });
 

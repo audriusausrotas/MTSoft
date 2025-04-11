@@ -14,7 +14,7 @@ const filteredGates = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full max-w-[910px]">
+  <div class="flex flex-col gap-4 w-full">
     <BaseInput
       placeholder="Paieška"
       width="flex-1"
@@ -34,7 +34,7 @@ const filteredGates = computed(() => {
     <div
       v-for="(gate, index) in filteredGates"
       :key="gate._id"
-      class="flex flex-col border-b border-red-600"
+      class="flex flex-col"
     >
       <GatesGateInfo :gate="gate" :index="index" />
     </div>
