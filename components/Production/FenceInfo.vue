@@ -10,23 +10,58 @@ const props = defineProps([
   "clientAddress",
 ]);
 
+const { setError, setIsError } = useError();
 const useProduction = useProductionStore();
 const useUser = useUserStore();
 
-const cut = ref<string>(props.data.cut);
-const done = ref<string>(props.data.done);
-const elements = ref<string>(props.data.elements);
-const height = ref<string>(props.data.height);
-const length = ref<string>(props.data.length);
-const postone = ref<boolean>(props.data.postone);
+const isAdmin = useUser.user?.accountType === "Administratorius";
+
+const cut = ref<number>(props.data.cut);
+const done = ref<number>(props.data.done);
+const elements = ref<number>(props.data.elements);
+const height = ref<number>(props.data.height);
+const length = ref<number>(props.data.length);
+
+const iMadeChanges = ref<boolean>(false);
 const isSavedElements = ref<boolean>(true);
 const isSavedHeight = ref<boolean>(true);
 const isSavedLength = ref<boolean>(true);
 const isSavedCut = ref<boolean>(true);
 const isSavedDone = ref<boolean>(true);
-const isAdmin = useUser.user?.accountType === "Administratorius";
 
-const { setError, setIsError } = useError();
+const indexColor = computed(() => {
+  return props.data.postone
+    ? "bg-red-full text-white"
+    : +props.data.cut === 0 || props.data.cut === undefined
+    ? "bg-transparent"
+    : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
+    ? "bg-green-500"
+    : +props.data.cut > +props.data.elements
+    ? "bg-red-full"
+    : +props.data.cut === +props.data.elements
+    ? "bg-green-300"
+    : "bg-orange-400";
+});
+
+const cutColor = computed(() => {
+  return +props.data.cut === +props.data.elements
+    ? "bg-green-500"
+    : +props.data.cut === 0 || props.data.cut === undefined
+    ? "bg-transparent"
+    : +props.data.cut > +props.data.elements
+    ? "bg-red-full"
+    : "bg-orange-500";
+});
+
+const doneColor = computed(() => {
+  return +props.data.done === +props.data.elements
+    ? "bg-green-500"
+    : +props.data.done === 0 || props.data.done === undefined
+    ? "bg-transparent"
+    : +props.data.done > +props.data.elements
+    ? "bg-red-full"
+    : "bg-orange-500";
+});
 
 const saveHandler = async (field: string) => {
   const requestData = {
@@ -35,14 +70,14 @@ const saveHandler = async (field: string) => {
     measureIndex: props.index,
     value:
       field === "cut"
-        ? +cut.value
+        ? +props.data.cut
         : field === "done"
-        ? +done.value
+        ? +props.data.done
         : field === "elements"
-        ? +elements.value
+        ? +props.data.elements
         : field === "length"
-        ? +length.value
-        : +height.value,
+        ? +props.data.length
+        : +props.data.height,
     field,
     option: "fences",
   };
@@ -55,18 +90,31 @@ const saveHandler = async (field: string) => {
         props.data._id,
         props.fenceIndex,
         props.index,
-        requestData.value,
+        +requestData.value,
         field,
         requestData.option
       );
     setIsError(false);
     setError(response.message);
 
-    if (field === "cut") isSavedCut.value = true;
-    else if (field === "elements") isSavedElements.value = true;
-    else if (field === "height") isSavedHeight.value = true;
-    else if (field === "done") isSavedDone.value = true;
-    else if (field === "length") isSavedLength.value = true;
+    if (field === "cut") {
+      cut.value = +requestData.value;
+      isSavedCut.value = true;
+    } else if (field === "elements") {
+      elements.value = +requestData.value;
+      isSavedElements.value = true;
+    } else if (field === "height") {
+      height.value = +requestData.value;
+      isSavedHeight.value = true;
+    } else if (field === "done") {
+      done.value = +requestData.value;
+      isSavedDone.value = true;
+    } else if (field === "length") {
+      length.value = +requestData.value;
+      isSavedLength.value = true;
+    }
+
+    iMadeChanges.value = false;
   } else {
     setError(response.message);
   }
@@ -77,7 +125,7 @@ const postoneHandler = async () => {
     _id: props._id,
     index: props.fenceIndex,
     measureIndex: props.index,
-    value: !postone.value,
+    value: !props.data.postone,
     option: "fences",
   };
 
@@ -93,7 +141,6 @@ const postoneHandler = async () => {
         "postone",
         requestData.option
       );
-    postone.value = !postone.value;
     setIsError(false);
     setError(response.message);
   } else {
@@ -149,17 +196,17 @@ const printHandler = () => {
                         text-align: center;
                         font-size: 22px;
                         font-weight: bold;
-                        border: 2px solid black; 
+                        border: 2px solid black;
                     }
                     body p {
-                        margin: 0; 
+                        margin: 0;
                         padding: 0;
                     }
                     .container {
                         width:100%;
                         display: flex;
                         justify-content: space-between;
-                  
+
                     }
                     .borderB {
                         width: 100%;
@@ -180,10 +227,10 @@ const printHandler = () => {
             <div class="container borderB">
               <p class="padding ">${props.orderNr}</p>
               <div class="borderL"></div>
-              <p class="padding">${formattedDate}</p> 
+              <p class="padding">${formattedDate}</p>
             </div>
               <p class="padding borderB">${props.clientAddress}</p>
-              <p class="padding bigText">${props.fenceSide} ${props.index + 1} / ${props.total}</p> 
+              <p class="padding bigText">${props.fenceSide} ${props.index + 1} / ${props.total}</p>
             </body>
         </html>
     `;
@@ -194,30 +241,62 @@ const printHandler = () => {
   printWindow?.print();
 };
 
-watch(cut, (newCut) => {
-  if (newCut !== props.data.cut) isSavedCut.value = false;
-  else isSavedCut.value = true;
-});
+const updateMeasure = (field: string, event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  iMadeChanges.value = true;
 
-watch(done, (newDone) => {
-  if (newDone !== props.data.done) isSavedDone.value = false;
-  else isSavedDone.value = true;
-});
+  useProduction.updateMeasure(
+    props._id,
+    props.fenceIndex,
+    props.index,
+    +inputElement.value,
+    field,
+    "fence"
+  );
 
-watch(elements, (newElements) => {
-  if (+newElements !== +props.data.elements) isSavedElements.value = false;
-  else isSavedElements.value = true;
-});
+  if (field === "cut")
+    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+  else if (field === "elements")
+    +inputElement.value !== elements.value
+      ? (isSavedElements.value = false)
+      : (isSavedElements.value = true);
+  else if (field === "height")
+    +inputElement.value !== height.value
+      ? (isSavedHeight.value = false)
+      : (isSavedHeight.value = true);
+  else if (field === "done")
+    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+  else if (field === "length")
+    +inputElement.value !== length.value
+      ? (isSavedLength.value = false)
+      : (isSavedLength.value = true);
+};
 
-watch(height, (newHeight) => {
-  if (+newHeight !== +props.data.height) isSavedHeight.value = false;
-  else isSavedHeight.value = true;
-});
-
-watch(length, (newLength) => {
-  if (+newLength !== +props.data.length) isSavedLength.value = false;
-  else isSavedLength.value = true;
-});
+watch(
+  () => props.data,
+  (fence) => {
+    console.log(fence);
+    if (!iMadeChanges.value) {
+      if (fence.elements !== elements.value) {
+        elements.value = +fence.elements;
+      }
+      if (fence.cut !== cut.value) {
+        cut.value = +fence.cut;
+      }
+      if (fence.done !== done.value) {
+        done.value = +fence.done;
+        console.log(done.value, fence.done);
+      }
+      if (fence.height !== height.value) {
+        height.value = +fence.height;
+      }
+      if (fence.length !== length.value) {
+        length.value = +fence.length;
+      }
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -282,25 +361,18 @@ watch(length, (newLength) => {
   <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none">
     <p
       class="w-10 flex items-center justify-center h-full border-x border-black"
-      :class="
-        postone
-          ? 'bg-red-full text-white'
-          : +cut === 0 || cut === undefined
-          ? 'bg-transparent'
-          : +cut === +props.data.elements && +done === +props.data.elements
-          ? 'bg-green-500'
-          : +cut > +props.data.elements
-          ? 'bg-red-full'
-          : +cut === +props.data.elements
-          ? 'bg-green-300'
-          : 'bg-orange-400'
-      "
+      :class="indexColor"
     >
       {{ props.index + 1 }}
     </p>
 
     <div class="w-20 flex items-center justify-center h-full border-r border-black px-1">
-      <input type="number" v-model="length" class="w-full" />
+      <input
+        type="number"
+        class="w-full"
+        :value="props.data.length"
+        @input="updateMeasure('length', $event)"
+      />
       <NuxtImg
         width="20"
         height="20"
@@ -314,7 +386,12 @@ watch(length, (newLength) => {
       />
     </div>
     <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
-      <input type="number" v-model="elements" class="w-full" />
+      <input
+        type="number"
+        :value="props.data.elements"
+        @input="updateMeasure('elements', $event)"
+        class="w-full"
+      />
       <NuxtImg
         width="20"
         height="20"
@@ -328,7 +405,12 @@ watch(length, (newLength) => {
       />
     </div>
     <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
-      <input type="number" v-model="height" class="w-full" />
+      <input
+        type="number"
+        :value="props.data.height"
+        @input="updateMeasure('height', $event)"
+        class="w-full"
+      />
       <NuxtImg
         width="20"
         height="20"
@@ -343,17 +425,15 @@ watch(length, (newLength) => {
     </div>
     <div
       class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-      :class="
-        +cut === 0 || cut === undefined
-          ? 'bg-transparent'
-          : +cut === +props.data.elements
-          ? 'bg-green-500'
-          : +cut > +props.data.elements
-          ? 'bg-red-full'
-          : 'bg-orange-500'
-      "
+      :class="cutColor"
     >
-      <input v-model="cut" type="number" placeholder="Išpjauti" class="w-full" />
+      <input
+        :value="props.data.cut"
+        @input="updateMeasure('cut', $event)"
+        type="number"
+        placeholder="Išpjauti"
+        class="w-full"
+      />
       <NuxtImg
         v-if="!isSavedCut"
         src="/icons/save.svg"
@@ -368,17 +448,15 @@ watch(length, (newLength) => {
     </div>
     <div
       class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-      :class="
-        +done === 0 || done === undefined
-          ? 'bg-transparent'
-          : +done === +props.data.elements
-          ? 'bg-green-500'
-          : +done > +props.data.elements
-          ? 'bg-red-full'
-          : 'bg-orange-500'
-      "
+      :class="doneColor"
     >
-      <input v-model="done" type="number" placeholder="Pagaminti" class="w-full" />
+      <input
+        :value="props.data.done"
+        @input="updateMeasure('done', $event)"
+        type="number"
+        placeholder="Pagaminti"
+        class="w-full"
+      />
       <NuxtImg
         v-if="!isSavedDone"
         src="/icons/save.svg"
@@ -400,7 +478,7 @@ watch(length, (newLength) => {
     <button
       v-if="isAdmin"
       class="flex items-center justify-center h-full border-r border-black w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
-      :class="{ 'bg-red-full text-white': postone }"
+      :class="{ 'bg-red-full text-white': props.data.postone }"
       @click="postoneHandler"
     >
       Negaminti

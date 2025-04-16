@@ -19,20 +19,25 @@ export default function projectListeners(socket: Socket) {
   socket.on("updateProjectAdvance", ({ _id, value }) => {
     useProject.updateProjectField(_id, "advance", value);
   });
+
   socket.on("updateProjectManager", ({ _id, user }) => {
     useProject.updateProjectField(_id, "creator", user);
   });
+
   socket.on("updateProjectExparationDate", ({ _id, dateExparation }) => {
     useProject.updateProjectField(_id, "dateExparation", dateExparation);
   });
+
   socket.on("updateProjectFiles", ({ _id, files }) => {
     useProject.updateProjectField(_id, "files", files);
   });
 
-  socket.on("finishProject", ({ _id }) => {
-    const project = useProject.projects.find((item) => item._id === _id);
-    if (project) useArchives.addArchive("archive", project);
+  socket.on("finishProject", ({ _id, data }) => {
+    useArchivesStore().addArchive("archive", data);
+    useProductionStore().deleteProductionOrder(_id);
+    useInstallationStore().deleteInstallationOrder(_id);
     useProject.deleteProject(_id);
+    navigateTo("/");
   });
 
   socket.on("updateProject", (project) => {

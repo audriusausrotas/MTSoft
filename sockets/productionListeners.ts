@@ -3,7 +3,8 @@ import { Socket } from "socket.io-client";
 export default function productionListeners(socket: Socket) {
   const useProduction = useProductionStore();
 
-  socket.on("deleteProduction", (_id) => {
+  socket.on("deleteProduction", ({ _id }) => {
+    console.log(_id);
     useProduction.deleteProductionOrder(_id);
   });
 
@@ -36,8 +37,8 @@ export default function productionListeners(socket: Socket) {
     useProjectsStore().updateProjectField(production._id, "status", "Gaminama");
   });
 
-  socket.on("newProductionBinding", ({ _id, binding }) => {
-    useProduction.addNewBinding(_id, binding);
+  socket.on("newProductionBinding", ({ _id, data }) => {
+    useProduction.addNewBinding(_id, data);
   });
 
   socket.on("newProductionMeasure", ({ _id, index, newMeasure }) => {

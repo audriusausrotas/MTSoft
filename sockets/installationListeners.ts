@@ -5,7 +5,7 @@ export default function InstallationListeners(socket: Socket) {
 
   socket.on("newInstallation", (data) => {
     useInstallation.addInstallation(data);
-    useProjectsStore().updateProjectField(data._id, "status", "Gaminama");
+    useProjectsStore().updateProjectField(data._id, "status", "Montuojama");
   });
 
   socket.on("deleteInstallationOrder", (_id) => {

@@ -30,7 +30,6 @@ const commentHandler = async (value: string) => {
   const requestData = {
     _id: order.value._id,
     comment: value,
-    username: useUser.user!.username,
   };
 
   const response: any = await request.post("addProductionComment", requestData);
@@ -71,8 +70,6 @@ const newBindingHandler = async () => {
     setError(response.message);
   }
 };
-
-const photosHandler = async (photo: string) => {};
 
 const bindingPrintHandler = () => {
   const today = new Date();
@@ -184,7 +181,7 @@ const uploadFiles = async (data: any) => {
     <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
 
     <BaseComment
-      :commentsArray="order?.comment"
+      :commentsArray="order?.comments"
       :id="order?._id"
       @onSave="commentHandler"
       class="max-w-[896px]"

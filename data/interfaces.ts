@@ -255,7 +255,7 @@ export interface Bonus {
   cost: number;
   profit: number;
   margin: number;
-  bonus: number;
+  user: string;
 }
 
 export interface FenceMeasure {
@@ -373,8 +373,8 @@ export interface ProductionMeasure {
   MeasureSpace: number;
   elements: number;
   gates: GateInfo;
-  cut: number | undefined;
-  done: number | undefined;
+  cut: number;
+  done: number;
   postone: boolean;
   kampas: {
     exist: boolean;
