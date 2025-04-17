@@ -80,11 +80,12 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
   const response: any = await request.patch("partsDelivered", requestData);
 
   if (response.success) {
-    !useSocketStore().connected &&  useInstallation.updatePartsDelivered(
-      response.data._id,
-      response.data.measureIndex,
-      response.data.value
-    );
+    !useSocketStore().connected &&
+      useInstallation.updatePartsDelivered(
+        response.data._id,
+        response.data.measureIndex,
+        response.data.value
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -124,7 +125,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
     </div>
 
     <BaseComment
-      :commentsArray="order?.comment"
+      :commentsArray="order?.comments"
       :id="order._id"
       @onSave="commentHandler"
       @onDelete="deleteHandler"

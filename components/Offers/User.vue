@@ -13,7 +13,7 @@ const address = ref<string>(props.client.address);
 const status = ref<string>(props.client.status);
 
 const deleteHandler = async () => {
-  const response: any = await request.delete(`deleteClient/${props.client._id}`);
+  const response: any = await request.delete(`deletePotentialClient/${props.client._id}`);
 
   if (response.success) {
     !useSocketStore().connected && usePotentialClients.deletePotentialClient(props.client._id);
@@ -45,18 +45,40 @@ const saveHandler = async () => {
     setError(response.message);
   }
 };
+
+watch(
+  () => props.client,
+  (client) => {
+    name.value = client.name;
+    email.value = client.email;
+    phone.value = client.phone;
+    address.value = client.address;
+    status.value = client.status;
+  },
+  { deep: true }
+);
 </script>
 
 <template>
   <div
     class="flex w-fit border-b gap-4 items-center px-2 py-1 border"
-    :class="editable ? ' border-green-500 rounded-lg ' : 'border-transparent border-b-dark-light'"
+    :class="[
+      editable ? ' border-green-500 rounded-lg ' : 'border-transparent border-b-dark-light',
+      props.client.status === 'Domina'
+        ? 'bg-green-100'
+        : props.client.status === 'Nelabai domina'
+        ? 'bg-orange-100'
+        : props.client.status === 'Nedomina'
+        ? 'bg-red-100'
+        : '',
+    ]"
   >
     <p class="w-6">{{ props.index + 1 }}</p>
     <input type="text" v-model="name" class="w-48" :disabled="!editable" />
     <input type="text" v-model="email" class="w-60" :disabled="!editable" />
     <input type="text" v-model="phone" class="w-28" :disabled="!editable" />
     <input type="text" v-model="address" class="w-60" :disabled="!editable" />
+
     <BaseSelectField
       :values="OffersStatus"
       :defaultValue="status"

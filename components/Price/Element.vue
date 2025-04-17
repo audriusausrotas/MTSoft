@@ -61,6 +61,17 @@ const saveHandler = async () => {
     setError(response.message);
   }
 };
+
+watch(
+  () => props.product,
+  (newProduct) => {
+    productName.value = newProduct.name;
+    productPrice.value = newProduct.price;
+    productCost.value = newProduct.cost;
+    productCategory.value = newProduct.category;
+  },
+  { deep: true }
+);
 </script>
 
 <template>

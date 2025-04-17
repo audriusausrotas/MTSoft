@@ -151,7 +151,7 @@ const uploadFiles = async (data: any) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updatePhoto(response.data._id, response.data.files);
+      useProduction.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);

@@ -1,16 +1,6 @@
 <script setup lang="ts">
 const useProducts = useProductsStore();
 const searchQuery = ref<string>("");
-
-const filteredProducts = computed(() => {
-  let filtered = [...useProducts.products];
-  if (searchQuery.value.length > 2) {
-    return filtered.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  }
-  return filtered;
-});
 </script>
 
 <template>
@@ -48,7 +38,7 @@ const filteredProducts = computed(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in filteredProducts" :key="product._id">
+          <tr v-for="(product, index) in useProducts.search(searchQuery)" :key="product._id">
             <PriceElement :index="index" :product="product" />
           </tr>
         </tbody>

@@ -24,5 +24,15 @@ export const useProductsStore = defineStore("products", {
     },
   },
 
-  getters: {},
+  getters: {
+    search: (state) => {
+      return (value: string) => {
+        if (value.length > 2) {
+          return state.products.filter((product) =>
+            product.name.toLowerCase().includes(value.toLowerCase())
+          );
+        } else return state.products;
+      };
+    },
+  },
 });

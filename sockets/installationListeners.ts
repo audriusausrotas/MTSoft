@@ -8,7 +8,7 @@ export default function InstallationListeners(socket: Socket) {
     useProjectsStore().updateProjectField(data._id, "status", "Montuojama");
   });
 
-  socket.on("deleteInstallationOrder", (_id) => {
+  socket.on("deleteInstallationOrder", ({ _id }) => {
     useInstallation.deleteInstallationOrder(_id);
   });
 
@@ -31,15 +31,13 @@ export default function InstallationListeners(socket: Socket) {
     useInstallation.updateStatus(_id, status);
   });
   socket.on("newInstallationComment", ({ _id, comment }) => {
+    console.log();
     useInstallation.addComment(_id, comment);
   });
   socket.on("deleteInstallationComment", ({ _id, comment }) => {
     useInstallation.deleteComments(_id, comment);
   });
-  socket.on("uploadFilesInstallation", ({ _id, files }) => {
-    useInstallation.updateFiles(_id, files);
-  });
-  socket.on("deleteFilesInstallation", ({ _id, files }) => {
+  socket.on("updateInstallationFiles", ({ _id, files }) => {
     useInstallation.updateFiles(_id, files);
   });
 }

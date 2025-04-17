@@ -52,11 +52,7 @@ export default function productionListeners(socket: Socket) {
     useProduction.deleteComment(_id, comment);
   });
 
-  socket.on("uploadFilesProduction", ({ _id, files }) => {
-    useProduction.updateFiles(_id, files);
-  });
-
-  socket.on("deleteFilesProduction", ({ _id, files }) => {
+  socket.on("updateProductionFiles", ({ _id, files }) => {
     useProduction.updateFiles(_id, files);
   });
 }

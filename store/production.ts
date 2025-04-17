@@ -93,12 +93,6 @@ export const useProductionStore = defineStore("production", {
       );
     },
 
-    updatePhoto(id: string, photo: string[]) {
-      this.production = this.production.map((item) =>
-        item._id === id ? { ...item, files: [...photo] } : item
-      );
-    },
-
     clearProduction() {
       this.production = [];
     },

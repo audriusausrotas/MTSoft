@@ -42,26 +42,12 @@ const sendHandler = async () => {
   loading.value = false;
 };
 
-const selectAllHandler = async () => {
-  const requestData = { all: true, value: true };
-
-  const response: any = await request.patch("selectClients", requestData);
-
-  if (response.success) {
-    !useSocketStore().connected && usePotentialClients.selectPotentialClients(true);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-};
-
-const selectNoneHandler = async () => {
-  const requestData = { all: true, value: false };
+const selectAllHandler = async (value: boolean) => {
+  const requestData = { all: true, value };
 
   const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
-    !useSocketStore().connected && usePotentialClients.selectPotentialClients(false);
+    usePotentialClients.selectPotentialClients(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -109,8 +95,8 @@ watch(
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
       <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
-      <BaseButton name="pažymėti visus" @click="selectAllHandler" />
-      <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
+      <BaseButton name="pažymėti visus" @click="selectAllHandler(true)" />
+      <BaseButton name="atžymėti visus" @click="selectAllHandler(false)" />
 
       <div class="relative bg-dark-full text-white w-60 h-10 rounded-lg">
         <input

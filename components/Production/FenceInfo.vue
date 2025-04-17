@@ -275,7 +275,6 @@ const updateMeasure = (field: string, event: Event) => {
 watch(
   () => props.data,
   (fence) => {
-    console.log(fence);
     if (!iMadeChanges.value) {
       if (fence.elements !== elements.value) {
         elements.value = +fence.elements;
