@@ -20,8 +20,14 @@ export const useUserStore = defineStore("user", {
       this.users = [...users];
     },
 
+    addUser(user: User) {
+      this.users.push(user);
+    },
+
     updateUser(data: User) {
-      this.users = this.users.map((user) => (user._id === data._id ? data : user));
+      this.users = this.users.map((user) =>
+        user._id === data._id ? data : user
+      );
     },
 
     deleteUser(id: string) {

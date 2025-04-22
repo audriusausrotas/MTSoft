@@ -1,36 +1,39 @@
 <script setup lang="ts">
+import { reactive, watchEffect } from "vue";
+
 const props = defineProps(["accountType"]);
 const { setError, setIsError } = useError();
 const useSettings = useSettingsStore();
 
-const installationBox = ref<boolean>(false);
-const productionBox = ref<boolean>(false);
-const scheduleBox = ref<boolean>(false);
-const projectBox = ref<boolean>(false);
-const editable = ref<boolean>(false);
-const adminBox = ref<boolean>(false);
-const gateBox = ref<boolean>(false);
+const editable = ref(false);
+const rights = reactive({
+  installation: false,
+  production: false,
+  schedule: false,
+  project: false,
+  admin: false,
+  gate: false,
+});
 
-for (const user of useSettings.userRights) {
-  if (user.accountType === props.accountType) {
-    installationBox.value = user.installation;
-    productionBox.value = user.production;
-    scheduleBox.value = user.schedule;
-    projectBox.value = user.project;
-    adminBox.value = user.admin;
-    gateBox.value = user.gate;
+watchEffect(() => {
+  const user = useSettings.userRights.find(
+    (u) => u.accountType === props.accountType
+  );
+
+  if (user) {
+    rights.installation = user.installation;
+    rights.production = user.production;
+    rights.schedule = user.schedule;
+    rights.project = user.project;
+    rights.admin = user.admin;
+    rights.gate = user.gate;
   }
-}
+});
 
 const saveHandler = async () => {
   const requestData = {
     accountType: props.accountType,
-    project: projectBox.value,
-    schedule: scheduleBox.value,
-    production: productionBox.value,
-    installation: installationBox.value,
-    gate: gateBox.value,
-    admin: adminBox.value,
+    ...rights,
   };
 
   const response: any = await request.post("newUserRights", requestData);
@@ -50,22 +53,52 @@ const saveHandler = async () => {
   <div class="flex gap-4">
     <div class="w-48">{{ props.accountType }}</div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="projectBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.project"
+      />
     </div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="scheduleBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.schedule"
+      />
     </div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="productionBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.production"
+      />
     </div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="installationBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.installation"
+      />
     </div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="gateBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.gate"
+      />
     </div>
     <div class="w-24 flex justify-center">
-      <input type="checkbox" class="w-5" :disabled="!editable" v-model="adminBox" />
+      <input
+        type="checkbox"
+        class="w-5"
+        :disabled="!editable"
+        v-model="rights.admin"
+      />
     </div>
     <NuxtImg
       v-if="!editable"

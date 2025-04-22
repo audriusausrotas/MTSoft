@@ -10,27 +10,18 @@ const useSchedule = useScheduleStore();
 const useProduction = useProductionStore();
 const useUser = useUserStore();
 
+const schedule = computed(() =>
+  useSchedule.getScheduleByWorkerAndDate(props.worker._id, props.date)
+);
+
 const commentModalOpen = ref<boolean>(false);
 const modalOpen = ref<boolean>(false);
 const menuOpen = ref<boolean>(false);
 const canSave = ref<boolean>(false);
-const selectedJobs = ref<Job[]>([]);
-const comment = ref<string>("");
+const selectedJobs = ref<Job[]>(schedule.value?.jobs || []);
+const comment = ref<string>(schedule.value?.comment || "");
+
 const isAdmin = useUser.user?.accountType === "Administratorius";
-
-const loadSelectedJobs = () => {
-  const scheduleItem = useSchedule.schedules.find((schedule) => {
-    return (
-      schedule.worker._id === props.worker._id &&
-      new Date(schedule.date).toISOString() === new Date(props.date).toISOString()
-    );
-  });
-
-  selectedJobs.value = scheduleItem ? scheduleItem.jobs : [];
-  comment.value = scheduleItem ? scheduleItem.comment : "";
-};
-
-loadSelectedJobs();
 
 const newWorkHandler = () => {
   modalOpen.value = true;
@@ -85,6 +76,15 @@ const saveHandler = async () => {
   }
   canSave.value = false;
 };
+
+watch(
+  schedule,
+  (newVal) => {
+    selectedJobs.value = newVal?.jobs || [];
+    comment.value = newVal?.comment || "";
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -123,7 +123,10 @@ const saveHandler = async () => {
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
-    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
+    <div
+      v-if="menuOpen"
+      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white"
+    >
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -147,7 +150,12 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
+    <div
+      v-if="selectedJobs.length > 0"
+      v-for="job in selectedJobs"
+      :key="job._id"
+      class="relative"
+    >
       <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
     </div>
 
@@ -156,7 +164,12 @@ const saveHandler = async () => {
       class="bg-blue-600 absolute top-0 left-0 w-full h-full flex flex-col justify-end placeholder-white text-white"
     >
       <div class="border-y border-white">
-        <input type="text" placeholder="Komentaras" v-model="comment" class="w-full p-1" />
+        <input
+          type="text"
+          placeholder="Komentaras"
+          v-model="comment"
+          class="w-full p-1"
+        />
       </div>
       <div class="flex justify">
         <div
@@ -168,11 +181,16 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
+    <div
+      v-if="modalOpen"
+      class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg"
+    >
       <BaseSearchFieldProduction
         width="w-full"
         :data="
-          props.worker.accountType === 'Gamyba' ? useProduction.production : useProjects.projects
+          props.worker.accountType === 'Gamyba'
+            ? useProduction.production
+            : useProjects.projects
         "
         @modalClose="modalOpen = false"
         @onClick="selectHandler"

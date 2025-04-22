@@ -14,4 +14,8 @@ export default function userListeners(socket: Socket) {
   socket.on("deleteUser", ({ _id }) => {
     useUser.deleteUser(_id);
   });
+
+  socket.on("newUser", (user) => {
+    useUser.addUser(user);
+  });
 }

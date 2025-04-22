@@ -38,7 +38,7 @@ const confirmHandler = async () => {
   };
 
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    const response = await request.post("deleteUser", postData);
+    const response = await request.delete("deleteUser", postData);
 
     if (response.success) {
       !useSocketStore().connected && useUser.deleteUser(selectedUser.value);
@@ -62,7 +62,9 @@ const deleteHandler = (id: string) => {
 
 <template>
   <div class="w-full">
-    <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
+    <div
+      class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl"
+    >
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>
       <p class="flex-[6]">el. paštas</p>
@@ -77,7 +79,9 @@ const deleteHandler = (id: string) => {
       class="flex py-2 capitalize border-b"
     >
       <div class="flex-1 pl-3">{{ index + 1 }}</div>
-      <p class="flex-[3] flex items-center">{{ user.username }} {{ user.lastName }}</p>
+      <p class="flex-[3] flex items-center">
+        {{ user.username }} {{ user.lastName }}
+      </p>
 
       <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
@@ -99,7 +103,10 @@ const deleteHandler = (id: string) => {
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
-      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
+      <div
+        class="flex justify-end flex-1 hover:cursor-pointer"
+        @click="deleteHandler(user._id)"
+      >
         <NuxtImg
           src="/icons/delete.svg"
           alt="delete button "
@@ -115,7 +122,7 @@ const deleteHandler = (id: string) => {
   <Teleport to="body">
     <div
       v-if="modalOpen"
-      class="absolute top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
+      class="fixed top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
     >
       <div
         class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl"
@@ -131,7 +138,11 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
+          <BaseButton
+            name="patvirtinti"
+            @click="confirmHandler"
+            :isLoading="isLoading"
+          />
         </div>
       </div>
     </div>

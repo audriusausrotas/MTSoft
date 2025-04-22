@@ -1,11 +1,11 @@
 homepage - done
-grafikas - 
+grafikas - done
 gamyba - done
 montavimas - done
-vartai - 
+vartai - done
 pasiulymai - done
 kainos - done
-vartotojai - 
+vartotojai - done
 klientai - done
-nustatymai - 
-archyvas - 
+nustatymai - done
+archyvas - done 

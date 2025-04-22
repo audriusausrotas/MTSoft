@@ -15,7 +15,7 @@ export default function gateListeners(socket: Socket) {
     useGate.updateGate(gate);
   });
 
-  socket.on("cancelGateOrder", (_id) => {
+  socket.on("cancelGateOrder", ({ _id }) => {
     useGate.removeGates(_id);
   });
 }
