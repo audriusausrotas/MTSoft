@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import type { User, Installation } from "~/data/interfaces";
-const useInstallation = useInstallationStore();
-const useUser = useUserStore();
+const installationStore = useInstallationStore();
+const userStore = useUserStore();
 const filteredUser = ref<string>("Visi");
 const searchQuery = ref<string>("");
 
-const workers = useUser.users
+const workers = userStore.users
   .filter((user: User) => user.accountType === "Montavimas")
   .map((user: User) => user.lastName);
 
 const filteredInstallation = computed(() => {
-  let filtered = [...useInstallation.installation];
+  let filtered = [...installationStore.installation];
 
   if (searchQuery.value.length > 2) {
     return filtered.filter(
@@ -24,14 +24,14 @@ const filteredInstallation = computed(() => {
   }
 
   if (
-    useUser.user?.accountType === "Administratorius" ||
-    useUser.user?.accountType === "Sandėlys"
+    userStore.user?.accountType === "Administratorius" ||
+    userStore.user?.accountType === "Sandėlys"
   ) {
     if (filteredUser.value !== "Visi")
       filtered = filtered.filter((item: Installation) => item.workers.includes(filteredUser.value));
   } else
     filtered = filtered.filter((item: Installation) =>
-      item.workers.includes(useUser.user?.lastName!)
+      item.workers.includes(userStore.user?.lastName!)
     );
 
   return filtered;
@@ -46,7 +46,7 @@ const changeFilter = (value: string) => {
   <div class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <BaseSelectField
-        v-if="useUser.user?.accountType === 'Administratorius'"
+        v-if="userStore.user?.accountType === 'Administratorius'"
         label="Montuotojas"
         :values="['Visi', ...workers]"
         id="userFilter"

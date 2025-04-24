@@ -1,21 +1,21 @@
 import { Socket } from "socket.io-client";
 
 export default function userListeners(socket: Socket) {
-  const useUser = useUserStore();
+  const userStore = useUserStore();
 
   socket.on("updateUserProfile", (user) => {
-    useUser.updateUser(user);
+    userStore.updateUser(user);
   });
 
   socket.on("updateUser", (user) => {
-    useUser.updateUser(user);
+    userStore.updateUser(user);
   });
 
   socket.on("deleteUser", ({ _id }) => {
-    useUser.deleteUser(_id);
+    userStore.deleteUser(_id);
   });
 
   socket.on("newUser", (user) => {
-    useUser.addUser(user);
+    userStore.addUser(user);
   });
 }

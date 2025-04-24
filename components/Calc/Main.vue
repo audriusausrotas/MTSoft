@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { laserInstructions } from "~/data/laserInstruction";
 const emit = defineEmits(["onCalculate"]);
-const useCalculations = useCalculationsStore();
+const calculationsStore = useCalculationsStore();
 
 const modalOpen = ref<boolean>(false);
 const textArea = ref<string>("");
@@ -12,7 +12,7 @@ const precisionValues = ["Žemyn", "Standartas", "Andriaus"];
 const instructionOpen = ref<boolean>(false);
 
 const createFenceHandler = () => {
-  useCalculations.addFence();
+  calculationsStore.addFence();
 };
 
 const calculateResultsHandler = () => {
@@ -21,15 +21,15 @@ const calculateResultsHandler = () => {
 };
 
 const confirmHandler = () => {
-  useCalculations.lazerCalculate(textArea.value, units.value, precision.value);
+  calculationsStore.lazerCalculate(textArea.value, units.value, precision.value);
   modalOpen.value = false;
 };
 
 const retailHandler = (value: string) => {
   if (value === "Didmena") {
-    useCalculations.updateRetail(true);
+    calculationsStore.updateRetail(true);
   } else {
-    useCalculations.updateRetail(false);
+    calculationsStore.updateRetail(false);
   }
 };
 </script>
@@ -110,13 +110,13 @@ const retailHandler = (value: string) => {
       <BaseSelectField
         :values="['Didmena', 'Mažmena']"
         id="parts"
-        :defaultValue="useCalculations.retail ? 'Didmena' : 'Mažmena'"
+        :defaultValue="calculationsStore.retail ? 'Didmena' : 'Mažmena'"
         width="w-60"
         @onChange="retailHandler"
       />
     </div>
 
-    <div v-for="(fence, index) in useCalculations.fences" :key="fence.id">
+    <div v-for="(fence, index) in calculationsStore.fences" :key="fence.id">
       <CalcFence :fence="fence" :index="index" />
     </div>
   </div>

@@ -3,11 +3,11 @@ import type { Project } from "~/data/interfaces";
 
 const props = defineProps(["location", "_id"]);
 
-const useProjects = useProjectsStore();
-const useArchives = useArchivesStore();
-const useResults = useResultsStore();
-const useCalculations = useCalculationsStore();
-const useBackup = useBackupStore();
+const projectsStore = useProjectsStore();
+const archiveStore = useArchiveStore();
+const resultsStore = useResultsStore();
+const calculationsStore = useCalculationsStore();
+const backupStore = useBackupStore();
 
 const { setError, setIsError } = useError();
 
@@ -25,8 +25,8 @@ const deleteHandler = async () => {
   if (response.success) {
     if (!useSocketStore().connected) {
       props.location === "projects"
-        ? useProjects.deleteProject(props._id)
-        : useArchives.deleteArchive(props._id, props.location);
+        ? projectsStore.deleteProject(response.data._id)
+        : archiveStore.deleteArchive(response.data._id, response.data.location);
     }
     setIsError(false);
     setError(response.message);
@@ -36,12 +36,12 @@ const deleteHandler = async () => {
 };
 
 const editHandler = async () => {
-  useCalculations.clearAll();
-  useResults.clearAll();
-  useProjects.clearSelected();
-  useBackup.clearBackup();
+  calculationsStore.clearAll();
+  resultsStore.clearAll();
+  projectsStore.clearSelected();
+  backupStore.clearBackup();
 
-  const project: Project | undefined = useProjects.projects.find(
+  const project: Project | undefined = projectsStore.projects.find(
     (project) => project._id === props._id
   );
 
@@ -50,14 +50,14 @@ const editHandler = async () => {
     return;
   }
 
-  useCalculations.setProject({
+  calculationsStore.setProject({
     client: project.client,
     fenceMeasures: project.fenceMeasures,
     retail: project.retail,
   });
-  useResults.setProject(project);
-  useBackup.addBackup(project.results, project.works);
-  useProjects.setSelectedProject(project._id ? project._id : "");
+  resultsStore.setProject(project);
+  backupStore.addBackup(project.results, project.works);
+  projectsStore.setSelectedProject(project._id ? project._id : "");
   navigateTo("/skaiciuokle");
 };
 
@@ -89,7 +89,7 @@ const copyHandler = async () => {
   const response: any = await request.post("newProject", { _id: props._id });
 
   if (response.success) {
-    !useSocketStore().connected && useProjects.addProject(response.data);
+    !useSocketStore().connected && projectsStore.addProject(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -104,11 +104,15 @@ const archiveHandler = async () => {
 
   if (props.location === "projects") response = await request.post(`addArchive/${props._id}`);
   else response = await request.patch("restoreArchive", requestData);
-
   if (response.success) {
     if (!useSocketStore().connected) {
-      if (props.location === "projects") useProjects.addProject(response.data.data);
-      else useArchives.deleteArchive(props._id, props.location);
+      if (props.location === "projects") {
+        archiveStore.addArchive("archive", response.data);
+        projectsStore.deleteProject(response.data._id);
+      } else {
+        projectsStore.addProject(response.data.data);
+        archiveStore.deleteArchive(response.data.data._id, response.data.location);
+      }
     }
 
     setIsError(false);
@@ -123,7 +127,7 @@ const extendHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjects.updateProjectField(
+      projectsStore.updateProjectField(
         response.data._id,
         "dateExparation",
         response.data.dateExparation
@@ -139,7 +143,10 @@ const unconfirmedHandler = async () => {
   const response: any = await request.post(`addUnconfirmed/${props._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useProjects.deleteProject(response.data._id);
+    if (!useSocketStore().connected) {
+      archiveStore.addArchive("unconfirmed", response.data);
+      projectsStore.deleteProject(response.data._id);
+    }
 
     setIsError(false);
     setError(response.message);

@@ -19,15 +19,11 @@ export const useGateStore = defineStore("gate", {
     },
 
     updateGate(data: GateSchema) {
-      this.gates = this.gates.map((item) =>
-        item._id === data._id ? { ...data } : item
-      );
+      this.gates = this.gates.map((item) => (item._id === data._id ? { ...data } : item));
     },
 
     updateGateStatus(_id: string, status: string) {
-      this.gates = this.gates.map((item) =>
-        item._id === _id ? { ...item, status } : item
-      );
+      this.gates = this.gates.map((item) => (item._id === _id ? { ...item, status } : item));
     },
   },
 
@@ -48,9 +44,7 @@ export const useGateStore = defineStore("gate", {
         }
 
         if (userStore.user?.accountType !== "Administratorius") {
-          filteredGates = filteredGates.filter(
-            (item) => item.manager === userStore.user?.email
-          );
+          filteredGates = filteredGates.filter((item) => item.manager === userStore.user?.email);
         }
 
         return filteredGates;

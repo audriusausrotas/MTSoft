@@ -5,14 +5,14 @@ import { verticals } from "~/data/selectFieldData";
 
 export default function createResultElement(item: any) {
   const results = useResultsStore();
-  const useBackup = useBackupStore();
+  const backupStore = useBackupStore();
   const product: Product = getPriceItem(item.type);
 
   let newPrice: number = Number(product.price);
   let newCost: number = Number(product.cost);
 
   // change gate prices
-  if (item.type.includes("vartai") && !useBackup.backupExist) {
+  if (item.type.includes("vartai") && !backupStore.backupExist) {
     if (item.type.includes("segmentiniai")) {
       if (item.width > 400) {
         newPrice += 60;
@@ -51,7 +51,7 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (item.type === "Kiemo varteliai segmentiniai" && !useBackup.backupExist) {
+  if (item.type === "Kiemo varteliai segmentiniai" && !backupStore.backupExist) {
     if (item.height > 110) {
       newPrice += 20;
       newCost += 20;
@@ -71,7 +71,7 @@ export default function createResultElement(item: any) {
   }
 
   // change price on fence seeThrough
-  if (!useBackup.backupExist) {
+  if (!backupStore.backupExist) {
     if (item.seeThrough === "Aklina") {
       newPrice = +product.price + 3;
       newCost = +product.cost + 2.1;
@@ -98,7 +98,7 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (verticals.includes(item.type) && !useBackup.backupExist) {
+  if (verticals.includes(item.type) && !backupStore.backupExist) {
     newPrice = +((product.price * item.height) / 100).toFixed(2);
     newCost = +((product.cost * item.height) / 100).toFixed(2);
   }

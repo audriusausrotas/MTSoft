@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["data", "fenceIndex", "index", "_id"]);
 
-const useInstallation = useInstallationStore();
+const installationStore = useInstallationStore();
 
 const { setError, setIsError } = useError();
 
@@ -17,7 +17,12 @@ const postoneHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.updatePostone(props._id, props.fenceIndex, props.index, !props.data.postone);
+      installationStore.updatePostone(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex,
+        response.data.value
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -37,7 +42,12 @@ const doneHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.updateDone(props._id, props.fenceIndex, props.index, !props.data.done);
+      installationStore.updateDone(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex,
+        response.data.value
+      );
 
     setIsError(false);
     setError(response.message);

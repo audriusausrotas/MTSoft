@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const useProducts = useProductsStore();
+const productsStore = useProductsStore();
 
-const fences = useProducts.products.filter(
+const fences = productsStore.products.filter(
   (item) => item.category.trim().toLowerCase() === "tvoros"
 );
 </script>

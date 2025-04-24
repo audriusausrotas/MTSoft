@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["index", "client"]);
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 const { setError, setIsError } = useError();
 
 const updateHandler = async (value: boolean) => {
@@ -9,7 +9,7 @@ const updateHandler = async (value: boolean) => {
   const response: any = await request.patch("selectClients", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && usePotentialClients.updatePotentialClients(response.data);
+    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
     setIsError(false);
     setError(response.message);
   } else {

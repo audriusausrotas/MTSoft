@@ -11,10 +11,10 @@ const props = defineProps([
 ]);
 
 const { setError, setIsError } = useError();
-const useProduction = useProductionStore();
-const useUser = useUserStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
 
-const isAdmin = useUser.user?.accountType === "Administratorius";
+const isAdmin = userStore.user?.accountType === "Administratorius";
 
 const cut = ref<number>(props.data.cut);
 const done = ref<number>(props.data.done);
@@ -86,13 +86,13 @@ const saveHandler = async (field: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updateMeasure(
-        props.data._id,
-        props.fenceIndex,
-        props.index,
-        +requestData.value,
-        field,
-        requestData.option
+      productionStore.updateMeasure(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex,
+        response.data.value,
+        response.data.field,
+        response.data.option
       );
     setIsError(false);
     setError(response.message);
@@ -133,13 +133,13 @@ const postoneHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updateMeasure(
-        props._id,
-        props.fenceIndex,
-        props.index,
-        requestData.value,
+      productionStore.updateMeasure(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex,
+        response.data.value,
         "postone",
-        requestData.option
+        response.data.option
       );
     setIsError(false);
     setError(response.message);
@@ -162,7 +162,11 @@ const deleteHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.deleteMeasure(props._id, props.fenceIndex, props.index);
+      productionStore.deleteMeasure(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -245,7 +249,7 @@ const updateMeasure = (field: string, event: Event) => {
   const inputElement = event.target as HTMLInputElement;
   iMadeChanges.value = true;
 
-  useProduction.updateMeasure(
+  productionStore.updateMeasure(
     props._id,
     props.fenceIndex,
     props.index,

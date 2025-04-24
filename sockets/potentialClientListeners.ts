@@ -1,17 +1,17 @@
 import { Socket } from "socket.io-client";
 
 export default function potentialClientListeners(socket: Socket) {
-  const usePotentialClients = usePotentialClientsStore();
+  const potentialClientsStore = usePotentialClientsStore();
 
   socket.on("deletePotentialClient", ({ _id }) => {
-    usePotentialClients.deletePotentialClient(_id);
+    potentialClientsStore.deletePotentialClient(_id);
   });
 
   socket.on("updatePotentialClient", (client) => {
-    usePotentialClients.updatePotentialClients(client);
+    potentialClientsStore.updatePotentialClients(client);
   });
 
   socket.on("newPotentialClient", (client) => {
-    usePotentialClients.addPotentialClient(client);
+    potentialClientsStore.addPotentialClient(client);
   });
 }

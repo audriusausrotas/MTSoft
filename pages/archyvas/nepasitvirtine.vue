@@ -1,10 +1,10 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-const useArchives = useArchivesStore();
+const archiveStore = useArchiveStore();
 </script>
 
 <template>
-  <ArchiveMain :data="useArchives.filteredUnconfirmed" location="unconfirmed" />
+  <ArchiveMain :data="archiveStore.filteredUnconfirmed" location="unconfirmed" />
 </template>
 <style scoped></style>

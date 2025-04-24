@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useProductsStore } from "~/store/products";
+import { productsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
 
-const useProducts = useProductsStore();
+const productsStore = useProductsStore();
 const open = ref<boolean>(false);
 const newName = ref<string>("");
 const newPrice = ref<number>(0);
@@ -25,7 +25,7 @@ const saveHandler = async (): Promise<void> => {
   const response: any = await request.post("newProduct", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProducts.newProduct(response.data);
+    !useSocketStore().connected && productsStore.newProduct(response.data);
     clearHandler();
     setIsError(false);
     setError(response.message);

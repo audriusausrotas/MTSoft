@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const { setError, setIsError } = useError();
-const useClients = useClientsStore();
+const clientsStore = useClientsStore();
 
 const deleteHandler = async (_id: string) => {
   const response: any = await request.delete(`deleteClient/${_id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useClients.deleteClient(_id);
+    !useSocketStore().connected && clientsStore.deleteClient(response.data._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -25,7 +25,7 @@ const deleteHandler = async (_id: string) => {
       <p class="w-60">Adresas</p>
     </div>
     <div
-      v-for="(client, index) in useClients.clients"
+      v-for="(client, index) in clientsStore.clients"
       :key="client?._id"
       class="flex gap-4 border-b"
     >

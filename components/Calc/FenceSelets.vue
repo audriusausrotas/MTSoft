@@ -11,10 +11,10 @@ import {
 
 const props = defineProps(["index"]);
 
-const useSettings = useSettingsStore();
-const useCalculations = useCalculationsStore();
+const settingsStore = useSettingsStore();
+const calculationsStore = useCalculationsStore();
 
-const currentFence = useCalculations.fences[props.index];
+const currentFence = calculationsStore.fences[props.index];
 const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
 const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
@@ -22,7 +22,7 @@ const needBindings = ref<boolean>(true);
 const isOpen = ref<boolean>(false);
 
 watch(
-  () => useCalculations.fences[props.index],
+  () => calculationsStore.fences[props.index],
   (newValue) => {
     needPoles.value = newValue?.parts?.includes("Stulpai");
     isFenceBoards.value = verticals.includes(newValue?.type as string);
@@ -30,14 +30,14 @@ watch(
 
     if (newValue?.direction === "Horizontali" && !isFenceBoards.value && !isSegment.value) {
       if (newValue?.bindings === "Taip") {
-        useCalculations.updateBindings(props.index, "Taip");
+        calculationsStore.updateBindings(props.index, "Taip");
         needBindings.value = true;
       } else {
-        useCalculations.updateBindings(props.index, "Ne");
+        calculationsStore.updateBindings(props.index, "Ne");
         needBindings.value = false;
       }
     } else {
-      useCalculations.updateBindings(props.index, "Ne");
+      calculationsStore.updateBindings(props.index, "Ne");
       needBindings.value = false;
     }
   },
@@ -54,49 +54,49 @@ watch(
         id="fenceSide"
         :defaultValue="currentFence.side"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateSide(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateSide(props.index, value)
         "
       />
 
       <BaseSelectField
-        v-if="useCalculations.retail"
+        v-if="calculationsStore.retail"
         label="Tvoros tipas"
-        :values="useSettings.selectValues.retailFenceTypes"
+        :values="settingsStore.selectValues.retailFenceTypes"
         id="fenceType"
         :defaultValue="currentFence.type"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateType(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateType(props.index, value)
         "
       />
       <BaseSelectField
         v-else
         label="Tvoros tipas"
-        :values="useSettings.selectValues.fenceTypes"
+        :values="settingsStore.selectValues.fenceTypes"
         id="fenceType"
         :defaultValue="currentFence.type"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateType(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateType(props.index, value)
         "
       />
 
       <BaseSelectField
         label="Tvoros spalva"
-        :values="useSettings.selectValues.fenceColors"
+        :values="settingsStore.selectValues.fenceColors"
         id="fenceColor"
         :defaultValue="currentFence.color"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateColor(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateColor(props.index, value)
         "
       />
 
       <BaseSelectField
         v-if="!isSegment"
         label="Skardos Tipas"
-        :values="useSettings.selectValues.fenceMaterials"
+        :values="settingsStore.selectValues.fenceMaterials"
         id="fenceMaterials"
         :defaultValue="currentFence.material"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateMaterial(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateMaterial(props.index, value)
         "
       />
 
@@ -107,7 +107,7 @@ watch(
         id="seeThrough"
         :defaultValue="currentFence.seeThrough"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateSeeThrough(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateSeeThrough(props.index, value)
         "
       />
 
@@ -118,7 +118,7 @@ watch(
         id="fenceDirection"
         :defaultValue="currentFence.direction"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateDirection(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateDirection(props.index, value)
         "
       />
 
@@ -128,7 +128,7 @@ watch(
         id="services"
         :defaultValue="currentFence.services"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateServices(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateServices(props.index, value)
         "
       />
 
@@ -138,7 +138,7 @@ watch(
         id="parts"
         :defaultValue="currentFence.parts"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateParts(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateParts(props.index, value)
         "
       />
 
@@ -149,7 +149,7 @@ watch(
         id="twoSided"
         :defaultValue="currentFence.twoSided"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateTwoSided(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateTwoSided(props.index, value)
         "
       />
 
@@ -162,7 +162,7 @@ watch(
         width="w-60"
         :name="currentFence.space"
         @onChange="(value: number) =>
-        useCalculations.updateSpace(props.index,
+        calculationsStore.updateSpace(props.index,
           value,
         )
         "
@@ -174,7 +174,7 @@ watch(
         id="bingings"
         :defaultValue="currentFence.bindings"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateBindings(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateBindings(props.index, value)
         "
       />
       <BaseSelectField
@@ -184,7 +184,7 @@ watch(
         id="anchoredPoles"
         :defaultValue="currentFence.anchoredPoles"
         width="w-60"
-        @onChange="(value: string) => useCalculations.updateAnchoredPoles(props.index, value)
+        @onChange="(value: string) => calculationsStore.updateAnchoredPoles(props.index, value)
         "
       />
     </div>
@@ -206,7 +206,7 @@ watch(
         class="mb-8"
         :name="currentFence.comment"
         @onChange="(value: string) =>
-        useCalculations.updateComment(props.index,
+        calculationsStore.updateComment(props.index,
           value,
         )
         "

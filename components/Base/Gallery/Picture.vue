@@ -16,14 +16,11 @@ const deleteHandler = async (event: Event) => {
   if (response.success) {
     if (!useSocketStore().connected) {
       if (props.category === "projects") {
-        const useProjects = useProjectsStore();
-        useProjects.updateFiles(props._id, response.data.files);
+        useProjectsStore().updateFiles(response.data._id, response.data.files);
       } else if (props.category === "production") {
-        const useProduction = useProductionStore();
-        useProduction.updatePhoto(props._id, response.data.files);
+        useProductionStore().updateFiles(response.data._id, response.data.files);
       } else if (props.category === "installation") {
-        const useInstallation = useInstallationStore();
-        useInstallation.updateFiles(props._id, response.data.files);
+        useInstallationStore().updateFiles(response.data._id, response.data.files);
       }
     }
 

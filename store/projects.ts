@@ -47,8 +47,8 @@ export const useProjectsStore = defineStore("Projects", {
       this.projects = this.projects.filter((item) => item._id !== _id);
     },
 
-    setSelectedProject(data: string) {
-      this.selectedProject = data;
+    setSelectedProject(_id: string) {
+      this.selectedProject = _id;
     },
 
     clearSelected() {

@@ -19,8 +19,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       } else {
         const response = await request.get("logout");
         if (response.success) {
-          const useUser = useUserStore();
-          useUser.logout();
+          const userStore = useUserStore();
+          userStore.logout();
           const router = useRouter();
           router.push("/login");
         }
@@ -40,8 +40,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     // fetch settings for everyone
     await Promise.all([fetchUsers(), fetchUserRights()]);
 
-    const useSettings = useSettingsStore();
-    const userRights = useSettings.userRights.find(
+    const userRights = useSettingsStore().userRights.find(
       (item) => item.accountType === user.data.accountType
     );
 

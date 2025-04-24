@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const props = defineProps(["binding", "index", "_id"]);
 const { setError, setIsError } = useError();
-const useProduction = useProductionStore();
-const useUser = useUserStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
 
-const isAdmin = useUser.user?.accountType === "Administratorius";
+const isAdmin = userStore.user?.accountType === "Administratorius";
 
 const cut = ref<number>(props.binding.cut);
 const done = ref<number>(props.binding.done);
@@ -79,13 +79,13 @@ const saveHandler = async (field: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updateMeasure(
-        props._id,
-        props.index,
+      productionStore.updateMeasure(
+        response.data._id,
+        response.data.index,
         null,
-        requestData.value,
-        field,
-        requestData.option
+        response.data.value,
+        response.data.field,
+        response.data.option
       );
     setIsError(false);
     setError(response.message);
@@ -128,13 +128,13 @@ const postoneHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updateMeasure(
-        props._id,
-        props.index,
+      productionStore.updateMeasure(
+        response.data._id,
+        response.data.index,
         null,
-        requestData.value,
+        response.data.value,
         "postone",
-        requestData.option
+        response.data.option
       );
 
     setIsError(false);
@@ -153,7 +153,8 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteBindings", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.deleteBinding(props._id, props.binding.id);
+    !useSocketStore().connected &&
+      productionStore.deleteBinding(response.data._id, response.data.bindingId);
     setIsError(false);
     setError(response.message);
   } else {
@@ -166,7 +167,14 @@ const updateMeasure = (field: string, event: Event) => {
 
   iMadeChanges.value = true;
 
-  useProduction.updateMeasure(props._id, props.index, null, inputElement.value, field, "bindings");
+  productionStore.updateMeasure(
+    props._id,
+    props.index,
+    null,
+    inputElement.value,
+    field,
+    "bindings"
+  );
 
   if (field === "cut")
     +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);

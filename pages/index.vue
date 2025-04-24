@@ -3,14 +3,14 @@ import type { Project } from "~/data/interfaces";
 
 const { setError, setIsError } = useError();
 
-const useProjects = useProjectsStore();
+const projectsStore = useProjectsStore();
 
 const filterUser = ref<string>(useUserStore().user!.username);
 const filterStatus = ref<string>("Visi");
 const searchQuery = ref<string>("");
 
 const filteredProjects = () => {
-  let filtered = [...useProjects.projects];
+  let filtered = [...projectsStore.projects];
 
   if (searchQuery.value.length > 2) {
     return filtered.filter(
@@ -80,7 +80,7 @@ const projects = computed(() => {
 
 const users = [
   "Visi",
-  ...new Set(useProjects.projects?.map((item) => item.creator.username).filter(Boolean)),
+  ...new Set(projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)),
 ];
 
 const statusFilters = [
@@ -108,14 +108,14 @@ const changeStatusFilter = (statusFilter: string) => {
 };
 
 const newProjectHandler = () => {
-  const useResults = useResultsStore();
-  const useCalculations = useCalculationsStore();
-  const useBackup = useBackupStore();
+  const resultsStore = useResultsStore();
+  const calculationsStore = useCalculationsStore();
+  const backupStore = useBackupStore();
 
-  useCalculations.clearAll();
-  useResults.clearAll();
-  useProjects.clearSelected();
-  useBackup.clearBackup();
+  calculationsStore.clearAll();
+  resultsStore.clearAll();
+  projectsStore.clearSelected();
+  backupStore.clearBackup();
 
   navigateTo("/skaiciuokle");
 };
@@ -124,12 +124,8 @@ const removeUnconfirmed = async () => {
   const response: any = await request.delete("removeUnconfirmed");
   if (response.success) {
     if (!useSocketStore().connected) {
-      const useArchive = useArchivesStore();
-      const useProject = useProjectsStore();
-      response.data.forEach((item: Project) => {
-        useArchive.addArchive("unconfirmed", item);
-        useProject.deleteProject(item._id!);
-      });
+      useArchiveStore().addArchive("unconfirmed", response.data);
+      useProjectsStore().deleteProject(response.data._id);
     }
 
     setIsError(false);

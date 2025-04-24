@@ -4,10 +4,10 @@ import { verticals } from "~/data/selectFieldData";
 const props = defineProps(["fence", "fenceIndex", "_id", "orderNr", "clientAddress"]);
 
 const { setError, setIsError } = useError();
-const useProduction = useProductionStore();
-const useUser = useUserStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
 
-const isAdmin = useUser.user?.accountType === "Administratorius";
+const isAdmin = userStore.user?.accountType === "Administratorius";
 const filterIndex = ref<boolean>(false);
 const filterLength = ref<boolean>(false);
 
@@ -23,7 +23,11 @@ const newMeasureHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.addNewMeasure(props._id, props.fenceIndex, response.data);
+      productionStore.addNewMeasure(
+        response.data_id,
+        response.data.index,
+        response.data.newMeasure
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -64,7 +68,8 @@ const deleteHandler = async () => {
   const response: any = await request.delete("deleteFence", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.deleteFence(props._id, props.fenceIndex);
+    !useSocketStore().connected &&
+      productionStore.deleteFence(response.data._id, response.data.index);
     setIsError(false);
     setError(response.message);
   } else {

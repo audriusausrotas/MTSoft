@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { InstallationStatus } from "~/data/selectFieldData";
+import type { Comment } from "~/data/interfaces";
 
 const { setError, setIsError } = useError();
 
-const useInstallation = useInstallationStore();
-const useUser = useUserStore();
+const installationStore = useInstallationStore();
+const userStore = useUserStore();
 const route = useRoute();
 
 const order: any = computed(() => {
-  return useInstallation.installation.find((item) => item._id === route.params.id);
+  return installationStore.installation.find((item) => item._id === route.params.id);
 });
 
 const statusHandler = async (value: string) => {
@@ -18,7 +19,7 @@ const statusHandler = async (value: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.updateStatus(response.data._id, response.data.status);
+      installationStore.updateStatus(response.data._id, response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -26,18 +27,18 @@ const statusHandler = async (value: string) => {
   }
 };
 
-const commentHandler = async (value: string) => {
+const commentHandler = async (comment: Comment) => {
   const requestData = {
     _id: order?.value._id,
-    comment: value,
-    username: useUser.user?.username,
+    comment,
+    username: userStore.user?.username,
   };
 
   const response: any = await request.post("addInstallationComment", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.addComment(response.data._id, response.data.comment);
+      installationStore.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -45,13 +46,14 @@ const commentHandler = async (value: string) => {
   }
 };
 
-const deleteHandler = async (value: string, comment: string) => {
-  const requestData = { _id: value, comment: comment };
+const deleteHandler = async (_id: string, comment: Comment) => {
+  const requestData = { _id, comment };
 
   const response: any = await request.delete("deleteInstallationComment", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useInstallation.deleteInstallationOrder(value);
+    !useSocketStore().connected &&
+      installationStore.deleteComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -68,7 +70,7 @@ const uploadFiles = async (data: any) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.updateFiles(response.data._id, response.data.files);
+      installationStore.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
@@ -81,7 +83,7 @@ const deliverHandler = async (value: boolean, measureIndex: number) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.updatePartsDelivered(
+      installationStore.updatePartsDelivered(
         response.data._id,
         response.data.measureIndex,
         response.data.value

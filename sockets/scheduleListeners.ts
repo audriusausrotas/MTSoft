@@ -1,17 +1,17 @@
 import { Socket } from "socket.io-client";
 
 export default function scheduleListeners(socket: Socket) {
-  const useSchedule = useScheduleStore();
+  const scheduleStore = useScheduleStore();
 
   socket.on("newSchedule", (schedule) => {
-    useSchedule.addSchedule(schedule);
+    scheduleStore.addSchedule(schedule);
   });
 
   socket.on("updateSchedule", (schedule) => {
-    useSchedule.updateSchedule(schedule);
+    scheduleStore.updateSchedule(schedule);
   });
 
   socket.on("deleteSchedule", ({ date, worker }) => {
-    useSchedule.deleteSchedule(date, worker);
+    scheduleStore.deleteSchedule(date, worker);
   });
 }

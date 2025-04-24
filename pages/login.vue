@@ -10,7 +10,7 @@ const email = ref<string>("");
 const password = ref<string>("");
 const retypePassword = ref<string>("");
 const isLoading = ref<boolean>(false);
-const useUser = useUserStore();
+const userStore = useUserStore();
 
 const loginHandler = async () => {
   isLoading.value = true;
@@ -20,7 +20,7 @@ const loginHandler = async () => {
   const response = await request.post("login", loginData);
 
   if (response.success) {
-    useUser.setUser(response.data);
+    userStore.setUser(response.data);
     clearFields();
     setIsError(false);
     setError(response.message);

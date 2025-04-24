@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const useProducts = useProductsStore();
+const productsStore = useProductsStore();
 const searchQuery = ref<string>("");
 </script>
 
@@ -38,7 +38,7 @@ const searchQuery = ref<string>("");
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in useProducts.search(searchQuery)" :key="product._id">
+          <tr v-for="(product, index) in productsStore.search(searchQuery)" :key="product._id">
             <PriceElement :index="index" :product="product" />
           </tr>
         </tbody>

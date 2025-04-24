@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { v4 } from "uuid";
 const props = defineProps(["index"]);
-const useCalculations = useCalculationsStore();
+const calculationsStore = useCalculationsStore();
 </script>
 <template>
   <div class="flex flex-col lg:sticky top-16 bg-white border-b z-40 py-2 gap-4">
@@ -9,7 +9,7 @@ const useCalculations = useCalculationsStore();
   </div>
   <div class="flex flex-wrap justify-evenly">
     <CalcFenceMeasureElement
-      v-for="(measure, measureIndex) in useCalculations.fences[props.index].measures"
+      v-for="(measure, measureIndex) in calculationsStore.fences[props.index].measures"
       :key="v4()"
       :measureIndex="measureIndex"
       :index="props.index"

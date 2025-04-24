@@ -2,20 +2,20 @@
 import { yesno, gateDirection, laiptasDirection } from "~/data/selectFieldData";
 const props = defineProps(["measureIndex", "index", "measure", "lastElement"]);
 
-const useCalculations = useCalculationsStore();
-const useSettings = useSettingsStore();
+const calculationsStore = useCalculationsStore();
+const settingsStore = useSettingsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
-const isSegment = ref<boolean>(useCalculations.fences[props.index].type.includes("Segmentas"));
+const isSegment = ref<boolean>(calculationsStore.fences[props.index].type.includes("Segmentas"));
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
-  useCalculations.updateMeasureGate(props.index, value, props.measureIndex);
+  calculationsStore.updateMeasureGate(props.index, value, props.measureIndex);
 }
 
 watch(
-  () => useCalculations.fences[props.index].type,
+  () => calculationsStore.fences[props.index].type,
   (newValue) => {
     isSegment.value = newValue.includes("Segmentas");
   },
@@ -35,12 +35,12 @@ watch(
         label="ilgis"
         type="number"
         variant="light"
-        :active="useCalculations.fences[props.index].measures.length - 1 === props.measureIndex"
+        :active="calculationsStore.fences[props.index].measures.length - 1 === props.measureIndex"
         :name="props.measure.length"
-        @EnterPressed="useCalculations.addMeasure(props.index)"
+        @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureLength(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureLength(props.index, props.measureIndex, value)
         "
       />
 
@@ -52,23 +52,23 @@ watch(
         label="aukštis"
         variant="light"
         :name="props.measure.height"
-        @EnterPressed="useCalculations.addMeasure(props.index)"
+        @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureHeight(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureHeight(props.index, props.measureIndex, value)
         "
       />
 
       <BaseInput
         v-if="isData && !isSegment"
         width="w-24"
-        :disable="!useCalculations.retail"
+        :disable="!calculationsStore.retail"
         label="elementai"
-        :variant="useCalculations.retail ? 'light' : ''"
+        :variant="calculationsStore.retail ? 'light' : ''"
         :name="props.measure.elements"
         @onChange="
           (value: number): void =>
-            useCalculations.updateMeasureElements(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureElements(props.index, props.measureIndex, value)
         "
       />
 
@@ -97,7 +97,7 @@ watch(
         :name="props.measure.kampas.value"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureKampas(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureKampas(props.index, value, props.measureIndex)
         "
       />
       <BaseInput
@@ -109,7 +109,7 @@ watch(
         :name="props.measure.kampas.comment"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureKampasComment(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureKampasComment(props.index, value, props.measureIndex)
         "
       />
 
@@ -130,7 +130,7 @@ watch(
         :name="props.measure.laiptas.value"
         @onChange="
           (value: string): void =>
-            useCalculations.updateMeasureLaiptas(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureLaiptas(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -140,7 +140,7 @@ watch(
         label="kryptis"
         :defaultValue="props.measure.laiptas.direction"
         width="w-32"
-        @onChange="(value: string) => useCalculations.updateMeasureLaiptasDirection(
+        @onChange="(value: string) => calculationsStore.updateMeasureLaiptasDirection(
         props.index,
         value,
         props.measureIndex
@@ -154,7 +154,7 @@ watch(
         height="20"
         decoding="auto"
         class="hover:bg-red-ulta-light pb-3 rounded-xl hover:cursor-pointer"
-        @click="useCalculations.deleteMeasure(props.index, props.measureIndex)"
+        @click="calculationsStore.deleteMeasure(props.index, props.measureIndex)"
       />
     </div>
 
@@ -166,18 +166,18 @@ watch(
         id="automatics"
         :defaultValue="props.measure.gates.automatics"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateAutomatics(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateAutomatics(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
         v-if="props.measure.length > 200"
-        :values="useSettings.selectValues.gateTypes"
+        :values="settingsStore.selectValues.gateTypes"
         id="gateTypes"
         label="vartų tipas"
         :defaultValue="props.measure.gates.type"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateGateType(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateGateType(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -187,7 +187,7 @@ watch(
         label="vartų pamatas"
         :defaultValue="props.measure.gates.bankette"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateBankette(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateBankette(props.index, value, props.measureIndex)
         "
       />
 
@@ -198,29 +198,29 @@ watch(
         label="vartelių atidarymas"
         :defaultValue="props.measure.gates.direction"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateGateDirection(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateGateDirection(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
         v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
-        :values="useSettings.selectValues.gateLock"
+        :values="settingsStore.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"
         :defaultValue="props.measure.gates.lock"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateGateLock(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateGateLock(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
         v-if="props.measure.length <= 200"
-        :values="useSettings.selectValues.gateOption"
+        :values="settingsStore.selectValues.gateOption"
         id="gateOption"
         label="Vartelių tipas"
         :defaultValue="props.measure.gates.option"
         width="w-36"
-        @onChange="(value: string) => useCalculations.updateGateOption(props.index, value, props.measureIndex)
+        @onChange="(value: string) => calculationsStore.updateGateOption(props.index, value, props.measureIndex)
         "
       />
     </div>
@@ -231,7 +231,7 @@ watch(
       width="w-full"
       :name="props.measure.gates.comment"
       @onChange="(value: string) =>
-        useCalculations.updateGateComment(props.index, value, props.measureIndex
+        calculationsStore.updateGateComment(props.index, value, props.measureIndex
         )
         "
     />

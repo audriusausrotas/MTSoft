@@ -1,30 +1,30 @@
 import { Socket } from "socket.io-client";
 
 export default function archiveListeners(socket: Socket) {
-  const useArchive = useArchivesStore();
-  const useProject = useProjectsStore();
+  const archiveStore = useArchiveStore();
+  const projectsStore = useProjectsStore();
 
   socket.on("archiveDeleted", ({ _id, location }) => {
-    useArchive.deleteArchive(_id, location);
+    archiveStore.deleteArchive(_id, location);
   });
 
   socket.on("restoreArchive", ({ data, location }) => {
-    useProject.addProject(data);
-    useArchive.deleteArchive(data._id, location);
+    projectsStore.addProject(data);
+    archiveStore.deleteArchive(data._id, location);
   });
 
   socket.on("addArchive", (data) => {
-    useArchive.addArchive("archive", data);
-    useProject.deleteProject(data._id);
+    archiveStore.addArchive("archive", data);
+    projectsStore.deleteProject(data._id);
   });
 
   socket.on("addUnconfirmed", (data) => {
-    useArchive.addArchive("unconfirmed", data);
-    useProject.deleteProject(data._id);
+    archiveStore.addArchive("unconfirmed", data);
+    projectsStore.deleteProject(data._id);
   });
 
   socket.on("addDeleted", (data) => {
-    useArchive.addArchive("deleted", data);
-    useProject.deleteProject(data._id);
+    archiveStore.addArchive("deleted", data);
+    projectsStore.deleteProject(data._id);
   });
 }

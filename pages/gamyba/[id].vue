@@ -1,14 +1,15 @@
 -
 <script setup lang="ts">
+import type { Comment } from "~/data/interfaces";
 import { ProductionStatus } from "~/data/selectFieldData";
 const { setError, setIsError } = useError();
-const useProduction = useProductionStore();
-const useUser = useUserStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
 const route = useRoute();
 
-const isAdmin = useUser.user?.accountType === "Administratorius";
+const isAdmin = userStore.user?.accountType === "Administratorius";
 const order: any = computed(() => {
-  return useProduction.production.find((item) => item._id === route.params.id);
+  return productionStore.production.find((item) => item._id === route.params.id);
 });
 
 const statusHandler = async (value: string) => {
@@ -17,7 +18,8 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProductionStatus", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.updateStatus(order!.value._id, value);
+    !useSocketStore().connected &&
+      productionStore.updateStatus(response.data._id, response.data.status);
 
     setIsError(false);
     setError(response.message);
@@ -26,16 +28,17 @@ const statusHandler = async (value: string) => {
   }
 };
 
-const commentHandler = async (value: string) => {
+const commentHandler = async (comment: Comment) => {
   const requestData = {
     _id: order.value._id,
-    comment: value,
+    comment,
   };
 
   const response: any = await request.post("addProductionComment", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.addComment(order!.value._id, response.data);
+    !useSocketStore().connected &&
+      productionStore.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -43,13 +46,14 @@ const commentHandler = async (value: string) => {
   }
 };
 
-const deleteHandler = async (value: string, comment: string) => {
-  const requestData = { _id: value, comment: comment };
+const deleteHandler = async (_id: string, comment: Comment) => {
+  const requestData = { _id, comment };
 
   const response = await request.delete("deleteProductionComment", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.deleteComment(value, response.data.comment);
+    !useSocketStore().connected &&
+      productionStore.deleteComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -62,7 +66,7 @@ const newBindingHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.addNewBinding(response.data._id, response.data.data);
+      productionStore.addNewBinding(response.data._id, response.data.data);
 
     setIsError(false);
     setError(response.message);
@@ -151,7 +155,7 @@ const uploadFiles = async (data: any) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProduction.updateFiles(response.data._id, response.data.files);
+      productionStore.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);

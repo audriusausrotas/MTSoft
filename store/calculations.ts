@@ -72,15 +72,15 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateRetail(value: boolean) {
-      const useSettings = useSettingsStore();
+      const settingsStore = useSettingsStore();
 
       this.retail = value;
       this.fences = this.fences.map((item) => {
         if (value) {
-          item.type = useSettings.selectValues.retailFenceTypes[0];
+          item.type = settingsStore.selectValues.retailFenceTypes[0];
           return item;
         } else {
-          item.type = useSettings.selectValues.fenceTypes[0];
+          item.type = settingsStore.selectValues.fenceTypes[0];
           return item;
         }
       });
@@ -369,7 +369,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     //   calculation from Bosh lazer app
     lazerCalculate(text: string, units: string, precision: string) {
-      const useSettings = useSettingsStore();
+      const settingsStore = useSettingsStore();
       const tempArr: string = text.replace(/\n/g, " ");
       const splitArr: string[] = tempArr.split(" ");
       const unit = units === "Metrai" ? 100 : units === "Milimetrai" ? 0.1 : 1;
@@ -489,7 +489,7 @@ export const useCalculationsStore = defineStore("calculations", {
           checkFence();
           let found = "Nerasta";
 
-          if (useSettings.selectValues.fenceTypes.some((item) => item === capitalize(temp))) {
+          if (settingsStore.selectValues.fenceTypes.some((item) => item === capitalize(temp))) {
             found = capitalize(temp);
           } else {
             if (temp === "60x90") found = "Daimond 60/90";

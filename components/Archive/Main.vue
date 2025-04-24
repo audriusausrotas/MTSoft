@@ -5,14 +5,14 @@ const props = defineProps({
     required: true,
   },
 });
-const useArchives = useArchivesStore();
+const archiveStore = useArchiveStore();
 
 const searchValue = ref("");
 
 const filteredProjects = computed(() => {
   return searchValue.value.length > 2
-    ? useArchives.searchArchive(props.location, searchValue.value)
-    : useArchives.data[props.location];
+    ? archiveStore.searchArchive(props.location, searchValue.value)
+    : archiveStore.data[props.location];
 });
 </script>
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
 
-const useCalculations = useCalculationsStore();
-const useProjects = useProjectsStore();
-const useResults = useResultsStore();
-const useBackup = useBackupStore();
-const useUser = useUserStore();
+const calculationsStore = useCalculationsStore();
+const projectsStore = useProjectsStore();
+const resultsStore = useResultsStore();
+const backupStore = useBackupStore();
+const userStore = useUserStore();
 
 const { setError, setIsError } = useError();
 
@@ -13,32 +13,32 @@ const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
 const project = computed(() => {
-  return useProjects.projects.find((item) => item._id === useProjects.selectedProject);
+  return projectsStore.projects.find((item) => item._id === projectsStore.selectedProject);
 });
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   const newProject: Project = {
-    _id: useProjects.selectedProject ? useProjects.selectedProject : "",
+    _id: projectsStore.selectedProject ? projectsStore.selectedProject : "",
     creator: {
-      username: useUser.user!.username,
-      lastName: useUser.user!.lastName,
-      email: useUser.user!.email,
-      phone: useUser.user!.phone,
+      username: userStore.user!.username,
+      lastName: userStore.user!.lastName,
+      email: userStore.user!.email,
+      phone: userStore.user!.phone,
     },
-    client: useCalculations.client,
-    fenceMeasures: useCalculations.fences,
-    results: useResults.results,
-    works: useResults.works,
-    gates: useResults.gates,
-    retail: useCalculations.retail,
-    totalPrice: useResults.totalPrice,
-    totalCost: useResults.totalCost,
-    totalProfit: useResults.totalProfit,
-    totalMargin: useResults.totalMargin,
-    priceVAT: useResults.priceVAT,
-    priceWithDiscount: useResults.priceWithDiscount,
-    discount: useResults.discount,
+    client: calculationsStore.client,
+    fenceMeasures: calculationsStore.fences,
+    results: resultsStore.results,
+    works: resultsStore.works,
+    gates: resultsStore.gates,
+    retail: calculationsStore.retail,
+    totalPrice: resultsStore.totalPrice,
+    totalCost: resultsStore.totalCost,
+    totalProfit: resultsStore.totalProfit,
+    totalMargin: resultsStore.totalMargin,
+    priceVAT: resultsStore.priceVAT,
+    priceWithDiscount: resultsStore.priceWithDiscount,
+    discount: resultsStore.discount,
     dateCreated: "",
     dateExparation: "",
     status: "Nepatvirtintas",
@@ -50,11 +50,15 @@ const saveHandler = async (): Promise<void> => {
   };
   try {
     let response;
-    if (useProjects.selectedProject) response = await request.patch("updateProject", newProject);
+    if (projectsStore.selectedProject) response = await request.patch("updateProject", newProject);
     else response = await request.post("newProject", newProject);
 
     if (response.success) {
-      !useSocketStore().connected && useProjects.addProject(response.data);
+      if (!useSocketStore().connected) {
+        if (projectsStore.selectedProject) projectsStore.updateProject(response.data);
+        else projectsStore.addProject(response.data);
+      }
+
       clearHandler();
       setIsError(false);
       setError(response.message);
@@ -69,10 +73,10 @@ const saveHandler = async (): Promise<void> => {
 };
 
 const clearHandler = () => {
-  useCalculations.clearAll();
-  useResults.clearAll();
-  useProjects.clearSelected();
-  useBackup.clearBackup();
+  calculationsStore.clearAll();
+  resultsStore.clearAll();
+  projectsStore.clearSelected();
+  backupStore.clearBackup();
 };
 </script>
 

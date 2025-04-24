@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
 const { setError, setIsError } = useError();
-const useInstallation = useInstallationStore();
-const useUser = useUserStore();
+const installationStore = useInstallationStore();
+const userStore = useUserStore();
 
 const statusColor = computed(() =>
   props.order.status === "Sumontuota"
@@ -18,7 +18,7 @@ const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti darbą?");
   if (!confirmed) return;
 
-  if (useUser.user?.accountType !== "Administratorius") {
+  if (userStore.user?.accountType !== "Administratorius") {
     setError("Ištrinti gali tik administratorius");
     return;
   }
@@ -26,7 +26,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteInstallation/${props.order._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useInstallation.deleteInstallationOrder(props.order._id);
+    !useSocketStore().connected && installationStore.deleteInstallationOrder(response.data._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -41,7 +41,7 @@ const workerDeleteHandler = async (worker: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallation.deleteInstallationWorker(props.order._id, worker);
+      installationStore.deleteInstallationWorker(response.data._id, response.data.worker);
     setIsError(false);
     setError(response.message);
   } else {
@@ -88,7 +88,7 @@ const clickHandler = () => {
       {{ order?.client.address }}
     </p>
     <div
-      v-if="useUser.user?.accountType === 'Administratorius'"
+      v-if="userStore.user?.accountType === 'Administratorius'"
       class="flex flex-1 items-center justify-around h-8 border-black bg-stone-300"
     >
       <div v-for="worker in props.order.workers" :key="worker" class="flex gap-1">

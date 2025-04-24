@@ -3,7 +3,7 @@ import { verticals, horizontals } from "../../data/selectFieldData";
 import type { Product } from "~/data/interfaces";
 const props = defineProps(["result", "index", "parts"]);
 
-const useResults = useResultsStore();
+const resultsStore = useResultsStore();
 const isFenceboard = computed(() => {
   if (verticals.some((item) => props.result?.type?.includes(item))) {
     return true;
@@ -35,10 +35,7 @@ const showAditionalHorizontal = computed(() => {
 });
 
 const colorEditable = computed(
-  () =>
-    props.result.isNew ||
-    props.result.color === "Kita" ||
-    props.result.category !== "tvoros"
+  () => props.result.isNew || props.result.color === "Kita" || props.result.category !== "tvoros"
 );
 
 const spaceEditable = computed(
@@ -59,9 +56,9 @@ const spaceEditable = computed(
         label="Pavadinimas"
         :name="props.result.type"
         :data="props.parts"
-        @onChange="(value) => useResults.updateName(props.index, value)"
+        @onChange="(value) => resultsStore.updateName(props.index, value)"
         @OnClick="(value: Product) => {
-      useResults.selectItem(props.index, value);
+      resultsStore.selectItem(props.index, value);
     }
       "
       />
@@ -73,7 +70,7 @@ const spaceEditable = computed(
           :variant="colorEditable ? 'light' : ''"
           :disable="colorEditable ? false : true"
           :name="props.result.color"
-          @onChange="(value) => useResults.updateColor(props.index, value)"
+          @onChange="(value) => resultsStore.updateColor(props.index, value)"
         />
 
         <BaseInput
@@ -82,7 +79,7 @@ const spaceEditable = computed(
           label="kiekis"
           type="number"
           :name="props.result.quantity"
-          @onChange="(value: number) => useResults.updateQuantity(props.index, +value)"
+          @onChange="(value: number) => resultsStore.updateQuantity(props.index, +value)"
         />
 
         <BaseInput
@@ -91,25 +88,20 @@ const spaceEditable = computed(
           width="w-24"
           type="number"
           :name="props.result.price"
-          @onChange="(value: number) => useResults.updatePrice(props.index, value)"
+          @onChange="(value: number) => resultsStore.updatePrice(props.index, value)"
         />
         <BaseInput
           label="savikaina"
           :name="props.result.cost"
           width="w-24"
           variant="light"
-          @onChange="(value: number) => useResults.updateResultCost(props.index, value)"
+          @onChange="(value: number) => resultsStore.updateResultCost(props.index, value)"
         />
       </div>
     </div>
 
     <div v-if="showAditionalVertical" class="flex flex-col gap-2">
-      <BaseInput
-        variant="light"
-        label="ilgis"
-        :name="$props.result.height"
-        width="w-24"
-      />
+      <BaseInput variant="light" label="ilgis" :name="$props.result.height" width="w-24" />
       <BaseInput
         v-if="isFenceboard"
         :name="props.result.space"
@@ -117,7 +109,7 @@ const spaceEditable = computed(
         label="tarpas"
         :variant="spaceEditable ? 'light' : ''"
         :disable="spaceEditable ? false : true"
-        @onChange="(value) => useResults.updateSpace(props.index, value)"
+        @onChange="(value) => resultsStore.updateSpace(props.index, value)"
       />
     </div>
 
@@ -152,33 +144,18 @@ const spaceEditable = computed(
         :name="props.result.totalCost"
         disable="true"
       />
-      <BaseInput
-        width="w-24"
-        label="viso kaina"
-        :name="props.result.totalPrice"
-        disable="true"
-      />
+      <BaseInput width="w-24" label="viso kaina" :name="props.result.totalPrice" disable="true" />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput
-        width="w-24"
-        label="marža"
-        :name="props.result.margin + ' %'"
-        disable="true"
-      />
-      <BaseInput
-        width="w-24"
-        :name="props.result.profit"
-        label="pelnas"
-        disable="true"
-      />
+      <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" disable="true" />
+      <BaseInput width="w-24" :name="props.result.profit" label="pelnas" disable="true" />
     </div>
 
     <NuxtImg
       src="/icons/delete.svg"
       width="20"
       height="20"
-      @click="useResults.deleteResult(props.result.id)"
+      @click="resultsStore.deleteResult(props.result.id)"
       class="rounded-lg hover:bg-red-light hover:cursor-pointer"
     />
   </div>

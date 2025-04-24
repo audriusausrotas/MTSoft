@@ -3,8 +3,8 @@ import { accountStatus } from "~/data/selectFieldData";
 import request from "~/utils/request";
 
 const { setError, setIsError } = useError();
-const useSettings = useSettingsStore();
-const useUser = useUserStore();
+const settingsStore = useSettingsStore();
+const userStore = useUserStore();
 const password = ref<string>("");
 const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
@@ -21,7 +21,7 @@ const userChangesHandler = async (id: string, type: string, value: string) => {
   const response: any = await request.patch("updateUser", postData);
 
   if (response.success) {
-    !useSocketStore().connected && useUser.updateUser(response.data);
+    !useSocketStore().connected && userStore.updateUser(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -41,7 +41,7 @@ const confirmHandler = async () => {
     const response = await request.delete("deleteUser", postData);
 
     if (response.success) {
-      !useSocketStore().connected && useUser.deleteUser(selectedUser.value);
+      !useSocketStore().connected && userStore.deleteUser(response.data._id);
       password.value = "";
       selectedUser.value = "";
       modalOpen.value = false;
@@ -62,9 +62,7 @@ const deleteHandler = (id: string) => {
 
 <template>
   <div class="w-full">
-    <div
-      class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl"
-    >
+    <div class="flex p-3 bg-gray-ultra-light capitalize items-center justify-center rounded-t-2xl">
       <div class="flex-1">nr</div>
       <p class="flex-[3]">vartotojo vardas</p>
       <p class="flex-[6]">el. paštas</p>
@@ -74,14 +72,12 @@ const deleteHandler = (id: string) => {
     </div>
 
     <div
-      v-for="(user, index) in useUser.users"
+      v-for="(user, index) in userStore.users"
       :key="user._id"
       class="flex py-2 capitalize border-b"
     >
       <div class="flex-1 pl-3">{{ index + 1 }}</div>
-      <p class="flex-[3] flex items-center">
-        {{ user.username }} {{ user.lastName }}
-      </p>
+      <p class="flex-[3] flex items-center">{{ user.username }} {{ user.lastName }}</p>
 
       <div class="flex-[6] flex lowercase items-center">{{ user.email }}</div>
 
@@ -96,17 +92,14 @@ const deleteHandler = (id: string) => {
 
       <BaseSelectField
         :id="user._id"
-        :values="useSettings.selectValues.accountTypes"
+        :values="settingsStore.selectValues.accountTypes"
         width="w-52"
         class="flex-[3]"
         :defaultValue="user?.accountType"
         @onChange="(value: string) => userChangesHandler(user._id, 'admin', value)"
       />
 
-      <div
-        class="flex justify-end flex-1 hover:cursor-pointer"
-        @click="deleteHandler(user._id)"
-      >
+      <div class="flex justify-end flex-1 hover:cursor-pointer" @click="deleteHandler(user._id)">
         <NuxtImg
           src="/icons/delete.svg"
           alt="delete button "
@@ -138,11 +131,7 @@ const deleteHandler = (id: string) => {
         </div>
         <div class="flex gap-4">
           <BaseButton name="atšaukti" @click="() => (modalOpen = false)" />
-          <BaseButton
-            name="patvirtinti"
-            @click="confirmHandler"
-            :isLoading="isLoading"
-          />
+          <BaseButton name="patvirtinti" @click="confirmHandler" :isLoading="isLoading" />
         </div>
       </div>
     </div>

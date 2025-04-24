@@ -3,7 +3,7 @@ import { reactive, watchEffect } from "vue";
 
 const props = defineProps(["accountType"]);
 const { setError, setIsError } = useError();
-const useSettings = useSettingsStore();
+const settingsStore = useSettingsStore();
 
 const editable = ref(false);
 const rights = reactive({
@@ -16,9 +16,7 @@ const rights = reactive({
 });
 
 watchEffect(() => {
-  const user = useSettings.userRights.find(
-    (u) => u.accountType === props.accountType
-  );
+  const user = settingsStore.userRights.find((u) => u.accountType === props.accountType);
 
   if (user) {
     rights.installation = user.installation;
@@ -39,7 +37,7 @@ const saveHandler = async () => {
   const response: any = await request.post("newUserRights", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useSettings.updateUserRights(response.data);
+    !useSocketStore().connected && settingsStore.updateUserRights(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);
@@ -53,52 +51,22 @@ const saveHandler = async () => {
   <div class="flex gap-4">
     <div class="w-48">{{ props.accountType }}</div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.project"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.project" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.schedule"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.schedule" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.production"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.production" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.installation"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.installation" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.gate"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.gate" />
     </div>
     <div class="w-24 flex justify-center">
-      <input
-        type="checkbox"
-        class="w-5"
-        :disabled="!editable"
-        v-model="rights.admin"
-      />
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.admin" />
     </div>
     <NuxtImg
       v-if="!editable"

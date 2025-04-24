@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PotentialClient } from "~/data/interfaces";
 
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 const { setError, setIsError } = useError();
 const loading = ref<boolean>(false);
 const files = ref<any>([]);
@@ -13,7 +13,7 @@ const input = ref<string>("");
 const sendHandler = async () => {
   loading.value = true;
 
-  const recipients = usePotentialClients.potentialClients.filter((client) => client.send);
+  const recipients = potentialClientsStore.potentialClients.filter((client) => client.send);
 
   const formData = new FormData();
   formData.append("message", text.value);
@@ -47,7 +47,7 @@ const selectAllHandler = async (value: boolean) => {
 
   const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
-    usePotentialClients.selectPotentialClients(value);
+    potentialClientsStore.selectPotentialClients(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -58,7 +58,7 @@ const selectAllHandler = async (value: boolean) => {
 const searchHandler = (value: string) => {
   input.value = value;
   if (value.length > 2) {
-    const foundProjects = usePotentialClients.potentialClients.filter(
+    const foundProjects = potentialClientsStore.potentialClients.filter(
       (client: PotentialClient) =>
         client.address.toLowerCase().includes(value.toLowerCase()) ||
         client.email.toLowerCase().includes(value.toLowerCase()) ||
@@ -67,7 +67,7 @@ const searchHandler = (value: string) => {
     );
     filteredData.value = [...foundProjects];
   } else {
-    filteredData.value = [...usePotentialClients.potentialClients];
+    filteredData.value = [...potentialClientsStore.potentialClients];
   }
 };
 
@@ -80,11 +80,11 @@ const removeFile = (index: number) => {
 };
 
 onMounted(() => {
-  filteredData.value = [...usePotentialClients.potentialClients];
+  filteredData.value = [...potentialClientsStore.potentialClients];
 });
 
 watch(
-  () => usePotentialClients.potentialClients,
+  () => potentialClientsStore.potentialClients,
   (newClients) => {
     if (input.value.length === 0) filteredData.value = [...newClients];
   }

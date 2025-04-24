@@ -11,9 +11,7 @@ export const useScheduleStore = defineStore("schedule", {
     },
 
     addSchedule(schedule: Schedule) {
-      const index = this.schedules.findIndex(
-        (item) => item._id === schedule._id
-      );
+      const index = this.schedules.findIndex((item) => item._id === schedule._id);
       if (index !== -1) {
         this.schedules[index] = schedule;
       } else {
@@ -22,9 +20,7 @@ export const useScheduleStore = defineStore("schedule", {
     },
 
     updateSchedule(schedule: Schedule) {
-      const index = this.schedules.findIndex(
-        (item) => item._id === schedule._id
-      );
+      const index = this.schedules.findIndex((item) => item._id === schedule._id);
       if (index !== -1) {
         this.schedules[index] = schedule;
       }

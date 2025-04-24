@@ -2,7 +2,7 @@
 import { OffersStatus } from "~/data/selectFieldData";
 
 const { setError, setIsError } = useError();
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 
 const open = ref<boolean>(false);
 const name = ref<string>("");
@@ -23,7 +23,7 @@ const saveHandler = async () => {
   const response: any = await request.post("newPotentialClient", client);
 
   if (response.success) {
-    !useSocketStore().connected && usePotentialClients.addPotentialClient(response.data);
+    !useSocketStore().connected && potentialClientsStore.addPotentialClient(response.data);
     setIsError(false);
     setError(response.message);
     cancelHandler();

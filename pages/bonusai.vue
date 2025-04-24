@@ -26,9 +26,7 @@ const filterMonth = ref<string>(MONTHS[currentDate.getMonth()]);
 const bonusSum = ref<number>(0);
 
 const getBonuses = async () => {
-  const response: { data: Bonus[]; success: boolean; message: string } = await request.get(
-    "getBonus"
-  );
+  const response = await request.get("getBonus");
 
   if (response.success) {
     bonuses.value = [...response.data];

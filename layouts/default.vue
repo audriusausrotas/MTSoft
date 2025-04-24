@@ -2,9 +2,9 @@
 import { useSocketStore } from "~/store/socket";
 const useSocket = useSocketStore();
 
-onMounted(() => {
-  useSocket.connect();
-});
+// onMounted(() => {
+//   useSocket.connect();
+// });
 </script>
 
 <template>

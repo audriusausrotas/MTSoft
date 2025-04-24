@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const props = defineProps(["version", "index", "projectId"]);
-const useCalculations = useCalculationsStore();
-const useResults = useResultsStore();
-const useProjects = useProjectsStore();
-const useBackup = useBackupStore();
+const calculationsStore = useCalculationsStore();
+const resultsStore = useResultsStore();
+const projectsStore = useProjectsStore();
+const backupStore = useBackupStore();
 const { setError, setIsError } = useError();
 
 const open = ref<boolean>(false);
@@ -19,26 +19,26 @@ const returnHandler = async () => {
   const response: any = await request.patch("versionRollback", requestData);
 
   if (response.success) {
-    useCalculations.clearAll();
-    useResults.clearAll();
-    useProjects.clearSelected();
-    useBackup.clearBackup();
+    calculationsStore.clearAll();
+    resultsStore.clearAll();
+    projectsStore.clearSelected();
+    backupStore.clearBackup();
 
     response.data._id = props.projectId;
 
-    useProjects.addProject(response.data);
+    projectsStore.addProject(response.data);
 
-    useCalculations.setProject({
+    calculationsStore.setProject({
       client: response.data.client,
       fenceMeasures: response.data.fenceMeasures,
       retail: response.data.retail,
     });
 
-    useResults.setProject(response.data);
+    resultsStore.setProject(response.data);
 
-    useBackup.addBackup(response.data.results, response.data.works);
+    backupStore.addBackup(response.data.results, response.data.works);
 
-    useProjects.setSelectedProject(props.projectId);
+    projectsStore.setSelectedProject(props.projectId);
   }
   open.value = false;
 };
@@ -50,14 +50,12 @@ const deleteHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjects.deleteVersion(response.data._id, response.data.projectId);
+      projectsStore.deleteVersion(response.data._id, response.data.projectId);
     setIsError(false);
     setError(response.message);
   } else {
     setError(response.message);
   }
-
-  useProjects.deleteVersion(props.version.id, props.projectId);
 
   open.value = false;
 };

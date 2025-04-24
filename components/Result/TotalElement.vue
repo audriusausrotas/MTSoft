@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const props = defineProps(["results"]);
-const useResults = useResultsStore();
+const resultsStore = useResultsStore();
 
-useResults.calculateTotals();
+resultsStore.calculateTotals();
 
-if (!useResults.priceWithDiscount) useResults.calculatePriceWithDiscount();
+if (!resultsStore.priceWithDiscount) resultsStore.calculatePriceWithDiscount();
 </script>
 
 <template>
@@ -27,7 +27,7 @@ if (!useResults.priceWithDiscount) useResults.calculatePriceWithDiscount();
           type="number"
           class="bg-transparent w-24 px-2"
           :value="props.results?.priceWithDiscount"
-          @change="(event: Event) => useResults.updateDiscount(+(event.target as HTMLInputElement)?.value)"
+          @change="(event: Event) => resultsStore.updateDiscount(+(event.target as HTMLInputElement)?.value)"
         />
       </div>
     </div>

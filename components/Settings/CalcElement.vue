@@ -2,14 +2,14 @@
 import type { Product } from "~/data/interfaces";
 const { setError, setIsError } = useError();
 const props = defineProps(["value", "data", "field", "name"]);
-const useSettings = useSettingsStore();
+const settingsStore = useSettingsStore();
 const input = ref<string>("");
 
 const editable = ref<boolean>(false);
 
 const clickHandler = (value: Product) => {
   input.value = value.name;
-  useSettings.changeDefaultValue(value.name, props.field);
+  settingsStore.changeDefaultValue(value.name, props.field);
 };
 
 const saveHandler = async () => {
@@ -18,7 +18,8 @@ const saveHandler = async () => {
   const response: any = await request.post("newDefaultValue", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useSettings.changeDefaultValue(input.value, props.field);
+    !useSocketStore().connected &&
+      settingsStore.changeDefaultValue(response.data.value, response.data.field);
     editable.value = false;
     setIsError(false);
     setError(response.message);

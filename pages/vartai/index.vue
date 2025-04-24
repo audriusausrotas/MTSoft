@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const useGates = useGateStore();
+const gateStore = useGateStore();
 const searchQuery = ref<string>("");
 </script>
 
@@ -22,7 +22,7 @@ const searchQuery = ref<string>("");
       />
     </BaseInput>
     <div
-      v-for="(gate, index) in useGates.searchGates(searchQuery)"
+      v-for="(gate, index) in gateStore.searchGates(searchQuery)"
       :key="gate._id"
       class="flex flex-col border-b border-red-600"
     >

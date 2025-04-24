@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { setError, setIsError } = useError();
-const useClients = useClientsStore();
+const clientsStore = useClientsStore();
 
 const open = ref<boolean>(false);
 const username = ref<string>("");
@@ -18,7 +18,7 @@ const saveHandler = async () => {
 
   const response: any = await request.post("newClient", client);
   if (response.success) {
-    !useSocketStore().connected && useClients.addClient(response.data);
+    !useSocketStore().connected && clientsStore.addClient(response.data);
     setIsError(false);
     setError(response.message);
   } else {

@@ -3,15 +3,15 @@ import type { Product } from "~/data/interfaces";
 
 const props = defineProps(["data", "field", "name"]);
 const { setError, setIsError } = useError();
-const useSettings = useSettingsStore();
-const useProducts = useProductsStore();
+const settingsStore = useSettingsStore();
+const productsStore = useProductsStore();
 
 const fenceTypes = props.field.toLowerCase().includes("fencetypes");
 const editable = ref<boolean>(false);
 
 const fences = ref<Product[]>([]);
 
-useProducts?.products?.forEach((item) => {
+productsStore?.products?.forEach((item) => {
   switch (item.category.toLowerCase()) {
     case "tvoros":
       fences.value.push(item);
@@ -27,7 +27,8 @@ const saveHandler = async (value: string) => {
   const response: any = await request.post("newSelect", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useSettings.newSelectValue(props.field, value);
+    !useSocketStore().connected &&
+      settingsStore.newSelectValue(response.data.field, response.data.value);
     editable.value = false;
     setIsError(false);
     setError(response.message);

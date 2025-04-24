@@ -256,6 +256,7 @@ export interface Bonus {
   profit: number;
   margin: number;
   user: string;
+  bonus: number;
 }
 
 export interface FenceMeasure {

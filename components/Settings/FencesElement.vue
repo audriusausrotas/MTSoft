@@ -3,7 +3,7 @@ import { fenceTypes, fenceDirections } from "~/data/selectFieldData";
 const props = defineProps(["fence"]);
 
 const { setError, setIsError } = useError();
-const useProducts = useProductsStore();
+const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
 const height = ref<string>(props.fence?.height);
@@ -56,7 +56,7 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateFenceData", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProducts.updateProduct(response.data);
+    !useSocketStore().connected && settingsStore.updateFenceSettings(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);

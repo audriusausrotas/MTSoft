@@ -1,15 +1,15 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
 const { setError, setIsError } = useError();
-const useProduction = useProductionStore();
-const useUser = useUserStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
   if (!confirmed) return;
 
-  if (useUser.user?.accountType !== "Administratorius") {
+  if (userStore.user?.accountType !== "Administratorius") {
     setError("Ištrinti gali tik administratorius");
     return;
   }
@@ -17,7 +17,7 @@ const deleteHandler = async (): Promise<void> => {
   const response: any = await request.delete(`deleteProduction/${props.order._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useProduction.deleteProductionOrder(response._id);
+    !useSocketStore().connected && productionStore.deleteProductionOrder(response.data._id);
     await router.replace("/gamyba");
     setIsError(false);
     setError(response.message);

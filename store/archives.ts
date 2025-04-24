@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { Project } from "~/data/interfaces";
 
-export const useArchivesStore = defineStore("Archives", {
+export const useArchiveStore = defineStore("Archives", {
   state: () => ({
     data: {
       archive: [] as Project[],

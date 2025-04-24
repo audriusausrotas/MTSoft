@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { gateStatus } from "~/data/selectFieldData";
-const useGates = useGateStore();
+const gateStore = useGateStore();
 const route = useRoute();
 const router = useRouter();
-const useUser = useUserStore();
+const userStore = useUserStore();
 const gate = computed(() => {
-  return useGates.gates.find((item) => item._id === route.params.id);
+  return gateStore.gates.find((item) => item._id === route.params.id);
 });
 const { setError, setIsError } = useError();
 
-const gateUsers = useUser.users
+const gateUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => {
     return user.email;
@@ -21,7 +21,7 @@ const finishOrderHandler = async () => {
   if (response.success) {
     if (!useSocketStore().connected) {
       useProjectsStore().updateProjectField(response.data_id, "status", response.data.status);
-      useGates.updateGateStatus(response.data._id, response.data.status);
+      gateStore.updateGateStatus(response.data._id, response.data.status);
     }
 
     await router.replace("/vartai");
@@ -37,13 +37,13 @@ const updateHandler = async (change: string, value: any) => {
     _id: gate.value?._id,
     change,
     value,
-    username: useUser.user?.username,
+    username: userStore.user?.username,
   };
 
   const response: any = await request.patch("updateOrder", data);
 
   if (response.success) {
-    !useSocketStore().connected && useGates.updateGate(response.data);
+    !useSocketStore().connected && gateStore.updateGate(response.data);
 
     if (change === "status") {
       const link = `https://mtsoft.lt/vartai/${gate.value?._id}`;

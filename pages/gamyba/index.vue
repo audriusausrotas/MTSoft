@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const useProduction = useProductionStore();
+const productionStore = useProductionStore();
 
 const searchQuery = ref("");
 
 const filteredProduction = computed(() => {
-  let list = [...useProduction.production];
+  let list = [...productionStore.production];
 
   if (searchQuery.value.length > 2) {
     list = list.filter(

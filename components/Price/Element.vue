@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useProductsStore } from "~/store/products";
+import { productsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
 
 const props = defineProps(["product", "index"]);
-const useProducts = useProductsStore();
+const productsStore = useProductsStore();
 
 const { setError, setIsError } = useError();
 const disable = ref<boolean>(true);
@@ -23,7 +23,7 @@ const deleteHandler = async (): Promise<void> => {
   const response = await request.delete(`deleteProduct/${props.product._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useProducts.deleteProduct(props.product._id);
+    !useSocketStore().connected && productsStore.deleteProduct(response.data._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -53,7 +53,7 @@ const saveHandler = async () => {
   const response = await request.patch("updateProduct", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProducts.updateProduct(response.data);
+    !useSocketStore().connected && productsStore.updateProduct(response.data);
     disable.value = true;
     setIsError(false);
     setError(response.message);

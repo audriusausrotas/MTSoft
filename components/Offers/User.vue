@@ -3,7 +3,7 @@ import { OffersStatus } from "~/data/selectFieldData";
 
 const props = defineProps(["index", "client"]);
 const { setError, setIsError } = useError();
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 
 const editable = ref<boolean>(false);
 const name = ref<string>(props.client.name);
@@ -16,7 +16,7 @@ const deleteHandler = async () => {
   const response: any = await request.delete(`deletePotentialClient/${props.client._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && usePotentialClients.deletePotentialClient(props.client._id);
+    !useSocketStore().connected && potentialClientsStore.deletePotentialClient(response.data._id);
     setIsError(false);
     setError(response.message);
   } else {
@@ -37,7 +37,7 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateClient", client);
 
   if (response.success) {
-    !useSocketStore().connected && usePotentialClients.updatePotentialClients(response.data);
+    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
     setIsError(false);
     setError(response.message);
     editable.value = false;

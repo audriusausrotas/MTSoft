@@ -1,4 +1,4 @@
-import { useResultsStore } from "~/store/results";
+import { resultsStore } from "~/store/results";
 import { verticals } from "~/data/selectFieldData";
 import { v4 as uuidv4 } from "uuid";
 import type { Fences } from "~/data/interfaces";
@@ -7,15 +7,15 @@ import calculateVerticalFence from "~/utils/calculateVerticalFence";
 import generateResults from "~/utils/generateResults";
 
 export default function calculateResults() {
-  const useCalculations = useCalculationsStore();
-  const useSettings = useSettingsStore();
+  const calculationsStore = useCalculationsStore();
+  const settingsStore = useSettingsStore();
   const results = useResultsStore();
 
   results.clearAll();
 
   let fenceTemp: Fences[] = [];
 
-  useCalculations.fences.forEach((item) => {
+  calculationsStore.fences.forEach((item) => {
     // checks if crossbars needed
     const onlyParts = item.services === "Tik Medžiagos";
     const onlyServices = item.services === "Tik Montavimas";
@@ -27,17 +27,14 @@ export default function calculateResults() {
       item.parts !== "Be Bortelių Ir Stulpų" &&
       item.anchoredPoles === "Ne";
 
-    const hasCrossbars: boolean = verticals.some(
-      (vertical) => vertical === item.type
-    );
+    const hasCrossbars: boolean = verticals.some((vertical) => vertical === item.type);
 
     // calculate horizontal fence by suare meters
     if (!hasCrossbars && !isSegment) {
       const temp = calculateHorizontalFence(fenceTemp, item);
       if (!onlyServices) fenceTemp = [...(temp || [])];
       if (!onlyParts) {
-        if (item.bindings === "Taip")
-          results.addTotalFenceWithBindings(item.totalQuantity);
+        if (item.bindings === "Taip") results.addTotalFenceWithBindings(item.totalQuantity);
         else results.addTotalFence(item.totalQuantity);
       }
     }
@@ -46,8 +43,7 @@ export default function calculateResults() {
     let lastBindingHeight: number = 0;
 
     item.measures.forEach((measure) => {
-      const isFence =
-        !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
+      const isFence = !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
 
       // calculate gates
       if (measure.gates.exist) {
@@ -65,7 +61,7 @@ export default function calculateResults() {
               ? measure.gates.bankette
               : "",
 
-              comment: measure.gates.comment,
+          comment: measure.gates.comment,
           direction: measure.length! < 200 ? measure.gates.direction : "",
           lock: measure.length! < 200 ? measure.gates.lock : "",
           option: measure.gates.option,
@@ -87,26 +83,23 @@ export default function calculateResults() {
 
       // calculate total elements
       if (!isSegment) {
-        if (!onlyServices)
-          results.addTotalElements(measure.elements, item.color, item.type);
+        if (!onlyServices) results.addTotalElements(measure.elements, item.color, item.type);
 
         // calculate bindings
 
         if (item.direction === "Horizontali" && item.bindings === "Taip") {
-          if (!onlyServices)
-            results.addBindingsLength(measure.height, item.color);
-          if (!onlyServices && !useCalculations.retail)
-            lastBindingHeight = measure.height;
+          if (!onlyServices) results.addBindingsLength(measure.height, item.color);
+          if (!onlyServices && !calculationsStore.retail) lastBindingHeight = measure.height;
         }
       }
 
       // calculate retail legs
-      if (useCalculations.retail) {
+      if (calculationsStore.retail) {
         if (item.direction !== "Horizontali" || measure.gates.exist) return;
         const type =
           item.bindings === "Taip"
-            ? useSettings.defaultValues.retailSingleLeg
-            : useSettings.defaultValues.retailDoubleLeg;
+            ? settingsStore.defaultValues.retailSingleLeg
+            : settingsStore.defaultValues.retailDoubleLeg;
         results.addRetailLeg(measure.height, item.color, type);
       }
 
@@ -137,8 +130,7 @@ export default function calculateResults() {
           if (!measure.gates.exist) {
             if (isFence) {
               if (!onlyServices) results.addAnchoredPoles(item.color, 3);
-              if (results.totalAnchoredPoles === 0 && !onlyParts)
-                results.addTotalAnchoredPoles();
+              if (results.totalAnchoredPoles === 0 && !onlyParts) results.addTotalAnchoredPoles();
               if (!onlyParts) results.addTotalAnchoredPoles();
               isTogether = false;
             }
@@ -159,8 +151,7 @@ export default function calculateResults() {
           if (!measure.gates.exist) {
             if (isFence) {
               if (!onlyServices) results.addPoles(item.color, 3);
-              if (results.totalPoles === 0 && !onlyParts)
-                results.addTotalPoles();
+              if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
               if (!onlyParts) results.addTotalPoles();
               isTogether = false;
             }

@@ -69,7 +69,7 @@ export const useInstallationStore = defineStore("installation", {
       });
     },
 
-    deleteComments(_id: string, comment: Comment): void {
+    deleteComment(_id: string, comment: Comment): void {
       this.installation = this.installation.map((project) => {
         if (project._id === _id) {
           project.comments = project.comments.filter(

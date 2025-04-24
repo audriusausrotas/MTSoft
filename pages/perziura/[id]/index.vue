@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { Version } from "~/data/interfaces";
+import type { Version, Comment } from "~/data/interfaces";
 const { setError, setIsError } = useError();
-const useInstallation = useInstallationStore();
-const useProjects = useProjectsStore();
-const useSettings = useSettingsStore();
-const useProduction = useProductionStore();
-const useGates = useGateStore();
-const useUsers = useUserStore();
+const installationStore = useInstallationStore();
+const projectsStore = useProjectsStore();
+const settingsStore = useSettingsStore();
+const productionStore = useProductionStore();
+const gateStore = useGateStore();
+const userStore = useUserStore();
 const route = useRoute();
 
-const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
-const allUsers = useUsers.users.map((item) => item.username);
+const offer = computed(() => projectsStore.projects.find((item) => item._id === route.params.id));
+const allUsers = userStore.users.map((item) => item.username);
 
 const isOpenInstallation = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
@@ -29,19 +29,20 @@ const uploadFiles = async (data: any) => {
   });
 
   if (response.success) {
-    !useSocketStore().connected && useProjects.updateFiles(response.data._id, response.data.files);
+    !useSocketStore().connected &&
+      projectsStore.updateFiles(response.data._id, response.data.files);
     setIsError(false);
     setError(response.message);
   } else setError(response.message);
 };
 
-const vartonasUsers = useUsers.users
+const vartonasUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => {
     return user.email;
   });
 
-const workers = useUsers.users
+const workers = userStore.users
   .filter((user) => user.accountType === "Montavimas")
   .map((user) => {
     return user.lastName;
@@ -50,14 +51,13 @@ const workers = useUsers.users
 const versions: Version[] | undefined = offer.value?.versions;
 
 const statusHandler = async (value: string) => {
-  const response: any = await request.patch("updateProjectStatus", {
-    _id: offer!.value!._id,
-    value,
-  });
+  const requestData = { _id: offer!.value!._id, value };
+
+  const response: any = await request.patch("updateProjectStatus", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjects.updateProjectField(response.data._id, "status", value);
+      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -102,7 +102,7 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
   const response: any = await request.post("newOrder", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useGates.addGate(response.data);
+    !useSocketStore().connected && gateStore.addGate(response.data);
 
     const link = `https://mtsoft.lt/vartai/${offer?.value?._id}`;
 
@@ -136,7 +136,7 @@ const gateCancelHandler = async (): Promise<void> => {
   const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && useGates.removeGates(response.data);
+    !useSocketStore().connected && gateStore.removeGates(response.data._id);
     gateOrdered.value = false;
     setIsError(false);
     setError(response.message);
@@ -158,7 +158,7 @@ const changeCreatorHandler = async (value: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjects.updateProjectField(response.data._id, "creator", response.data.user);
+      projectsStore.updateProjectField(response.data._id, "creator", response.data.user);
     setIsError(false);
     setError(response.message);
   } else {
@@ -174,9 +174,11 @@ const advanceHandler = async () => {
   const response: any = await request.patch("changeAdvance", requestData);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      useProjects.updateProjectField(response.data._id, "advance", response.data.value);
-    offer!.value!.advance = advance.value;
+    if (!useSocketStore().connected) {
+      projectsStore.updateProjectField(response.data._id, "advance", response.data.value);
+      projectsStore.updateProjectField(response.data._id, "status", "Patvirtintas");
+    }
+
     setIsError(false);
     setError(response.message);
   } else {
@@ -191,10 +193,10 @@ const orderFinishHandler = async () => {
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      useArchivesStore().addArchive("archive", response.data.data);
-      useProjects.deleteProject(response.data._id);
+      useArchiveStore().addArchive("archive", response.data);
       useProductionStore().deleteProductionOrder(response.data._id);
       useInstallationStore().deleteInstallationOrder(response.data._id);
+      projectsStore.deleteProject(response.data._id);
       navigateTo("/");
     }
     setIsError(false);
@@ -209,8 +211,8 @@ const productionHandler = async () => {
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      useProduction.addProduction(response.data);
-      useProjects.updateProjectField(response.data._id, "status", "Gaminama");
+      productionStore.addProduction(response.data);
+      projectsStore.updateProjectField(response.data._id, "status", "Gaminama");
     }
     setIsError(false);
     setError(response.message);
@@ -226,7 +228,7 @@ const installationHandler = async (value: string) => {
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      useInstallation.addInstallation(response.data);
+      installationStore.addInstallation(response.data);
       useProjectsStore().updateProjectField(response.data._id, "status", "Montuojama");
     }
     setIsError(false);
@@ -237,17 +239,18 @@ const installationHandler = async (value: string) => {
   isOpenInstallation.value = false;
 };
 
-const addComment = async (value: any) => {
+const addComment = async (comment: Comment) => {
   const requestData = {
     _id: offer?.value!._id,
-    comment: value,
-    username: useUsers.user?.username,
+    comment,
+    username: userStore.user?.username,
   };
 
   const response: any = await request.post("addProjectComment", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && useProjects.addComment(response.data._id, response.data.comment);
+    !useSocketStore().connected &&
+      projectsStore.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -255,17 +258,17 @@ const addComment = async (value: any) => {
   }
 };
 
-const deleteComment = async (value: any) => {
+const deleteComment = async (comment: Comment) => {
   const requestData = {
     _id: offer?.value!._id,
-    comment: value,
+    comment,
   };
 
   const response: any = await request.delete("deleteProjectComment", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjects.deleteComment(response.data._id, response.data.comment);
+      projectsStore.deleteComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -278,7 +281,7 @@ const versionsHandler = (id: string) => {
 };
 
 const checkGates = () => {
-  gateOrdered.value = useGates.gates.some(
+  gateOrdered.value = gateStore.gates.some(
     (item) => item._id.toString() === offer.value!._id!.toString()
   );
 };
@@ -293,7 +296,7 @@ const gateExist =
   );
 
 watch(
-  () => useGates.gates,
+  () => gateStore.gates,
   () => {
     checkGates();
   },
@@ -414,7 +417,7 @@ watch(
 
         <div class="flex gap-4 items-end">
           <BaseSelectField
-            :values="useSettings.selectValues.status"
+            :values="settingsStore.selectValues.status"
             id="orderStatus"
             :defaultValue="offer?.status"
             label="Statusas"
