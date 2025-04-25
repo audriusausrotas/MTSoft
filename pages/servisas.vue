@@ -22,7 +22,7 @@ const searchHandler = async (value: string) => {
       method: "GET",
       credentials: "include",
     };
-    const response: any = await $fetch(`https://mtsoft.lt/serviceCheck?q=${value}`, options);
+    const response: any = await $fetch(`https://mtsoft.lt/serviceSearch?q=${value}`, options);
     data.value = response.data || [];
   }, 250);
 };
