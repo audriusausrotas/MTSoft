@@ -29,7 +29,7 @@ const fetchData = async (
 
   try {
     const apiUrl =
-      window.location.hostname === "localhost" ? "http://localhost:3001" : "https://mtsoft.lt:3001";
+      process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://mtsoft.lt:3001";
 
     const data: any = await $fetch(`${apiUrl}/${path}`, options);
 
