@@ -1,13 +1,10 @@
 import { defineStore } from "pinia";
-import type { ProjectsState, Project } from "~/data/interfaces";
+import type { Project, Comment } from "~/data/interfaces";
 
 export const useProjectsStore = defineStore("Projects", {
-  state: (): ProjectsState => ({
-    projects: [],
-    filteredProjects: [],
-    selectedProject: null,
-    selectedFilter: "Visi",
-    selectedStatusFilter: "Visi",
+  state: () => ({
+    projects: [] as Project[],
+    selectedProject: null as string | null,
   }),
 
   actions: {
@@ -16,43 +13,52 @@ export const useProjectsStore = defineStore("Projects", {
     },
 
     addProject(project: Project): void {
-      if (this.projects.length === 0) this.projects.unshift(project);
-      else {
-        this.projects = this.projects.map((item) => {
-          if (item._id === project._id) {
-            return project;
-          } else {
-            return item;
-          }
-        });
-      }
-    },
-
-    copyProject(project: Project): void {
       this.projects.unshift(project);
-      this.filterProjects();
     },
 
-    deleteProject(id: String): void {
-      this.projects = this.projects.filter((item) => item._id !== id);
-      this.filterProjects();
+    updateProject(project: Project): void {
+      this.projects = this.projects.map((item) => (item._id === project._id ? project : item));
     },
 
-    setSelectedProject(data: string) {
-      this.selectedProject = data;
+    addComment(_id: string, comment: Comment): void {
+      this.projects = this.projects.map((project) => {
+        if (project._id === _id) {
+          project.comments = [...project.comments, comment];
+          return project;
+        } else return project;
+      });
+    },
+
+    deleteComment(_id: string, comment: Comment) {
+      this.projects = this.projects.map((project) => {
+        if (project._id === _id) {
+          project.comments = project.comments.filter(
+            (item) =>
+              item.date !== comment.date &&
+              item.creator !== comment.creator &&
+              item.comment !== comment.comment
+          );
+          return project;
+        } else return project;
+      });
+    },
+
+    deleteProject(_id: string): void {
+      this.projects = this.projects.filter((item) => item._id !== _id);
+    },
+
+    setSelectedProject(_id: string) {
+      this.selectedProject = _id;
     },
 
     clearSelected() {
       this.selectedProject = null;
     },
 
-    updateStatus(id: string, value: string) {
-      this.projects = this.projects.map((item) => {
-        if (item._id === id) {
-          item.status = value;
-          return item;
-        } else return item;
-      });
+    updateProjectField<T extends keyof Project>(id: string, field: T, value: Project[T]) {
+      this.projects = this.projects.map((item) =>
+        item._id === id ? { ...item, [field]: value } : item
+      );
     },
 
     deleteVersion(versionId: string, projectId: string) {
@@ -64,87 +70,13 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
-    changeFilter(data: string) {
-      this.selectedFilter = data;
-      this.filterProjects();
-    },
-    changeStatusFilter(data: string) {
-      this.selectedStatusFilter = data;
-      this.filterProjects();
-    },
-    changeCreator(data: Project) {
+    updateFiles(_id: string, files: string[]) {
       this.projects = this.projects.map((item) => {
-        if (item._id === data._id) return data;
-        else return item;
-      });
-      this.filterProjects();
-    },
-
-    changeAdvance(project: Project) {
-      this.projects = this.projects.map((item) => {
-        if (item._id === project._id) return project;
-        else return item;
-      });
-    },
-
-    addPhoto(id: string, photo: { url: string; id: string }) {
-      this.projects = this.projects.map((item) => {
-        if (item._id === id) {
-          item.files = [...item.files, photo];
+        if (item._id === _id) {
+          item.files = [...files];
           return item;
         } else return item;
       });
-    },
-
-    deletePhoto(id: string, photoID: string) {
-      this.projects = this.projects.map((item) => {
-        if (item._id === id) {
-          item.files = item.files.filter((item) => item.id !== photoID);
-          return item;
-        } else return item;
-      });
-    },
-
-    filterProjects() {
-      if (this.selectedFilter === "Visi") {
-        if (this.selectedStatusFilter === "Visi") {
-          this.filteredProjects = [...this.projects];
-        } else {
-          const filteredByStatus = this.projects.filter(
-            (item) => item.status === this.selectedStatusFilter
-          );
-          this.filteredProjects = [...filteredByStatus];
-        }
-      } else {
-        if (this.selectedStatusFilter === "Visi") {
-          this.filteredProjects = this.projects.filter((item) =>
-            item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase())
-          );
-        } else {
-          this.filteredProjects = this.projects.filter(
-            (item) =>
-              item.creator.username.toLowerCase().startsWith(this.selectedFilter.toLowerCase()) &&
-              item.status === this.selectedStatusFilter
-          );
-        }
-      }
-    },
-
-    searchProjects(value: string) {
-      if (value.length > 2) {
-        const foundProjects = this.projects.filter(
-          (project) =>
-            project.client.address.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.email.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
-            project.client.username.toLowerCase().includes(value.toLowerCase()) ||
-            project.orderNumber.toLowerCase().includes(value.toLowerCase())
-        );
-
-        this.filteredProjects = [...foundProjects];
-      } else {
-        this.filterProjects();
-      }
     },
   },
 });

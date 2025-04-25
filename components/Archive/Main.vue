@@ -1,19 +1,29 @@
 <script setup lang="ts">
-const props = defineProps(["data", "location"]);
-const useArchives = useArchivesStore();
+const props = defineProps({
+  location: {
+    type: String as PropType<"archive" | "unconfirmed" | "deleted" | "backup">,
+    required: true,
+  },
+});
+const archiveStore = useArchiveStore();
 
-const searchArchive = (value: string) => {
-  useArchives.searchArchive(value, props.location);
-};
+const searchValue = ref("");
+
+const filteredProjects = computed(() => {
+  return searchValue.value.length > 2
+    ? archiveStore.searchArchive(props.location, searchValue.value)
+    : archiveStore.data[props.location];
+});
 </script>
 
 <template>
   <div class="flex flex-col items-center gap-4">
     <BaseInput
       placeholder="Paieška"
-      width="w-full "
+      width="w-full"
       variant="light"
-      @onChange="(value: string): void => searchArchive(value)"
+      :name="searchValue"
+      @onChange="(value:string)=> searchValue = value"
     >
       <NuxtImg
         src="/icons/search.svg"
@@ -27,13 +37,12 @@ const searchArchive = (value: string) => {
     </BaseInput>
 
     <HomeProject
-      v-for="(project, index) in props.data"
+      v-for="(project, index) in filteredProjects"
       :key="project._id"
       :index="index"
-      :length="props.data.length"
+      :length="filteredProjects.length"
       :project="project"
       :location="props.location"
     />
   </div>
 </template>
-<style scoped></style>

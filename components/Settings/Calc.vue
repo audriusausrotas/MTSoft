@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Product } from "~/data/interfaces";
-const useProducts = useProductsStore();
-const useSettings = useSettingsStore();
+const productsStore = useProductsStore();
+const settingsStore = useSettingsStore();
 
 const poles = ref<Product[]>([]);
 const borders = ref<Product[]>([]);
@@ -12,7 +12,7 @@ const works = ref<Product[]>([]);
 const fences = ref<Product[]>([]);
 const other = ref<Product[]>([]);
 
-useProducts?.products?.forEach((item) => {
+productsStore?.products?.forEach((item) => {
   switch (item.category.toLowerCase()) {
     case "borteliai":
       borders.value.push(item);
@@ -44,293 +44,291 @@ useProducts?.products?.forEach((item) => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <p class="m-auto font-bold text-2xl mb-4">
-      Standartines medžiagos ir darbai
-    </p>
+    <p class="m-auto font-bold text-2xl mb-4">Standartines medžiagos ir darbai</p>
     <SettingsCalcElement
-      :value="useSettings.defaultValues.poleMain"
+      :value="settingsStore.defaultValues.poleMain"
       :data="poles"
       field="poleMain"
       name="Tvoros Stulpas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.poleAlt"
+      :value="settingsStore.defaultValues.poleAlt"
       :data="poles"
       field="poleAlt"
       name="Segmento Stulpas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gatePoleMain"
+      :value="settingsStore.defaultValues.gatePoleMain"
       :data="poles"
       field="gatePoleMain"
       name="Stumdomų vartų stulpas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gatePoleAlt"
+      :value="settingsStore.defaultValues.gatePoleAlt"
       :data="poles"
       field="gatePoleAlt"
       name="Varstonų vartų stulpas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredPoleMain"
+      :value="settingsStore.defaultValues.anchoredPoleMain"
       :data="poles"
       field="anchoredPoleMain"
       name="Ankeriuojamas tvoros stulpas H-1.5"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredPoleAlt"
+      :value="settingsStore.defaultValues.anchoredPoleAlt"
       :data="poles"
       field="anchoredPoleAlt"
       name="Ankeriuojamas tvoros stulpas H-2.0"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredGatePoleMain"
+      :value="settingsStore.defaultValues.anchoredGatePoleMain"
       :data="poles"
       field="anchoredGatePoleMain"
       name="Ankeriuojamas vartų stulpas H-1.5"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredGatePoleAlt"
+      :value="settingsStore.defaultValues.anchoredGatePoleAlt"
       :data="poles"
       field="anchoredGatePoleAlt"
       name="Ankeriuojamas vartų stulpas H-2.0"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.border"
+      :value="settingsStore.defaultValues.border"
       :data="borders"
       field="border"
       name="Pamatėlis"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.borderHolder"
+      :value="settingsStore.defaultValues.borderHolder"
       :data="holders"
       field="borderHolder"
       name="Pamatėlio laikiklis"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.crossbar"
+      :value="settingsStore.defaultValues.crossbar"
       :data="crossbars"
       field="crossbar"
       name="Tvorralenčių skersinis"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.crossbarHolders"
+      :value="settingsStore.defaultValues.crossbarHolders"
       :data="holders"
       field="crossbarHolders"
       name="Skersinio laikiklis"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.rivets"
+      :value="settingsStore.defaultValues.rivets"
       :data="other"
       field="rivets"
       name="Kniedės"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.bolts"
+      :value="settingsStore.defaultValues.bolts"
       :data="other"
       field="bolts"
       name="Sąvigrežiai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.bindings"
+      :value="settingsStore.defaultValues.bindings"
       :data="other"
       field="bindings"
       name="Tvoros apkaustai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segment103"
+      :value="settingsStore.defaultValues.segment103"
       :data="fences"
       field="segment103"
       name="Segmentas 1.03 m"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segment123"
+      :value="settingsStore.defaultValues.segment123"
       :data="fences"
       field="segment123"
       name="Segmentas 1.23 m"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segment153"
+      :value="settingsStore.defaultValues.segment153"
       :data="fences"
       field="segment153"
       name="Segmentas 1.53 m"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segment173"
+      :value="settingsStore.defaultValues.segment173"
       :data="fences"
       field="segment173"
       name="Segmentas 1.73 m"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segment203"
+      :value="settingsStore.defaultValues.segment203"
       :data="fences"
       field="segment203"
       name="Segmentas 2.03 m"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segmentHolders"
+      :value="settingsStore.defaultValues.segmentHolders"
       :data="other"
       field="segmentHolders"
       name="Segmento apkabos"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gates"
+      :value="settingsStore.defaultValues.gates"
       :data="gates"
       field="gates"
       name="Stumdomi vartai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gates2"
+      :value="settingsStore.defaultValues.gates2"
       :data="gates"
       field="gates2"
       name="Varstomi vartai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gatesAuto"
+      :value="settingsStore.defaultValues.gatesAuto"
       :data="gates"
       field="gatesAuto"
       name="Stumdomi vartai su automatika"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gates2Auto"
+      :value="settingsStore.defaultValues.gates2Auto"
       :data="gates"
       field="gates2Auto"
       name="Varstomi vartai su automatika"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.smallGates"
+      :value="settingsStore.defaultValues.smallGates"
       :data="gates"
       field="smallGates"
       name="Kiemo varteliai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.smallGates2"
+      :value="settingsStore.defaultValues.smallGates2"
       :data="gates"
       field="smallGates2"
       name="Kiemo varteliai su elektromagnetine spyna"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.smallGatesSegment"
+      :value="settingsStore.defaultValues.smallGatesSegment"
       :data="gates"
       field="smallGatesSegment"
       name="Kiemo varteliai segmentiniai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gateSegment"
+      :value="settingsStore.defaultValues.gateSegment"
       :data="gates"
       field="gateSegment"
       name="Varstomi vartai segmentiniai"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.dileCork"
+      :value="settingsStore.defaultValues.dileCork"
       :data="other"
       field="dileCork"
       name="Tvoralentės Dilė kamštelis"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segmentGatesWork"
+      :value="settingsStore.defaultValues.segmentGatesWork"
       :data="works"
       field="segmentGatesWork"
       name="Segmentinių vartelių montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segmentGateWork"
+      :value="settingsStore.defaultValues.segmentGateWork"
       :data="works"
       field="segmentGateWork"
       name="Segmentinių vartų montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.polesWork"
+      :value="settingsStore.defaultValues.polesWork"
       :data="works"
       field="polesWork"
       name="Tvoros stulpo betonavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gatesPoleWork"
+      :value="settingsStore.defaultValues.gatesPoleWork"
       :data="works"
       field="gatesPoleWork"
       name="Vartų stulpo betonavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.gateBnkette"
+      :value="settingsStore.defaultValues.gateBnkette"
       :data="works"
       field="gateBnkette"
       name="Vartų pamato betonavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.bordersWork"
+      :value="settingsStore.defaultValues.bordersWork"
       :data="works"
       field="bordersWork"
       name="Pamatėlio montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.transport"
+      :value="settingsStore.defaultValues.transport"
       :data="works"
       field="transport"
       name="Transportas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.fenceWork"
+      :value="settingsStore.defaultValues.fenceWork"
       :data="works"
       field="fenceWork"
       name="Tvoros montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.totalFencesWithBindings"
+      :value="settingsStore.defaultValues.totalFencesWithBindings"
       :data="works"
       field="totalFencesWithBindings"
       name="Tvoros montavimas su apkaustais"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.bindingWork"
+      :value="settingsStore.defaultValues.bindingWork"
       :data="works"
       field="bindingWork"
       name="Apkaustų montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.fenceboardWork"
+      :value="settingsStore.defaultValues.fenceboardWork"
       :data="works"
       field="fenceboardWork"
       name="Tvoralentės montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.crossbarWork"
+      :value="settingsStore.defaultValues.crossbarWork"
       :data="works"
       field="crossbarWork"
       name="Skersinio montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.segmentWork"
+      :value="settingsStore.defaultValues.segmentWork"
       :data="works"
       field="segmentWork"
       name="Segmento montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredPolesWork"
+      :value="settingsStore.defaultValues.anchoredPolesWork"
       :data="works"
       field="anchoredPolesWork"
       name="Ankeriuojamo stulpo montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.anchoredGatePolesWork"
+      :value="settingsStore.defaultValues.anchoredGatePolesWork"
       :data="works"
       field="anchoredGatePolesWork"
       name="Ankeriuojamo vartų stulpo montavimas"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.retailBindings"
+      :value="settingsStore.defaultValues.retailBindings"
       :data="other"
       field="retailBindings"
       name="Tvoros apkaustai - metras"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.retailDoubleLeg"
+      :value="settingsStore.defaultValues.retailDoubleLeg"
       :data="other"
       field="retailDoubleLeg"
       name="Koja dviguba - metras"
     />
     <SettingsCalcElement
-      :value="useSettings.defaultValues.retailSingleLeg"
+      :value="settingsStore.defaultValues.retailSingleLeg"
       :data="other"
       field="retailSingleLeg"
       name="Koja vienguba - metras"

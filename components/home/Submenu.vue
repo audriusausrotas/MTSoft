@@ -1,29 +1,33 @@
 <script setup lang="ts">
+import type { Project } from "~/data/interfaces";
+
 const props = defineProps(["location", "_id"]);
 
-const useProjects = useProjectsStore();
-const useArchives = useArchivesStore();
-const useResults = useResultsStore();
-const useCalculations = useCalculationsStore();
-const useBackup = useBackupStore();
+const projectsStore = useProjectsStore();
+const archiveStore = useArchiveStore();
+const resultsStore = useResultsStore();
+const calculationsStore = useCalculationsStore();
+const backupStore = useBackupStore();
 
 const { setError, setIsError } = useError();
 
-const deleteHandler = async (): Promise<void> => {
+const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
   if (!confirmed) return;
 
-  const response: any = await $fetch(
-    props.location === "projects" ? "/api/project" : "/api/archive",
-    {
-      method: "delete",
-      body: { _id: props._id, location: props.location },
-    }
-  );
+  const requestData = { _id: props._id, location: props.location };
+
+  let response;
+
+  if (props.location === "projects") response = await request.delete(`deleteProject/${props._id}`);
+  else response = await request.delete("deleteArchive", requestData);
+
   if (response.success) {
-    props.location === "projects"
-      ? useProjects.deleteProject(props._id)
-      : useArchives.deleteArchive(props._id, props.location);
+    if (!useSocketStore().connected) {
+      props.location === "projects"
+        ? projectsStore.deleteProject(response.data._id)
+        : archiveStore.deleteArchive(response.data._id, response.data.location);
+    }
     setIsError(false);
     setError(response.message);
   } else {
@@ -32,27 +36,28 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const editHandler = async () => {
-  useCalculations.clearAll();
-  useResults.clearAll();
-  useProjects.clearSelected();
-  useBackup.clearBackup();
+  calculationsStore.clearAll();
+  resultsStore.clearAll();
+  projectsStore.clearSelected();
+  backupStore.clearBackup();
 
-  const response: any = await $fetch("/api/projectSingle", {
-    method: "post",
-    body: { _id: props._id },
-  });
-  if (response.success) {
-    useProjects.addProject(response.data);
+  const project: Project | undefined = projectsStore.projects.find(
+    (project) => project._id === props._id
+  );
+
+  if (!project) {
+    setError("Projektas nerastas");
+    return;
   }
 
-  useCalculations.setProject({
-    client: response.data.client,
-    fenceMeasures: response.data.fenceMeasures,
-    retail: response.data.retail,
+  calculationsStore.setProject({
+    client: project.client,
+    fenceMeasures: project.fenceMeasures,
+    retail: project.retail,
   });
-  useResults.setProject(response.data);
-  useBackup.addBackup(response.data.results, response.data.works);
-  useProjects.setSelectedProject(response.data._id);
+  resultsStore.setProject(project);
+  backupStore.addBackup(project.results, project.works);
+  projectsStore.setSelectedProject(project._id ? project._id : "");
   navigateTo("/skaiciuokle");
 };
 
@@ -81,63 +86,72 @@ const openInNewHandler = () => {
 };
 
 const copyHandler = async () => {
-  const data: any = await $fetch("/api/project", {
-    method: "post",
-    body: { _id: props._id },
-  });
-  if (data.success) {
-    useProjects.copyProject(data.data);
+  const response: any = await request.post("newProject", { _id: props._id });
+
+  if (response.success) {
+    !useSocketStore().connected && projectsStore.addProject(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
 const archiveHandler = async () => {
-  const data: any = await $fetch("/api/archive", {
-    method: props.location === "projects" ? "post" : "patch",
-    body: { _id: props._id, location: props.location },
-  } as any);
-  if (data.success) {
-    if (props.location === "projects") {
-      useProjects.deleteProject(props._id);
-    } else {
-      useArchives.deleteArchive(props._id, props.location);
+  const requestData = { _id: props._id, location: props.location };
+
+  let response;
+
+  if (props.location === "projects") response = await request.post(`addArchive/${props._id}`);
+  else response = await request.patch("restoreArchive", requestData);
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      if (props.location === "projects") {
+        archiveStore.addArchive("archive", response.data);
+        projectsStore.deleteProject(response.data._id);
+      } else {
+        projectsStore.addProject(response.data.data);
+        archiveStore.deleteArchive(response.data.data._id, response.data.location);
+      }
     }
+
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
 const extendHandler = async () => {
-  const data: any = await $fetch("/api/projectExtend", {
-    method: "post",
-    body: { _id: props._id },
-  } as any);
-  if (data.success) {
+  const response: any = await request.patch(`extendExparationDate/${props._id}`);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.updateProjectField(
+        response.data._id,
+        "dateExparation",
+        response.data.dateExparation
+      );
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
 const unconfirmedHandler = async () => {
-  const data: any = await $fetch("/api/unconfirmed", {
-    method: "post",
-    body: { _id: props._id },
-  });
+  const response: any = await request.post(`addUnconfirmed/${props._id}`);
 
-  if (data.success) {
-    useProjects.deleteProject(props._id);
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      archiveStore.addArchive("unconfirmed", response.data);
+      projectsStore.deleteProject(response.data._id);
+    }
 
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 </script>
@@ -151,12 +165,7 @@ const unconfirmedHandler = async () => {
       @click="openInNewHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/document-forward.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/document-forward.svg" alt="edit button" width="20" height="20" />
       <p>Atidaryti pasiūlymą</p>
     </div>
 
@@ -183,12 +192,7 @@ const unconfirmedHandler = async () => {
       @click="editHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/edit-2.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/edit-2.svg" alt="edit button" width="20" height="20" />
       <p>Redaguoti</p>
     </div>
 
@@ -197,12 +201,7 @@ const unconfirmedHandler = async () => {
       @click="copyHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/pageflip.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
       <p>Kopijuoti projektą</p>
     </div>
 
@@ -211,12 +210,7 @@ const unconfirmedHandler = async () => {
       @click="extendHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/clock.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/clock.svg" alt="edit button" width="20" height="20" />
       <p>Pratęsti galiojimą</p>
     </div>
 
@@ -224,12 +218,7 @@ const unconfirmedHandler = async () => {
       @click="archiveHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/archive-tick.svg"
-        alt="archive button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/archive-tick.svg" alt="archive button" width="20" height="20" />
       <p v-if="props.location === 'projects'">Archyvuoti</p>
       <p v-else>Sugrąžinti</p>
     </div>
@@ -239,12 +228,7 @@ const unconfirmedHandler = async () => {
       @click="unconfirmedHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/archive-book.svg"
-        alt="archive button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/archive-book.svg" alt="archive button" width="20" height="20" />
       <p>Nepatvirtintas</p>
     </div>
 
@@ -252,12 +236,7 @@ const unconfirmedHandler = async () => {
       @click="deleteHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/delete.svg"
-        alt="delete button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
       <p>Ištrinti</p>
     </div>
   </div>

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useProductsStore } from "~/store/products";
+import { productsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
-import type { ResponseProduct } from "~/data/interfaces";
 
-const useProducts = useProductsStore();
+const productsStore = useProductsStore();
 const open = ref<boolean>(false);
 const newName = ref<string>("");
 const newPrice = ref<number>(0);
@@ -16,25 +15,22 @@ const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   if (newName.value.trim() === "") return;
 
-  const newProduct = {
+  const requestData = {
     name: newName.value,
     price: newPrice.value,
     cost: newCost.value,
     category: newCategory.value,
   };
 
-  const data: ResponseProduct = await $fetch("/api/product", {
-    method: "post",
-    body: newProduct,
-  });
+  const response: any = await request.post("newProduct", requestData);
 
-  if (data.success) {
-    useProducts.newProduct(data.data);
+  if (response.success) {
+    !useSocketStore().connected && productsStore.newProduct(response.data);
     clearHandler();
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };
@@ -52,11 +48,7 @@ const clearHandler = (): void => {
   <div class="flex flex-col gap-4">
     <BaseButton v-if="!open" name="pridėti naują" @click="open = true" />
     <div v-else class="flex gap-4">
-      <BaseButton
-        name="išsaugoti"
-        @click="saveHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton name="išsaugoti" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
     <div v-if="open" class="flex items-end gap-2">

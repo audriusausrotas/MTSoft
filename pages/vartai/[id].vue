@@ -1,33 +1,29 @@
 <script setup lang="ts">
 import { gateStatus } from "~/data/selectFieldData";
-const useGates = useGateStore();
+const gateStore = useGateStore();
 const route = useRoute();
 const router = useRouter();
-const useUser = useUserStore();
+const userStore = useUserStore();
 const gate = computed(() => {
-  return useGates.gates.find((item) => item._id === route.params.id);
+  return gateStore.gates.find((item) => item._id === route.params.id);
 });
 const { setError, setIsError } = useError();
 
-const vartonasUsers = useUser.users
+const gateUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => {
     return user.email;
   });
 
-const gigastaUsers = useUser.users
-  .filter((user) => user.accountType === "Gigasta")
-  .map((user) => {
-    return user.email;
-  });
-
-const buttonHandler = async () => {
-  const response: any = await $fetch("/api/gates", {
-    method: "patch",
-    body: { _id: gate.value?._id },
-  });
+const finishOrderHandler = async () => {
+  const response: any = await request.delete(`finishOrder/${gate.value?._id}`);
 
   if (response.success) {
+    if (!useSocketStore().connected) {
+      useProjectsStore().updateProjectField(response.data_id, "status", response.data.status);
+      gateStore.updateGateStatus(response.data._id, response.data.status);
+    }
+
     await router.replace("/vartai");
     setIsError(false);
     setError(response.message);
@@ -37,35 +33,34 @@ const buttonHandler = async () => {
 };
 
 const updateHandler = async (change: string, value: any) => {
-  const response: any = await $fetch("/api/gates", {
-    method: "put",
-    body: {
-      _id: gate.value?._id,
-      change,
-      value,
-      username: useUser.user?.username,
-    },
-  });
+  const data = {
+    _id: gate.value?._id,
+    change,
+    value,
+    username: userStore.user?.username,
+  };
+
+  const response: any = await request.patch("updateOrder", data);
+
   if (response.success) {
-    useGates.updateGate(response.data, gate.value!._id);
+    !useSocketStore().connected && gateStore.updateGate(response.data);
 
     if (change === "status") {
       const link = `https://mtsoft.lt/vartai/${gate.value?._id}`;
 
-      const data: any = await $fetch("/api/mail", {
-        method: "put",
-        body: {
-          to: response.data.manager,
-          message: `Užsakymo ${gate.value?.orderNr}, ${gate.value?.client.address} statusas pakeistas į "${value}". Peržiūrėti galite čia: ${link} "`,
-          title: "Statusas pasikeitė",
-        },
-      });
+      const requestData = {
+        to: response.data.manager,
+        message: `Užsakymo ${gate.value?.orderNr}, ${gate.value?.client.address} statusas pakeistas į "${value}". Peržiūrėti galite čia: ${link} "`,
+        title: "Statusas pasikeitė",
+      };
 
-      if (data.success) {
+      const response2: any = await request.post("sendGateInfo", requestData);
+
+      if (response2.success) {
         setIsError(false);
-        setError(data.message);
+        setError(response2.message);
       } else {
-        setError(data.message);
+        setError(response2.message);
       }
     }
     setIsError(false);
@@ -86,9 +81,7 @@ const updateHandler = async (change: string, value: any) => {
         @onChange="(value: string) => updateHandler('status', value)"
       />
       <BaseSelectField
-        :values="
-          gate?.manager?.includes('vartonas') ? vartonasUsers : gigastaUsers
-        "
+        :values="gateUsers"
         id="currentUsers"
         :defaultValue="gate?.manager"
         width="w-60"
@@ -99,22 +92,12 @@ const updateHandler = async (change: string, value: any) => {
         placeholder="Užsakymo Nr."
         @onConfirm="(value) => updateHandler('orderNr', value)"
       />
-      <BaseButtonWithConfirmation
-        name="užbaigti užsakymą"
-        @onConfirm="buttonHandler"
-      />
+      <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="finishOrderHandler" />
     </div>
-    <div
-      class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap"
-    >
+    <div class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap">
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Užsakymo duomenys</h3>
-        <BaseInput
-          :name="gate?.orderNr"
-          width="w-72"
-          label="Užsakymo nr:"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
         <BaseInput
           :name="gate?.measure"
           width="w-72"
@@ -137,24 +120,9 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput
-          :name="gate?.client?.username"
-          width="w-72"
-          label="klientas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.address"
-          width="w-72"
-          label="adresas"
-          :disable="true"
-        />
-        <BaseInput
-          :name="gate?.client?.phone"
-          width="w-72"
-          label="telefonas"
-          :disable="true"
-        />
+        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
+        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
+        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>

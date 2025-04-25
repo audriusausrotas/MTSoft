@@ -3,60 +3,52 @@ import type { GateSchema } from "~/data/interfaces";
 export const useGateStore = defineStore("gate", {
   state: () => ({
     gates: [] as GateSchema[],
-    filteredGates: [] as GateSchema[],
   }),
 
   actions: {
     addGates(data: GateSchema[]) {
       this.gates = [...data];
-      this.updateFilteredGates();
     },
 
     removeGates(id: string) {
-      if (this.gates.some((item) => item._id === id)) {
-        this.gates = this.gates.filter((item) => item._id !== id);
-      }
-      this.updateFilteredGates();
+      this.gates = this.gates.filter((item) => item._id !== id);
     },
 
     addGate(data: GateSchema) {
       this.gates.push(data);
-      this.updateFilteredGates();
     },
 
-    addSelectedGate(data: GateSchema) {
-      this.gates = [];
-      this.gates.push(data);
+    updateGate(data: GateSchema) {
+      this.gates = this.gates.map((item) => (item._id === data._id ? { ...data } : item));
     },
 
-    updateGate(data: GateSchema, id: string) {
-      this.gates = this.gates.map((item) => {
-        if (item._id === id) return data;
-        else return item;
-      });
-    },
-
-    searchGates(value: string) {
-      if (value.length > 2) {
-        const foundProjects = this.filteredGates.filter(
-          (project) =>
-            project.client.address
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
-            project.manager.toLowerCase().includes(value.toLowerCase()) ||
-            project.orderNr.toLowerCase().includes(value.toLowerCase())
-        );
-
-        this.filteredGates = [...foundProjects];
-      } else {
-        this.updateFilteredGates();
-      }
-    },
-
-    updateFilteredGates() {
-      this.filteredGates = [...this.gates];
+    updateGateStatus(_id: string, status: string) {
+      this.gates = this.gates.map((item) => (item._id === _id ? { ...item, status } : item));
     },
   },
 
-  getters: {},
+  getters: {
+    searchGates: (state) => {
+      return (value: string) => {
+        const userStore = useUserStore();
+
+        let filteredGates = state.gates;
+
+        if (value.length > 2) {
+          filteredGates = filteredGates.filter(
+            (item) =>
+              item.client.address.toLowerCase().includes(value.toLowerCase()) ||
+              item.manager.toLowerCase().includes(value.toLowerCase()) ||
+              item.orderNr.toLowerCase().includes(value.toLowerCase())
+          );
+        }
+
+        if (userStore.user?.accountType !== "Administratorius") {
+          filteredGates = filteredGates.filter((item) => item.manager === userStore.user?.email);
+        }
+
+        return filteredGates;
+      };
+    },
+  },
 });

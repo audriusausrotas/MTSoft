@@ -34,13 +34,13 @@ jobs:
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_IP: ${{ secrets.VPS_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          # CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          # CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          # CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          NODEMAILER_PASS_ANDRIUS: ${{ secrets.NODEMAILER_PASS_ANDRIUS }}
-          NODEMAILER_PASS_AUDRIUS: ${{ secrets.NODEMAILER_PASS_AUDRIUS }}
-          NODEMAILER_PASS_HARIS: ${{ secrets.NODEMAILER_PASS_HARIS }}
+          # NODEMAILER_PASS_ANDRIUS: ${{ secrets.NODEMAILER_PASS_ANDRIUS }}
+          # NODEMAILER_PASS_AUDRIUS: ${{ secrets.NODEMAILER_PASS_AUDRIUS }}
+          # NODEMAILER_PASS_HARIS: ${{ secrets.NODEMAILER_PASS_HARIS }}
           NUXT_PUBLIC_CLOUD_API_KEY: ${{ secrets.NUXT_PUBLIC_CLOUD_API_KEY }}
           NUXT_PUBLIC_CLOUD_NAME: ${{ secrets.NUXT_PUBLIC_CLOUD_NAME }}
           SALT: ${{ secrets.SALT }}

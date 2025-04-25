@@ -3,7 +3,7 @@ import { fenceTypes, fenceDirections } from "~/data/selectFieldData";
 const props = defineProps(["fence"]);
 
 const { setError, setIsError } = useError();
-const useProducts = useProductsStore();
+const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
 const height = ref<string>(props.fence?.height);
@@ -45,7 +45,7 @@ const seeThroughData = reactive({
 });
 
 const saveHandler = async () => {
-  const newData = {
+  const requestData = {
     _id: props.fence._id,
     height: height.value,
     width: width.value,
@@ -53,13 +53,10 @@ const saveHandler = async () => {
     defaultDirection: defaultDirection.value,
     seeThrough: seeThroughData,
   };
-  const response: any = await $fetch("/api/product", {
-    method: "put",
-    body: newData,
-  });
+  const response: any = await request.patch("updateFenceData", requestData);
 
   if (response.success) {
-    useProducts.updateProduct(response.data);
+    !useSocketStore().connected && settingsStore.updateFenceSettings(response.data);
     editable.value = false;
     setIsError(false);
     setError(response.message);

@@ -2,14 +2,14 @@
 import { navigationLinks, optionLinks } from "~/data/initialValues";
 import type { MenuLinks } from "~/data/interfaces";
 
-const useSettings = useSettingsStore();
-const useUser = useUserStore();
+const settingsStore = useSettingsStore();
+const userStore = useUserStore();
 const route = useRoute();
 
 const currentPath = ref("");
 
-const userRights = useSettings.userRights.find(
-  (item) => item.accountType === useUser?.user?.accountType
+const userRights = settingsStore.userRights.find(
+  (item) => item.accountType === userStore?.user?.accountType
 );
 
 const adminLinks = userRights?.admin ? optionLinks : null;
@@ -80,7 +80,7 @@ watch(
           :currentLinks="currentLinks"
           :adminLinks="adminLinks"
         />
-        <NavUser :useUser="useUser" class="self-start" />
+        <NavUser :userStore="userStore" class="self-start" />
       </div>
     </div>
   </div>

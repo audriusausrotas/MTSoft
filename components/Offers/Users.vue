@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const usePotentialClients = usePotentialClientsStore();
       </div>
       <div class="flex flex-col">
         <OffersUser
-          v-for="(client, index) in usePotentialClients.potentialClients"
+          v-for="(client, index) in potentialClientsStore.potentialClients"
           :key="client?._id"
           :index="index"
           :client="client"

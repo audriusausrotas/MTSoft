@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const { setError, setIsError } = useError();
-const useUser = useUserStore();
-const initials = useUser.user?.username.slice(0, 2);
+const userStore = useUserStore();
+const initials = userStore.user?.username.slice(0, 2);
 const newPassword = ref<string>("");
 const password = ref<string>("");
-const lastName = ref<string>(useUser.user?.lastName || "");
-const phone = ref<string>(useUser.user?.phone || "");
+const lastName = ref<string>(userStore.user?.lastName || "");
+const phone = ref<string>(userStore.user?.phone || "");
 const isSavedPhone = ref<boolean>(true);
 const isSavedName = ref<boolean>(true);
 
@@ -21,13 +21,10 @@ const saveHandler = async (field: string) => {
     value = password.value;
   }
 
-  const response: any = await $fetch("/api/profile", {
-    method: "post",
-    body: { field, value },
-  });
+  const response: any = await request.patch("updateProfile", { field, value });
 
   if (response.success) {
-    useUser.setUser(response.data);
+    !useSocketStore().connected && userStore.setUser(response.data);
 
     if (field === "password") {
       password.value = "";
@@ -42,35 +39,35 @@ const saveHandler = async (field: string) => {
   }
 };
 
-const successHandler = async (photo: { url: string; id: string }) => {
-  const oldPhotoId = useUser.user?.photo.id;
+const successHandler = async (photo: string) => {
+  const oldPhotoId = userStore.user?.photo;
 
-  const response: any = await $fetch("/api/uploadPhotos", {
-    method: "post",
-    body: { photo, category: "profile", _id: useUser.user?._id },
-  });
-  if (response.success) {
-    useUser.setUser(response.data);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
+  // const response: any = await $fetch("/api/uploadPhotos", {
+  //   method: "post",
+  //   body: { photo, category: "profile", _id: userStore.user?._id },
+  // });
+  // if (response.success) {
+  //   userStore.setUser(response.data);
+  //   setIsError(false);
+  //   setError(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 
-  const deleteResponse = await $fetch("/api/cloudinary", {
-    method: "delete",
-    body: { id: oldPhotoId },
-  });
-  if (!deleteResponse.success) setError(deleteResponse.message);
+  // const deleteResponse = await $fetch("/api/cloudinary", {
+  //   method: "delete",
+  //   body: { id: oldPhotoId },
+  // });
+  // if (!deleteResponse.success) setError(deleteResponse.message);
 };
 
 watch(phone, (newPhone) => {
-  if (newPhone !== useUser.user?.phone) isSavedPhone.value = false;
+  if (newPhone !== userStore.user?.phone) isSavedPhone.value = false;
   else isSavedPhone.value = true;
 });
 
 watch(lastName, (newName) => {
-  if (newName !== useUser.user?.lastName) isSavedName.value = false;
+  if (newName !== userStore.user?.lastName) isSavedName.value = false;
   else isSavedName.value = true;
 });
 </script>
@@ -83,8 +80,8 @@ watch(lastName, (newName) => {
           class="flex flex-col items-center justify-center overflow-hidden bg-gray-light rounded-t-xl h-60 w-60"
         >
           <NuxtImg
-            v-if="useUser.user?.photo?.url && useUser.user.photo.url !== ''"
-            :src="useUser.user?.photo?.url || ''"
+            v-if="userStore.user?.photo && userStore.user.photo !== ''"
+            :src="userStore.user?.photo || ''"
             alt="Vartotojo nuotrauka"
             class="object-cover object-center w-full h-full"
             width="48"
@@ -100,14 +97,9 @@ watch(lastName, (newName) => {
 
       <div class="flex flex-col h-60 font-semibold justify-around capitalize">
         <div class="flex gap-4 text-4xl">
-          <p>{{ useUser.user?.username }}</p>
+          <p>{{ userStore.user?.username }}</p>
           <div class="flex">
-            <input
-              type="text"
-              v-model="lastName"
-              placeholder="Pavardė"
-              class="max-w-60"
-            />
+            <input type="text" v-model="lastName" placeholder="Pavardė" class="max-w-60" />
             <div class="flex-1 flex">
               <NuxtImg
                 width="20"
@@ -125,17 +117,12 @@ watch(lastName, (newName) => {
         </div>
 
         <div>
-          {{ useUser.user?.accountType }}
+          {{ userStore.user?.accountType }}
           <h5 class="font-semibold"></h5>
         </div>
-        <h5 class="font-semibold normal-case">{{ useUser.user?.email }}</h5>
+        <h5 class="font-semibold normal-case">{{ userStore.user?.email }}</h5>
         <div class="flex">
-          <input
-            type="text"
-            v-model="phone"
-            placeholder="Telefono numeris"
-            class="max-w-32"
-          />
+          <input type="text" v-model="phone" placeholder="Telefono numeris" class="max-w-32" />
           <div class="flex-1">
             <NuxtImg
               width="20"
@@ -165,10 +152,7 @@ watch(lastName, (newName) => {
         @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį"
       />
-      <BaseButton
-        name="Išsaugoti slaptažodį"
-        @click="saveHandler('password')"
-      />
+      <BaseButton name="Išsaugoti slaptažodį" @click="saveHandler('password')" />
     </div>
   </div>
 </template>

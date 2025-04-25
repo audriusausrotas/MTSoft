@@ -2,7 +2,7 @@
 import { OffersStatus } from "~/data/selectFieldData";
 
 const { setError, setIsError } = useError();
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 
 const open = ref<boolean>(false);
 const name = ref<string>("");
@@ -20,12 +20,10 @@ const saveHandler = async () => {
     status: status.value,
   };
 
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "post",
-    body: client,
-  });
+  const response: any = await request.post("newPotentialClient", client);
+
   if (response.success) {
-    usePotentialClients.addPotentialClient(response.data);
+    !useSocketStore().connected && potentialClientsStore.addPotentialClient(response.data);
     setIsError(false);
     setError(response.message);
     cancelHandler();
@@ -53,11 +51,7 @@ const cancelHandler = () => {
         <BaseButton name="Atšaukti" @click="cancelHandler" />
       </div>
       <div class="flex gap-4 flex-wrap">
-        <BaseInput
-          label="Vardas"
-          placeholder="vardas"
-          @onChange="(value) => (name = value)"
-        />
+        <BaseInput label="Vardas" placeholder="vardas" @onChange="(value) => (name = value)" />
         <BaseInput
           label="el. paštas"
           placeholder="el. paštas"
@@ -68,11 +62,7 @@ const cancelHandler = () => {
           placeholder="telefono numeris"
           @onChange="(value) => (phone = value)"
         />
-        <BaseInput
-          label="adresas"
-          placeholder="adresas"
-          @onChange="(value) => (address = value)"
-        />
+        <BaseInput label="adresas" placeholder="adresas" @onChange="(value) => (address = value)" />
         <BaseSelectField
           id="pasiumynuStatusas"
           label="Statusas"

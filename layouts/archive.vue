@@ -1,12 +1,10 @@
 <script setup lang="ts">
-const useUser = useUserStore();
+const userStore = useUserStore();
 </script>
 
 <template>
-  <NavMain v-if="useUser?.user" class="print:hidden" />
-  <div
-    class="px-4 py-10 flex flex-col justify-center m-auto gap-8 max-w-[1400px]"
-  >
+  <NavMain v-if="userStore?.user" class="print:hidden" />
+  <div class="px-4 py-10 flex flex-col justify-center m-auto gap-8 max-w-[1400px]">
     <NavArchive />
     <slot />
   </div>

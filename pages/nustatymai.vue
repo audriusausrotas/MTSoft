@@ -36,7 +36,7 @@ const selected = ref<string>("bendri");
         Pasirinkimo laukų nustatymai
       </div>
     </div>
-    <SettingsGeneral v-if="selected === 'bendri'" />
+    <SettingsUserSettings v-if="selected === 'bendri'" />
     <SettingsFences v-else-if="selected === 'tvoros'" />
     <SettingsCalc v-else-if="selected === 'skaiciuokle'" />
     <SettingsSelect v-else-if="selected === 'pasirinkimai'" />

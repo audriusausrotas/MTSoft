@@ -1,16 +1,6 @@
 <script setup lang="ts">
-const useGates = useGateStore();
-const useUser = useUserStore();
-
-const filteredGates = computed(() => {
-  if (useUser.user!.accountType === "Administratorius") {
-    return useGates.filteredGates;
-  } else {
-    return useGates.filteredGates.filter(
-      (item) => item.manager === useUser.user?.email
-    );
-  }
-});
+const gateStore = useGateStore();
+const searchQuery = ref<string>("");
 </script>
 
 <template>
@@ -19,7 +9,7 @@ const filteredGates = computed(() => {
       placeholder="Paieška"
       width="flex-1"
       variant="light"
-      @onChange="(value: string): void => useGates.searchGates(value)"
+      @onChange="(value: string) => searchQuery = value"
     >
       <NuxtImg
         src="/icons/search.svg"
@@ -32,7 +22,7 @@ const filteredGates = computed(() => {
       />
     </BaseInput>
     <div
-      v-for="(gate, index) in filteredGates"
+      v-for="(gate, index) in gateStore.searchGates(searchQuery)"
       :key="gate._id"
       class="flex flex-col"
     >

@@ -78,7 +78,7 @@ export const createInitialMeasure = (): Measure => ({
     exist: false,
     type: "Stumdomi",
     automatics: "Taip",
-    aditional: "",
+    comment: "",
     direction: "Vidus Kairė",
     lock: "Paprasta",
     bankette: "Taip",
@@ -87,7 +87,7 @@ export const createInitialMeasure = (): Measure => ({
   kampas: {
     exist: false,
     value: 90,
-    aditional: "",
+    comment: "",
   },
   laiptas: {
     exist: false,

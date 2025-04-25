@@ -2,8 +2,10 @@
 definePageMeta({
   layout: false,
 });
-const useArchive = useArchivesStore();
-const offer = useArchive.projectToOpen;
+
+const route = useRoute();
+
+const offer = await request.get(`getArchive/${route.params.id}`);
 
 const open = ref<boolean>(true);
 </script>
@@ -30,10 +32,10 @@ const open = ref<boolean>(true);
     </div>
 
     <div>
-      <OfferMain v-if="open" :offer="offer" />
+      <OfferMain v-if="open" :offer="offer.data" />
       <div v-else class="flex gap-8 py-10 justify-evenly flex-wrap">
         <PreviewMeasures
-          v-for="(fence, index) in offer?.fenceMeasures"
+          v-for="(fence, index) in offer.data?.fenceMeasures"
           :key="fence.id"
           :fence="fence"
           :index="index"

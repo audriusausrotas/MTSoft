@@ -1,4 +1,3 @@
-import { useCookie } from "nuxt/app";
 import type { User } from "~/data/interfaces";
 
 export const useUserStore = defineStore("user", {
@@ -8,28 +7,25 @@ export const useUserStore = defineStore("user", {
   }),
 
   actions: {
-    async setUser(data: User) {
+    setUser(data: User) {
       this.user = data;
     },
 
     logout() {
-      const router = useRouter();
       this.user = null;
-      const cookie = useCookie("mtud");
-      cookie.value = null;
       this.users = [];
-      router.replace("/login");
     },
 
-    async setUsers(users: User[]) {
+    setUsers(users: User[]) {
       this.users = [...users];
     },
 
+    addUser(user: User) {
+      this.users.push(user);
+    },
+
     updateUser(data: User) {
-      this.users = this.users.map((user) => {
-        if (user._id === data._id) return data;
-        else return user;
-      });
+      this.users = this.users.map((user) => (user._id === data._id ? data : user));
     },
 
     deleteUser(id: string) {

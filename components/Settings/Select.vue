@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const useSettings = useSettingsStore();
+const settingsStore = useSettingsStore();
 </script>
 
 <template>
@@ -7,55 +7,55 @@ const useSettings = useSettingsStore();
     <SettingsSelectElement
       field="fenceColors"
       name="Tvoros spalvos"
-      :data="useSettings.selectValues.fenceColors"
+      :data="settingsStore.selectValues.fenceColors"
     />
 
     <SettingsSelectElement
       field="fenceTypes"
       name="Tvoros tipai"
-      :data="useSettings.selectValues.fenceTypes"
+      :data="settingsStore.selectValues.fenceTypes"
     />
 
     <SettingsSelectElement
       field="retailFenceTypes"
       name="Didmenos tvoros tipai"
-      :data="useSettings.selectValues.retailFenceTypes"
+      :data="settingsStore.selectValues.retailFenceTypes"
     />
 
     <SettingsSelectElement
       field="fenceMaterials"
       name="Tvoros skardos"
-      :data="useSettings.selectValues.fenceMaterials"
+      :data="settingsStore.selectValues.fenceMaterials"
     />
 
     <SettingsSelectElement
       field="status"
       name="Projekto statusas"
-      :data="useSettings.selectValues.status"
+      :data="settingsStore.selectValues.status"
     />
 
     <SettingsSelectElement
       field="accountTypes"
       name="Paskyros tipai"
-      :data="useSettings.selectValues.accountTypes"
+      :data="settingsStore.selectValues.accountTypes"
     />
 
     <SettingsSelectElement
       field="gateTypes"
       name="Vartų tipai"
-      :data="useSettings.selectValues.gateTypes"
+      :data="settingsStore.selectValues.gateTypes"
     />
 
     <SettingsSelectElement
       field="gateOption"
       name="Vartelių tipai"
-      :data="useSettings.selectValues.gateOption"
+      :data="settingsStore.selectValues.gateOption"
     />
 
     <SettingsSelectElement
       field="gateLock"
       name="Vartelių spyna"
-      :data="useSettings.selectValues.gateLock"
+      :data="settingsStore.selectValues.gateLock"
     />
   </div>
 </template>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-const useArchives = useArchivesStore();
+onBeforeMount(() => {
+  fetchDeleted();
+});
 </script>
 
 <template>
-  <ArchiveMain :data="useArchives.filteredDeleted" location="deleted" />
+  <ArchiveMain location="deleted" />
 </template>
 <style scoped></style>

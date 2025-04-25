@@ -1,27 +1,40 @@
 <script setup lang="ts">
-import type { User, Montavimas } from "~/data/interfaces";
-const useMontavimas = useMontavimasStore();
-const useUser = useUserStore();
+import type { User, Installation } from "~/data/interfaces";
+const installationStore = useInstallationStore();
+const userStore = useUserStore();
 const filteredUser = ref<string>("Visi");
+const searchQuery = ref<string>("");
 
-const workers = useUser.users
+const workers = userStore.users
   .filter((user: User) => user.accountType === "Montavimas")
   .map((user: User) => user.lastName);
 
-const filteredMontavimas = computed(() => {
-  if (
-    useUser.user?.accountType === "Administratorius" ||
-    useUser.user?.accountType === "Sandėlys"
-  ) {
-    if (filteredUser.value === "Visi") return useMontavimas.filteredMontavimasList;
-    else
-      return useMontavimas.filteredMontavimasList.filter((item: Montavimas) =>
-        item.workers.includes(filteredUser.value)
-      );
-  } else
-    return useMontavimas.filteredMontavimasList.filter((item: Montavimas) =>
-      item.workers.includes(useUser.user?.lastName!)
+const filteredInstallation = computed(() => {
+  let filtered = [...installationStore.installation];
+
+  if (searchQuery.value.length > 2) {
+    return filtered.filter(
+      (project) =>
+        project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
+  }
+
+  if (
+    userStore.user?.accountType === "Administratorius" ||
+    userStore.user?.accountType === "Sandėlys"
+  ) {
+    if (filteredUser.value !== "Visi")
+      filtered = filtered.filter((item: Installation) => item.workers.includes(filteredUser.value));
+  } else
+    filtered = filtered.filter((item: Installation) =>
+      item.workers.includes(userStore.user?.lastName!)
+    );
+
+  return filtered;
 });
 
 const changeFilter = (value: string) => {
@@ -33,7 +46,7 @@ const changeFilter = (value: string) => {
   <div class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <BaseSelectField
-        v-if="useUser.user?.accountType === 'Administratorius'"
+        v-if="userStore.user?.accountType === 'Administratorius'"
         label="Montuotojas"
         :values="['Visi', ...workers]"
         id="userFilter"
@@ -47,7 +60,9 @@ const changeFilter = (value: string) => {
         width="w-full"
         variant="light"
         label="Paieška"
-        @onChange="(value: string): void => useMontavimas.searchMontavimas(value)"
+        @onChange="
+          (value: string)=> searchQuery = value
+        "
       >
         <NuxtImg
           src="/icons/search.svg"
@@ -61,8 +76,8 @@ const changeFilter = (value: string) => {
       </BaseInput>
     </div>
     <div class="flex flex-wrap gap-4 justify-center">
-      <div v-for="(order, index) in filteredMontavimas" :key="order._id" :dataIndex="index">
-        <MontavimasOrder :order="order" :index="index" />
+      <div v-for="(order, index) in filteredInstallation" :key="order._id" :dataIndex="index">
+        <InstallationOrder :order="order" :index="index" />
       </div>
     </div>
   </div>

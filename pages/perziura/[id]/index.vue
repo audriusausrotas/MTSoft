@@ -1,40 +1,48 @@
 <script setup lang="ts">
-import type { Photo, Version } from "~/data/interfaces";
-const route = useRoute();
+import type { Version, Comment } from "~/data/interfaces";
 const { setError, setIsError } = useError();
-const useMontavimas = useMontavimasStore();
-const useProjects = useProjectsStore();
-const useSettings = useSettingsStore();
-const useGamyba = useGamybaStore();
-const useGates = useGateStore();
-const useUsers = useUserStore();
+const installationStore = useInstallationStore();
+const projectsStore = useProjectsStore();
+const settingsStore = useSettingsStore();
+const productionStore = useProductionStore();
+const gateStore = useGateStore();
+const userStore = useUserStore();
+const route = useRoute();
 
-const allUsers = useUsers.users.map((item) => {
-  return item.username;
-});
-const isLoading = ref<boolean>(false);
-const isOpenGates = ref<boolean>(false);
-const isOpenGates2 = ref<boolean>(false);
-const isOpenMontavimas = ref<boolean>(false);
+const offer = computed(() => projectsStore.projects.find((item) => item._id === route.params.id));
+const allUsers = userStore.users.map((item) => item.username);
+
+const isOpenInstallation = ref<boolean>(false);
 const isOpenAdvance = ref<boolean>(false);
-const offer = computed(() => useProjects.projects.find((item) => item._id === route.params.id));
+const isOpenGates2 = ref<boolean>(false);
+const isOpenGates = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
+const provider = ref<string>("");
 const gateOrdered = ref(false);
 const advance = ref<number>(0);
-const provider = ref<string>("");
 
-const vartonasUsers = useUsers.users
+const uploadFiles = async (data: any) => {
+  const response: any = await $fetch("http://localhost:3001/uploadFiles", {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.updateFiles(response.data._id, response.data.files);
+    setIsError(false);
+    setError(response.message);
+  } else setError(response.message);
+};
+
+const vartonasUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
   .map((user) => {
     return user.email;
   });
 
-const gigastaUsers = useUsers.users
-  .filter((user) => user.accountType === "Gigasta")
-  .map((user) => {
-    return user.email;
-  });
-
-const workers = useUsers.users
+const workers = userStore.users
   .filter((user) => user.accountType === "Montavimas")
   .map((user) => {
     return user.lastName;
@@ -43,12 +51,13 @@ const workers = useUsers.users
 const versions: Version[] | undefined = offer.value?.versions;
 
 const statusHandler = async (value: string) => {
-  const response: any = await $fetch("/api/project", {
-    method: "patch",
-    body: { _id: offer!.value!._id, value },
-  });
+  const requestData = { _id: offer!.value!._id, value };
+
+  const response: any = await request.patch("updateProjectStatus", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    !useSocketStore().connected &&
+      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -64,10 +73,14 @@ const setProvider = (value: string) => {
 
 const sendEmailHandler = async () => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/mail", {
-    method: "post",
-    body: { to: offer?.value?.client.email, link: offer?.value?._id },
-  });
+
+  const requestData = {
+    to: offer?.value?.client.email,
+    link: offer?.value?._id,
+  };
+
+  const response: any = await request.post("sendOffer", requestData);
+
   if (response.success) {
     setIsError(false);
     setError(response.message);
@@ -79,23 +92,28 @@ const sendEmailHandler = async () => {
 
 const gateOrderHadnler = async (name: string): Promise<void> => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/gates", {
-    method: "post",
-    body: { _id: offer?.value?._id, value: provider.value, manager: name },
-  });
+
+  const requestData = {
+    _id: offer?.value?._id,
+    value: provider.value,
+    manager: name,
+  };
+
+  const response: any = await request.post("newOrder", requestData);
+
   if (response.success) {
-    useGates.addGate(response.data);
+    !useSocketStore().connected && gateStore.addGate(response.data);
 
     const link = `https://mtsoft.lt/vartai/${offer?.value?._id}`;
 
-    const emailResponse: any = await $fetch("/api/mail", {
-      method: "put",
-      body: {
-        to: name,
-        message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
-        title: "Naujas užsakymas",
-      },
-    });
+    const emailRequestData = {
+      to: name,
+      message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
+      title: "Naujas užsakymas",
+    };
+
+    const emailResponse: any = await request.post("sendGateInfo", emailRequestData);
+
     if (emailResponse.success) {
       setIsError(false);
       setError(emailResponse.message);
@@ -114,11 +132,11 @@ const gateOrderHadnler = async (name: string): Promise<void> => {
 
 const gateCancelHandler = async (): Promise<void> => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/gates", {
-    method: "delete",
-    body: { _id: offer?.value?._id },
-  });
+
+  const response: any = await request.delete(`cancelOrder/${offer?.value?._id}`);
+
   if (response.success) {
+    !useSocketStore().connected && gateStore.removeGates(response.data._id);
     gateOrdered.value = false;
     setIsError(false);
     setError(response.message);
@@ -134,12 +152,13 @@ const cancelHandler = () => {
 };
 
 const changeCreatorHandler = async (value: string) => {
-  const response: any = await $fetch("/api/projectCreator", {
-    method: "PATCH",
-    body: { _id: offer!.value!._id, value },
-  });
+  const requestData = { _id: offer!.value!._id, value };
+
+  const response: any = await request.patch("changeManager", requestData);
+
   if (response.success) {
-    useProjects.changeCreator(response.data);
+    !useSocketStore().connected &&
+      projectsStore.updateProjectField(response.data._id, "creator", response.data.user);
     setIsError(false);
     setError(response.message);
   } else {
@@ -149,13 +168,17 @@ const changeCreatorHandler = async (value: string) => {
 
 const advanceHandler = async () => {
   isLoading.value = true;
-  const response: any = await $fetch("/api/advance", {
-    method: "post",
-    body: { _id: offer!.value?._id, advance: advance.value },
-  });
+
+  const requestData = { _id: offer!.value?._id, advance: advance.value };
+
+  const response: any = await request.patch("changeAdvance", requestData);
+
   if (response.success) {
-    useProjects.changeAdvance(response.data);
-    offer!.value!.advance = advance.value;
+    if (!useSocketStore().connected) {
+      projectsStore.updateProjectField(response.data._id, "advance", response.data.value);
+      projectsStore.updateProjectField(response.data._id, "status", "Patvirtintas");
+    }
+
     setIsError(false);
     setError(response.message);
   } else {
@@ -166,23 +189,15 @@ const advanceHandler = async () => {
 };
 
 const orderFinishHandler = async () => {
-  const response: any = await $fetch("/api/project", {
-    method: "PATCH",
-    body: { _id: offer!.value!._id, value: "Baigtas" },
-  });
+  const response: any = await request.patch(`projectFinished/${offer?.value?._id}`);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
-    const archieveResponse: any = await $fetch("/api/archive", {
-      method: "POST",
-      body: { _id: offer!.value!._id },
-    });
-    if (archieveResponse.success) {
-      offer?.value?._id && useProjects.deleteProject(offer.value._id);
-      setIsError(false);
-      setError(archieveResponse.message);
+    if (!useSocketStore().connected) {
+      useArchiveStore().addArchive("archive", response.data);
+      useProductionStore().deleteProductionOrder(response.data._id);
+      useInstallationStore().deleteInstallationOrder(response.data._id);
+      projectsStore.deleteProject(response.data._id);
       navigateTo("/");
-    } else {
-      setError(archieveResponse.message);
     }
     setIsError(false);
     setError(response.message);
@@ -191,42 +206,14 @@ const orderFinishHandler = async () => {
   }
 };
 
-const gamybaHandler = async () => {
-  const response: any = await $fetch("/api/gamyba", {
-    method: "post",
-    body: { _id: offer!.value!._id },
-  });
-  if (response.success) {
-    setIsError(false);
-    setError(response.message);
-    useGamyba.addGamyba(response.data);
-  } else {
-    setError(response.message);
-  }
-};
+const productionHandler = async () => {
+  const response: any = await request.post(`newProduction/${offer!.value!._id}`);
 
-const montavimasHandler = async (value: string) => {
-  const response: any = await $fetch("/api/montavimas", {
-    method: "post",
-    body: { _id: offer!.value!._id, worker: value },
-  });
   if (response.success) {
-    useMontavimas.addMontavimas(response.data);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-  isOpenMontavimas.value = false;
-};
-
-const photosHandler = async (photo: Photo) => {
-  const response: any = await $fetch("/api/uploadPhotos", {
-    method: "post",
-    body: { photo, category: "projects", _id: offer!.value!._id },
-  });
-  if (response.success) {
-    offer?.value?._id && useProjects.addPhoto(offer!.value!._id, photo);
+    if (!useSocketStore().connected) {
+      productionStore.addProduction(response.data);
+      projectsStore.updateProjectField(response.data._id, "status", "Gaminama");
+    }
     setIsError(false);
     setError(response.message);
   } else {
@@ -234,17 +221,36 @@ const photosHandler = async (photo: Photo) => {
   }
 };
 
-const addComment = async (value: any) => {
-  const response: any = await $fetch("/api/projectComments", {
-    method: "post",
-    body: {
-      _id: offer?.value!._id,
-      comment: value,
-      username: useUsers.user?.username,
-    },
-  });
+const installationHandler = async (value: string) => {
+  const requestData = { _id: offer!.value!._id, worker: value };
+
+  const response: any = await request.post("addInstallation", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    if (!useSocketStore().connected) {
+      installationStore.addInstallation(response.data);
+      useProjectsStore().updateProjectField(response.data._id, "status", "Montuojama");
+    }
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+  isOpenInstallation.value = false;
+};
+
+const addComment = async (comment: Comment) => {
+  const requestData = {
+    _id: offer?.value!._id,
+    comment,
+    username: userStore.user?.username,
+  };
+
+  const response: any = await request.post("addProjectComment", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.addComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -252,16 +258,17 @@ const addComment = async (value: any) => {
   }
 };
 
-const deleteComment = async (value: any) => {
-  const response: any = await $fetch("/api/projectComments", {
-    method: "delete",
-    body: {
-      _id: offer?.value!._id,
-      comment: value,
-    },
-  });
+const deleteComment = async (comment: Comment) => {
+  const requestData = {
+    _id: offer?.value!._id,
+    comment,
+  };
+
+  const response: any = await request.delete("deleteProjectComment", requestData);
+
   if (response.success) {
-    useProjects.updateStatus(response.data);
+    !useSocketStore().connected &&
+      projectsStore.deleteComment(response.data._id, response.data.comment);
     setIsError(false);
     setError(response.message);
   } else {
@@ -274,7 +281,7 @@ const versionsHandler = (id: string) => {
 };
 
 const checkGates = () => {
-  gateOrdered.value = useGates.gates.some(
+  gateOrdered.value = gateStore.gates.some(
     (item) => item._id.toString() === offer.value!._id!.toString()
   );
 };
@@ -289,7 +296,7 @@ const gateExist =
   );
 
 watch(
-  useGates.gates,
+  () => gateStore.gates,
   () => {
     checkGates();
   },
@@ -375,20 +382,20 @@ watch(
               </button>
             </div>
           </div>
-          <BaseUpload @onSuccess="photosHandler" />
+          <BaseUploadButton @upload="uploadFiles" :_id="offer?._id" category="projects" />
         </div>
 
         <div class="flex gap-4">
           <BaseButtonWithConfirmation
             name="Į gamybą"
-            @onConfirm="gamybaHandler"
+            @onConfirm="productionHandler"
             :isLoading="isLoading"
           />
           <div>
             <BaseButton
-              v-if="!isOpenMontavimas"
+              v-if="!isOpenInstallation"
               name="Į montavimą"
-              @click="isOpenMontavimas = true"
+              @click="isOpenInstallation = true"
               :isLoading="isLoading"
             />
             <BaseSelectField
@@ -397,7 +404,7 @@ watch(
               id="workersList"
               defaultValue="Pasirinkti montuotoją"
               width="w-60"
-              @onChange="(value: string) => montavimasHandler(value)
+              @onChange="(value: string) => installationHandler(value)
                 "
             />
           </div>
@@ -410,7 +417,7 @@ watch(
 
         <div class="flex gap-4 items-end">
           <BaseSelectField
-            :values="useSettings.selectValues.status"
+            :values="settingsStore.selectValues.status"
             id="orderStatus"
             :defaultValue="offer?.status"
             label="Statusas"
@@ -450,16 +457,10 @@ watch(
               >
                 Vartonas
               </button>
-              <button
-                @click="setProvider('Gigasta')"
-                class="bg-dark-full text-white flex-1 px-4 py-2 hover:bg-red-full"
-              >
-                Gigasta
-              </button>
             </div>
             <BaseSelectField
               v-else-if="!gateOrdered && isOpenGates2"
-              :values="provider === 'Vartonas' ? vartonasUsers : gigastaUsers"
+              :values="vartonasUsers"
               id="userSelect"
               defaultValue="Priskirti vartotoja"
               width="w-60"

@@ -1,13 +1,11 @@
 <script setup lang="ts">
-const useSettings = useSettingsStore();
-const accountTypes = useSettings.selectValues.accountTypes;
+const settingsStore = useSettingsStore();
+const accountTypes = settingsStore.selectValues.accountTypes;
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <h3 class="text-2xl font-medium self-center">
-      Vartotojų teisių nustatymai
-    </h3>
+    <h3 class="text-2xl font-medium self-center">Vartotojų teisių nustatymai</h3>
     <div class="flex gap-4 text-center text-xl">
       <p class="w-48 text-start">Varotojo teises</p>
       <p class="w-24">Projektai</p>

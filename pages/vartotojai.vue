@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { accountStatus } from "~/data/selectFieldData";
+import request from "~/utils/request";
 
 const { setError, setIsError } = useError();
-const useSettings = useSettingsStore();
-const useUser = useUserStore();
+const settingsStore = useSettingsStore();
+const userStore = useUserStore();
 const password = ref<string>("");
 const modalOpen = ref<boolean>(false);
 const selectedUser = ref("");
@@ -11,50 +12,43 @@ const isLoading = ref<boolean>(false);
 
 const userChangesHandler = async (id: string, type: string, value: string) => {
   const postData = {
-    selectedUserId: id,
+    _id: id,
     changeType: type,
     password: password.value,
     value: value,
   };
 
-  const data: any = await $fetch("/api/userChanges", {
-    method: "post",
-    body: postData,
-  });
-  if (data.success) {
-    useUser.updateUser(data.data);
+  const response: any = await request.patch("updateUser", postData);
+
+  if (response.success) {
+    !useSocketStore().connected && userStore.updateUser(response.data);
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
   } else {
-    setError(data.message);
+    setError(response.message);
   }
 };
 
 const confirmHandler = async () => {
   isLoading.value = true;
+
   const postData = {
-    selectedUserId: selectedUser.value,
+    _id: selectedUser.value,
     password: password.value,
   };
 
   if (password.value.trim().length > 4 || selectedUser.value.length > 0) {
-    const data: { data: null; message: string; success: boolean } = await $fetch(
-      "/api/userChanges",
-      {
-        method: "delete",
-        body: postData,
-      }
-    );
+    const response = await request.delete("deleteUser", postData);
 
-    if (data.success) {
-      useUser.deleteUser(selectedUser.value);
+    if (response.success) {
+      !useSocketStore().connected && userStore.deleteUser(response.data._id);
       password.value = "";
       selectedUser.value = "";
       modalOpen.value = false;
       setIsError(false);
-      setError(data.message);
+      setError(response.message);
     } else {
-      setError(data.message);
+      setError(response.message);
     }
   }
   isLoading.value = false;
@@ -78,7 +72,7 @@ const deleteHandler = (id: string) => {
     </div>
 
     <div
-      v-for="(user, index) in useUser.users"
+      v-for="(user, index) in userStore.users"
       :key="user._id"
       class="flex py-2 capitalize border-b"
     >
@@ -98,7 +92,7 @@ const deleteHandler = (id: string) => {
 
       <BaseSelectField
         :id="user._id"
-        :values="useSettings.selectValues.accountTypes"
+        :values="settingsStore.selectValues.accountTypes"
         width="w-52"
         class="flex-[3]"
         :defaultValue="user?.accountType"
@@ -121,7 +115,7 @@ const deleteHandler = (id: string) => {
   <Teleport to="body">
     <div
       v-if="modalOpen"
-      class="absolute top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
+      class="fixed top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
     >
       <div
         class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl"

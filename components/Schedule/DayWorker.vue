@@ -5,33 +5,23 @@ const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
 const { setError, setIsError } = useError();
 
-const useProjects = useProjectsStore();
-const useSchedule = useScheduleStore();
-const useGamyba = useGamybaStore();
-const useUser = useUserStore();
+const projectsStore = useProjectsStore();
+const scheduleStore = useScheduleStore();
+const productionStore = useProductionStore();
+const userStore = useUserStore();
+
+const schedule = computed(() =>
+  scheduleStore.getScheduleByWorkerAndDate(props.worker._id, props.date)
+);
 
 const commentModalOpen = ref<boolean>(false);
 const modalOpen = ref<boolean>(false);
 const menuOpen = ref<boolean>(false);
 const canSave = ref<boolean>(false);
-const selectedJobs = ref<Job[]>([]);
-const comment = ref<string>("");
-const isAdmin = useUser.user?.accountType === "Administratorius";
+const selectedJobs = ref<Job[]>(schedule.value?.jobs || []);
+const comment = ref<string>(schedule.value?.comment || "");
 
-const loadSelectedJobs = () => {
-  const scheduleItem = useSchedule.schedule.find((schedule) => {
-    return (
-      schedule.worker._id === props.worker._id &&
-      new Date(schedule.date).toISOString() ===
-        new Date(props.date).toISOString()
-    );
-  });
-
-  selectedJobs.value = scheduleItem ? scheduleItem.jobs : [];
-  comment.value = scheduleItem ? scheduleItem.comment : "";
-};
-
-loadSelectedJobs();
+const isAdmin = userStore.user?.accountType === "Administratorius";
 
 const newWorkHandler = () => {
   modalOpen.value = true;
@@ -46,7 +36,8 @@ const newCommentHandler = () => {
 
 const selectHandler = (value: Project) => {
   modalOpen.value = false;
-  selectedJobs.value.push({ _id: value._id, address: value.client.address });
+
+  selectedJobs.value.push({ _id: value._id!, address: value.client.address });
   canSave.value = true;
 };
 
@@ -67,18 +58,17 @@ const cancelHandler = () => {
 };
 
 const saveHandler = async () => {
-  const data = {
+  const requestData = {
     date: props.date,
     comment: comment.value,
     selectedJobs: selectedJobs.value,
     worker: { _id: props.worker._id, lastName: props.worker.lastName },
   };
 
-  const response: any = await $fetch("/api/schedule", {
-    method: "post",
-    body: data,
-  });
+  const response: any = await request.post("addSchedule", requestData);
+
   if (response.success) {
+    !useSocketStore().connected && scheduleStore.addSchedule(response.data);
     setIsError(false);
     setError(response.message);
   } else {
@@ -86,6 +76,15 @@ const saveHandler = async () => {
   }
   canSave.value = false;
 };
+
+watch(
+  schedule,
+  (newVal) => {
+    selectedJobs.value = newVal?.jobs || [];
+    comment.value = newVal?.comment || "";
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -124,10 +123,7 @@ const saveHandler = async () => {
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
-    <div
-      v-if="menuOpen"
-      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white"
-    >
+    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -151,12 +147,7 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div
-      v-if="selectedJobs.length > 0"
-      v-for="job in selectedJobs"
-      :key="job._id"
-      class="relative"
-    >
+    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
       <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
     </div>
 
@@ -165,12 +156,7 @@ const saveHandler = async () => {
       class="bg-blue-600 absolute top-0 left-0 w-full h-full flex flex-col justify-end placeholder-white text-white"
     >
       <div class="border-y border-white">
-        <input
-          type="text"
-          placeholder="Komentaras"
-          v-model="comment"
-          class="w-full p-1"
-        />
+        <input type="text" placeholder="Komentaras" v-model="comment" class="w-full p-1" />
       </div>
       <div class="flex justify">
         <div
@@ -182,16 +168,13 @@ const saveHandler = async () => {
       </div>
     </div>
 
-    <div
-      v-if="modalOpen"
-      class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg"
-    >
+    <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
       <BaseSearchFieldProduction
         width="w-full"
         :data="
           props.worker.accountType === 'Gamyba'
-            ? useGamyba.gamybaList
-            : useProjects.projects
+            ? productionStore.production
+            : projectsStore.projects
         "
         @modalClose="modalOpen = false"
         @onClick="selectHandler"

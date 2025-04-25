@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ResponseUser } from "~/data/interfaces";
-
 definePageMeta({
   layout: false,
 });
@@ -12,30 +10,30 @@ const email = ref<string>("");
 const password = ref<string>("");
 const retypePassword = ref<string>("");
 const isLoading = ref<boolean>(false);
-const useUser = useUserStore();
+const userStore = useUserStore();
 
 const loginHandler = async () => {
   isLoading.value = true;
+
   const loginData = { email: email.value, password: password.value };
-  const data: ResponseUser = await $fetch("/api/login", {
-    method: "post",
-    body: loginData,
-  });
 
-  // const data: ResponseUser = await $fetch("http://localhost:3001/login", {
-  //   method: "post",
-  //   credentials: "include",
-  //   body: loginData,
-  // });
+  const response = await request.post("login", loginData);
 
-  if (data.success) {
-    useUser.setUser(data.data);
+  if (response.success) {
+    userStore.setUser(response.data);
     clearFields();
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
+
+    await fetchUserRights();
+    const rights = useSettingsStore().userRights.find(
+      (item) => item.accountType === response.data.accountType
+    );
+
+    if (rights) await fetchInitialUserData(rights);
     await navigateTo("/");
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };
@@ -49,21 +47,15 @@ const registerHandler = async () => {
     username: username.value,
   };
 
-  const data: { success: boolean; data: ResponseUser; message: string } = await $fetch(
-    "/api/register",
-    {
-      method: "post",
-      body: loginData,
-    }
-  );
+  const response: any = await request.post("register", loginData);
 
-  if (data.success) {
+  if (response.success) {
     setIsError(false);
-    setError(data.message);
+    setError(response.message);
     clearFields();
     changeLogin();
   } else {
-    setError(data.message);
+    setError(response.message);
   }
   isLoading.value = false;
 };

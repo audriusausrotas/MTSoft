@@ -2,9 +2,9 @@ import createResultElement from "~/utils/createResultElement";
 
 export default function generateResults() {
   const results = useResultsStore();
-  const useCalculations = useCalculationsStore();
-  const useBackup = useBackupStore();
-  const useSettings = useSettingsStore();
+  const calculationsStore = useCalculationsStore();
+  const backupStore = useBackupStore();
+  const settingsStore = useSettingsStore();
 
   if (results.fences.length > 0) {
     let cork = 0;
@@ -16,7 +16,7 @@ export default function generateResults() {
     });
     if (cork > 0) {
       createResultElement({
-        type: useSettings.defaultValues.dileCork,
+        type: settingsStore.defaultValues.dileCork,
         quantity: cork,
         color: 9005,
       });
@@ -28,27 +28,27 @@ export default function generateResults() {
       if (item.height <= 113)
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.segment103,
+          type: settingsStore.defaultValues.segment103,
         });
       else if (item.height <= 133)
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.segment123,
+          type: settingsStore.defaultValues.segment123,
         });
       else if (item.height <= 163)
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.segment153,
+          type: settingsStore.defaultValues.segment153,
         });
       else if (item.height <= 183)
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.segment173,
+          type: settingsStore.defaultValues.segment173,
         });
       else
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.segment203,
+          type: settingsStore.defaultValues.segment203,
         });
     });
   }
@@ -57,7 +57,7 @@ export default function generateResults() {
     results.segmentHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.segmentHolders,
+        type: settingsStore.defaultValues.segmentHolders,
       });
     });
   }
@@ -66,9 +66,9 @@ export default function generateResults() {
     results.poles.forEach((item) => {
       let pole = "";
       if (item.height === 3) {
-        pole = useSettings.defaultValues.poleMain;
+        pole = settingsStore.defaultValues.poleMain;
       } else {
-        pole = useSettings.defaultValues.poleAlt;
+        pole = settingsStore.defaultValues.poleAlt;
       }
 
       createResultElement({ ...item, type: pole });
@@ -79,9 +79,9 @@ export default function generateResults() {
     let pole = "";
     const exist = results.gates.some((item) => item.type === "Varstomi");
     if (exist) {
-      pole = useSettings.defaultValues.gatePoleAlt;
+      pole = settingsStore.defaultValues.gatePoleAlt;
     } else {
-      pole = useSettings.defaultValues.gatePoleMain;
+      pole = settingsStore.defaultValues.gatePoleMain;
     }
 
     results.gatePoles.forEach((item) => {
@@ -93,9 +93,9 @@ export default function generateResults() {
     results.anchoredPoles.forEach((item) => {
       let pole = "";
       if (item.height <= 150) {
-        pole = useSettings.defaultValues.anchoredPoleMain;
+        pole = settingsStore.defaultValues.anchoredPoleMain;
       } else {
-        pole = useSettings.defaultValues.anchoredPoleAlt;
+        pole = settingsStore.defaultValues.anchoredPoleAlt;
       }
       createResultElement({ ...item, type: pole });
     });
@@ -105,9 +105,9 @@ export default function generateResults() {
     let pole = "";
     const exist = results.gates.some((item) => item.type === "Varstomi");
     if (exist) {
-      pole = useSettings.defaultValues.anchoredGatePoleAlt;
+      pole = settingsStore.defaultValues.anchoredGatePoleAlt;
     } else {
-      pole = useSettings.defaultValues.anchoredGatePoleMain;
+      pole = settingsStore.defaultValues.anchoredGatePoleMain;
     }
 
     results.anchoredGatePoles.forEach((item) => {
@@ -117,13 +117,13 @@ export default function generateResults() {
 
   if (results.borders > 0) {
     createResultElement({
-      type: useSettings.defaultValues.border,
+      type: settingsStore.defaultValues.border,
       quantity: results.borders,
     });
     results.borderHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.borderHolder,
+        type: settingsStore.defaultValues.borderHolder,
       });
     });
   }
@@ -132,25 +132,23 @@ export default function generateResults() {
     results.crossbars.forEach((item) => {
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.crossbar,
+        type: settingsStore.defaultValues.crossbar,
       });
     });
     results.crossbarHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.crossbarHolders,
+        type: settingsStore.defaultValues.crossbarHolders,
       });
     });
   }
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.rivets,
+        type: settingsStore.defaultValues.rivets,
         quantity: boxQuantity,
       });
     });
@@ -158,12 +156,10 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
-        type: useSettings.defaultValues.bolts,
+        type: settingsStore.defaultValues.bolts,
         quantity: boxQuantity,
       });
     });
@@ -183,9 +179,9 @@ export default function generateResults() {
     results.bindingsLength.forEach((item) => {
       createResultElement({
         ...item,
-        type: useCalculations.retail
-          ? useSettings.defaultValues.retailBindings
-          : useSettings.defaultValues.bindings,
+        type: calculationsStore.retail
+          ? settingsStore.defaultValues.retailBindings
+          : settingsStore.defaultValues.bindings,
         quantity: item.quantity / 100,
       });
     });
@@ -197,13 +193,13 @@ export default function generateResults() {
         if (item.auto === "Taip") {
           createResultElement({
             ...item,
-            type: useSettings.defaultValues.gatesAuto,
+            type: settingsStore.defaultValues.gatesAuto,
             quantity: 1,
           });
         } else {
           createResultElement({
             ...item,
-            type: useSettings.defaultValues.gates,
+            type: settingsStore.defaultValues.gates,
             quantity: 1,
           });
         }
@@ -211,24 +207,24 @@ export default function generateResults() {
         if (item.auto !== "Taip") {
           createResultElement({
             ...item,
-            type: useSettings.defaultValues.gates2,
+            type: settingsStore.defaultValues.gates2,
             quantity: 1,
           });
         } else {
           createResultElement({
             ...item,
-            type: useSettings.defaultValues.gates2Auto,
+            type: settingsStore.defaultValues.gates2Auto,
             quantity: 1,
           });
         }
       } else if (item.type === "Segmentiniai") {
         createResultElement({
           ...item,
-          type: useSettings.defaultValues.gateSegment,
+          type: settingsStore.defaultValues.gateSegment,
           quantity: 1,
         });
         createWorkElement({
-          name: useSettings.defaultValues.segmentGateWork,
+          name: settingsStore.defaultValues.segmentGateWork,
           quantity: 1,
         });
       } else {
@@ -236,24 +232,24 @@ export default function generateResults() {
           if (item.lock === "Elektromagnetinė") {
             createResultElement({
               ...item,
-              type: useSettings.defaultValues.smallGates2,
+              type: settingsStore.defaultValues.smallGates2,
               quantity: 1,
             });
           } else {
             createResultElement({
               ...item,
-              type: useSettings.defaultValues.smallGates,
+              type: settingsStore.defaultValues.smallGates,
               quantity: 1,
             });
           }
         } else {
           createResultElement({
             ...item,
-            type: useSettings.defaultValues.smallGatesSegment,
+            type: settingsStore.defaultValues.smallGatesSegment,
             quantity: 1,
           });
           createWorkElement({
-            name: useSettings.defaultValues.segmentGatesWork,
+            name: settingsStore.defaultValues.segmentGatesWork,
             quantity: 1,
           });
         }
@@ -265,70 +261,70 @@ export default function generateResults() {
 
   if (results.totalFences > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.fenceWork,
+      name: settingsStore.defaultValues.fenceWork,
       quantity: results.totalFences,
     });
   }
 
   if (results.totalFencesWithBindings > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.totalFencesWithBindings,
+      name: settingsStore.defaultValues.totalFencesWithBindings,
       quantity: results.totalFencesWithBindings,
     });
   }
 
   if (results.totalFenceboards > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.fenceboardWork,
+      name: settingsStore.defaultValues.fenceboardWork,
       quantity: results.totalFenceboards,
     });
   }
 
   if (results.totalPoles > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.polesWork,
+      name: settingsStore.defaultValues.polesWork,
       quantity: results.totalPoles,
     });
   }
 
   if (results.totalGatePoles > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.gatesPoleWork,
+      name: settingsStore.defaultValues.gatesPoleWork,
       quantity: results.totalGatePoles,
     });
   }
 
   if (results.totalAnchoredPoles > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.anchoredPolesWork,
+      name: settingsStore.defaultValues.anchoredPolesWork,
       quantity: results.totalAnchoredPoles,
     });
   }
 
   if (results.totalAnchoredGatePoles > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.anchoredGatePolesWork,
+      name: settingsStore.defaultValues.anchoredGatePolesWork,
       quantity: results.totalAnchoredGatePoles,
     });
   }
 
   if (results.totalBorders > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.bordersWork,
+      name: settingsStore.defaultValues.bordersWork,
       quantity: results.totalBorders,
     });
   }
 
   if (results.totalCrossbars > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.crossbarWork,
+      name: settingsStore.defaultValues.crossbarWork,
       quantity: results.totalCrossbars,
     });
   }
 
   if (results.totalSegments > 0) {
     createWorkElement({
-      name: useSettings.defaultValues.segmentWork,
+      name: settingsStore.defaultValues.segmentWork,
       quantity: results.totalSegments,
     });
   }
@@ -354,27 +350,27 @@ export default function generateResults() {
 
     if (quantity > 0) {
       createWorkElement({
-        name: useSettings.defaultValues.gateBnkette,
+        name: settingsStore.defaultValues.gateBnkette,
         quantity,
       });
     }
   }
 
   let transportCount = 1;
-  if (useBackup.backupExist) {
-    const temp = useBackup.works.find((item) => item.name === "Transportas");
+  if (backupStore.backupExist) {
+    const temp = backupStore.works.find((item) => item.name === "Transportas");
     transportCount = temp?.quantity || 1;
   }
 
   createWorkElement({
-    name: useSettings.defaultValues.transport,
+    name: settingsStore.defaultValues.transport,
     quantity: transportCount,
   });
 
-  const tempResults = useBackup.results.filter(
+  const tempResults = backupStore.results.filter(
     (item) => !results.results.some((itm) => itm.type === item.type)
   );
-  const tempWorks = useBackup.works.filter(
+  const tempWorks = backupStore.works.filter(
     (item) => !results.works.some((itm) => itm.name === item.name)
   );
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PotentialClient } from "~/data/interfaces";
 
-const usePotentialClients = usePotentialClientsStore();
+const potentialClientsStore = usePotentialClientsStore();
 const { setError, setIsError } = useError();
 const loading = ref<boolean>(false);
 const files = ref<any>([]);
@@ -13,9 +13,7 @@ const input = ref<string>("");
 const sendHandler = async () => {
   loading.value = true;
 
-  const recipients = usePotentialClients.potentialClients.filter(
-    (client) => client.send
-  );
+  const recipients = potentialClientsStore.potentialClients.filter((client) => client.send);
 
   const formData = new FormData();
   formData.append("message", text.value);
@@ -26,12 +24,15 @@ const sendHandler = async () => {
     formData.append(`file${index}`, file);
   });
 
-  const response: any = await $fetch("/api/mail", {
-    method: "patch",
+  const response: any = await $fetch("http://localhost:3001/sendRetailOffers", {
+    method: "POST",
     body: formData,
+    credentials: "include",
   });
 
   if (response.success) {
+    files.value = [];
+    text.value = "";
     setIsError(false);
     setError(response.message);
   } else {
@@ -41,27 +42,12 @@ const sendHandler = async () => {
   loading.value = false;
 };
 
-const selectAllHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "put",
-    body: { all: "yes", value: true },
-  });
-  if (response.success) {
-    usePotentialClients.checkPotentialClients(true);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-};
+const selectAllHandler = async (value: boolean) => {
+  const requestData = { all: true, value };
 
-const selectNoneHandler = async () => {
-  const response: any = await $fetch("/api/potentialClients", {
-    method: "put",
-    body: { all: "yes", value: false },
-  });
+  const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
-    usePotentialClients.checkPotentialClients(false);
+    potentialClientsStore.selectPotentialClients(value);
     setIsError(false);
     setError(response.message);
   } else {
@@ -72,7 +58,7 @@ const selectNoneHandler = async () => {
 const searchHandler = (value: string) => {
   input.value = value;
   if (value.length > 2) {
-    const foundProjects = usePotentialClients.potentialClients.filter(
+    const foundProjects = potentialClientsStore.potentialClients.filter(
       (client: PotentialClient) =>
         client.address.toLowerCase().includes(value.toLowerCase()) ||
         client.email.toLowerCase().includes(value.toLowerCase()) ||
@@ -81,7 +67,7 @@ const searchHandler = (value: string) => {
     );
     filteredData.value = [...foundProjects];
   } else {
-    filteredData.value = [...usePotentialClients.potentialClients];
+    filteredData.value = [...potentialClientsStore.potentialClients];
   }
 };
 
@@ -94,11 +80,11 @@ const removeFile = (index: number) => {
 };
 
 onMounted(() => {
-  filteredData.value = [...usePotentialClients.potentialClients];
+  filteredData.value = [...potentialClientsStore.potentialClients];
 });
 
 watch(
-  () => usePotentialClients.potentialClients,
+  () => potentialClientsStore.potentialClients,
   (newClients) => {
     if (input.value.length === 0) filteredData.value = [...newClients];
   }
@@ -108,13 +94,9 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
-      <BaseButton
-        name="siūsti pasiūlymą"
-        @click="sendHandler"
-        :isLoading="loading"
-      />
-      <BaseButton name="pažymėti visus" @click="selectAllHandler" />
-      <BaseButton name="atžymėti visus" @click="selectNoneHandler" />
+      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
+      <BaseButton name="pažymėti visus" @click="selectAllHandler(true)" />
+      <BaseButton name="atžymėti visus" @click="selectAllHandler(false)" />
 
       <div class="relative bg-dark-full text-white w-60 h-10 rounded-lg">
         <input

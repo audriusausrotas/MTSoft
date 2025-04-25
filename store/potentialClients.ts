@@ -15,23 +15,26 @@ export const usePotentialClientsStore = defineStore("potentialClients", {
     },
 
     updatePotentialClients(data: PotentialClient) {
-      this.potentialClients = this.potentialClients.map((client) => {
-        if (client._id === data._id) return data;
-        else return client;
-      });
-    },
-
-    deletePotentialClient(id: string) {
-      this.potentialClients = this.potentialClients.filter(
-        (client) => client._id !== id
+      this.potentialClients = this.potentialClients.map((client) =>
+        client._id === data._id ? data : client
       );
     },
 
-    checkPotentialClients(value: boolean) {
+    deletePotentialClient(id: string) {
+      this.potentialClients = this.potentialClients.filter((client) => client._id !== id);
+    },
+
+    selectPotentialClients(value: boolean) {
       this.potentialClients = this.potentialClients.map((client) => {
         client.send = value;
         return client;
       });
+    },
+
+    selectPotentialClient(_id: string, send: boolean) {
+      this.potentialClients = this.potentialClients.map((client) =>
+        client._id === _id ? { ...client, send } : client
+      );
     },
   },
 });

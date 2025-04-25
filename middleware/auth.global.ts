@@ -1,238 +1,88 @@
-import { useCookie } from "nuxt/app";
+import request from "~/utils/request";
+
+const isPublicPath = (path: string) =>
+  path.includes("pasiulymas") || path.includes("didmena") || path.includes("tvoros");
+
+const isValidAdminPath = (path: string) =>
+  [
+    "/kainos",
+    "/bonusai",
+    "/pasiulymai",
+    "/klientai",
+    "/vartotojai",
+    "/nustatymai",
+    "/archyvas/baigti",
+    "/archyvas/archyvas",
+    "/archyvas/nepasitvirtine",
+    "/archyvas/istrinti",
+    "/archyvas/atsargines_kopijos",
+  ].includes(path);
+
+const projectPaths = ["/", "/skaiciuokle"];
+const schedulePaths = ["/grafikas"];
+const productionPaths = ["/gamyba"];
+const installationPaths = ["/montavimas"];
+const gatePaths = ["/vartai"];
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const useUser = useUserStore();
-  const cookie = useCookie("mtud");
+  const userStore = useUserStore();
+  const settingsStore = useSettingsStore();
 
-  if (
-    !to.path.includes("pasiulymas") &&
-    !to.path.includes("didmena") &&
-    !to.path.includes("tvoros")
-  ) {
-    // authentificate in server from cookie
-    if (cookie.value) {
-      if (!useUser.user) {
-        const data: any = await fetchUser();
-
-        if (!data) {
-          if (to.path !== "/login") {
-            useUser.logout();
-            return navigateTo("/login");
-          }
-        } else {
-          await fetchUsers();
-        }
-      }
-    } else {
-      if (to.path !== "/login") {
-        useUser.logout();
-        return navigateTo("/login");
+  if (isPublicPath(to.path)) {
+    if (to.path.includes("pasiulymas") && import.meta.server) {
+      const success = await fetchOrder(to);
+      if (!success && !to.name?.toString().includes("negalioja")) {
+        return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
       }
     }
+    return;
+  }
 
-    // vartonas service worker rerouting
-    if (useUser.user?.accountType.toLowerCase() === "servisas") {
-      if (to.path !== "/servisas") {
-        return navigateTo("/servisas");
-      } else {
-        return;
-      }
+  let user = userStore.user;
+  if (!user) {
+    const response = await fetchUser();
+    if (!response.success) {
+      const logoutResponse = await request.get("logout");
+      if (logoutResponse.success) userStore.logout();
+
+      if (to.path !== "/login") return navigateTo("/login");
+      return;
     }
 
-    // fetch settings for everyone
+    user = response.data;
+  }
+
+  if (to.path === "/login") return navigateTo("/");
+
+  if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas") {
+    return navigateTo("/servisas");
+  }
+
+  let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
+
+  if (!userRights) {
     await fetchUserRights();
+    userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
+  }
 
-    const useSettings = useSettingsStore();
-    const userRights = useSettings.userRights.find(
-      (item) => item.accountType === useUser?.user?.accountType
-    );
+  const isSingleArchiveView = to.path.startsWith("/archyvas/") && to.path.split("/").length === 3;
 
-    switch (to.path) {
-      case "/":
-        if (userRights?.project) {
-          await Promise.all([fetchProjects(), fetchGates(), fetchUsers(), fetchSelects()]);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
+  if (import.meta.server && !isSingleArchiveView) {
+    await fetchInitialUserData(userRights);
+  }
 
-      case `/perziura/${to.params.id}`:
-        if (userRights?.project) {
-          await fetchProject(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/skaiciuokle":
-        if (userRights?.project) {
-          await Promise.all([fetchProducts(), fetchClients(), fetchDefaultValues()]);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/grafikas":
-        if (userRights?.schedule) {
-          await Promise.all([fetchSchedules(), fetchGamybas()]);
-          if (useUser.user?.accountType === "Administratorius") await fetchProjects();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/gamyba":
-        if (userRights?.production) {
-          await fetchGamybas();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case `/gamyba/${to.params.id}`:
-        if (userRights?.production) {
-          await fetchGamyba(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/montavimas":
-        if (userRights?.installation) {
-          await Promise.all([fetchMontavimus(), fetchSchedules()]);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case `/montavimas/${to.params.id}`:
-        if (userRights?.installation) {
-          await fetchMontavima(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/vartai":
-        if (userRights?.gate) {
-          await fetchGates();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case `/vartai/${to.params.id}`:
-        if (userRights?.gate) {
-          await fetchGate(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/kainos":
-        if (userRights?.admin) {
-          await fetchProducts();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/pasiulymai":
-        if (userRights?.admin) {
-          await fetchPotentialClients();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/klientai":
-        if (userRights?.admin) {
-          await fetchClients();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/vartotojai":
-        if (userRights?.admin) {
-          await Promise.all([fetchUsers(), fetchSelects()]);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/nustatymai":
-        if (userRights?.admin) {
-          await Promise.all([
-            fetchProducts(),
-            fetchDefaultValues(),
-            fetchUserRights(),
-            fetchSelects(),
-          ]);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/archyvas/archyvas":
-        if (userRights?.admin) {
-          await fetchArchives();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/archyvas/nepasitvirtine":
-        if (userRights?.admin) {
-          await fetchUnconfirmed();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/archyvas/istrinti":
-        if (userRights?.admin) {
-          await fetchDeleted();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/archyvas/atsargines_kopijos":
-        if (userRights?.admin) {
-          await fetchBackup();
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case `/archyvas/${to.params.id}`:
-        if (userRights?.admin) {
-          await fetchArchive(to.params.id);
-        } else {
-          return navigateTo(middlewareHelper(userRights!));
-        }
-        break;
-
-      case "/bonusai":
-        if (useUser.user?.username !== "Audrius" && useUser.user?.username !== "Andrius") {
-          return navigateTo("/");
-        }
-        break;
-
-      default:
-        break;
+  const premissionHandler = (paths: string[], right: boolean | undefined) => {
+    if (paths.some((p) => to.path === p || to.path.includes(p)) && !right) {
+      return navigateTo(middlewareHelper(userRights!));
     }
-  } else {
-    if (to.path.includes("pasiulymas"))
-      if (import.meta.server) {
-        const success = await fetchOrder(to);
-        if (!success) {
-          const pathName = to.name?.toString();
-          if (!pathName?.includes("negalioja")) {
-            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-          }
-        }
-      }
+  };
+
+  if (premissionHandler(projectPaths, userRights?.project)) return;
+  if (premissionHandler(schedulePaths, userRights?.schedule)) return;
+  if (premissionHandler(productionPaths, userRights?.production)) return;
+  if (premissionHandler(installationPaths, userRights?.installation)) return;
+  if (premissionHandler(gatePaths, userRights?.gate)) return;
+  if (isValidAdminPath(to.path) && !userRights?.admin) {
+    return navigateTo(middlewareHelper(userRights!));
   }
 });

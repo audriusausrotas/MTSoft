@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = defineProps(["project", "index", "length", "location"]);
-const useProjects = useProjectsStore();
-const useSettings = useSettingsStore();
-const useGates = useGateStore();
+const projectsStore = useProjectsStore();
+const settingsStore = useSettingsStore();
+const gateStore = useGateStore();
 const open = ref<boolean>(false);
 
 const { setError, setIsError } = useError();
@@ -10,13 +10,11 @@ const { setError, setIsError } = useError();
 const time = computed(() => {
   const today = new Date();
   const expirationDate = new Date(props.project.dateExparation);
-  return Math.ceil(
-    (expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  return Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 });
 
 const gateOrdered = computed(() => {
-  const test = useGates.gates.some(
+  const test = gateStore.gates.some(
     (item) => item._id.toString() === props.project?._id.toString()
   );
   return test ? "bg-green-500" : "bg-red-500";
@@ -50,13 +48,12 @@ const color =
     : "bg-yellow-400";
 
 const statusHandler = async (value: string) => {
-  const response: any = await $fetch("/api/project", {
-    method: "patch",
-    body: { _id: props.project._id, value },
-  });
+  const requestData = { _id: props.project._id, value };
+
+  const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
-    console.log(response.data.status);
-    useProjects.updateStatus(props.project._id, value);
+    !useSocketStore().connected &&
+      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -73,10 +70,7 @@ const statusHandler = async (value: string) => {
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative flex-1">
       <div
-        v-if="
-          props.project.gates?.length > 0 &&
-          props.project.status !== 'Nepatvirtintas'
-        "
+        v-if="props.project.gates?.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered"
       ></div>
@@ -98,19 +92,12 @@ const statusHandler = async (value: string) => {
       />
     </div>
 
-    <BaseInfoField
-      :name="props.project?.client?.phone"
-      width="w-32"
-      :tel="true"
-    />
-    <BaseInfoField
-      :name="props.project?.client?.email"
-      width="w-80 "
-      :email="true"
-    />
-    <div class="relative">
+    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-80 " :email="true" />
+
+    <div v-if="location === 'projects'" class="relative">
       <BaseSelectField
-        :values="useSettings.selectValues.status"
+        :values="settingsStore.selectValues.status"
         id="orderStatus"
         :defaultValue="props.project?.status"
         width="w-48"
@@ -123,12 +110,19 @@ const statusHandler = async (value: string) => {
         v-if="props.project?.status === 'Nepatvirtintas' && time"
         class="absolute top-1.5 right-7 flex rounded-full w-7 h-7 shadow-md items-center justify-center font-medium"
         :class="
-          time < 3 ? 'bg-red-600' : time < 10 ? 'bg-red-400' : ' bg-inherit'
+          time < 0
+            ? 'bg-black text-white'
+            : time < 3
+            ? 'bg-red-600'
+            : time < 10
+            ? 'bg-red-400'
+            : ' bg-inherit'
         "
       >
-        {{ time }}
+        {{ time > 0 ? time : 0 }}
       </div>
     </div>
+    <BaseInfoField v-else :name="props.project?.status" width="w-48 " :class="color" />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
@@ -142,11 +136,7 @@ const statusHandler = async (value: string) => {
         loading="lazy"
         :ismap="true"
       />
-      <HomeSubmenu
-        v-if="open"
-        :location="props.location"
-        :_id="props.project._id"
-      />
+      <HomeSubmenu v-if="open" :location="props.location" :_id="props.project._id" />
     </div>
   </div>
 </template>

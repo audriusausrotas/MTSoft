@@ -2,15 +2,16 @@
 const props = defineProps(["value", "editable", "index", "field", "disable"]);
 
 const { setError, setIsError } = useError();
-const useSettings = useSettingsStore();
+const settingsStore = useSettingsStore();
 
 const deleteHandler = async () => {
-  const response: any = await $fetch("/api/selects", {
-    method: "delete",
-    body: { field: props.field, index: props.index },
-  });
+  const requestData = { field: props.field, index: props.index };
+
+  const response = await request.delete("deleteSelect", requestData);
+
   if (response.success) {
-    useSettings.deleteSelectValue(props.field, props.index);
+    !useSocketStore().connected &&
+      settingsStore.deleteSelectValue(response.data.field, response.data.index);
     setIsError(false);
     setError(response.message);
   } else {

@@ -1,192 +1,219 @@
 export async function fetchUser() {
-  const useUser = useUserStore();
-
-  const { data }: any = await useFetch("/api/auth", {
-    method: "post",
-    body: {},
-  });
-  if (data.value.data) {
-    useUser.setUser({ ...data.value.data });
+  const userStore = useUserStore();
+  try {
+    const response: any = await request.get("getUser");
+    console.log("fecina useri");
+    if (response.success) {
+      userStore.setUser(response.data);
+    }
+    return response;
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
-  return data.value.data;
 }
 
 export async function fetchGates() {
-  const useGates = useGateStore();
-  const { data }: any = await useFetch("/api/gates");
-  if (data.value.success) {
-    useGates.addGates(data.value.data);
+  const gateStore = useGateStore();
+
+  try {
+    const response: any = await request.get("getGates");
+    console.log("fecina vartus");
+    if (response.success) {
+      gateStore.addGates(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
-export async function fetchGate(id: any) {
-  const useGates = useGateStore();
-  const { data }: any = await useFetch("/api/gate", {
-    method: "post",
-    body: { _id: id },
-  });
-  if (data.value.success) {
-    useGates.addSelectedGate(data.value.data);
+export async function fetchProduction() {
+  const productionStore = useProductionStore();
+
+  try {
+    const response: any = await request.get("getProduction");
+    console.log("fecina gamyba");
+    if (response.success) {
+      productionStore.addAll(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
-export async function fetchGamybas() {
-  const useGamyba = useGamybaStore();
-  const { data }: any = await useFetch("/api/gamyba");
-  if (data.value.success) {
-    useGamyba.addAll(data.value.data);
-  }
-}
+export async function fetchInstallation() {
+  const installationStore = useInstallationStore();
 
-export async function fetchGamyba(id: any) {
-  const useGamyba = useGamybaStore();
-  const { data }: any = await useFetch("/api/gamyb", {
-    method: "post",
-    body: { _id: id },
-  });
-  if (data.value.success) {
-    useGamyba.clearGamyba();
-    useGamyba.addOne(data.value.data);
-  }
-}
-
-export async function fetchMontavimus() {
-  const useMontavimas = useMontavimasStore();
-  const { data }: any = await useFetch("/api/montavimas");
-  if (data.value.success) {
-    useMontavimas.addAll(data.value.data);
-  }
-}
-
-export async function fetchMontavima(id: any) {
-  const useMontavimas = useMontavimasStore();
-  const { data }: any = await useFetch("/api/montavima", {
-    method: "post",
-    body: { _id: id },
-  });
-  if (data.value.success) {
-    useMontavimas.addOne(data.value.data);
+  try {
+    const response: any = await request.get("getWorks");
+    console.log("fecina montavima");
+    if (response.success) {
+      installationStore.addAll(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchProjects() {
-  const useProjects = useProjectsStore();
-  const { data }: any = await useFetch("/api/project");
-  if (data.value.success) {
-    useProjects.addProjects(data.value.data);
-  }
-}
+  const projectsStore = useProjectsStore();
 
-export async function fetchProject(id: any) {
-  const useProjects = useProjectsStore();
-  const { data }: any = await useFetch("/api/projectSingle", {
-    method: "post",
-    body: { _id: id },
-  });
-  if (data.value.success) {
-    useProjects.addProject(data.value.data);
+  try {
+    const response: any = await request.get("getProjects");
+    console.log("fecina projektus");
+    if (response.success) {
+      projectsStore.addProjects(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchProducts() {
-  const useProducts = useProductsStore();
-  const { data }: any = await useFetch("/api/products");
-  if (data.value.success) {
-    useProducts.addProducts(data.value.data);
+  const productsStore = useProductsStore();
+
+  try {
+    const response: any = await request.get("getProducts");
+    console.log("fecina produktus");
+    if (response.success) {
+      productsStore.addProducts(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchUsers() {
-  const useUser = useUserStore();
-  if (useUser.users.length > 0) return;
-  const { data }: any = await useFetch("/api/users");
-  if (data.value.success) {
-    useUser.setUsers(data.value.data);
-  }
-}
+  const userStore = useUserStore();
 
-export async function fetchArchive(id: any) {
-  const useArchives = useArchivesStore();
-  const { data }: any = await useFetch("/api/archive", {
-    method: "put",
-    body: { id },
-  });
-  if (data.value.success) {
-    useArchives.addProjectToOpen(data.value.data);
+  try {
+    const response: any = await request.get("getUsers");
+    console.log("fecina userius");
+    if (response.success) {
+      userStore.setUsers(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchArchives() {
-  const useArchives = useArchivesStore();
-  const { data: archive }: any = await useFetch("/api/archives");
-  if (archive.value.success) {
-    useArchives.addArchives(archive.value.data);
+  const archiveStore = useArchiveStore();
+
+  try {
+    const response: any = await request.get("getArchives");
+    console.log("fecina archyva");
+    if (response.success) {
+      archiveStore.addArchives("archive", response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
+
 export async function fetchUnconfirmed() {
-  const useArchives = useArchivesStore();
-  const { data: archive }: any = await useFetch("/api/unconfirmed");
-  if (archive.value.success) {
-    useArchives.addUnconfirmed(archive.value.data);
+  const archiveStore = useArchiveStore();
+
+  try {
+    const response: any = await request.get("getUnconfirmed");
+    console.log("fecina nepatvirtintus");
+    if (response.success) {
+      archiveStore.addArchives("unconfirmed", response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
+
 export async function fetchDeleted() {
-  const useArchives = useArchivesStore();
-  const { data: archive }: any = await useFetch("/api/deleted");
-  if (archive.value.success) {
-    useArchives.addDeleted(archive.value.data);
+  const archiveStore = useArchiveStore();
+
+  try {
+    const response: any = await request.get("getDeleted");
+    console.log("fecina istrintus");
+    if (response.success) {
+      archiveStore.addArchives("deleted", response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
+
 export async function fetchBackup() {
-  const useArchives = useArchivesStore();
-  const { data: archive }: any = await useFetch("/api/backup");
-  if (archive.value.success) {
-    useArchives.addBackup(archive.value.data);
+  const archiveStore = useArchiveStore();
+
+  try {
+    const response: any = await request.get("getBackup");
+    console.log("fecina backupa");
+    if (response.success) {
+      archiveStore.addArchives("backup", response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchSchedules() {
-  const useSchedule = useScheduleStore();
-  const { data: schedules }: any = await useFetch("/api/schedule");
-  if (schedules.value.success) {
-    useSchedule.addSchedules(schedules.value.data);
+  const scheduleStore = useScheduleStore();
+
+  try {
+    const response: any = await request.get("getSchedules");
+    console.log("fecina grafika");
+    if (response.success) {
+      scheduleStore.addSchedules(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchClients() {
-  const useClients = useClientsStore();
-  const { data: clients }: any = await useFetch("/api/clients");
-  if (clients.value.success) {
-    useClients.setClients(clients.value.data);
+  const clientsStore = useClientsStore();
+
+  try {
+    const response: any = await request.get("getClients");
+    console.log("fecina klientus");
+
+    if (response.success) {
+      clientsStore.setClients(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchOrder(to: any) {
   let success = true;
 
-  const { data: offer }: any = await useFetch("/api/order", {
-    method: "post",
-    body: { _id: to.params.id },
-  });
-  if (offer.value.success) {
-    const useOffer = useOfferStore();
-    if (offer.value.data.status === "Nepatvirtintas" || offer.value.data.status === "Netinkamas") {
-      const currentDate = new Date();
-      const exparationDate = new Date(offer.value.data.dateExparation);
-      if (currentDate < exparationDate) {
-        useOffer.setOffer({ ...offer.value.data });
-      } else {
-        const data: any = await $fetch("/api/unconfirmed", {
-          method: "post",
-          body: { _id: offer.value.data._id },
-        } as any);
+  const response: any = await request.get(`getOrder/${to.params.id}`);
 
-        if (data.success) {
+  if (response.success) {
+    const offerStore = useOfferStore();
+    if (response.data.status === "Nepatvirtintas" || response.data.status === "Netinkamas") {
+      const currentDate = new Date();
+      const exparationDate = new Date(response.data.dateExparation);
+      if (currentDate < exparationDate) {
+        offerStore.setOffer({ ...response.data });
+      } else {
+        const data2: any = await $fetch(`addUnconfirmed/${response.data._id}`);
+        if (data2.success) {
           success = false;
         }
       }
     } else {
-      useOffer.setOffer({ ...offer.value.data });
+      offerStore.setOffer({ ...response.data });
     }
   } else {
     success = false;
@@ -195,33 +222,61 @@ export async function fetchOrder(to: any) {
 }
 
 export async function fetchSelects() {
-  const useSettings = useSettingsStore();
-  const { data: selects }: any = await useFetch("/api/selects");
-  if (selects.value.success) {
-    useSettings.addSelectData(selects.value.data);
+  const settingsStore = useSettingsStore();
+
+  try {
+    const response: any = await request.get("getSelects");
+    console.log("fecina select fieldus");
+    if (response.success) {
+      settingsStore.addSelectData(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchDefaultValues() {
-  const useSettings = useSettingsStore();
-  const { data: defaultValues }: any = await useFetch("/api/defaultValues");
-  if (defaultValues.value.success) {
-    useSettings.addDefaultValues(defaultValues.value.data);
+  const settingsStore = useSettingsStore();
+
+  try {
+    const response: any = await request.get("getDefaultValues");
+    console.log("fecina default values");
+    if (response.success) {
+      settingsStore.addDefaultValues(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchUserRights() {
-  const useSettings = useSettingsStore();
-  const { data: userRights }: any = await useFetch("/api/userRights");
-  if (userRights.value.success) {
-    useSettings.addUserRights(userRights.value.data);
+  const settingsStore = useSettingsStore();
+
+  try {
+    const response: any = await request.get("getUserRights");
+    console.log("fecina vartotoju teises");
+    if (response.success) {
+      settingsStore.addUserRights(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }
 
 export async function fetchPotentialClients() {
-  const usePotentialClients = usePotentialClientsStore();
-  const { data: potentialClients }: any = await useFetch("/api/potentialClients");
-  if (potentialClients.value.success) {
-    usePotentialClients.addPotentialClients(potentialClients.value.data);
+  const potentialClientsStore = usePotentialClientsStore();
+
+  try {
+    const response: any = await request.get("getpotentialClients");
+    console.log("fecina potencialius klientus");
+    if (response.success) {
+      potentialClientsStore.addPotentialClients(response.data);
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
   }
 }

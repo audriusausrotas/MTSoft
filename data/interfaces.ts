@@ -31,7 +31,7 @@ export interface Project {
   orderNumber: string;
   dateCreated: string;
   dateExparation: string;
-  files: Photo[];
+  files: string[];
   comments: Comment[];
   versions: Version[];
 }
@@ -59,7 +59,7 @@ export interface Fence {
   seeThrough: string;
   direction: string;
   parts: string;
-  aditional: string;
+  comment: string;
   twoSided: string;
   bindings: string;
   anchoredPoles: string;
@@ -79,7 +79,7 @@ export interface Measure {
   kampas: {
     exist: boolean;
     value: number;
-    aditional: string;
+    comment: string;
   };
   laiptas: {
     exist: boolean;
@@ -107,20 +107,6 @@ export interface Result {
   margin: number;
   isNew: boolean;
   width: number | null;
-}
-
-export interface MontavimasResult {
-  type: string;
-  category: string;
-  quantity: number;
-  height: number;
-  twoSided: string;
-  direction: string;
-  seeThrough: string;
-  space: number;
-  color: string;
-  width: number | null;
-  delivered: boolean;
 }
 
 export interface OtherParts {
@@ -162,7 +148,7 @@ export interface Gate {
   bankette: string;
   direction: string;
   lock: string;
-  aditional: string;
+  comment: string;
   option: string;
 }
 
@@ -189,7 +175,7 @@ export interface GateInfo {
   exist: boolean;
   type: string;
   automatics: string;
-  aditional: string;
+  comment: string;
   direction: string;
   lock: string;
   bankette: string;
@@ -205,43 +191,7 @@ export interface User {
   phone: string;
   verified: boolean;
   accountType: string;
-  photo: Photo;
-}
-
-export interface Photo {
-  id: string;
-  url: string;
-}
-
-export interface ResponseUser {
-  success: boolean;
-  data: User;
-  message: string;
-}
-export interface ResponseUsers {
-  success: boolean;
-  data: User[];
-  message: string;
-}
-
-export interface ProjectsState {
-  projects: Project[];
-  filteredProjects: Project[];
-  selectedProject: string | null;
-  selectedFilter: string;
-  selectedStatusFilter: string;
-}
-
-export interface ArchivesState {
-  archives: Project[];
-  filteredArchives: Project[];
-  backup: Project[];
-  filteredBackup: Project[];
-  deleted: Project[];
-  filteredDeleted: Project[];
-  unconfirmed: Project[];
-  filteredUnconfirmed: Project[];
-  projectToOpen: Project | null;
+  photo: string;
 }
 
 export interface Product {
@@ -287,26 +237,9 @@ export interface Works {
   isNew: boolean;
 }
 
-export interface MontavimasWorks {
+export interface InstallationWorks {
   name: string;
   quantity: number;
-}
-
-export interface ResponseProducts {
-  success: boolean;
-  data: Product[];
-  message: string;
-}
-export interface ResponseProduct {
-  success: boolean;
-  data: Product;
-  message: string;
-}
-
-export interface ResponseProject {
-  success: boolean;
-  data: Project;
-  message: string;
 }
 
 export interface MenuLinks {
@@ -322,6 +255,7 @@ export interface Bonus {
   cost: number;
   profit: number;
   margin: number;
+  user: string;
   bonus: number;
 }
 
@@ -332,32 +266,32 @@ export interface FenceMeasure {
   seeThrough: number[];
 }
 
-export interface Montavimas {
+export interface Installation {
   _id: string;
   client: Client;
   creator: Creator;
   orderNumber: string;
   workers: string[];
   status: string;
-  fences: GamybaFence[];
-  results: MontavimasResult[];
-  works: MontavimasWorks[];
-  aditional: Comment[];
-  files: Photo[];
+  fences: InstallationFence[];
+  results: InstallationResult[];
+  works: InstallationWorks[];
+  comments: Comment[];
+  files: string[];
 }
 
-export interface MontavimasMeasure {
+export interface InstallationMeasure {
   length: number;
   height: number;
   MeasureSpace: number;
   elements: number;
   gates: GateInfo;
-  done: number | undefined;
+  done: boolean;
   postone: boolean;
   kampas: {
     exist: boolean;
     value: number;
-    aditional: string;
+    comment: string;
   };
   laiptas: {
     exist: boolean;
@@ -366,19 +300,33 @@ export interface MontavimasMeasure {
   };
 }
 
-export interface Gamyba {
+export interface Production {
   _id: string;
   client: Client;
   creator: Creator;
   orderNumber: string;
   status: string;
-  fences: GamybaFence[];
+  fences: ProductionFence[];
   bindings: Bindings[] | null;
-  aditional: Comment[];
-  files: Photo[];
+  comments: Comment[];
+  files: string[];
 }
 
-export interface MontavimasFence {
+export interface InstallationResult {
+  type: string;
+  category: string;
+  quantity: number;
+  height: number;
+  twoSided: string;
+  direction: string;
+  seeThrough: string;
+  space: number;
+  color: string;
+  width: number | null;
+  delivered: boolean;
+}
+
+export interface InstallationFence {
   id: string;
   side: string;
   type: string;
@@ -388,7 +336,7 @@ export interface MontavimasFence {
   seeThrough: string;
   direction: string;
   parts: string;
-  aditional: string;
+  comment: string;
   twoSided: string;
   bindings: string;
   anchoredPoles: string;
@@ -396,10 +344,10 @@ export interface MontavimasFence {
   elements: number;
   totalLength: number;
   totalQuantity: number;
-  measures: MontavimasMeasure[];
+  measures: InstallationMeasure[];
 }
 
-export interface GamybaFence {
+export interface ProductionFence {
   id: string;
   side: string;
   type: string;
@@ -409,7 +357,7 @@ export interface GamybaFence {
   seeThrough: string;
   direction: string;
   parts: string;
-  aditional: string;
+  comment: string;
   twoSided: string;
   bindings: string;
   anchoredPoles: string;
@@ -417,22 +365,22 @@ export interface GamybaFence {
   elements: number;
   totalLength: number;
   totalQuantity: number;
-  measures: GamybaMeasure[];
+  measures: ProductionMeasure[];
 }
 
-export interface GamybaMeasure {
+export interface ProductionMeasure {
   length: number;
   height: number;
   MeasureSpace: number;
   elements: number;
   gates: GateInfo;
-  cut: number | undefined;
-  done: number | undefined;
+  cut: number;
+  done: number;
   postone: boolean;
   kampas: {
     exist: boolean;
     value: number;
-    aditional: string;
+    comment: string;
   };
   laiptas: {
     exist: boolean;
@@ -465,7 +413,7 @@ export interface BindingItem {
   lastHeight: Measure;
 }
 
-export interface WorkerInfo {
+export interface Worker {
   _id: string;
   lastName: string;
 }
@@ -478,8 +426,8 @@ export interface Job {
 export interface Schedule {
   _id: string;
   date: string;
-  worker: WorkerInfo;
-  jobs: [Job];
+  worker: Worker;
+  jobs: [Job] | [];
   comment: string;
 }
 

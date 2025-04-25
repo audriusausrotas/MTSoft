@@ -1,12 +1,18 @@
 <script setup lang="ts">
 const isOpen = ref<boolean>(false);
 
-const props = defineProps(["useUser"]);
+const props = defineProps(["userStore"]);
 
-const initials = computed(() => props.useUser?.user?.username.slice(0, 2));
+const initials = computed(() => props.userStore?.user?.username.slice(0, 2));
 
-function logoutHandler(): void {
-  props.useUser.logout();
+async function logoutHandler() {
+  const response = await request.get("logout");
+  if (response.success) {
+    const userStore = useUserStore();
+    userStore.logout();
+    const router = useRouter();
+    router.push("/login");
+  }
 }
 </script>
 
@@ -22,12 +28,12 @@ function logoutHandler(): void {
       class="relative flex items-center gap-2 select-none hover:cursor-pointer"
     >
       <div
-        v-if="useUser.user?.accountType === 'Administratorius'"
+        v-if="userStore.user?.accountType === 'Administratorius'"
         class="md:flex hidden items-center justify-center w-10 h-10 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full"
       >
         <NuxtImg
-          v-if="props.useUser.user?.photo?.url && props.useUser.user.photo.url !== ''"
-          :src="props.useUser.user?.photo?.url"
+          v-if="props.userStore.user?.photo?.url && props.userStore.user.photo.url !== ''"
+          :src="props.userStore.user?.photo?.url"
           class="object-cover object-center w-full h-full"
           width="48"
           height="48"
@@ -38,8 +44,8 @@ function logoutHandler(): void {
         <p v-else>{{ initials }}</p>
       </div>
 
-      <div v-if="useUser.user?.accountType === 'Administratorius'">
-        {{ props.useUser.user?.username }}
+      <div v-if="userStore.user?.accountType === 'Administratorius'">
+        {{ props.userStore.user?.username }}
       </div>
       <NuxtImg
         src="/icons/arrowDown.svg"

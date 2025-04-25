@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const props = defineProps(["version", "index", "projectId"]);
-const useCalculations = useCalculationsStore();
-const useResults = useResultsStore();
-const useProjects = useProjectsStore();
-const useBackup = useBackupStore();
+const calculationsStore = useCalculationsStore();
+const resultsStore = useResultsStore();
+const projectsStore = useProjectsStore();
+const backupStore = useBackupStore();
 const { setError, setIsError } = useError();
 
 const open = ref<boolean>(false);
@@ -14,47 +14,49 @@ const versionsHandler = () => {
 };
 
 const returnHandler = async () => {
-  const response: any = await $fetch("/api/rollbackVersion", {
-    method: "post",
-    body: { _id: props.version.id, projectId: props.projectId },
-  });
+  const requestData = { _id: props.version.id, projectId: props.projectId };
+
+  const response: any = await request.patch("versionRollback", requestData);
 
   if (response.success) {
-    useCalculations.clearAll();
-    useResults.clearAll();
-    useProjects.clearSelected();
-    useBackup.clearBackup();
+    calculationsStore.clearAll();
+    resultsStore.clearAll();
+    projectsStore.clearSelected();
+    backupStore.clearBackup();
 
     response.data._id = props.projectId;
 
-    useProjects.addProject(response.data);
-    useCalculations.setProject({
+    projectsStore.addProject(response.data);
+
+    calculationsStore.setProject({
       client: response.data.client,
       fenceMeasures: response.data.fenceMeasures,
       retail: response.data.retail,
     });
-    useResults.setProject(response.data);
-    useBackup.addBackup(response.data.results, response.data.works);
-    useProjects.setSelectedProject(props.projectId);
+
+    resultsStore.setProject(response.data);
+
+    backupStore.addBackup(response.data.results, response.data.works);
+
+    projectsStore.setSelectedProject(props.projectId);
   }
   open.value = false;
 };
 
 const deleteHandler = async () => {
-  const response: any = await $fetch("/api/version", {
-    method: "delete",
-    body: { _id: props.version.id, projectId: props.projectId },
-  });
+  const requestData = { _id: props.version.id, projectId: props.projectId };
+
+  const response: any = await request.delete("deleteVersion", requestData);
 
   if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.deleteVersion(response.data._id, response.data.projectId);
     setIsError(false);
     setError(response.message);
   } else {
-    // useProjects.deleteVersion(props.version.id, props.projectId);
     setError(response.message);
   }
 
-  useProjects.updateStatus(response.data);
   open.value = false;
 };
 </script>

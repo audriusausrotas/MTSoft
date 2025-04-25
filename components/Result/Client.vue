@@ -2,23 +2,21 @@ div
 <script setup lang="ts">
 import type { Client } from "~/data/interfaces";
 
-const useCalculations = useCalculationsStore();
-const useClients = useClientsStore();
+const calculationsStore = useCalculationsStore();
+const clientsStore = useClientsStore();
 const open = ref(false);
 
 const selectHandler = (value: Client) => {
-  useCalculations.updateClientUsername(value.username);
-  useCalculations.updateClientPhone(value.phone);
-  useCalculations.updateClientAddress(value.address);
-  useCalculations.updateClientEmail(value.email);
+  calculationsStore.updateClientUsername(value.username);
+  calculationsStore.updateClientPhone(value.phone);
+  calculationsStore.updateClientAddress(value.address);
+  calculationsStore.updateClientEmail(value.email);
   open.value = false;
 };
 </script>
 
 <template>
-  <div
-    class="flex flex-wrap justify-center items-center gap-4 xl:justify-normal"
-  >
+  <div class="flex flex-wrap justify-center items-center gap-4 xl:justify-normal">
     <div class="pt-6 relative">
       <NuxtImg
         src="/icons/users.svg"
@@ -33,7 +31,7 @@ const selectHandler = (value: Client) => {
       />
       <div v-if="open" class="absolute bg-white top-14 py-1 left-0 w-96 z-50">
         <BaseSearchFieldClients
-          :data="useClients.clients"
+          :data="clientsStore.clients"
           width="w-full"
           @onClick="selectHandler"
         />
@@ -44,32 +42,32 @@ const selectHandler = (value: Client) => {
       variant="light"
       :active="true"
       label="Klientas"
-      :name="useCalculations.client.username"
-      @onChange="(value: string) => useCalculations.updateClientUsername(value)"
+      :name="calculationsStore.client.username"
+      @onChange="(value: string) => calculationsStore.updateClientUsername(value)"
     />
 
     <BaseInput
       placeholder="Telefono Numeris"
       variant="light"
       label="Telefono Numeris"
-      :name="useCalculations.client.phone"
-      @onChange="(value: string) => useCalculations.updateClientPhone(value)"
+      :name="calculationsStore.client.phone"
+      @onChange="(value: string) => calculationsStore.updateClientPhone(value)"
     />
 
     <BaseInput
       placeholder="Adresas"
       variant="light"
       label="Adresas"
-      :name="useCalculations.client.address"
-      @onChange="(value: string) => useCalculations.updateClientAddress(value)"
+      :name="calculationsStore.client.address"
+      @onChange="(value: string) => calculationsStore.updateClientAddress(value)"
     />
 
     <BaseInput
       placeholder="Elektroninis Paštas"
       variant="light"
       label="Elektroninis Paštas"
-      :name="useCalculations.client.email"
-      @onChange="(value: string) => useCalculations.updateClientEmail(value)"
+      :name="calculationsStore.client.email"
+      @onChange="(value: string) => calculationsStore.updateClientEmail(value)"
     />
   </div>
 </template>
