@@ -1,11 +1,7 @@
 export async function fetchUser() {
-  const userStore = useUserStore();
   try {
     const response: any = await request.get("getUser");
-    console.log("fecina useri");
-    if (response.success) {
-      userStore.setUser(response.data);
-    }
+    response.success && useUserStore().setUser(response.data);
     return response;
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -14,14 +10,9 @@ export async function fetchUser() {
 }
 
 export async function fetchGates() {
-  const gateStore = useGateStore();
-
   try {
     const response: any = await request.get("getGates");
-    console.log("fecina vartus");
-    if (response.success) {
-      gateStore.addGates(response.data);
-    }
+    response.success && useGateStore().addGates(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -29,14 +20,9 @@ export async function fetchGates() {
 }
 
 export async function fetchProduction() {
-  const productionStore = useProductionStore();
-
   try {
     const response: any = await request.get("getProduction");
-    console.log("fecina gamyba");
-    if (response.success) {
-      productionStore.addAll(response.data);
-    }
+    response.success && useProductionStore().addAll(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -44,14 +30,9 @@ export async function fetchProduction() {
 }
 
 export async function fetchInstallation() {
-  const installationStore = useInstallationStore();
-
   try {
     const response: any = await request.get("getWorks");
-    console.log("fecina montavima");
-    if (response.success) {
-      installationStore.addAll(response.data);
-    }
+    response.success && useInstallationStore().addAll(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -59,14 +40,9 @@ export async function fetchInstallation() {
 }
 
 export async function fetchProjects() {
-  const projectsStore = useProjectsStore();
-
   try {
     const response: any = await request.get("getProjects");
-    console.log("fecina projektus");
-    if (response.success) {
-      projectsStore.addProjects(response.data);
-    }
+    response.success && useProjectsStore().addProjects(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -74,14 +50,10 @@ export async function fetchProjects() {
 }
 
 export async function fetchProducts() {
-  const productsStore = useProductsStore();
-
   try {
     const response: any = await request.get("getProducts");
     console.log("fecina produktus");
-    if (response.success) {
-      productsStore.addProducts(response.data);
-    }
+    response.success && useProductsStore().addProducts(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -89,14 +61,9 @@ export async function fetchProducts() {
 }
 
 export async function fetchUsers() {
-  const userStore = useUserStore();
-
   try {
     const response: any = await request.get("getUsers");
-    console.log("fecina userius");
-    if (response.success) {
-      userStore.setUsers(response.data);
-    }
+    response.success && useUserStore().setUsers(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -104,14 +71,9 @@ export async function fetchUsers() {
 }
 
 export async function fetchArchives() {
-  const archiveStore = useArchiveStore();
-
   try {
     const response: any = await request.get("getArchives");
-    console.log("fecina archyva");
-    if (response.success) {
-      archiveStore.addArchives("archive", response.data);
-    }
+    response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -119,14 +81,9 @@ export async function fetchArchives() {
 }
 
 export async function fetchUnconfirmed() {
-  const archiveStore = useArchiveStore();
-
   try {
     const response: any = await request.get("getUnconfirmed");
-    console.log("fecina nepatvirtintus");
-    if (response.success) {
-      archiveStore.addArchives("unconfirmed", response.data);
-    }
+    response.success && useArchiveStore().addArchives("unconfirmed", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -134,14 +91,9 @@ export async function fetchUnconfirmed() {
 }
 
 export async function fetchDeleted() {
-  const archiveStore = useArchiveStore();
-
   try {
     const response: any = await request.get("getDeleted");
-    console.log("fecina istrintus");
-    if (response.success) {
-      archiveStore.addArchives("deleted", response.data);
-    }
+    response.success && useArchiveStore().addArchives("deleted", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -149,14 +101,9 @@ export async function fetchDeleted() {
 }
 
 export async function fetchBackup() {
-  const archiveStore = useArchiveStore();
-
   try {
     const response: any = await request.get("getBackup");
-    console.log("fecina backupa");
-    if (response.success) {
-      archiveStore.addArchives("backup", response.data);
-    }
+    response.success && useArchiveStore().addArchives("backup", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -164,14 +111,9 @@ export async function fetchBackup() {
 }
 
 export async function fetchSchedules() {
-  const scheduleStore = useScheduleStore();
-
   try {
     const response: any = await request.get("getSchedules");
-    console.log("fecina grafika");
-    if (response.success) {
-      scheduleStore.addSchedules(response.data);
-    }
+    response.success && useScheduleStore().addSchedules(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -179,15 +121,9 @@ export async function fetchSchedules() {
 }
 
 export async function fetchClients() {
-  const clientsStore = useClientsStore();
-
   try {
     const response: any = await request.get("getClients");
-    console.log("fecina klientus");
-
-    if (response.success) {
-      clientsStore.setClients(response.data);
-    }
+    response.success && useClientsStore().setClients(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -222,14 +158,9 @@ export async function fetchOrder(to: any) {
 }
 
 export async function fetchSelects() {
-  const settingsStore = useSettingsStore();
-
   try {
     const response: any = await request.get("getSelects");
-    console.log("fecina select fieldus");
-    if (response.success) {
-      settingsStore.addSelectData(response.data);
-    }
+    response.success && useSettingsStore().addSelectData(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -237,14 +168,9 @@ export async function fetchSelects() {
 }
 
 export async function fetchDefaultValues() {
-  const settingsStore = useSettingsStore();
-
   try {
     const response: any = await request.get("getDefaultValues");
-    console.log("fecina default values");
-    if (response.success) {
-      settingsStore.addDefaultValues(response.data);
-    }
+    response.success && useSettingsStore().addDefaultValues(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -252,14 +178,9 @@ export async function fetchDefaultValues() {
 }
 
 export async function fetchUserRights() {
-  const settingsStore = useSettingsStore();
-
   try {
     const response: any = await request.get("getUserRights");
-    console.log("fecina vartotoju teises");
-    if (response.success) {
-      settingsStore.addUserRights(response.data);
-    }
+    response.success && useSettingsStore().addUserRights(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -267,14 +188,9 @@ export async function fetchUserRights() {
 }
 
 export async function fetchPotentialClients() {
-  const potentialClientsStore = usePotentialClientsStore();
-
   try {
     const response: any = await request.get("getpotentialClients");
-    console.log("fecina potencialius klientus");
-    if (response.success) {
-      potentialClientsStore.addPotentialClients(response.data);
-    }
+    response.success && usePotentialClientsStore().addPotentialClients(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
