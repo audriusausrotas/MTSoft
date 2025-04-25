@@ -13,7 +13,10 @@ export const useSocketStore = defineStore("socket", {
     connect() {
       if (this.socket) return;
 
-      this.socket = io("http://localhost:3002", {
+      const socketUrl =
+        window.location.hostname === "localhost" ? "ws://localhost:3002" : "wss://mtsoft.lt:3002";
+
+      this.socket = io(socketUrl, {
         withCredentials: true,
         transports: ["websocket"],
       });
