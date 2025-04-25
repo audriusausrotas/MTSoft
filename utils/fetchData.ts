@@ -52,7 +52,6 @@ export async function fetchProjects() {
 export async function fetchProducts() {
   try {
     const response: any = await request.get("getProducts");
-    console.log("fecina produktus");
     response.success && useProductsStore().addProducts(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);

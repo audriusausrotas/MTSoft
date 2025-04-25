@@ -28,7 +28,10 @@ const fetchData = async (
   }
 
   try {
-    const data: any = await $fetch(`http://localhost:3001/${path}`, options);
+    const apiUrl =
+      window.location.hostname === "localhost" ? "http://localhost:3001" : "https://mtsoft.lt:3001";
+
+    const data: any = await $fetch(`${apiUrl}/${path}`, options);
 
     return data;
   } catch (error) {
