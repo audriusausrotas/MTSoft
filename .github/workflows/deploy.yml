@@ -10,18 +10,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.18.0"
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: "20.18.0"
 
-      - name: Install dependencies
-        run: npm install
-        env:
-          NODE_NO_WARNINGS: "1"
+      # - name: Install dependencies
+      #   run: npm install
+      #   env:
+      #     NODE_NO_WARNINGS: "1"
 
       - name: Build the application
         run: npm run build
@@ -34,13 +34,7 @@ jobs:
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_IP: ${{ secrets.VPS_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          # CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          # CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          # CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          # NODEMAILER_PASS_ANDRIUS: ${{ secrets.NODEMAILER_PASS_ANDRIUS }}
-          # NODEMAILER_PASS_AUDRIUS: ${{ secrets.NODEMAILER_PASS_AUDRIUS }}
-          # NODEMAILER_PASS_HARIS: ${{ secrets.NODEMAILER_PASS_HARIS }}
           NUXT_PUBLIC_CLOUD_API_KEY: ${{ secrets.NUXT_PUBLIC_CLOUD_API_KEY }}
           NUXT_PUBLIC_CLOUD_NAME: ${{ secrets.NUXT_PUBLIC_CLOUD_NAME }}
           SALT: ${{ secrets.SALT }}
@@ -56,7 +50,7 @@ jobs:
           $projectPath = $env:PROJECT_PATH
 
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && git pull"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm install"
+          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm install"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm run build"
