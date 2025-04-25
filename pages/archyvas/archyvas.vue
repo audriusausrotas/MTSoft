@@ -1,10 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-const archiveStore = useArchiveStore();
+onBeforeMount(() => {
+  fetchArchives();
+});
 </script>
 
 <template>
-  <ArchiveMain :data="archiveStore.filteredArchives" location="archive" />
+  <ArchiveMain location="archive" />
 </template>
 <style scoped></style>

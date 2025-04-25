@@ -1,10 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-const archiveStore = useArchiveStore();
+onBeforeMount(() => {
+  fetchUnconfirmed();
+});
 </script>
 
 <template>
-  <ArchiveMain :data="archiveStore.filteredUnconfirmed" location="unconfirmed" />
+  <ArchiveMain location="unconfirmed" />
 </template>
 <style scoped></style>

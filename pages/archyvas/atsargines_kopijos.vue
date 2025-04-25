@@ -1,10 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-const archiveStore = useArchiveStore();
+onBeforeMount(() => {
+  fetchBackup();
+});
 </script>
 
 <template>
-  <ArchiveMain :data="archiveStore.filteredBackup" location="backup" />
+  <ArchiveMain location="backup" />
 </template>
 <style scoped></style>

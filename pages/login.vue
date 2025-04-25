@@ -24,6 +24,13 @@ const loginHandler = async () => {
     clearFields();
     setIsError(false);
     setError(response.message);
+
+    await fetchUserRights();
+    const rights = useSettingsStore().userRights.find(
+      (item) => item.accountType === response.data.accountType
+    );
+
+    if (rights) await fetchInitialUserData(rights);
     await navigateTo("/");
   } else {
     setError(response.message);

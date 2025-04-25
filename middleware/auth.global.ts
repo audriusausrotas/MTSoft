@@ -1,202 +1,88 @@
 import request from "~/utils/request";
 
+const isPublicPath = (path: string) =>
+  path.includes("pasiulymas") || path.includes("didmena") || path.includes("tvoros");
+
+const isValidAdminPath = (path: string) =>
+  [
+    "/kainos",
+    "/bonusai",
+    "/pasiulymai",
+    "/klientai",
+    "/vartotojai",
+    "/nustatymai",
+    "/archyvas/baigti",
+    "/archyvas/archyvas",
+    "/archyvas/nepasitvirtine",
+    "/archyvas/istrinti",
+    "/archyvas/atsargines_kopijos",
+  ].includes(path);
+
+const projectPaths = ["/", "/skaiciuokle"];
+const schedulePaths = ["/grafikas"];
+const productionPaths = ["/gamyba"];
+const installationPaths = ["/montavimas"];
+const gatePaths = ["/vartai"];
+
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (
-    to.path.includes("pasiulymas") ||
-    to.path.includes("didmena") ||
-    to.path.includes("tvoros")
-  ) {
-    if (to.path.includes("pasiulymas")) {
-      if (import.meta.server) {
-        const success = await fetchOrder(to);
-        if (!success)
-          if (!to.name?.toString().includes("negalioja"))
-            return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+  const userStore = useUserStore();
+  const settingsStore = useSettingsStore();
+
+  if (isPublicPath(to.path)) {
+    if (to.path.includes("pasiulymas") && import.meta.server) {
+      const success = await fetchOrder(to);
+      if (!success && !to.name?.toString().includes("negalioja")) {
+        return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
       }
     }
-  } else {
-    const user: any = await fetchUser();
+    return;
+  }
 
-    if (user.success) {
-      if (user.data) {
-        if (to.path === "/login") return navigateTo("/");
-      } else {
-        const response = await request.get("logout");
-        if (response.success) {
-          const userStore = useUserStore();
-          userStore.logout();
-          const router = useRouter();
-          router.push("/login");
-        }
+  let user = userStore.user;
+  if (!user) {
+    const response = await fetchUser();
+    if (!response.success) {
+      const logoutResponse = await request.get("logout");
+      if (logoutResponse.success) userStore.logout();
 
-        if (to.path !== "/login") return navigateTo("/login");
-      }
-    } else {
       if (to.path !== "/login") return navigateTo("/login");
-      else return;
+      return;
     }
 
-    // vartonas service worker rerouting
-    if (user.data.accountType.toLowerCase() === "servisas")
-      if (to.path !== "/servisas") return navigateTo("/servisas");
-      else return;
+    user = response.data;
+  }
 
-    // fetch settings for everyone
-    await Promise.all([fetchUsers(), fetchUserRights()]);
+  if (to.path === "/login") return navigateTo("/");
 
-    const userRights = useSettingsStore().userRights.find(
-      (item) => item.accountType === user.data.accountType
-    );
+  if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas") {
+    return navigateTo("/servisas");
+  }
 
-    if (to.path === "/")
-      if (userRights?.project) {
-        await Promise.all([
-          fetchProjects(),
-          fetchGates(),
-          fetchUsers(),
-          fetchSelects(),
-        ]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
+  let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
 
-    if (to.path.includes("perziura"))
-      if (userRights?.project) {
-        await Promise.all([fetchProjects()]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
+  if (!userRights) {
+    await fetchUserRights();
+    userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
+  }
 
-    if (to.path === "/skaiciuokle")
-      if (userRights?.project) {
-        await Promise.all([
-          fetchProducts(),
-          fetchClients(),
-          fetchDefaultValues(),
-        ]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
+  const isSingleArchiveView = to.path.startsWith("/archyvas/") && to.path.split("/").length === 3;
 
-    if (to.path === "/grafikas")
-      if (userRights?.schedule) {
-        await Promise.all([fetchSchedules(), fetchProduction()]);
-        if (user.data.accountType === "Administratorius") await fetchProjects();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
+  if (import.meta.server && !isSingleArchiveView) {
+    await fetchInitialUserData(userRights);
+  }
 
-    if (to.path.includes("/gamyba"))
-      if (userRights?.production) {
-        await fetchProduction();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
+  const premissionHandler = (paths: string[], right: boolean | undefined) => {
+    if (paths.some((p) => to.path === p || to.path.includes(p)) && !right) {
+      return navigateTo(middlewareHelper(userRights!));
+    }
+  };
 
-    if (to.path.includes("/montavimas"))
-      if (userRights?.installation) {
-        await Promise.all([fetchInstallation(), fetchSchedules()]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path.includes("/vartai"))
-      if (userRights?.gate) {
-        await fetchGates();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/kainos")
-      if (userRights?.admin) {
-        await fetchProducts();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/pasiulymai")
-      if (userRights?.admin) {
-        await fetchPotentialClients();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/klientai")
-      if (userRights?.admin) {
-        await fetchClients();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/vartotojai")
-      if (userRights?.admin) {
-        await Promise.all([fetchUsers(), fetchSelects()]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/nustatymai")
-      if (userRights?.admin) {
-        await Promise.all([
-          fetchProducts(),
-          fetchDefaultValues(),
-          fetchUserRights(),
-          fetchSelects(),
-        ]);
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/archyvas/archyvas")
-      if (userRights?.admin) {
-        await fetchArchives();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/archyvas/nepasitvirtine")
-      if (userRights?.admin) {
-        await fetchUnconfirmed();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/archyvas/istrinti")
-      if (userRights?.admin) {
-        await fetchDeleted();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/archyvas/atsargines_kopijos")
-      if (userRights?.admin) {
-        await fetchBackup();
-        return;
-      } else {
-        return navigateTo(middlewareHelper(userRights!));
-      }
-
-    if (to.path === "/bonusai")
-      if (
-        user.data.username !== "Audrius" &&
-        user.data.username !== "Andrius"
-      ) {
-        return navigateTo("/");
-      }
+  if (premissionHandler(projectPaths, userRights?.project)) return;
+  if (premissionHandler(schedulePaths, userRights?.schedule)) return;
+  if (premissionHandler(productionPaths, userRights?.production)) return;
+  if (premissionHandler(installationPaths, userRights?.installation)) return;
+  if (premissionHandler(gatePaths, userRights?.gate)) return;
+  if (isValidAdminPath(to.path) && !userRights?.admin) {
+    return navigateTo(middlewareHelper(userRights!));
   }
 });

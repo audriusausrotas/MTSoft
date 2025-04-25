@@ -2,7 +2,7 @@ export async function fetchUser() {
   const userStore = useUserStore();
   try {
     const response: any = await request.get("getUser");
-
+    console.log("fecina useri");
     if (response.success) {
       userStore.setUser(response.data);
     }
@@ -18,6 +18,7 @@ export async function fetchGates() {
 
   try {
     const response: any = await request.get("getGates");
+    console.log("fecina vartus");
     if (response.success) {
       gateStore.addGates(response.data);
     }
@@ -32,6 +33,7 @@ export async function fetchProduction() {
 
   try {
     const response: any = await request.get("getProduction");
+    console.log("fecina gamyba");
     if (response.success) {
       productionStore.addAll(response.data);
     }
@@ -46,7 +48,7 @@ export async function fetchInstallation() {
 
   try {
     const response: any = await request.get("getWorks");
-
+    console.log("fecina montavima");
     if (response.success) {
       installationStore.addAll(response.data);
     }
@@ -61,6 +63,7 @@ export async function fetchProjects() {
 
   try {
     const response: any = await request.get("getProjects");
+    console.log("fecina projektus");
     if (response.success) {
       projectsStore.addProjects(response.data);
     }
@@ -75,6 +78,7 @@ export async function fetchProducts() {
 
   try {
     const response: any = await request.get("getProducts");
+    console.log("fecina produktus");
     if (response.success) {
       productsStore.addProducts(response.data);
     }
@@ -89,6 +93,7 @@ export async function fetchUsers() {
 
   try {
     const response: any = await request.get("getUsers");
+    console.log("fecina userius");
     if (response.success) {
       userStore.setUsers(response.data);
     }
@@ -103,6 +108,7 @@ export async function fetchArchives() {
 
   try {
     const response: any = await request.get("getArchives");
+    console.log("fecina archyva");
     if (response.success) {
       archiveStore.addArchives("archive", response.data);
     }
@@ -117,6 +123,7 @@ export async function fetchUnconfirmed() {
 
   try {
     const response: any = await request.get("getUnconfirmed");
+    console.log("fecina nepatvirtintus");
     if (response.success) {
       archiveStore.addArchives("unconfirmed", response.data);
     }
@@ -131,6 +138,7 @@ export async function fetchDeleted() {
 
   try {
     const response: any = await request.get("getDeleted");
+    console.log("fecina istrintus");
     if (response.success) {
       archiveStore.addArchives("deleted", response.data);
     }
@@ -145,6 +153,7 @@ export async function fetchBackup() {
 
   try {
     const response: any = await request.get("getBackup");
+    console.log("fecina backupa");
     if (response.success) {
       archiveStore.addArchives("backup", response.data);
     }
@@ -159,6 +168,7 @@ export async function fetchSchedules() {
 
   try {
     const response: any = await request.get("getSchedules");
+    console.log("fecina grafika");
     if (response.success) {
       scheduleStore.addSchedules(response.data);
     }
@@ -173,6 +183,7 @@ export async function fetchClients() {
 
   try {
     const response: any = await request.get("getClients");
+    console.log("fecina klientus");
 
     if (response.success) {
       clientsStore.setClients(response.data);
@@ -215,6 +226,7 @@ export async function fetchSelects() {
 
   try {
     const response: any = await request.get("getSelects");
+    console.log("fecina select fieldus");
     if (response.success) {
       settingsStore.addSelectData(response.data);
     }
@@ -229,6 +241,7 @@ export async function fetchDefaultValues() {
 
   try {
     const response: any = await request.get("getDefaultValues");
+    console.log("fecina default values");
     if (response.success) {
       settingsStore.addDefaultValues(response.data);
     }
@@ -243,6 +256,7 @@ export async function fetchUserRights() {
 
   try {
     const response: any = await request.get("getUserRights");
+    console.log("fecina vartotoju teises");
     if (response.success) {
       settingsStore.addUserRights(response.data);
     }
@@ -257,6 +271,7 @@ export async function fetchPotentialClients() {
 
   try {
     const response: any = await request.get("getpotentialClients");
+    console.log("fecina potencialius klientus");
     if (response.success) {
       potentialClientsStore.addPotentialClients(response.data);
     }
