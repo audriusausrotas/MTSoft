@@ -18,11 +18,20 @@ const searchHandler = async (value: string) => {
       return;
     }
 
+    const isDevelopment = process.env.NODE_ENV === "development";
+
     const options: any = {
       method: "GET",
       credentials: "include",
     };
-    const response: any = await $fetch(`https://mtsoft.lt/serviceSearch?q=${value}`, options);
+    const response: any = await $fetch(
+      ` ${
+        isDevelopment
+          ? `http://localhost:3001/serviceSearch?q=${value}`
+          : `https://mtsoft.lt/serviceSearch?q=${value}`
+      } `,
+      options
+    );
     data.value = response.data || [];
   }, 250);
 };

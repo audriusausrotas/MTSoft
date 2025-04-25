@@ -13,8 +13,9 @@ export const useSocketStore = defineStore("socket", {
     connect() {
       if (this.socket) return;
 
-      const socketUrl =
-        window.location.hostname === "localhost" ? "localhost:3002" : "wss://mtsoft.lt/socket.io";
+      const isDev = process.env.NODE_ENV === "development";
+
+      const socketUrl = isDev ? "ws://localhost:3002" : "https://mtsoft.lt";
 
       this.socket = io(socketUrl, {
         withCredentials: true,
