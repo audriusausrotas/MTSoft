@@ -71,7 +71,11 @@ export async function fetchUsers() {
 
 export async function fetchArchives() {
   try {
-    const response: any = await request.get("getArchives");
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(`https://mtsoft.lt:3001/getArchives`, options);
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);

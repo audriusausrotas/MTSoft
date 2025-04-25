@@ -28,11 +28,7 @@ const fetchData = async (
   }
 
   try {
-    const apiUrl =
-      // process.env.NODE_ENV === "development" ? "http://localhost:3001" : "http://localhost:3001";
-      process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://mtsoft.lt/api";
-
-    const data: any = await $fetch(`${apiUrl}/${path}`, options);
+    const data: any = await $fetch(`http://localhost:3001/${path}`, options);
 
     return data;
   } catch (error) {
