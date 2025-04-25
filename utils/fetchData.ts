@@ -85,7 +85,11 @@ export async function fetchArchives() {
 
 export async function fetchUnconfirmed() {
   try {
-    const response: any = await request.get("getUnconfirmed");
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(`https://mtsoft.lt/getUnconfirmed`, options);
     response.success && useArchiveStore().addArchives("unconfirmed", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -95,7 +99,11 @@ export async function fetchUnconfirmed() {
 
 export async function fetchDeleted() {
   try {
-    const response: any = await request.get("getDeleted");
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(`https://mtsoft.lt/getDeleted`, options);
     response.success && useArchiveStore().addArchives("deleted", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -105,7 +113,11 @@ export async function fetchDeleted() {
 
 export async function fetchBackup() {
   try {
-    const response: any = await request.get("getBackup");
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(`https://mtsoft.lt/getBackup`, options);
     response.success && useArchiveStore().addArchives("backup", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
