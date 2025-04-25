@@ -170,10 +170,7 @@ export async function fetchOrder(to: any) {
   });
   if (offer.value.success) {
     const useOffer = useOfferStore();
-    if (
-      offer.value.data.status === "Nepatvirtintas" ||
-      offer.value.data.status === "Netinkamas"
-    ) {
+    if (offer.value.data.status === "Nepatvirtintas" || offer.value.data.status === "Netinkamas") {
       const currentDate = new Date();
       const exparationDate = new Date(offer.value.data.dateExparation);
       if (currentDate < exparationDate) {
@@ -223,9 +220,7 @@ export async function fetchUserRights() {
 
 export async function fetchPotentialClients() {
   const usePotentialClients = usePotentialClientsStore();
-  const { data: potentialClients }: any = await useFetch(
-    "/api/potentialClients"
-  );
+  const { data: potentialClients }: any = await useFetch("/api/potentialClients");
   if (potentialClients.value.success) {
     usePotentialClients.addPotentialClients(potentialClients.value.data);
   }
