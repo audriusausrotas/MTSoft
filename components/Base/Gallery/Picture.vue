@@ -36,6 +36,7 @@ const deleteHandler = async (event: Event) => {
   <div
     class="rounded-lg overflow-hidden w-56 h-40 shadow-lg shadow-gray-full relative hover:cursor-pointer"
   >
+    <p>Image Path: {{ props.file }}</p>
     <NuxtImg
       :src="`https://mtsoft.lt${props.file}`"
       width="200"
