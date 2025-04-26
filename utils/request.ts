@@ -81,7 +81,7 @@ export default {
     if (import.meta.server) {
       options.headers = useRequestHeaders(["cookie"]);
     }
-
+    console.log(getApiUrl(path), options);
     return await $fetch(getApiUrl(path), options);
   },
 
