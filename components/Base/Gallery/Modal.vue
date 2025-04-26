@@ -29,7 +29,7 @@ const closeHandler = () => {
       <div class="m-auto flex justify-center w-[90%] h-[90%]">
         <div class="rounded-xl overflow-hidden">
           <NuxtImg
-            :src="`http://localhost:3001${selectedPicture}`"
+            :src="`https://mtsoft.lt/uploads/${selectedPicture}`"
             width="800"
             height="800"
             decoding="auto"
@@ -48,7 +48,7 @@ const closeHandler = () => {
           @click="selectedPicture = file"
         >
           <NuxtImg
-            :src="`http://localhost:3001${file}`"
+            :src="`https://mtsoft.lt/uploads/${file}`"
             width="100"
             height="100"
             decoding="auto"

@@ -24,11 +24,16 @@ const sendHandler = async () => {
     formData.append(`file${index}`, file);
   });
 
-  const response: any = await $fetch("http://localhost:3001/sendRetailOffers", {
-    method: "POST",
-    body: formData,
-    credentials: "include",
-  });
+  const response: any = await $fetch(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3001/api/sendRetailOffers"
+      : "https://mtsoft.lt/api/sendRetailOffers",
+    {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    }
+  );
 
   if (response.success) {
     files.value = [];
