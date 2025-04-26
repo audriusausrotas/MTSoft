@@ -17,7 +17,7 @@ const loginHandler = async () => {
 
   const loginData = { email: email.value, password: password.value };
 
-  const response = await request.post("login", loginData);
+  const response: any = await request.post("login", loginData);
 
   if (response.success) {
     userStore.setUser(response.data);
