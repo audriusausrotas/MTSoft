@@ -27,8 +27,8 @@ const searchHandler = async (value: string) => {
     const response: any = await $fetch(
       ` ${
         isDevelopment
-          ? `http://localhost:3001/serviceSearch?q=${value}`
-          : `https://mtsoft.lt/serviceSearch?q=${value}`
+          ? `http://localhost:3001/api/serviceSearch?q=${value}`
+          : `https://mtsoft.lt/api/serviceSearch?q=${value}`
       } `,
       options
     );

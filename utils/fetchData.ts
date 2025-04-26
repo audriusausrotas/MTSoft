@@ -73,19 +73,7 @@ export async function fetchUsers() {
 
 export async function fetchArchives() {
   try {
-    const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
-
-    if (isDevelopment) {
-      response = await request.get("getArchives");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-      };
-      response = await $fetch(`https://mtsoft.lt/getArchives`, options);
-    }
-
+    const response = await request.get("getArchives");
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -95,18 +83,7 @@ export async function fetchArchives() {
 
 export async function fetchUnconfirmed() {
   try {
-    const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
-
-    if (isDevelopment) {
-      response = await request.get("getUnconfirmed");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-      };
-      response = await $fetch(`https://mtsoft.lt/getUnconfirmed`, options);
-    }
+    const response = await request.get("getUnconfirmed");
     response.success && useArchiveStore().addArchives("unconfirmed", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -116,18 +93,7 @@ export async function fetchUnconfirmed() {
 
 export async function fetchDeleted() {
   try {
-    const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
-
-    if (isDevelopment) {
-      response = await request.get("getDeleted");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-      };
-      response = await $fetch(`https://mtsoft.lt/getDeleted`, options);
-    }
+    const response = await request.get("getDeleted");
 
     response.success && useArchiveStore().addArchives("deleted", response.data);
   } catch (error) {
@@ -138,18 +104,7 @@ export async function fetchDeleted() {
 
 export async function fetchBackup() {
   try {
-    const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
-
-    if (isDevelopment) {
-      response = await request.get("getBackup");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-      };
-      response = await $fetch(`https://mtsoft.lt/getBackup`, options);
-    }
+    const response = await request.get("getBackup");
 
     response.success && useArchiveStore().addArchives("backup", response.data);
   } catch (error) {

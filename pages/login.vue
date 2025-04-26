@@ -25,12 +25,12 @@ const loginHandler = async () => {
     setIsError(false);
     setError(response.message);
 
-    await fetchUserRights();
-    const rights = useSettingsStore().userRights.find(
-      (item) => item.accountType === response.data.accountType
-    );
+    // await fetchUserRights();
+    // const rights = useSettingsStore().userRights.find(
+    //   (item) => item.accountType === response.data.accountType
+    // );
 
-    if (rights) await fetchInitialUserData(rights);
+    // if (rights) await fetchInitialUserData(rights);
     await navigateTo("/");
   } else {
     setError(response.message);
