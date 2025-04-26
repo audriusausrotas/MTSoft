@@ -19,24 +19,21 @@ const fetchData = async (
     };
   }
 
-  // if (import.meta.server && withCredentials) {
-  //   const headers = useRequestHeaders(["cookie"]);
-  //   options.headers = {
-  //     ...headers,
-  //     ...options.headers,
-  //   };
-  // }
   if (import.meta.server && withCredentials) {
-    const requestHeaders = useRequestHeaders(["cookie"]);
+    const headers = useRequestHeaders(["cookie"]);
     options.headers = {
-      ...(options.headers || {}),
-      ...requestHeaders,
+      ...headers,
+      ...options.headers,
     };
   }
 
   try {
     const url =
-      process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://mtsoft.lt";
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3001"
+        : import.meta.server
+        ? "http://localhost:3001"
+        : "https://mtsoft.lt";
 
     const data: any = await $fetch(`${url}/api/${path}`, options);
 
