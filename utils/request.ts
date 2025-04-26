@@ -19,11 +19,18 @@ const fetchData = async (
     };
   }
 
+  // if (import.meta.server && withCredentials) {
+  //   const headers = useRequestHeaders(["cookie"]);
+  //   options.headers = {
+  //     ...headers,
+  //     ...options.headers,
+  //   };
+  // }
   if (import.meta.server && withCredentials) {
-    const headers = useRequestHeaders(["cookie"]);
+    const requestHeaders = useRequestHeaders(["cookie"]);
     options.headers = {
-      ...headers,
-      ...options.headers,
+      ...(options.headers || {}),
+      ...requestHeaders,
     };
   }
 
