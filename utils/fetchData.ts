@@ -1,6 +1,26 @@
 export async function fetchUser() {
+  // try {
+  //   const response: any = await request.get("getUser");
+  //   response.success && useUserStore().setUser(response.data);
+  //   return response;
+  // } catch (error) {
+  //   console.log("Serverio klaida: " + error);
+  //   return { success: false, data: null };
+  // }
   try {
-    const response: any = await request.get("getUser");
+    const isDevelopment = process.env.NODE_ENV === "development";
+    let response: any;
+
+    if (isDevelopment) {
+      response = await request.get("getUser");
+    } else {
+      const options: any = {
+        method: "GET",
+        credentials: "include",
+      };
+      response = await $fetch(`https://mtsoft.lt/api/getUser`, options);
+    }
+
     response.success && useUserStore().setUser(response.data);
     return response;
   } catch (error) {
