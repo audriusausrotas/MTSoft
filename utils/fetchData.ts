@@ -74,6 +74,7 @@ export async function fetchUsers() {
 export async function fetchArchives() {
   try {
     const response = await request.get("getArchives");
+    console.log("archyvu response: ", response);
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
