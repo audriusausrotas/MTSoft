@@ -102,6 +102,8 @@ const fetchData = async (
         ? "http://localhost:3001"
         : "https://mtsoft.lt";
 
+    console.log(url);
+
     const data: any = await $fetch(`${url}/api/${path}`, options);
     return data;
   } catch (error) {
