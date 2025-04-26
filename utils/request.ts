@@ -86,12 +86,6 @@ const fetchData = async (
       ...(options.headers || {}),
       ...(headers || {}),
     };
-  } else if (import.meta.client && withCredentials) {
-    const token = useCookie("mtud");
-    console.log(token);
-    if (token.value) {
-      options.headers.Authorization = `Bearer ${token.value}`;
-    }
   }
 
   try {
