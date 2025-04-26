@@ -18,15 +18,13 @@ const searchHandler = async (value: string) => {
       return;
     }
 
-    const isDevelopment = process.env.NODE_ENV === "development";
-
     const options: any = {
       method: "GET",
       credentials: "include",
     };
     const response: any = await $fetch(
       ` ${
-        isDevelopment
+        process.env.NODE_ENV === "development"
           ? `http://localhost:3001/api/serviceSearch?q=${value}`
           : `https://mtsoft.lt/api/serviceSearch?q=${value}`
       } `,

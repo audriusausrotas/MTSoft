@@ -6,9 +6,7 @@ const props = defineProps(["userStore"]);
 const initials = computed(() => props.userStore?.user?.username.slice(0, 2));
 
 async function logoutHandler() {
-  console.log("issilogina");
   const response: any = await request.get("logout");
-  console.log("issiloginimo response:", response);
   if (response.success) {
     const userStore = useUserStore();
     userStore.logout();

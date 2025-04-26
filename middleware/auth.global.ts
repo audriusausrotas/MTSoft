@@ -61,8 +61,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
 
   if (!userRights) {
-    const asdf = await fetchUserRights();
-    console.log(asdf);
+    await fetchUserRights();
     userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
   }
 

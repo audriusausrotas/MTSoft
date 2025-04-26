@@ -1,6 +1,5 @@
 export async function fetchUser() {
   try {
-    console.log("fecina useri test 2");
     const response: any = await request.get("getUser");
     response.success && useUserStore().setUser(response.data);
     return response;
@@ -42,7 +41,6 @@ export async function fetchInstallation() {
 
 export async function fetchProjects() {
   try {
-    console.log("fecina projektus");
     const response: any = await request.get("getProjects");
     response.success && useProjectsStore().addProjects(response.data);
   } catch (error) {
@@ -74,7 +72,6 @@ export async function fetchUsers() {
 export async function fetchArchives() {
   try {
     const response = await request.get("getArchives");
-    console.log("archyvu response: ", response);
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -184,7 +181,6 @@ export async function fetchDefaultValues() {
 export async function fetchUserRights() {
   try {
     const response: any = await request.get("getUserRights");
-    console.log(response);
     response.success && useSettingsStore().addUserRights(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
