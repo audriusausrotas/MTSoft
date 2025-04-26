@@ -22,7 +22,12 @@ const gateOrdered = ref(false);
 const advance = ref<number>(0);
 
 const uploadFiles = async (data: any) => {
-  const response: any = await $fetch("http://localhost:3001/api/uploadFiles", {
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3001/api/uploadFiles"
+      : "https://mtsoft.lt/api/uploadFiles";
+
+  const response: any = await $fetch(url, {
     method: "POST",
     body: data,
     credentials: "include",
