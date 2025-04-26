@@ -5,7 +5,7 @@ definePageMeta({
 
 const route = useRoute();
 
-const offer = await request.get(`getArchive/${route.params.id}`);
+const offer: any = await request.get(`getArchive/${route.params.id}`);
 
 const open = ref<boolean>(true);
 </script>

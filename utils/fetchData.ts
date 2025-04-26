@@ -92,17 +92,15 @@ export async function fetchUsers() {
 export async function fetchArchives() {
   try {
     const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
 
-    if (isDevelopment) {
-      response = await request.get("getArchives");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-      };
-      response = await $fetch(`https://mtsoft.lt/getArchives`, options);
-    }
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(
+      ` ${isDevelopment ? "localhost:3001/api" : "https://mtsoft.lt/getArchives"}`,
+      options
+    );
 
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
