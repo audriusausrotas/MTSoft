@@ -243,7 +243,21 @@ export async function fetchDefaultValues() {
 
 export async function fetchUserRights() {
   try {
-    const response: any = await request.get("getUserRights");
+    // const response: any = await request.get("getUserRights");
+
+    const isDevelopment = process.env.NODE_ENV === "development";
+
+    const options: any = {
+      method: "GET",
+      credentials: "include",
+    };
+    const response: any = await $fetch(
+      `${
+        isDevelopment ? "localhost:3001/api/getUserRights" : "https://mtsoft.lt/api/getUserRights"
+      }`,
+      options
+    );
+
     response.success && useSettingsStore().addUserRights(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
