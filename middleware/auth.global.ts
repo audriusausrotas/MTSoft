@@ -61,10 +61,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
   let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
 
   if (!userRights) {
-    await fetchUserRights();
+    const asdf = await fetchUserRights();
+    console.log(asdf);
     userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
   }
-  console.log(userRights);
 
   const isSingleArchiveView = to.path.startsWith("/archyvas/") && to.path.split("/").length === 3;
 

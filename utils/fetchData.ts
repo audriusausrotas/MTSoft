@@ -1,6 +1,6 @@
 export async function fetchUser() {
   try {
-    console.log("fecina useri");
+    console.log("fecina useri test 2");
     const response: any = await request.get("getUser");
     response.success && useUserStore().setUser(response.data);
     return response;
@@ -228,6 +228,7 @@ export async function fetchDefaultValues() {
 export async function fetchUserRights() {
   try {
     const response: any = await request.get("getUserRights");
+    console.log(response);
     response.success && useSettingsStore().addUserRights(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
