@@ -147,7 +147,7 @@ const bindingPrintHandler = () => {
 };
 
 const uploadFiles = async (data: any) => {
-  const response: any = await $fetch("http://localhost:3001/uploadFiles", {
+  const response: any = await $fetch("http://localhost:3001/api/uploadFiles", {
     method: "POST",
     body: data,
     credentials: "include",
