@@ -64,41 +64,28 @@
 
 import { useRequestHeaders } from "#app";
 
-const getBaseUrl = () => {
+const getApiUrl = (path: string) => {
   if (process.env.NODE_ENV === "development" || import.meta.server) {
-    return "http://localhost:3001/api";
+    return `http://localhost:3001/api/${path}`;
   }
-  return "https://mtsoft.lt/api";
+  return `https://mtsoft.lt/api/${path}`;
 };
 
 export default {
-  get: async (path: string, params: any = null) => {
-    const url = new URL(`${getBaseUrl()}/${path}`);
-
-    if (params) {
-      Object.keys(params).forEach((key) => {
-        if (params[key] !== undefined && params[key] !== null) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
-    }
-
+  get: async (path: string) => {
     const options: any = {
       method: "GET",
       credentials: "include",
     };
 
     if (import.meta.server) {
-      const headers = useRequestHeaders(["cookie"]);
-      options.headers = {
-        ...headers,
-      };
+      options.headers = useRequestHeaders(["cookie"]);
     }
 
-    return await $fetch(url.toString(), options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  post: async (path: string, body: any = null) => {
+  post: async (path: string, body: any = {}) => {
     const options: any = {
       method: "POST",
       body,
@@ -106,16 +93,13 @@ export default {
     };
 
     if (import.meta.server) {
-      const headers = useRequestHeaders(["cookie"]);
-      options.headers = {
-        ...headers,
-      };
+      options.headers = useRequestHeaders(["cookie"]);
     }
 
-    return await $fetch(`${getBaseUrl()}/${path}`, options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  patch: async (path: string, body: any = null) => {
+  patch: async (path: string, body: any = {}) => {
     const options: any = {
       method: "PATCH",
       body,
@@ -123,93 +107,58 @@ export default {
     };
 
     if (import.meta.server) {
-      const headers = useRequestHeaders(["cookie"]);
-      options.headers = {
-        ...headers,
-      };
+      options.headers = useRequestHeaders(["cookie"]);
     }
 
-    return await $fetch(`${getBaseUrl()}/${path}`, options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  delete: async (path: string, params: any = null) => {
-    const url = new URL(`${getBaseUrl()}/${path}`);
-
-    if (params) {
-      Object.keys(params).forEach((key) => {
-        if (params[key] !== undefined && params[key] !== null) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
-    }
-
+  delete: async (path: string, body: any = {}) => {
     const options: any = {
       method: "DELETE",
+      body,
       credentials: "include",
     };
 
     if (import.meta.server) {
-      const headers = useRequestHeaders(["cookie"]);
-      options.headers = {
-        ...headers,
-      };
+      options.headers = useRequestHeaders(["cookie"]);
     }
 
-    return await $fetch(url.toString(), options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  // No credentials versions
-  getNoCredentials: async (path: string, params: any = null) => {
-    const url = new URL(`${getBaseUrl()}/${path}`);
-
-    if (params) {
-      Object.keys(params).forEach((key) => {
-        if (params[key] !== undefined && params[key] !== null) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
-    }
-
+  getNoParams: async (path: string) => {
     const options: any = {
       method: "GET",
     };
 
-    return await $fetch(url.toString(), options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  postNoCredentials: async (path: string, body: any = null) => {
+  postNoParams: async (path: string, body: any = {}) => {
     const options: any = {
       method: "POST",
       body,
     };
 
-    return await $fetch(`${getBaseUrl()}/${path}`, options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  patchNoCredentials: async (path: string, body: any = null) => {
+  patchNoParams: async (path: string, body: any = {}) => {
     const options: any = {
       method: "PATCH",
       body,
     };
 
-    return await $fetch(`${getBaseUrl()}/${path}`, options);
+    return await $fetch(getApiUrl(path), options);
   },
 
-  deleteNoCredentials: async (path: string, params: any = null) => {
-    const url = new URL(`${getBaseUrl()}/${path}`);
-
-    if (params) {
-      Object.keys(params).forEach((key) => {
-        if (params[key] !== undefined && params[key] !== null) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
-    }
-
+  deleteNoParams: async (path: string, body: any = {}) => {
     const options: any = {
       method: "DELETE",
+      body,
     };
 
-    return await $fetch(url.toString(), options);
+    return await $fetch(getApiUrl(path), options);
   },
 };
