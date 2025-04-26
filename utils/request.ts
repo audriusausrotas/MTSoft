@@ -31,7 +31,11 @@ const fetchData = async (
     const url =
       process.env.NODE_ENV === "development"
         ? "http://localhost:3001/api"
+        : import.meta.server
+        ? "http://localhost:3001/api"
         : "https://mtsoft.lt/api";
+
+    console.log(`${url}/${path}`, options);
 
     const data: any = await $fetch(`${url}/${path}`, options);
 
