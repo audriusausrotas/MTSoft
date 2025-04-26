@@ -64,10 +64,8 @@
 
 import { useRequestHeaders } from "#app";
 
-const isServer = import.meta.server;
-
 const getBaseUrl = () => {
-  if (process.env.NODE_ENV === "development" || isServer) {
+  if (process.env.NODE_ENV === "development" || import.meta.server) {
     return "http://localhost:3001/api";
   }
   return "https://mtsoft.lt/api";
@@ -90,7 +88,7 @@ export default {
       credentials: "include",
     };
 
-    if (isServer) {
+    if (import.meta.server) {
       const headers = useRequestHeaders(["cookie"]);
       options.headers = {
         ...headers,
@@ -107,7 +105,7 @@ export default {
       credentials: "include",
     };
 
-    if (isServer) {
+    if (import.meta.server) {
       const headers = useRequestHeaders(["cookie"]);
       options.headers = {
         ...headers,
@@ -124,7 +122,7 @@ export default {
       credentials: "include",
     };
 
-    if (isServer) {
+    if (import.meta.server) {
       const headers = useRequestHeaders(["cookie"]);
       options.headers = {
         ...headers,
@@ -150,7 +148,7 @@ export default {
       credentials: "include",
     };
 
-    if (isServer) {
+    if (import.meta.server) {
       const headers = useRequestHeaders(["cookie"]);
       options.headers = {
         ...headers,
@@ -160,6 +158,7 @@ export default {
     return await $fetch(url.toString(), options);
   },
 
+  // No credentials versions
   getNoCredentials: async (path: string, params: any = null) => {
     const url = new URL(`${getBaseUrl()}/${path}`);
 
