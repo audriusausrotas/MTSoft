@@ -6,19 +6,7 @@ const props = defineProps(["userStore"]);
 const initials = computed(() => props.userStore?.user?.username.slice(0, 2));
 
 async function logoutHandler() {
-  // const response = await request.get("logout");
-  const isDevelopment = process.env.NODE_ENV === "development";
-  let response: any;
-
-  if (isDevelopment) {
-    response = await request.get("logout");
-  } else {
-    const options: any = {
-      method: "GET",
-      credentials: "include",
-    };
-    response = await $fetch(`https://mtsoft.lt/api/logout`, options);
-  }
+  const response = await request.get("logout");
   if (response.success) {
     const userStore = useUserStore();
     userStore.logout();

@@ -42,19 +42,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!user) {
     const response = await fetchUser();
     if (!response.success) {
-      // const logoutResponse = await request.get("logout");
-      const isDevelopment = process.env.NODE_ENV === "development";
-      let logoutResponse: any;
-
-      if (isDevelopment) {
-        logoutResponse = await request.get("logout");
-      } else {
-        const options: any = {
-          method: "GET",
-          credentials: "include",
-        };
-        logoutResponse = await $fetch(`https://mtsoft.lt/api/logout`, options);
-      }
+      const logoutResponse = await request.get("logout");
       if (logoutResponse.success) userStore.logout();
 
       if (to.path !== "/login") return navigateTo("/login");

@@ -1,62 +1,7 @@
-// export async function fetchUser() {
-// try {
-//   const response: any = await request.get("getUser");
-//   response.success && useUserStore().setUser(response.data);
-//   return response;
-// } catch (error) {
-//   console.log("Serverio klaida: " + error);
-//   return { success: false, data: null };
-// }
-//   try {
-//     const isDevelopment = process.env.NODE_ENV === "development";
-//     let response: any;
-
-//     if (isDevelopment) {
-//       response = await request.get("getUser");
-//     } else {
-//       const options: any = {
-//         method: "GET",
-//         credentials: "include",
-//       };
-//       response = await $fetch(`https://mtsoft.lt/api/getUser`, options);
-//     }
-
-//     response.success && useUserStore().setUser(response.data);
-//     return response;
-//   } catch (error) {
-//     console.log("Serverio klaida: " + error);
-//     return { success: false, data: null };
-//   }
-// }
-
 export async function fetchUser() {
   try {
-    const isDevelopment = process.env.NODE_ENV === "development";
-    let response: any;
-
-    if (isDevelopment) {
-      response = await request.get("getUser");
-    } else {
-      const options: any = {
-        method: "GET",
-        credentials: "include",
-        headers: {},
-      };
-
-      // Include cookies in server-side requests
-      if (import.meta.server) {
-        const headers = useRequestHeaders(["cookie"]);
-        options.headers = {
-          ...headers,
-        };
-      }
-
-      response = await $fetch(`https://mtsoft.lt/api/getUser`, options);
-    }
-
-    if (response.success) {
-      useUserStore().setUser(response.data);
-    }
+    const response: any = await request.get("getUser");
+    response.success && useUserStore().setUser(response.data);
     return response;
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -127,15 +72,17 @@ export async function fetchUsers() {
 export async function fetchArchives() {
   try {
     const isDevelopment = process.env.NODE_ENV === "development";
+    let response: any;
 
-    const options: any = {
-      method: "GET",
-      credentials: "include",
-    };
-    const response: any = await $fetch(
-      ` ${isDevelopment ? "localhost:3001/api" : "https://mtsoft.lt/getArchives"}`,
-      options
-    );
+    if (isDevelopment) {
+      response = await request.get("getArchives");
+    } else {
+      const options: any = {
+        method: "GET",
+        credentials: "include",
+      };
+      response = await $fetch(`https://mtsoft.lt/getArchives`, options);
+    }
 
     response.success && useArchiveStore().addArchives("archive", response.data);
   } catch (error) {
@@ -278,21 +225,7 @@ export async function fetchDefaultValues() {
 
 export async function fetchUserRights() {
   try {
-    // const response: any = await request.get("getUserRights");
-
-    const isDevelopment = process.env.NODE_ENV === "development";
-
-    const options: any = {
-      method: "GET",
-      credentials: "include",
-    };
-    const response: any = await $fetch(
-      `${
-        isDevelopment ? "localhost:3001/api/getUserRights" : "https://mtsoft.lt/api/getUserRights"
-      }`,
-      options
-    );
-
+    const response: any = await request.get("getUserRights");
     response.success && useSettingsStore().addUserRights(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
