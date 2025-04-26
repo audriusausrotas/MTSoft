@@ -10,18 +10,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: "20.18.0"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.0"
 
-      # - name: Install dependencies
-      #   run: npm install
-      #   env:
-      #     NODE_NO_WARNINGS: "1"
+      - name: Install dependencies
+        run: npm install
+        env:
+          NODE_NO_WARNINGS: "1"
 
       - name: Build the application
         run: npm run build
@@ -35,8 +35,6 @@ jobs:
           VPS_IP: ${{ secrets.VPS_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          NUXT_PUBLIC_CLOUD_API_KEY: ${{ secrets.NUXT_PUBLIC_CLOUD_API_KEY }}
-          NUXT_PUBLIC_CLOUD_NAME: ${{ secrets.NUXT_PUBLIC_CLOUD_NAME }}
           SALT: ${{ secrets.SALT }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           NODE_NO_WARNINGS: "1"
