@@ -1,5 +1,6 @@
 export async function fetchUser() {
   try {
+    console.log("fecina useri");
     const response: any = await request.get("getUser");
     response.success && useUserStore().setUser(response.data);
     return response;
@@ -41,6 +42,7 @@ export async function fetchInstallation() {
 
 export async function fetchProjects() {
   try {
+    console.log("fecina projektus");
     const response: any = await request.get("getProjects");
     response.success && useProjectsStore().addProjects(response.data);
   } catch (error) {
