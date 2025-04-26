@@ -1,12 +1,35 @@
+// export async function fetchUser() {
+// try {
+//   const response: any = await request.get("getUser");
+//   response.success && useUserStore().setUser(response.data);
+//   return response;
+// } catch (error) {
+//   console.log("Serverio klaida: " + error);
+//   return { success: false, data: null };
+// }
+//   try {
+//     const isDevelopment = process.env.NODE_ENV === "development";
+//     let response: any;
+
+//     if (isDevelopment) {
+//       response = await request.get("getUser");
+//     } else {
+//       const options: any = {
+//         method: "GET",
+//         credentials: "include",
+//       };
+//       response = await $fetch(`https://mtsoft.lt/api/getUser`, options);
+//     }
+
+//     response.success && useUserStore().setUser(response.data);
+//     return response;
+//   } catch (error) {
+//     console.log("Serverio klaida: " + error);
+//     return { success: false, data: null };
+//   }
+// }
+
 export async function fetchUser() {
-  // try {
-  //   const response: any = await request.get("getUser");
-  //   response.success && useUserStore().setUser(response.data);
-  //   return response;
-  // } catch (error) {
-  //   console.log("Serverio klaida: " + error);
-  //   return { success: false, data: null };
-  // }
   try {
     const isDevelopment = process.env.NODE_ENV === "development";
     let response: any;
@@ -17,11 +40,23 @@ export async function fetchUser() {
       const options: any = {
         method: "GET",
         credentials: "include",
+        headers: {},
       };
+
+      // Include cookies in server-side requests
+      if (import.meta.server) {
+        const headers = useRequestHeaders(["cookie"]);
+        options.headers = {
+          ...headers,
+        };
+      }
+
       response = await $fetch(`https://mtsoft.lt/api/getUser`, options);
     }
 
-    response.success && useUserStore().setUser(response.data);
+    if (response.success) {
+      useUserStore().setUser(response.data);
+    }
     return response;
   } catch (error) {
     console.log("Serverio klaida: " + error);
