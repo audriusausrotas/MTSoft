@@ -132,30 +132,15 @@ export async function fetchClients() {
 }
 
 export async function fetchOrder(to: any) {
-  let success = true;
-
-  const response: any = await request.get(`getOrder/${to.params.id}`);
-
-  if (response.success) {
-    const offerStore = useOfferStore();
-    if (response.data.status === "Nepatvirtintas" || response.data.status === "Netinkamas") {
-      const currentDate = new Date();
-      const exparationDate = new Date(response.data.dateExparation);
-      if (currentDate < exparationDate) {
-        offerStore.setOffer({ ...response.data });
-      } else {
-        const data2: any = await $fetch(`addUnconfirmed/${response.data._id}`);
-        if (data2.success) {
-          success = false;
-        }
-      }
-    } else {
-      offerStore.setOffer({ ...response.data });
-    }
-  } else {
-    success = false;
+  try {
+    const response: any = await request.get(`getOrder/${to.params.id}`);
+    if (response.success) useOfferStore().setOffer({ ...response.data });
+    else return false;
+    return true;
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return false;
   }
-  return success;
 }
 
 export async function fetchSelects() {

@@ -3,38 +3,13 @@ import request from "~/utils/request";
 const isPublicPath = (path: string) =>
   path.includes("pasiulymas") || path.includes("didmena") || path.includes("tvoros");
 
-const isValidAdminPath = (path: string) =>
-  [
-    "/kainos",
-    "/bonusai",
-    "/pasiulymai",
-    "/klientai",
-    "/vartotojai",
-    "/nustatymai",
-    "/archyvas/baigti",
-    "/archyvas/archyvas",
-    "/archyvas/nepasitvirtine",
-    "/archyvas/istrinti",
-    "/archyvas/atsargines_kopijos",
-  ].includes(path);
-
-const projectPaths = ["/", "/skaiciuokle"];
-const schedulePaths = ["/grafikas"];
-const productionPaths = ["/gamyba"];
-const installationPaths = ["/montavimas"];
-const gatePaths = ["/vartai"];
-
 export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUserStore();
   const settingsStore = useSettingsStore();
 
   if (isPublicPath(to.path)) {
-    if (to.path.includes("pasiulymas") && import.meta.server) {
-      const success = await fetchOrder(to);
-      if (!success && !to.name?.toString().includes("negalioja")) {
-        return navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
-      }
-    }
+    if (to.path.includes("pasiulymas") && import.meta.server)
+      !(await fetchOrder(to)) && navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
     return;
   }
 
@@ -54,9 +29,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (to.path === "/login") return navigateTo("/");
 
-  if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas") {
+  if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas")
     return navigateTo("/servisas");
-  }
 
   let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
 
@@ -65,24 +39,64 @@ export default defineNuxtRouteMiddleware(async (to) => {
     userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
   }
 
-  const isSingleArchiveView = to.path.startsWith("/archyvas/") && to.path.split("/").length === 3;
-
-  if (import.meta.server && !isSingleArchiveView) {
+  if (import.meta.server) {
     await fetchInitialUserData(userRights);
   }
 
-  const premissionHandler = (paths: string[], right: boolean | undefined) => {
-    if (paths.some((p) => to.path === p || to.path.includes(p)) && !right) {
-      return navigateTo(middlewareHelper(userRights!));
-    }
-  };
+  switch (to.path) {
+    case "/":
+      if (!userRights?.project) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/skaiciuokle":
+      if (!userRights?.project) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/grafikas":
+      if (!userRights?.schedule) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/gamyba":
+      if (!userRights?.production) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/montavimas":
+      if (!userRights?.installation) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/vartai":
+      if (!userRights?.gate) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/kainos":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/bonusai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/pasiulymai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/klientai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/vartotojai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/nustatymai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/archyvas/baigti":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/archyvas/archyvas":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/archyvas/nepasitvirtine":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/archyvas/istrinti":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
+    case "/archyvas/atsargines_kopijos":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
 
-  if (premissionHandler(projectPaths, userRights?.project)) return;
-  if (premissionHandler(schedulePaths, userRights?.schedule)) return;
-  if (premissionHandler(productionPaths, userRights?.production)) return;
-  if (premissionHandler(installationPaths, userRights?.installation)) return;
-  if (premissionHandler(gatePaths, userRights?.gate)) return;
-  if (isValidAdminPath(to.path) && !userRights?.admin) {
-    return navigateTo(middlewareHelper(userRights!));
+    default:
+      break;
   }
 });
