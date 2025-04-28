@@ -42,9 +42,6 @@ export async function fetchInstallation() {
 export async function fetchProjects() {
   try {
     const response: any = await request.get("getProjects");
-    console.log("projects");
-    console.log(response.data[0].dateCreated);
-    console.log(response.data[0].dates.dateCreated);
     response.success && useProjectsStore().addProjects(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
@@ -85,9 +82,6 @@ export async function fetchArchives() {
 export async function fetchFinished() {
   try {
     const response = await request.get("getFinished");
-    console.log("finished");
-    console.log(response.data[0].dateCreated);
-    console.log(response.data[0].dates.dateCreated);
     response.success && useArchiveStore().addArchives("finished", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
