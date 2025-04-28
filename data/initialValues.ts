@@ -46,6 +46,7 @@ export const initialResultData: Result = {
   isNew: false,
   category: "",
   width: null,
+  delivered: false,
 };
 
 export const navigationLinks: MenuLinks[] = [
@@ -66,7 +67,7 @@ export const optionLinks: MenuLinks[] = [
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
-  { name: "Archyvas", link: "/archyvas/archyvas", iconPath: "" },
+  { name: "Archyvas", link: "/archyvas/baigti", iconPath: "" },
 ];
 
 export const createInitialMeasure = (): Measure => ({

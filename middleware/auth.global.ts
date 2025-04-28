@@ -1,7 +1,9 @@
 import request from "~/utils/request";
 
 const isPublicPath = (path: string) =>
-  path.includes("pasiulymas") || path.includes("didmena") || path.includes("tvoros");
+  path.includes("pasiulymas") ||
+  path.includes("didmena") ||
+  path.includes("tvoros");
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUserStore();
@@ -9,7 +11,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (isPublicPath(to.path)) {
     if (to.path.includes("pasiulymas") && import.meta.server)
-      !(await fetchOrder(to)) && navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
+      !(await fetchOrder(to)) &&
+        navigateTo(`/pasiulymas/${to.params.id}/negalioja`);
     return;
   }
 
@@ -32,11 +35,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas")
     return navigateTo("/servisas");
 
-  let userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
+  let userRights = settingsStore.userRights.find(
+    (item) => item.accountType === user?.accountType
+  );
 
   if (!userRights) {
     await fetchUserRights();
-    userRights = settingsStore.userRights.find((item) => item.accountType === user?.accountType);
+    userRights = settingsStore.userRights.find(
+      (item) => item.accountType === user?.accountType
+    );
   }
 
   if (import.meta.server) {
@@ -45,19 +52,24 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   switch (to.path) {
     case "/":
-      if (!userRights?.project) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.project)
+        return navigateTo(middlewareHelper(userRights!));
       break;
     case "/skaiciuokle":
-      if (!userRights?.project) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.project)
+        return navigateTo(middlewareHelper(userRights!));
       break;
     case "/grafikas":
-      if (!userRights?.schedule) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.schedule)
+        return navigateTo(middlewareHelper(userRights!));
       break;
     case "/gamyba":
-      if (!userRights?.production) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.production)
+        return navigateTo(middlewareHelper(userRights!));
       break;
     case "/montavimas":
-      if (!userRights?.installation) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.installation)
+        return navigateTo(middlewareHelper(userRights!));
       break;
     case "/vartai":
       if (!userRights?.gate) return navigateTo(middlewareHelper(userRights!));
