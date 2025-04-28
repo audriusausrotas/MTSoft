@@ -15,29 +15,17 @@ const filteredProjects = () => {
   if (searchQuery.value.length > 2) {
     return filtered.filter(
       (project) =>
-        project.client.address
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.email
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.phone
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.username
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase())
+        project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered.filter((item) =>
-      item?.creator?.username
-        .toLowerCase()
-        .startsWith(filterUser.value.toLowerCase())
+      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase())
     );
   }
 
@@ -92,9 +80,7 @@ const projects = computed(() => {
 
 const users = [
   "Visi",
-  ...new Set(
-    projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)
-  ),
+  ...new Set(projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)),
 ];
 
 const statusFilters = [
@@ -155,10 +141,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation
-          name="sutvarkyti datas"
-          @onConfirm="removeUnconfirmed"
-        />
+        <BaseButtonWithConfirmation name="laisvas test mygtukas" @onConfirm="removeUnconfirmed" />
         <BaseSelectField
           label="Vartotojas"
           :values="users"
