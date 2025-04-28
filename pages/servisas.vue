@@ -80,11 +80,15 @@ watch(input, searchHandler);
             <p class="w-96">{{ item.client.address }}</p>
             <div class="w-32 flex items-center justify-center gap-2">
               <p class="">
-                {{ item.dateExparation.slice(0, 10) }}
+                {{ item.dates?.dateArchieved.slice(0, 10) }}
               </p>
               <span
                 class="p-1 rounded-full"
-                :class="isWithinTwoYears(item.dateExparation) ? 'bg-green-500' : 'bg-red-500'"
+                :class="
+                  isWithinTwoYears(item.dates?.dateArchieved)
+                    ? 'bg-green-500'
+                    : 'bg-red-500'
+                "
               ></span>
             </div>
           </div>

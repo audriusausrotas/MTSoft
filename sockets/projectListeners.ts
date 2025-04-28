@@ -25,7 +25,7 @@ export default function projectListeners(socket: Socket) {
   });
 
   socket.on("updateProjectExparationDate", ({ _id, dateExparation }) => {
-    projectsStore.updateProjectField(_id, "dateExparation", dateExparation);
+    projectsStore.updateProjectDates(_id, "dateExparation", dateExparation);
   });
 
   socket.on("updateProjectFiles", ({ _id, files }) => {

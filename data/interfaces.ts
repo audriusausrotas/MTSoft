@@ -29,12 +29,13 @@ export interface Project {
   status: string;
   advance: number;
   orderNumber: string;
-  dateCreated: string;
-  dateExparation: string;
   files: string[];
   comments: Comment[];
   versions: Version[];
+  dates: Dates;
+  workers: string[];
 }
+
 export interface Version {
   _id?: string;
   id: string;
@@ -107,6 +108,7 @@ export interface Result {
   margin: number;
   isNew: boolean;
   width: number | null;
+  delivered: boolean;
 }
 
 export interface OtherParts {
@@ -114,6 +116,14 @@ export interface OtherParts {
   quantity: number;
   height: number;
   type?: string;
+}
+
+export interface Dates {
+  dateCreated: string;
+  dateExparation: string;
+  dateConfirmed: string;
+  dateCompletion: string;
+  dateArchieved: string;
 }
 
 export interface RetailLegs {

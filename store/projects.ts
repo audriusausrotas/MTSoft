@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Project, Comment } from "~/data/interfaces";
+import type { Project, Comment, Dates } from "~/data/interfaces";
 
 export const useProjectsStore = defineStore("Projects", {
   state: () => ({
@@ -17,7 +17,9 @@ export const useProjectsStore = defineStore("Projects", {
     },
 
     updateProject(project: Project): void {
-      this.projects = this.projects.map((item) => (item._id === project._id ? project : item));
+      this.projects = this.projects.map((item) =>
+        item._id === project._id ? project : item
+      );
     },
 
     addComment(_id: string, comment: Comment): void {
@@ -55,16 +57,37 @@ export const useProjectsStore = defineStore("Projects", {
       this.selectedProject = null;
     },
 
-    updateProjectField<T extends keyof Project>(id: string, field: T, value: Project[T]) {
+    updateProjectField<T extends keyof Project>(
+      id: string,
+      field: T,
+      value: Project[T]
+    ) {
       this.projects = this.projects.map((item) =>
         item._id === id ? { ...item, [field]: value } : item
+      );
+    },
+
+    updateProjectDates<T extends keyof Dates>(
+      id: string,
+      field: T,
+      value: Dates[T]
+    ) {
+      this.projects = this.projects.map((item) =>
+        item._id === id
+          ? {
+              ...item,
+              dates: { ...item.dates, [field]: value },
+            }
+          : item
       );
     },
 
     deleteVersion(versionId: string, projectId: string) {
       this.projects = this.projects.map((item) => {
         if (item._id === projectId) {
-          item.versions = item.versions.filter((version) => version._id !== versionId);
+          item.versions = item.versions.filter(
+            (version) => version._id !== versionId
+          );
           return item;
         } else return item;
       });

@@ -5,6 +5,7 @@ export const useArchiveStore = defineStore("Archives", {
   state: () => ({
     data: {
       archive: [] as Project[],
+      finished: [] as Project[],
       unconfirmed: [] as Project[],
       deleted: [] as Project[],
       backup: [] as Project[],
@@ -21,7 +22,9 @@ export const useArchiveStore = defineStore("Archives", {
     deleteArchive(_id: string, location: keyof typeof this.data) {
       if (!this.data[location]) return;
 
-      this.data[location] = this.data[location].filter((item) => item._id !== _id);
+      this.data[location] = this.data[location].filter(
+        (item) => item._id !== _id
+      );
     },
 
     addArchive(location: keyof typeof this.data, project: Project) {
@@ -34,7 +37,9 @@ export const useArchiveStore = defineStore("Archives", {
       if (!this.data[location]) return [];
 
       if (input.length > 2) {
-        return this.data[location].filter((project: Project) => this.matchSearch(project, input));
+        return this.data[location].filter((project: Project) =>
+          this.matchSearch(project, input)
+        );
       }
       return this.data[location];
     },

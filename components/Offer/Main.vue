@@ -24,11 +24,11 @@ props.offer?.works?.forEach(
     >
       <h5>
         Užsakymo data:<br />
-        {{ offer?.dateCreated?.slice(0, 10) }}
+        {{ offer?.dates.dates?.dateCreated?.slice(0, 10) }}
       </h5>
       <h5>
         Pasiūlymo galiojimo data: <br />
-        {{ offer?.dateExparation?.slice(0, 10) }}
+        {{ offer?.dates.dateExparation?.slice(0, 10) }}
       </h5>
       <h3>
         Pasiūlymo Nr.: <br />
@@ -159,13 +159,13 @@ props.offer?.works?.forEach(
         <div class="flex flex-col flex-1 gap-1">
           <p class="">Pasiūlymo data:</p>
           <p>
-            {{ offer?.dateCreated?.slice(0, 10) }}
+            {{ offer?.dates?.dates?.dateCreated?.slice(0, 10) }}
           </p>
         </div>
         <div class="flex flex-col flex-1 gap-1">
           <p>Pasiūlymo galiojimo data:</p>
           <p>
-            {{ offer?.dateExparation?.slice(0, 10) }}
+            {{ offer?.dates?.dateExparation?.slice(0, 10) }}
           </p>
         </div>
       </div>

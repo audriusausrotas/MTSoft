@@ -7,6 +7,14 @@ const route = useRoute();
     class="flex w-full text-center border border-dark-light rounded-lg overflow-hidden divide-x divide-dark-light"
   >
     <NuxtLink
+      to="/archyvas/baigti"
+      class="flex-1 p-2 border-dark-light hover:cursor-pointer min-w-28 hover:bg-red-600 hover:text-white"
+      :class="route.path === '/archyvas/baigti' ? 'bg-red-full text-white' : ''"
+    >
+      Baigti
+    </NuxtLink>
+
+    <NuxtLink
       to="/archyvas/archyvas"
       class="flex-1 p-2 border-dark-light hover:cursor-pointer min-w-28 hover:bg-red-600 hover:text-white"
       :class="

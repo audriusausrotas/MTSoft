@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const props = defineProps({
   location: {
-    type: String as PropType<"archive" | "unconfirmed" | "deleted" | "backup">,
+    type: String as PropType<
+      "archive" | "finished" | "unconfirmed" | "deleted" | "backup"
+    >,
     required: true,
   },
 });
