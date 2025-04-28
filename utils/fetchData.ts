@@ -102,7 +102,7 @@ export async function fetchUnconfirmed() {
 export async function fetchDeleted() {
   try {
     const response = await request.get("getDeleted");
-    console.log(response.data);
+
     response.success && useArchiveStore().addArchives("deleted", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
