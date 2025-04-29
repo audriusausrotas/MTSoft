@@ -123,7 +123,10 @@ watch(
 
     <p v-if="!commentModalOpen">{{ comment }}</p>
 
-    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
+    <div
+      v-if="menuOpen"
+      class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white"
+    >
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -147,7 +150,12 @@ watch(
       </div>
     </div>
 
-    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
+    <div
+      v-if="selectedJobs.length > 0"
+      v-for="job in selectedJobs"
+      :key="job._id"
+      class="relative"
+    >
       <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
     </div>
 
@@ -156,7 +164,12 @@ watch(
       class="bg-blue-600 absolute top-0 left-0 w-full h-full flex flex-col justify-end placeholder-white text-white"
     >
       <div class="border-y border-white">
-        <input type="text" placeholder="Komentaras" v-model="comment" class="w-full p-1" />
+        <input
+          type="text"
+          placeholder="Komentaras"
+          v-model="comment"
+          class="w-full p-1"
+        />
       </div>
       <div class="flex justify">
         <div
@@ -168,7 +181,10 @@ watch(
       </div>
     </div>
 
-    <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
+    <div
+      v-if="modalOpen"
+      class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg"
+    >
       <BaseSearchFieldProduction
         width="w-full"
         :data="
