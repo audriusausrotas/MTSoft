@@ -7,12 +7,12 @@ const open = ref<boolean>(false);
 
 const { setError, setIsError } = useError();
 
+const date = props.project?.dates.dateConfirmed || props.project?.dates.dateCreated;
+
 const time = computed(() => {
   const today = new Date();
   const expirationDate = new Date(props.project?.dates?.dateExparation);
-  return Math.ceil(
-    (expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  return Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 });
 
 const gateOrdered = computed(() => {
@@ -55,11 +55,7 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
     !useSocketStore().connected &&
-      projectsStore.updateProjectField(
-        response.data._id,
-        "status",
-        response.data.status
-      );
+      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
     setIsError(false);
     setError(response.message);
   } else {
@@ -72,28 +68,38 @@ const statusHandler = async (value: string) => {
   <div
     class="flex flex-wrap border-b items-center justify-center xl:justify-start gap-2 pb-2 w-full"
   >
+    <div class="font-semibold text-xl w-10">
+      {{ length - index }}
+    </div>
     <div class="relative group">
-      <div class="font-semibold text-xl w-10 hover:cursor-pointer">
-        {{ length - index }}
-      </div>
       <BaseInfoField
         v-if="props.location === 'projects'"
-        :name="
-          props.project?.dates.dateConfirmed.slice(0, 10) ||
-          props.project?.dates.dateCreated.slice(0, 10)
-        "
+        :name="date.slice(0, 10)"
         width="w-28"
-        class="absolute top-4 left-8 hidden group-hover:flex items-center justify-center bg-red-600 text-white font-medium shadow-xl"
+        class="hover:cursor-pointer"
       />
+      <div
+        class="absolute top-0 left-28 bg-red-200 rounded-lg shadow-2xl border font-medium px-4 py-2 w-60 z-50 group-hover:cursor-pointer group-hover:block hidden"
+      >
+        <div class="flex justify-between">
+          <p>Sukurta:</p>
+          <p>{{ project.dates.dateCreated.slice(0, 10) }}</p>
+        </div>
+        <div class="flex justify-between">
+          <p>Patvirtinta:</p>
+          <p>{{ project.dates.dateConfirmed.slice(0, 10) }}</p>
+        </div>
+        <div class="flex justify-between">
+          <p>Įgyvendinimas:</p>
+          <p>{{ project.dates.dateCompletion.slice(0, 10) || "-------------" }}</p>
+        </div>
+      </div>
     </div>
 
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative flex-1">
       <div
-        v-if="
-          props.project.gates?.length > 0 &&
-          props.project.status !== 'Nepatvirtintas'
-        "
+        v-if="props.project.gates?.length > 0 && props.project.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered"
       ></div>
@@ -115,16 +121,8 @@ const statusHandler = async (value: string) => {
       />
     </div>
 
-    <BaseInfoField
-      :name="props.project?.client?.phone"
-      width="w-32"
-      :tel="true"
-    />
-    <BaseInfoField
-      :name="props.project?.client?.email"
-      width="w-64  "
-      :email="true"
-    />
+    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
+    <BaseInfoField :name="props.project?.client?.email" width="w-64  " :email="true" />
 
     <div v-if="location === 'projects'" class="relative">
       <BaseSelectField
@@ -153,12 +151,7 @@ const statusHandler = async (value: string) => {
         {{ time > 0 ? time : 0 }}
       </div>
     </div>
-    <BaseInfoField
-      v-else
-      :name="props.project?.status"
-      width="w-48 "
-      :class="color"
-    />
+    <BaseInfoField v-else :name="props.project?.status" width="w-48 " :class="color" />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
@@ -172,11 +165,7 @@ const statusHandler = async (value: string) => {
         loading="lazy"
         :ismap="true"
       />
-      <HomeSubmenu
-        v-if="open"
-        :location="props.location"
-        :_id="props.project._id"
-      />
+      <HomeSubmenu v-if="open" :location="props.location" :_id="props.project._id" />
     </div>
   </div>
 </template>
