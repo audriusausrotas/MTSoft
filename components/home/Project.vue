@@ -70,9 +70,23 @@ const statusHandler = async (value: string) => {
 
 <template>
   <div
-    class="flex flex-wrap border-b items-center justify-center xl:justify-start border-red-full gap-2 pb-4 w-full"
+    class="flex flex-wrap border-b items-center justify-center xl:justify-start gap-2 pb-2 w-full"
   >
-    <div class="font-semibold text-xl w-12">{{ length - index }}</div>
+    <div class="relative group">
+      <div class="font-semibold text-xl w-10 hover:cursor-pointer">
+        {{ length - index }}
+      </div>
+      <BaseInfoField
+        v-if="props.location === 'projects'"
+        :name="
+          props.project?.dates.dateConfirmed.slice(0, 10) ||
+          props.project?.dates.dateCreated.slice(0, 10)
+        "
+        width="w-28"
+        class="absolute top-4 left-8 hidden group-hover:flex items-center justify-center bg-red-600 text-white font-medium shadow-xl"
+      />
+    </div>
+
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative flex-1">
       <div
@@ -94,7 +108,7 @@ const statusHandler = async (value: string) => {
       <BaseInfoField
         :name="
           props.project?.discount
-            ? props.project?.priceWithDiscount + '€'
+            ? props.project?.priceWithDiscount + ' €'
             : props.project?.priceVAT + ' €'
         "
         width="w-24"
@@ -108,7 +122,7 @@ const statusHandler = async (value: string) => {
     />
     <BaseInfoField
       :name="props.project?.client?.email"
-      width="w-80 "
+      width="w-64  "
       :email="true"
     />
 

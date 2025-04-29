@@ -8,9 +8,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <SocketStatus :connected="useSocket.isConnected" :transporter="useSocket.transporter" />
+  <SocketStatus
+    :connected="useSocket.isConnected"
+    :transporter="useSocket.transporter"
+  />
   <NavMain />
-  <div class="px-4 py-10 flex justify-center max-w-[1400px] m-auto">
+  <div class="px-4 py-10 flex justify-center max-w-[1470px] m-auto">
     <slot />
   </div>
 </template>

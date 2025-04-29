@@ -4,7 +4,9 @@ const userStore = useUserStore();
 
 <template>
   <NavMain v-if="userStore?.user" class="print:hidden" />
-  <div class="px-4 py-10 flex flex-col justify-center m-auto gap-8 max-w-[1400px]">
+  <div
+    class="px-4 py-10 flex flex-col justify-center m-auto gap-8 max-w-[1470px]"
+  >
     <NavArchive />
     <slot />
   </div>

@@ -5,7 +5,7 @@ const route = useRoute();
 <template>
   <div class="py-4 shadow-bottom print:hidden">
     <div
-      class="flex lg:justify-between flex-wrap justify-center max-w-[1400px] m-auto"
+      class="flex lg:justify-between flex-wrap justify-center max-w-[1470px] m-auto"
     >
       <NuxtLink to="https://www.modernitvora.lt">
         <NuxtImg

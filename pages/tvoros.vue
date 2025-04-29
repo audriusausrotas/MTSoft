@@ -4,7 +4,7 @@ definePageMeta({
 });
 </script>
 <template>
-  <div class="max-w-[1400px] m-auto py-8">
+  <div class="max-w-[1470px] m-auto py-8">
     <div class="flex flex-col gap-8">
       <OffersAbout class="print:break-after-page" />
       <OffersSteelInfo class="print:break-after-page" />

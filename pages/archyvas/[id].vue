@@ -11,7 +11,7 @@ const open = ref<boolean>(true);
 </script>
 
 <template>
-  <div class="m-auto my-10 w-full max-w-[1440px]">
+  <div class="m-auto my-10 w-full max-w-[1470px]">
     <div
       class="flex border flex-wrap rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
     >

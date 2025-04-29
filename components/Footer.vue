@@ -2,7 +2,7 @@
 
 <template>
   <div class="flex justify-center bg-dark-full py-8 text-white print:hidden">
-    <div class="max-w-[1400px] w-full">
+    <div class="max-w-[1470px] w-full">
       <div class="flex flex-col items-center gap-8">
         <div class="flex flex-col items-center">
           <NuxtImg
@@ -19,7 +19,9 @@
 
         <div class="border border-red-full w-full"></div>
 
-        <div class="flex lg:justify-between justify-center flex-wrap w-full gap-6 py-2">
+        <div
+          class="flex lg:justify-between justify-center flex-wrap w-full gap-6 py-2"
+        >
           <div class="flex flex-col gap-2">
             <div class="flex gap-2">
               <NuxtImg
