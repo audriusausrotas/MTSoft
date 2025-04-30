@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Result, Works } from "~/data/interfaces";
-import { offerStore } from "~/store/offer";
 
 definePageMeta({
   layout: "order",
