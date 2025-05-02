@@ -1,7 +1,8 @@
 divdivdivdivdivdiv
 
 <script setup lang="ts">
-const props = defineProps(["offer", "location"]);
+const props = defineProps(["offer", "location", "showButtons"]);
+const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
 const { setError, setIsError } = useError();
 const installationStore = useInstallationStore();
@@ -34,7 +35,7 @@ const gateOrdered = computed(() => {
 
 const gateExist = computed(() => {
   const gates = props.offer?.gates || [];
-  return gates.some((item) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai");
+  return gates.some((item: any) => item.type !== "Segmentiniai" && item.option !== "Segmentiniai");
 });
 
 const statusValues = [
@@ -105,7 +106,6 @@ const gateOrderHandler = async (name: string): Promise<void> => {
 
   const requestData = {
     _id: props.offer?._id,
-    value: provider.value,
     manager: name,
   };
 
@@ -170,10 +170,9 @@ const changeCreatorHandler = async (value: string) => {
   }
 };
 
-const advanceHandler = async () => {
+const advanceHandler = async (advance: string) => {
   isLoading.value = true;
-
-  const requestData = { _id: props.offer?._id, advance: advance.value };
+  const requestData = { _id: props.offer?._id, advance };
 
   const response: any = await request.patch("changeAdvance", requestData);
 
@@ -188,7 +187,6 @@ const advanceHandler = async () => {
   } else {
     setError(response.message);
   }
-  cancelHandler();
   isLoading.value = false;
 };
 
@@ -292,6 +290,12 @@ const deleteComment = async (comment: Comment) => {
 
       <BaseButtonWithInput name="Pridėti avansą" @onConfirm="advanceHandler" type="number" />
 
+      <BaseInput
+        v-if="props.location === 'projects'"
+        :disable="true"
+        :name="props.offer?.advance"
+      />
+
       <BaseSelectField
         :values="statusValues"
         id="orderStatus"
@@ -339,13 +343,34 @@ const deleteComment = async (comment: Comment) => {
         />
       </div>
 
-      <BaseButtonWithConfirmation
-        name="Baigti užsakymą"
-        @onConfirm="
-          props.location === 'production' ? orderFinishHandler : statusHandler('Pridavimas')
-        "
-        :isLoading="isLoading"
-      />
+      <div class="flex gap-4 items-end">
+        <div>
+          <BaseButton
+            v-if="!props.showButtons"
+            name="Užsakyti medžiagas"
+            @click="emit('openOrder')"
+          />
+
+          <div v-else class="w-60">
+            <div
+              class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
+            >
+              <button
+                class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full"
+                @click="emit('conformOrder')"
+              >
+                Patvirtinti
+              </button>
+              <button
+                class="flex-1 px-4 py-2 font-bold bg-dark-full text-red-full hover:text-black hover:bg-red-full"
+                @click="emit('cancel')"
+              >
+                X
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="flex gap-4 items-end">
         <div v-if="gateExist">
@@ -373,6 +398,14 @@ const deleteComment = async (comment: Comment) => {
           />
         </div>
       </div>
+
+      <BaseButtonWithConfirmation
+        name="Baigti užsakymą"
+        @onConfirm="
+          props.location === 'production' ? orderFinishHandler : statusHandler('Pridavimas')
+        "
+        :isLoading="isLoading"
+      />
     </div>
   </div>
 </template>

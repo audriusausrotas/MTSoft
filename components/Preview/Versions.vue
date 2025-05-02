@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["versions"]);
 
-const versionsHandler = (id) => {
+const versionsHandler = (id: string) => {
   window.open("/archyvas/" + id, "_blank");
 };
 </script>

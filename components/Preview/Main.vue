@@ -1,10 +1,18 @@
 <script setup lang="ts">
 const props = defineProps(["offer", "location"]);
 
+const { setError, setIsError } = useError();
+
+const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
+let selectedProducts: any = [];
+
+const deliveryMethod = ref<string>(deliveryValues[0]);
+const showOrderButtons = ref<boolean>(false);
+const date = ref<Date | null>(null);
+
 const resultsTotal = computed(() => {
   let cost = 0;
   let price = 0;
-  let total = 0;
   let profit = 0;
   let tempMargin = 0;
   let count = 0;
@@ -24,7 +32,6 @@ const resultsTotal = computed(() => {
 const worksTotal = computed(() => {
   let cost = 0;
   let price = 0;
-  let total = 0;
   let profit = 0;
   let tempMargin = 0;
   let count = 0;
@@ -40,6 +47,40 @@ const worksTotal = computed(() => {
   const margin = tempMargin / count;
   return { cost, price, profit, margin };
 });
+
+const orderConfirmHandler = async () => {
+  const requestData = {
+    data: selectedProducts,
+    client: props.offer?.client,
+    date: date.value,
+    deliveryMethod: deliveryMethod.value,
+  };
+
+  const response: any = await request.post("orderProducts", requestData);
+
+  if (response.success) {
+    cancelHandler();
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const checkedHandler = (data: any) => {
+  selectedProducts.push(data);
+};
+
+const uncheckedHandler = (data: any) => {
+  selectedProducts = selectedProducts.filter((item: any) => item.name !== data);
+};
+
+const cancelHandler = () => {
+  showOrderButtons.value = false;
+  selectedProducts = [];
+  deliveryMethod.value = deliveryValues[0];
+  date.value = null;
+};
 </script>
 
 <template>
@@ -58,7 +99,30 @@ const worksTotal = computed(() => {
       :location="props.location"
     />
 
-    <PreviewButtons :offer="props.offer" :location="props.location" class="print:hidden" />
+    <PreviewButtons
+      :offer="props.offer"
+      :location="props.location"
+      class="print:hidden"
+      @conformOrder="orderConfirmHandler"
+      @openOrder="showOrderButtons = true"
+      @cancel="cancelHandler"
+      :showButtons="showOrderButtons"
+    />
+
+    <div v-if="showOrderButtons" class="flex gap-4">
+      <div class="flex flex-col">
+        <label for="finalDate" class="font-medium mb-1">Pristatymo data iki:</label>
+        <input v-model="date" type="date" id="finalDate" name="finalDate" class="" />
+      </div>
+      <BaseSelectField
+        :values="deliveryValues"
+        label="Medžiagų pristatymas"
+        id="deliferyStuff"
+        :defaultValue="deliveryMethod"
+        @onChange="(value: string) => deliveryMethod = value
+        "
+      />
+    </div>
 
     <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
 
@@ -66,6 +130,7 @@ const worksTotal = computed(() => {
     <div class="flex flex-col">
       <div class="border-y border-black font-semibold gap-10 px-2 py-2 flex">
         <div class="w-6 text-center">Nr</div>
+        <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
         <div v-if="props.location === 'projects'" class="w-16">Savikaina</div>
@@ -84,6 +149,9 @@ const worksTotal = computed(() => {
           :index="index"
           :_id="props.offer._id"
           :hidePrices="location !== 'projects'"
+          :showbuttons="showOrderButtons"
+          @checked="checkedHandler"
+          @unchecked="uncheckedHandler"
         />
 
         <PreviewTotal v-if="props.location === 'projects'" :values="resultsTotal" />

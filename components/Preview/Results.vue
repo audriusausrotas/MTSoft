@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const props = defineProps(["result", "index", "hidePrices", "_id"]);
+const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons"]);
+const emit = defineEmits(["checked", "unchecked"]);
+
+const { setError, setIsError } = useError();
+
 const measurement = ref<string>("vnt");
 
 if (props.result.type.includes("Apkaustai")) measurement.value = "m";
@@ -18,7 +22,7 @@ const deliverHandler = async (value: boolean) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      installationStore.updatePartsDelivered(
+      useInstallationStore().updatePartsDelivered(
         response.data._id,
         response.data.measureIndex,
         response.data.value
@@ -28,6 +32,16 @@ const deliverHandler = async (value: boolean) => {
   } else {
     setError(response.message);
   }
+};
+
+const selectData = (value: boolean) => {
+  const data = {
+    name: props.result.type,
+    color: props.result.color,
+    quantity: props.result.quantity,
+  };
+
+  value ? emit("checked", data) : emit("unchecked", data.name);
 };
 </script>
 
@@ -39,6 +53,16 @@ const deliverHandler = async (value: boolean) => {
       <p class="block sm:hidden font-bold">Nr.:</p>
       <div class="w-6 text-center">{{ props.index + 1 }}</div>
     </div>
+
+    <div v-if="props.showbuttons" class="w-6 items-center">
+      <BaseCheckField
+        :name="'order' + index"
+        @onChange="selectData"
+        :checked="false"
+        height="h-6"
+      />
+    </div>
+
     <div class="border sm:hidden w-full"></div>
     <div class="flex-1">
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
