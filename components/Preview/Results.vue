@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["result", "index", "hidePrices"]);
+const props = defineProps(["result", "index", "hidePrices", "_id"]);
 const measurement = ref<string>("vnt");
 
 if (props.result.type.includes("Apkaustai")) measurement.value = "m";
@@ -11,6 +11,24 @@ else if (
 )
   measurement.value = "m2";
 else measurement.value = "vnt";
+
+const deliverHandler = async (value: boolean) => {
+  const requestData = { _id: props._id, measureIndex: props.index, value };
+  const response: any = await request.patch("partsDelivered", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      installationStore.updatePartsDelivered(
+        response.data._id,
+        response.data.measureIndex,
+        response.data.value
+      );
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
@@ -54,22 +72,66 @@ else measurement.value = "vnt";
           <p>{{ measurement }}</p>
         </div>
       </div>
+
+      <div v-if="!props.hidePrices">
+        <p class="block sm:hidden font-bold">Savikaina:</p>
+        <div class="w-16 flex gap-2">
+          <p>
+            {{ props.result.cost }}
+          </p>
+          <p>€</p>
+        </div>
+      </div>
+
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Kaina:</p>
-        <div class="w-20 flex gap-2">
+        <div class="w-16 flex gap-2">
           <p>
             {{ props.result.price }}
           </p>
           <p>€</p>
         </div>
       </div>
+
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Viso:</p>
-        <div class="w-20 flex gap-2">
+        <div class="w-16 flex gap-2">
           <p>
             {{ props.result.totalPrice }}
           </p>
           <p>€</p>
+        </div>
+      </div>
+
+      <div v-if="!props.hidePrices">
+        <p class="block sm:hidden font-bold">Pelnas:</p>
+        <div class="w-16 flex gap-2">
+          <p>
+            {{ props.result.profit }}
+          </p>
+          <p>€</p>
+        </div>
+      </div>
+
+      <div v-if="!props.hidePrices">
+        <p class="block sm:hidden font-bold">Marža:</p>
+        <div class="w-16 flex gap-2">
+          <p>
+            {{ props.result.margin }}
+          </p>
+          <p>%</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="block sm:hidden font-bold">Pristatyta:</p>
+        <div class="w-20 items-center">
+          <BaseCheckField
+            :name="'vartai' + index"
+            @onChange="deliverHandler"
+            :checked="result.delivered"
+            height="h-6"
+          />
         </div>
       </div>
     </div>

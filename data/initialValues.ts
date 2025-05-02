@@ -1,11 +1,4 @@
-import type {
-  Client,
-  Measure,
-  Result,
-  MenuLinks,
-  FenceMeasure,
-  Works,
-} from "~/data/interfaces";
+import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -58,6 +51,7 @@ export const navigationLinks: MenuLinks[] = [
     iconPath: "",
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
+  { name: "Sandėlys", link: "/sandelys", iconPath: "" },
   { name: "Vartai", link: "/vartai", iconPath: "" },
 ];
 

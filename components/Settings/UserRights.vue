@@ -9,18 +9,19 @@ const editable = ref(false);
 const rights = reactive({
   installation: false,
   production: false,
+  warehouse: false,
   schedule: false,
   project: false,
   admin: false,
   gate: false,
 });
-
 watchEffect(() => {
   const user = settingsStore.userRights.find((u) => u.accountType === props.accountType);
 
   if (user) {
     rights.installation = user.installation;
     rights.production = user.production;
+    rights.warehouse = user.warehouse;
     rights.schedule = user.schedule;
     rights.project = user.project;
     rights.admin = user.admin;
@@ -50,22 +51,25 @@ const saveHandler = async () => {
 <template>
   <div class="flex gap-4">
     <div class="w-48">{{ props.accountType }}</div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.project" />
     </div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.schedule" />
     </div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.production" />
     </div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.installation" />
     </div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.warehouse" />
+    </div>
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.gate" />
     </div>
-    <div class="w-24 flex justify-center">
+    <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.admin" />
     </div>
     <NuxtImg

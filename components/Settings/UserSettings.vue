@@ -8,12 +8,13 @@ const accountTypes = settingsStore.selectValues.accountTypes;
     <h3 class="text-2xl font-medium self-center">Vartotojų teisių nustatymai</h3>
     <div class="flex gap-4 text-center text-xl">
       <p class="w-48 text-start">Varotojo teises</p>
-      <p class="w-24">Projektai</p>
-      <p class="w-24">Grafikas</p>
-      <p class="w-24">Gamyba</p>
-      <p class="w-24">Montavimas</p>
-      <p class="w-24">Vartai</p>
-      <p class="w-24">Admin</p>
+      <p class="w-28">Projektai</p>
+      <p class="w-28">Grafikas</p>
+      <p class="w-28">Gamyba</p>
+      <p class="w-28">Montavimas</p>
+      <p class="w-28">Sandėlys</p>
+      <p class="w-28">Vartai</p>
+      <p class="w-28">Admin</p>
     </div>
     <SettingsUserRights
       v-for="accountType in accountTypes"

@@ -1,3 +1,4 @@
+divdivaa
 <script setup lang="ts">
 import type { Version, Comment } from "~/data/interfaces";
 const { setError, setIsError } = useError();
@@ -10,6 +11,6 @@ const offer = computed(() => projectsStore.projects.find((item) => item._id === 
 
 <template>
   <div class="flex flex-col gap-8">
-    <PreviewMain :offer="offer" location="projects" />
+    <PreviewMain :offer="offer" location="warehouse" />
   </div>
 </template>

@@ -3,7 +3,7 @@ import type { UserRights } from "~/data/interfaces";
 export const fetchInitialUserData = async (userRights: UserRights | undefined) => {
   const fetchData = [fetchUsers()];
 
-  if (userRights?.project) fetchData.push(fetchProjects());
+  if (userRights?.project || userRights?.warehouse) fetchData.push(fetchProjects());
   if (userRights?.schedule) fetchData.push(fetchSchedules());
   if (userRights?.production) fetchData.push(fetchProduction());
   if (userRights?.installation) fetchData.push(fetchInstallation());

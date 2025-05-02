@@ -13,12 +13,12 @@ const userRights = settingsStore.userRights.find(
 );
 
 const adminLinks = userRights?.admin ? optionLinks : null;
-
 const currentLinks: MenuLinks[] = navigationLinks.filter((link) => {
   if (link.name === "Projektai" && userRights?.project) return true;
   else if (link.name === "Grafikas" && userRights?.schedule) return true;
   else if (link.name === "Gamyba" && userRights?.production) return true;
   else if (link.name === "Montavimas" && userRights?.installation) return true;
+  else if (link.name === "Sandėlys" && userRights?.warehouse) return true;
   else if (link.name === "Vartai" && userRights?.gate) return true;
   else return false;
 });
@@ -38,6 +38,8 @@ const routeHandler = (newPath: string) => {
     currentPath.value = "Gamyba";
   } else if (newPath.includes("/montavimas")) {
     currentPath.value = "Montavimas";
+  } else if (newPath.includes("/sandelys")) {
+    currentPath.value = "Sandėlys";
   } else if (newPath.includes("/vartai")) {
     currentPath.value = "Vartai";
   } else {

@@ -10,7 +10,7 @@ const dateCreated = new Date(props.gate.dateCreated).getTime();
 
 const dateDifferenceMs = dateNow - dateCreated;
 const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
-console.log(dateDifference);
+
 const clickHandler = () => {
   router.push(`/vartai/${props.gate._id}`);
 };

@@ -17,9 +17,7 @@ export const useProjectsStore = defineStore("Projects", {
     },
 
     updateProject(project: Project): void {
-      this.projects = this.projects.map((item) =>
-        item._id === project._id ? project : item
-      );
+      this.projects = this.projects.map((item) => (item._id === project._id ? project : item));
     },
 
     addComment(_id: string, comment: Comment): void {
@@ -57,21 +55,13 @@ export const useProjectsStore = defineStore("Projects", {
       this.selectedProject = null;
     },
 
-    updateProjectField<T extends keyof Project>(
-      id: string,
-      field: T,
-      value: Project[T]
-    ) {
+    updateProjectField<T extends keyof Project>(id: string, field: T, value: Project[T]) {
       this.projects = this.projects.map((item) =>
         item._id === id ? { ...item, [field]: value } : item
       );
     },
 
-    updateProjectDates<T extends keyof Dates>(
-      id: string,
-      field: T,
-      value: Dates[T]
-    ) {
+    updateProjectDates<T extends keyof Dates>(id: string, field: T, value: Dates[T]) {
       this.projects = this.projects.map((item) =>
         item._id === id
           ? {
@@ -85,9 +75,7 @@ export const useProjectsStore = defineStore("Projects", {
     deleteVersion(versionId: string, projectId: string) {
       this.projects = this.projects.map((item) => {
         if (item._id === projectId) {
-          item.versions = item.versions.filter(
-            (version) => version._id !== versionId
-          );
+          item.versions = item.versions.filter((version) => version._id !== versionId);
           return item;
         } else return item;
       });
@@ -100,6 +88,33 @@ export const useProjectsStore = defineStore("Projects", {
           return item;
         } else return item;
       });
+    },
+  },
+
+  getters: {
+    getConfirmed: (state) => {
+      return state.projects.filter(
+        (project) =>
+          project.status !== "Nepatvirtintas" &&
+          project.status !== "Tinkamas" &&
+          project.status !== "Netinkamas" &&
+          project.status !== "Baigtas" &&
+          project.status !== "Pridavimas" &&
+          project.status !== "Apmokėjimas"
+      );
+    },
+
+    searchGetConfirmed: (state) => {
+      return (value: string) => {
+        return useProjectsStore().getConfirmed.filter(
+          (project: Project) =>
+            project.client.address.toLowerCase().includes(value.toLowerCase()) ||
+            project.client.email.toLowerCase().includes(value.toLowerCase()) ||
+            project.client.phone.toLowerCase().includes(value.toLowerCase()) ||
+            project.client.username.toLowerCase().includes(value.toLowerCase()) ||
+            project.orderNumber.toLowerCase().includes(value.toLowerCase())
+        );
+      };
     },
   },
 });

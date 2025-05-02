@@ -512,6 +512,7 @@ export interface UserRights {
   installation: boolean;
   gate: boolean;
   admin: boolean;
+  warehouse: boolean;
 }
 
 export interface PotentialClient {
