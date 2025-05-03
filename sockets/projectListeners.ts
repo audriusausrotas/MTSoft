@@ -58,4 +58,7 @@ export default function projectListeners(socket: Socket) {
   socket.on("deleteProjectComment", ({ _id, comment }) => {
     projectsStore.deleteComment(_id, comment);
   });
+  socket.on("changeCompletionDate", ({ _id, date }) => {
+    projectsStore.changeCompletionDate(_id, date);
+  });
 }

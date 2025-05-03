@@ -14,6 +14,8 @@ const userStore = useUserStore();
 const isOpenInstallation = ref<boolean>(false);
 const isOpenGates = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
+const isChangeDate = ref<boolean>(false);
+const date = ref<Date | null>(null);
 
 const allUsers = computed(() =>
   userStore.users
@@ -277,31 +279,53 @@ const deleteComment = async (comment: Comment) => {
     setError(response.message);
   }
 };
+
+const cancelHandler = () => {
+  isChangeDate.value = false;
+  date.value = null;
+};
+
+const dateHandler = async () => {
+  const requestData = {
+    _id: props.offer?._id,
+    date: date.value,
+  };
+
+  const response: any = await request.patch("changeCompletionDate", requestData);
+  if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.changeCompletionDate(response.data._id, response.data.date);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+  cancelHandler();
+};
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <div
-      v-if="props.location === 'projects'"
-      class="flex gap-4 flex-wrap justify-around lg:justify-normal"
-    >
-      <BaseButtonWithConfirmation
-        name="išsiūsti pasiūlymą"
-        @onConfirm="sendEmailHandler"
-        :isLoading="isLoading"
-      />
-
-      <BaseButtonWithInput name="Pridėti avansą" @onConfirm="advanceHandler" type="number" />
-
+    <div class="flex gap-4 flex-wrap justify-around lg:justify-normal">
       <BaseInput
         v-if="props.location === 'projects'"
         :disable="true"
+        label="Avansas"
         :name="props.offer?.advance"
       />
 
+      <BaseInput
+        v-if="props.location !== 'installation'"
+        :disable="true"
+        label="Darbų pradžia"
+        :name="props.offer?.dates?.dateCompletion"
+      />
+
       <BaseSelectField
+        v-if="props.location === 'projects'"
         :values="statusValues"
         id="orderStatus"
+        label="Statusas"
         :defaultValue="props.offer?.status"
         width="w-60"
         @onChange="(value: string) => statusHandler(value)
@@ -309,9 +333,11 @@ const deleteComment = async (comment: Comment) => {
       />
 
       <BaseSelectField
+        v-if="props.location === 'projects'"
         :values="allUsers"
         id="changeCreator"
         width="w-60"
+        label="Atsakingas vadybininkas"
         :defaultValue="props.offer?.creator.username"
         @onChange="(value: string) => changeCreatorHandler(value)
               "
@@ -319,15 +345,54 @@ const deleteComment = async (comment: Comment) => {
     </div>
 
     <div class="flex gap-4 w-full flex-wrap justify-around lg:justify-normal">
+      <BaseButtonWithConfirmation
+        v-if="props.location === 'projects'"
+        name="išsiūsti pasiūlymą"
+        @onConfirm="sendEmailHandler"
+        :isLoading="isLoading"
+      />
+
+      <BaseButtonWithInput
+        v-if="props.location === 'projects'"
+        name="Pridėti avansą"
+        @onConfirm="advanceHandler"
+        type="number"
+      />
+
+      <div v-if="props.location !== 'installation'" class="flex gap-4 items-end">
+        <BaseButton
+          v-if="!isChangeDate"
+          name="Pakeisti darbų pradžios datą"
+          @click="isChangeDate = true"
+        />
+
+        <div v-else class="w-60">
+          <div
+            class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
+          >
+            <button class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full" @click="dateHandler">
+              Patvirtinti
+            </button>
+            <button
+              class="flex-1 px-4 py-2 font-bold bg-dark-full text-red-full hover:text-black hover:bg-red-full"
+              @click="cancelHandler"
+            >
+              X
+            </button>
+          </div>
+        </div>
+      </div>
+
       <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" category="projects" />
 
       <BaseButtonWithConfirmation
+        v-if="props.location !== 'installation'"
         name="Į gamybą"
         @onConfirm="productionHandler"
         :isLoading="isLoading"
       />
 
-      <div>
+      <div v-if="props.location !== 'installation'">
         <BaseButton
           v-if="!isOpenInstallation"
           name="Į montavimą"
@@ -346,7 +411,7 @@ const deleteComment = async (comment: Comment) => {
         />
       </div>
 
-      <div class="flex gap-4 items-end">
+      <div v-if="props.location !== 'installation'" class="flex gap-4 items-end">
         <BaseButton
           v-if="!props.showButtons"
           name="Užsakyti medžiagas"
@@ -373,7 +438,7 @@ const deleteComment = async (comment: Comment) => {
         </div>
       </div>
 
-      <div v-if="gateExist" class="flex gap-4 items-end">
+      <div v-if="gateExist && props.location !== 'installation'" class="flex gap-4 items-end">
         <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHandler" />
 
         <BaseButton
@@ -395,12 +460,17 @@ const deleteComment = async (comment: Comment) => {
       </div>
 
       <BaseButtonWithConfirmation
+        v-if="props.location !== 'installation'"
         name="Baigti užsakymą"
         @onConfirm="
           props.location === 'production' ? orderFinishHandler : statusHandler('Pridavimas')
         "
         :isLoading="isLoading"
       />
+    </div>
+    <div v-if="isChangeDate" class="border py-2 px-4 rounded w-fit shadow-lg">
+      <p class="font-medium">Pasirinkti datą:</p>
+      <input type="date" v-model="date" />
     </div>
   </div>
 </template>

@@ -3,7 +3,7 @@ const props = defineProps(["order"]);
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-8">
     <div class="flex gap-4 flex-wrap justify-around">
       <PreviewProductionFence
         v-for="(fence, index) in props.order?.fences"

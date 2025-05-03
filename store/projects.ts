@@ -98,6 +98,15 @@ export const useProjectsStore = defineStore("Projects", {
         } else return item;
       });
     },
+
+    changeCompletionDate(_id: string, date: string) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === _id) {
+          item.dates.dateCompletion = date;
+          return item;
+        } else return item;
+      });
+    },
   },
 
   getters: {

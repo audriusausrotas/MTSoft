@@ -140,7 +140,10 @@ const cancelHandler = () => {
       :showButtons="showOrderButtons"
     />
 
-    <div v-if="showOrderButtons" class="flex gap-4 flex-wrap justify-around md:justify-normal">
+    <div
+      v-if="showOrderButtons"
+      class="flex gap-4 flex-wrap justify-around md:justify-normal border px-4 py-2 w-fit rounded-lg shadow-lg"
+    >
       <div class="flex flex-col">
         <label for="finalDate" class="font-medium mb-1">Pristatymo data iki:</label>
         <input v-model="date" type="date" id="finalDate" name="finalDate" class="" />

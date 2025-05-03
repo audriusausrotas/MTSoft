@@ -23,7 +23,7 @@ const props = defineProps(["client", "orderNr", "creator", "location"]);
         <BaseInput
           :disable="true"
           :name="props.client?.email"
-          label="elektroninis pastas"
+          label="elektroninis paštas"
           class="pointer-events-none print:hidden"
         />
       </a>
@@ -31,7 +31,7 @@ const props = defineProps(["client", "orderNr", "creator", "location"]);
         v-if="props.location !== 'projects'"
         :disable="true"
         :name="props.creator?.username"
-        label="Atsakingas"
+        label="Atsakingas vadybininkas"
       />
     </div>
   </div>
