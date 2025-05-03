@@ -2,7 +2,6 @@
 import { useRoute } from "vue-router";
 import type { Project } from "~/data/interfaces";
 
-const { setError, setIsError } = useError();
 const projectsStore = useProjectsStore();
 const route = useRoute();
 
@@ -16,9 +15,6 @@ if (!offer.value) {
   const remoteOffer = await fetchProject(route.params.id as string);
   if (remoteOffer) {
     offer.value = remoteOffer;
-  } else {
-    setIsError(true);
-    setError("Nepavyko rasti projekto.");
   }
 }
 </script>

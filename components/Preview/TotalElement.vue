@@ -4,7 +4,7 @@ const props = defineProps(["totals", "priceWithDiscount"]);
 
 <template>
   <div
-    class="flex gap-20 items-start bg-red-ulta-light w-full justify-center p-8 rounded-xl border border-dashed font-medium text-lg border-dark-light"
+    class="flex max-w-[1000px] m-auto gap-8 justify-evenly items-start bg-red-ulta-light w-full py-8 rounded-xl border border-dashed font-medium text-lg border-dark-light flex-wrap"
   >
     <div class="flex flex-col gap-4">
       <div>Kaina: {{ (props.totals?.price).toFixed(2) }}</div>

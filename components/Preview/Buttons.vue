@@ -281,7 +281,10 @@ const deleteComment = async (comment: Comment) => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <div v-if="props.location === 'projects'" class="flex gap-4">
+    <div
+      v-if="props.location === 'projects'"
+      class="flex gap-4 flex-wrap justify-around lg:justify-normal"
+    >
       <BaseButtonWithConfirmation
         name="išsiūsti pasiūlymą"
         @onConfirm="sendEmailHandler"
@@ -315,7 +318,7 @@ const deleteComment = async (comment: Comment) => {
       />
     </div>
 
-    <div class="flex gap-4 w-full">
+    <div class="flex gap-4 w-full flex-wrap justify-around lg:justify-normal">
       <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" category="projects" />
 
       <BaseButtonWithConfirmation

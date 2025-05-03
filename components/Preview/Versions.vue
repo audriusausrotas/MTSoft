@@ -12,7 +12,7 @@ const versionsHandler = (id: string) => {
     class="flex flex-col gap-2 text-center w-full"
   >
     <p class="font-medium text-2xl">Projekto versijos</p>
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap justify-around lg:justify-normal">
       <div
         v-for="(version, index) in props.versions"
         :key="version.id"

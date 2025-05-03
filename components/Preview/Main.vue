@@ -1,10 +1,25 @@
 <script setup lang="ts">
+import type { Production } from "~/data/interfaces";
+
 const props = defineProps(["offer", "location"]);
 
 const { setError, setIsError } = useError();
 
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
 let selectedProducts: any = [];
+
+const production = ref<Production | null>(null);
+
+const localOffer = useProductionStore().production.find((item) => item._id === props.offer._id);
+if (localOffer) {
+  production.value = localOffer;
+}
+if (!production.value) {
+  const remoteOffer = await fetchProduction(props.offer._id as string);
+  if (remoteOffer) {
+    production.value = remoteOffer;
+  }
+}
 
 const deliveryMethod = ref<string>(deliveryValues[0]);
 const showOrderButtons = ref<boolean>(false);
@@ -125,7 +140,7 @@ const cancelHandler = () => {
       :showButtons="showOrderButtons"
     />
 
-    <div v-if="showOrderButtons" class="flex gap-4">
+    <div v-if="showOrderButtons" class="flex gap-4 flex-wrap justify-around md:justify-normal">
       <div class="flex flex-col">
         <label for="finalDate" class="font-medium mb-1">Pristatymo data iki:</label>
         <input v-model="date" type="date" id="finalDate" name="finalDate" class="" />
@@ -145,13 +160,13 @@ const cancelHandler = () => {
     <PreviewTotalElement
       v-if="props.location === 'projects'"
       :totals="totals"
-      :discount="offer.discount"
-      :priceWithDiscount="offer.discount ? offer.priceWithDiscount : null"
+      :discount="offer?.discount"
+      :priceWithDiscount="offer?.discount ? offer?.priceWithDiscount : null"
     />
 
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 flex">
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
         <div class="w-6 text-center">Nr</div>
         <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
@@ -184,7 +199,7 @@ const cancelHandler = () => {
 
     <div class="text-2xl font-semibold text-black text-center">Darbai</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 flex">
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
@@ -205,14 +220,24 @@ const cancelHandler = () => {
         <PreviewTotal v-if="props.location === 'projects'" :values="worksTotal" />
       </div>
     </div>
-    <div class="flex gap-8 justify-evenly flex-wrap">
-      <PreviewMeasures
-        v-for="(fence, index) in props.offer?.fenceMeasures"
-        :key="fence.id"
-        :fence="fence"
-        :index="index"
-        :showFull="true"
-      />
+
+    <div class="flex flex-col items-center gap-4 border-y py-4">
+      <div class="font-semibold text-2xl">Matavimai</div>
+      <div class="flex gap-8 flex-wrap justify-around">
+        <PreviewMeasures
+          v-for="(fence, index) in props.offer?.fenceMeasures"
+          :key="fence.id"
+          :fence="fence"
+          :index="index"
+          :showFull="true"
+        />
+      </div>
+    </div>
+
+    <div v-if="production" class="flex flex-col items-center gap-4">
+      <div class="font-semibold text-2xl">Gamyba</div>
+
+      <PreviewProduction v-if="production" :order="production" :location="props.location" />
     </div>
   </div>
 </template>

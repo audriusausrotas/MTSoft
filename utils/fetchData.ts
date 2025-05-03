@@ -19,13 +19,23 @@ export async function fetchGates() {
   }
 }
 
-export async function fetchProduction() {
+export async function fetchProductions() {
   try {
-    const response: any = await request.get("getProduction");
+    const response: any = await request.get("getProductions");
     response.success && useProductionStore().addAll(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
+  }
+}
+
+export async function fetchProduction(id: string) {
+  try {
+    const response: any = await request.get(`getProduction/${id}`);
+    if (response.success) return response.data;
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return null;
   }
 }
 

@@ -48,10 +48,10 @@ const selectData = (value: boolean) => {
 
 <template>
   <div
-    class="flex w-full flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-6 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
+    class="flex w-full flex-col lg:flex-row border-b-2 print:gap-6 gap-4 items-start lg:gap-6 lg:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 lg:px-2 py-[10px] print:py-2 border-red-full lg:border-none"
   >
     <div class="flex">
-      <p class="block sm:hidden font-bold">Nr.:</p>
+      <p class="block lg:hidden font-bold">Nr.:</p>
       <div class="w-6 text-center">{{ props.index + 1 }}</div>
     </div>
 
@@ -64,10 +64,10 @@ const selectData = (value: boolean) => {
       />
     </div>
 
-    <div class="border sm:hidden w-full"></div>
+    <div class="border lg:hidden w-full"></div>
     <div class="flex-1">
-      <p class="block sm:hidden font-bold">Pavadinimas:</p>
-      <div class="flex print:gap-4 gap-2 sm:gap-8">
+      <p class="block lg:hidden font-bold">Pavadinimas:</p>
+      <div class="flex print:gap-4 gap-2 lg:gap-8">
         <span class="w-fit">{{ props.result.type }}</span>
         <span v-if="props.result.seeThrough">{{ props.result.seeThrough }}</span>
         <span
@@ -86,10 +86,10 @@ const selectData = (value: boolean) => {
         </span>
       </div>
     </div>
-    <div class="border sm:hidden w-full"></div>
-    <div class="flex print:gap-6 gap-6">
+    <div class="border lg:hidden w-full"></div>
+    <div class="flex print:gap-6 gap-6 flex-wrap">
       <div>
-        <p class="block sm:hidden font-bold">Kiekis:</p>
+        <p class="block lg:hidden font-bold">Kiekis:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.quantity }}
@@ -99,7 +99,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div v-if="!props.hidePrices">
-        <p class="block sm:hidden font-bold">Savikaina:</p>
+        <p class="block lg:hidden font-bold">Savikaina:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.cost }}
@@ -109,7 +109,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div v-if="!props.hidePrices">
-        <p class="block sm:hidden font-bold">Kaina:</p>
+        <p class="block lg:hidden font-bold">Kaina:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.price }}
@@ -119,7 +119,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div v-if="!props.hidePrices">
-        <p class="block sm:hidden font-bold">Viso:</p>
+        <p class="block lg:hidden font-bold">Viso:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.totalPrice }}
@@ -129,7 +129,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div v-if="!props.hidePrices">
-        <p class="block sm:hidden font-bold">Pelnas:</p>
+        <p class="block lg:hidden font-bold">Pelnas:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.profit }}
@@ -139,7 +139,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div v-if="!props.hidePrices">
-        <p class="block sm:hidden font-bold">Marža:</p>
+        <p class="block lg:hidden font-bold">Marža:</p>
         <div class="w-20 flex gap-2">
           <p>
             {{ props.result.margin }}
@@ -149,7 +149,7 @@ const selectData = (value: boolean) => {
       </div>
 
       <div>
-        <p class="block sm:hidden font-bold">Pristatyta:</p>
+        <p class="block lg:hidden font-bold">Pristatyta:</p>
         <div
           class="w-16 items-center"
           :class="props.location === 'installation' ? 'pointer-events-none ' : ''"
