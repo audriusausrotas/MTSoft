@@ -8,18 +8,16 @@ const { setError, setIsError } = useError();
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
 let selectedProducts: any = [];
 
-const production = ref<Production | null>(null);
-
-const localOffer = useProductionStore().production.find((item) => item._id === props.offer._id);
-if (localOffer) {
-  production.value = localOffer;
-}
-if (!production.value) {
-  const remoteOffer = await fetchProduction(props.offer._id as string);
-  if (remoteOffer) {
-    production.value = remoteOffer;
+onMounted(async () => {
+  const exists = useProductionStore().production.find((item) => item._id === props.offer._id);
+  if (!exists) {
+    await fetchProduction(props.offer._id as string);
   }
-}
+});
+
+const production = computed<Production | null>(
+  () => useProductionStore().production.find((item) => item._id === props.offer._id) ?? null
+);
 
 const deliveryMethod = ref<string>(deliveryValues[0]);
 const showOrderButtons = ref<boolean>(false);
@@ -285,7 +283,7 @@ const deleteComment = async (_id: string, comment: Comment) => {
     <div v-if="production" class="flex flex-col items-center gap-4">
       <div class="font-semibold text-2xl">Gamyba</div>
 
-      <PreviewProduction v-if="production" :order="production" :location="props.location" />
+      <PreviewProduction :order="production" />
     </div>
   </div>
 </template>

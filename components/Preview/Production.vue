@@ -6,13 +6,9 @@ const props = defineProps(["order"]);
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 flex-wrap justify-around">
       <PreviewProductionFence
-        v-for="(fence, index) in props.order?.fences"
+        v-for="fence in props.order?.fences"
         :key="fence._id"
         :fence="fence"
-        :fenceIndex="index"
-        :_id="props.order._id"
-        :orderNr="props.order?.orderNumber"
-        :clientAddress="props.order?.client.address"
       />
     </div>
 

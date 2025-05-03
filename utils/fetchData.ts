@@ -32,10 +32,10 @@ export async function fetchProductions() {
 export async function fetchProduction(id: string) {
   try {
     const response: any = await request.get(`getProduction/${id}`);
-    if (response.success) return response.data;
+    response.success && useProductionStore().addProduction(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
-    return null;
+    return { success: false, data: null };
   }
 }
 
@@ -63,11 +63,11 @@ export async function fetchProject(id: string) {
   try {
     const response: any = await request.get(`getProject/${id}`);
     if (response.success) {
-      return response.data;
+      response.success && useProjectsStore().addProject(response.data);
     }
   } catch (error) {
     console.log("Serverio klaida: " + error);
-    return null;
+    return { success: false, data: null };
   }
 }
 

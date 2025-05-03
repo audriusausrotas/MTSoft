@@ -5,18 +5,16 @@ import type { Project } from "~/data/interfaces";
 const projectsStore = useProjectsStore();
 const route = useRoute();
 
-const offer = ref<Project | null>(null);
-
-const localOffer = projectsStore.projects.find((item) => item._id === route.params.id);
-if (localOffer) {
-  offer.value = localOffer;
-}
-if (!offer.value) {
-  const remoteOffer = await fetchProject(route.params.id as string);
-  if (remoteOffer) {
-    offer.value = remoteOffer;
+onMounted(async () => {
+  const exists = projectsStore.projects.find((project) => project._id === route.params.id);
+  if (!exists) {
+    await fetchProject(route.params.id as string);
   }
-}
+});
+
+const offer = computed<Project | null>(
+  () => projectsStore.projects.find((project) => project._id === route.params.id) ?? null
+);
 </script>
 
 <template>

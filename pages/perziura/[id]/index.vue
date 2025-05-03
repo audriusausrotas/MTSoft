@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import type { Version, Comment } from "~/data/interfaces";
-const { setError, setIsError } = useError();
-
 const projectsStore = useProjectsStore();
 const route = useRoute();
 
