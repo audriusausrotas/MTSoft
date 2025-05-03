@@ -112,6 +112,43 @@ const cancelHandler = () => {
   deliveryMethod.value = deliveryValues[0];
   date.value = null;
 };
+
+const addComment = async (comment: Comment) => {
+  const requestData = {
+    _id: props.offer?._id,
+    comment,
+    username: useUserStore().user?.username,
+  };
+
+  const response: any = await request.post("addProjectComment", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      useProjectsStore().addComment(response.data._id, response.data.comment);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
+const deleteComment = async (_id: string, comment: Comment) => {
+  const requestData = {
+    _id,
+    comment,
+  };
+
+  const response: any = await request.delete("deleteProjectComment", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      useProjectsStore().deleteComment(response.data._id, response.data.comment);
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
@@ -158,7 +195,15 @@ const cancelHandler = () => {
       />
     </div>
 
-    <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
+    <BaseGalleryElement :_id="offer?._id" :files="offer?.files" :category="props.location" />
+
+    <BaseComment
+      :commentsArray="props.offer?.comments"
+      :id="props.offer?._id"
+      @onSave="addComment"
+      class="max-w-[1260px]"
+      @onDelete="deleteComment"
+    />
 
     <PreviewTotalElement
       v-if="props.location === 'projects'"

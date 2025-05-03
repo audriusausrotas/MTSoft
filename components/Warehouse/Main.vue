@@ -18,7 +18,7 @@ const colorCompletion = computed(() => {
   const today = new Date();
   const completionDate = new Date(props.project?.dates?.dateCompletion);
 
-  const time = Math.ceil((tenDaysLater.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const time = Math.ceil((completionDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
   return time > 30
     ? "bg-green-300"
@@ -57,7 +57,7 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
     !useSocketStore().connected &&
-      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
+      useProjectsStore().updateProjectField(response.data._id, "status", response.data.status);
     setIsError(false);
     setError(response.message);
   } else {

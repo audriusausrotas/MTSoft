@@ -243,43 +243,6 @@ const installationHandler = async (value: string) => {
   isOpenInstallation.value = false;
 };
 
-const addComment = async (comment: Comment) => {
-  const requestData = {
-    _id: props.offer?._id,
-    comment,
-    username: userStore.user?.username,
-  };
-
-  const response: any = await request.post("addProjectComment", requestData);
-
-  if (response.success) {
-    !useSocketStore().connected &&
-      projectsStore.addComment(response.data._id, response.data.comment);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-};
-
-const deleteComment = async (comment: Comment) => {
-  const requestData = {
-    _id: props.offer?._id,
-    comment,
-  };
-
-  const response: any = await request.delete("deleteProjectComment", requestData);
-
-  if (response.success) {
-    !useSocketStore().connected &&
-      projectsStore.deleteComment(response.data._id, response.data.comment);
-    setIsError(false);
-    setError(response.message);
-  } else {
-    setError(response.message);
-  }
-};
-
 const cancelHandler = () => {
   isChangeDate.value = false;
   date.value = null;
@@ -383,7 +346,7 @@ const dateHandler = async () => {
         </div>
       </div>
 
-      <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" category="projects" />
+      <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" :category="props.location" />
 
       <BaseButtonWithConfirmation
         v-if="props.location !== 'installation'"

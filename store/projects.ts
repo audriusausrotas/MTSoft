@@ -33,10 +33,7 @@ export const useProjectsStore = defineStore("Projects", {
       this.projects = this.projects.map((project) => {
         if (project._id === _id) {
           project.comments = project.comments.filter(
-            (item) =>
-              item.date !== comment.date &&
-              item.creator !== comment.creator &&
-              item.comment !== comment.comment
+            (item) => item.date !== comment.date && item.comment !== comment.comment
           );
           return project;
         } else return project;
