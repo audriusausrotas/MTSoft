@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons"]);
+const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons", "location"]);
 const emit = defineEmits(["checked", "unchecked"]);
 
 const { setError, setIsError } = useError();
@@ -22,7 +22,7 @@ const deliverHandler = async (value: boolean) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useInstallationStore().updatePartsDelivered(
+      useProjectsStore().partsDelivered(
         response.data._id,
         response.data.measureIndex,
         response.data.value
@@ -39,6 +39,7 @@ const selectData = (value: boolean) => {
     name: props.result.type,
     color: props.result.color,
     quantity: props.result.quantity,
+    measureIndex: props.index,
   };
 
   value ? emit("checked", data) : emit("unchecked", data.name);
@@ -47,7 +48,7 @@ const selectData = (value: boolean) => {
 
 <template>
   <div
-    class="flex w-full flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-10 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
+    class="flex w-full flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-6 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
   >
     <div class="flex">
       <p class="block sm:hidden font-bold">Nr.:</p>
@@ -58,7 +59,7 @@ const selectData = (value: boolean) => {
       <BaseCheckField
         :name="'order' + index"
         @onChange="selectData"
-        :checked="false"
+        :checked="props.result.delivered"
         height="h-6"
       />
     </div>
@@ -86,7 +87,7 @@ const selectData = (value: boolean) => {
       </div>
     </div>
     <div class="border sm:hidden w-full"></div>
-    <div class="flex print:gap-6 gap-10">
+    <div class="flex print:gap-6 gap-6">
       <div>
         <p class="block sm:hidden font-bold">Kiekis:</p>
         <div class="w-20 flex gap-2">
@@ -99,7 +100,7 @@ const selectData = (value: boolean) => {
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Savikaina:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.result.cost }}
           </p>
@@ -109,7 +110,7 @@ const selectData = (value: boolean) => {
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Kaina:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.result.price }}
           </p>
@@ -119,7 +120,7 @@ const selectData = (value: boolean) => {
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Viso:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.result.totalPrice }}
           </p>
@@ -129,7 +130,7 @@ const selectData = (value: boolean) => {
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Pelnas:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.result.profit }}
           </p>
@@ -139,7 +140,7 @@ const selectData = (value: boolean) => {
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Marža:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.result.margin }}
           </p>
@@ -149,7 +150,10 @@ const selectData = (value: boolean) => {
 
       <div>
         <p class="block sm:hidden font-bold">Pristatyta:</p>
-        <div class="w-20 items-center">
+        <div
+          class="w-16 items-center"
+          :class="props.location === 'installation' ? 'pointer-events-none ' : ''"
+        >
           <BaseCheckField
             :name="'vartai' + index"
             @onChange="deliverHandler"

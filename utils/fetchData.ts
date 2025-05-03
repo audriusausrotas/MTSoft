@@ -49,6 +49,18 @@ export async function fetchProjects() {
   }
 }
 
+export async function fetchProject(id: string) {
+  try {
+    const response: any = await request.get(`getProject/${id}`);
+    if (response.success) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return null;
+  }
+}
+
 export async function fetchProducts() {
   try {
     const response: any = await request.get("getProducts");

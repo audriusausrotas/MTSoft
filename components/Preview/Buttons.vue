@@ -344,59 +344,51 @@ const deleteComment = async (comment: Comment) => {
       </div>
 
       <div class="flex gap-4 items-end">
-        <div>
-          <BaseButton
-            v-if="!props.showButtons"
-            name="Užsakyti medžiagas"
-            @click="emit('openOrder')"
-          />
+        <BaseButton
+          v-if="!props.showButtons"
+          name="Užsakyti medžiagas"
+          @click="emit('openOrder')"
+        />
 
-          <div v-else class="w-60">
-            <div
-              class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
+        <div v-else class="w-60">
+          <div
+            class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
+          >
+            <button
+              class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full"
+              @click="emit('conformOrder')"
             >
-              <button
-                class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full"
-                @click="emit('conformOrder')"
-              >
-                Patvirtinti
-              </button>
-              <button
-                class="flex-1 px-4 py-2 font-bold bg-dark-full text-red-full hover:text-black hover:bg-red-full"
-                @click="emit('cancel')"
-              >
-                X
-              </button>
-            </div>
+              Patvirtinti
+            </button>
+            <button
+              class="flex-1 px-4 py-2 font-bold bg-dark-full text-red-full hover:text-black hover:bg-red-full"
+              @click="emit('cancel')"
+            >
+              X
+            </button>
           </div>
         </div>
       </div>
 
-      <div class="flex gap-4 items-end">
-        <div v-if="gateExist">
-          <BaseButton
-            v-if="gateOrdered"
-            name="Atšaukti vartų užsakymą"
-            @click="gateCancelHandler"
-          />
+      <div v-if="gateExist" class="flex gap-4 items-end">
+        <BaseButton v-if="gateOrdered" name="Atšaukti vartų užsakymą" @click="gateCancelHandler" />
 
-          <BaseButton
-            v-else-if="!gateOrdered && !isOpenGates"
-            name="Užsakyti vartus"
-            @click="isOpenGates = true"
-            :isLoading="isLoading"
-          />
+        <BaseButton
+          v-else-if="!gateOrdered && !isOpenGates"
+          name="Užsakyti vartus"
+          @click="isOpenGates = true"
+          :isLoading="isLoading"
+        />
 
-          <BaseSelectField
-            v-else-if="!gateOrdered && isOpenGates"
-            :values="gateUsers"
-            id="userSelect"
-            defaultValue="Priskirti vartotoja"
-            width="w-60"
-            @onChange="(value: string) => gateOrderHandler(value)
+        <BaseSelectField
+          v-else-if="!gateOrdered && isOpenGates"
+          :values="gateUsers"
+          id="userSelect"
+          defaultValue="Priskirti vartotoja"
+          width="w-60"
+          @onChange="(value: string) => gateOrderHandler(value)
                 "
-          />
-        </div>
+        />
       </div>
 
       <BaseButtonWithConfirmation

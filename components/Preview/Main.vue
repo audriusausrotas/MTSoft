@@ -18,8 +18,8 @@ const resultsTotal = computed(() => {
   let count = 0;
 
   for (const result of props.offer.results) {
-    cost += result.cost;
-    price += result.price;
+    cost += result.cost * result.quantity;
+    price += result.price * result.quantity;
     profit += result.profit;
     tempMargin += result.margin;
     count++;
@@ -37,8 +37,8 @@ const worksTotal = computed(() => {
   let count = 0;
 
   for (const result of props.offer.works) {
-    cost += result.cost;
-    price += result.price;
+    cost += result.cost * result.quantity;
+    price += result.price * result.quantity;
     profit += result.profit;
     tempMargin += result.margin;
     count++;
@@ -48,8 +48,18 @@ const worksTotal = computed(() => {
   return { cost, price, profit, margin };
 });
 
+const totals = computed(() => {
+  const cost = resultsTotal.value.cost + worksTotal.value.cost;
+  const price = resultsTotal.value.price + worksTotal.value.price;
+  const profit = resultsTotal.value.profit + worksTotal.value.profit;
+  const margin = (resultsTotal.value.margin + worksTotal.value.margin) / 2;
+
+  return { cost, price, profit, margin };
+});
+
 const orderConfirmHandler = async () => {
   const requestData = {
+    _id: props.offer?._id,
     data: selectedProducts,
     client: props.offer?.client,
     date: date.value,
@@ -59,6 +69,12 @@ const orderConfirmHandler = async () => {
   const response: any = await request.post("orderProducts", requestData);
 
   if (response.success) {
+    if (!useSocketStore().connected) {
+      for (const item of response.data.data) {
+        useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
+      }
+    }
+
     cancelHandler();
     setIsError(false);
     setError(response.message);
@@ -126,19 +142,26 @@ const cancelHandler = () => {
 
     <BaseGalleryElement :_id="offer?._id" :files="offer?.files" category="projects" />
 
+    <PreviewTotalElement
+      v-if="props.location === 'projects'"
+      :totals="totals"
+      :discount="offer.discount"
+      :priceWithDiscount="offer.discount ? offer.priceWithDiscount : null"
+    />
+
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-10 px-2 py-2 flex">
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 flex">
         <div class="w-6 text-center">Nr</div>
         <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
-        <div v-if="props.location === 'projects'" class="w-16">Savikaina</div>
-        <div v-if="props.location === 'projects'" class="w-16">Kaina</div>
-        <div v-if="props.location === 'projects'" class="w-16">Viso</div>
-        <div v-if="props.location === 'projects'" class="w-16">Pelnas</div>
-        <div v-if="props.location === 'projects'" class="w-16">Marža</div>
-        <div class="w-20">Pristatyta</div>
+        <div v-if="props.location === 'projects'" class="w-20">Savikaina</div>
+        <div v-if="props.location === 'projects'" class="w-20">Kaina</div>
+        <div v-if="props.location === 'projects'" class="w-20">Viso</div>
+        <div v-if="props.location === 'projects'" class="w-20">Pelnas</div>
+        <div v-if="props.location === 'projects'" class="w-20">Marža</div>
+        <div class="w-16">Pristatyta</div>
       </div>
 
       <div class="border-dark-full">
@@ -148,27 +171,28 @@ const cancelHandler = () => {
           :result="result"
           :index="index"
           :_id="props.offer._id"
+          :location="props.location"
           :hidePrices="location !== 'projects'"
           :showbuttons="showOrderButtons"
           @checked="checkedHandler"
           @unchecked="uncheckedHandler"
         />
 
-        <PreviewTotal v-if="props.location === 'projects'" :values="resultsTotal" />
+        <PreviewTotal v-if="props.location === 'projects'" :values="resultsTotal" :parts="true" />
       </div>
     </div>
 
     <div class="text-2xl font-semibold text-black text-center">Darbai</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-10 px-2 py-2 flex">
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 flex">
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
-        <div v-if="props.location === 'projects'" class="w-16">Savikaina</div>
-        <div v-if="props.location === 'projects'" class="w-16">Kaina</div>
-        <div v-if="props.location === 'projects'" class="w-16">Viso</div>
-        <div v-if="props.location === 'projects'" class="w-16">Pelnas</div>
-        <div v-if="props.location === 'projects'" class="w-16">Marža</div>
+        <div v-if="props.location === 'projects'" class="w-20">Savikaina</div>
+        <div v-if="props.location === 'projects'" class="w-20">Kaina</div>
+        <div v-if="props.location === 'projects'" class="w-20">Viso</div>
+        <div v-if="props.location === 'projects'" class="w-20">Pelnas</div>
+        <div v-if="props.location === 'projects'" class="w-20">Marža</div>
       </div>
       <div class="print:border-b border-dark-full">
         <PreviewWorks
@@ -181,7 +205,7 @@ const cancelHandler = () => {
         <PreviewTotal v-if="props.location === 'projects'" :values="worksTotal" />
       </div>
     </div>
-    <!-- <div class="flex gap-8 justify-evenly flex-wrap">
+    <div class="flex gap-8 justify-evenly flex-wrap">
       <PreviewMeasures
         v-for="(fence, index) in props.offer?.fenceMeasures"
         :key="fence.id"
@@ -189,7 +213,7 @@ const cancelHandler = () => {
         :index="index"
         :showFull="true"
       />
-    </div> -->
+    </div>
   </div>
 </template>
 <style scoped></style>

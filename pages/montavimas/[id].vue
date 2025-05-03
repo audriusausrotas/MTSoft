@@ -1,15 +1,30 @@
 <script setup lang="ts">
-import type { Version, Comment } from "~/data/interfaces";
-const { setError, setIsError } = useError();
+import { useRoute } from "vue-router";
+import type { Project } from "~/data/interfaces";
 
+const { setError, setIsError } = useError();
 const projectsStore = useProjectsStore();
 const route = useRoute();
 
-const offer = computed(() => projectsStore.projects.find((item) => item._id === route.params.id));
+const offer = ref<Project | null>(null);
+
+const localOffer = projectsStore.projects.find((item) => item._id === route.params.id);
+if (localOffer) {
+  offer.value = localOffer;
+}
+if (!offer.value) {
+  const remoteOffer = await fetchProject(route.params.id as string);
+  if (remoteOffer) {
+    offer.value = remoteOffer;
+  } else {
+    setIsError(true);
+    setError("Nepavyko rasti projekto.");
+  }
+}
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div v-if="offer" class="flex flex-col gap-8">
     <PreviewMain :offer="offer" location="installation" />
   </div>
 </template>

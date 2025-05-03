@@ -89,6 +89,15 @@ export const useProjectsStore = defineStore("Projects", {
         } else return item;
       });
     },
+
+    partsDelivered(_id: string, measureIndex: number, value: boolean) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === _id) {
+          item.results[measureIndex].delivered = value;
+          return item;
+        } else return item;
+      });
+    },
   },
 
   getters: {

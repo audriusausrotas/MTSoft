@@ -1,27 +1,17 @@
 <script setup lang="ts">
-const props = defineProps(["values"]);
+const props = defineProps(["values", "parts"]);
 </script>
 
 <template>
-  <div class="flex gap-2 text-xl font-semibold justify-end">
-    <div class="flex flex-col gap-2 w-fit rounded-lg p-4 shadow-lg">
-      <div class="flex gap-2 justify-between">
-        <p>Viso Savikaina:</p>
-        <p>{{ props.values.cost?.toFixed(2) }} €</p>
-      </div>
-      <div class="flex gap-2 justify-between">
-        <p>Viso Kaina:</p>
-        <p>{{ props.values.price?.toFixed(2) }} €</p>
-      </div>
-      <div class="flex gap-2 justify-between">
-        <p>Viso Pelnas:</p>
-        <p>{{ props.values.profit?.toFixed(2) }} €</p>
-      </div>
-      <div class="flex gap-2 justify-between">
-        <p>Viso Marža:</p>
-        <p>{{ props.values.margin?.toFixed(2) }} %</p>
-      </div>
-    </div>
+  <div class="border-y border-black font-semibold gap-6 px-2 py-1 flex justify-end">
+    <p class="w-6"></p>
+    <p class="flex-1 font-bold">Viso:</p>
+    <p class="w-20">{{ props.values.cost?.toFixed(2) }} €</p>
+    <p class="w-20">{{ props.values.price?.toFixed(2) }} €</p>
+    <p class="w-20"></p>
+    <p class="w-20">{{ props.values.profit?.toFixed(2) }} €</p>
+    <p class="w-20">{{ props.values.margin?.toFixed(2) }} %</p>
+    <div v-if="props.parts" class="w-16"></div>
   </div>
 </template>
 

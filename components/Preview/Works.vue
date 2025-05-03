@@ -4,7 +4,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
 <template>
   <div
-    class="flex flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-10 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
+    class="flex flex-col sm:flex-row border-b-2 print:gap-6 gap-4 items-start sm:gap-6 sm:items-center font-medium print:text-xs print:border-b print:border-gray-full print:even:bg-transparent even:bg-gray-ultra-light px-8 sm:px-2 py-[10px] print:py-2 border-red-full sm:border-none"
   >
     <div class="flex">
       <p class="block sm:hidden font-bold">Nr.:</p>
@@ -16,7 +16,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
       <p>{{ props.work.name }}</p>
     </div>
     <div class="border sm:hidden w-full"></div>
-    <div class="flex print:gap-6 gap-10">
+    <div class="flex print:gap-6 gap-6">
       <div>
         <p class="block sm:hidden font-bold">Kiekis:</p>
         <div class="w-20 gap-2 flex">
@@ -37,7 +37,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Savikaina:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.work.cost }}
           </p>
@@ -47,7 +47,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Kaina:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.work.price }}
           </p>
@@ -57,7 +57,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Viso:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.work.totalPrice }}
           </p>
@@ -67,7 +67,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Pelnas:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.work.profit }}
           </p>
@@ -77,7 +77,7 @@ const props = defineProps(["work", "index", "hidePrices"]);
 
       <div v-if="!props.hidePrices">
         <p class="block sm:hidden font-bold">Marža:</p>
-        <div class="w-16 flex gap-2">
+        <div class="w-20 flex gap-2">
           <p>
             {{ props.work.margin }}
           </p>

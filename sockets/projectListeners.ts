@@ -44,6 +44,10 @@ export default function projectListeners(socket: Socket) {
     projectsStore.updateProject(project);
   });
 
+  socket.on("partsDelivered", ({ _id, measureIndex, value }) => {
+    projectsStore.partsDelivered(_id, measureIndex, value);
+  });
+
   socket.on("newProject", (project) => {
     projectsStore.addProject(project);
   });

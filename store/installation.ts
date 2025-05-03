@@ -27,15 +27,6 @@ export const useInstallationStore = defineStore("installation", {
       });
     },
 
-    updatePartsDelivered(_id: string, measureIndex: number, value: boolean) {
-      this.installation = this.installation.map((item) => {
-        if (item._id === _id) {
-          item.results[measureIndex].delivered = value;
-          return item;
-        } else return item;
-      });
-    },
-
     updatePostone(_id: string, index: number, measureIndex: number, value: boolean) {
       this.installation = this.installation.map((item) => {
         if (item._id === _id) {

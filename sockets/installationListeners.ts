@@ -16,10 +16,6 @@ export default function InstallationListeners(socket: Socket) {
     installationStore.deleteInstallationWorker(_id, worker);
   });
 
-  socket.on("installationPartsDelivered", ({ _id, measureIndex, value }) => {
-    installationStore.updatePartsDelivered(_id, measureIndex, value);
-  });
-
   socket.on("updateInstallationPostone", ({ _id, index, measureIndex, value }) => {
     installationStore.updatePostone(_id, index, measureIndex, value);
   });
