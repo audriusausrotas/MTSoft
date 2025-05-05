@@ -231,8 +231,8 @@ const orderFinishHandler = async () => {
       productionStore.deleteProductionOrder(response.data._id);
       installationStore.deleteInstallationOrder(response.data._id);
       projectsStore.deleteProject(response.data._id);
-      navigateTo("/");
     }
+    navigateTo("/");
     setIsError(false);
     setError(response.message);
   } else {
@@ -484,7 +484,7 @@ const dateHandler = async () => {
         name="Baigti užsakymą"
         @onConfirm="
           props.location === 'projects'
-            ? orderFinishHandler
+            ? orderFinishHandler()
             : statusHandler('Pridavimas')
         "
         :isLoading="isLoading"

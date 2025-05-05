@@ -9,14 +9,19 @@ const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"]
 let selectedProducts: any = [];
 
 onMounted(async () => {
-  const exists = useProductionStore().production.find((item) => item._id === props.offer._id);
+  const exists = useProductionStore().production.find(
+    (item) => item._id === props?.offer?._id
+  );
   if (!exists) {
-    await fetchProduction(props.offer._id as string);
+    await fetchProduction(props?.offer?._id as string);
   }
 });
 
 const production = computed<Production | null>(
-  () => useProductionStore().production.find((item) => item._id === props.offer._id) ?? null
+  () =>
+    useProductionStore().production.find(
+      (item) => item._id === props?.offer?._id
+    ) ?? null
 );
 
 const deliveryMethod = ref<string>(deliveryValues[0]);
@@ -30,11 +35,11 @@ const resultsTotal = computed(() => {
   let tempMargin = 0;
   let count = 0;
 
-  for (const result of props.offer.results) {
-    cost += result.cost * result.quantity;
-    price += result.price * result.quantity;
-    profit += result.profit;
-    tempMargin += result.margin;
+  for (const result of props?.offer?.results) {
+    cost += result?.cost * result?.quantity;
+    price += result?.price * result?.quantity;
+    profit += result?.profit;
+    tempMargin += result?.margin;
     count++;
   }
 
@@ -49,11 +54,11 @@ const worksTotal = computed(() => {
   let tempMargin = 0;
   let count = 0;
 
-  for (const result of props.offer.works) {
-    cost += result.cost * result.quantity;
-    price += result.price * result.quantity;
-    profit += result.profit;
-    tempMargin += result.margin;
+  for (const result of props?.offer?.works) {
+    cost += result?.cost * result?.quantity;
+    price += result?.price * result?.quantity;
+    profit += result?.profit;
+    tempMargin += result?.margin;
     count++;
   }
 
@@ -62,21 +67,21 @@ const worksTotal = computed(() => {
 });
 
 const totals = computed(() => {
-  const cost = resultsTotal.value.cost + worksTotal.value.cost;
-  const price = resultsTotal.value.price + worksTotal.value.price;
-  const profit = resultsTotal.value.profit + worksTotal.value.profit;
-  const margin = (resultsTotal.value.margin + worksTotal.value.margin) / 2;
+  const cost = resultsTotal?.value?.cost + worksTotal?.value?.cost;
+  const price = resultsTotal?.value?.price + worksTotal?.value?.price;
+  const profit = resultsTotal?.value?.profit + worksTotal?.value?.profit;
+  const margin = (resultsTotal?.value?.margin + worksTotal?.value?.margin) / 2;
 
   return { cost, price, profit, margin };
 });
 
 const orderConfirmHandler = async () => {
   const requestData = {
-    _id: props.offer?._id,
+    _id: props?.offer?._id,
     data: selectedProducts,
-    client: props.offer?.client,
-    date: date.value,
-    deliveryMethod: deliveryMethod.value,
+    client: props?.offer?.client,
+    date: date?.value,
+    deliveryMethod: deliveryMethod?.value,
   };
 
   const response: any = await request.post("orderProducts", requestData);
@@ -84,7 +89,11 @@ const orderConfirmHandler = async () => {
   if (response.success) {
     if (!useSocketStore().connected) {
       for (const item of response.data.data) {
-        useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
+        useProjectsStore().partsDelivered(
+          response.data._id,
+          item.measureIndex,
+          true
+        );
       }
     }
 
@@ -136,11 +145,17 @@ const deleteComment = async (_id: string, comment: Comment) => {
     comment,
   };
 
-  const response: any = await request.delete("deleteProjectComment", requestData);
+  const response: any = await request.delete(
+    "deleteProjectComment",
+    requestData
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjectsStore().deleteComment(response.data._id, response.data.comment);
+      useProjectsStore().deleteComment(
+        response.data._id,
+        response.data.comment
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -150,24 +165,24 @@ const deleteComment = async (_id: string, comment: Comment) => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col gap-8">
+  <div v-if="props.offer" class="w-full flex flex-col gap-8">
     <PreviewVersions
       v-if="props.location === 'projects'"
-      :versions="props.offer.versions"
-      :_id="props.offer._id"
+      :versions="props?.offer?.versions"
+      :_id="props?.offer?._id"
       class="print:hidden"
     />
 
     <PreviewClient
-      :client="props.offer?.client"
-      :orderNr="props.offer?.orderNumber"
-      :creator="props.offer?.creator"
-      :location="props.location"
+      :client="props?.offer?.client"
+      :orderNr="props?.offer?.orderNumber"
+      :creator="props?.offer?.creator"
+      :location="props?.location"
     />
 
     <PreviewButtons
-      :offer="props.offer"
-      :location="props.location"
+      :offer="props?.offer"
+      :location="props?.location"
       class="print:hidden"
       @conformOrder="orderConfirmHandler"
       @openOrder="showOrderButtons = true"
@@ -180,8 +195,16 @@ const deleteComment = async (_id: string, comment: Comment) => {
       class="flex gap-4 flex-wrap justify-around md:justify-normal border px-4 py-2 w-fit rounded-lg shadow-lg"
     >
       <div class="flex flex-col">
-        <label for="finalDate" class="font-medium mb-1">Pristatymo data iki:</label>
-        <input v-model="date" type="date" id="finalDate" name="finalDate" class="" />
+        <label for="finalDate" class="font-medium mb-1"
+          >Pristatymo data iki:</label
+        >
+        <input
+          v-model="date"
+          type="date"
+          id="finalDate"
+          name="finalDate"
+          class=""
+        />
       </div>
       <BaseSelectField
         :values="deliveryValues"
@@ -193,18 +216,22 @@ const deleteComment = async (_id: string, comment: Comment) => {
       />
     </div>
 
-    <BaseGalleryElement :_id="offer?._id" :files="offer?.files" :category="props.location" />
+    <BaseGalleryElement
+      :_id="offer?._id"
+      :files="offer?.files"
+      :category="props?.location"
+    />
 
     <BaseComment
       :commentsArray="props.offer?.comments"
-      :id="props.offer?._id"
+      :id="props?.offer?._id"
       @onSave="addComment"
       class="max-w-[1260px]"
       @onDelete="deleteComment"
     />
 
     <PreviewTotalElement
-      v-if="props.location === 'projects'"
+      v-if="props?.location === 'projects'"
       :totals="totals"
       :discount="offer?.discount"
       :priceWithDiscount="offer?.discount ? offer?.priceWithDiscount : null"
@@ -212,7 +239,9 @@ const deleteComment = async (_id: string, comment: Comment) => {
 
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
+      <div
+        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
+      >
         <div class="w-6 text-center">Nr</div>
         <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
@@ -227,33 +256,39 @@ const deleteComment = async (_id: string, comment: Comment) => {
 
       <div class="border-dark-full">
         <PreviewResults
-          v-for="(result, index) in props.offer?.results"
+          v-for="(result, index) in props?.offer?.results"
           :key="result.id"
           :result="result"
           :index="index"
-          :_id="props.offer._id"
-          :location="props.location"
+          :_id="props?.offer?._id"
+          :location="props?.location"
           :hidePrices="location !== 'projects'"
           :showbuttons="showOrderButtons"
           @checked="checkedHandler"
           @unchecked="uncheckedHandler"
         />
 
-        <PreviewTotal v-if="props.location === 'projects'" :values="resultsTotal" :parts="true" />
+        <PreviewTotal
+          v-if="props?.location === 'projects'"
+          :values="resultsTotal"
+          :parts="true"
+        />
       </div>
     </div>
 
     <div class="text-2xl font-semibold text-black text-center">Darbai</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
+      <div
+        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
+      >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
-        <div v-if="props.location === 'projects'" class="w-20">Savikaina</div>
-        <div v-if="props.location === 'projects'" class="w-20">Kaina</div>
-        <div v-if="props.location === 'projects'" class="w-20">Viso</div>
-        <div v-if="props.location === 'projects'" class="w-20">Pelnas</div>
-        <div v-if="props.location === 'projects'" class="w-20">Marža</div>
+        <div v-if="props?.location === 'projects'" class="w-20">Savikaina</div>
+        <div v-if="props?.location === 'projects'" class="w-20">Kaina</div>
+        <div v-if="props?.location === 'projects'" class="w-20">Viso</div>
+        <div v-if="props?.location === 'projects'" class="w-20">Pelnas</div>
+        <div v-if="props?.location === 'projects'" class="w-20">Marža</div>
       </div>
       <div class="print:border-b border-dark-full">
         <PreviewWorks
@@ -261,9 +296,12 @@ const deleteComment = async (_id: string, comment: Comment) => {
           :key="work.id"
           :work="work"
           :index="index"
-          :hidePrices="location !== 'projects'"
+          :hidePrices="props?.location !== 'projects'"
         />
-        <PreviewTotal v-if="props.location === 'projects'" :values="worksTotal" />
+        <PreviewTotal
+          v-if="props?.location === 'projects'"
+          :values="worksTotal"
+        />
       </div>
     </div>
 
@@ -271,7 +309,7 @@ const deleteComment = async (_id: string, comment: Comment) => {
       <div class="font-semibold text-2xl">Matavimai</div>
       <div class="flex gap-8 flex-wrap justify-around">
         <PreviewMeasures
-          v-for="(fence, index) in props.offer?.fenceMeasures"
+          v-for="(fence, index) in props?.offer?.fenceMeasures"
           :key="fence.id"
           :fence="fence"
           :index="index"

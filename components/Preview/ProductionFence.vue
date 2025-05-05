@@ -6,8 +6,8 @@ const props = defineProps(["fence"]);
   <div class="flex flex-col w-fit">
     <div class="flex gap-4 items-center font-bold text-xl">
       <p>
-        {{ props.fence.side }} - {{ props.fence.type }} -
-        {{ props.fence.color }}
+        {{ props?.fence?.side }} - {{ props?.fence?.type }} -
+        {{ props?.fence?.color }}
       </p>
     </div>
 
@@ -22,13 +22,21 @@ const props = defineProps(["fence"]);
       >
         Ilgis
       </p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Elementai</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Aukštis</p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Elementai
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Aukštis
+      </p>
     </div>
 
     <div class="flex flex-col flex-1">
       <PreviewProductionFenceInfo
-        v-for="(data, index) in fence.measures"
+        v-for="(data, index) in fence?.measures"
         :key="data._id"
         :data="data"
         :index="index"

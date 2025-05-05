@@ -48,8 +48,6 @@ const downloadAsPDF = async () => {
 };
 
 const orderStatusHandler = async (value: boolean) => {
-  isLoading.value = true;
-
   const requestData = { _id: offer.offer._id, value };
 
   const response: any = await request.patch(`changeOrderStatus`, requestData);

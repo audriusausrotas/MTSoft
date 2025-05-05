@@ -1,5 +1,12 @@
 <script setup lang="ts">
-const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons", "location"]);
+const props = defineProps([
+  "result",
+  "index",
+  "hidePrices",
+  "_id",
+  "showbuttons",
+  "location",
+]);
 const emit = defineEmits(["checked", "unchecked"]);
 
 const { setError, setIsError } = useError();
@@ -8,38 +15,38 @@ const measurement = ref<string>("vnt");
 
 if (props.result.type.includes("Apkaustai")) measurement.value = "m";
 else if (
-  props.result.type.includes("Daimond") ||
-  props.result.type.includes("Plank") ||
-  props.result.type.includes("Eglė") ||
-  props.result.type.includes("Žaliuzi")
+  props?.result?.type.includes("Daimond") ||
+  props?.result?.type.includes("Plank") ||
+  props?.result?.type.includes("Eglė") ||
+  props?.result?.type.includes("Žaliuzi")
 )
   measurement.value = "m2";
 else measurement.value = "vnt";
 
 const deliverHandler = async (value: boolean) => {
-  const requestData = { _id: props._id, measureIndex: props.index, value };
+  const requestData = { _id: props?._id, measureIndex: props?.index, value };
   const response: any = await request.patch("partsDelivered", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
       useProjectsStore().partsDelivered(
-        response.data._id,
-        response.data.measureIndex,
-        response.data.value
+        response?.data?._id,
+        response?.data?.measureIndex,
+        response?.data?.value
       );
     setIsError(false);
-    setError(response.message);
+    setError(response?.message);
   } else {
-    setError(response.message);
+    setError(response?.message);
   }
 };
 
 const selectData = (value: boolean) => {
   const data = {
-    name: props.result.type,
-    color: props.result.color,
-    quantity: props.result.quantity,
-    measureIndex: props.index,
+    name: props?.result?.type,
+    color: props?.result?.color,
+    quantity: props?.result?.quantity,
+    measureIndex: props?.index,
   };
 
   value ? emit("checked", data) : emit("unchecked", data.name);
@@ -52,14 +59,14 @@ const selectData = (value: boolean) => {
   >
     <div class="flex">
       <p class="block lg:hidden font-bold">Nr.:</p>
-      <div class="w-6 text-center">{{ props.index + 1 }}</div>
+      <div class="w-6 text-center">{{ props?.index + 1 }}</div>
     </div>
 
     <div v-if="props.showbuttons" class="w-6 items-center">
       <BaseCheckField
         :name="'order' + index"
         @onChange="selectData"
-        :checked="props.result.delivered"
+        :checked="props?.result?.delivered"
         height="h-6"
       />
     </div>
@@ -68,21 +75,24 @@ const selectData = (value: boolean) => {
     <div class="flex-1">
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 lg:gap-8">
-        <span class="w-fit">{{ props.result.type }}</span>
-        <span v-if="props.result.seeThrough">{{ props.result.seeThrough }}</span>
+        <span class="w-fit">{{ props?.result?.type }}</span>
+        <span v-if="props?.result?.seeThrough">{{
+          props?.result?.seeThrough
+        }}</span>
         <span
           v-if="
-            props.result.height &&
-            props.result.category.toLowerCase() === 'tvoros' &&
-            !props.result.type.includes('Segmentas')
+            props?.result?.height &&
+            props?.result?.category.toLowerCase() === 'tvoros' &&
+            !props?.result?.type.includes('Segmentas')
           "
-          >H-{{ props.result.height }}</span
+          >H-{{ props?.result?.height }}</span
         >
-        <span v-if="props.result.color && !props.result.type.includes('RAL')"
-          >RAL {{ props.result.color }}</span
+        <span
+          v-if="props?.result?.color && !props?.result?.type?.includes('RAL')"
+          >RAL {{ props?.result?.color }}</span
         >
-        <span v-if="props.result.category.toLowerCase() === 'vartai'"
-          >plotis: {{ props.result.width }} cm
+        <span v-if="props?.result?.category.toLowerCase() === 'vartai'"
+          >plotis: {{ props?.result?.width }} cm
         </span>
       </div>
     </div>
@@ -92,57 +102,57 @@ const selectData = (value: boolean) => {
         <p class="block lg:hidden font-bold">Kiekis:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.quantity }}
+            {{ props?.result?.quantity }}
           </p>
           <p>{{ measurement }}</p>
         </div>
       </div>
 
-      <div v-if="!props.hidePrices">
+      <div v-if="!props?.hidePrices">
         <p class="block lg:hidden font-bold">Savikaina:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.cost }}
+            {{ props?.result?.cost }}
           </p>
           <p>€</p>
         </div>
       </div>
 
-      <div v-if="!props.hidePrices">
+      <div v-if="!props?.hidePrices">
         <p class="block lg:hidden font-bold">Kaina:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.price }}
+            {{ props?.result?.price }}
           </p>
           <p>€</p>
         </div>
       </div>
 
-      <div v-if="!props.hidePrices">
+      <div v-if="!props?.hidePrices">
         <p class="block lg:hidden font-bold">Viso:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.totalPrice }}
+            {{ props?.result?.totalPrice }}
           </p>
           <p>€</p>
         </div>
       </div>
 
-      <div v-if="!props.hidePrices">
+      <div v-if="!props?.hidePrices">
         <p class="block lg:hidden font-bold">Pelnas:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.profit }}
+            {{ props?.result?.profit }}
           </p>
           <p>€</p>
         </div>
       </div>
 
-      <div v-if="!props.hidePrices">
+      <div v-if="!props?.hidePrices">
         <p class="block lg:hidden font-bold">Marža:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.margin }}
+            {{ props?.result?.margin }}
           </p>
           <p>%</p>
         </div>
@@ -152,12 +162,14 @@ const selectData = (value: boolean) => {
         <p class="block lg:hidden font-bold">Pristatyta:</p>
         <div
           class="w-16 items-center"
-          :class="props.location === 'installation' ? 'pointer-events-none ' : ''"
+          :class="
+            props?.location === 'installation' ? 'pointer-events-none ' : ''
+          "
         >
           <BaseCheckField
             :name="'vartai' + index"
             @onChange="deliverHandler"
-            :checked="result.delivered"
+            :checked="result?.delivered"
             height="h-6"
           />
         </div>
