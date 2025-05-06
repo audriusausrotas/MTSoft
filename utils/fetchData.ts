@@ -163,6 +163,16 @@ export async function fetchClients() {
   }
 }
 
+export async function fetchSuppliers() {
+  try {
+    const response: any = await request.get("getSuppliers");
+    response.success && useSuppliersStore().setSuppliers(response.data);
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
+  }
+}
+
 export async function fetchOrder(to: any) {
   try {
     const response: any = await request.get(`getOrder/${to.params.id}`);

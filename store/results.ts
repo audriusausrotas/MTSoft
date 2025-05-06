@@ -61,7 +61,6 @@ export const useResultsStore = defineStore("results", {
       const newResult: Result = {
         ...initialResultData,
         id: uuidv4(),
-        isNew: true,
       };
       this.results.push(newResult);
     },
@@ -69,7 +68,6 @@ export const useResultsStore = defineStore("results", {
       const newWork: Works = {
         ...initialWorkData,
         id: uuidv4(),
-        isNew: true,
       };
       this.works.push(newWork);
     },
@@ -113,7 +111,6 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateColor(index: number, value: string): void {
-      this.results[index].isNew = true;
       this.results[index].color = value;
     },
 

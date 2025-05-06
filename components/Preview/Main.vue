@@ -1,28 +1,27 @@
 <script setup lang="ts">
-import type { Production } from "~/data/interfaces";
+import type { Production, Supplier } from "~/data/interfaces";
 
 const props = defineProps(["offer", "location"]);
 
 const { setError, setIsError } = useError();
 
+const suppliersStore = useSuppliersStore();
+
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
 let selectedProducts: any = [];
-
-onMounted(async () => {
-  const exists = useProductionStore().production.find((item) => item._id === props?.offer?._id);
-  if (!exists) {
-    await fetchProduction(props?.offer?._id as string);
-  }
-});
+const deliveryMethod = ref<string>(deliveryValues[0]);
+const showOrderButtons = ref<boolean>(false);
+const date = ref<Date | null>(null);
+const message = ref<string>("");
+const supplier = ref<string>(suppliersStore?.suppliers[0]?.email);
 
 const production = computed<Production | null>(
   () => useProductionStore().production.find((item) => item._id === props?.offer?._id) ?? null
 );
 
-const deliveryMethod = ref<string>(deliveryValues[0]);
-const showOrderButtons = ref<boolean>(false);
-const date = ref<Date | null>(null);
-const message = ref<string>("");
+const suppliers = computed<string[] | null>(() =>
+  suppliersStore?.suppliers?.map((item) => item?.email)
+);
 
 const resultsTotal = computed(() => {
   let cost = 0;
@@ -79,6 +78,7 @@ const orderConfirmHandler = async () => {
     date: date?.value,
     deliveryMethod: deliveryMethod?.value,
     message: message.value,
+    to: supplier.value,
   };
 
   const response: any = await request.post("orderProducts", requestData);
@@ -112,6 +112,7 @@ const cancelHandler = () => {
   deliveryMethod.value = deliveryValues[0];
   date.value = null;
   message.value = "";
+  supplier.value = suppliersStore.suppliers[0].email;
 };
 
 const addComment = async (comment: Comment) => {
@@ -150,6 +151,13 @@ const deleteComment = async (_id: string, comment: Comment) => {
     setError(response.message);
   }
 };
+
+onMounted(async () => {
+  const exists = useProductionStore().production.find((item) => item._id === props?.offer?._id);
+  if (!exists) {
+    await fetchProduction(props?.offer?._id as string);
+  }
+});
 </script>
 
 <template>
@@ -182,8 +190,18 @@ const deleteComment = async (_id: string, comment: Comment) => {
       v-if="showOrderButtons"
       class="flex gap-4 flex-wrap justify-around md:justify-normal border px-4 py-2 rounded-lg shadow-lg w-full max-w-[1264px]"
     >
+      <BaseSelectField
+        :values="suppliers"
+        id="supplier"
+        label="Gavėjas"
+        :defaultValue="supplier"
+        width="w-72"
+        @onChange="(value: string) => supplier = value
+    "
+      />
+
       <div class="flex flex-col">
-        <label for="finalDate" class="font-medium mb-1 text-sm">Pristatymo data iki:</label>
+        <label for="finalDate" class="mb-1 text-sm">Pristatymo data iki:</label>
         <div class="border rounded-md border-dark-light">
           <input
             v-model="date"

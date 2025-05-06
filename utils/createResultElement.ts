@@ -125,9 +125,10 @@ export default function createResultElement(item: any) {
     totalCost: totalCost,
     profit: profit,
     margin: +margin,
-    isNew: false,
     category: product.category,
     width: item.width || null,
+    delivered: false,
+    ordered: false,
   };
 
   results.results.push(resultData);

@@ -77,6 +77,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     case "/klientai":
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
       break;
+    case "/tiekejai":
+      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      break;
     case "/vartotojai":
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
       break;

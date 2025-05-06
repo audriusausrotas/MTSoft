@@ -14,6 +14,7 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
       fetchSelects(),
       fetchProducts(),
       fetchClients(),
+      fetchSuppliers(),
       fetchDefaultValues(),
       fetchPotentialClients()
     );

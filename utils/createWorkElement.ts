@@ -22,7 +22,7 @@ export default function createWorkElement(item: { name: string; quantity: number
     totalCost: totalCost,
     profit: profit,
     margin: margin,
-    isNew: false,
+    done: false,
   };
 
   works.addWork(resultData);

@@ -35,14 +35,11 @@ const showAditionalHorizontal = computed(() => {
 });
 
 const colorEditable = computed(
-  () => props.result.isNew || props.result.color === "Kita" || props.result.category !== "tvoros"
+  () => props.result.color === "Kita" || props.result.category !== "tvoros"
 );
 
 const spaceEditable = computed(
-  () =>
-    props.result.isNew &&
-    props.result.category === "tvoros" &&
-    !props.result.type.includes("Segmentas")
+  () => props.result.category === "tvoros" && !props.result.type.includes("Segmentas")
 );
 </script>
 

@@ -18,6 +18,7 @@ export const initialWorkData: Works = {
   margin: 0,
   profit: 0,
   isNew: false,
+  done: false,
 };
 
 export const initialResultData: Result = {
@@ -40,6 +41,7 @@ export const initialResultData: Result = {
   category: "",
   width: null,
   delivered: false,
+  ordered: false,
 };
 
 export const navigationLinks: MenuLinks[] = [
@@ -60,6 +62,7 @@ export const optionLinks: MenuLinks[] = [
   { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
+  { name: "Tiekėjai", link: "/tiekejai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
   { name: "Archyvas", link: "/archyvas/baigti", iconPath: "" },
 ];
