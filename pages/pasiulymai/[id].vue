@@ -5,8 +5,7 @@ definePageMeta({
 
 const route = useRoute();
 
-const offer: any = await request.get(`getArchive/${route.params.id}`);
-console.log(offer);
+const offer: any = await request.get(`getVersion/${route.params.id}`);
 </script>
 
 <template>

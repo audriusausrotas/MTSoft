@@ -10,7 +10,7 @@ const open = ref<boolean>(false);
 
 const versionsHandler = () => {
   open.value = false;
-  window.open("/archyvas/" + props.version.id, "_blank");
+  window.open("/pasiulymai/" + props.version.id, "_blank");
 };
 
 const returnHandler = async () => {

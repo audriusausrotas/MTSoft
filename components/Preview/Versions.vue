@@ -2,7 +2,7 @@
 const props = defineProps(["versions"]);
 
 const versionsHandler = (id: string) => {
-  window.open("/archyvas/" + id, "_blank");
+  window.open("/pasiulymai/" + id, "_blank");
 };
 </script>
 
