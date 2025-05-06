@@ -48,6 +48,14 @@ export default function projectListeners(socket: Socket) {
     projectsStore.partsDelivered(_id, measureIndex, value);
   });
 
+  socket.on("partsOrdered", ({ _id, measureIndex, value }) => {
+    projectsStore.partsOrdered(_id, measureIndex, value);
+  });
+
+  socket.on("workDone", ({ _id, measureIndex, value }) => {
+    projectsStore.workDone(_id, measureIndex, value);
+  });
+
   socket.on("newProject", (project) => {
     projectsStore.addProject(project);
   });

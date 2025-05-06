@@ -1,5 +1,25 @@
 <script setup lang="ts">
-const props = defineProps(["work", "index", "hidePrices"]);
+const props = defineProps(["work", "index", "hidePrices", "location", "_id"]);
+
+const { setError, setIsError } = useError();
+
+const doneHandler = async (value: boolean) => {
+  const requestData = { _id: props?._id, measureIndex: props?.index, value };
+  const response: any = await request.patch("workDone", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      useProjectsStore().workDone(
+        response?.data?._id,
+        response?.data?.measureIndex,
+        response?.data?.value
+      );
+    setIsError(false);
+    setError(response?.message);
+  } else {
+    setError(response?.message);
+  }
+};
 </script>
 
 <template>
@@ -82,6 +102,20 @@ const props = defineProps(["work", "index", "hidePrices"]);
             {{ props.work.margin }}
           </p>
           <p>%</p>
+        </div>
+      </div>
+      <div>
+        <p class="block lg:hidden font-bold">Užsakyta:</p>
+        <div
+          class="w-16 items-center"
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
+        >
+          <BaseCheckField
+            :name="'vartai' + index"
+            @onChange="doneHandler"
+            :checked="work?.done"
+            height="h-6"
+          />
         </div>
       </div>
     </div>

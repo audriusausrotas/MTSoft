@@ -96,6 +96,24 @@ export const useProjectsStore = defineStore("Projects", {
       });
     },
 
+    partsOrdered(_id: string, measureIndex: number, value: boolean) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === _id) {
+          item.results[measureIndex].ordered = value;
+          return item;
+        } else return item;
+      });
+    },
+
+    workDone(_id: string, measureIndex: number, value: boolean) {
+      this.projects = this.projects.map((item) => {
+        if (item._id === _id) {
+          item.works[measureIndex].done = value;
+          return item;
+        } else return item;
+      });
+    },
+
     changeCompletionDate(_id: string, date: string) {
       this.projects = this.projects.map((item) => {
         if (item._id === _id) {

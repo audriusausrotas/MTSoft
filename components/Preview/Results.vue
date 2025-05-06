@@ -1,12 +1,5 @@
 <script setup lang="ts">
-const props = defineProps([
-  "result",
-  "index",
-  "hidePrices",
-  "_id",
-  "showbuttons",
-  "location",
-]);
+const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons", "location"]);
 const emit = defineEmits(["checked", "unchecked"]);
 
 const { setError, setIsError } = useError();
@@ -30,6 +23,24 @@ const deliverHandler = async (value: boolean) => {
   if (response.success) {
     !useSocketStore().connected &&
       useProjectsStore().partsDelivered(
+        response?.data?._id,
+        response?.data?.measureIndex,
+        response?.data?.value
+      );
+    setIsError(false);
+    setError(response?.message);
+  } else {
+    setError(response?.message);
+  }
+};
+
+const orderHandler = async (value: boolean) => {
+  const requestData = { _id: props?._id, measureIndex: props?.index, value };
+  const response: any = await request.patch("partsOrdered", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      useProjectsStore().partsOrdered(
         response?.data?._id,
         response?.data?.measureIndex,
         response?.data?.value
@@ -76,9 +87,7 @@ const selectData = (value: boolean) => {
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 lg:gap-8">
         <span class="w-fit">{{ props?.result?.type }}</span>
-        <span v-if="props?.result?.seeThrough">{{
-          props?.result?.seeThrough
-        }}</span>
+        <span v-if="props?.result?.seeThrough">{{ props?.result?.seeThrough }}</span>
         <span
           v-if="
             props?.result?.height &&
@@ -87,8 +96,7 @@ const selectData = (value: boolean) => {
           "
           >H-{{ props?.result?.height }}</span
         >
-        <span
-          v-if="props?.result?.color && !props?.result?.type?.includes('RAL')"
+        <span v-if="props?.result?.color && !props?.result?.type?.includes('RAL')"
           >RAL {{ props?.result?.color }}</span
         >
         <span v-if="props?.result?.category.toLowerCase() === 'vartai'"
@@ -159,12 +167,24 @@ const selectData = (value: boolean) => {
       </div>
 
       <div>
+        <p class="block lg:hidden font-bold">Užsakyta:</p>
+        <div
+          class="w-16 items-center"
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
+        >
+          <BaseCheckField
+            :name="'vartai' + index"
+            @onChange="orderHandler"
+            :checked="result?.ordered"
+            height="h-6"
+          />
+        </div>
+      </div>
+      <div>
         <p class="block lg:hidden font-bold">Pristatyta:</p>
         <div
           class="w-16 items-center"
-          :class="
-            props?.location === 'installation' ? 'pointer-events-none ' : ''
-          "
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
         >
           <BaseCheckField
             :name="'vartai' + index"

@@ -26,6 +26,7 @@ const props = defineProps(["values", "parts"]);
       <p class="w-20">{{ props.values.margin?.toFixed(2) }} %</p>
     </div>
     <div v-if="props.parts" class="w-16 hidden lg:block"></div>
+    <div v-if="props.parts" class="w-16 hidden lg:block"></div>
   </div>
 </template>
 
