@@ -241,9 +241,13 @@ onMounted(async () => {
 
     <PreviewTotalElement
       v-if="props?.location === 'projects'"
-      :totals="totals"
       :discount="offer?.discount"
       :priceWithDiscount="offer?.discount ? offer?.priceWithDiscount : null"
+      :priceVAT="offer?.priceVAT"
+      :totalCost="offer?.totalCost"
+      :totalPrice="offer?.totalPrice"
+      :totalMargin="offer?.totalMargin"
+      :totalProfit="offer?.totalProfit"
     />
 
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
