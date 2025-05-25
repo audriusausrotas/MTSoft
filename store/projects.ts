@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { version } from "vue";
 import type { Project, Comment, Dates } from "~/data/interfaces";
 
 export const useProjectsStore = defineStore("Projects", {
@@ -72,7 +73,9 @@ export const useProjectsStore = defineStore("Projects", {
     deleteVersion(versionId: string, projectId: string) {
       this.projects = this.projects.map((item) => {
         if (item._id === projectId) {
-          item.versions = item.versions.filter((version) => version._id !== versionId);
+          item.versions = item.versions.filter(
+            (version) => version.id?.toString() !== versionId.toString()
+          );
           return item;
         } else return item;
       });
