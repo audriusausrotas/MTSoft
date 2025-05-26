@@ -6,27 +6,16 @@ const { setError, setIsError } = useError();
 const settingsStore = useSettingsStore();
 
 const editable = ref(false);
+
 const rights = reactive({
   installation: false,
   production: false,
   warehouse: false,
   schedule: false,
   project: false,
+  orders: false,
   admin: false,
   gate: false,
-});
-watchEffect(() => {
-  const user = settingsStore.userRights.find((u) => u.accountType === props.accountType);
-
-  if (user) {
-    rights.installation = user.installation;
-    rights.production = user.production;
-    rights.warehouse = user.warehouse;
-    rights.schedule = user.schedule;
-    rights.project = user.project;
-    rights.admin = user.admin;
-    rights.gate = user.gate;
-  }
 });
 
 const saveHandler = async () => {
@@ -46,6 +35,21 @@ const saveHandler = async () => {
     setError(response.message);
   }
 };
+
+watchEffect(() => {
+  const user = settingsStore.userRights.find((u) => u.accountType === props.accountType);
+
+  if (user) {
+    rights.installation = user.installation;
+    rights.production = user.production;
+    rights.warehouse = user.warehouse;
+    rights.schedule = user.schedule;
+    rights.project = user.project;
+    rights.orders = user.orders;
+    rights.admin = user.admin;
+    rights.gate = user.gate;
+  }
+});
 </script>
 
 <template>
@@ -65,6 +69,9 @@ const saveHandler = async () => {
     </div>
     <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.warehouse" />
+    </div>
+    <div class="w-28 flex justify-center">
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.orders" />
     </div>
     <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.gate" />

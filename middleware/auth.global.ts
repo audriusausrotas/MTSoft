@@ -62,6 +62,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     case "/sandelys":
       if (!userRights?.warehouse) return navigateTo(middlewareHelper(userRights!));
       break;
+    case "/uzsakymai":
+      if (!userRights?.orders) return navigateTo(middlewareHelper(userRights!));
+      break;
     case "/vartai":
       if (!userRights?.gate) return navigateTo(middlewareHelper(userRights!));
       break;

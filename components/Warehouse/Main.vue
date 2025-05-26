@@ -77,11 +77,11 @@ const previewHandler = () => {
     </div>
 
     <BaseInfoField
-      :name="props.project?.dates?.dateConfirmed.slice(0, 10) || '--------'"
+      :name="props.project?.dates?.dateConfirmed?.slice(0, 10) || '--------'"
       width="w-28"
     />
     <BaseInfoField
-      :name="props.project?.dates?.dateCompletion.slice(0, 10) || '--------'"
+      :name="props.project?.dates?.dateCompletion?.slice(0, 10) || '--------'"
       width="w-28"
       :class="colorCompletion"
     />

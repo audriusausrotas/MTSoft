@@ -17,7 +17,6 @@ export const initialWorkData: Works = {
   totalPrice: 0,
   margin: 0,
   profit: 0,
-  isNew: false,
   done: false,
 };
 
@@ -37,7 +36,6 @@ export const initialResultData: Result = {
   totalCost: 0,
   profit: 0,
   margin: 0,
-  isNew: false,
   category: "",
   width: null,
   delivered: false,
@@ -54,6 +52,7 @@ export const navigationLinks: MenuLinks[] = [
   },
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
   { name: "Sandėlys", link: "/sandelys", iconPath: "" },
+  { name: "Užsakymai", link: "/uzsakymai", iconPath: "" },
   { name: "Vartai", link: "/vartai", iconPath: "" },
 ];
 

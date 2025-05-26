@@ -519,6 +519,7 @@ export interface UserRights {
   production: boolean;
   installation: boolean;
   gate: boolean;
+  orders: boolean;
   admin: boolean;
   warehouse: boolean;
 }

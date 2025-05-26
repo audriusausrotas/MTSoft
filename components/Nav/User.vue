@@ -44,9 +44,9 @@ async function logoutHandler() {
         <p v-else>{{ initials }}</p>
       </div>
 
-      <div v-if="userStore.user?.accountType === 'Administratorius'">
+      <!-- <div v-if="userStore.user?.accountType === 'Administratorius'">
         {{ props.userStore.user?.username }}
-      </div>
+      </div> -->
       <NuxtImg
         src="/icons/arrowDown.svg"
         width="10"
