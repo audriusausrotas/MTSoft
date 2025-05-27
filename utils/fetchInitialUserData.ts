@@ -7,6 +7,7 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
   if (userRights?.schedule) fetchData.push(fetchSchedules());
   if (userRights?.production) fetchData.push(fetchProductions());
   if (userRights?.installation) fetchData.push(fetchInstallation());
+  if (userRights?.orders) fetchData.push(fetchOrders());
   if (userRights?.gate) fetchData.push(fetchGates());
 
   if (userRights?.admin) {

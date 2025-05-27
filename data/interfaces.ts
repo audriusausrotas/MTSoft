@@ -524,6 +524,24 @@ export interface UserRights {
   warehouse: boolean;
 }
 
+export interface Order {
+  user: Creator;
+  client: Client;
+  data: [OrderData];
+  orderDate: string;
+  deliveryDate: string;
+  deliveryMethod: string;
+  message: string;
+  recipient: string;
+}
+
+export interface OrderData {
+  name: string;
+  color: string;
+  quantity: number;
+  measureIndex: number;
+}
+
 export interface PotentialClient {
   _id?: string;
   name: string;
