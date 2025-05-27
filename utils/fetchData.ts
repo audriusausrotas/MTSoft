@@ -185,7 +185,7 @@ export async function fetchSuppliers() {
 
 export async function fetchOrder(to: any) {
   try {
-    const response: any = await request.get(`getOrder/${to.params.id}`);
+    const response: any = await request.get(`getOffer/${to.params.id}`);
     if (response.success) useOfferStore().setOffer({ ...response.data });
     else return false;
     return true;

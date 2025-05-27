@@ -9,6 +9,18 @@ export const useOrderStore = defineStore("order", {
     addOrders(orders: [Order]) {
       this.orders = [...orders];
     },
+
+    newOrder(order: Order) {
+      this.orders.push(order);
+    },
+
+    updateOrder(order: Order) {
+      this.orders = this.orders.map((item) => (item._id === order._id ? order : item));
+    },
+
+    deleteOrder(_id: string) {
+      this.orders = this.orders.filter((item) => item._id !== _id);
+    },
   },
 
   getters: {

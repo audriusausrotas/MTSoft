@@ -40,7 +40,7 @@ const updateHandler = async (change: string, value: any) => {
     username: userStore.user?.username,
   };
 
-  const response: any = await request.patch("updateOrder", data);
+  const response: any = await request.patch("updateGateOrder", data);
 
   if (response.success) {
     !useSocketStore().connected && gateStore.updateGate(response.data);

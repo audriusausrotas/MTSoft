@@ -525,6 +525,7 @@ export interface UserRights {
 }
 
 export interface Order {
+  _id?: string;
   user: Creator;
   client: Client;
   data: [OrderData];

@@ -81,10 +81,11 @@ const orderConfirmHandler = async () => {
     to: supplier.value,
   };
 
-  const response: any = await request.post("orderProducts", requestData);
+  const response: any = await request.post("newOrder", requestData);
 
   if (response.success) {
     if (!useSocketStore().connected) {
+      useOrderStore().newOrder(response.data.orderData);
       for (const item of response.data.data) {
         useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
       }

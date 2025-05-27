@@ -124,7 +124,7 @@ const gateOrderHandler = async (name: string): Promise<void> => {
     manager: name,
   };
 
-  const response: any = await request.post("newOrder", requestData);
+  const response: any = await request.post("newGateOrder", requestData);
 
   if (response.success) {
     !useSocketStore().connected && gateStore.addGate(response.data);
