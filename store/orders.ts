@@ -1,4 +1,4 @@
-import type { Order } from "~/data/interfaces";
+import type { Comment, Order } from "~/data/interfaces";
 
 export const useOrderStore = defineStore("order", {
   state: () => ({
@@ -15,11 +15,34 @@ export const useOrderStore = defineStore("order", {
     },
 
     updateOrder(order: Order) {
-      this.orders = this.orders.map((item) => (item._id === order._id ? order : item));
+      this.orders = this.orders.map((item) =>
+        item._id === order._id ? order : item
+      );
     },
 
     deleteOrder(_id: string) {
       this.orders = this.orders.filter((item) => item._id !== _id);
+    },
+
+    addComment(_id: string, comment: Comment): void {
+      this.orders = this.orders.map((order) => {
+        if (order._id === _id) {
+          order.comments = [...order.comments, comment];
+          return order;
+        } else return order;
+      });
+    },
+
+    deleteComment(_id: string, comment: Comment) {
+      this.orders = this.orders.map((order) => {
+        if (order._id === _id) {
+          order.comments = order.comments.filter(
+            (item) =>
+              item.date !== comment.date && item.comment !== comment.comment
+          );
+          return order;
+        } else return order;
+      });
     },
   },
 

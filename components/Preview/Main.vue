@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Production, Supplier } from "~/data/interfaces";
+import type { Production } from "~/data/interfaces";
 
 const props = defineProps(["offer", "location"]);
 
@@ -8,15 +8,18 @@ const { setError, setIsError } = useError();
 const suppliersStore = useSuppliersStore();
 
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
-let selectedProducts: any = [];
+const supplier = ref<string>(suppliersStore?.suppliers[0]?.email);
 const deliveryMethod = ref<string>(deliveryValues[0]);
 const showOrderButtons = ref<boolean>(false);
 const date = ref<Date | null>(null);
 const message = ref<string>("");
-const supplier = ref<string>(suppliersStore?.suppliers[0]?.email);
+let selectedProducts: any = [];
 
 const production = computed<Production | null>(
-  () => useProductionStore().production.find((item) => item._id === props?.offer?._id) ?? null
+  () =>
+    useProductionStore().production.find(
+      (item) => item._id === props?.offer?._id
+    ) ?? null
 );
 
 const suppliers = computed<string[] | null>(() =>
@@ -87,7 +90,11 @@ const orderConfirmHandler = async () => {
     if (!useSocketStore().connected) {
       useOrderStore().newOrder(response.data.orderData);
       for (const item of response.data.data) {
-        useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
+        useProjectsStore().partsDelivered(
+          response.data._id,
+          item.measureIndex,
+          true
+        );
       }
     }
 
@@ -141,11 +148,17 @@ const deleteComment = async (_id: string, comment: Comment) => {
     comment,
   };
 
-  const response: any = await request.delete("deleteProjectComment", requestData);
+  const response: any = await request.delete(
+    "deleteProjectComment",
+    requestData
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjectsStore().deleteComment(response.data._id, response.data.comment);
+      useProjectsStore().deleteComment(
+        response.data._id,
+        response.data.comment
+      );
     setIsError(false);
     setError(response.message);
   } else {
@@ -154,7 +167,9 @@ const deleteComment = async (_id: string, comment: Comment) => {
 };
 
 onMounted(async () => {
-  const exists = useProductionStore().production.find((item) => item._id === props?.offer?._id);
+  const exists = useProductionStore().production.find(
+    (item) => item._id === props?.offer?._id
+  );
   if (!exists) {
     await fetchProduction(props?.offer?._id as string);
   }
@@ -230,7 +245,11 @@ onMounted(async () => {
       />
     </div>
 
-    <BaseGalleryElement :_id="offer?._id" :files="offer?.files" :category="props?.location" />
+    <BaseGalleryElement
+      :_id="offer?._id"
+      :files="offer?.files"
+      :category="props?.location"
+    />
 
     <BaseComment
       :commentsArray="props.offer?.comments"
@@ -253,7 +272,9 @@ onMounted(async () => {
 
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
+      <div
+        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
+      >
         <div class="w-6 text-center">Nr</div>
         <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
@@ -281,13 +302,19 @@ onMounted(async () => {
           @unchecked="uncheckedHandler"
         />
 
-        <PreviewTotal v-if="props?.location === 'projects'" :values="resultsTotal" :parts="true" />
+        <PreviewTotal
+          v-if="props?.location === 'projects'"
+          :values="resultsTotal"
+          :parts="true"
+        />
       </div>
     </div>
 
     <div class="text-2xl font-semibold text-black text-center">Darbai</div>
     <div class="flex flex-col">
-      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
+      <div
+        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
+      >
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
@@ -308,7 +335,10 @@ onMounted(async () => {
           :location="props.location"
           :_id="props.offer._id"
         />
-        <PreviewTotal v-if="props?.location === 'projects'" :values="worksTotal" />
+        <PreviewTotal
+          v-if="props?.location === 'projects'"
+          :values="worksTotal"
+        />
       </div>
     </div>
 

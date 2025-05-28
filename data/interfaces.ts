@@ -532,7 +532,7 @@ export interface Order {
   orderDate: string;
   deliveryDate: string;
   deliveryMethod: string;
-  message: string;
+  comments: Comment[];
   recipient: string;
 }
 

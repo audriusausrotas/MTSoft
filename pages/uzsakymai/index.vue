@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <OrdersMain
+    <OrdersOrder
       v-for="(order, index) in useOrderStore().orders"
       :order="order"
       :key="order._id"
