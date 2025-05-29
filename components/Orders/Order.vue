@@ -1,7 +1,13 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
-
 const { setError, setIsError } = useError();
+const userStore = useUserStore();
+
+const dateNow = new Date().getTime();
+const dateCreated = new Date(props.order.orderDate).getTime();
+
+const dateDifferenceMs = dateNow - dateCreated;
+const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
 
 const deleteHandler = async (event: Event) => {
   const response: any = await request.delete(`deleteOrder/${props.order._id}`);
@@ -23,17 +29,50 @@ const clickHandler = () => {
 </script>
 
 <template>
-  <div class="flex gap-4 items-center border-b px-2">
+  <div class="flex gap-4 m-auto items-center">
     <div
       @click="clickHandler"
-      class="flex gap-4 hover:scale-105 transition-transform hover:cursor-pointer"
+      class="flex sm:gap-2 gap-y-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
-      <div>{{ index + 1 }}</div>
-      <div>{{ order.orderDate }}</div>
-      <div>{{ order.deliveryDate }}</div>
-      <div>{{ order.client.address }}</div>
-      <div>{{ order.deliveryMethod }}</div>
-      <div>{{ order.user.username }}</div>
+      <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
+      <BaseInput
+        :name="props.order.orderNr"
+        width="w-36 order-2"
+        :disable="true"
+      />
+      <BaseInput
+        :name="props.order.client.address"
+        width="w-full md:w-80 order-6 md:order-3"
+        :disable="true"
+      />
+
+      <BaseInfoField
+        :name="props.order.deliveryMethod"
+        width="w-40 order-3 md:order-4"
+        class="capitalize"
+      />
+
+      <BaseInfoField
+        v-if="userStore.user?.accountType === 'Administratorius'"
+        :name="props.order.recipient.split('@')[0].replace('.', ' ')"
+        width="w-52 order-4 "
+        class="capitalize"
+      />
+
+      <BaseInfoField
+        :name="props.order.deliveryDate.slice(0, 10)"
+        width="w-32"
+        class="order-5"
+        :class="
+          dateDifference < 25
+            ? 'bg-green-500'
+            : dateDifference < 45
+            ? 'bg-orange-500'
+            : dateDifference < 60
+            ? 'bg-red-600'
+            : 'bg-red-800 text-white animate-bounce'
+        "
+      />
     </div>
     <div
       @click="deleteHandler"
@@ -41,8 +80,8 @@ const clickHandler = () => {
     >
       <NuxtImg
         src="/icons/delete.svg"
-        width="20"
-        height="20"
+        width="24"
+        height="24"
         decoding="auto"
         :ismap="true"
         loading="lazy"

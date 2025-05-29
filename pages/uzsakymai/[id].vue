@@ -6,6 +6,8 @@ const order = computed(() =>
   useOrderStore().orders.find((item) => item._id === route.params.id)
 );
 
+const editable = ref<boolean>(false);
+
 const addComment = async (comment: Comment) => {
   const requestData = {
     _id: order.value?._id,
@@ -43,6 +45,13 @@ const deleteComment = async (_id: string, comment: Comment) => {
 <template>
   <div class="flex flex-col gap-4">
     <OrdersInfo :order="order" />
+
+    <OrdersButtons
+      :_id="order?._id"
+      :editable="editable"
+      @edit="editable = !editable"
+    />
+
     <BaseComment
       :commentsArray="order?.comments"
       :id="order?._id"
@@ -50,6 +59,7 @@ const deleteComment = async (_id: string, comment: Comment) => {
       class="max-w-[1260px]"
       @onDelete="deleteComment"
     />
+
     <div class="flex flex-col gap-4">
       <OrdersMain
         v-for="(data, index) in order?.data"

@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-4">
     <OrdersOrder
       v-for="(order, index) in useOrderStore().orders"
       :order="order"
