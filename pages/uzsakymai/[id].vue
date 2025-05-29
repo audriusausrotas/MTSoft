@@ -49,7 +49,8 @@ const deleteComment = async (_id: string, comment: Comment) => {
     <OrdersButtons
       :_id="order?._id"
       :editable="editable"
-      @edit="editable = !editable"
+      @edit="editable = true"
+      @save="editable = false"
     />
 
     <BaseComment
