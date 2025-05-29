@@ -9,7 +9,7 @@ const dateCreated = new Date(props.order.orderDate).getTime();
 const dateDifferenceMs = dateNow - dateCreated;
 const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
 
-const deleteHandler = async (event: Event) => {
+const deleteHandler = async () => {
   const response: any = await request.delete(`deleteOrder/${props.order._id}`);
 
   if (response.success) {
@@ -35,11 +35,7 @@ const clickHandler = () => {
       class="flex sm:gap-2 gap-y-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput
-        :name="props.order.orderNr"
-        width="w-36 order-2"
-        :disable="true"
-      />
+      <BaseInput :name="props.order.orderNr" width="w-36 order-2" :disable="true" />
       <BaseInput
         :name="props.order.client.address"
         width="w-full md:w-80 order-6 md:order-3"
@@ -60,6 +56,7 @@ const clickHandler = () => {
       />
 
       <BaseInfoField
+        v-if="props.order.status"
         :name="props.order.deliveryDate.slice(0, 10)"
         width="w-32"
         class="order-5"
@@ -73,8 +70,10 @@ const clickHandler = () => {
             : 'bg-red-800 text-white animate-bounce'
         "
       />
+      <BaseInfoField v-else name="Baigtas" width="w-32" class="order-5 bg-green-500" />
     </div>
     <div
+      v-if="userStore.user?.accountType === 'Administratorius'"
       @click="deleteHandler"
       class="hover:cursor-pointer hover:bg-red-200 flex items-center justify-center w-8 h-8 rounded-md"
     >

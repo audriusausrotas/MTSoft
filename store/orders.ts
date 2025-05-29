@@ -1,4 +1,4 @@
-import type { Comment, Order } from "~/data/interfaces";
+import type { Comment, Order, OrderData } from "~/data/interfaces";
 
 export const useOrderStore = defineStore("order", {
   state: () => ({
@@ -14,10 +14,40 @@ export const useOrderStore = defineStore("order", {
       this.orders.push(order);
     },
 
-    updateOrder(order: Order) {
-      this.orders = this.orders.map((item) =>
-        item._id === order._id ? order : item
+    updateOrder(_id: string, dataIndex: number, data: OrderData) {
+      this.orders = this.orders.map((item) => {
+        if (item._id === _id) {
+          item.data[dataIndex] = data;
+        }
+        return item;
+      });
+    },
+
+    updateOrderNr(_id: string, orderNr: string) {
+      this.orders = this.orders.map((item) => {
+        if (item._id === _id) item.orderNr = orderNr;
+        return item;
+      });
+    },
+
+    updateOrderFields(_id: string, dataIndex: number, field: keyof OrderData, value: boolean) {
+      this.orders = this.orders.map((order) =>
+        order._id !== _id
+          ? order
+          : {
+              ...order,
+              data: order.data.map((item, index) =>
+                index !== dataIndex ? item : { ...item, [field]: value }
+              ),
+            }
       );
+    },
+
+    finishOrder(_id: string) {
+      this.orders = this.orders.map((item) => {
+        if (item._id === _id) item.status = false;
+        return item;
+      });
     },
 
     deleteOrder(_id: string) {
@@ -37,33 +67,11 @@ export const useOrderStore = defineStore("order", {
       this.orders = this.orders.map((order) => {
         if (order._id === _id) {
           order.comments = order.comments.filter(
-            (item) =>
-              item.date !== comment.date && item.comment !== comment.comment
+            (item) => item.date !== comment.date && item.comment !== comment.comment
           );
           return order;
         } else return order;
       });
     },
-  },
-
-  getters: {
-    // searchGates: (state) => {
-    //   return (value: string) => {
-    //     const userStore = useUserStore();
-    //     let filteredGates = state.gates;
-    //     if (value.length > 2) {
-    //       filteredGates = filteredGates.filter(
-    //         (item) =>
-    //           item.client.address.toLowerCase().includes(value.toLowerCase()) ||
-    //           item.manager.toLowerCase().includes(value.toLowerCase()) ||
-    //           item.orderNr.toLowerCase().includes(value.toLowerCase())
-    //       );
-    //     }
-    //     if (userStore.user?.accountType !== "Administratorius") {
-    //       filteredGates = filteredGates.filter((item) => item.manager === userStore.user?.email);
-    //     }
-    //     return filteredGates;
-    //   };
-    // },
   },
 });

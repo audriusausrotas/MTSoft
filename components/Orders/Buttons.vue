@@ -1,28 +1,51 @@
 <script setup lang="ts">
-const props = defineProps(["_id", "editable"]);
-const emits = defineEmits(["edit", "save"]);
+const props = defineProps(["_id", "projectID"]);
 
 const { setError, setIsError } = useError();
 
-const editHandler = () => {
-  emits("edit");
+const finishOrderHandler = async () => {
+  const requestData = { _id: props._id, projectID: props.projectID };
+
+  const response: any = await request.patch("finishOrder", requestData);
+
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      const orderStore = useOrderStore();
+
+      orderStore.finishOrder(response.data._id);
+
+      const order = orderStore.orders.find((item) => item._id === response.data._id);
+
+      if (order) {
+        order.data.forEach((item) => {
+          useProjectsStore().partsDelivered(
+            response.data.projectID,
+            item.measureIndex,
+            item.delivered
+          );
+        });
+      }
+    }
+    setIsError(false);
+    setError(response.message);
+  } else {
+    setError(response.message);
+  }
+  navigateTo("/uzsakymai");
+  if (useUserStore().user?.accountType !== "Administratorius")
+    useOrderStore().deleteOrder(response.data._id);
 };
 
-const saveHandler = async () => {
-  emits("save");
-};
-
-const finishOrderHandler = async () => {};
-
-const orderNrHandler = async () => {
-  const requestData = { _id: props._id };
+const orderNrHandler = async (value: string) => {
+  const requestData = { _id: props._id, value };
 
   const response: any = await request.patch("updateOrderNr", requestData);
 
   if (response.success) {
-    // !useSocketStore().connected && gateStore.removeGates(response.data._id);
+    !useSocketStore().connected &&
+      useOrderStore().updateOrderNr(response.data._id, response.data.value);
     setIsError(false);
-    setError("Vartų užsakymas ištrintas");
+    setError(response.message);
   } else {
     setError(response.message);
   }
@@ -31,20 +54,8 @@ const orderNrHandler = async () => {
 
 <template>
   <div class="flex gap-4">
-    <BaseButtonWithInput
-      @onConfirm="orderNrHandler"
-      name="Pridėti užsakymo numerį"
-    />
-    <BaseButtonWithConfirmation
-      v-if="editable"
-      @onConfirm="saveHandler"
-      name="išsaugoti pakeitimus"
-    />
-    <BaseButton v-else @click="editHandler" name="redaguoti užsakymą" />
-    <BaseButtonWithConfirmation
-      @onConfirm="finishOrderHandler"
-      name="užbaigti užsakymą"
-    />
+    <BaseButtonWithInput @onConfirm="orderNrHandler" name="Pridėti užsakymo numerį" />
+    <BaseButtonWithConfirmation @onConfirm="finishOrderHandler" name="užbaigti užsakymą" />
   </div>
 </template>
 <style scoped></style>

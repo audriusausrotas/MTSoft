@@ -16,7 +16,7 @@ const gateUsers = userStore.users
   });
 
 const finishOrderHandler = async () => {
-  const response: any = await request.delete(`finishOrder/${gate.value?._id}`);
+  const response: any = await request.delete(`finishGateOrder/${gate.value?._id}`);
 
   if (response.success) {
     if (!useSocketStore().connected) {

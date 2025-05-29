@@ -445,7 +445,7 @@ export interface Schedule {
   _id: string;
   date: string;
   worker: Worker;
-  jobs: [Job] | [];
+  jobs: Job[] | [];
   comment: string;
 }
 
@@ -526,15 +526,16 @@ export interface UserRights {
 
 export interface Order {
   _id?: string;
+  projectID: string;
   creator: Creator;
   client: Client;
-  data: [OrderData];
+  data: OrderData[];
   orderDate: string;
   deliveryDate: string;
   deliveryMethod: string;
   comments: Comment[];
   recipient: string;
-  status: string;
+  status: boolean;
   orderNr: string;
 }
 
@@ -543,6 +544,9 @@ export interface OrderData {
   color: string;
   quantity: number;
   measureIndex: number;
+  ordered: boolean;
+  inWarehouse: boolean;
+  delivered: boolean;
 }
 
 export interface PotentialClient {
