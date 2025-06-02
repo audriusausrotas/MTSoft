@@ -22,6 +22,7 @@ export async function fetchGates() {
 export async function fetchOrders() {
   try {
     const response: any = await request.get("getOrders");
+
     response.success && useOrderStore().addOrders(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);

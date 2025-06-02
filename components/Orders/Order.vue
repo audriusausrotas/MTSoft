@@ -4,17 +4,17 @@ const { setError, setIsError } = useError();
 const userStore = useUserStore();
 
 const dateNow = new Date().getTime();
-const dateCreated = new Date(props.order.orderDate).getTime();
+const dateCreated = new Date(props.order?.orderDate).getTime();
 
 const dateDifferenceMs = dateNow - dateCreated;
 const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
 
 const deleteHandler = async () => {
-  const response: any = await request.delete(`deleteOrder/${props.order._id}`);
+  const response: any = await request.delete(`deleteOrder/${props.order?._id}`);
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      useOrderStore().deleteOrder(response.data._id);
+      useOrderStore().deleteOrder(response.data?._id);
     }
     setIsError(false);
     setError(response.message);
@@ -24,7 +24,7 @@ const deleteHandler = async () => {
 };
 
 const clickHandler = () => {
-  navigateTo("/uzsakymai/" + props.order._id);
+  navigateTo("/uzsakymai/" + props.order?._id);
 };
 </script>
 
@@ -35,29 +35,29 @@ const clickHandler = () => {
       class="flex sm:gap-2 gap-y-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput :name="props.order.orderNr" width="w-36 order-2" :disable="true" />
+      <BaseInput :name="props.order?.orderNr" width="w-36 order-2" :disable="true" />
       <BaseInput
-        :name="props.order.client.address"
+        :name="props.order?.client?.address"
         width="w-full md:w-80 order-6 md:order-3"
         :disable="true"
       />
 
       <BaseInfoField
-        :name="props.order.deliveryMethod"
+        :name="props.order?.deliveryMethod"
         width="w-40 order-3 md:order-4"
         class="capitalize"
       />
 
       <BaseInfoField
         v-if="userStore.user?.accountType === 'Administratorius'"
-        :name="props.order.recipient.split('@')[0].replace('.', ' ')"
+        :name="props.order?.recipient?.split('@')[0].replace('.', ' ')"
         width="w-52 order-4 "
         class="capitalize"
       />
 
       <BaseInfoField
-        v-if="props.order.status"
-        :name="props.order.deliveryDate.slice(0, 10)"
+        v-if="props.order?.status"
+        :name="props.order?.deliveryDate?.slice(0, 10)"
         width="w-32"
         class="order-5"
         :class="
