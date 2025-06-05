@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps(["phone", "email", "image"]);
+</script>
 
 <template>
   <OffersBoxWrap>
@@ -25,10 +27,10 @@
             <p class="text-justify font-normal md:max-w-96 min-w-72">
               <span class="font-bold sm:text-xl text-lg">„Moderni Tvora“</span>
               – šiuolaikiškus tvorų sprendimus siūlanti įmonė. Ilgametę patirtį
-              turinti profesionalų komanda specializuojasi skardinių tvorų
-              gamyboje. Didelį dėmesį skiria gaminių kokybei bei valdymo
-              procesams, kurie užtikrina aukščiausią gaminių kokybę ir greitą
-              bei skalndų užsakymų įgyvendinimą. Pas mus rasite didelį
+              turinti profesionalų komanda specializuojasi skardinių tvorų ir
+              lauko žaliuzių gamyboje. Didelį dėmesį skiria gaminių kokybei bei
+              valdymo procesams, kurie užtikrina aukščiausią gaminių kokybę ir
+              greitą bei skalndų užsakymų įgyvendinimą. Pas mus rasite didelį
               aukščiausios kokybės skardų bei kitų medžiagų pasirinkimą,
               užtikrinantį šimtaprocentinį jūsų poreikių įgyvendinimą.
             </p>
@@ -69,7 +71,7 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <p>audrius@modernitvora.lt</p>
+                  <p>{{ email }}</p>
                 </a>
 
                 <a
@@ -85,7 +87,7 @@
                     loading="lazy"
                     :ismap="true"
                   />
-                  <p>+370 675 17745</p>
+                  <p>{{ phone }}</p>
                 </a>
 
                 <NuxtLink
@@ -125,8 +127,9 @@
             </div>
           </div>
         </div>
+
         <NuxtImg
-          src="/images/cover.jpg"
+          :src="image"
           alt="Rombo tipo tvora"
           decoding="auto"
           loading="lazy"
