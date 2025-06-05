@@ -3,14 +3,7 @@ definePageMeta({
   layout: false,
 });
 
-const files = [
-  "blindsPDF1",
-  "blindsPDF2",
-  "blindsPDF3",
-  "blindsPDF4",
-  "blindsPDF5",
-  "blindsPDF6",
-];
+const files = ["blindsPDF1", "blindsPDF2", "blindsPDF3", "blindsPDF4", "blindsPDF5", "blindsPDF6"];
 </script>
 <template>
   <div class="max-w-[1470px] m-auto py-8">
@@ -31,11 +24,7 @@ const files = [
         </div>
       </OffersBoxWrap>
 
-      <OffersSteelInfo
-        class="print:break-after-page"
-        :hideEco="true"
-        :blinds="true"
-      />
+      <OffersSteelInfo class="print:break-after-page" :hideEco="true" :blinds="true" />
 
       <OffersOfferFences :retail="false" :blinds="true" />
 
@@ -45,7 +34,7 @@ const files = [
         <OffersBoxWrap v-for="file in files" :key="file" class="w-full">
           <NuxtImg
             :src="`/images/${file}.jpg`"
-            alt="Lauko žaliužė"
+            alt="Lauko žaliužės"
             decoding="auto"
             loading="lazy"
             :ismap="true"
