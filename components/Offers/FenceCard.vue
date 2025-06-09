@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const props = defineProps(["fence", "retail"]);
-console.log("fence");
 </script>
 
 <template>
