@@ -191,7 +191,7 @@ const blinds = [
     imgDetail: "blind",
     imgView: "blinds2",
     premPriceM: props.retail ? "5.45" : "7.41",
-    premPriceMVat: props.retail ? "6.60" : "8.97",
+    premPriceMVat: props.retail ? "6.60" : "8.98",
     holders: props.retail ? "22.50" : "25.88",
     holdersVat: props.retail ? "27.22" : "31.32",
   },
@@ -207,7 +207,7 @@ const blinds = [
       class="print:break-after-page"
       :retail="props.retail"
       :blinds="true"
-    />
+    />-
   </div>
   <div v-else>
     <OffersFenceCard
