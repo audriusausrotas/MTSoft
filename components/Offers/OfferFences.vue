@@ -199,7 +199,7 @@ const blinds = [
 </script>
 
 <template>
-  <div v-if="blinds">
+  <div v-if="props.blinds">
     <OffersBlindCard
       v-for="blind in blinds"
       :key="blind.name"
