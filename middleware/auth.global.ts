@@ -1,7 +1,10 @@
 import request from "~/utils/request";
 
 const isPublicPath = (path: string) =>
-  path.includes("pasiulymas") || path.includes("didmena") || path.includes("tvoros");
+  path.includes("pasiulymas") ||
+  path.includes("didmena") ||
+  path.includes("tvoros") ||
+  path.includes("zaliuzes");
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUserStore();
