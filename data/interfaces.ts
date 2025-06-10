@@ -558,3 +558,192 @@ export interface PotentialClient {
   status: string;
   send: boolean;
 }
+
+// export interface Prices {
+//   cost: number;
+//   price: number;
+//   profit: number;
+//   margin: number;
+// }
+
+// export interface Comment {
+//   date: string;
+//   creator: string;
+//   comment: string;
+// }
+
+// export interface Creator {
+//   username: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+// }
+
+// export interface Client {
+//   _id?: string;
+//   address: string;
+//   username: string;
+//   phone: string;
+//   email: string;
+// }
+
+// export interface Kampas {
+//   exist: boolean;
+//   value: number;
+//   comment: string;
+// }
+
+// export interface Laiptas {
+//   exist: boolean;
+//   value: number;
+//   direction: string;
+// }
+
+// export interface GateInfo {
+//   exist: boolean;
+//   type: string;
+//   automatics: string;
+//   comment: string;
+//   direction: string;
+//   lock: string;
+//   bankette: string;
+//   option: string;
+// }
+
+// export interface Measure {
+//   length: number;
+//   height: number;
+//   MeasureSpace: number;
+//   elements: number;
+//   gates: GateInfo;
+//   kampas: Kampas;
+//   laiptas: Laiptas;
+// }
+
+// export interface InstallationMeasure extends Measure {
+//   done: boolean;
+//   postone: boolean;
+// }
+
+// export interface ProductionMeasure extends Measure {
+//   cut: number;
+//   done: number;
+//   postone: boolean;
+// }
+
+// export interface BaseFence {
+//   id: string;
+//   side: string;
+//   type: string;
+//   color: string;
+//   material: string;
+//   services: string;
+//   seeThrough: string;
+//   direction: string;
+//   parts: string;
+//   comment: string;
+//   twoSided: string;
+//   bindings: string;
+//   anchoredPoles: string;
+//   space: number;
+//   elements: number;
+//   totalLength: number;
+//   totalQuantity: number;
+// }
+
+// export interface InstallationFence extends BaseFence {
+//   measures: InstallationMeasure[];
+// }
+
+// export interface ProdutionFence extends BaseFence {
+//   measures: ProductionMeasure[];
+// }
+
+// export interface Fence extends BaseFence {
+//   measures: Measure[];
+// }
+
+// export interface ProjectPrices {
+//   isRetail: boolean;
+//   isDiscount: boolean;
+//   priceVAT: number;
+//   priceWithDiscount: number;
+//   advance: number;
+//   retail: Prices;
+//   wholesale: Prices;
+// }
+
+// export interface Dates {
+//   dateCreated: string;
+//   dateExpiration: string;
+//   dateConfirmed: string;
+//   dateCompletion: string;
+//   dateArchieved: string;
+// }
+
+// export interface Version {
+//   _id?: Types.ObjectId;
+//   id: Types.ObjectId;
+//   date: string;
+// }
+
+// export interface Project {
+//   _id?: string;
+//   creator: Creator;
+//   client: Client;
+//   fenceMeasures: Fence[];
+//   results: Result[];
+//   works: Works[];
+//   gates: Gate[];
+//   prices: ProjectPrices;
+//   status: string;
+//   orderNumber: string;
+//   files: string[];
+//   comments: Comment[];
+//   versions: Version[];
+//   dates: Dates;
+//   workers: string[];
+// }
+
+// export interface Result {
+//   id: string;
+//   type: string;
+//   prices: Prices;
+//   totalPrices: Prices;
+//   category: string;
+//   quantity: number;
+//   height: number;
+//   twoSided: string;
+//   direction: string;
+//   seeThrough: string;
+//   space: number;
+//   color: string;
+//   width: number | null;
+//   delivered: boolean;
+//   ordered: boolean;
+// }
+
+// export interface Works {
+//   id: string;
+//   name: string;
+//   quantity: number;
+//   prices: Prices;
+//   totalPrices: Prices;
+//   done: boolean;
+// }
+
+// export interface Gate {
+//   _id: Types.ObjectId;
+//   type: string;
+//   auto: string;
+//   width: number;
+//   height: number;
+//   color: string;
+//   filling: string;
+//   ready: boolean;
+//   bankette: string;
+//   direction: string;
+//   lock: string;
+//   comment: string;
+//   option: string;
+// }
