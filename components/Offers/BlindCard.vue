@@ -8,38 +8,22 @@ const props = defineProps(["blind", "retail"]);
       <div class="font-bold text-2xl text-center mb-4">
         {{ props.blind.name }}
       </div>
-      <div
-        class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
-      >
+      <div class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full">
         <div class="flex flex-col gap-2 w-[400px] justify-evenly">
           <div class="flex flex-col">
-            <div class="text-center font-bold text-lg">
-              {{ props.blind.name }} metro kaina
-            </div>
-            <div
-              class="grid grid-cols-[1fr_1fr] border-2 rounded-md border-black"
-            >
-              <div
-                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
-              >
+            <div class="text-center font-bold text-lg">{{ props.blind.name }} metro kaina</div>
+            <div class="grid grid-cols-[1fr_1fr] border-2 rounded-md border-black">
+              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
                 Skardos tipas
               </div>
-              <div
-                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
-              >
-                Premium
-              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
 
-              <div class="px-2 py-1 border-b border-inherit border-r">
-                Kaina be PVM
-              </div>
+              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
               <div class="px-2 py-1 border-b border-inherit border-r">
                 {{ props.blind.premPriceM }} €/m
               </div>
 
-              <div class="px-2 py-1 border-r border-inherit flex">
-                Kaina su PVM
-              </div>
+              <div class="px-2 py-1 border-r border-inherit flex">Kaina su PVM</div>
               <div class="px-2 py-1 border-r border-inherit flex">
                 {{ props.blind.premPriceMVat }} €/m
               </div>
@@ -48,12 +32,8 @@ const props = defineProps(["blind", "retail"]);
 
           <div class="flex flex-col">
             <div class="text-center font-bold text-lg">Žaliuzės laikikliai</div>
-            <div
-              class="grid grid-cols-[1fr_1fr] border-2 rounded-md border-black"
-            >
-              <div class="px-2 py-1 border-b border-inherit border-r">
-                Kaina be PVM
-              </div>
+            <div class="grid grid-cols-[1fr_1fr] border-2 rounded-md border-black">
+              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
               <div class="px-2 py-1 border-b border-inherit border-r">
                 {{ props.blind.holders }} €/vnt
               </div>
