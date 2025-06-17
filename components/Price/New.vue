@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { productsStore } from "~/store/products";
 import { categories } from "~/data/selectFieldData";
 
 const productsStore = useProductsStore();
@@ -48,7 +47,11 @@ const clearHandler = (): void => {
   <div class="flex flex-col gap-4">
     <BaseButton v-if="!open" name="pridėti naują" @click="open = true" />
     <div v-else class="flex gap-4">
-      <BaseButton name="išsaugoti" @click="saveHandler" :isLoading="isLoading" />
+      <BaseButton
+        name="išsaugoti"
+        @click="saveHandler"
+        :isLoading="isLoading"
+      />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
     <div v-if="open" class="flex items-end gap-2">
