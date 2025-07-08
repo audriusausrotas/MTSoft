@@ -2,7 +2,7 @@
 import type { Product } from "~/data/interfaces";
 
 const props = defineProps(["data", "field", "name"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const settingsStore = useSettingsStore();
 const productsStore = useProductsStore();
 
@@ -30,8 +30,7 @@ const saveHandler = async (value: string) => {
     !useSocketStore().connected &&
       settingsStore.newSelectValue(response.data.field, response.data.value);
     editable.value = false;
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

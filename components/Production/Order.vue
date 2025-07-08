@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 const router = useRouter();
@@ -14,13 +14,15 @@ const deleteHandler = async (): Promise<void> => {
     return;
   }
 
-  const response: any = await request.delete(`deleteProduction/${props.order._id}`);
+  const response: any = await request.delete(
+    `deleteProduction/${props.order._id}`
+  );
 
   if (response.success) {
-    !useSocketStore().connected && productionStore.deleteProductionOrder(response.data._id);
+    !useSocketStore().connected &&
+      productionStore.deleteProductionOrder(response.data._id);
     await router.replace("/gamyba");
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -51,9 +53,20 @@ const clickHandler = () => {
           : 'bg-green-500'
       "
     />
-    <BaseInfoField class="pointer-events-none" :name="order?.client?.address" width="w-96" />
-    <BaseInfoField class="pointer-events-none" :name="order?.creator?.username" width="w-24" />
-    <div @click.stop="deleteHandler" class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
+    <BaseInfoField
+      class="pointer-events-none"
+      :name="order?.client?.address"
+      width="w-96"
+    />
+    <BaseInfoField
+      class="pointer-events-none"
+      :name="order?.creator?.username"
+      width="w-24"
+    />
+    <div
+      @click.stop="deleteHandler"
+      class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1"
+    >
       <NuxtImg
         src="/icons/delete.svg"
         width="24"

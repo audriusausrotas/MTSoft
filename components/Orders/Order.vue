@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const userStore = useUserStore();
 
 const dateNow = new Date().getTime();
@@ -16,8 +16,8 @@ const deleteHandler = async () => {
     if (!useSocketStore().connected) {
       useOrderStore().deleteOrder(response.data?._id);
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -35,7 +35,11 @@ const clickHandler = () => {
       class="flex sm:gap-2 gap-y-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput :name="props.order?.orderNr" width="w-36 order-2" :disable="true" />
+      <BaseInput
+        :name="props.order?.orderNr"
+        width="w-36 order-2"
+        :disable="true"
+      />
       <BaseInput
         :name="props.order?.client?.address"
         width="w-full md:w-80 order-6 md:order-3"
@@ -70,7 +74,12 @@ const clickHandler = () => {
             : 'bg-red-800 text-white animate-bounce'
         "
       />
-      <BaseInfoField v-else name="Baigtas" width="w-32" class="order-5 bg-green-500" />
+      <BaseInfoField
+        v-else
+        name="Baigtas"
+        width="w-32"
+        class="order-5 bg-green-500"
+      />
     </div>
     <div
       v-if="userStore.user?.accountType === 'Administratorius'"

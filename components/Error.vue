@@ -1,27 +1,26 @@
 <script setup lang="ts">
-const { error } = useError();
-const { isError } = useError();
+const { message, isError } = useError();
 </script>
 
 <template>
   <Teleport to="body">
     <div
-      v-if="error"
+      v-if="message"
       class="fixed top-0 left-0 z-50 flex justify-center w-full pointer-events-none"
-      :class="error ? 'animation' : ''"
+      :class="message ? 'animation' : ''"
     >
       <div
-        class="flex items-center justify-center px-8 py-4 text-xl font-medium text-center text-white capitalize w-72 min-h-24 rounded-b-3xl"
+        class="flex items-center justify-center px-8 py-4 text-xl font-medium text-center text-white capitalize w-72 min-h-20 rounded-b-3xl"
         :class="isError ? 'bg-red-full ' : 'bg-green-500 text-black'"
       >
-        {{ error }}
+        {{ message }}
       </div>
     </div>
   </Teleport>
 </template>
 <style scoped>
 .animation {
-  animation: slide 2s;
+  animation: slide 1s;
 }
 
 @keyframes slide {

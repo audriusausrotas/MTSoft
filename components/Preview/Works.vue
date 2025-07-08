@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["work", "index", "hidePrices", "location", "_id"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const doneHandler = async (value: boolean) => {
   const requestData = { _id: props?._id, measureIndex: props?.index, value };
@@ -14,8 +14,8 @@ const doneHandler = async (value: boolean) => {
         response?.data?.measureIndex,
         response?.data?.value
       );
-    setIsError(false);
-    setError(response?.message);
+
+    setSuccess(response?.message);
   } else {
     setError(response?.message);
   }
@@ -108,7 +108,9 @@ const doneHandler = async (value: boolean) => {
         <p class="block lg:hidden font-bold">Užsakyta:</p>
         <div
           class="w-16 items-center"
-          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
+          :class="
+            props?.location === 'installation' ? 'pointer-events-none ' : ''
+          "
         >
           <BaseCheckField
             :name="'vartai' + index"

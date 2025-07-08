@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "file", "category"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const deleteHandler = async (event: Event) => {
   event.stopPropagation();
@@ -18,14 +18,19 @@ const deleteHandler = async (event: Event) => {
       if (props.category === "projects") {
         useProjectsStore().updateFiles(response.data._id, response.data.files);
       } else if (props.category === "production") {
-        useProductionStore().updateFiles(response.data._id, response.data.files);
+        useProductionStore().updateFiles(
+          response.data._id,
+          response.data.files
+        );
       } else if (props.category === "installation") {
-        useInstallationStore().updateFiles(response.data._id, response.data.files);
+        useInstallationStore().updateFiles(
+          response.data._id,
+          response.data.files
+        );
       }
     }
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

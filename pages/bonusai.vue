@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Bonus } from "~/data/interfaces";
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const MONTHS = [
   "Visi",
   "Sausis",
@@ -32,8 +32,7 @@ const getBonuses = async () => {
     bonuses.value = [...response.data];
     getYears(response.data);
     filterBonuses();
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -119,7 +118,9 @@ const calculateBonuses = () => {
       <BaseInput label="Viso bonusų:" :name="bonusSum + ' €'" width="w-24" />
     </div>
     <div>
-      <div class="flex gap-4 font-medium border-b p-2 rounded-t-xl bg-gray-ultra-light">
+      <div
+        class="flex gap-4 font-medium border-b p-2 rounded-t-xl bg-gray-ultra-light"
+      >
         <p class="w-8">Nr</p>
         <p class="flex-1">Adresas</p>
         <p class="w-28">Data</p>

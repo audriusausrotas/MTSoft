@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const route = useRoute();
 
-const order = computed(() => useOrderStore().orders.find((item) => item._id === route.params.id));
+const order = computed(() =>
+  useOrderStore().orders.find((item) => item._id === route.params.id)
+);
 
 const addComment = async (comment: Comment) => {
   const requestData = {
@@ -15,8 +17,7 @@ const addComment = async (comment: Comment) => {
   if (response.success) {
     !useSocketStore().connected &&
       useOrderStore().addComment(response.data._id, response.data.comment);
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -30,8 +31,7 @@ const deleteComment = async (_id: string, comment: Comment) => {
   if (response.success) {
     !useSocketStore().connected &&
       useOrderStore().deleteComment(response.data._id, response.data.comment);
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

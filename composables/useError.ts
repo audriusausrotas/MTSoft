@@ -1,31 +1,26 @@
-export default function useError(): {
-  error: Ref<string>;
-  isError: Ref<boolean>;
-  setIsError: (errorMessage: boolean) => void;
-  setError: (errorMessage: string) => void;
-} {
-  const error = useState("error", () => "");
-  const isError = useState("isError", () => true);
-  let timeoutId: any = null;
+const message = ref("");
+const isError = ref(false);
+let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  const setError = (errorMessage: string) => {
-    error.value = errorMessage;
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      error.value = "";
-      isError.value = true;
-    }, 3000);
-  };
-  const setIsError = (errorMessage: boolean) => {
-    isError.value = errorMessage;
-  };
+const showMessage = (text: string, type: boolean) => {
+  message.value = text;
+  isError.value = type;
 
+  if (timeoutId) clearTimeout(timeoutId);
+  timeoutId = setTimeout(() => {
+    message.value = "";
+    isError.value = false;
+  }, 950);
+};
+
+const setSuccess = (text: string) => showMessage(text, false);
+const setError = (text: string) => showMessage(text, true);
+
+export default function useError() {
   return {
-    error,
+    message,
     isError,
-    setIsError,
+    setSuccess,
     setError,
   };
 }

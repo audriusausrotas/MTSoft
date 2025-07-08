@@ -5,7 +5,7 @@ const settingsStore = useSettingsStore();
 const gateStore = useGateStore();
 const open = ref<boolean>(false);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const date = props.project?.dates?.dateConfirmed
   ? props.project?.dates?.dateConfirmed
@@ -64,8 +64,8 @@ const statusHandler = async (value: string) => {
         "status",
         response.data.status
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

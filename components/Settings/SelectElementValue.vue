@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["value", "editable", "index", "field", "disable"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const settingsStore = useSettingsStore();
 
 const deleteHandler = async () => {
@@ -12,8 +12,7 @@ const deleteHandler = async () => {
   if (response.success) {
     !useSocketStore().connected &&
       settingsStore.deleteSelectValue(response.data.field, response.data.index);
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

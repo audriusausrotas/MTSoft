@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const projectsStore = useProjectsStore();
 
 const searchQuery = ref<string>("");

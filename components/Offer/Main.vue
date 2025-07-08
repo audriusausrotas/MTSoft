@@ -262,7 +262,7 @@ props.offer?.works?.forEach(
 
           <div class="flex px-4 justify-between">
             <p class="font-semibold">PVM Suma:</p>
-            <p>{{ (offer?.totalPrice || 0 * 0.21).toFixed(2) }} €</p>
+            <p>{{ (offer?.totalPrice * 0.21).toFixed(2) }} €</p>
           </div>
 
           <div

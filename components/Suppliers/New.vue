@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const open = ref<boolean>(false);
 const username = ref<string>("");
@@ -17,9 +17,9 @@ const saveHandler = async () => {
 
   const response: any = await request.post("newSupplier", supplier);
   if (response.success) {
-    !useSocketStore().connected && useSuppliersStore().addSupplier(response.data);
-    setIsError(false);
-    setError(response.message);
+    !useSocketStore().connected &&
+      useSuppliersStore().addSupplier(response.data);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -45,7 +45,11 @@ const cancelHandler = () => {
         <BaseButton name="Atšaukti" @click="cancelHandler" />
       </div>
       <div class="flex gap-4 flex-wrap">
-        <BaseInput label="Vardas" placeholder="vardas" @onChange="(value) => (username = value)" />
+        <BaseInput
+          label="Vardas"
+          placeholder="vardas"
+          @onChange="(value) => (username = value)"
+        />
         <BaseInput
           label="el. paštas"
           placeholder="el. paštas"
@@ -56,7 +60,11 @@ const cancelHandler = () => {
           placeholder="telefono numeris"
           @onChange="(value) => (phone = value)"
         />
-        <BaseInput label="adresas" placeholder="adresas" @onChange="(value) => (address = value)" />
+        <BaseInput
+          label="adresas"
+          placeholder="adresas"
+          @onChange="(value) => (address = value)"
+        />
       </div>
     </div>
   </div>

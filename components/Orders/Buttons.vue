@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "projectID"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const finishOrderHandler = async () => {
   const requestData = { _id: props._id, projectID: props.projectID };
@@ -14,7 +14,9 @@ const finishOrderHandler = async () => {
 
       orderStore.finishOrder(response.data._id);
 
-      const order = orderStore.orders.find((item) => item._id === response.data._id);
+      const order = orderStore.orders.find(
+        (item) => item._id === response.data._id
+      );
 
       if (order) {
         order.data.forEach((item) => {
@@ -26,8 +28,8 @@ const finishOrderHandler = async () => {
         });
       }
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -44,8 +46,8 @@ const orderNrHandler = async (value: string) => {
   if (response.success) {
     !useSocketStore().connected &&
       useOrderStore().updateOrderNr(response.data._id, response.data.value);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -54,8 +56,14 @@ const orderNrHandler = async (value: string) => {
 
 <template>
   <div class="flex gap-4">
-    <BaseButtonWithInput @onConfirm="orderNrHandler" name="Pridėti užsakymo numerį" />
-    <BaseButtonWithConfirmation @onConfirm="finishOrderHandler" name="užbaigti užsakymą" />
+    <BaseButtonWithInput
+      @onConfirm="orderNrHandler"
+      name="Pridėti užsakymo numerį"
+    />
+    <BaseButtonWithConfirmation
+      @onConfirm="finishOrderHandler"
+      name="užbaigti užsakymą"
+    />
   </div>
 </template>
 <style scoped></style>

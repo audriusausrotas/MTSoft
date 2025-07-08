@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import type { Measure } from "~/data/interfaces";
 import { verticals } from "~/data/selectFieldData";
-const props = defineProps(["fence", "fenceIndex", "_id", "orderNr", "clientAddress"]);
+const props = defineProps([
+  "fence",
+  "fenceIndex",
+  "_id",
+  "orderNr",
+  "clientAddress",
+]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
@@ -14,7 +20,8 @@ const filterLength = ref<boolean>(false);
 const filteredMeasures = ref([...props.fence.measures]);
 
 const isFenceboards =
-  verticals.includes(props.fence.type) || props.fence.type.includes("Segmentas");
+  verticals.includes(props.fence.type) ||
+  props.fence.type.includes("Segmentas");
 
 const newMeasureHandler = async () => {
   const requestData = { _id: props._id, index: props.fenceIndex };
@@ -28,8 +35,8 @@ const newMeasureHandler = async () => {
         response.data.index,
         response.data.newMeasure
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -70,8 +77,8 @@ const deleteHandler = async () => {
   if (response.success) {
     !useSocketStore().connected &&
       productionStore.deleteFence(response.data._id, response.data.index);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -92,7 +99,10 @@ watch(
 
 <template>
   <div class="flex flex-col">
-    <div v-if="!isFenceboards" class="flex gap-4 items-center font-bold text-2xl">
+    <div
+      v-if="!isFenceboards"
+      class="flex gap-4 items-center font-bold text-2xl"
+    >
       <p>
         {{ props.fence.side }} - {{ props.fence.type }} -
         {{ props.fence.color }}
@@ -145,11 +155,29 @@ watch(
           class="transition-all"
         />
       </p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Elementai</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Aukštis</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Išpjauti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Pagaminti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black print:hidden">
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Elementai
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Aukštis
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Išpjauti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Pagaminti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black print:hidden"
+      >
         Veiksmai
       </p>
       <p
@@ -177,7 +205,12 @@ watch(
         :orderNr="props.orderNr"
         :clientAddress="props.clientAddress"
       />
-      <BaseButton v-if="isAdmin" name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
+      <BaseButton
+        v-if="isAdmin"
+        name="Pridėti naują"
+        class="mt-2"
+        @click="newMeasureHandler"
+      />
     </div>
   </div>
 </template>

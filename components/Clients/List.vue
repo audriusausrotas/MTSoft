@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const clientsStore = useClientsStore();
 
 const deleteHandler = async (_id: string) => {
@@ -7,8 +7,8 @@ const deleteHandler = async (_id: string) => {
 
   if (response.success) {
     !useSocketStore().connected && clientsStore.deleteClient(response.data._id);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

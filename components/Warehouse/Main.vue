@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["project", "index", "length"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const statusValues = [
   "Patvirtintas",
@@ -18,7 +18,9 @@ const colorCompletion = computed(() => {
   const today = new Date();
   const completionDate = new Date(props.project?.dates?.dateCompletion);
 
-  const time = Math.ceil((completionDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const time = Math.ceil(
+    (completionDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
   return time > 30
     ? "bg-green-300"
@@ -57,9 +59,12 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
     !useSocketStore().connected &&
-      useProjectsStore().updateProjectField(response.data._id, "status", response.data.status);
-    setIsError(false);
-    setError(response.message);
+      useProjectsStore().updateProjectField(
+        response.data._id,
+        "status",
+        response.data.status
+      );
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -71,7 +76,9 @@ const previewHandler = () => {
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center xl:justify-start gap-2 w-full">
+  <div
+    class="flex flex-wrap items-center justify-center xl:justify-start gap-2 w-full"
+  >
     <div class="font-semibold text-xl w-10">
       {{ length - index }}
     </div>
@@ -88,8 +95,16 @@ const previewHandler = () => {
 
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <BaseInfoField :name="props.project?.client?.address" width="flex-1" />
-    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
-    <BaseInfoField :name="props.project?.client?.email" width="w-64  " :email="true" />
+    <BaseInfoField
+      :name="props.project?.client?.phone"
+      width="w-32"
+      :tel="true"
+    />
+    <BaseInfoField
+      :name="props.project?.client?.email"
+      width="w-64  "
+      :email="true"
+    />
 
     <BaseSelectField
       :values="statusValues"

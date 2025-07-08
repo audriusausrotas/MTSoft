@@ -135,17 +135,17 @@ const props = defineProps(["hideEco", "blinds"]);
       </div>
       <div class="px-2 py-1 border-b border-inherit font-bold">Eco</div>
       <div class="px-2 py-1 border-b border-inherit border-r">Gamintojas</div>
-      <div class="px-2 py-1 border-b border-inherit">Marcegaglia</div>
+      <div class="px-2 py-1 border-b border-inherit">Ukraina</div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Gamintojo šalis
       </div>
-      <div class="px-2 py-1 border-b border-inherit">Italija</div>
+      <div class="px-2 py-1 border-b border-inherit">Ukraina</div>
       <div class="px-2 py-1 border-b border-inherit border-r">Garantija</div>
-      <div class="px-2 py-1 border-b border-inherit">5 metai</div>
+      <div class="px-2 py-1 border-b border-inherit">10 metų</div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Skardos storis
       </div>
-      <div class="px-2 py-1 border-b border-inherit">0.45 mm</div>
+      <div class="px-2 py-1 border-b border-inherit">0.42 mm</div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Skardos identiško atspalvio garantas
       </div>
@@ -161,9 +161,9 @@ const props = defineProps(["hideEco", "blinds"]);
       <div class="px-2 py-1 border-b border-inherit border-r">
         Metalinės dangos masė (g/m2)
       </div>
-      <div class="px-2 py-1 border-b border-inherit">---</div>
+      <div class="px-2 py-1 border-b border-inherit">Zn 100</div>
       <div class="px-2 py-1 border-r border-inherit">Padengimas</div>
-      <div class="px-2 py-1">---</div>
+      <div class="px-2 py-1">25 mikronai</div>
     </div>
   </OffersBoxWrap>
 </template>

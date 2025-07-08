@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["binding", "index", "_id"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
@@ -26,7 +26,8 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.binding.cut === 0 || props.binding.cut === undefined
     ? "bg-transparent"
-    : +props.binding.cut === +props.binding.quantity && +done === +props.binding.quantity
+    : +props.binding.cut === +props.binding.quantity &&
+      +done === +props.binding.quantity
     ? "bg-green-500"
     : +props.binding.cut > +props.binding.quantity
     ? "bg-red-full"
@@ -87,8 +88,8 @@ const saveHandler = async (field: string) => {
         response.data.field,
         response.data.option
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
 
     if (field === "cut") {
       cut.value = +requestData.value;
@@ -124,7 +125,10 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch("updateProductionPostone", requestData);
+  const response: any = await request.patch(
+    "updateProductionPostone",
+    requestData
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -137,8 +141,7 @@ const postoneHandler = async () => {
         response.data.option
       );
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -155,8 +158,8 @@ const deleteHandler = async () => {
   if (response.success) {
     !useSocketStore().connected &&
       productionStore.deleteBinding(response.data._id, response.data.bindingId);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -177,17 +180,25 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+    +inputElement.value !== cut.value
+      ? (isSavedCut.value = false)
+      : (isSavedCut.value = true);
   else if (field === "type")
-    inputElement.value !== type.value ? (isSavedType.value = false) : (isSavedType.value = true);
+    inputElement.value !== type.value
+      ? (isSavedType.value = false)
+      : (isSavedType.value = true);
   else if (field === "color")
-    inputElement.value !== color.value ? (isSavedColor.value = false) : (isSavedColor.value = true);
+    inputElement.value !== color.value
+      ? (isSavedColor.value = false)
+      : (isSavedColor.value = true);
   else if (field === "height")
     +inputElement.value !== height.value
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+    +inputElement.value !== done.value
+      ? (isSavedDone.value = false)
+      : (isSavedDone.value = true);
   else if (field === "quantity")
     +inputElement.value !== quantity.value
       ? (isSavedQuantity.value = false)

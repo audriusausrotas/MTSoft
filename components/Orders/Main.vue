@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "data", "index"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const disabled = ref<boolean>(true);
 const name = ref<string>(props.data?.name);
@@ -20,8 +20,8 @@ const updateOrderHandler = async (field: string, value: boolean) => {
         response.data.field,
         response.data.value
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -31,16 +31,25 @@ const saveHandler = async () => {
   const requestData = {
     _id: props._id,
     dataIndex: props.index,
-    data: { ...props.data, name: name.value, color: color.value, quantity: quantity.value },
+    data: {
+      ...props.data,
+      name: name.value,
+      color: color.value,
+      quantity: quantity.value,
+    },
   };
 
   const response: any = await request.patch("updateOrder", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      useOrderStore().updateOrder(response.data._id, response.data.dataIndex, response.data.data);
-    setIsError(false);
-    setError(response.message);
+      useOrderStore().updateOrder(
+        response.data._id,
+        response.data.dataIndex,
+        response.data.data
+      );
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

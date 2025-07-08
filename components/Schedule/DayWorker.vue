@@ -3,7 +3,7 @@ import type { Project, Job } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const projectsStore = useProjectsStore();
 const scheduleStore = useScheduleStore();
@@ -69,8 +69,7 @@ const saveHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected && scheduleStore.addSchedule(response.data);
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

@@ -2,7 +2,7 @@
 import { OffersStatus } from "~/data/selectFieldData";
 
 const props = defineProps(["index", "client"]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const potentialClientsStore = usePotentialClientsStore();
 
 const editable = ref<boolean>(false);
@@ -13,12 +13,15 @@ const address = ref<string>(props.client.address);
 const status = ref<string>(props.client.status);
 
 const deleteHandler = async () => {
-  const response: any = await request.delete(`deletePotentialClient/${props.client._id}`);
+  const response: any = await request.delete(
+    `deletePotentialClient/${props.client._id}`
+  );
 
   if (response.success) {
-    !useSocketStore().connected && potentialClientsStore.deletePotentialClient(response.data._id);
-    setIsError(false);
-    setError(response.message);
+    !useSocketStore().connected &&
+      potentialClientsStore.deletePotentialClient(response.data._id);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -37,9 +40,10 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateClient", client);
 
   if (response.success) {
-    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
-    setIsError(false);
-    setError(response.message);
+    !useSocketStore().connected &&
+      potentialClientsStore.updatePotentialClients(response.data);
+
+    setSuccess(response.message);
     editable.value = false;
   } else {
     setError(response.message);
@@ -63,7 +67,9 @@ watch(
   <div
     class="flex w-fit border-b gap-4 items-center px-2 py-1 border"
     :class="[
-      editable ? ' border-green-500 rounded-lg ' : 'border-transparent border-b-dark-light',
+      editable
+        ? ' border-green-500 rounded-lg '
+        : 'border-transparent border-b-dark-light',
       props.client.status === 'Domina'
         ? 'bg-green-100'
         : props.client.status === 'Nelabai domina'

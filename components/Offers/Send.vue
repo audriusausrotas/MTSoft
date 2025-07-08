@@ -2,7 +2,7 @@
 import type { PotentialClient } from "~/data/interfaces";
 
 const potentialClientsStore = usePotentialClientsStore();
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const loading = ref<boolean>(false);
 const files = ref<any>([]);
 const text = ref<string>("");
@@ -13,7 +13,9 @@ const input = ref<string>("");
 const sendHandler = async () => {
   loading.value = true;
 
-  const recipients = potentialClientsStore.potentialClients.filter((client) => client.send);
+  const recipients = potentialClientsStore.potentialClients.filter(
+    (client) => client.send
+  );
 
   const formData = new FormData();
   formData.append("message", text.value);
@@ -38,8 +40,8 @@ const sendHandler = async () => {
   if (response.success) {
     files.value = [];
     text.value = "";
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -53,8 +55,7 @@ const selectAllHandler = async (value: boolean) => {
   const response: any = await request.patch("selectClients", requestData);
   if (response.success) {
     potentialClientsStore.selectPotentialClients(value);
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -99,7 +100,11 @@ watch(
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-center flex-wrap">
-      <BaseButton name="siūsti pasiūlymą" @click="sendHandler" :isLoading="loading" />
+      <BaseButton
+        name="siūsti pasiūlymą"
+        @click="sendHandler"
+        :isLoading="loading"
+      />
       <BaseButton name="pažymėti visus" @click="selectAllHandler(true)" />
       <BaseButton name="atžymėti visus" @click="selectAllHandler(false)" />
 

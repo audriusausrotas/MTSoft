@@ -3,7 +3,7 @@ const props = defineProps(["gate", "index"]);
 const userStore = useUserStore();
 const gateStore = useGateStore();
 const router = useRouter();
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const dateNow = new Date().getTime();
 const dateCreated = new Date(props.gate.dateCreated).getTime();
@@ -23,8 +23,8 @@ const deleteHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected && gateStore.removeGates(response.data._id);
-    setIsError(false);
-    setError("Vartų užsakymas ištrintas");
+
+    setSuccess("Vartų užsakymas ištrintas");
   } else {
     setError(response.message);
   }
@@ -37,7 +37,11 @@ const deleteHandler = async () => {
       class="flex gap-1 sm:gap-4 justify-evenly gap-y-4 pb-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput :name="props.gate.orderNr" width="w-36 order-2" :disable="true" />
+      <BaseInput
+        :name="props.gate.orderNr"
+        width="w-36 order-2"
+        :disable="true"
+      />
       <BaseInput
         :name="props.gate.client.address"
         width="w-full md:w-80 order-6 md:order-3"
@@ -61,7 +65,10 @@ const deleteHandler = async () => {
       </div>
 
       <BaseInfoField
-        v-if="userStore.user?.accountType === 'Administratorius' && props.gate.manager"
+        v-if="
+          userStore.user?.accountType === 'Administratorius' &&
+          props.gate.manager
+        "
         :name="props.gate.manager.split('@')[0]"
         width="w-32 order-4 "
         class="capitalize"

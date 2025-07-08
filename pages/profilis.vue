@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const userStore = useUserStore();
 const initials = userStore.user?.username.slice(0, 2);
 const newPassword = ref<string>("");
@@ -32,8 +32,7 @@ const saveHandler = async (field: string) => {
     } else if (field === "phone") isSavedPhone.value = true;
     else if (field === "name") isSavedName.value = true;
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -48,8 +47,7 @@ const successHandler = async (photo: string) => {
   // });
   // if (response.success) {
   //   userStore.setUser(response.data);
-  //   setIsError(false);
-  //   setError(response.message);
+  //   setSuccess(response.message);
   // } else {
   //   setError(response.message);
   // }
@@ -99,7 +97,12 @@ watch(lastName, (newName) => {
         <div class="flex gap-4 text-4xl">
           <p>{{ userStore.user?.username }}</p>
           <div class="flex">
-            <input type="text" v-model="lastName" placeholder="Pavardė" class="max-w-60" />
+            <input
+              type="text"
+              v-model="lastName"
+              placeholder="Pavardė"
+              class="max-w-60"
+            />
             <div class="flex-1 flex">
               <NuxtImg
                 width="20"
@@ -122,7 +125,12 @@ watch(lastName, (newName) => {
         </div>
         <h5 class="font-semibold normal-case">{{ userStore.user?.email }}</h5>
         <div class="flex">
-          <input type="text" v-model="phone" placeholder="Telefono numeris" class="max-w-32" />
+          <input
+            type="text"
+            v-model="phone"
+            placeholder="Telefono numeris"
+            class="max-w-32"
+          />
           <div class="flex-1">
             <NuxtImg
               width="20"
@@ -152,7 +160,10 @@ watch(lastName, (newName) => {
         @onChange="(v) => (password = v)"
         placeholder="Pakartoti slaptažodį"
       />
-      <BaseButton name="Išsaugoti slaptažodį" @click="saveHandler('password')" />
+      <BaseButton
+        name="Išsaugoti slaptažodį"
+        @click="saveHandler('password')"
+      />
     </div>
   </div>
 </template>

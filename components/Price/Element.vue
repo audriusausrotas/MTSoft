@@ -4,7 +4,7 @@ import { categories } from "~/data/selectFieldData";
 const props = defineProps(["product", "index"]);
 const productsStore = useProductsStore();
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const disable = ref<boolean>(true);
 const productName = ref<string>(props.product.name);
 const productPrice = ref<number>(props.product.price);
@@ -24,8 +24,8 @@ const deleteHandler = async (): Promise<void> => {
   if (response.success) {
     !useSocketStore().connected &&
       productsStore.deleteProduct(response.data._id);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -55,8 +55,8 @@ const saveHandler = async () => {
   if (response.success) {
     !useSocketStore().connected && productsStore.updateProduct(response.data);
     disable.value = true;
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

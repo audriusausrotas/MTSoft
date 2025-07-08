@@ -4,7 +4,7 @@ divdivdivdivdivdiv
 const props = defineProps(["offer", "location", "showButtons"]);
 const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const installationStore = useInstallationStore();
 const projectsStore = useProjectsStore();
 const productionStore = useProductionStore();
@@ -73,8 +73,8 @@ const uploadFiles = async (data: any) => {
   if (response.success) {
     !useSocketStore().connected &&
       projectsStore.updateFiles(response.data._id, response.data.files);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else setError(response.message);
 };
 
@@ -90,8 +90,8 @@ const statusHandler = async (value: string) => {
         "status",
         response.data.status
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -108,8 +108,7 @@ const sendEmailHandler = async () => {
   const response: any = await request.post("sendOffer", requestData);
 
   if (response.success) {
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -143,13 +142,12 @@ const gateOrderHandler = async (name: string): Promise<void> => {
     );
 
     if (emailResponse.success) {
-      setIsError(false);
-      setError(emailResponse.message);
+      setSuccess(emailResponse.message);
     } else {
       setError(emailResponse.message);
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -165,8 +163,7 @@ const gateCancelHandler = async (): Promise<void> => {
   if (response.success) {
     !useSocketStore().connected && gateStore.removeGates(response.data._id);
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -185,8 +182,8 @@ const changeCreatorHandler = async (value: string) => {
         "creator",
         response.data.user
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -212,8 +209,7 @@ const advanceHandler = async (advance: string) => {
       );
     }
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -233,8 +229,8 @@ const orderFinishHandler = async () => {
       projectsStore.deleteProject(response.data._id);
     }
     navigateTo("/");
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -248,8 +244,8 @@ const productionHandler = async () => {
       productionStore.addProduction(response.data);
       projectsStore.updateProjectField(response.data._id, "status", "Gaminama");
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -269,8 +265,8 @@ const installationHandler = async (value: string) => {
         "Montuojama"
       );
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -295,8 +291,8 @@ const dateHandler = async () => {
   if (response.success) {
     !useSocketStore().connected &&
       projectsStore.changeCompletionDate(response.data._id, response.data.date);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

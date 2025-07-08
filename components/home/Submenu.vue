@@ -9,7 +9,7 @@ const resultsStore = useResultsStore();
 const calculationsStore = useCalculationsStore();
 const backupStore = useBackupStore();
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
@@ -29,8 +29,8 @@ const deleteHandler = async () => {
         ? projectsStore.deleteProject(response.data._id)
         : archiveStore.deleteArchive(response.data._id, response.data.location);
     }
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -66,8 +66,7 @@ const linkHandler = () => {
   navigator.clipboard
     .writeText("https://mtsoft.lt/pasiulymas/" + props._id)
     .then(() => {
-      setIsError(false);
-      setError("Nuoroda nukopijuota");
+      setSuccess("Nuoroda nukopijuota");
     })
     .catch((error) => {
       setError("Klaida: " + error);
@@ -91,8 +90,8 @@ const copyHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected && projectsStore.addProject(response.data);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -120,8 +119,7 @@ const archiveHandler = async () => {
       }
     }
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -139,8 +137,8 @@ const extendHandler = async () => {
         "dateExparation",
         response.data.dateExparation
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -155,8 +153,7 @@ const unconfirmedHandler = async () => {
       projectsStore.deleteProject(response.data._id);
     }
 
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

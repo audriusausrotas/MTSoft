@@ -10,7 +10,7 @@ const props = defineProps([
   "clientAddress",
 ]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
@@ -34,7 +34,8 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.data.cut === 0 || props.data.cut === undefined
     ? "bg-transparent"
-    : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
+    : +props.data.cut === +props.data.elements &&
+      +props.data.done === +props.data.elements
     ? "bg-green-500"
     : +props.data.cut > +props.data.elements
     ? "bg-red-full"
@@ -94,8 +95,8 @@ const saveHandler = async (field: string) => {
         response.data.field,
         response.data.option
       );
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
 
     if (field === "cut") {
       cut.value = +requestData.value;
@@ -129,7 +130,10 @@ const postoneHandler = async () => {
     option: "fences",
   };
 
-  const response: any = await request.patch("updateProductionPostone", requestData);
+  const response: any = await request.patch(
+    "updateProductionPostone",
+    requestData
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -141,8 +145,7 @@ const postoneHandler = async () => {
         "postone",
         response.data.option
       );
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -167,8 +170,7 @@ const deleteHandler = async () => {
         response.data.index,
         response.data.measureIndex
       );
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -234,7 +236,9 @@ const printHandler = () => {
               <p class="padding">${formattedDate}</p>
             </div>
               <p class="padding borderB">${props.clientAddress}</p>
-              <p class="padding bigText">${props.fenceSide} ${props.index + 1} / ${props.total}</p>
+              <p class="padding bigText">${props.fenceSide} ${
+    props.index + 1
+  } / ${props.total}</p>
             </body>
         </html>
     `;
@@ -259,7 +263,9 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+    +inputElement.value !== cut.value
+      ? (isSavedCut.value = false)
+      : (isSavedCut.value = true);
   else if (field === "elements")
     +inputElement.value !== elements.value
       ? (isSavedElements.value = false)
@@ -269,7 +275,9 @@ const updateMeasure = (field: string, event: Event) => {
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+    +inputElement.value !== done.value
+      ? (isSavedDone.value = false)
+      : (isSavedDone.value = true);
   else if (field === "length")
     +inputElement.value !== length.value
       ? (isSavedLength.value = false)
@@ -307,14 +315,24 @@ watch(
     v-if="props.data.laiptas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p class="w-10 flex items-center justify-center h-full border-x border-black">
+    <p
+      class="w-10 flex items-center justify-center h-full border-x border-black"
+    >
       {{ props.index + 1 }}
     </p>
-    <p class="w-20 flex items-center justify-center h-full border-r border-black">Laiptas</p>
-    <p class="w-24 flex items-center justify-center h-full border-r border-black">
+    <p
+      class="w-20 flex items-center justify-center h-full border-r border-black"
+    >
+      Laiptas
+    </p>
+    <p
+      class="w-24 flex items-center justify-center h-full border-r border-black"
+    >
       {{ props.data.laiptas.direction }}
     </p>
-    <p class="w-24 flex items-center justify-center h-full border-r border-black">
+    <p
+      class="w-24 flex items-center justify-center h-full border-r border-black"
+    >
       {{ props.data.laiptas.value }} cm
     </p>
     <p class="flex-1 h-full border-r border-black"></p>
@@ -337,14 +355,26 @@ watch(
     v-else-if="props.data.kampas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p class="w-10 flex items-center justify-center h-full border-x border-black">
+    <p
+      class="w-10 flex items-center justify-center h-full border-x border-black"
+    >
       {{ props.index + 1 }}
     </p>
-    <p class="w-20 flex items-center justify-center h-full border-r border-black">Kampas</p>
-    <p class="w-24 flex items-center justify-center h-full border-r border-black">
+    <p
+      class="w-20 flex items-center justify-center h-full border-r border-black"
+    >
+      Kampas
+    </p>
+    <p
+      class="w-24 flex items-center justify-center h-full border-r border-black"
+    >
       {{ props.data.kampas.value }}
     </p>
-    <p class="w-24 flex items-center justify-center h-full border-r border-black">laipsnių</p>
+    <p
+      class="w-24 flex items-center justify-center h-full border-r border-black"
+    >
+      laipsnių
+    </p>
     <p class="flex-1 h-full border-r border-black"></p>
     <div
       v-if="isAdmin"
@@ -361,7 +391,10 @@ watch(
       />
     </div>
   </div>
-  <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none">
+  <div
+    v-else
+    class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none"
+  >
     <p
       class="w-10 flex items-center justify-center h-full border-x border-black"
       :class="indexColor"
@@ -369,7 +402,9 @@ watch(
       {{ props.index + 1 }}
     </p>
 
-    <div class="w-20 flex items-center justify-center h-full border-r border-black px-1">
+    <div
+      class="w-20 flex items-center justify-center h-full border-r border-black px-1"
+    >
       <input
         type="number"
         class="w-full"
@@ -388,7 +423,9 @@ watch(
         class="hover:cursor-pointer"
       />
     </div>
-    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
+    <div
+      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
+    >
       <input
         type="number"
         :value="props.data.elements"
@@ -407,7 +444,9 @@ watch(
         class="hover:cursor-pointer"
       />
     </div>
-    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
+    <div
+      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
+    >
       <input
         type="number"
         :value="props.data.height"

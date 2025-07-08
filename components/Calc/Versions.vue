@@ -4,7 +4,7 @@ const calculationsStore = useCalculationsStore();
 const resultsStore = useResultsStore();
 const projectsStore = useProjectsStore();
 const backupStore = useBackupStore();
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const open = ref<boolean>(false);
 
@@ -51,8 +51,8 @@ const deleteHandler = async () => {
   if (response.success) {
     !useSocketStore().connected &&
       projectsStore.deleteVersion(response.data._id, response.data.projectId);
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

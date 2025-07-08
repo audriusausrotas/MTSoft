@@ -7,7 +7,7 @@ const userStore = useUserStore();
 const gate = computed(() => {
   return gateStore.gates.find((item) => item._id === route.params.id);
 });
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const gateUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
@@ -16,17 +16,22 @@ const gateUsers = userStore.users
   });
 
 const finishOrderHandler = async () => {
-  const response: any = await request.delete(`finishGateOrder/${gate.value?._id}`);
+  const response: any = await request.delete(
+    `finishGateOrder/${gate.value?._id}`
+  );
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      useProjectsStore().updateProjectField(response.data_id, "status", response.data.status);
+      useProjectsStore().updateProjectField(
+        response.data_id,
+        "status",
+        response.data.status
+      );
       gateStore.updateGateStatus(response.data._id, response.data.status);
     }
 
     await router.replace("/vartai");
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -57,14 +62,12 @@ const updateHandler = async (change: string, value: any) => {
       const response2: any = await request.post("sendGateInfo", requestData);
 
       if (response2.success) {
-        setIsError(false);
-        setError(response2.message);
+        setSuccess(response2.message);
       } else {
         setError(response2.message);
       }
     }
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -92,12 +95,22 @@ const updateHandler = async (change: string, value: any) => {
         placeholder="Užsakymo Nr."
         @onConfirm="(value) => updateHandler('orderNr', value)"
       />
-      <BaseButtonWithConfirmation name="užbaigti užsakymą" @onConfirm="finishOrderHandler" />
+      <BaseButtonWithConfirmation
+        name="užbaigti užsakymą"
+        @onConfirm="finishOrderHandler"
+      />
     </div>
-    <div class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap">
+    <div
+      class="flex justify-center lg:justify-between font-semibold gap-4 flex-wrap"
+    >
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Užsakymo duomenys</h3>
-        <BaseInput :name="gate?.orderNr" width="w-72" label="Užsakymo nr:" :disable="true" />
+        <BaseInput
+          :name="gate?.orderNr"
+          width="w-72"
+          label="Užsakymo nr:"
+          :disable="true"
+        />
         <BaseInput
           :name="gate?.measure"
           width="w-72"
@@ -120,9 +133,24 @@ const updateHandler = async (change: string, value: any) => {
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Klento duomenys</h3>
-        <BaseInput :name="gate?.client?.username" width="w-72" label="klientas" :disable="true" />
-        <BaseInput :name="gate?.client?.address" width="w-72" label="adresas" :disable="true" />
-        <BaseInput :name="gate?.client?.phone" width="w-72" label="telefonas" :disable="true" />
+        <BaseInput
+          :name="gate?.client?.username"
+          width="w-72"
+          label="klientas"
+          :disable="true"
+        />
+        <BaseInput
+          :name="gate?.client?.address"
+          width="w-72"
+          label="adresas"
+          :disable="true"
+        />
+        <BaseInput
+          :name="gate?.client?.phone"
+          width="w-72"
+          label="telefonas"
+          :disable="true"
+        />
       </div>
       <div class="flex flex-col gap-4">
         <h3 class="text-xl">Vadybininko duomenys</h3>

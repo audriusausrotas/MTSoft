@@ -8,7 +8,7 @@ const newPrice = ref<number>(0);
 const newCost = ref<number>(0);
 const isLoading = ref<boolean>(false);
 const newCategory = ref<string>(categories[0]);
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -26,8 +26,8 @@ const saveHandler = async (): Promise<void> => {
   if (response.success) {
     !useSocketStore().connected && productsStore.newProduct(response.data);
     clearHandler();
-    setIsError(false);
-    setError(response.message);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }

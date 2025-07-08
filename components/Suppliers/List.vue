@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const suppliersStore = useSuppliersStore();
 
 const deleteHandler = async (_id: string) => {
   const response: any = await request.delete(`deleteSupplier/${_id}`);
 
   if (response.success) {
-    !useSocketStore().connected && suppliersStore.deleteSupplier(response.data._id);
-    setIsError(false);
-    setError(response.message);
+    !useSocketStore().connected &&
+      suppliersStore.deleteSupplier(response.data._id);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -34,7 +34,10 @@ const deleteHandler = async (_id: string) => {
       <p class="w-60">{{ supplier?.email }}</p>
       <p class="w-28">{{ supplier?.phone }}</p>
       <p class="w-60">{{ supplier?.address }}</p>
-      <div @click="deleteHandler(supplier._id!)" class="w-6 hover:cursor-pointer">
+      <div
+        @click="deleteHandler(supplier._id!)"
+        class="w-6 hover:cursor-pointer"
+      >
         <NuxtImg
           src="/icons/delete.svg"
           width="18"

@@ -2,13 +2,15 @@
 import { fenceTypes, fenceDirections } from "~/data/selectFieldData";
 const props = defineProps(["fence"]);
 
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
 const height = ref<string>(props.fence?.height);
 const width = ref<string>(props.fence?.width);
-const isFenceBoard = ref<string>(props.fence?.isFenceBoard ? "Tvoralentė" : "Tvora");
+const isFenceBoard = ref<string>(
+  props.fence?.isFenceBoard ? "Tvoralentė" : "Tvora"
+);
 const defaultDirection = ref<string>(props.fence?.defaultDirection);
 
 const seeThroughData = reactive({
@@ -56,10 +58,10 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateFenceData", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && settingsStore.updateFenceSettings(response.data);
+    !useSocketStore().connected &&
+      settingsStore.updateFenceSettings(response.data);
     editable.value = false;
-    setIsError(false);
-    setError(response.message);
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -67,7 +69,9 @@ const saveHandler = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 items-center border border-dark-full p-8 rounded-xl">
+  <div
+    class="flex flex-col gap-2 items-center border border-dark-full p-8 rounded-xl"
+  >
     <div class="flex gap-4 items-center">
       <p class="font-bold text-2xl">{{ props.fence.name }}</p>
 
@@ -137,9 +141,19 @@ const saveHandler = async () => {
         @onChange="(value:string) => (width = value)"
       />
 
-      <BaseInput :name="props.fence.price" label="Kaina" width="w-24" disable="true" />
+      <BaseInput
+        :name="props.fence.price"
+        label="Kaina"
+        width="w-24"
+        disable="true"
+      />
 
-      <BaseInput :name="props.fence.cost" label="savikaina" width="w-24" disable="true" />
+      <BaseInput
+        :name="props.fence.cost"
+        label="savikaina"
+        width="w-24"
+        disable="true"
+      />
     </div>
 
     <SettingsFencesElementBlock

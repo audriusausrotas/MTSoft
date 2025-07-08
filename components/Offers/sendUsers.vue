@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["index", "client"]);
 const potentialClientsStore = usePotentialClientsStore();
-const { setError, setIsError } = useError();
+const { setError, setSuccess } = useError();
 
 const updateHandler = async (value: boolean) => {
   const requestData = { _id: props.client._id, all: false, send: value };
@@ -9,9 +9,10 @@ const updateHandler = async (value: boolean) => {
   const response: any = await request.patch("selectClients", requestData);
 
   if (response.success) {
-    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
-    setIsError(false);
-    setError(response.message);
+    !useSocketStore().connected &&
+      potentialClientsStore.updatePotentialClients(response.data);
+
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -31,7 +32,11 @@ const updateHandler = async (value: boolean) => {
         : ''
     "
   >
-    <BaseCheckField height="h-4" :checked="props.client.send" @onChange="updateHandler" />
+    <BaseCheckField
+      height="h-4"
+      :checked="props.client.send"
+      @onChange="updateHandler"
+    />
     <p class="w-6">{{ props.index + 1 }}</p>
     <p class="w-48">{{ props.client.name }}</p>
     <p class="w-80">{{ props.client.email }}</p>
