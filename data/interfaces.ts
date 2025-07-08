@@ -558,3 +558,30 @@ export interface PotentialClient {
   status: string;
   send: boolean;
 }
+
+const fence = {
+  name: "something",
+  gaminama: true,
+  arTvoralente: false,
+  defaultDirection: "horizontali",
+  dimensions: {
+    width: 6,
+    height: 9,
+    lenkimai: 4,
+  },
+  step: {
+    aklina: 2,
+    nepramatoma: 3,
+    vidutiniska: 4,
+    pramatoma: 5,
+    "25% pramatomumas": 6,
+    "50% pramatomumas": 7,
+  },
+  price: {
+    retail: {},
+    wholesale: {
+      price: 35,
+      cost: 25,
+    },
+  },
+};
