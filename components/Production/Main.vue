@@ -2,13 +2,7 @@
 <script setup lang="ts">
 import type { Bindings } from "~/data/interfaces";
 
-const props = defineProps([
-  "_id",
-  "orderNumber",
-  "client",
-  "creator",
-  "bindings",
-]);
+const props = defineProps(["_id", "orderNr", "client", "creator", "bindings"]);
 const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
@@ -110,7 +104,7 @@ const bindingPrintHandler = () => {
             </head>
             <body class="">
             <div class="container borderB">
-              <p class="padding ">${props.orderNumber}</p>
+              <p class="padding ">${props.orderNr}</p>
               <div class="borderL"></div>
               <p class="padding">${formattedDate}</p>
             </div>

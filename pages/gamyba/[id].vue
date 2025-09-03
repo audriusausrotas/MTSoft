@@ -137,7 +137,7 @@ const uploadFiles = async (data: any) => {
 
     <ProductionMain
       :_id="order._id"
-      :orderNumer="order.orderNumber"
+      :orderNr="order?.orderNumber"
       :client="order.client"
       :creator="order.creator"
       :bindings="order.bindings"

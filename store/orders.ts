@@ -30,7 +30,12 @@ export const useOrderStore = defineStore("order", {
       });
     },
 
-    updateOrderFields(_id: string, dataIndex: number, field: keyof OrderData, value: boolean) {
+    updateOrderFields(
+      _id: string,
+      dataIndex: number,
+      field: keyof OrderData,
+      value: boolean
+    ) {
       this.orders = this.orders.map((order) =>
         order._id !== _id
           ? order
@@ -57,7 +62,7 @@ export const useOrderStore = defineStore("order", {
     addComment(_id: string, comment: Comment): void {
       this.orders = this.orders.map((order) => {
         if (order._id === _id) {
-          order.comments = [...order.comments, comment];
+          order.comments = [comment, ...order.comments];
           return order;
         } else return order;
       });
@@ -67,7 +72,8 @@ export const useOrderStore = defineStore("order", {
       this.orders = this.orders.map((order) => {
         if (order._id === _id) {
           order.comments = order.comments.filter(
-            (item) => item.date !== comment.date && item.comment !== comment.comment
+            (item) =>
+              item.date !== comment.date && item.comment !== comment.comment
           );
           return order;
         } else return order;

@@ -1,4 +1,9 @@
-import type { Bindings, Production, ProductionMeasure, Comment } from "~/data/interfaces";
+import type {
+  Bindings,
+  Production,
+  ProductionMeasure,
+  Comment,
+} from "~/data/interfaces";
 
 export const useProductionStore = defineStore("production", {
   state: () => ({
@@ -11,7 +16,9 @@ export const useProductionStore = defineStore("production", {
     },
 
     addOne(data: Production) {
-      this.production = this.production.map((item) => (item._id === data._id ? data : item));
+      this.production = this.production.map((item) =>
+        item._id === data._id ? data : item
+      );
     },
 
     addProduction(data: Production) {
@@ -52,7 +59,9 @@ export const useProductionStore = defineStore("production", {
     deleteBinding(_id: string, bindingId: string) {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
-          item.bindings = item.bindings!.filter((binding) => binding.id !== bindingId);
+          item.bindings = item.bindings!.filter(
+            (binding) => binding.id !== bindingId
+          );
           return item;
         } else return item;
       });
@@ -81,7 +90,8 @@ export const useProductionStore = defineStore("production", {
         if (item._id === _id) {
           option === "bindings"
             ? ((item.bindings as any)[index][field] = value)
-            : ((item.fences as any)[index].measures[measureIndex!][field] = value);
+            : ((item.fences as any)[index].measures[measureIndex!][field] =
+                value);
         }
         return item;
       });
@@ -100,7 +110,7 @@ export const useProductionStore = defineStore("production", {
     addComment(_id: string, comment: Comment): void {
       this.production = this.production.map((project) => {
         if (project._id === _id) {
-          project.comments = [...project.comments, comment];
+          project.comments = [comment, ...project.comments];
           return project;
         } else return project;
       });
