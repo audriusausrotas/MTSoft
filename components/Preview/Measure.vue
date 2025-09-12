@@ -5,7 +5,7 @@ const props = defineProps(["index", "data"]);
 <template>
   <div
     v-if="props.data.laiptas.exist"
-    class="text-center w-fit odd:bg-gray-ultra-light flex select-none py-1"
+    class="text-center w-full odd:bg-gray-ultra-light flex select-none py-1"
   >
     <p class="w-10">
       {{ props.index + 1 }}
@@ -18,7 +18,7 @@ const props = defineProps(["index", "data"]);
   </div>
   <div
     v-else-if="props.data.kampas.exist"
-    class="text-center w-fit shadow-md odd:bg-gray-ultra-light flex select-none py-1"
+    class="text-center w-full shadow-md odd:bg-gray-ultra-light flex select-none py-1"
   >
     <p class="w-10">
       {{ props.index + 1 }}
@@ -46,7 +46,7 @@ const props = defineProps(["index", "data"]);
     </div>
 
     <div class="flex-1">
-      {{ props.data.elements }}
+      {{ props.data.elements || 1 }}
     </div>
   </div>
 </template>

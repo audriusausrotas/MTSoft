@@ -7,7 +7,7 @@ const open = ref<boolean>(true);
 <template>
   <div class="m-auto my-10 w-full max-w-[1470px]">
     <div
-      class="flex border flex-wrap rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
+      class="flex print:hidden border flex-wrap rounded-lg text-center divide-x overflow-hidden font-medium text-lg"
     >
       <div
         class="flex-1 flex items-center justify-center hover:bg-red-600 h-10 hover:cursor-pointer hover:text-white"
