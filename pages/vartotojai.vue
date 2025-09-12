@@ -120,10 +120,10 @@ const deleteHandler = (id: string) => {
   <Teleport to="body">
     <div
       v-if="modalOpen"
-      class="fixed top-0 left-0 flex z-50 items-center justify-center w-screen h-screen bg-opacity-80 bg-gray-ultra-light"
+      class="fixed top-0 left-0 flex z-50 items-center justify-center w-screen h-[100dvh] bg-opacity-80 bg-gray-ultra-light"
     >
       <div
-        class="flex flex-col items-center gap-8 p-12 border shadow-md bg-gray-ultra-light rounded-xl"
+        class="flex flex-col items-center gap-8 p-12 border bg-gray-ultra-light rounded-xl"
       >
         <div class="flex flex-col items-center gap-8">
           <p>Įveskite slaptaždodį norėdami ištrinti vartotoją</p>

@@ -1,30 +1,88 @@
 <script setup lang="ts">
-
 const props = defineProps(["fence", "index"]);
-
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div class="flex font-bold text-xl">
-      <p>{{ props.fence.side }} - {{ props.fence.type }} - {{ props.fence.color }}</p>
-    </div>
+  <div class="flex flex-col rounded-md shadow-lg border w-[312px]">
     <p v-if="fence.comment">Komentarai: {{ fence.comment }}</p>
-    <div class="flex w-fit border-y items-center h-8  border-black select-none">
-      <p class="hover:cursor-pointer h-full items-center w-10 border-x border-black  flex justify-evenly">
-        Nr
+
+    <div class="p-4">
+      <h3 class="text-lg font-semibold mb-2 text-center">Tvoros informacija</h3>
+      <div class="grid grid-cols-2 gap-y-1 border-t border-black pt-2">
+        <div class="font-medium">Tvoros pusė</div>
+        <div>{{ props.fence.side }}</div>
+
+        <div class="font-medium">Pavadinimas</div>
+        <div>{{ props.fence.type }}</div>
+
+        <div class="font-medium">Tvoros spalva</div>
+        <div>RAL {{ props.fence.color }}</div>
+
+        <div v-if="!props.fence.elements" class="font-medium">Pramatomumas</div>
+        <div v-if="!props.fence.elements">
+          {{ props.fence.seeThrough }}
+        </div>
+
+        <div v-if="!props.fence.elements" class="font-medium">Žingsnis</div>
+        <div v-if="!props.fence.elements">
+          {{ fence.measures[0].height / fence.measures[0].elements }} cm
+        </div>
+
+        <div v-if="props.fence.elements" class="font-medium">Dvipusė</div>
+        <div v-if="props.fence.elements">
+          {{ props.fence.twoSided }}
+        </div>
+
+        <div v-if="props.fence.elements" class="font-medium">Tarpas</div>
+        <div v-if="props.fence.elements">{{ props.fence.space }} mm</div>
+
+        <div class="font-medium">Metražas</div>
+        <div>{{ props.fence.totalLength }} m</div>
+
+        <div v-if="props.fence.elements" class="font-medium">Viso elementų</div>
+        <div v-if="props.fence.elements">{{ props.fence.elements }} vnt</div>
+
+        <div v-if="!props.fence.elements" class="font-medium">Kvadratūra</div>
+        <div v-if="!props.fence.elements">
+          {{ props.fence.totalQuantity }} m<span>²</span>
+        </div>
+      </div>
+
+      <p v-if="props.fence.comment" class="text-sm text-gray-700 italic">
+        Komentarai: {{ props.fence.comment }}
       </p>
-      <p class=" hover:cursor-pointer w-20 flex gap-1 justify-center border-r border-black h-full items-center">Ilgis
-      </p>
-      <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Aukštis</p>
-      <p class=" w-24 flex items-center justify-center h-full  border-r border-black">Elementai</p>
+    </div>
+
+    <div class="table_layout">
+      <p class="table_cells w-10">Nr</p>
+      <p class="table_cells flex-1">Ilgis</p>
+      <p class="table_cells flex-1">Aukštis</p>
+      <p class="table_cells flex-1">Elementai</p>
     </div>
 
     <div class="flex flex-col flex-1">
-      <PreviewMeasure v-for="data, index in fence.measures" :key="data.index" :data="data" :index="index"
-        :fenceSide="props.fence.side" :_id="data._id" />
+      <PreviewMeasure
+        v-for="(data, index) in fence.measures"
+        :key="data.index"
+        :data="data"
+        :index="index"
+        :fenceSide="props.fence.side"
+        :_id="data._id"
+      />
     </div>
   </div>
-
 </template>
-<style scoped></style>
+
+<style scoped>
+.table_cells {
+  @apply flex items-center justify-center h-full;
+}
+
+.table_layout {
+  @apply flex w-full border-y items-center h-8 border-gray-400 select-none;
+}
+
+.info_cell {
+  @apply px-2 py-1 flex-1;
+}
+</style>

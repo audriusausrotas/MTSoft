@@ -103,6 +103,7 @@ const sendEmailHandler = async () => {
   const requestData = {
     to: props.offer?.client.email,
     link: props.offer?._id,
+    address: props.offer?.client.address,
   };
 
   const response: any = await request.post("sendOffer", requestData);
