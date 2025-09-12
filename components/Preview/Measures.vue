@@ -25,7 +25,10 @@ const props = defineProps(["fence", "index"]);
 
         <div v-if="!props.fence.elements" class="font-medium">Žingsnis</div>
         <div v-if="!props.fence.elements">
-          {{ fence.measures[0].height / fence.measures[0].elements }} cm
+          {{
+            (fence.measures[0].height / fence.measures[0].elements).toFixed(2)
+          }}
+          cm
         </div>
 
         <div v-if="props.fence.elements" class="font-medium">Dvipusė</div>
