@@ -19,7 +19,7 @@ onMounted(() => {
   <NavMain />
   <div
     class="fixed bottom-1 right-1 rounded-full overflow-hidden hidden hover:scale-125 transition-transform lg:block bg-red-500 hover:cursor-pointer z-50"
-    :onclick="upHandler"
+    @click="upHandler"
   >
     <NuxtImg
       src="/icons/arrowUp.svg"
