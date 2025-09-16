@@ -6,6 +6,13 @@ const upHandler = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
+const downHandler = () => {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: "smooth",
+  });
+};
+
 onMounted(() => {
   useSocket.connect();
 });
@@ -18,14 +25,28 @@ onMounted(() => {
   />
   <NavMain />
   <div
-    class="fixed bottom-1 right-1 rounded-full overflow-hidden hidden hover:scale-125 transition-transform lg:block bg-red-500 hover:cursor-pointer z-50"
+    class="fixed bottom-9 right-0 rounded-full overflow-hidden hidden bg-green-500 hover:scale-125 transition-transform lg:block hover:cursor-pointer z-50"
     @click="upHandler"
   >
     <NuxtImg
-      src="/icons/arrowUp.svg"
+      src="/icons/arrowUpBold.svg"
       alt="Rodykle aukstyn"
-      width="32"
-      height="32"
+      width="28"
+      height="28"
+      decoding="auto"
+      loading="lazy"
+      :ismap="true"
+    />
+  </div>
+  <div
+    class="fixed bottom-1 right-0 rounded-full rotate-180 overflow-hidden hidden bg-red-500 hover:scale-125 transition-transform lg:block hover:cursor-pointer z-50"
+    @click="downHandler"
+  >
+    <NuxtImg
+      src="/icons/arrowUpBold.svg"
+      alt="Rodykle aukstyn"
+      width="28"
+      height="28"
       decoding="auto"
       loading="lazy"
       :ismap="true"
