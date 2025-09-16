@@ -64,14 +64,14 @@ const worksTotal = computed(() => {
   return { cost, price, profit, margin };
 });
 
-const totals = computed(() => {
-  const cost = resultsTotal?.value?.cost + worksTotal?.value?.cost;
-  const price = resultsTotal?.value?.price + worksTotal?.value?.price;
-  const profit = resultsTotal?.value?.profit + worksTotal?.value?.profit;
-  const margin = (resultsTotal?.value?.margin + worksTotal?.value?.margin) / 2;
+// const totals = computed(() => {
+//   const cost = resultsTotal?.value?.cost + worksTotal?.value?.cost;
+//   const price = resultsTotal?.value?.price + worksTotal?.value?.price;
+//   const profit = resultsTotal?.value?.profit + worksTotal?.value?.profit;
+//   const margin = (resultsTotal?.value?.margin + worksTotal?.value?.margin) / 2;
 
-  return { cost, price, profit, margin };
-});
+//   return { cost, price, profit, margin };
+// });
 
 const orderConfirmHandler = async () => {
   const requestData = {

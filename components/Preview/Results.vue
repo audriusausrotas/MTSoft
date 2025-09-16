@@ -61,7 +61,10 @@ const orderHandler = async (value: boolean) => {
 
 const selectData = (value: boolean) => {
   const data = {
-    name: props?.result?.type,
+    name:
+      props?.result?.category === "tvoros"
+        ? props?.result?.type + " H-" + props.result.height
+        : props?.result?.type,
     color: props?.result?.color,
     quantity: props?.result?.quantity,
     measureIndex: props?.index,
