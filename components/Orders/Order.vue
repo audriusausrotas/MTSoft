@@ -3,6 +3,24 @@ const props = defineProps(["order", "index"]);
 const { setError, setSuccess } = useError();
 const userStore = useUserStore();
 
+const dateNow = new Date().getTime();
+const orderDate = new Date(props.order?.deliveryDate).getTime();
+
+const dateDifferenceMs = orderDate - dateNow;
+const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
+
+const dateColor =
+  dateDifference < -1000
+    ? ""
+    : dateDifference < -1
+    ? "border-4 border-red-500 "
+    : dateDifference < 2
+    ? "animate-bounce "
+    : dateDifference < 5
+    ? "animate-pulse"
+    : "";
+
+console.log(dateDifference);
 const statusColor = computed(() => {
   const items = props?.order?.data ?? [];
 
@@ -69,10 +87,17 @@ const clickHandler = () => {
       />
 
       <BaseInfoField
+        v-if="props.order.status"
         :name="props.order?.deliveryDate?.slice(0, 10)"
         width="w-32"
         class="order-5"
-        :class="[statusColor]"
+        :class="[statusColor, dateColor]"
+      />
+      <BaseInfoField
+        v-else
+        name="Baigta"
+        width="w-32"
+        class="order-5 bg-stone-400"
       />
     </div>
     <div
