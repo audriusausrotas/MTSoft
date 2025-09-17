@@ -7,6 +7,7 @@ const projectsStore = useProjectsStore();
 
 const filterUser = ref<string>(useUserStore().user!.username);
 const filterStatus = ref<string>("Visi");
+const filterBy = ref<string>("Statusą");
 const searchQuery = ref<string>("");
 
 const filteredProjects = () => {
@@ -49,6 +50,8 @@ const filteredProjects = () => {
 };
 
 const projects = computed(() => {
+  const allProjects = filteredProjects();
+
   const categories = {
     unconfirmed: [] as Project[],
     confirmed: [] as Project[],
@@ -80,12 +83,37 @@ const projects = computed(() => {
     Baigtas: "finished",
   };
 
-  const allProjects = filteredProjects();
-
   allProjects.forEach((item: Project) => {
-    const category = statusToCategory[item.status] || "other";
-    categories[category].push(item);
+    if (filterBy.value === "Statusą") {
+      const category = statusToCategory[item.status] || "other";
+      categories[category].push(item);
+    } else if (filterBy.value === "Datą") {
+      if (item.dates.dateConfirmed) categories.confirmed.push(item);
+      else categories.unconfirmed.push(item);
+    }
   });
+
+  if (filterBy.value === "Datą") {
+    categories.confirmed.sort((a: Project, b: Project) => {
+      const dateA = a.dates.dateConfirmed
+        ? new Date(a.dates.dateConfirmed).getTime()
+        : 0;
+      const dateB = b.dates.dateConfirmed
+        ? new Date(b.dates.dateConfirmed).getTime()
+        : 0;
+      return dateB - dateA;
+    });
+
+    categories.unconfirmed.sort((a: Project, b: Project) => {
+      const dateA = a.dates.dateCreated
+        ? new Date(a.dates.dateCreated).getTime()
+        : 0;
+      const dateB = b.dates.dateCreated
+        ? new Date(b.dates.dateCreated).getTime()
+        : 0;
+      return dateB - dateA;
+    });
+  }
 
   return categories;
 });
@@ -113,12 +141,18 @@ const statusFilters = [
   "Baigtas",
 ];
 
+const filterByValues = ["Statusą", "Datą"];
+
 const changeUserFilter = (userFilter: string) => {
   filterUser.value = userFilter;
 };
 
 const changeStatusFilter = (statusFilter: string) => {
   filterStatus.value = statusFilter;
+};
+
+const changeFilterBy = (filterByValue: string) => {
+  filterBy.value = filterByValue;
 };
 
 const newProjectHandler = () => {
@@ -173,6 +207,15 @@ const removeUnconfirmed = async () => {
           :defaultValue="filterStatus"
           width="w-60"
           @onChange="changeStatusFilter"
+        />
+
+        <BaseSelectField
+          label="Filtruoti pagal"
+          :values="filterByValues"
+          id="statusFilter"
+          :defaultValue="filterBy"
+          width="w-60"
+          @onChange="changeFilterBy"
         />
       </div>
 
@@ -390,5 +433,15 @@ const removeUnconfirmed = async () => {
         location="projects"
       />
     </div>
+    <!-- <div v-if="filterBy === 'Datą'" class="flex flex-col gap-4 w-full">
+      <HomeProject
+        v-for="(project, index) in projects.byDate"
+        :key="project._id"
+        :index="index"
+        :length="projects.byDate.length"
+        :project="project"
+        location="projects"
+      />
+    </div> -->
   </div>
 </template>
