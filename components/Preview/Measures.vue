@@ -44,7 +44,7 @@ const isSegment = props.fence.type.includes("Segmentas");
         </div>
 
         <div v-if="isFenceBoard" class="font-medium">Tarpas</div>
-        <div v-if="isFenceBoard">{{ props.fence.space }} mm</div>
+        <div v-if="isFenceBoard">{{ props.fence.space }} cm</div>
 
         <div class="font-medium">Metražas</div>
         <div>{{ props.fence.totalLength }} m</div>
