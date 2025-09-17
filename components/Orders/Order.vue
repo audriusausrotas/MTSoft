@@ -3,11 +3,20 @@ const props = defineProps(["order", "index"]);
 const { setError, setSuccess } = useError();
 const userStore = useUserStore();
 
-const dateNow = new Date().getTime();
-const dateCreated = new Date(props.order?.orderDate).getTime();
+const statusColor = computed(() => {
+  const items = props?.order?.data ?? [];
 
-const dateDifferenceMs = dateNow - dateCreated;
-const dateDifference = Math.floor(dateDifferenceMs / (1000 * 60 * 60 * 24));
+  if (
+    items.every(
+      (item: any) => !item.delivered && !item.inWarehouse && !item.ordered
+    )
+  )
+    return "bg-white";
+  else if (items.every((item: any) => item.delivered)) return "bg-stone-400";
+  else if (items.every((item: any) => item.inWarehouse)) return "bg-green-500";
+  else if (items.every((item: any) => item.ordered)) return "bg-yellow-500";
+  else return "bg-yellow-500";
+});
 
 const deleteHandler = async () => {
   const response: any = await request.delete(`deleteOrder/${props.order?._id}`);
@@ -60,25 +69,10 @@ const clickHandler = () => {
       />
 
       <BaseInfoField
-        v-if="props.order?.status"
         :name="props.order?.deliveryDate?.slice(0, 10)"
         width="w-32"
         class="order-5"
-        :class="
-          dateDifference < 25
-            ? 'bg-green-500'
-            : dateDifference < 45
-            ? 'bg-orange-500'
-            : dateDifference < 60
-            ? 'bg-red-600'
-            : 'bg-red-800 text-white animate-bounce'
-        "
-      />
-      <BaseInfoField
-        v-else
-        name="Baigtas"
-        width="w-32"
-        class="order-5 bg-green-500"
+        :class="[statusColor]"
       />
     </div>
     <div
