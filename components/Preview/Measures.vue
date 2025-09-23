@@ -3,6 +3,8 @@ const props = defineProps(["fence", "index"]);
 
 const isFenceBoard = props.fence.elements;
 const isSegment = props.fence.type.includes("Segmentas");
+
+console.log(props.fence);
 </script>
 
 <template>

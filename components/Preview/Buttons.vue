@@ -315,7 +315,7 @@ const dateHandler = async () => {
         v-if="props.location !== 'installation'"
         :disable="true"
         label="Darbų pradžia"
-        :name="props.offer?.dates?.dateCompletion"
+        :name="props.offer?.dates?.dateCompletion.slice(0, 10)"
       />
 
       <BaseSelectField
