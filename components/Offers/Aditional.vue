@@ -41,6 +41,7 @@
             Pagal gaminį
           </div>
           <div class="px-2 py-1 border-b border-inherit">Pagal gaminį</div>
+
           <div class="px-2 py-1 border-inherit border-b border-r">
             Kniedės 4 x 8 mm
           </div>
@@ -48,6 +49,14 @@
             25 €/1000 vnt
           </div>
           <div class="px-2 py-1 border-inherit border-b">30.25 €/1000 vnt</div>
+          <div class="px-2 py-1 border-inherit border-b border-r">
+            Skylučių mušimas lankstiniui
+          </div>
+          <div class="px-2 py-1 border-inherit border-b border-r">
+            0.24 ct/vnt
+          </div>
+          <div class="px-2 py-1 border-inherit border-b">0.29 ct/vnt</div>
+
           <div class="px-2 py-1 border-inherit border-r">Skydo surinkimas</div>
           <div class="px-2 py-1 border-inherit border-r">6 €/vnt</div>
           <div class="px-2 py-1 border-inherit">7.26 €/vnt</div>
@@ -97,6 +106,13 @@
             25 €/1000 vnt
           </div>
           <div class="px-2 py-1 border-inherit border-b">30.25 €/1000 vnt</div>
+          <div class="px-2 py-1 border-inherit border-b border-r">
+            Skylučių mušimas lankstiniui
+          </div>
+          <div class="px-2 py-1 border-inherit border-b border-r">
+            0.24 ct/vnt
+          </div>
+          <div class="px-2 py-1 border-inherit border-b">0.29 ct/vnt</div>
           <div class="px-2 py-1 border-inherit border-r">Skydo surinkimas</div>
           <div class="px-2 py-1 border-inherit border-r">6 €/vnt</div>
           <div class="px-2 py-1 border-inherit">7.26 €/vnt</div>

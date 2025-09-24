@@ -8,10 +8,10 @@ const settingsStore = useSettingsStore();
 const editable = ref<boolean>(false);
 const height = ref<string>(props.fence?.height);
 const width = ref<string>(props.fence?.width);
+const bends = ref<string>(props.fence?.bends);
 const isFenceBoard = ref<string>(
   props.fence?.isFenceBoard ? "Tvoralentė" : "Tvora"
 );
-const defaultDirection = ref<string>(props.fence?.defaultDirection);
 
 const seeThroughData = reactive({
   Aklina: {
@@ -47,34 +47,30 @@ const seeThroughData = reactive({
 });
 
 const saveHandler = async () => {
-  const requestData = {
-    _id: props.fence._id,
-    height: height.value,
-    width: width.value,
-    isFenceBoard: isFenceBoard.value === "Tvora" ? false : true,
-    defaultDirection: defaultDirection.value,
-    seeThrough: seeThroughData,
-  };
-  const response: any = await request.patch("updateFenceData", requestData);
-
-  if (response.success) {
-    !useSocketStore().connected &&
-      settingsStore.updateFenceSettings(response.data);
-    editable.value = false;
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  // const requestData = {
+  //   _id: props.fence._id,
+  //   height: height.value,
+  //   width: width.value,
+  //   isFenceBoard: isFenceBoard.value === "Tvora" ? false : true,
+  //   seeThrough: seeThroughData,
+  // };
+  // const response: any = await request.patch("updateFenceData", requestData);
+  // if (response.success) {
+  //   !useSocketStore().connected &&
+  //     settingsStore.updateFenceSettings(response.data);
+  editable.value = false;
+  //   setSuccess(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 };
 </script>
 
 <template>
   <div
-    class="flex flex-col gap-2 items-center border border-dark-full p-8 rounded-xl"
+    class="flex flex-col gap-4 items-center border border-dark-full p-8 rounded-xl relative"
   >
-    <div class="flex gap-4 items-center">
-      <p class="font-bold text-2xl">{{ props.fence.name }}</p>
-
+    <div class="absolute top-2 right-2">
       <NuxtImg
         v-if="editable"
         src="/icons/save.svg"
@@ -83,7 +79,7 @@ const saveHandler = async () => {
         decoding="auto"
         :ismap="true"
         loading="lazy"
-        class="hover:cursor-pointer hover:scale-125"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
         @click="saveHandler"
       />
 
@@ -95,68 +91,126 @@ const saveHandler = async () => {
         decoding="auto"
         :ismap="true"
         loading="lazy"
-        class="hover:cursor-pointer hover:scale-125"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
         @click="editable = !editable"
       />
     </div>
 
-    <div class="flex gap-4">
-      <BaseSelectField
-        label="Tvoros Tipas"
-        :values="fenceTypes"
-        :defaultValue="isFenceBoard || fenceTypes[0]"
-        :disable="!editable"
-        :variant="editable ? 'light' : ''"
-        width="w-52"
-        @onChange="(value) => (isFenceBoard = value)"
-      />
+    <div class="flex flex-col gap-4 justify-center items-center">
+      <p class="font-semibold text-lg">Lankstinio informacija</p>
+      <div class="flex gap-4 items-center justify-center w-full">
+        <BaseInput
+          :name="props.fence.name"
+          width="flex-1 min-w-60"
+          label="Tvoros Pavadinimas"
+          :disable="true"
+        />
+        <BaseSelectField
+          label="Tvoros Tipas"
+          :values="fenceTypes"
+          :defaultValue="isFenceBoard || fenceTypes[0]"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+          width="w-40"
+          @onChange="(value) => (isFenceBoard = value)"
+        />
+        <BaseInput
+          :name="height"
+          label="auktis"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+          @onChange="(value:string) => (height = value)"
+        />
 
-      <BaseSelectField
-        label="Standartinė Kryptis"
-        :values="fenceDirections"
-        :defaultValue="defaultDirection || fenceDirections[0]"
-        :disable="!editable"
-        :variant="editable ? 'light' : ''"
-        width="w-52"
-        @onChange="(value) => (defaultDirection = value)"
-      />
+        <BaseInput
+          :name="width"
+          label="plotis"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+          @onChange="(value:string) => (width = value)"
+        />
+        <BaseInput
+          :name="bends"
+          label="lenkimai"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+          @onChange="(value:string) => (bends = value)"
+        />
+      </div>
     </div>
 
-    <div class="flex gap-4 items-center">
-      <BaseInput
-        :name="height"
-        label="auktis"
-        width="w-24"
-        :disable="!editable"
-        :variant="editable ? 'light' : ''"
-        @onChange="(value:string) => (height = value)"
-      />
-
-      <BaseInput
-        :name="width"
-        label="plotis"
-        width="w-24"
-        :disable="!editable"
-        :variant="editable ? 'light' : ''"
-        @onChange="(value:string) => (width = value)"
-      />
-
-      <BaseInput
-        :name="props.fence.price"
-        label="Kaina"
-        width="w-24"
-        disable="true"
-      />
-
-      <BaseInput
-        :name="props.fence.cost"
-        label="savikaina"
-        width="w-24"
-        disable="true"
-      />
+    <div class="flex flex-col gap-4 items-center w-full">
+      <p class="font-semibold text-lg">Montavimo žingsnis</p>
+      <div class="flex gap-4 items-center justify-center">
+        <BaseInput
+          name=""
+          label="Aklina"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="Nepramatoma"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="Vidutiniška"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="Pramatoma"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="25%"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="50%"
+          width="w-24"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+      </div>
     </div>
 
-    <SettingsFencesElementBlock
+    <div class="flex flex-col gap-4 items-center">
+      <p class="font-semibold text-lg">Kainos</p>
+      <div class="flex gap-4 items-center justify-center">
+        <BaseInput
+          name=""
+          label="metro savikaina"
+          width="w-28"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+        <BaseInput
+          name=""
+          label="metro kaina"
+          width="w-28"
+          :disable="!editable"
+          :variant="editable ? 'light' : ''"
+        />
+      </div>
+    </div>
+
+    <!-- <SettingsFencesElementBlock
       name="Aklina"
       :editable="editable"
       :price="seeThroughData.Aklina.price"
@@ -220,7 +274,7 @@ const saveHandler = async () => {
       @priceChange="(value:string) => (seeThroughData['50% Pramatomumas'].price = +value)"
       @costChange="(value:string) => (seeThroughData['50% Pramatomumas'].cost = +value)"
       @spaceChange="(value:string) => (seeThroughData['50% Pramatomumas'].space = +value)"
-    />
+    /> -->
   </div>
 </template>
 
