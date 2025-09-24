@@ -19,10 +19,6 @@ const filterLength = ref<boolean>(false);
 
 const filteredMeasures = ref([...props.fence.measures]);
 
-const isFenceboards =
-  verticals.includes(props.fence.type) ||
-  props.fence.type.includes("Segmentas");
-
 const newMeasureHandler = async () => {
   const requestData = { _id: props._id, index: props.fenceIndex };
 
@@ -100,14 +96,38 @@ watch(
 <template>
   <div class="flex flex-col">
     <div
-      v-if="!isFenceboards"
-      class="flex gap-4 items-center font-bold text-2xl"
+      class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0"
     >
-      <p>
-        {{ props.fence.side }} - {{ props.fence.type }} -
+      <p
+        class="w-20 flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.side }}
+      </p>
+      <p
+        class="w-20 flex items-center justify-center h-full border-r border-black"
+      >
         {{ props.fence.color }}
       </p>
-      <div v-if="isAdmin" class="hover:cursor-pointer" @click="deleteHandler">
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.type }}
+      </p>
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.manufacturer || "Nežinoma" }}
+      </p>
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.material }}
+      </p>
+      <div
+        v-if="isAdmin"
+        class="hover:cursor-pointer w-[39px] flex items-center justify-center"
+        @click="deleteHandler"
+      >
         <NuxtImg
           width="20"
           height="20"

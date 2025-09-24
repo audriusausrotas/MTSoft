@@ -64,6 +64,7 @@ export interface Fence {
   type: string;
   color: string;
   material: string;
+  manufacturer: string;
   services: string;
   seeThrough: string;
   direction: string;
@@ -451,6 +452,7 @@ export interface Schedule {
 
 export interface SelectValues {
   fenceMaterials: string[];
+  fenceManufacturers: string[];
   gateOption: string[];
   gateLock: string[];
   gateTypes: string[];

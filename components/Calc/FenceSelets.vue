@@ -28,7 +28,11 @@ watch(
     isFenceBoards.value = verticals.includes(newValue?.type as string);
     isSegment.value = newValue?.type?.includes("Segmentas");
 
-    if (newValue?.direction === "Horizontali" && !isFenceBoards.value && !isSegment.value) {
+    if (
+      newValue?.direction === "Horizontali" &&
+      !isFenceBoards.value &&
+      !isSegment.value
+    ) {
       if (newValue?.bindings === "Taip") {
         calculationsStore.updateBindings(props.index, "Taip");
         needBindings.value = true;
@@ -47,7 +51,9 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
+    <div
+      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
+    >
       <BaseSelectField
         label="Tvoros pusė"
         :values="fenceSide"
@@ -97,6 +103,17 @@ watch(
         :defaultValue="currentFence.material"
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateMaterial(props.index, value)
+        "
+      />
+
+      <BaseSelectField
+        v-if="!isSegment"
+        label="Skardos Gamintojas"
+        :values="settingsStore.selectValues.fenceManufacturers"
+        id="fenceManufacturers"
+        :defaultValue="currentFence.manufacturer"
+        width="w-60"
+        @onChange="(value: string) => calculationsStore.updateManufacturer(props.index, value)
         "
       />
 
@@ -189,7 +206,10 @@ watch(
       />
     </div>
     <div>
-      <div class="flex gap-2 hover:cursor-pointer select-none" @click="isOpen = !isOpen">
+      <div
+        class="flex gap-2 hover:cursor-pointer select-none"
+        @click="isOpen = !isOpen"
+      >
         <p class="text-md">Papildoma Informacija</p>
         <NuxtImg
           src="icons/arrowDown.svg"

@@ -1,4 +1,8 @@
-import type { DefaultValues, SelectValues, UserRights } from "~/data/interfaces";
+import type {
+  DefaultValues,
+  SelectValues,
+  UserRights,
+} from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -10,6 +14,7 @@ export const useSettingsStore = defineStore("settings", {
       fenceMaterials: [],
       fenceColors: [],
       fenceTypes: [],
+      fenceManufacturers: [],
       retailFenceTypes: [],
       status: [],
       accountTypes: [],
@@ -41,7 +46,9 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     deleteSelectValue(field: keyof SelectValues, index: number) {
-      this.selectValues[field] = this.selectValues[field].filter((item, ind) => ind !== index);
+      this.selectValues[field] = this.selectValues[field].filter(
+        (item, ind) => ind !== index
+      );
     },
 
     updateUserRights(data: UserRights) {

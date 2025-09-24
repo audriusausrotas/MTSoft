@@ -29,6 +29,12 @@ const settingsStore = useSettingsStore();
     />
 
     <SettingsSelectElement
+      field="fenceManufacturers"
+      name="Skardos Gamintojai"
+      :data="settingsStore.selectValues.fenceManufacturers"
+    />
+
+    <SettingsSelectElement
       field="status"
       name="Projekto statusas"
       :data="settingsStore.selectValues.status"
