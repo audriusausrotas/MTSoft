@@ -10,13 +10,13 @@ export default function generateResults() {
     let cork = 0;
     results.fences.forEach((item) => {
       createResultElement(item);
-      if (item.type.includes("Dilė")) {
+      if (item.name.includes("Dilė")) {
         cork += item.quantity;
       }
     });
     if (cork > 0) {
       createResultElement({
-        type: settingsStore.defaultValues.dileCork,
+        name: settingsStore.defaultValues.dileCork,
         quantity: cork,
         color: 9005,
       });
@@ -28,27 +28,27 @@ export default function generateResults() {
       if (item.height <= 113)
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.segment103,
+          name: settingsStore.defaultValues.segment103,
         });
       else if (item.height <= 133)
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.segment123,
+          name: settingsStore.defaultValues.segment123,
         });
       else if (item.height <= 163)
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.segment153,
+          name: settingsStore.defaultValues.segment153,
         });
       else if (item.height <= 183)
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.segment173,
+          name: settingsStore.defaultValues.segment173,
         });
       else
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.segment203,
+          name: settingsStore.defaultValues.segment203,
         });
     });
   }
@@ -57,7 +57,7 @@ export default function generateResults() {
     results.segmentHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.segmentHolders,
+        name: settingsStore.defaultValues.segmentHolders,
       });
     });
   }
@@ -71,13 +71,13 @@ export default function generateResults() {
         pole = settingsStore.defaultValues.poleAlt;
       }
 
-      createResultElement({ ...item, type: pole });
+      createResultElement({ ...item, name: pole });
     });
   }
 
   if (results.gatePoles.length > 0) {
     let pole = "";
-    const exist = results.gates.some((item) => item.type === "Varstomi");
+    const exist = results.gates.some((item) => item.name === "Varstomi");
     if (exist) {
       pole = settingsStore.defaultValues.gatePoleAlt;
     } else {
@@ -85,7 +85,7 @@ export default function generateResults() {
     }
 
     results.gatePoles.forEach((item) => {
-      createResultElement({ ...item, type: pole });
+      createResultElement({ ...item, name: pole });
     });
   }
 
@@ -97,13 +97,13 @@ export default function generateResults() {
       } else {
         pole = settingsStore.defaultValues.anchoredPoleAlt;
       }
-      createResultElement({ ...item, type: pole });
+      createResultElement({ ...item, name: pole });
     });
   }
 
   if (results.anchoredGatePoles.length > 0) {
     let pole = "";
-    const exist = results.gates.some((item) => item.type === "Varstomi");
+    const exist = results.gates.some((item) => item.name === "Varstomi");
     if (exist) {
       pole = settingsStore.defaultValues.anchoredGatePoleAlt;
     } else {
@@ -111,19 +111,19 @@ export default function generateResults() {
     }
 
     results.anchoredGatePoles.forEach((item) => {
-      createResultElement({ ...item, type: pole });
+      createResultElement({ ...item, name: pole });
     });
   }
 
   if (results.borders > 0) {
     createResultElement({
-      type: settingsStore.defaultValues.border,
+      name: settingsStore.defaultValues.border,
       quantity: results.borders,
     });
     results.borderHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.borderHolder,
+        name: settingsStore.defaultValues.borderHolder,
       });
     });
   }
@@ -132,23 +132,25 @@ export default function generateResults() {
     results.crossbars.forEach((item) => {
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.crossbar,
+        name: settingsStore.defaultValues.crossbar,
       });
     });
     results.crossbarHolders.forEach((item) => {
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.crossbarHolders,
+        name: settingsStore.defaultValues.crossbarHolders,
       });
     });
   }
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000
+      );
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.rivets,
+        name: settingsStore.defaultValues.rivets,
         quantity: boxQuantity,
       });
     });
@@ -156,10 +158,12 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000
+      );
       createResultElement({
         ...item,
-        type: settingsStore.defaultValues.bolts,
+        name: settingsStore.defaultValues.bolts,
         quantity: boxQuantity,
       });
     });
@@ -169,7 +173,7 @@ export default function generateResults() {
     results.retailLegs.forEach((item) => {
       createResultElement({
         ...item,
-        type: item.type,
+        name: item.name,
         quantity: item.quantity / 100,
       });
     });
@@ -179,7 +183,7 @@ export default function generateResults() {
     results.bindingsLength.forEach((item) => {
       createResultElement({
         ...item,
-        type: calculationsStore.retail
+        name: calculationsStore.retail
           ? settingsStore.defaultValues.retailBindings
           : settingsStore.defaultValues.bindings,
         quantity: item.quantity / 100,
@@ -189,38 +193,38 @@ export default function generateResults() {
 
   if (results.gates.length > 0) {
     results.gates.forEach((item) => {
-      if (item.type === "Stumdomi") {
+      if (item.name === "Stumdomi") {
         if (item.auto === "Taip") {
           createResultElement({
             ...item,
-            type: settingsStore.defaultValues.gatesAuto,
+            name: settingsStore.defaultValues.gatesAuto,
             quantity: 1,
           });
         } else {
           createResultElement({
             ...item,
-            type: settingsStore.defaultValues.gates,
+            name: settingsStore.defaultValues.gates,
             quantity: 1,
           });
         }
-      } else if (item.type === "Varstomi") {
+      } else if (item.name === "Varstomi") {
         if (item.auto !== "Taip") {
           createResultElement({
             ...item,
-            type: settingsStore.defaultValues.gates2,
+            name: settingsStore.defaultValues.gates2,
             quantity: 1,
           });
         } else {
           createResultElement({
             ...item,
-            type: settingsStore.defaultValues.gates2Auto,
+            name: settingsStore.defaultValues.gates2Auto,
             quantity: 1,
           });
         }
-      } else if (item.type === "Segmentiniai") {
+      } else if (item.name === "Segmentiniai") {
         createResultElement({
           ...item,
-          type: settingsStore.defaultValues.gateSegment,
+          name: settingsStore.defaultValues.gateSegment,
           quantity: 1,
         });
         createWorkElement({
@@ -232,20 +236,20 @@ export default function generateResults() {
           if (item.lock === "Elektromagnetinė") {
             createResultElement({
               ...item,
-              type: settingsStore.defaultValues.smallGates2,
+              name: settingsStore.defaultValues.smallGates2,
               quantity: 1,
             });
           } else {
             createResultElement({
               ...item,
-              type: settingsStore.defaultValues.smallGates,
+              name: settingsStore.defaultValues.smallGates,
               quantity: 1,
             });
           }
         } else {
           createResultElement({
             ...item,
-            type: settingsStore.defaultValues.smallGatesSegment,
+            name: settingsStore.defaultValues.smallGatesSegment,
             quantity: 1,
           });
           createWorkElement({
@@ -332,7 +336,7 @@ export default function generateResults() {
   if (results.gates.length > 0) {
     let quantity = 0;
     results.gates.forEach((item) => {
-      if (item.bankette === "Taip" && item.type.includes("Stumdomi")) {
+      if (item.bankette === "Taip" && item.name.includes("Stumdomi")) {
         quantity +=
           item.width <= 500
             ? 2
@@ -368,7 +372,7 @@ export default function generateResults() {
   });
 
   const tempResults = backupStore.results.filter(
-    (item) => !results.results.some((itm) => itm.type === item.type)
+    (item) => !results.results.some((itm) => itm.name === item.name)
   );
   const tempWorks = backupStore.works.filter(
     (item) => !results.works.some((itm) => itm.name === item.name)
@@ -377,7 +381,7 @@ export default function generateResults() {
   tempResults.forEach((item) => {
     createResultElement({
       ...item,
-      type: item.type,
+      name: item.name,
       quantity: item.quantity,
     });
   });

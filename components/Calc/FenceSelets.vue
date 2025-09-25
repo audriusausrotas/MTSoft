@@ -15,18 +15,19 @@ const settingsStore = useSettingsStore();
 const calculationsStore = useCalculationsStore();
 
 const currentFence = calculationsStore.fences[props.index];
-const isFenceBoards = ref<boolean>(verticals.includes(currentFence.type));
-const isSegment = ref<boolean>(currentFence.type.includes("Segmentas"));
+const isFenceBoards = ref<boolean>(verticals.includes(currentFence.name));
+const isSegment = ref<boolean>(currentFence.name.includes("Segmentas"));
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
 const needBindings = ref<boolean>(true);
+const needHoles = ref<boolean>(true);
 const isOpen = ref<boolean>(false);
 
 watch(
   () => calculationsStore.fences[props.index],
   (newValue) => {
     needPoles.value = newValue?.parts?.includes("Stulpai");
-    isFenceBoards.value = verticals.includes(newValue?.type as string);
-    isSegment.value = newValue?.type?.includes("Segmentas");
+    isFenceBoards.value = verticals.includes(newValue?.name as string);
+    isSegment.value = newValue?.name?.includes("Segmentas");
 
     if (
       newValue?.direction === "Horizontali" &&
@@ -69,7 +70,7 @@ watch(
         label="Tvoros tipas"
         :values="settingsStore.selectValues.retailFenceTypes"
         id="fenceType"
-        :defaultValue="currentFence.type"
+        :defaultValue="currentFence.name"
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateType(props.index, value)
         "
@@ -79,7 +80,7 @@ watch(
         label="Tvoros tipas"
         :values="settingsStore.selectValues.fenceTypes"
         id="fenceType"
-        :defaultValue="currentFence.type"
+        :defaultValue="currentFence.name"
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateType(props.index, value)
         "
@@ -202,6 +203,15 @@ watch(
         :defaultValue="currentFence.anchoredPoles"
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateAnchoredPoles(props.index, value)
+        "
+      />
+      <BaseSelectField
+        label="Skylučių išmušimas"
+        :values="yesno"
+        id="holes"
+        :defaultValue="currentFence.holes"
+        width="w-60"
+        @onChange="(value: string) => calculationsStore.updateHoles(props.index, value)
         "
       />
     </div>

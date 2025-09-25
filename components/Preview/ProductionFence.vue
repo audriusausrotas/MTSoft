@@ -6,7 +6,7 @@ const props = defineProps(["fence"]);
   <div class="flex flex-col w-fit">
     <div class="flex gap-4 items-center font-bold text-xl">
       <p>
-        {{ props?.fence?.side }} - {{ props?.fence?.type }} -
+        {{ props?.fence?.side }} - {{ props?.fence?.name }} -
         {{ props?.fence?.color }}
       </p>
     </div>

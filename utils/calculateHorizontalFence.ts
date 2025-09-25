@@ -1,6 +1,9 @@
 import type { Fence, Fences } from "~/data/interfaces";
 
-export default function calculateHorizontalFence(fenceTemp: Fences[], item: Fence) {
+export default function calculateHorizontalFence(
+  fenceTemp: Fences[],
+  item: Fence
+) {
   const tempFence: Fences[] = [...fenceTemp];
   const useCalculate = useCalculationsStore();
   const retail = useCalculate.retail;
@@ -16,9 +19,10 @@ export default function calculateHorizontalFence(fenceTemp: Fences[], item: Fenc
     quantity: retail ? calculateRetail(item) : item.totalQuantity,
     elements: 0,
   };
+
   tempFence.forEach((fenceItem) => {
     if (
-      fenceItem.type === item.type &&
+      fenceItem.name === item.name &&
       fenceItem.color === item.color &&
       fenceItem.material === item.material &&
       fenceItem.space === item.space &&
@@ -34,6 +38,7 @@ export default function calculateHorizontalFence(fenceTemp: Fences[], item: Fenc
       }
     }
   });
+
   if (!fenceExist) {
     tempFence.push(initialFenceData);
   }

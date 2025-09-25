@@ -13,12 +13,12 @@ const { setError, setSuccess } = useError();
 
 const measurement = ref<string>("vnt");
 
-if (props.result.type.includes("Apkaustai")) measurement.value = "m";
+if (props.result.name.includes("Apkaustai")) measurement.value = "m";
 else if (
-  props?.result?.type.includes("Daimond") ||
-  props?.result?.type.includes("Plank") ||
-  props?.result?.type.includes("Eglė") ||
-  props?.result?.type.includes("Žaliuzi")
+  props?.result?.name.includes("Daimond") ||
+  props?.result?.name.includes("Plank") ||
+  props?.result?.name.includes("Eglė") ||
+  props?.result?.name.includes("Žaliuzi")
 )
   measurement.value = "m2";
 else measurement.value = "vnt";
@@ -63,8 +63,8 @@ const selectData = (value: boolean) => {
   const data = {
     name:
       props?.result?.category === "tvoros"
-        ? props?.result?.type + " H-" + props.result.height
-        : props?.result?.type,
+        ? props?.result?.name + " H-" + props.result.height
+        : props?.result?.name,
     color: props?.result?.color,
     quantity: props?.result?.quantity,
     measureIndex: props?.index,
@@ -96,7 +96,7 @@ const selectData = (value: boolean) => {
     <div class="flex-1">
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 lg:gap-8">
-        <span class="w-fit">{{ props?.result?.type }}</span>
+        <span class="w-fit">{{ props?.result?.name }}</span>
         <span v-if="props?.result?.seeThrough">{{
           props?.result?.seeThrough
         }}</span>
@@ -104,12 +104,12 @@ const selectData = (value: boolean) => {
           v-if="
             props?.result?.height &&
             props?.result?.category.toLowerCase() === 'tvoros' &&
-            !props?.result?.type.includes('Segmentas')
+            !props?.result?.name.includes('Segmentas')
           "
           >H-{{ props?.result?.height }}</span
         >
         <span
-          v-if="props?.result?.color && !props?.result?.type?.includes('RAL')"
+          v-if="props?.result?.color && !props?.result?.name?.includes('RAL')"
           >RAL {{ props?.result?.color }}</span
         >
         <span v-if="props?.result?.category.toLowerCase() === 'vartai'"

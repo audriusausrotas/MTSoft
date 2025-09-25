@@ -1,4 +1,11 @@
-import type { Client, Measure, Result, MenuLinks, FenceMeasure, Works } from "~/data/interfaces";
+import type {
+  Client,
+  Measure,
+  Result,
+  MenuLinks,
+  FenceMeasure,
+  Works,
+} from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -22,7 +29,7 @@ export const initialWorkData: Works = {
 
 export const initialResultData: Result = {
   id: "",
-  type: "",
+  name: "",
   quantity: 0,
   color: "",
   space: 0,
@@ -73,7 +80,7 @@ export const createInitialMeasure = (): Measure => ({
   elements: 0,
   gates: {
     exist: false,
-    type: "Stumdomi",
+    name: "Stumdomi",
     automatics: "Taip",
     comment: "",
     direction: "Vidus Kairė",

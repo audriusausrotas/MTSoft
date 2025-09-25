@@ -18,7 +18,7 @@ export default function calculateResults() {
     // checks if crossbars needed
     const onlyParts = item.services === "Tik Medžiagos";
     const onlyServices = item.services === "Tik Montavimas";
-    const isSegment: boolean = item.type.includes("Segmentas");
+    const isSegment: boolean = item.name.includes("Segmentas");
     const polesNeeded: boolean =
       item.parts !== "Tik Borteliai" && item.parts !== "Be Bortelių Ir Stulpų";
     const bordersNeeded: boolean =
@@ -27,7 +27,7 @@ export default function calculateResults() {
       item.anchoredPoles === "Ne";
 
     const hasCrossbars: boolean = verticals.some(
-      (vertical) => vertical === item.type
+      (vertical) => vertical === item.name
     );
 
     // calculate horizontal fence by suare meters
@@ -52,15 +52,15 @@ export default function calculateResults() {
       if (measure.gates.exist) {
         results.addGates({
           _id: uuidv4(),
-          type: measure.length! > 200 ? measure.gates.type : "Varteliai",
+          name: measure.length! > 200 ? measure.gates.name : "Varteliai",
           auto: measure.length! > 200 ? measure.gates.automatics : "",
           width: measure.length,
           height: measure.height,
           color: item.color,
-          filling: item.type,
+          filling: item.name,
           ready: false,
           bankette:
-            measure.length! > 200 && measure.gates.type === "Stumdomi"
+            measure.length! > 200 && measure.gates.name === "Stumdomi"
               ? measure.gates.bankette
               : "",
 
@@ -87,7 +87,7 @@ export default function calculateResults() {
       // calculate total elements
       if (!isSegment) {
         if (!onlyServices)
-          results.addTotalElements(measure.elements, item.color, item.type);
+          results.addTotalElements(measure.elements, item.color, item.name);
 
         // calculate bindings
 
@@ -102,11 +102,11 @@ export default function calculateResults() {
       // calculate retail legs
       if (calculationsStore.retail) {
         if (item.direction !== "Horizontali" || measure.gates.exist) return;
-        const type =
+        const name =
           item.bindings === "Taip"
             ? settingsStore.defaultValues.retailSingleLeg
             : settingsStore.defaultValues.retailDoubleLeg;
-        results.addRetailLeg(measure.height, item.color, type);
+        results.addRetailLeg(measure.height, item.color, name);
       }
 
       // calculate borders, crossbars

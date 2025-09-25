@@ -111,7 +111,7 @@ watch(
       <p
         class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
       >
-        {{ props.fence.type }}
+        {{ props.fence.name }}
       </p>
       <p
         class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"

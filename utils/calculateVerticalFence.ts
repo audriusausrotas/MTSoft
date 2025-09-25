@@ -10,7 +10,7 @@ export default function calculateVerticalFence(
   let fenceExist: boolean = false;
   let fenceWidth: number = 0;
 
-  fenceWidth = fenceMeasures.findIndex((element) => element.name === item.type);
+  fenceWidth = fenceMeasures.findIndex((element) => element.name === item.name);
 
   const elements = calculateFenceBoards(
     measure.length,
@@ -20,7 +20,7 @@ export default function calculateVerticalFence(
   );
 
   const initialFenceData = {
-    type: item.type,
+    name: item.name,
     color: item.color,
     length: 0,
     height: measure.height,
@@ -35,7 +35,7 @@ export default function calculateVerticalFence(
 
   tempFence.forEach((fenceItem) => {
     if (
-      fenceItem.type === item.type &&
+      fenceItem.name === item.name &&
       fenceItem.color === item.color &&
       fenceItem.material === item.material &&
       fenceItem.space === item.space &&

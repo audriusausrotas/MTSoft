@@ -24,7 +24,7 @@ const indexColor = computed(() => {
     </p>
 
     <div class="flex-1 border-r border-black px-1">
-      {{ props?.binding?.type }}
+      {{ props?.binding?.name }}
     </div>
 
     <div class="w-12 sm:w-16 border-r border-black px-1">

@@ -2,7 +2,9 @@
 const projectsStore = useProjectsStore();
 const route = useRoute();
 
-const offer = computed(() => projectsStore.projects.find((item) => item._id === route.params.id));
+const offer = computed(() =>
+  projectsStore.projects.find((item) => item._id === route.params.id)
+);
 </script>
 
 <template>

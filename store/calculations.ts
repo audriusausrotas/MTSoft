@@ -20,7 +20,7 @@ export const useCalculationsStore = defineStore("calculations", {
       const initialFence: Fence = {
         id: uuidv4(),
         side: "Priekis",
-        type: this.retail ? "Daimond 60/90 metras" : "Daimond 60/90",
+        name: this.retail ? "Daimond 60/90 metras" : "Daimond 60/90",
         color: "7016",
         material: "Matinė",
         manufacturer: "Arcelor",
@@ -31,12 +31,14 @@ export const useCalculationsStore = defineStore("calculations", {
         twoSided: "Ne",
         comment: "",
         bindings: "Taip",
+        holes: "Taip",
         anchoredPoles: "Ne",
         space: 2,
         elements: 0,
         totalLength: 0,
         totalQuantity: 0,
         measures: [],
+        fenceboards: false,
       };
 
       this.fences.push(initialFence);
@@ -82,10 +84,10 @@ export const useCalculationsStore = defineStore("calculations", {
       this.retail = value;
       this.fences = this.fences.map((item) => {
         if (value) {
-          item.type = settingsStore.selectValues.retailFenceTypes[0];
+          item.name = settingsStore.selectValues.retailFenceTypes[0];
           return item;
         } else {
-          item.type = settingsStore.selectValues.fenceTypes[0];
+          item.name = settingsStore.selectValues.fenceTypes[0];
           return item;
         }
       });
@@ -112,7 +114,7 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateType(index: number, value: string): void {
-      this.fences[index].type = value;
+      this.fences[index].name = value;
       this.calculateAllElements(index);
     },
 
@@ -146,7 +148,7 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateGateType(index: number, value: string, measureIndex: number): void {
-      this.fences[index].measures[measureIndex].gates.type = value;
+      this.fences[index].measures[measureIndex].gates.name = value;
       if (value === "Segmentiniai") {
         this.fences[index].measures[measureIndex].gates.option = value;
       } else {
@@ -213,6 +215,10 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateAnchoredPoles(index: number, value: string): void {
       this.fences[index].anchoredPoles = value;
+    },
+
+    updateHoles(index: number, value: string): void {
+      this.fences[index].holes = value;
     },
 
     updateMeasureKampas(
@@ -343,11 +349,11 @@ export const useCalculationsStore = defineStore("calculations", {
     calculateElements(index: number, measureIndex: number) {
       const fence = this.fences[index];
       const measure = fence.measures[measureIndex];
-      const isFenceBoards = verticals.includes(fence.type);
+      const isFenceBoards = verticals.includes(fence.name);
       const seeThroughIndex = pramatomumas.indexOf(fence.seeThrough);
       const fenceData = fenceMeasures.find(
         (item) =>
-          item.name.trim().toLowerCase() === fence.type.trim().toLowerCase()
+          item.name.trim().toLowerCase() === fence.name.trim().toLowerCase()
       );
 
       let elements = 0;

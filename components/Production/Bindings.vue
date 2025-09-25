@@ -8,7 +8,7 @@ const isAdmin = userStore.user?.accountType === "Administratorius";
 
 const cut = ref<number>(props.binding.cut);
 const done = ref<number>(props.binding.done);
-const type = ref<string>(props.binding.type);
+const name = ref<string>(props.binding.name);
 const height = ref<number>(props.binding.height);
 const quantity = ref<number>(props.binding.quantity);
 const color = ref<string>(props.binding.color);
@@ -16,7 +16,7 @@ const color = ref<string>(props.binding.color);
 const iMadeChanges = ref<boolean>(false);
 const isSavedCut = ref<boolean>(true);
 const isSavedDone = ref<boolean>(true);
-const isSavedType = ref<boolean>(true);
+const isSavedName = ref<boolean>(true);
 const isSavedHeight = ref<boolean>(true);
 const isSavedQuantity = ref<boolean>(true);
 const isSavedColor = ref<boolean>(true);
@@ -65,8 +65,8 @@ const saveHandler = async (field: string) => {
         ? +props.binding.cut
         : field === "done"
         ? +props.binding.done
-        : field === "type"
-        ? props.binding.type
+        : field === "name"
+        ? props.binding.name
         : field === "height"
         ? +props.binding.height
         : field === "quantity"
@@ -97,9 +97,9 @@ const saveHandler = async (field: string) => {
     } else if (field === "done") {
       done.value = +requestData.value;
       isSavedDone.value = true;
-    } else if (field === "type") {
-      type.value = String(requestData.value);
-      isSavedType.value = true;
+    } else if (field === "name") {
+      name.value = String(requestData.value);
+      isSavedName.value = true;
     } else if (field === "height") {
       height.value = +requestData.value;
       isSavedHeight.value = true;
@@ -183,10 +183,10 @@ const updateMeasure = (field: string, event: Event) => {
     +inputElement.value !== cut.value
       ? (isSavedCut.value = false)
       : (isSavedCut.value = true);
-  else if (field === "type")
-    inputElement.value !== type.value
-      ? (isSavedType.value = false)
-      : (isSavedType.value = true);
+  else if (field === "name")
+    inputElement.value !== name.value
+      ? (isSavedName.value = false)
+      : (isSavedName.value = true);
   else if (field === "color")
     inputElement.value !== color.value
       ? (isSavedColor.value = false)
@@ -209,8 +209,8 @@ watch(
   () => props.binding,
   (binding) => {
     if (!iMadeChanges.value) {
-      if (binding.type !== type.value) {
-        type.value = binding.type;
+      if (binding.name !== name.value) {
+        name.value = binding.name;
       }
       if (binding.cut !== cut.value) {
         cut.value = +binding.cut;
@@ -243,18 +243,18 @@ watch(
       <input
         type="text"
         class="w-full"
-        :value="props.binding.type"
-        @input="updateMeasure('type', $event)"
+        :value="props.binding.name"
+        @input="updateMeasure('name', $event)"
       />
       <NuxtImg
         width="20"
         height="20"
-        v-if="!isSavedType"
+        v-if="!isSavedName"
         src="/icons/save.svg"
         decoding="auto"
         loading="lazy"
         :ismap="true"
-        @click="saveHandler('type')"
+        @click="saveHandler('name')"
         class="hover:cursor-pointer"
       />
     </div>

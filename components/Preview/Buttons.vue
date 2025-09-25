@@ -45,7 +45,7 @@ const gateExist = computed(() => {
   const gates = props.offer?.gates || [];
   return gates.some(
     (item: any) =>
-      item.type !== "Segmentiniai" && item.option !== "Segmentiniai"
+      item.name !== "Segmentiniai" && item.option !== "Segmentiniai"
   );
 });
 

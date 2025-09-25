@@ -91,7 +91,7 @@ export const useResultsStore = defineStore("results", {
 
     selectItem(index: number, value: Product): void {
       const selectedResult = this.results[index];
-      selectedResult.type = value.name;
+      selectedResult.name = value.name;
       selectedResult.price = value.price;
       selectedResult.cost = value.cost;
       selectedResult.category = value.category;
@@ -132,7 +132,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateName(index: number, value: string): void {
-      this.results[index].type = value;
+      this.results[index].name = value;
     },
     updateWorkName(index: number, value: string): void {
       this.works[index].name = value;
@@ -396,10 +396,10 @@ export const useResultsStore = defineStore("results", {
       this.crossbarHolders = this.addPart(this.crossbarHolders, color, 4, 0);
     },
 
-    addTotalElements(elements: number, color: string, type: string): void {
+    addTotalElements(elements: number, color: string, name: string): void {
       this.totalElements += elements;
 
-      if (verticals.includes(type)) {
+      if (verticals.includes(name)) {
         this.bolts = this.addPart(
           this.bolts,
           color,
@@ -416,13 +416,13 @@ export const useResultsStore = defineStore("results", {
       }
     },
 
-    addRetailLeg(height: number, color: string, type: string): void {
+    addRetailLeg(height: number, color: string, name: string): void {
       this.retailLegs = this.addPart(
         this.retailLegs,
         color,
         height * 2,
         0,
-        type
+        name
       );
     },
 
@@ -469,7 +469,7 @@ export const useResultsStore = defineStore("results", {
       color: string,
       quantity: number,
       height: number,
-      type?: string
+      name?: string
     ) {
       let tempArr = [...array];
       let itemExist = false;
@@ -477,14 +477,14 @@ export const useResultsStore = defineStore("results", {
         if (
           item.color === color &&
           height === item.height &&
-          item.type === type
+          item.name === name
         ) {
           item.quantity += quantity;
           itemExist = true;
         }
       });
       if (!itemExist) {
-        tempArr.push({ color, quantity, height, type });
+        tempArr.push({ color, quantity, height, name });
       }
       return tempArr;
     },

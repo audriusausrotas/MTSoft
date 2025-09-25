@@ -6,14 +6,14 @@ import { verticals } from "~/data/selectFieldData";
 export default function createResultElement(item: any) {
   const results = useResultsStore();
   const backupStore = useBackupStore();
-  const product: Product = getPriceItem(item.type);
+  const product: Product = getPriceItem(item.name);
 
   let newPrice: number = Number(product.price);
   let newCost: number = Number(product.cost);
 
   // change gate prices
-  if (item.type.includes("vartai") && !backupStore.backupExist) {
-    if (item.type.includes("segmentiniai")) {
+  if (item.name.includes("vartai") && !backupStore.backupExist) {
+    if (item.name.includes("segmentiniai")) {
       if (item.width > 400) {
         newPrice += 60;
         newCost += 60;
@@ -51,7 +51,10 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (item.type === "Kiemo varteliai segmentiniai" && !backupStore.backupExist) {
+  if (
+    item.name === "Kiemo varteliai segmentiniai" &&
+    !backupStore.backupExist
+  ) {
     if (item.height > 110) {
       newPrice += 20;
       newCost += 20;
@@ -98,7 +101,7 @@ export default function createResultElement(item: any) {
     }
   }
 
-  if (verticals.includes(item.type) && !backupStore.backupExist) {
+  if (verticals.includes(item.name) && !backupStore.backupExist) {
     newPrice = +((product.price * item.height) / 100).toFixed(2);
     newCost = +((product.cost * item.height) / 100).toFixed(2);
   }
@@ -111,7 +114,7 @@ export default function createResultElement(item: any) {
 
   const resultData: Result = {
     id: uuidv4(),
-    type: item.type,
+    name: item.name,
     quantity: +item.quantity.toFixed(2),
     color: item.color || "",
     height: item.height || 0,

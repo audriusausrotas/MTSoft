@@ -7,7 +7,9 @@ const settingsStore = useSettingsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
-const isSegment = ref<boolean>(calculationsStore.fences[props.index].type.includes("Segmentas"));
+const isSegment = ref<boolean>(
+  calculationsStore.fences[props.index].name.includes("Segmentas")
+);
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
@@ -15,7 +17,7 @@ function toggleCheckbox(value: boolean) {
 }
 
 watch(
-  () => calculationsStore.fences[props.index].type,
+  () => calculationsStore.fences[props.index].name,
   (newValue) => {
     isSegment.value = newValue.includes("Segmentas");
   },
@@ -35,12 +37,19 @@ watch(
         label="ilgis"
         type="number"
         variant="light"
-        :active="calculationsStore.fences[props.index].measures.length - 1 === props.measureIndex"
+        :active="
+          calculationsStore.fences[props.index].measures.length - 1 ===
+          props.measureIndex
+        "
         :name="props.measure.length"
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureLength(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureLength(
+              props.index,
+              props.measureIndex,
+              value
+            )
         "
       />
 
@@ -55,7 +64,11 @@ watch(
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureHeight(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureHeight(
+              props.index,
+              props.measureIndex,
+              value
+            )
         "
       />
 
@@ -68,7 +81,11 @@ watch(
         :name="props.measure.elements"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureElements(props.index, props.measureIndex, value)
+            calculationsStore.updateMeasureElements(
+              props.index,
+              props.measureIndex,
+              value
+            )
         "
       />
 
@@ -97,7 +114,11 @@ watch(
         :name="props.measure.kampas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampas(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureKampas(
+              props.index,
+              value,
+              props.measureIndex
+            )
         "
       />
       <BaseInput
@@ -109,7 +130,11 @@ watch(
         :name="props.measure.kampas.comment"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampasComment(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureKampasComment(
+              props.index,
+              value,
+              props.measureIndex
+            )
         "
       />
 
@@ -130,7 +155,11 @@ watch(
         :name="props.measure.laiptas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureLaiptas(props.index, value, props.measureIndex)
+            calculationsStore.updateMeasureLaiptas(
+              props.index,
+              value,
+              props.measureIndex
+            )
         "
       />
       <BaseSelectField
@@ -154,13 +183,21 @@ watch(
         height="20"
         decoding="auto"
         class="hover:bg-red-ulta-light pb-3 rounded-xl hover:cursor-pointer"
-        @click="calculationsStore.deleteMeasure(props.index, props.measureIndex)"
+        @click="
+          calculationsStore.deleteMeasure(props.index, props.measureIndex)
+        "
       />
     </div>
 
-    <div v-if="isChecked" class="flex flex-wrap justify-center md:justify-between gap-2">
+    <div
+      v-if="isChecked"
+      class="flex flex-wrap justify-center md:justify-between gap-2"
+    >
       <BaseSelectField
-        v-if="props.measure.length > 200 && props.measure.gates.type !== 'Segmentiniai'"
+        v-if="
+          props.measure.length > 200 &&
+          props.measure.gates.name !== 'Segmentiniai'
+        "
         :values="yesno"
         label="Automatika"
         id="automatics"
@@ -175,13 +212,15 @@ watch(
         :values="settingsStore.selectValues.gateTypes"
         id="gateTypes"
         label="vartų tipas"
-        :defaultValue="props.measure.gates.type"
+        :defaultValue="props.measure.gates.name"
         width="w-36"
         @onChange="(value: string) => calculationsStore.updateGateType(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
-        v-if="props.measure.length > 200 && props.measure.gates.type === 'Stumdomi'"
+        v-if="
+          props.measure.length > 200 && props.measure.gates.name === 'Stumdomi'
+        "
         :values="yesno"
         id="bankette"
         label="vartų pamatas"
@@ -192,7 +231,10 @@ watch(
       />
 
       <BaseSelectField
-        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
+        v-if="
+          props.measure.length <= 200 &&
+          props.measure.gates.option !== 'Segmentiniai'
+        "
         :values="gateDirection"
         id="gateDirection"
         label="vartelių atidarymas"
@@ -203,7 +245,10 @@ watch(
       />
 
       <BaseSelectField
-        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
+        v-if="
+          props.measure.length <= 200 &&
+          props.measure.gates.option !== 'Segmentiniai'
+        "
         :values="settingsStore.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"

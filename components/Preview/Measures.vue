@@ -2,9 +2,7 @@
 const props = defineProps(["fence", "index"]);
 
 const isFenceBoard = props.fence.elements;
-const isSegment = props.fence.type.includes("Segmentas");
-
-console.log(props.fence);
+const isSegment = props.fence.name.includes("Segmentas");
 </script>
 
 <template>
@@ -18,7 +16,7 @@ console.log(props.fence);
         <div>{{ props.fence.side }}</div>
 
         <div class="font-medium">Pavadinimas</div>
-        <div>{{ props.fence.type }}</div>
+        <div>{{ props.fence.name }}</div>
 
         <div class="font-medium">Tvoros spalva</div>
         <div>RAL {{ props.fence.color }}</div>
@@ -54,7 +52,7 @@ console.log(props.fence);
         <div v-if="isFenceBoard" class="font-medium">Viso elementų</div>
         <div v-if="isFenceBoard">{{ isFenceBoard }} vnt</div>
 
-        <div v-if="!isFenceBoard && props.fence.type" class="font-medium">
+        <div v-if="!isFenceBoard && props.fence.name" class="font-medium">
           Kvadratūra
         </div>
         <div v-if="!isFenceBoard">

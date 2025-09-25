@@ -20,7 +20,6 @@ const dateColor =
     ? "animate-pulse"
     : "";
 
-console.log(dateDifference);
 const statusColor = computed(() => {
   const items = props?.order?.data ?? [];
 

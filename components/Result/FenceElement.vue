@@ -5,7 +5,7 @@ const props = defineProps(["result", "index", "parts"]);
 
 const resultsStore = useResultsStore();
 const isFenceboard = computed(() => {
-  if (verticals.some((item) => props.result?.type?.includes(item))) {
+  if (verticals.some((item) => props.result?.name?.includes(item))) {
     return true;
   } else {
     return false;
@@ -14,7 +14,7 @@ const isFenceboard = computed(() => {
 
 const showAditionalVertical = computed(() => {
   if (
-    verticals.some((item) => props.result?.type?.includes(item)) &&
+    verticals.some((item) => props.result?.name?.includes(item)) &&
     props.result.direction === "Vertikali"
   ) {
     return true;
@@ -25,7 +25,7 @@ const showAditionalVertical = computed(() => {
 
 const showAditionalHorizontal = computed(() => {
   if (
-    horizontals.some((item) => props.result?.type?.includes(item)) &&
+    horizontals.some((item) => props.result?.name?.includes(item)) &&
     props.result.direction === "Horizontali"
   ) {
     return true;
@@ -39,7 +39,9 @@ const colorEditable = computed(
 );
 
 const spaceEditable = computed(
-  () => props.result.category === "tvoros" && !props.result.type.includes("Segmentas")
+  () =>
+    props.result.category === "tvoros" &&
+    !props.result.name.includes("Segmentas")
 );
 </script>
 
@@ -51,7 +53,7 @@ const spaceEditable = computed(
       <BaseSearchField
         width="w-full"
         label="Pavadinimas"
-        :name="props.result.type"
+        :name="props.result.name"
         :data="props.parts"
         @onChange="(value) => resultsStore.updateName(props.index, value)"
         @OnClick="(value: Product) => {
@@ -98,7 +100,12 @@ const spaceEditable = computed(
     </div>
 
     <div v-if="showAditionalVertical" class="flex flex-col gap-2">
-      <BaseInput variant="light" label="ilgis" :name="$props.result.height" width="w-24" />
+      <BaseInput
+        variant="light"
+        label="ilgis"
+        :name="$props.result.height"
+        width="w-24"
+      />
       <BaseInput
         v-if="isFenceboard"
         :name="props.result.space"
@@ -141,11 +148,26 @@ const spaceEditable = computed(
         :name="props.result.totalCost"
         disable="true"
       />
-      <BaseInput width="w-24" label="viso kaina" :name="props.result.totalPrice" disable="true" />
+      <BaseInput
+        width="w-24"
+        label="viso kaina"
+        :name="props.result.totalPrice"
+        disable="true"
+      />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" disable="true" />
-      <BaseInput width="w-24" :name="props.result.profit" label="pelnas" disable="true" />
+      <BaseInput
+        width="w-24"
+        label="marža"
+        :name="props.result.margin + ' %'"
+        disable="true"
+      />
+      <BaseInput
+        width="w-24"
+        :name="props.result.profit"
+        label="pelnas"
+        disable="true"
+      />
     </div>
 
     <NuxtImg
