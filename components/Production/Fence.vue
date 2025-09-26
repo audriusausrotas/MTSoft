@@ -95,16 +95,17 @@ watch(
 
 <template>
   <div class="flex flex-col">
+    <p v-if="props.fence.comment">{{ props.fence.comment }}</p>
     <div
       class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0"
     >
       <p
-        class="w-20 flex items-center justify-center h-full border-r border-black"
+        class="w-40 flex items-center justify-center h-full border-r border-black"
       >
         {{ props.fence.side }}
       </p>
       <p
-        class="w-20 flex items-center justify-center h-full border-r border-black"
+        class="w-40 flex items-center justify-center h-full border-r border-black"
       >
         {{ props.fence.color }}
       </p>
@@ -112,16 +113,6 @@ watch(
         class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
       >
         {{ props.fence.name }}
-      </p>
-      <p
-        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
-      >
-        {{ props.fence.manufacturer || "Nežinoma" }}
-      </p>
-      <p
-        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
-      >
-        {{ props.fence.material }}
       </p>
       <div
         v-if="isAdmin"
@@ -138,8 +129,29 @@ watch(
         />
       </div>
     </div>
-    <div>
-      <p v-if="props.fence.comment">{{ props.fence.comment }}</p>
+
+    <div
+      class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0"
+    >
+      <p
+        class="w-40 flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.manufacturer || "Nežinoma" }}
+      </p>
+      <p
+        class="w-40 flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.material }}
+      </p>
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
+      >
+        {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }}
+      </p>
+      <div
+        v-if="isAdmin"
+        class="hover:cursor-pointer w-[39px] flex items-center justify-center"
+      ></div>
     </div>
 
     <div class="flex w-fit border-y items-center h-8 border-black select-none">

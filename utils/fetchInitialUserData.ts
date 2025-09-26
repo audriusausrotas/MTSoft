@@ -1,6 +1,8 @@
 import type { UserRights } from "~/data/interfaces";
 
-export const fetchInitialUserData = async (userRights: UserRights | undefined) => {
+export const fetchInitialUserData = async (
+  userRights: UserRights | undefined
+) => {
   const fetchData = [fetchUsers()];
 
   if (userRights?.project || userRights?.warehouse) {
@@ -15,6 +17,7 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
 
   if (userRights?.admin) {
     fetchData.push(
+      fetchFences(),
       fetchSelects(),
       fetchProducts(),
       fetchClients(),

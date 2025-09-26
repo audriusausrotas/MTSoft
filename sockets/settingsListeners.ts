@@ -11,15 +11,19 @@ export default function settingsListeners(socket: Socket) {
     settingsStore.newSelectValue(field, value);
   });
 
-  socket.on("updateFenceSettings", (fence) => {
-    settingsStore.updateFenceSettings(fence);
-  });
-
   socket.on("newDefaultValue", ({ value, field }) => {
     settingsStore.changeDefaultValue(value, field);
   });
 
   socket.on("newUserRights", (userRights) => {
     settingsStore.updateUserRights(userRights);
+  });
+
+  socket.on("newFence", (fence) => {
+    settingsStore.newFence(fence);
+  });
+
+  socket.on("updateFenceSettings", (fence) => {
+    settingsStore.updateFenceSettings(fence);
   });
 }

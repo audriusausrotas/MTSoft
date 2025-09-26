@@ -115,7 +115,8 @@ export async function fetchArchives() {
 export async function fetchFinished() {
   try {
     const response = await request.get("getFinished");
-    response.success && useArchiveStore().addArchives("finished", response.data);
+    response.success &&
+      useArchiveStore().addArchives("finished", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -125,7 +126,8 @@ export async function fetchFinished() {
 export async function fetchUnconfirmed() {
   try {
     const response = await request.get("getUnconfirmed");
-    response.success && useArchiveStore().addArchives("unconfirmed", response.data);
+    response.success &&
+      useArchiveStore().addArchives("unconfirmed", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -206,6 +208,16 @@ export async function fetchSelects() {
   }
 }
 
+export async function fetchFences() {
+  try {
+    const response: any = await request.get("getFences");
+    response.success && useSettingsStore().addFences(response.data);
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
+  }
+}
+
 export async function fetchDefaultValues() {
   try {
     const response: any = await request.get("getDefaultValues");
@@ -229,7 +241,8 @@ export async function fetchUserRights() {
 export async function fetchPotentialClients() {
   try {
     const response: any = await request.get("getpotentialClients");
-    response.success && usePotentialClientsStore().addPotentialClients(response.data);
+    response.success &&
+      usePotentialClientsStore().addPotentialClients(response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };

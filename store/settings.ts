@@ -1,5 +1,6 @@
 import type {
   DefaultValues,
+  FenceSetup,
   SelectValues,
   UserRights,
 } from "~/data/interfaces";
@@ -7,7 +8,7 @@ import type {
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
     general: [] as any,
-    fence: [] as any,
+    fences: [] as any,
     defaultValues: {} as DefaultValues,
     userRights: [] as UserRights[],
     selectValues: {
@@ -58,7 +59,20 @@ export const useSettingsStore = defineStore("settings", {
       });
     },
 
-    updateFenceSettings(fence: any) {},
+    addFences(fences: FenceSetup[]) {
+      this.fences = [...fences];
+    },
+
+    newFence(fence: FenceSetup) {
+      this.fences.push(fence);
+    },
+
+    updateFenceSettings(fence: FenceSetup) {
+      this.fences = this.fences.map((item: FenceSetup) => {
+        if (item._id === fence._id) return fence;
+        else return item;
+      });
+    },
   },
 
   getters: {},

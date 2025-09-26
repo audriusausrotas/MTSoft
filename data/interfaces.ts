@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface Response {
   success: boolean;
   data: Project[];
@@ -561,4 +563,51 @@ export interface PotentialClient {
   address: string;
   status: string;
   send: boolean;
+}
+
+export interface FenceDetails {
+  width: number;
+  height: number;
+  bends: number;
+  holes: number;
+}
+
+export interface SeeThroughSteps {
+  aklina: number;
+  nepramatoma: number;
+  vidutiniska: number;
+  pramatoma: number;
+  pramatoma25: number;
+  pramatoma50: number;
+}
+
+export interface SeeThroughPrice {
+  cost: number;
+  priceRetail: number;
+  priceWholesale: number;
+}
+
+export interface QualityPricing {
+  meter: SeeThroughPrice;
+  aklina: SeeThroughPrice;
+  nepramatoma: SeeThroughPrice;
+  vidutiniska: SeeThroughPrice;
+  pramatoma: SeeThroughPrice;
+  pramatoma25: SeeThroughPrice;
+  pramatoma50: SeeThroughPrice;
+}
+
+export interface PriceTier {
+  premium: QualityPricing;
+  eco: QualityPricing;
+}
+
+export interface FenceSetup {
+  _id: Types.ObjectId;
+  name: string;
+  type: string;
+  defaultDirection: string;
+  details: FenceDetails;
+  steps: SeeThroughSteps;
+  prices: PriceTier;
 }
