@@ -211,11 +211,25 @@ const saveHandler = async () => {
     setError(response.message);
   }
 };
+
+const deleteHandler = async () => {
+  if (!confirm("Ar tikrai norite ištrinti šią tvorą?")) return;
+
+  const response: any = await request.delete(
+    `deleteFenceSettings/${props.fence._id}`
+  );
+  if (response.success) {
+    !useSocketStore().connected && settingsStore.deleteFence(props.fence._id);
+    setSuccess(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
   <div
-    class="flex flex-col gap-8 items-center border border-dark-full p-8 rounded-xl"
+    class="flex flex-col gap-8 items-center border border-dark-full p-8 rounded-xl relative"
   >
     <div class="flex flex-col gap-4 justify-center items-center">
       <div class="flex gap-4">
@@ -241,6 +255,20 @@ const saveHandler = async () => {
           loading="lazy"
           class="hover:cursor-pointer hover:scale-125 transition-transform"
           @click="editable = !editable"
+        />
+      </div>
+
+      <div
+        class="absolute top-2 right-2 hover:scale-125 transition-transform hover:cursor-pointer"
+        @click="deleteHandler"
+      >
+        <NuxtImg
+          src="/icons/delete.svg"
+          width="20"
+          height="20"
+          decoding="auto"
+          :ismap="true"
+          loading="lazy"
         />
       </div>
 
@@ -276,7 +304,7 @@ const saveHandler = async () => {
 
         <BaseInput
           :name="fenceDetails?.height"
-          label="auktis"
+          label="aukštis"
           width="w-24"
           type="number"
           :disable="!editable"

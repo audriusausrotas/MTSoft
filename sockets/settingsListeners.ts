@@ -26,4 +26,8 @@ export default function settingsListeners(socket: Socket) {
   socket.on("updateFenceSettings", (fence) => {
     settingsStore.updateFenceSettings(fence);
   });
+
+  socket.on("deleteFenceSettings", ({ _id }) => {
+    settingsStore.deleteFence(_id);
+  });
 }

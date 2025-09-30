@@ -8,7 +8,7 @@ import type {
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
     general: [] as any,
-    fences: [] as any,
+    fences: [] as FenceSetup[],
     defaultValues: {} as DefaultValues,
     userRights: [] as UserRights[],
     selectValues: {
@@ -72,6 +72,12 @@ export const useSettingsStore = defineStore("settings", {
         if (item._id === fence._id) return fence;
         else return item;
       });
+    },
+
+    deleteFence(id: string) {
+      this.fences = this.fences.filter(
+        (item: FenceSetup) => item._id.toString() !== id.toString()
+      );
     },
   },
 

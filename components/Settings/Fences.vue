@@ -2,8 +2,6 @@
 const settingsStore = useSettingsStore();
 const { setError, setSuccess } = useError();
 
-const fences = settingsStore.fences;
-
 const newFenceHandler = async (name: string) => {
   const requestData = {
     name: name,
@@ -27,7 +25,10 @@ const newFenceHandler = async (name: string) => {
   />
 
   <div class="flex flex-wrap gap-20 justify-around">
-    <SettingsFencesElement v-for="fence in fences" :fence="fence" />
+    <SettingsFencesElement
+      v-for="fence in settingsStore.fences"
+      :fence="fence"
+    />
   </div>
 </template>
 <style scoped></style>
