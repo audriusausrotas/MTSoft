@@ -44,7 +44,7 @@ const props = defineProps(["phone", "email", "image"]);
               </p>
               <div class="flex flex-col gap-2 md:mt-4">
                 <a
-                  href="mailto:audrius@modernitvora.lt"
+                  :href="`mailto:${email}`"
                   class="flex gap-2 hover:scale-105 transition-transform w-fit"
                 >
                   <svg
@@ -75,7 +75,7 @@ const props = defineProps(["phone", "email", "image"]);
                 </a>
 
                 <a
-                  href="tel:+37067517745"
+                  :href="`tel:${phone}`"
                   class="flex gap-2 hover:scale-105 transition-transform w-fit"
                 >
                   <NuxtImg

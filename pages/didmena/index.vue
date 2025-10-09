@@ -8,8 +8,8 @@ definePageMeta({
     <div class="flex flex-col gap-8">
       <OffersAbout
         class="print:break-after-page"
-        phone="+370 675 17745"
-        email="audrius@modernitvora.lt"
+        phone="+370 600 97 933"
+        email="dalius@modernitvora.lt"
         image="/images/cover.jpg"
       />
       <OffersInfoCard />

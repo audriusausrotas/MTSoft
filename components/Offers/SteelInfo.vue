@@ -19,21 +19,32 @@ const props = defineProps(["hideEco", "blinds"]);
         Eco
       </div>
       <div class="px-4 py-1 border-b border-inherit border-r">Gamintojas</div>
-      <div class="px-4 py-1 border-b border-inherit border-r">Thyssenkrupp</div>
+      <div class="px-4 py-1 border-b border-inherit border-r">
+        Arcelor Ultramatt
+      </div>
       <div v-if="!hideEco" class="px-4 py-1 border-b border-inherit">
         Ukraina
       </div>
       <div class="px-4 py-1 border-b border-inherit border-r">
         Gamintojo šalis
       </div>
-      <div class="px-4 py-1 border-b border-inherit border-r">Vokietija</div>
+      <div class="px-4 py-1 border-b border-inherit border-r">Belgija</div>
       <div v-if="!hideEco" class="px-4 py-1 border-b border-inherit">
         Ukraina
       </div>
-      <div class="px-4 py-1 border-b border-inherit border-r">Garantija</div>
-      <div class="px-4 py-1 border-b border-inherit border-r">45 metai</div>
+      <div class="px-4 py-1 border-b border-inherit border-r">
+        Techninė garantija
+      </div>
+      <div class="px-4 py-1 border-b border-inherit border-r">50 metų</div>
       <div v-if="!hideEco" class="px-4 py-1 border-b border-inherit">
         10 metų
+      </div>
+      <div class="px-4 py-1 border-b border-inherit border-r">
+        Spalvos garantija
+      </div>
+      <div class="px-4 py-1 border-b border-inherit border-r">20 metų</div>
+      <div v-if="!hideEco" class="px-4 py-1 border-b border-inherit">
+        5 metai
       </div>
       <div class="px-4 py-1 border-b border-inherit border-r">
         Skardos storis
@@ -68,16 +79,12 @@ const props = defineProps(["hideEco", "blinds"]);
       <div class="px-4 py-1 border-b border-inherit border-r">
         Metalinės dangos masė (g/m2)
       </div>
-      <div class="px-4 py-1 border-b border-inherit border-r">
-        ZM 130 (cinko, magnio mišinys. Zn atitikmuo 260)
-      </div>
+      <div class="px-4 py-1 border-b border-inherit border-r">Zn 275</div>
       <div v-if="!hideEco" class="px-4 py-1 border-b border-inherit">
         Zn 100
       </div>
       <div class="px-4 py-1 border-r border-inherit">Padengimas</div>
-      <div class="px-4 py-1 border-r border-inherit">
-        min. 35 mikronų dviejų sluoksnių dengimo sistema
-      </div>
+      <div class="px-4 py-1 border-r border-inherit">min. 35 mikronai</div>
       <div v-if="!hideEco" class="px-4 py-1">25 mikronai</div>
     </div>
 
@@ -89,13 +96,21 @@ const props = defineProps(["hideEco", "blinds"]);
         Premium
       </div>
       <div class="px-2 py-1 border-b border-inherit border-r">Gamintojas</div>
-      <div class="px-2 py-1 border-b border-inherit border-r">Thyssenkrupp</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">
+        Arcelor Ultramatt
+      </div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Gamintojo šalis
       </div>
-      <div class="px-2 py-1 border-b border-inherit border-r">Vokietija</div>
-      <div class="px-2 py-1 border-b border-inherit border-r">Garantija</div>
-      <div class="px-2 py-1 border-b border-inherit border-r">45 metai</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">Belgija</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">
+        Techninė garantija
+      </div>
+      <div class="px-2 py-1 border-b border-inherit border-r">50 metų</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">
+        Spalvos garantija
+      </div>
+      <div class="px-2 py-1 border-b border-inherit border-r">20 metų</div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Skardos storis
       </div>
@@ -117,9 +132,7 @@ const props = defineProps(["hideEco", "blinds"]);
       <div class="px-2 py-1 border-b border-inherit border-r">
         Metalinės dangos masė (g/m2)
       </div>
-      <div class="px-2 py-1 border-b border-inherit border-r">
-        ZM 130 (cinko, magnio mišinys. Zn atitikmuo 260 g)
-      </div>
+      <div class="px-2 py-1 border-b border-inherit border-r">ZN 275</div>
       <div class="px-2 py-1 border-r border-inherit">Padengimas</div>
       <div class="px-2 py-1 border-r border-inherit">
         min. 35 mikronų dviejų sluoksnių dengimo sistema
@@ -140,8 +153,14 @@ const props = defineProps(["hideEco", "blinds"]);
         Gamintojo šalis
       </div>
       <div class="px-2 py-1 border-b border-inherit">Ukraina</div>
-      <div class="px-2 py-1 border-b border-inherit border-r">Garantija</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">
+        Techninė garantija
+      </div>
       <div class="px-2 py-1 border-b border-inherit">10 metų</div>
+      <div class="px-2 py-1 border-b border-inherit border-r">
+        Spalvos garantija
+      </div>
+      <div class="px-2 py-1 border-b border-inherit">5 metai</div>
       <div class="px-2 py-1 border-b border-inherit border-r">
         Skardos storis
       </div>

@@ -21,7 +21,9 @@ export const usePotentialClientsStore = defineStore("potentialClients", {
     },
 
     deletePotentialClient(id: string) {
-      this.potentialClients = this.potentialClients.filter((client) => client._id !== id);
+      this.potentialClients = this.potentialClients.filter(
+        (client) => client._id !== id
+      );
     },
 
     selectPotentialClients(value: boolean) {
