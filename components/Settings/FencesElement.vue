@@ -27,6 +27,12 @@ const steps = reactive({
   pramatoma50: props.fence?.steps?.pramatoma50,
 });
 
+const prices = reactive({
+  cost: props.fence?.prices?.cost,
+  priceRetail: props.fence?.prices?.priceRetail,
+  priceWholesale: props.fence?.prices?.priceWholesale,
+});
+
 const pricesPremium = reactive({
   meter: {
     cost: props.fence?.prices?.premium?.meter?.cost,
@@ -124,6 +130,9 @@ const saveHandler = async () => {
       pramatoma50: +steps.pramatoma50,
     },
     prices: {
+      cost: +prices.cost,
+      priceRetail: +prices.priceRetail,
+      priceWholesale: +prices.priceWholesale,
       premium: {
         meter: {
           cost: +pricesPremium.meter.cost,
@@ -293,6 +302,7 @@ const deleteHandler = async () => {
         />
 
         <BaseSelectField
+          v-if="fenceDetails.type !== 'Segmentas'"
           label="Kryptis"
           :values="fenceDirection"
           :defaultValue="fenceDetails.defaultDirection"
@@ -323,6 +333,7 @@ const deleteHandler = async () => {
         />
 
         <BaseInput
+          v-if="fenceDetails.type === 'Tvora'"
           :name="fenceDetails?.bends"
           label="lenkimai"
           width="w-24"
@@ -333,6 +344,7 @@ const deleteHandler = async () => {
         />
 
         <BaseInput
+          v-if="fenceDetails.type === 'Tvora'"
           :name="fenceDetails?.holes"
           label="Skyluės lankstinyje"
           width="w-36"
@@ -345,68 +357,111 @@ const deleteHandler = async () => {
     </div>
 
     <div
-      class="flex flex-col gap-4 items-center w-full border-t pt-4 border-gray-400"
+      class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"
     >
-      <p class="font-bold text-xl">Montavimo žingsnis</p>
-      <div class="flex gap-4 items-center justify-center">
-        <BaseInput
-          :name="steps.aklina"
-          label="Aklina"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.aklina = value)"
-        />
-        <BaseInput
-          :name="steps.nepramatoma"
-          label="Nepramatoma"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.nepramatoma = value)"
-        />
-        <BaseInput
-          :name="steps.vidutiniska"
-          label="Vidutiniška"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.vidutiniska = value)"
-        />
-        <BaseInput
-          :name="steps.pramatoma"
-          label="Pramatoma"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.pramatoma = value)"
-        />
-        <BaseInput
-          :name="steps.pramatoma25"
-          label="25%"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.pramatoma25 = value)"
-        />
-        <BaseInput
-          :name="steps.pramatoma50"
-          label="50%"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (steps.pramatoma50 = value)"
-        />
+      <div
+        v-if="fenceDetails.type === 'Tvora'"
+        class="flex flex-col gap-4 items-center"
+      >
+        <p class="font-bold text-xl">Montavimo žingsnis</p>
+        <div class="flex gap-4 items-center justify-center">
+          <BaseInput
+            :name="steps.aklina"
+            label="Aklina"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.aklina = value)"
+          />
+          <BaseInput
+            :name="steps.nepramatoma"
+            label="Nepramatoma"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.nepramatoma = value)"
+          />
+          <BaseInput
+            :name="steps.vidutiniska"
+            label="Vidutiniška"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.vidutiniska = value)"
+          />
+          <BaseInput
+            :name="steps.pramatoma"
+            label="Pramatoma"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.pramatoma = value)"
+          />
+          <BaseInput
+            :name="steps.pramatoma25"
+            label="25%"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.pramatoma25 = value)"
+          />
+          <BaseInput
+            :name="steps.pramatoma50"
+            label="50%"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (steps.pramatoma50 = value)"
+          />
+        </div>
+      </div>
+      <div
+        v-if="fenceDetails.type !== 'Tvora'"
+        class="flex flex-col gap-4 items-center"
+      >
+        <p class="font-bold text-xl">Kainos</p>
+        <div class="flex gap-4 items-center justify-center">
+          <BaseInput
+            :name="prices.cost"
+            label="Savikaina"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (prices.cost = value)"
+          />
+          <BaseInput
+            :name="prices.priceWholesale"
+            label="Didmena"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (prices.priceWholesale = value)"
+          />
+          <BaseInput
+            :name="prices.priceRetail"
+            label="Mažmena"
+            width="w-24"
+            type="number"
+            :disable="!editable"
+            :variant="editable ? 'light' : ''"
+            @onChange="(value) => (prices.priceRetail = value)"
+          />
+        </div>
       </div>
     </div>
 
-    <div class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400">
+    <div
+      v-if="fenceDetails.type === 'Tvora'"
+      class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
+    >
       <p class="font-bold text-xl">Premium skardos kainos</p>
       <div class="flex gap-4">
         <FencesElementBlock
@@ -492,7 +547,10 @@ const deleteHandler = async () => {
       </div>
     </div>
 
-    <div class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400">
+    <div
+      v-if="fenceDetails.type === 'Tvora'"
+      class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
+    >
       <p class="font-bold text-xl">Eco skardos kainos</p>
       <div class="flex gap-4">
         <FencesElementBlock
