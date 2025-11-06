@@ -35,7 +35,9 @@ export default function createResultElement(item: any) {
       price = backup.price;
     } else {
       cost = product.prices.cost;
-      price = retail ? product.prices.priceRetail : product.prices.wholesale;
+      price = retail
+        ? product.prices.priceRetail
+        : product.prices.priceWholesale;
     }
   } else {
     product = getFencePrice(item.name);

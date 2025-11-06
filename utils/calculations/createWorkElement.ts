@@ -12,8 +12,7 @@ export default function createWorkElement(item: {
   const works = useResultsStore();
   const backupExist = backupStore.backupExist;
   const backup = backupStore.works.find(
-    (i) =>
-      i.name.toLowerCase().trim() === item.name.toLowerCase().trim()
+    (i) => i.name.toLowerCase().trim() === item.name.toLowerCase().trim()
   );
 
   let cost = 0;
@@ -26,7 +25,7 @@ export default function createWorkElement(item: {
     price = backup.price;
   } else {
     cost = product.prices.cost;
-    price = retail ? product.prices.priceRetail : product.prices.wholesale;
+    price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
   }
 
   const totalPrice = +(price * item.quantity).toFixed(2);
