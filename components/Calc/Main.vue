@@ -32,7 +32,6 @@ const confirmHandler = () => {
 
 const retailHandler = (value: string) => {
   calculationsStore.updateRetail(value === "Mažmena");
-  calculationsStore.updateUnits(value === "Mažmena");
 };
 </script>
 

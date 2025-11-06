@@ -37,7 +37,7 @@ const isSegment = computed(
 );
 
 const unitHandler = (value: string) => {
-  calculationsStore.updateUnits(value === "Kvadratinis metras");
+  calculationsStore.updateUnits(props.index, value === "Kvadratinis metras");
 };
 
 watch(isFence, (value) => {
@@ -67,9 +67,7 @@ watch(isFence, (value) => {
         label="Matavimo vienetai"
         :values="['Kvadratinis metras', 'Metras']"
         id="units"
-        :defaultValue="
-          calculationsStore.units ? 'Kvadratinis metras' : 'Metras'
-        "
+        :defaultValue="currentFence.units ? 'Kvadratinis metras' : 'Metras'"
         width="w-60"
         @onChange="unitHandler"
       />

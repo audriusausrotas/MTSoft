@@ -10,7 +10,6 @@ export const useCalculationsStore = defineStore("calculations", {
     client: { ...clientInitialValue },
     fences: [],
     retail: true,
-    units: true,
   }),
 
   actions: {
@@ -37,6 +36,7 @@ export const useCalculationsStore = defineStore("calculations", {
         totalQuantity: 0,
         measures: [],
         fenceboards: false,
+        units: true,
       };
 
       this.fences.push(initialFence);
@@ -79,8 +79,8 @@ export const useCalculationsStore = defineStore("calculations", {
       this.retail = value;
     },
 
-    updateUnits(value: boolean) {
-      this.units = value;
+    updateUnits(index: number, value: boolean) {
+      this.fences[index].units = value;
     },
 
     updateClientAddress(data: string): void {

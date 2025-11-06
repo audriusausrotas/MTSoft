@@ -10,7 +10,6 @@ export interface Calculations {
   client: Client;
   fences: Fence[];
   retail: boolean;
-  units: boolean;
 }
 
 export interface Project {
@@ -83,6 +82,7 @@ export interface Fence {
   totalLength: number;
   totalQuantity: number;
   measures: Measure[];
+  units: boolean;
 }
 
 export interface Measure {

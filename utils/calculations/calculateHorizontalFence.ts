@@ -5,7 +5,6 @@ export default function calculateHorizontalFence(
   item: Fence
 ) {
   const tempFence: Fences[] = [...fenceTemp];
-  const units = useCalculationsStore().units;
 
   let fenceExist: boolean = false;
 
@@ -15,7 +14,7 @@ export default function calculateHorizontalFence(
     ...item,
     length: item.totalLength,
     height: 0,
-    quantity: units ? item.totalQuantity : calculateWholesale(item),
+    quantity: item.units ? item.totalQuantity : calculateWholesale(item),
     elements: 0,
   };
 
@@ -24,19 +23,19 @@ export default function calculateHorizontalFence(
       fenceItem.name === item.name &&
       fenceItem.color === item.color &&
       fenceItem.material === item.material &&
-      fenceItem.material === item.manufacturer &&
       fenceItem.space === item.space &&
       fenceItem.seeThrough === item.seeThrough &&
       fenceItem.direction === item.direction
     ) {
-      if (units) {
+      if (item.units) {
         fenceItem.length += item.totalLength || 0;
         fenceItem.quantity += item.totalQuantity || 0;
+
         fenceItem.elements += item.elements || 0;
-        fenceExist = true;
       } else {
         fenceItem.quantity += calculateWholesale(item);
       }
+      fenceExist = true;
     }
   });
 
