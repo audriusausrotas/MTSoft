@@ -58,7 +58,6 @@ const colorEditable = computed(
     }
       "
       />
-
       <div class="flex gap-2">
         <BaseInput
           label="spalva"
