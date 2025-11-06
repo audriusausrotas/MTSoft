@@ -1,4 +1,6 @@
-import createResultElement from "~/utils/createResultElement";
+import type { Project } from "~/data/interfaces";
+import createResultElement from "~/utils/calculations/createResultElement";
+import createWorkElement from "~/utils/calculations/createWorkElement";
 
 export default function generateResults() {
   const results = useResultsStore();
@@ -8,12 +10,29 @@ export default function generateResults() {
 
   if (results.fences.length > 0) {
     let cork = 0;
-    results.fences.forEach((item) => {
+    results.fences.forEach((item: any) => {
       createResultElement(item);
+
+      if (item.holes === "Taip") {
+        const fenceSettings = settingsStore.fences.find(
+          (fence) => fence.name === item.name
+        );
+
+        const holesQuantity =
+          (fenceSettings?.details?.holes || 0) * results.totalElements;
+
+        if (holesQuantity)
+          createWorkElement({
+            name: settingsStore.defaultValues.holesWork,
+            quantity: holesQuantity,
+          });
+      }
+
       if (item.name.includes("Dilė")) {
         cork += item.quantity;
       }
     });
+
     if (cork > 0) {
       createResultElement({
         name: settingsStore.defaultValues.dileCork,
@@ -25,31 +44,9 @@ export default function generateResults() {
 
   if (results.segments.length > 0) {
     results.segments.forEach((item) => {
-      if (item.height <= 113)
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.segment103,
-        });
-      else if (item.height <= 133)
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.segment123,
-        });
-      else if (item.height <= 163)
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.segment153,
-        });
-      else if (item.height <= 183)
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.segment173,
-        });
-      else
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.segment203,
-        });
+      createResultElement({
+        ...item,
+      });
     });
   }
 
@@ -64,14 +61,7 @@ export default function generateResults() {
 
   if (results.poles.length > 0) {
     results.poles.forEach((item) => {
-      let pole = "";
-      if (item.height === 3) {
-        pole = settingsStore.defaultValues.poleMain;
-      } else {
-        pole = settingsStore.defaultValues.poleAlt;
-      }
-
-      createResultElement({ ...item, name: pole });
+      createResultElement({ ...item });
     });
   }
 
@@ -173,7 +163,6 @@ export default function generateResults() {
     results.retailLegs.forEach((item) => {
       createResultElement({
         ...item,
-        name: item.name,
         quantity: item.quantity / 100,
       });
     });
@@ -184,8 +173,8 @@ export default function generateResults() {
       createResultElement({
         ...item,
         name: calculationsStore.retail
-          ? settingsStore.defaultValues.retailBindings
-          : settingsStore.defaultValues.bindings,
+          ? settingsStore.defaultValues.bindings
+          : settingsStore.defaultValues.retailBindings,
         quantity: item.quantity / 100,
       });
     });
@@ -360,36 +349,26 @@ export default function generateResults() {
     }
   }
 
-  let transportCount = 1;
-  if (backupStore.backupExist) {
-    const temp = backupStore.works.find((item) => item.name === "Transportas");
-    transportCount = temp?.quantity || 1;
-  }
-
   createWorkElement({
     name: settingsStore.defaultValues.transport,
-    quantity: transportCount,
+    quantity: 1,
   });
 
-  const tempResults = backupStore.results.filter(
-    (item) => !results.results.some((itm) => itm.name === item.name)
-  );
-  const tempWorks = backupStore.works.filter(
-    (item) => !results.works.some((itm) => itm.name === item.name)
-  );
+  if (backupStore.backupExist) {
+    const tempResults = backupStore.results.filter(
+      (item) => !results.results.some((itm) => itm.name === item.name)
+    );
+    const tempWorks = backupStore.works.filter(
+      (item) => !results.works.some((itm) => itm.name === item.name)
+    );
 
-  tempResults.forEach((item) => {
-    createResultElement({
-      ...item,
-      name: item.name,
-      quantity: item.quantity,
+    tempResults.forEach((item) => {
+      results.results.push(item);
     });
-  });
 
-  tempWorks.forEach((item) => {
-    createWorkElement({
-      name: item.name,
-      quantity: item.quantity,
+    const works = useResultsStore();
+    tempWorks.forEach((item) => {
+      works.addWork(item);
     });
-  });
+  }
 }

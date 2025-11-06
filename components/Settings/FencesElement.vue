@@ -14,7 +14,7 @@ const fenceDetails = reactive({
   width: props.fence?.details?.width,
   bends: props.fence?.details?.bends,
   holes: props.fence?.details?.holes,
-  type: props.fence?.type,
+  category: props.fence?.category,
   defaultDirection: props.fence?.defaultDirection,
 });
 
@@ -113,7 +113,7 @@ const saveHandler = async () => {
   const requestData = {
     _id: props.fence._id,
     name: fenceDetails.name,
-    type: fenceDetails.type,
+    category: fenceDetails.category,
     defaultDirection: fenceDetails.defaultDirection,
     details: {
       height: +fenceDetails.height,
@@ -294,15 +294,15 @@ const deleteHandler = async () => {
         <BaseSelectField
           label="Tvoros Tipas"
           :values="fenceTypes"
-          :defaultValue="fenceDetails.type"
+          :defaultValue="fenceDetails.category"
           :disable="!editable"
           :variant="editable ? 'light' : ''"
           width="w-40"
-          @onChange="(value) => (fenceDetails.type = value)"
+          @onChange="(value) => (fenceDetails.category = value)"
         />
 
         <BaseSelectField
-          v-if="fenceDetails.type !== 'Segmentas'"
+          v-if="fenceDetails.category !== 'Segmentas'"
           label="Kryptis"
           :values="fenceDirection"
           :defaultValue="fenceDetails.defaultDirection"
@@ -333,7 +333,7 @@ const deleteHandler = async () => {
         />
 
         <BaseInput
-          v-if="fenceDetails.type === 'Tvora'"
+          v-if="fenceDetails.category === 'Tvora'"
           :name="fenceDetails?.bends"
           label="lenkimai"
           width="w-24"
@@ -344,7 +344,7 @@ const deleteHandler = async () => {
         />
 
         <BaseInput
-          v-if="fenceDetails.type === 'Tvora'"
+          v-if="fenceDetails.category === 'Tvora'"
           :name="fenceDetails?.holes"
           label="Skyluės lankstinyje"
           width="w-36"
@@ -360,7 +360,7 @@ const deleteHandler = async () => {
       class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"
     >
       <div
-        v-if="fenceDetails.type === 'Tvora'"
+        v-if="fenceDetails.category === 'Tvora'"
         class="flex flex-col gap-4 items-center"
       >
         <p class="font-bold text-xl">Montavimo žingsnis</p>
@@ -422,7 +422,7 @@ const deleteHandler = async () => {
         </div>
       </div>
       <div
-        v-if="fenceDetails.type !== 'Tvora'"
+        v-if="fenceDetails.category !== 'Tvora'"
         class="flex flex-col gap-4 items-center"
       >
         <p class="font-bold text-xl">Kainos</p>
@@ -459,7 +459,7 @@ const deleteHandler = async () => {
     </div>
 
     <div
-      v-if="fenceDetails.type === 'Tvora'"
+      v-if="fenceDetails.category === 'Tvora'"
       class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
     >
       <p class="font-bold text-xl">Premium skardos kainos</p>
@@ -548,7 +548,7 @@ const deleteHandler = async () => {
     </div>
 
     <div
-      v-if="fenceDetails.type === 'Tvora'"
+      v-if="fenceDetails.category === 'Tvora'"
       class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
     >
       <p class="font-bold text-xl">Eco skardos kainos</p>

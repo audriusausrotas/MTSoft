@@ -3,10 +3,10 @@ const potentialClientsStore = usePotentialClientsStore();
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-4">
     <OffersNewUser />
-    <div class="flex flex-col">
-      <div class="flex gap-4 border-b-2 mb-1 px-2 w-fit">
+    <div class="flex flex-col gap-2">
+      <div class="flex gap-4 px-4 w-fit">
         <p class="w-6">Nr</p>
         <p class="w-48">Vardas</p>
         <p class="w-60">El. Paštas</p>
@@ -16,7 +16,9 @@ const potentialClientsStore = usePotentialClientsStore();
         <p class="w-6"></p>
         <p class="w-6"></p>
       </div>
-      <div class="flex flex-col">
+      <div
+        class="flex flex-col border border-black rounded-lg w-fit divide-y divide-gray-600 overflow-hidden"
+      >
         <OffersUser
           v-for="(client, index) in potentialClientsStore.potentialClients"
           :key="client?._id"

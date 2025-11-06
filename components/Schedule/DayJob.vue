@@ -1,10 +1,31 @@
 <script setup lang="ts">
-const props = defineProps(["job", "isAdmin"]);
+const props = defineProps(["job", "isAdmin", "worker"]);
 const emit = defineEmits(["onDelete"]);
 const router = useRouter();
 const userStore = useUserStore();
+const productionStore = useProductionStore();
 
 const menuOpen = ref<boolean>(false);
+
+const status = computed(() => {
+  if (props.worker.accountType !== "Gamyba") return null;
+
+  const project = productionStore.production.find(
+    (item) => item._id === props.job._id
+  );
+
+  if (!project) return null;
+
+  return project.status === "Gaminama"
+    ? "bg-green-500"
+    : project.status === "Laukiama"
+    ? "bg-orange-500"
+    : project.status === "Negaminti"
+    ? " bg-red-600"
+    : project.status === "Pagaminta"
+    ? "bg-violet-500"
+    : "bg-black";
+});
 
 const deleteHandler = () => {
   emit("onDelete", props.job._id);
@@ -21,9 +42,12 @@ const deleteHandler = () => {
         ? router.push(`/gamyba/${props.job._id}`)
         : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer hover:bg-red-600 hover:text-white"
+    class="hover:cursor-pointer hover:bg-red-600 hover:text-white flex justify-center items-center gap-1"
   >
-    {{ props.job.address }}
+    <div v-if="status" class="w-2 h-2 rounded-full" :class="status"></div>
+    <div>
+      {{ props.job.address }}
+    </div>
   </div>
   <div
     v-if="menuOpen"

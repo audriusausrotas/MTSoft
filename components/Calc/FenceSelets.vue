@@ -2,11 +2,10 @@
 import {
   fenceSide,
   fenceDirection,
-  pramatomumas,
-  verticals,
   services,
   parts,
   yesno,
+  pramatomumas,
 } from "~/data/selectFieldData";
 
 const props = defineProps(["index"]);
@@ -15,46 +14,45 @@ const settingsStore = useSettingsStore();
 const calculationsStore = useCalculationsStore();
 
 const currentFence = calculationsStore.fences[props.index];
-const isFenceBoards = ref<boolean>(verticals.includes(currentFence.name));
-const isSegment = ref<boolean>(currentFence.name.includes("Segmentas"));
+
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
-const needBindings = ref<boolean>(true);
-const needHoles = ref<boolean>(true);
 const isOpen = ref<boolean>(false);
 
-watch(
-  () => calculationsStore.fences[props.index],
-  (newValue) => {
-    needPoles.value = newValue?.parts?.includes("Stulpai");
-    isFenceBoards.value = verticals.includes(newValue?.name as string);
-    isSegment.value = newValue?.name?.includes("Segmentas");
-
-    if (
-      newValue?.direction === "Horizontali" &&
-      !isFenceBoards.value &&
-      !isSegment.value
-    ) {
-      if (newValue?.bindings === "Taip") {
-        calculationsStore.updateBindings(props.index, "Taip");
-        needBindings.value = true;
-      } else {
-        calculationsStore.updateBindings(props.index, "Ne");
-        needBindings.value = false;
-      }
-    } else {
-      calculationsStore.updateBindings(props.index, "Ne");
-      needBindings.value = false;
-    }
-  },
-  { deep: true }
+const isFence = computed(
+  () =>
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
+      ?.category === "Tvora"
 );
+
+const isFenceBoards = computed(
+  () =>
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
+      ?.category === "Tvoralentė"
+);
+
+const isSegment = computed(
+  () =>
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
+      ?.category === "Segmentas"
+);
+
+const unitHandler = (value: string) => {
+  calculationsStore.updateUnits(value === "Kvadratinis metras");
+};
+
+watch(isFence, (value) => {
+  calculationsStore.updateBindings(props.index, value ? "Taip" : "Ne");
+  calculationsStore.updateDirection(
+    props.index,
+    value ? "Horizontali" : "Vertikali"
+  );
+  calculationsStore.updateHoles(props.index, value ? "Taip" : "Ne");
+});
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <div
-      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
-    >
+    <div class="flex gap-4 wrap">
       <BaseSelectField
         label="Tvoros pusė"
         :values="fenceSide"
@@ -62,21 +60,24 @@ watch(
         :defaultValue="currentFence.side"
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateSide(props.index, value)
-        "
+      "
       />
-
       <BaseSelectField
-        v-if="calculationsStore.retail"
-        label="Tvoros tipas"
-        :values="settingsStore.selectValues.retailFenceTypes"
-        id="fenceType"
-        :defaultValue="currentFence.name"
+        v-if="isFence"
+        label="Matavimo vienetai"
+        :values="['Kvadratinis metras', 'Metras']"
+        id="units"
+        :defaultValue="
+          calculationsStore.units ? 'Kvadratinis metras' : 'Metras'
+        "
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateType(props.index, value)
-        "
+        @onChange="unitHandler"
       />
+    </div>
+    <div
+      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
+    >
       <BaseSelectField
-        v-else
         label="Tvoros tipas"
         :values="settingsStore.selectValues.fenceTypes"
         id="fenceType"
@@ -97,6 +98,28 @@ watch(
       />
 
       <BaseSelectField
+        v-if="isFence"
+        label="Pramatomumas"
+        :values="pramatomumas"
+        id="seeThrough"
+        :defaultValue="currentFence.seeThrough"
+        width="w-60"
+        @onChange="(value: string) => calculationsStore.updateSeeThrough(props.index, value)
+        "
+      />
+
+      <BaseSelectField
+        v-if="isFence"
+        label="Skardos Gamintojas"
+        :values="settingsStore.selectValues.fenceManufacturers"
+        id="fenceManufacturers"
+        :defaultValue="currentFence.manufacturer"
+        width="w-60"
+        @onChange="(value: string) => calculationsStore.updateManufacturer(props.index, value)
+        "
+      />
+
+      <BaseSelectField
         v-if="!isSegment"
         label="Skardos Tipas"
         :values="settingsStore.selectValues.fenceMaterials"
@@ -108,29 +131,7 @@ watch(
       />
 
       <BaseSelectField
-        v-if="!isSegment"
-        label="Skardos Gamintojas"
-        :values="settingsStore.selectValues.fenceManufacturers"
-        id="fenceManufacturers"
-        :defaultValue="currentFence.manufacturer"
-        width="w-60"
-        @onChange="(value: string) => calculationsStore.updateManufacturer(props.index, value)
-        "
-      />
-
-      <BaseSelectField
-        v-if="!isFenceBoards && !isSegment"
-        label="Pramatomumas"
-        :values="pramatomumas"
-        id="seeThrough"
-        :defaultValue="currentFence.seeThrough"
-        width="w-60"
-        @onChange="(value: string) => calculationsStore.updateSeeThrough(props.index, value)
-        "
-      />
-
-      <BaseSelectField
-        v-if="!isSegment"
+        v-if="isFenceBoards"
         label="tvoros kryptis"
         :values="fenceDirection"
         id="fenceDirection"
@@ -186,7 +187,7 @@ watch(
         "
       />
       <BaseSelectField
-        v-if="!isSegment && !isFenceBoards"
+        v-if="isFence"
         label="Apkaustai"
         :values="yesno"
         id="bingings"
@@ -206,6 +207,7 @@ watch(
         "
       />
       <BaseSelectField
+        v-if="isFence"
         label="Skylučių išmušimas"
         :values="yesno"
         id="holes"
@@ -220,7 +222,7 @@ watch(
         class="flex gap-2 hover:cursor-pointer select-none"
         @click="isOpen = !isOpen"
       >
-        <p class="text-md">Papildoma Informacija</p>
+        <p class="text-md mb-1 pl-2">Komentarai</p>
         <NuxtImg
           src="icons/arrowDown.svg"
           width="10"
@@ -230,10 +232,9 @@ watch(
       </div>
       <BaseInput
         v-if="isOpen"
-        placeholder="Papildoma informacija"
+        placeholder="Komentarai"
         variant="light"
-        width="w-full max-w-[1008px]"
-        class="mb-8"
+        width="w-full max-w-[1264px]"
         :name="currentFence.comment"
         @onChange="(value: string) =>
         calculationsStore.updateComment(props.index,

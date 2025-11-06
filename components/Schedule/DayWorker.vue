@@ -155,7 +155,12 @@ watch(
       :key="job._id"
       class="relative"
     >
-      <ScheduleDayJob :job="job" :isAdmin="isAdmin" @onDelete="deleteHandler" />
+      <ScheduleDayJob
+        :job="job"
+        :isAdmin="isAdmin"
+        @onDelete="deleteHandler"
+        :worker="props.worker"
+      />
     </div>
 
     <div

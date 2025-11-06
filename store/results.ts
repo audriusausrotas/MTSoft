@@ -9,7 +9,6 @@ import type {
   Works,
   Product,
 } from "~/data/interfaces";
-import { verticals } from "~/data/selectFieldData";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
@@ -92,8 +91,8 @@ export const useResultsStore = defineStore("results", {
     selectItem(index: number, value: Product): void {
       const selectedResult = this.results[index];
       selectedResult.name = value.name;
-      selectedResult.price = value.price;
-      selectedResult.cost = value.cost;
+      selectedResult.price = value.prices.priceRetail;
+      selectedResult.cost = value.prices.cost;
       selectedResult.category = value.category;
       selectedResult.quantity = this.results[index].quantity || 1;
       this.recalculateTotals(index);
@@ -337,13 +336,15 @@ export const useResultsStore = defineStore("results", {
       if (!exist) this.works.push(work);
     },
 
-    addPoles(color: string, height: number): void {
+    addPoles(color: string, name: string): void {
       let quantity = 0;
       if (this.poles.length === 0 && this.gatePoles.length === 0) quantity++;
-      const doesExist = this.poles.some((item) => item.color === color);
+      const doesExist = this.poles.some(
+        (item) => item.color === color && item.name === name
+      );
       if (!doesExist) quantity++;
       if (quantity === 0) quantity++;
-      this.poles = this.addPart(this.poles, color, quantity, +height);
+      this.poles = this.addPart(this.poles, color, quantity, 3, name);
     },
 
     addAnchoredPoles(color: string, height: number): void {
@@ -399,7 +400,11 @@ export const useResultsStore = defineStore("results", {
     addTotalElements(elements: number, color: string, name: string): void {
       this.totalElements += elements;
 
-      if (verticals.includes(name)) {
+      const isFenceboard =
+        useSettingsStore().fences.find((fence) => fence.name === name)
+          ?.category === "Tvoralentė";
+
+      if (isFenceboard) {
         this.bolts = this.addPart(
           this.bolts,
           color,
@@ -428,7 +433,7 @@ export const useResultsStore = defineStore("results", {
 
     addBindingsLength(height: number, color: string): void {
       const useCalculate = useCalculationsStore();
-      if (this.bindingsLength.length === 0 && !useCalculate.retail) {
+      if (this.bindingsLength.length === 0 && useCalculate.retail) {
         this.bindingsLength = this.addPart(
           this.bindingsLength,
           color,
@@ -444,10 +449,21 @@ export const useResultsStore = defineStore("results", {
       );
     },
 
-    addSegment(height: number, color: string): void {
-      this.segments = this.addPart(this.segments, color, 1, +height);
+    addSegment(
+      height: number,
+      color: string,
+      name: string,
+      quantity: number
+    ): void {
+      this.segments = this.addPart(
+        this.segments,
+        color,
+        quantity,
+        +height,
+        name
+      );
 
-      const holdersCount = +height < 130 ? 2 : +height < 170 ? 3 : 4;
+      const holdersCount = +height < 130 ? 2 : 3;
 
       if (this.segmentHolders.length === 0) {
         this.segmentHolders = this.addPart(
@@ -464,6 +480,7 @@ export const useResultsStore = defineStore("results", {
         0
       );
     },
+
     addPart(
       array: OtherParts[],
       color: string,

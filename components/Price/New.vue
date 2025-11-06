@@ -3,21 +3,23 @@ import { categories } from "~/data/selectFieldData";
 
 const productsStore = useProductsStore();
 const open = ref<boolean>(false);
-const newName = ref<string>("");
-const newPrice = ref<number>(0);
-const newCost = ref<number>(0);
+const name = ref<string>("");
+const priceRetail = ref<number>(0);
+const priceWholesale = ref<number>(0);
+const cost = ref<number>(0);
 const isLoading = ref<boolean>(false);
-const newCategory = ref<string>(categories[0]);
+const newCategory = ref<string>("Kita");
 const { setError, setSuccess } = useError();
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
-  if (newName.value.trim() === "") return;
+  if (name.value.trim() === "") return;
 
   const requestData = {
-    name: newName.value,
-    price: newPrice.value,
-    cost: newCost.value,
+    name: name.value,
+    priceRetail: priceRetail.value,
+    priceWholesale: priceWholesale.value,
+    cost: cost.value,
     category: newCategory.value,
   };
 
@@ -35,9 +37,10 @@ const saveHandler = async (): Promise<void> => {
 };
 
 const clearHandler = (): void => {
-  newName.value = "";
-  newPrice.value = 0;
-  newCost.value = 0;
+  name.value = "";
+  priceRetail.value = 0;
+  priceWholesale.value = 0;
+  cost.value = 0;
   newCategory.value = categories[0];
   open.value = false;
 };
@@ -56,28 +59,36 @@ const clearHandler = (): void => {
     </div>
     <div v-if="open" class="flex items-end gap-2">
       <BaseInput
-        :name="newName"
+        :name="name"
         width="w-full"
         variant="light"
         class="flex-1"
         label="Pavadinimas"
-        @onChange="(v) => (newName = v)"
+        @onChange="(v) => (name = v)"
       />
       <BaseInput
-        :name="newPrice"
-        width="w-24"
-        type="number"
-        label="Kaina"
-        variant="light"
-        @onChange="(v) => (newPrice = v)"
-      />
-      <BaseInput
-        :name="newCost"
+        :name="cost"
         width="w-24"
         type="number"
         label="Savikaina"
         variant="light"
-        @onChange="(v) => (newCost = v)"
+        @onChange="(v) => (cost = v)"
+      />
+      <BaseInput
+        :name="priceWholesale"
+        width="w-24"
+        type="number"
+        label="Didmena"
+        variant="light"
+        @onChange="(v) => (priceWholesale = v)"
+      />
+      <BaseInput
+        :name="priceRetail"
+        width="w-24"
+        type="number"
+        label="mažmena"
+        variant="light"
+        @onChange="(v) => (priceRetail = v)"
       />
       <BaseSelectField
         label="Kategorija"

@@ -1,18 +1,16 @@
 import type { Measure, Calculations, Fence } from "~/data/interfaces";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import {
-  createInitialMeasure,
-  fenceMeasures,
-  clientInitialValue,
-} from "~/data/initialValues";
-import { pramatomumas, verticals } from "~/data/selectFieldData";
+import { createInitialMeasure, clientInitialValue } from "~/data/initialValues";
+import { pramatomumas } from "~/data/selectFieldData";
+import calculateFenceBoards from "~/utils/calculations/calculateFenceBoards";
 
 export const useCalculationsStore = defineStore("calculations", {
   state: (): Calculations => ({
     client: { ...clientInitialValue },
     fences: [],
-    retail: false,
+    retail: true,
+    units: true,
   }),
 
   actions: {
@@ -20,7 +18,7 @@ export const useCalculationsStore = defineStore("calculations", {
       const initialFence: Fence = {
         id: uuidv4(),
         side: "Priekis",
-        name: this.retail ? "Daimond 60/90 metras" : "Daimond 60/90",
+        name: "Daimond 60/90",
         color: "7016",
         material: "Matinė",
         manufacturer: "Arcelor",
@@ -47,7 +45,6 @@ export const useCalculationsStore = defineStore("calculations", {
     clearAll() {
       this.client = { ...clientInitialValue };
       this.fences = [];
-      this.retail = false;
     },
 
     addMeasure(index: number): void {
@@ -79,18 +76,11 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateRetail(value: boolean) {
-      const settingsStore = useSettingsStore();
-
       this.retail = value;
-      this.fences = this.fences.map((item) => {
-        if (value) {
-          item.name = settingsStore.selectValues.retailFenceTypes[0];
-          return item;
-        } else {
-          item.name = settingsStore.selectValues.fenceTypes[0];
-          return item;
-        }
-      });
+    },
+
+    updateUnits(value: boolean) {
+      this.units = value;
     },
 
     updateClientAddress(data: string): void {
@@ -137,6 +127,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateDirection(index: number, value: string): void {
       this.fences[index].direction = value;
+      this.calculateAllElements(index);
     },
 
     updateServices(index: number, value: string): void {
@@ -349,30 +340,50 @@ export const useCalculationsStore = defineStore("calculations", {
     calculateElements(index: number, measureIndex: number) {
       const fence = this.fences[index];
       const measure = fence.measures[measureIndex];
-      const isFenceBoards = verticals.includes(fence.name);
-      const seeThroughIndex = pramatomumas.indexOf(fence.seeThrough);
-      const fenceData = fenceMeasures.find(
+
+      const fenceData = useSettingsStore().fences.find(
         (item) =>
           item.name.trim().toLowerCase() === fence.name.trim().toLowerCase()
       );
 
+      if (!fenceData || fenceData?.category === "Segmentas") return;
+      const isFenceBoards = fenceData.category === "Tvoralentė";
+
       let elements = 0;
+
       if (isFenceBoards) {
         elements = calculateFenceBoards(
-          measure.length,
+          fence.direction === "Vertikali" ? measure.length : measure.height,
           fence.space,
-          fenceData!.height,
+          fenceData.details.width,
           fence.twoSided
         );
-        this.fences[index].elements += elements;
       } else {
-        if (measure.height) {
-          elements =
-            (measure.height - 1) /
-            (fenceData!.seeThrough[seeThroughIndex] + fenceData!.height);
+        const fenceRename = fence.seeThrough
+          .replace("š", "s")
+          .replace("25% Pramatomumas", "pramatoma25")
+          .replace("50% Pramatomumas", "pramatoma50")
+          .toLowerCase() as keyof typeof fenceData.steps;
+
+        const seeThroughStep =
+          fenceRename in fenceData.steps ? fenceData.steps[fenceRename] : null;
+
+        if (
+          measure.height &&
+          this.fences[index].direction === "Horizontali" &&
+          seeThroughStep
+        ) {
+          elements = measure.height / seeThroughStep;
+        } else if (
+          measure.length &&
+          this.fences[index].direction === "Vertikali" &&
+          seeThroughStep
+        ) {
+          elements = measure.length / seeThroughStep;
         }
       }
-      measure.elements = Math.round(elements);
+      this.fences[index].measures[measureIndex].elements = Math.round(elements);
+      this.fences[index].elements += Math.round(elements);
     },
 
     setProject(project: any) {
@@ -563,7 +574,7 @@ export const useCalculationsStore = defineStore("calculations", {
             found = capitalize(temp);
           } else {
             if (temp === "60x90") found = "Daimond 60/90";
-            else if (temp === "60x90v") found = "Daimond 60/90 Vertical";
+            else if (temp === "vertical") found = "Daimond Vertical";
             else if (temp === "40x105") found = "Daimond 40/105";
             else if (temp === "60x120") found = "Daimond 60/120";
             else if (temp === "zaliuzi") found = "Žaliuzi";

@@ -1,7 +1,6 @@
 export const fenceSide = ["Priekis", "Galas", "Kairė", "Dešinė"];
 export const gateStatus = ["Eilėje", "Galima matuoti", "Pamatuota"];
 export const categories = [
-  "Tvoros",
   "Stulpai",
   "Borteliai",
   "Skersiniai",
@@ -11,56 +10,11 @@ export const categories = [
   "Kita",
 ];
 export const gateDirection = [
+  "Nežinoma",
   "Vidus Kairė",
   "Vidus Dešinė",
   "Išorė Kairė",
   "Išorė Dešinė",
-];
-
-export const horizontals = [
-  "Daimond 60/90",
-  "Daimond 40/105",
-  "Tvoralentė Alba",
-  "Plank",
-  "Eglė",
-  "Dilė 105mm",
-  "Dilė 135mm",
-  "Dilė 190mm",
-  "Tvoralentė Standard",
-  "Tvoralentė Sigma",
-  "Tvoralentė Astra",
-  "Tvoralentė Polo",
-  "Tvoralentė EVA",
-  "Tvoralentė EVA3",
-  "Tvoralentė Estetic",
-  "Tvoralentė Emka",
-];
-
-export const verticals = [
-  "Tvoralentė Alba",
-  "Dilė 105mm",
-  "Dilė 135mm",
-  "Dilė 190mm",
-  "Tvoralentė Standard",
-  "Tvoralentė Sigma",
-  "Tvoralentė Astra",
-  "Tvoralentė Polo",
-  "Tvoralentė EVA",
-  "Tvoralentė EVA3",
-  "Tvoralentė Estetic",
-  "Tvoralentė Emka",
-];
-
-export const fenceBoards = [
-  "Tvoralentė Alba",
-  "Tvoralentė Standard",
-  "Tvoralentė Sigma",
-  "Tvoralentė Astra",
-  "Tvoralentė Polo",
-  "Tvoralentė EVA",
-  "Tvoralentė EVA3",
-  "Tvoralentė Estetic",
-  "Tvoralentė Emka",
 ];
 
 export const pramatomumas = [
@@ -69,7 +23,7 @@ export const pramatomumas = [
   "Vidutiniška",
   "Pramatoma",
   "25% Pramatomumas",
-  "50% pramatomumas",
+  "50% Pramatomumas",
 ];
 
 export const fenceTypes = ["Tvora", "Tvoralentė", "Segmentas", "Žaliuzė"];

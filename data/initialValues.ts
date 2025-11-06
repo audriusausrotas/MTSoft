@@ -3,8 +3,8 @@ import type {
   Measure,
   Result,
   MenuLinks,
-  FenceMeasure,
   Works,
+  Fence,
 } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
@@ -83,7 +83,7 @@ export const createInitialMeasure = (): Measure => ({
     name: "Stumdomi",
     automatics: "Taip",
     comment: "",
-    direction: "Vidus Kairė",
+    direction: "Nežinoma",
     lock: "Paprasta",
     bankette: "Taip",
     option: "Gaminami",
@@ -99,174 +99,3 @@ export const createInitialMeasure = (): Measure => ({
     direction: "Aukštyn",
   },
 });
-
-export const fenceMeasures: FenceMeasure[] = [
-  {
-    name: "Daimond 60/90",
-    height: 9,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-  {
-    name: "Daimond 40/105",
-    height: 10.5,
-    width: 4,
-    seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
-  },
-  {
-    name: "Plank",
-    height: 11,
-    width: 4,
-    seeThrough: [1, 2, 3, 4, 5.5, 11],
-  },
-  {
-    name: "Žaliuzi",
-    height: 6.5,
-    width: 6,
-    seeThrough: [1.5, 2, 3, 4, 3.25, 6.5],
-  },
-  {
-    name: "Dilė 105mm",
-    height: 10.6,
-    width: 2,
-    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
-  },
-  {
-    name: "Dilė 135mm",
-    height: 10.6,
-    width: 2,
-    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
-  },
-  {
-    name: "Dilė 190mm",
-    height: 10.6,
-    width: 2,
-    seeThrough: [1, 2, 3, 4, 4.3, 8.6],
-  },
-  {
-    name: "Eglė",
-    height: 11,
-    width: 6,
-    seeThrough: [0, 0, 1, 2, 5.5, 11],
-  },
-  {
-    name: "Tvoralentė Alba",
-    height: 10.9,
-    width: 1.8,
-    seeThrough: [1, 2, 3, 4, 5.45, 10.9],
-  },
-  {
-    name: "Tvoralentė Standard",
-    height: 11.5,
-    width: 1.8,
-    seeThrough: [1, 2, 3, 4, 5.75, 11.5],
-  },
-  {
-    name: "Tvoralentė Sigma",
-    height: 11.8,
-    width: 2.3,
-    seeThrough: [1, 2, 3, 4, 5.9, 11.8],
-  },
-  {
-    name: "Tvoralentė Astra",
-    height: 9.1,
-    width: 1.5,
-    seeThrough: [1, 2, 3, 4, 4.5, 9.1],
-  },
-  {
-    name: "Tvoralentė Polo",
-    height: 11,
-    width: 1.6,
-    seeThrough: [1, 2, 3, 4, 5.5, 11],
-  },
-  {
-    name: "Tvoralentė EVA",
-    height: 11.5,
-    width: 1,
-    seeThrough: [1, 2, 3, 4, 5.75, 11.5],
-  },
-  {
-    name: "Tvoralentė EVA3",
-    height: 11.5,
-    width: 1,
-    seeThrough: [1, 2, 3, 4, 5.75, 11.5],
-  },
-  {
-    name: "Tvoralentė Estetic",
-    height: 11.5,
-    width: 1.8,
-    seeThrough: [1, 2, 3, 4, 5.75, 11.5],
-  },
-  {
-    name: "Tvoralentė Emka",
-    height: 11.5,
-    width: 1.8,
-    seeThrough: [1, 2, 3, 4, 5.75, 11.5],
-  },
-  {
-    name: "Segmentas 2,5x1,03 m, 4mm",
-    height: 0,
-    width: 250,
-    seeThrough: [0, 0, 0, 0, 0, 0],
-  },
-  {
-    name: "Segmentas 2,5x1,23 m, 4mm",
-    height: 0,
-    width: 250,
-    seeThrough: [0, 0, 0, 0, 0, 0],
-  },
-  {
-    name: "Segmentas 2,5x1,53 m, 4mm",
-    height: 0,
-    width: 250,
-    seeThrough: [0, 0, 0, 0, 0, 0],
-  },
-  {
-    name: "Segmentas 2,5x1,73 m, 4mm",
-    height: 0,
-    width: 250,
-    seeThrough: [0, 0, 0, 0, 0, 0],
-  },
-  {
-    name: "Segmentas 2,5x2,03 m, 4mm",
-    height: 0,
-    width: 250,
-    seeThrough: [0, 0, 0, 0, 0, 0],
-  },
-  {
-    name: "Daimond 60/90 metras",
-    height: 9,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-  {
-    name: "Daimond 60/120 metras",
-    height: 12,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-  {
-    name: "Daimond 40/105 metras",
-    height: 10.5,
-    width: 4,
-    seeThrough: [1.5, 2.5, 3.5, 4.5, 5.25, 10.5],
-  },
-  {
-    name: "Plank 40/110 metras",
-    height: 11,
-    width: 4,
-    seeThrough: [1, 2, 3, 4, 5.5, 11],
-  },
-  {
-    name: "Žaliuzi 60/65 metras",
-    height: 6.5,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-  {
-    name: "Namelis 60/105 metras",
-    height: 10.5,
-    width: 6,
-    seeThrough: [2, 3, 4, 5, 4.5, 9],
-  },
-];

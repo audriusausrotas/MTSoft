@@ -26,19 +26,25 @@ const searchQuery = ref<string>("");
     </div>
     <div class="overflow-auto">
       <table class="w-full">
-        <thead class="overflow-hidden font-semibold capitalize bg-gray-ultra-light">
+        <thead
+          class="overflow-hidden font-semibold capitalize bg-gray-ultra-light"
+        >
           <tr>
             <th class="w-8 p-3 rounded-tl-2xl">nr</th>
             <th class="min-w-[500px]">pavadinimas</th>
-            <th class="w-24 p-3">kaina</th>
             <th class="w-24 p-3">savikaina</th>
+            <th class="w-24 p-3">Didmena</th>
+            <th class="w-24 p-3">Mažmena</th>
             <th class="w-24 p-3">Kategorija</th>
             <th class="w-8 p-3"></th>
             <th class="w-8 p-3 rounded-tr-2xl"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in productsStore.search(searchQuery)" :key="product._id">
+          <tr
+            v-for="(product, index) in productsStore.search(searchQuery)"
+            :key="product._id.toString()"
+          >
             <PriceElement :index="index" :product="product" />
           </tr>
         </tbody>

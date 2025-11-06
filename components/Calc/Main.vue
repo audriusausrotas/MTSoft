@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { laserInstructions } from "~/data/laserInstruction";
+import calculateResults from "~/utils/calculations/calculateResults";
 const emit = defineEmits(["onCalculate"]);
 const calculationsStore = useCalculationsStore();
 
@@ -21,22 +22,25 @@ const calculateResultsHandler = () => {
 };
 
 const confirmHandler = () => {
-  calculationsStore.lazerCalculate(textArea.value, units.value, precision.value);
+  calculationsStore.lazerCalculate(
+    textArea.value,
+    units.value,
+    precision.value
+  );
   modalOpen.value = false;
 };
 
 const retailHandler = (value: string) => {
-  if (value === "Didmena") {
-    calculationsStore.updateRetail(true);
-  } else {
-    calculationsStore.updateRetail(false);
-  }
+  calculationsStore.updateRetail(value === "Mažmena");
+  calculationsStore.updateUnits(value === "Mažmena");
 };
 </script>
 
 <template>
   <div class="flex w-full flex-col">
-    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
+    <div
+      class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b"
+    >
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
       <BaseButton name="Iš lazerio" @click="modalOpen = true" />
       <BaseModal
@@ -110,8 +114,9 @@ const retailHandler = (value: string) => {
       <BaseSelectField
         :values="['Didmena', 'Mažmena']"
         id="parts"
-        :defaultValue="calculationsStore.retail ? 'Didmena' : 'Mažmena'"
-        width="w-60"
+        :defaultValue="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
+        width="w-48"
+        :name="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
         @onChange="retailHandler"
       />
     </div>

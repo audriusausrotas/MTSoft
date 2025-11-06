@@ -6,8 +6,22 @@ const resultsStore = useResultsStore();
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center gap-4 py-4">
-    <div class="">{{ props.index + 1 }}</div>
+  <div class="flex flex-wrap gap-4 p-4">
+    <div class="flex flex-col gap-8">
+      <BaseInput
+        label="Nr"
+        width="w-10"
+        :disable="true"
+        :name="props.index + 1"
+      />
+      <NuxtImg
+        src="/icons/delete.svg"
+        width="20"
+        height="20"
+        @click="resultsStore.deleteWork(props.work.id)"
+        class="rounded-lg hover:bg-red-light hover:cursor-pointer h-10 border w-10 p-2 transition-colors"
+      />
+    </div>
 
     <div class="flex flex-col gap-2">
       <BaseSearchField
@@ -30,7 +44,9 @@ const resultsStore = useResultsStore();
           type="number"
           :name="props.work.quantity"
           :disable="false"
-          @onChange="(value) => resultsStore.updateWorkQuantity(props.index, value)"
+          @onChange="
+            (value) => resultsStore.updateWorkQuantity(props.index, value)
+          "
         />
 
         <BaseInput
@@ -39,7 +55,9 @@ const resultsStore = useResultsStore();
           type="number"
           :name="props.work.price"
           width="w-24"
-          @onChange="(value) => resultsStore.updateWorkPrice(props.index, value)"
+          @onChange="
+            (value) => resultsStore.updateWorkPrice(props.index, value)
+          "
         />
 
         <BaseInput
@@ -52,21 +70,33 @@ const resultsStore = useResultsStore();
       </div>
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput label="Viso Savikaina" :name="props.work.totalCost" disable="true" width="w-24" />
-      <BaseInput label="Viso kaina" :name="props.work.totalPrice" disable="true" width="w-24" />
+      <BaseInput
+        label="Viso Savikaina"
+        :name="props.work.totalCost"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Viso kaina"
+        :name="props.work.totalPrice"
+        disable="true"
+        width="w-24"
+      />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput label="marža" :name="props.work.margin + ' %'" disable="true" width="w-24" />
-      <BaseInput label="Pelnas" :name="props.work.profit" disable="true" width="w-24" />
+      <BaseInput
+        label="marža"
+        :name="props.work.margin + ' %'"
+        disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        label="Pelnas"
+        :name="props.work.profit"
+        disable="true"
+        width="w-24"
+      />
     </div>
-
-    <NuxtImg
-      src="/icons/delete.svg"
-      width="20"
-      height="20"
-      @click="resultsStore.deleteWork(props.work.id)"
-      class="rounded-lg hover:bg-red-light hover:cursor-pointer"
-    />
   </div>
 </template>
 <style scoped></style>

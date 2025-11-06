@@ -1,21 +1,19 @@
 import type { Fence, Measure, Fences } from "~/data/interfaces";
-import { fenceMeasures } from "~/data/initialValues";
+import calculateFenceBoards from "./calculateFenceBoards";
 
-export default function calculateVerticalFence(
+export default function calculateFenceboardFence(
   item: Fence,
   measure: Measure,
-  fenceTemp: Fences[]
+  fenceTemp: Fences[],
+  fenceboardWidth: number
 ) {
   const tempFence: Fences[] = [...fenceTemp];
   let fenceExist: boolean = false;
-  let fenceWidth: number = 0;
-
-  fenceWidth = fenceMeasures.findIndex((element) => element.name === item.name);
 
   const elements = calculateFenceBoards(
-    measure.length,
+    item.direction === "Vertikali" ? measure.length : measure.height,
     item.space,
-    fenceMeasures[fenceWidth].height,
+    fenceboardWidth,
     item.twoSided
   );
 
@@ -23,7 +21,7 @@ export default function calculateVerticalFence(
     name: item.name,
     color: item.color,
     length: 0,
-    height: measure.height,
+    height: item.direction === "Vertikali" ? measure.height : measure.length,
     quantity: 0,
     elements: 0,
     material: item.material,
@@ -48,6 +46,7 @@ export default function calculateVerticalFence(
       fenceExist = true;
     }
   });
+
   if (!fenceExist) {
     initialFenceData.elements = elements;
     initialFenceData.quantity = elements;

@@ -6,10 +6,11 @@ const productsStore = useProductsStore();
 
 const { setError, setSuccess } = useError();
 const disable = ref<boolean>(true);
-const productName = ref<string>(props.product.name);
-const productPrice = ref<number>(props.product.price);
-const productCost = ref<number>(props.product.cost);
-const productCategory = ref<string>(props.product.category);
+const productName = ref<string>(props.product?.name);
+const priceRetail = ref<number>(props.product?.prices?.priceRetail || 0);
+const priceWholesale = ref<number>(props.product?.prices?.priceWholesale || 0);
+const productCost = ref<number>(props.product?.prices?.cost || 0);
+const productCategory = ref<string>(props.product?.category);
 
 const editHandler = (): void => {
   disable.value = !disable.value;
@@ -33,8 +34,9 @@ const deleteHandler = async (): Promise<void> => {
 
 const saveHandler = async () => {
   if (
-    props.product.cost === productCost.value &&
-    props.product.price === productPrice.value &&
+    props.product.prices.cost === productCost.value &&
+    props.product.prices.priceRetail === priceRetail.value &&
+    props.product.prices.priceWholesale === priceWholesale.value &&
     props.product.name === productName.value &&
     productCategory.value === props.product.category
   ) {
@@ -45,7 +47,8 @@ const saveHandler = async () => {
   const requestData = {
     _id: props.product._id,
     name: productName.value,
-    price: productPrice.value,
+    priceRetail: priceRetail.value,
+    priceWholesale: priceWholesale.value,
     cost: productCost.value,
     category: productCategory.value,
   };
@@ -66,8 +69,9 @@ watch(
   () => props.product,
   (newProduct) => {
     productName.value = newProduct.name;
-    productPrice.value = newProduct.price;
-    productCost.value = newProduct.cost;
+    priceRetail.value = newProduct.prices.priceRetail;
+    priceWholesale.value = newProduct.prices.priceWholesale;
+    productCost.value = newProduct.prices.cost;
     productCategory.value = newProduct.category;
   },
   { deep: true }
@@ -87,22 +91,32 @@ watch(
   </td>
   <td class="p-2">
     <BaseInput
-      :name="productPrice || 0"
-      width="w-24"
-      type="number"
-      :disable="disable"
-      :variant="disable ? '' : 'light'"
-      @onChange="(v) => (productPrice = v)"
-    />
-  </td>
-  <td class="p-2">
-    <BaseInput
       :name="productCost || 0"
       width="w-24"
       type="number"
       :disable="disable"
       :variant="disable ? '' : 'light'"
       @onChange="(v) => (productCost = v)"
+    />
+  </td>
+  <td class="p-2">
+    <BaseInput
+      :name="priceWholesale || 0"
+      width="w-24"
+      type="number"
+      :disable="disable"
+      :variant="disable ? '' : 'light'"
+      @onChange="(v) => (priceWholesale = v)"
+    />
+  </td>
+  <td class="p-2">
+    <BaseInput
+      :name="priceRetail || 0"
+      width="w-24"
+      type="number"
+      :disable="disable"
+      :variant="disable ? '' : 'light'"
+      @onChange="(v) => (priceRetail = v)"
     />
   </td>
   <td>

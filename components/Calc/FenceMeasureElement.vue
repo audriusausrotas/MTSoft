@@ -7,22 +7,18 @@ const settingsStore = useSettingsStore();
 
 const isChecked = ref(props.measure.gates.exist);
 const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
-const isSegment = ref<boolean>(
-  calculationsStore.fences[props.index].name.includes("Segmentas")
+
+const isSegment = computed(
+  () =>
+    settingsStore.fences.find(
+      (fence) => fence.name === calculationsStore.fences[props.index].name
+    )?.category === "Segmentas"
 );
 
 function toggleCheckbox(value: boolean) {
   isChecked.value = value;
   calculationsStore.updateMeasureGate(props.index, value, props.measureIndex);
 }
-
-watch(
-  () => calculationsStore.fences[props.index].name,
-  (newValue) => {
-    isSegment.value = newValue.includes("Segmentas");
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -59,7 +55,7 @@ watch(
         placeholder="Aukštis"
         type="number"
         label="aukštis"
-        variant="light"
+        :variant="'light'"
         :name="props.measure.height"
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
@@ -73,12 +69,16 @@ watch(
       />
 
       <BaseInput
-        v-if="isData && !isSegment"
+        v-if="isData"
         width="w-24"
-        :disable="!calculationsStore.retail"
+        :disable="calculationsStore.retail || isSegment"
         label="elementai"
-        :variant="calculationsStore.retail ? 'light' : ''"
-        :name="props.measure.elements"
+        :variant="isSegment ? '' : !calculationsStore.retail ? 'light' : ''"
+        :name="
+          isSegment
+            ? Math.ceil(props.measure.length / 255)
+            : props.measure.elements
+        "
         @onChange="
           (value: number): void =>
             calculationsStore.updateMeasureElements(

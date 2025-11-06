@@ -9,6 +9,7 @@ const name = ref<string>("");
 const email = ref<string>("");
 const phone = ref<string>("");
 const address = ref<string>("");
+const comment = ref<string>("");
 const status = ref<string>("Nežinoma");
 
 const saveHandler = async () => {
@@ -17,6 +18,7 @@ const saveHandler = async () => {
     email: email.value,
     phone: phone.value,
     address: address.value,
+    comment: comment.value,
     status: status.value,
   };
 
@@ -80,6 +82,12 @@ const cancelHandler = () => {
           @onChange="(value) => (status = value)"
         />
       </div>
+      <BaseInput
+        label="Komentaras"
+        placeholder="Komentaras"
+        width="w-full max-w-[1310px]"
+        @onChange="(value) => (comment = value)"
+      />
     </div>
   </div>
 </template>

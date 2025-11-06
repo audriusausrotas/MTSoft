@@ -10,6 +10,7 @@ export interface Calculations {
   client: Client;
   fences: Fence[];
   retail: boolean;
+  units: boolean;
 }
 
 export interface Project {
@@ -122,6 +123,8 @@ export interface Result {
   width: number | null;
   delivered: boolean;
   ordered: boolean;
+  retail: boolean;
+  units: boolean;
 }
 
 export interface OtherParts {
@@ -216,20 +219,11 @@ export interface User {
   accountType: string;
   photo: string;
 }
-
 export interface Product {
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
-  price: number;
-  cost: number;
+  prices: SeeThroughPrice;
   category: string;
-  image?: string;
-  height?: number;
-  width?: number;
-  type?: string;
-  isFenceBoard?: boolean;
-  defaultDirection?: string;
-  seeThrough?: SeeThrough;
 }
 
 export interface SeeThrough {
@@ -258,6 +252,7 @@ export interface Works {
   margin: number;
   profit: number;
   done: boolean;
+  retail: boolean;
 }
 
 export interface InstallationWorks {
@@ -482,11 +477,6 @@ export interface DefaultValues {
   retailBindings: string;
   retailDoubleLeg: string;
   retailSingleLeg: string;
-  segment103: string;
-  segment123: string;
-  segment153: string;
-  segment173: string;
-  segment203: string;
   segmentHolders: string;
   gates: string;
   gates2: string;
@@ -504,6 +494,7 @@ export interface DefaultValues {
   bordersWork: string;
   transport: string;
   fenceWork: string;
+  holesWork: string;
   totalFencesWithBindings: string;
   bindingWork: string;
   fenceboardWork: string;
@@ -562,6 +553,7 @@ export interface PotentialClient {
   phone: string;
   address: string;
   status: string;
+  comment: string;
   send: boolean;
 }
 
@@ -600,12 +592,15 @@ export interface QualityPricing {
 export interface PriceTier {
   premium: QualityPricing;
   eco: QualityPricing;
+  cost: number;
+  priceRetail: number;
+  priceWholesale: number;
 }
 
 export interface FenceSetup {
   _id: Types.ObjectId;
   name: string;
-  type: string;
+  category: string;
   defaultDirection: string;
   details: FenceDetails;
   steps: SeeThroughSteps;

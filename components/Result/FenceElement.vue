@@ -1,54 +1,51 @@
 <script setup lang="ts">
-import { verticals, horizontals } from "../../data/selectFieldData";
 import type { Product } from "~/data/interfaces";
 const props = defineProps(["result", "index", "parts"]);
 
 const resultsStore = useResultsStore();
-const isFenceboard = computed(() => {
-  if (verticals.some((item) => props.result?.name?.includes(item))) {
-    return true;
-  } else {
-    return false;
-  }
-});
+const settingsStore = useSettingsStore();
 
-const showAditionalVertical = computed(() => {
-  if (
-    verticals.some((item) => props.result?.name?.includes(item)) &&
-    props.result.direction === "Vertikali"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-});
+const isFenceboard = computed(
+  () =>
+    settingsStore.fences.find((fence) => fence.name === props.result?.name)
+      ?.category === "Tvoralentė"
+);
 
-const showAditionalHorizontal = computed(() => {
-  if (
-    horizontals.some((item) => props.result?.name?.includes(item)) &&
-    props.result.direction === "Horizontali"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-});
+const isFence = computed(
+  () =>
+    settingsStore.fences.find(
+      (fence) =>
+        fence.name.toLowerCase().trim() ===
+        props.result?.name
+          .replace(" Eco", "")
+          .replace(" Premium", "")
+          .toLowerCase()
+          .trim()
+    )?.category === "Tvora"
+);
 
 const colorEditable = computed(
   () => props.result.color === "Kita" || props.result.category !== "tvoros"
 );
-
-const spaceEditable = computed(
-  () =>
-    props.result.category === "tvoros" &&
-    !props.result.name.includes("Segmentas")
-);
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center gap-4 py-4">
-    <div class="">{{ props.index + 1 }}</div>
-
+  <div class="flex flex-wrap gap-4 p-4">
+    <div class="flex flex-col gap-8">
+      <BaseInput
+        label="Nr"
+        width="w-10"
+        :disable="true"
+        :name="props.index + 1"
+      />
+      <NuxtImg
+        src="/icons/delete.svg"
+        width="20"
+        height="20"
+        @click="resultsStore.deleteResult(props.result.id)"
+        class="rounded-lg hover:bg-red-light hover:cursor-pointer h-10 border w-10 p-2 transition-colors"
+      />
+    </div>
     <div class="flex flex-col gap-2 w-96">
       <BaseSearchField
         width="w-full"
@@ -77,7 +74,7 @@ const spaceEditable = computed(
           variant="light"
           label="kiekis"
           type="number"
-          :name="props.result.quantity"
+          :name="+props.result.quantity"
           @onChange="(value: number) => resultsStore.updateQuantity(props.index, +value)"
         />
 
@@ -86,12 +83,13 @@ const spaceEditable = computed(
           label="kaina"
           width="w-24"
           type="number"
-          :name="props.result.price"
+          :name="+props.result.price"
           @onChange="(value: number) => resultsStore.updatePrice(props.index, value)"
         />
         <BaseInput
           label="savikaina"
-          :name="props.result.cost"
+          :name="+props.result.cost"
+          type="number"
           width="w-24"
           variant="light"
           @onChange="(value: number) => resultsStore.updateResultCost(props.index, value)"
@@ -99,60 +97,18 @@ const spaceEditable = computed(
       </div>
     </div>
 
-    <div v-if="showAditionalVertical" class="flex flex-col gap-2">
-      <BaseInput
-        variant="light"
-        label="ilgis"
-        :name="$props.result.height"
-        width="w-24"
-      />
-      <BaseInput
-        v-if="isFenceboard"
-        :name="props.result.space"
-        width="w-24"
-        label="tarpas"
-        :variant="spaceEditable ? 'light' : ''"
-        :disable="spaceEditable ? false : true"
-        @onChange="(value) => resultsStore.updateSpace(props.index, value)"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <BaseInput
-        v-if="props.result.direction"
-        width="w-36"
-        label="kryptis"
-        :name="props.result.direction"
-      />
-      <BaseInput
-        v-if="showAditionalHorizontal"
-        label="pramatomumas"
-        :disable="true"
-        :name="props.result.seeThrough"
-        width="w-36"
-      />
-
-      <BaseInput
-        v-if="isFenceboard && props.result.twoSided"
-        width="w-36"
-        label="dvipusė"
-        :name="props.result.twoSided"
-        :disable="false"
-      />
-    </div>
-
     <div class="flex flex-col gap-2">
       <BaseInput
         width="w-24"
         label="viso savikaina"
         :name="props.result.totalCost"
-        disable="true"
+        :disable="true"
       />
       <BaseInput
         width="w-24"
         label="viso kaina"
         :name="props.result.totalPrice"
-        disable="true"
+        :disable="true"
       />
     </div>
     <div class="flex flex-col gap-2">
@@ -160,23 +116,60 @@ const spaceEditable = computed(
         width="w-24"
         label="marža"
         :name="props.result.margin + ' %'"
-        disable="true"
+        :disable="true"
       />
       <BaseInput
         width="w-24"
         :name="props.result.profit"
         label="pelnas"
-        disable="true"
+        :disable="true"
       />
     </div>
-
-    <NuxtImg
-      src="/icons/delete.svg"
-      width="20"
-      height="20"
-      @click="resultsStore.deleteResult(props.result.id)"
-      class="rounded-lg hover:bg-red-light hover:cursor-pointer"
-    />
+    <div v-if="isFenceboard" class="flex flex-col gap-2">
+      <BaseInput
+        label="Ilgis"
+        :name="props.result.height"
+        :disable="true"
+        width="w-24"
+      />
+      <BaseInput
+        v-if="isFenceboard"
+        :name="props.result.direction"
+        width="w-24"
+        label="kryptis"
+        :disable="true"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <BaseInput
+        v-if="isFenceboard"
+        width="w-24"
+        label="dvipusė"
+        :name="props.result.twoSided"
+        :disable="true"
+      />
+      <BaseInput
+        v-if="isFenceboard"
+        width="w-24"
+        label="tarpas"
+        :name="props.result.space"
+        :disable="true"
+      />
+      <BaseInput
+        v-if="isFence"
+        label="pramatomumas"
+        :disable="true"
+        :name="props.result.seeThrough"
+        width="w-36"
+      />
+      <BaseInput
+        v-if="isFence"
+        label="Skarda"
+        :disable="true"
+        :name="props.result.name.includes('Premium') ? 'Premium' : 'Eco'"
+        width="w-36"
+      />
+    </div>
   </div>
 </template>
 <style scoped></style>

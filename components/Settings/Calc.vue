@@ -44,7 +44,9 @@ productsStore?.products?.forEach((item) => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <p class="m-auto font-bold text-2xl mb-4">Standartines medžiagos ir darbai</p>
+    <p class="m-auto font-bold text-2xl mb-4">
+      Standartines medžiagos ir darbai
+    </p>
     <SettingsCalcElement
       :value="settingsStore.defaultValues.poleMain"
       :data="poles"
@@ -134,36 +136,6 @@ productsStore?.products?.forEach((item) => {
       :data="other"
       field="bindings"
       name="Tvoros apkaustai"
-    />
-    <SettingsCalcElement
-      :value="settingsStore.defaultValues.segment103"
-      :data="fences"
-      field="segment103"
-      name="Segmentas 1.03 m"
-    />
-    <SettingsCalcElement
-      :value="settingsStore.defaultValues.segment123"
-      :data="fences"
-      field="segment123"
-      name="Segmentas 1.23 m"
-    />
-    <SettingsCalcElement
-      :value="settingsStore.defaultValues.segment153"
-      :data="fences"
-      field="segment153"
-      name="Segmentas 1.53 m"
-    />
-    <SettingsCalcElement
-      :value="settingsStore.defaultValues.segment173"
-      :data="fences"
-      field="segment173"
-      name="Segmentas 1.73 m"
-    />
-    <SettingsCalcElement
-      :value="settingsStore.defaultValues.segment203"
-      :data="fences"
-      field="segment203"
-      name="Segmentas 2.03 m"
     />
     <SettingsCalcElement
       :value="settingsStore.defaultValues.segmentHolders"
@@ -272,6 +244,12 @@ productsStore?.products?.forEach((item) => {
       :data="works"
       field="fenceWork"
       name="Tvoros montavimas"
+    />
+    <SettingsCalcElement
+      :value="settingsStore.defaultValues.holesWork"
+      :data="works"
+      field="holesWork"
+      name="Skylučių išmušimas"
     />
     <SettingsCalcElement
       :value="settingsStore.defaultValues.totalFencesWithBindings"

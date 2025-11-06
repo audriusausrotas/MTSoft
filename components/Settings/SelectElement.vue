@@ -1,25 +1,14 @@
 <script setup lang="ts">
-import type { Product } from "~/data/interfaces";
+import type { FenceSetup, Product } from "~/data/interfaces";
 
 const props = defineProps(["data", "field", "name"]);
 const { setError, setSuccess } = useError();
 const settingsStore = useSettingsStore();
-const productsStore = useProductsStore();
 
 const fenceTypes = props.field.toLowerCase().includes("fencetypes");
 const editable = ref<boolean>(false);
 
-const fences = ref<Product[]>([]);
-
-productsStore?.products?.forEach((item) => {
-  switch (item.category.toLowerCase()) {
-    case "tvoros":
-      fences.value.push(item);
-      break;
-    default:
-      break;
-  }
-});
+const fences = ref<FenceSetup[]>(settingsStore.fences);
 
 const saveHandler = async (value: string) => {
   const requestData = { field: props.field, value };

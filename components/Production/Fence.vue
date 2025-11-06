@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Measure } from "~/data/interfaces";
-import { verticals } from "~/data/selectFieldData";
 const props = defineProps([
   "fence",
   "fenceIndex",
