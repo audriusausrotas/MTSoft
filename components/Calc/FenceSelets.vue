@@ -36,10 +36,6 @@ const isSegment = computed(
       ?.category === "Segmentas"
 );
 
-const unitHandler = (value: string) => {
-  calculationsStore.updateUnits(props.index, value === "Kvadratinis metras");
-};
-
 watch(isFence, (value) => {
   calculationsStore.updateBindings(props.index, value ? "Taip" : "Ne");
   calculationsStore.updateDirection(
@@ -61,15 +57,6 @@ watch(isFence, (value) => {
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateSide(props.index, value)
       "
-      />
-      <BaseSelectField
-        v-if="isFence"
-        label="Matavimo vienetai"
-        :values="['Kvadratinis metras', 'Metras']"
-        id="units"
-        :defaultValue="currentFence.units ? 'Kvadratinis metras' : 'Metras'"
-        width="w-60"
-        @onChange="unitHandler"
       />
     </div>
     <div

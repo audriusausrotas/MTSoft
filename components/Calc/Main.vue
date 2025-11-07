@@ -33,6 +33,10 @@ const confirmHandler = () => {
 const retailHandler = (value: string) => {
   calculationsStore.updateRetail(value === "Mažmena");
 };
+
+const unitHandler = (value: string) => {
+  calculationsStore.updateUnits(value === "Kvadratinis metras");
+};
 </script>
 
 <template>
@@ -117,6 +121,13 @@ const retailHandler = (value: string) => {
         width="w-48"
         :name="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
         @onChange="retailHandler"
+      />
+      <BaseSelectField
+        :values="['Kvadratinis metras', 'Metras']"
+        id="units"
+        :defaultValue="units ? 'Kvadratinis metras' : 'Metras'"
+        width="w-60"
+        @onChange="unitHandler"
       />
     </div>
 

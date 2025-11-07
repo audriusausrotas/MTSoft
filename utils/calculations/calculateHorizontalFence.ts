@@ -5,6 +5,7 @@ export default function calculateHorizontalFence(
   item: Fence
 ) {
   const tempFence: Fences[] = [...fenceTemp];
+  const units = useCalculationsStore().units;
 
   let fenceExist: boolean = false;
 
@@ -14,7 +15,7 @@ export default function calculateHorizontalFence(
     ...item,
     length: item.totalLength,
     height: 0,
-    quantity: item.units ? item.totalQuantity : calculateWholesale(item),
+    quantity: units ? item.totalQuantity : calculateWholesale(item),
     elements: 0,
   };
 
@@ -27,7 +28,7 @@ export default function calculateHorizontalFence(
       fenceItem.seeThrough === item.seeThrough &&
       fenceItem.direction === item.direction
     ) {
-      if (item.units) {
+      if (units) {
         fenceItem.length += item.totalLength || 0;
         fenceItem.quantity += item.totalQuantity || 0;
 

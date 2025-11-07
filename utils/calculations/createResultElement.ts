@@ -5,6 +5,7 @@ import getFencePrice from "./getFencePrice";
 
 export default function createResultElement(item: any) {
   const retail = useCalculationsStore().retail;
+  const units = useCalculationsStore().units;
   const results = useResultsStore();
   const backupStore = useBackupStore();
   const backupExist = backupStore.backupExist;
@@ -24,11 +25,12 @@ export default function createResultElement(item: any) {
   let price = 0;
 
   if (product) {
+    console.log(units === backup?.units);
     if (
       backupExist &&
       backup &&
       backup.retail === retail &&
-      item.units === backup.units
+      units === backup.units
     ) {
       cost = backup.cost;
       price = backup.price;
@@ -50,7 +52,7 @@ export default function createResultElement(item: any) {
 
       const checkSeethrough = item.seeThrough === backup?.seeThrough || null;
       const checkManufacturer = backup?.name.includes(nameUpdate) || null;
-      const checkUnits = item.units === backup?.units || null;
+      const checkUnits = units === backup?.units || null;
       const checkName =
         item.name
           .replace(" Eco", "")
@@ -75,7 +77,7 @@ export default function createResultElement(item: any) {
         cost = backup.cost;
         price = backup.price;
       } else {
-        const fenceRename = item.units
+        const fenceRename = units
           ? String(item.seeThrough)
               .replace("š", "s")
               .replace("25% Pramatomumas", "pramatoma25")
@@ -137,7 +139,7 @@ export default function createResultElement(item: any) {
     delivered: false,
     ordered: false,
     retail,
-    units: item.units,
+    units,
   };
 
   results.results.push(resultData);
