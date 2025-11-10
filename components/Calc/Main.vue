@@ -125,7 +125,9 @@ const unitHandler = (value: string) => {
       <BaseSelectField
         :values="['Kvadratinis metras', 'Metras']"
         id="units"
-        :defaultValue="units ? 'Kvadratinis metras' : 'Metras'"
+        :defaultValue="
+          calculationsStore.units ? 'Kvadratinis metras' : 'Metras'
+        "
         width="w-60"
         @onChange="unitHandler"
       />

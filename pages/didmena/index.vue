@@ -14,7 +14,7 @@ definePageMeta({
       />
       <OffersInfoCard />
       <OffersSteelInfo class="print:break-after-page" />
-      <OffersOfferFences :retail="true" :blinds="false" />
+      <OffersOfferFences :retail="false" :blinds="false" />
       <OffersAditional />
       <OffersColorsCard />
     </div>

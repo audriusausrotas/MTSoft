@@ -25,7 +25,6 @@ export default function createResultElement(item: any) {
   let price = 0;
 
   if (product) {
-    console.log(units === backup?.units);
     if (
       backupExist &&
       backup &&

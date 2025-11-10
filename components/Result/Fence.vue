@@ -17,7 +17,9 @@ productsStore?.products?.forEach((item) => {
 <template>
   <ResultTotalElement :results="results" />
   <div class="flex flex-col gap-4 divide-y w-full text-center divide-red-full">
-    <h3 v-if="results.results.length > 0" class="text-2xl font-bold m-auto">Medžiagos</h3>
+    <h3 v-if="results.results.length > 0" class="text-2xl font-bold m-auto">
+      Medžiagos
+    </h3>
     <ResultFenceElement
       v-for="(result, index) in results.results"
       :key="result.id"
@@ -25,7 +27,9 @@ productsStore?.products?.forEach((item) => {
       :index="index"
       :parts="parts"
     />
-    <h3 v-if="results.works.length > 0" class="text-2xl pt-4 w-full font-bold">Darbai</h3>
+    <h3 v-if="results.works.length > 0" class="text-2xl pt-4 w-full font-bold">
+      Darbai
+    </h3>
     <ResultFenceWorks
       v-for="(work, index) in results.works"
       :key="work.id"

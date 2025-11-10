@@ -13,7 +13,7 @@ definePageMeta({
         image="/images/cover.jpg"
       />
       <OffersSteelInfo class="print:break-after-page" />
-      <OffersOfferFences :retail="false" :blinds="false" />
+      <OffersOfferFences :retail="true" :blinds="false" />
       <OffersColorsCard />
     </div>
   </div>
