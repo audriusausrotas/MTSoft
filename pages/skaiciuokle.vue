@@ -17,7 +17,6 @@ const project = computed(() => {
     (item) => item._id === projectsStore.selectedProject
   );
 });
-
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
   const newProject: Project = {

@@ -19,7 +19,6 @@ export default function createResultElement(item: any) {
   );
 
   let product: any = getProductPrice(item.name);
-
   let nameUpdate = "";
   let cost = 0;
   let price = 0;
@@ -133,7 +132,7 @@ export default function createResultElement(item: any) {
     totalCost: +totalCost,
     profit: +profit,
     margin: +margin,
-    category: item.category || "",
+    category: product.category || "",
     width: item.width || 0,
     delivered: false,
     ordered: false,

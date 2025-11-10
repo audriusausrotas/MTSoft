@@ -8,6 +8,7 @@ import type {
   OtherParts,
   Works,
   Product,
+  FenceSetup,
 } from "~/data/interfaces";
 
 export const useResultsStore = defineStore("results", {
@@ -88,11 +89,17 @@ export const useResultsStore = defineStore("results", {
       this.recalculateWorkTotals(index);
     },
 
-    selectItem(index: number, value: Product): void {
+    selectItem(index: number, value: Product | any): void {
       const selectedResult = this.results[index];
       selectedResult.name = value.name;
-      selectedResult.price = value.prices.priceRetail;
-      selectedResult.cost = value.prices.cost;
+      selectedResult.price =
+        value?.category === "Tvora"
+          ? value.prices.premium.nepramatoma.priceRetail
+          : value.prices.priceRetail;
+      selectedResult.cost =
+        value?.category === "Tvora"
+          ? value.prices.premium.nepramatoma.cost
+          : value.prices.cost;
       selectedResult.category = value.category;
       selectedResult.quantity = this.results[index].quantity || 1;
       this.recalculateTotals(index);

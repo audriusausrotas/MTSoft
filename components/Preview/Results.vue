@@ -62,8 +62,8 @@ const orderHandler = async (value: boolean) => {
 const selectData = (value: boolean) => {
   const data = {
     name:
-      props?.result?.category === "tvoros"
-        ? props?.result?.name + " H-" + props.result.height
+      props?.result?.category === "Tvoralentė"
+        ? props?.result?.name + ", H-" + props.result.height
         : props?.result?.name,
     color: props?.result?.color,
     quantity: props?.result?.quantity,
@@ -97,15 +97,10 @@ const selectData = (value: boolean) => {
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 lg:gap-8">
         <span class="w-fit">{{ props?.result?.name }}</span>
-        <span v-if="props?.result?.seeThrough">{{
+        <span v-if="props?.result?.category === 'Tvora'">{{
           props?.result?.seeThrough
         }}</span>
-        <span
-          v-if="
-            props?.result?.height &&
-            props?.result?.category.toLowerCase() === 'tvoros' &&
-            !props?.result?.name.includes('Segmentas')
-          "
+        <span v-if="props?.result?.category === 'Tvoralentė'"
           >H-{{ props?.result?.height }}</span
         >
         <span

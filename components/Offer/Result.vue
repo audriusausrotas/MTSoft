@@ -26,15 +26,10 @@ else measurement.value = "vnt";
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 sm:gap-8">
         <span class="w-fit">{{ props.result.name }}</span>
-        <span v-if="props.result.seeThrough">{{
+        <span v-if="props.result.category === 'Tvora'">{{
           props.result.seeThrough
         }}</span>
-        <span
-          v-if="
-            props.result.height &&
-            props.result.category.toLowerCase() === 'tvoros' &&
-            !props.result.name.includes('Segmentas')
-          "
+        <span v-if="props.result.category === 'Tvoralentė'"
           >H-{{ props.result.height }}</span
         >
         <span v-if="props.result.color && !props.result.name.includes('RAL')"

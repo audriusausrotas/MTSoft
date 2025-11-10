@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const results = useResultsStore();
 const productsStore = useProductsStore();
+const settingsStore = useSettingsStore();
 
 const parts: any = [];
 const works: any = [];
@@ -12,6 +13,8 @@ productsStore?.products?.forEach((item) => {
     parts.push(item);
   }
 });
+
+const partsUpdated = [...parts, ...settingsStore.fences];
 </script>
 
 <template>
@@ -25,7 +28,7 @@ productsStore?.products?.forEach((item) => {
       :key="result.id"
       :result="result"
       :index="index"
-      :parts="parts"
+      :parts="partsUpdated"
     />
     <h3 v-if="results.works.length > 0" class="text-2xl pt-4 w-full font-bold">
       Darbai
