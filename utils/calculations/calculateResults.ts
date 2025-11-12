@@ -102,12 +102,13 @@ export default function calculateResults() {
 
       // calculate wholesale legs
       if (!calculationsStore.retail) {
-        if (item.direction !== "Horizontali" || measure.gates.exist) return;
-        const name =
-          item.bindings === "Taip"
-            ? settingsStore.defaultValues.retailSingleLeg
-            : settingsStore.defaultValues.retailDoubleLeg;
-        results.addRetailLeg(measure.height, item.color, name);
+        if (fenceSettings.category === "Tvora" && !measure.gates.exist) {
+          const name =
+            item.bindings === "Taip"
+              ? settingsStore.defaultValues.retailSingleLeg
+              : settingsStore.defaultValues.retailDoubleLeg;
+          results.addRetailLeg(measure.height, item.color, name);
+        }
       }
 
       // calculate borders, crossbars
