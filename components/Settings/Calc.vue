@@ -311,6 +311,24 @@ productsStore?.products?.forEach((item) => {
       field="retailSingleLeg"
       name="Koja vienguba - metras"
     />
+    <SettingsCalcElement
+      :value="settingsStore.defaultValues.retailBindingsEco"
+      :data="other"
+      field="retailBindingsEco"
+      name="Tvoros apkaustai - metras Eco"
+    />
+    <SettingsCalcElement
+      :value="settingsStore.defaultValues.retailDoubleLegEco"
+      :data="other"
+      field="retailDoubleLegEco"
+      name="Koja dviguba - metras Eco"
+    />
+    <SettingsCalcElement
+      :value="settingsStore.defaultValues.retailSingleLegEco"
+      :data="other"
+      field="retailSingleLegEco"
+      name="Koja vienguba - metras Eco"
+    />
   </div>
 </template>
 

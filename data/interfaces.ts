@@ -477,6 +477,9 @@ export interface DefaultValues {
   retailBindings: string;
   retailDoubleLeg: string;
   retailSingleLeg: string;
+  retailBindingsEco: string;
+  retailDoubleLegEco: string;
+  retailSingleLegEco: string;
   segmentHolders: string;
   gates: string;
   gates2: string;
