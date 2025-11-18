@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Works } from "~/data/interfaces";
+import type { Product, Works } from "~/data/interfaces";
 const props = defineProps(["work", "index", "works"]);
 
 const resultsStore = useResultsStore();
@@ -31,7 +31,7 @@ const resultsStore = useResultsStore();
         :name="props.work.name"
         @onChange="(value) => resultsStore.updateWorkName(props.index, value)"
         @OnClick="
-          (value: Works) => {
+          (value: Product) => {
             resultsStore.selectWork(props.index, value);
           }
         "

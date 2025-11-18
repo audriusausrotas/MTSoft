@@ -45,6 +45,8 @@ export const useCalculationsStore = defineStore("calculations", {
     clearAll() {
       this.client = { ...clientInitialValue };
       this.fences = [];
+      this.units = true;
+      this.retail = true;
     },
 
     addMeasure(index: number): void {
@@ -390,6 +392,7 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences = [...project.fenceMeasures];
       this.client = { ...project.client };
       this.retail = project.retail;
+      this.units = project.units;
     },
 
     calculatefromTotalLength(index: number, totalLength: number) {

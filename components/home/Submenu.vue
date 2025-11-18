@@ -55,6 +55,7 @@ const editHandler = async () => {
     client: project.client,
     fenceMeasures: project.fenceMeasures,
     retail: project.retail,
+    units: project.results[0].units,
   });
   resultsStore.setProject(project);
   backupStore.addBackup(project.results, project.works);

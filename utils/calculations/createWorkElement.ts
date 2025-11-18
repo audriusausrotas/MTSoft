@@ -32,8 +32,11 @@ export default function createWorkElement(item: {
   const totalCost = +(cost * item.quantity).toFixed(2);
   const profit = +(totalPrice - totalCost).toFixed(2);
   const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
-  const roundedQuantity = +item.quantity.toFixed(2);
+  let roundedQuantity = +item.quantity.toFixed(2);
 
+  if (item.name.toLowerCase() === "transportas" && backupExist && backup) {
+    roundedQuantity = backup.quantity;
+  }
   const resultData: Works = {
     id: uuidv4(),
     name: item.name,
