@@ -3,13 +3,7 @@ const props = defineProps(["result", "index", "hidePrices"]);
 const measurement = ref<string>("vnt");
 
 if (props.result.name.includes("Apkaustai")) measurement.value = "m";
-else if (
-  props.result.name.includes("Daimond") ||
-  props.result.name.includes("Plank") ||
-  props.result.name.includes("Eglė") ||
-  props.result.name.includes("Žaliuzi")
-)
-  measurement.value = "m2";
+else if (props.result.category === "Tvora") measurement.value = "m2";
 else measurement.value = "vnt";
 </script>
 
@@ -32,6 +26,7 @@ else measurement.value = "vnt";
         <span v-if="props.result.category === 'Tvoralentė'"
           >H-{{ props.result.height }}</span
         >
+
         <span v-if="props.result.color && !props.result.name.includes('RAL')"
           >RAL {{ props.result.color }}</span
         >
