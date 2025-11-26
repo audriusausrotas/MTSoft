@@ -600,6 +600,13 @@ export interface PriceTier {
   priceWholesale: number;
 }
 
+export interface profitPercents {
+  premiumRetail: number;
+  premiumWholesale: number;
+  ecoRetail: number;
+  ecoWholesale: number;
+}
+
 export interface FenceSetup {
   _id: Types.ObjectId;
   name: string;
@@ -608,4 +615,5 @@ export interface FenceSetup {
   details: FenceDetails;
   steps: SeeThroughSteps;
   prices: PriceTier;
+  profit: profitPercents;
 }

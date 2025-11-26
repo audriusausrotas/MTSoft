@@ -23,8 +23,7 @@ const deleteHandler = async (): Promise<void> => {
   const response = await request.delete(`deleteProduct/${props.product._id}`);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      productsStore.deleteProduct(response.data._id);
+    !useSocketStore().connected && productsStore.deleteProduct(response.data._id);
 
     setSuccess(response.message);
   } else {

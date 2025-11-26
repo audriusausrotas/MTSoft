@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { fenceTypes, fenceDirection } from "~/data/selectFieldData";
 import FencesElementBlock from "./FencesElementBlock.vue";
+import { calculateFencePrice } from "@/utils/calculations/calculateFencePrice";
+import { calculateProductPrice } from "@/utils/calculations/calculateProductPrice";
 import type { Product } from "~/data/interfaces";
 const props = defineProps(["fence"]);
 
@@ -8,10 +10,13 @@ const { setError, setSuccess } = useError();
 const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
-const retailMarginPercent = ref<number>(0);
-const wholesaleMarginPercent = ref<number>(0);
-const retailMarginPercentEco = ref<number>(0);
-const wholesaleMarginPercentEco = ref<number>(0);
+
+const profit = reactive({
+  premiumRetail: props.fence?.profit?.premiumRetail || 0,
+  premiumWholesale: props.fence?.profit?.premiumWholesale || 0,
+  ecoRetail: props.fence?.profit?.ecoRetail || 0,
+  ecoWholesale: props.fence?.profit?.ecoWholesale || 0,
+});
 
 const fenceDetails = reactive({
   name: props.fence.name,
@@ -120,6 +125,12 @@ const saveHandler = async () => {
     name: fenceDetails.name,
     category: fenceDetails.category,
     defaultDirection: fenceDetails.defaultDirection,
+    profit: {
+      premiumRetail: profit.premiumRetail,
+      premiumWholesale: profit.premiumWholesale,
+      ecoRetail: profit.ecoRetail,
+      ecoWholesale: profit.ecoWholesale,
+    },
     details: {
       height: +fenceDetails.height,
       width: +fenceDetails.width,
@@ -217,8 +228,7 @@ const saveHandler = async () => {
 
   const response: any = await request.patch("updateFenceData", requestData);
   if (response.success) {
-    !useSocketStore().connected &&
-      settingsStore.updateFenceSettings(response.data);
+    !useSocketStore().connected && settingsStore.updateFenceSettings(response.data);
     editable.value = false;
     setSuccess(response.message);
   } else {
@@ -229,9 +239,7 @@ const saveHandler = async () => {
 const deleteHandler = async () => {
   if (!confirm("Ar tikrai norite ištrinti šią tvorą?")) return;
 
-  const response: any = await request.delete(
-    `deleteFenceSettings/${props.fence._id}`
-  );
+  const response: any = await request.delete(`deleteFenceSettings/${props.fence._id}`);
   if (response.success) {
     !useSocketStore().connected && settingsStore.deleteFence(props.fence._id);
     setSuccess(response.message);
@@ -241,15 +249,14 @@ const deleteHandler = async () => {
 };
 
 const recalculateHandler = () => {
-  if (!retailMarginPercent.value || !wholesaleMarginPercent.value) return;
-
   if (props.fence?.category === "Tvora") {
     if (!pricesPremium.meter.cost || !pricesEco.meter.cost) return;
 
     const legNamePremium = settingsStore.defaultValues.retailDoubleLeg;
     const legNameEco = settingsStore.defaultValues.retailDoubleLegEco;
-    const legPricePremium: Product | undefined =
-      useProductsStore().products.find((item) => item.name === legNamePremium);
+    const legPricePremium: Product | undefined = useProductsStore().products.find(
+      (item) => item.name === legNamePremium
+    );
     const legPriceEco: Product | undefined = useProductsStore().products.find(
       (item) => item.name === legNameEco
     );
@@ -258,114 +265,113 @@ const recalculateHandler = () => {
 
     pricesPremium.meter.priceRetail = (
       pricesPremium.meter.cost /
-      ((100 - retailMarginPercent.value) / 100)
+      ((100 - profit.premiumRetail) / 100)
     ).toFixed(2);
 
     pricesPremium.meter.priceWholesale = (
       pricesPremium.meter.cost /
-      ((100 - wholesaleMarginPercent.value) / 100)
+      ((100 - profit.premiumWholesale) / 100)
     ).toFixed(2);
 
-    pricesEco.meter.priceRetail = (
-      pricesEco.meter.cost /
-      ((100 - retailMarginPercentEco.value) / 100)
-    ).toFixed(2);
+    pricesEco.meter.priceRetail = (pricesEco.meter.cost / ((100 - profit.ecoRetail) / 100)).toFixed(
+      2
+    );
 
     pricesEco.meter.priceWholesale = (
       pricesEco.meter.cost /
-      ((100 - wholesaleMarginPercentEco.value) / 100)
+      ((100 - profit.ecoWholesale) / 100)
     ).toFixed(2);
 
     //cost
-    pricesPremium.aklina.cost = calculatePrice(
+    pricesPremium.aklina.cost = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
-    pricesPremium.nepramatoma.cost = calculatePrice(
+    pricesPremium.nepramatoma.cost = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
-    pricesPremium.vidutiniska.cost = calculatePrice(
+    pricesPremium.vidutiniska.cost = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
-    pricesPremium.pramatoma.cost = calculatePrice(
+    pricesPremium.pramatoma.cost = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
-    pricesPremium.pramatoma25.cost = calculatePrice(
+    pricesPremium.pramatoma25.cost = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
-    pricesPremium.pramatoma50.cost = calculatePrice(
+    pricesPremium.pramatoma50.cost = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.cost,
       legPricePremium?.prices?.cost
     );
 
     // wholesale
-    pricesPremium.aklina.priceWholesale = calculatePrice(
+    pricesPremium.aklina.priceWholesale = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
-    pricesPremium.nepramatoma.priceWholesale = calculatePrice(
+    pricesPremium.nepramatoma.priceWholesale = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
-    pricesPremium.vidutiniska.priceWholesale = calculatePrice(
+    pricesPremium.vidutiniska.priceWholesale = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
-    pricesPremium.pramatoma.priceWholesale = calculatePrice(
+    pricesPremium.pramatoma.priceWholesale = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
-    pricesPremium.pramatoma25.priceWholesale = calculatePrice(
+    pricesPremium.pramatoma25.priceWholesale = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
-    pricesPremium.pramatoma50.priceWholesale = calculatePrice(
+    pricesPremium.pramatoma50.priceWholesale = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.priceWholesale,
       legPricePremium?.prices?.priceWholesale
     );
     // Retail
-    pricesPremium.aklina.priceRetail = calculatePrice(
+    pricesPremium.aklina.priceRetail = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
     );
-    pricesPremium.nepramatoma.priceRetail = calculatePrice(
+    pricesPremium.nepramatoma.priceRetail = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
     );
-    pricesPremium.vidutiniska.priceRetail = calculatePrice(
+    pricesPremium.vidutiniska.priceRetail = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
     );
-    pricesPremium.pramatoma.priceRetail = calculatePrice(
+    pricesPremium.pramatoma.priceRetail = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
     );
-    pricesPremium.pramatoma25.priceRetail = calculatePrice(
+    pricesPremium.pramatoma25.priceRetail = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
     );
-    pricesPremium.pramatoma50.priceRetail = calculatePrice(
+    pricesPremium.pramatoma50.priceRetail = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.priceRetail,
       legPricePremium?.prices?.priceRetail
@@ -373,114 +379,104 @@ const recalculateHandler = () => {
 
     //// eco
     //cost
-    pricesEco.aklina.cost = calculatePrice(
+    pricesEco.aklina.cost = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
-    pricesEco.nepramatoma.cost = calculatePrice(
+    pricesEco.nepramatoma.cost = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
-    pricesEco.vidutiniska.cost = calculatePrice(
+    pricesEco.vidutiniska.cost = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
-    pricesEco.pramatoma.cost = calculatePrice(
+    pricesEco.pramatoma.cost = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
-    pricesEco.pramatoma25.cost = calculatePrice(
+    pricesEco.pramatoma25.cost = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
-    pricesEco.pramatoma50.cost = calculatePrice(
+    pricesEco.pramatoma50.cost = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.cost,
       legPriceEco?.prices?.cost
     );
 
     // wholesale
-    pricesEco.aklina.priceWholesale = calculatePrice(
+    pricesEco.aklina.priceWholesale = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
-    pricesEco.nepramatoma.priceWholesale = calculatePrice(
+    pricesEco.nepramatoma.priceWholesale = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
-    pricesEco.vidutiniska.priceWholesale = calculatePrice(
+    pricesEco.vidutiniska.priceWholesale = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
-    pricesEco.pramatoma.priceWholesale = calculatePrice(
+    pricesEco.pramatoma.priceWholesale = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
-    pricesEco.pramatoma25.priceWholesale = calculatePrice(
+    pricesEco.pramatoma25.priceWholesale = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
-    pricesEco.pramatoma50.priceWholesale = calculatePrice(
+    pricesEco.pramatoma50.priceWholesale = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.priceWholesale,
       legPriceEco?.prices?.priceWholesale
     );
     // Retail
-    pricesEco.aklina.priceRetail = calculatePrice(
+    pricesEco.aklina.priceRetail = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
-    pricesEco.nepramatoma.priceRetail = calculatePrice(
+    pricesEco.nepramatoma.priceRetail = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
-    pricesEco.vidutiniska.priceRetail = calculatePrice(
+    pricesEco.vidutiniska.priceRetail = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
-    pricesEco.pramatoma.priceRetail = calculatePrice(
+    pricesEco.pramatoma.priceRetail = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
-    pricesEco.pramatoma25.priceRetail = calculatePrice(
+    pricesEco.pramatoma25.priceRetail = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
-    pricesEco.pramatoma50.priceRetail = calculatePrice(
+    pricesEco.pramatoma50.priceRetail = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.priceRetail,
       legPriceEco?.prices?.priceRetail
     );
   } else {
     if (!prices.cost) return;
-    prices.priceRetail = (
-      prices.cost /
-      ((100 - retailMarginPercent.value) / 100)
-    ).toFixed(2);
+    prices.priceRetail = calculateProductPrice(prices.cost, profit.premiumRetail);
 
-    prices.priceWholesale = (
-      prices.cost /
-      ((100 - wholesaleMarginPercent.value) / 100)
-    ).toFixed(2);
-  }
-
-  function calculatePrice(step: number, price: number, legPrice: number) {
-    return (((100 / step) * 2.5 * price + legPrice * 2) / 2.5).toFixed(2);
+    prices.priceWholesale = (prices.cost / ((100 - profit.premiumWholesale) / 100)).toFixed(2);
   }
 };
 </script>
@@ -516,56 +512,48 @@ const recalculateHandler = () => {
         />
       </div>
       <div v-if="editable" class="flex flex-col gap-4 items-center w-full">
-        <div
-          class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"
-        ></div>
+        <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"></div>
         <p class="font-semibold text-lg">Maržos skaičiavimui</p>
 
         <div class="flex gap-4 items-end">
           <BaseButton name="Skaičiuoti" @click="recalculateHandler" />
 
           <BaseInput
-            :name="wholesaleMarginPercent"
+            :name="profit.premiumWholesale"
             placeholder="Didmenos %"
-            :label="
-              props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'
-            "
+            :label="props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'"
             type="number"
             width="w-40"
-            @onChange="(value) => (wholesaleMarginPercent = value)"
+            @onChange="(value) => (profit.premiumWholesale = value)"
           />
           <BaseInput
-            :name="retailMarginPercent"
+            :name="profit.premiumRetail"
             placeholder="Mažmenos %"
-            :label="
-              props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'
-            "
+            :label="props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'"
             type="number"
             width="w-40"
-            @onChange="(value) => (retailMarginPercent = value)"
+            @onChange="(value) => (profit.premiumRetail = value)"
           />
           <BaseInput
             v-if="props.fence.category === 'Tvora'"
-            :name="wholesaleMarginPercentEco"
+            :name="profit.ecoWholesale"
             placeholder="Didmenos %"
             label="Didmena Eco"
             type="number"
             width="w-40"
-            @onChange="(value) => (wholesaleMarginPercentEco = value)"
+            @onChange="(value) => (profit.ecoWholesale = value)"
           />
           <BaseInput
             v-if="props.fence.category === 'Tvora'"
-            :name="retailMarginPercentEco"
+            :name="profit.ecoRetail"
             placeholder="Mažmenos %"
             label="Mažmena Eco"
             type="number"
             width="w-40"
-            @onChange="(value) => (retailMarginPercentEco = value)"
+            @onChange="(value) => (profit.ecoRetail = value)"
           />
         </div>
-        <div
-          class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"
-        ></div>
+        <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"></div>
       </div>
 
       <div
@@ -657,13 +645,8 @@ const recalculateHandler = () => {
       </div>
     </div>
 
-    <div
-      class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"
-    >
-      <div
-        v-if="fenceDetails.category === 'Tvora'"
-        class="flex flex-col gap-4 items-center"
-      >
+    <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400">
+      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col gap-4 items-center">
         <p class="font-bold text-xl">Montavimo žingsnis</p>
         <div class="flex gap-4 items-center justify-center">
           <BaseInput
@@ -722,10 +705,7 @@ const recalculateHandler = () => {
           />
         </div>
       </div>
-      <div
-        v-if="fenceDetails.category !== 'Tvora'"
-        class="flex flex-col gap-4 items-center"
-      >
+      <div v-if="fenceDetails.category !== 'Tvora'" class="flex flex-col gap-4 items-center">
         <p class="font-bold text-xl">Kainos</p>
         <div class="flex gap-4 items-center justify-center">
           <BaseInput
@@ -792,9 +772,7 @@ const recalculateHandler = () => {
           :wholesale="pricesPremium.nepramatoma.priceWholesale"
           :retail="pricesPremium.nepramatoma.priceRetail"
           @cost="(value) => (pricesPremium.nepramatoma.cost = value)"
-          @wholesale="
-            (value) => (pricesPremium.nepramatoma.priceWholesale = value)
-          "
+          @wholesale="(value) => (pricesPremium.nepramatoma.priceWholesale = value)"
           @retail="(value) => (pricesPremium.nepramatoma.priceRetail = value)"
         />
         <FencesElementBlock
@@ -804,9 +782,7 @@ const recalculateHandler = () => {
           :wholesale="pricesPremium.vidutiniska.priceWholesale"
           :retail="pricesPremium.vidutiniska.priceRetail"
           @cost="(value) => (pricesPremium.vidutiniska.cost = value)"
-          @wholesale="
-            (value) => (pricesPremium.vidutiniska.priceWholesale = value)
-          "
+          @wholesale="(value) => (pricesPremium.vidutiniska.priceWholesale = value)"
           @retail="(value) => (pricesPremium.vidutiniska.priceRetail = value)"
         />
         <FencesElementBlock
@@ -816,9 +792,7 @@ const recalculateHandler = () => {
           :wholesale="pricesPremium.pramatoma.priceWholesale"
           :retail="pricesPremium.pramatoma.priceRetail"
           @cost="(value) => (pricesPremium.pramatoma.cost = value)"
-          @wholesale="
-            (value) => (pricesPremium.pramatoma.priceWholesale = value)
-          "
+          @wholesale="(value) => (pricesPremium.pramatoma.priceWholesale = value)"
           @retail="(value) => (pricesPremium.pramatoma.priceRetail = value)"
         />
         <FencesElementBlock
@@ -828,9 +802,7 @@ const recalculateHandler = () => {
           :wholesale="pricesPremium.pramatoma25.priceWholesale"
           :retail="pricesPremium.pramatoma25.priceRetail"
           @cost="(value) => (pricesPremium.pramatoma25.cost = value)"
-          @wholesale="
-            (value) => (pricesPremium.pramatoma25.priceWholesale = value)
-          "
+          @wholesale="(value) => (pricesPremium.pramatoma25.priceWholesale = value)"
           @retail="(value) => (pricesPremium.pramatoma25.priceRetail = value)"
         />
         <FencesElementBlock
@@ -840,9 +812,7 @@ const recalculateHandler = () => {
           :wholesale="pricesPremium.pramatoma50.priceWholesale"
           :retail="pricesPremium.pramatoma50.priceRetail"
           @cost="(value) => (pricesPremium.pramatoma50.cost = value)"
-          @wholesale="
-            (value) => (pricesPremium.pramatoma50.priceWholesale = value)
-          "
+          @wholesale="(value) => (pricesPremium.pramatoma50.priceWholesale = value)"
           @retail="(value) => (pricesPremium.pramatoma50.priceRetail = value)"
         />
       </div>

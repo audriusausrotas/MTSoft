@@ -4,7 +4,7 @@ const resultsStore = useResultsStore();
 
 resultsStore.calculateTotals();
 
-if (!resultsStore.priceWithDiscount) resultsStore.calculatePriceWithDiscount();
+if (!resultsStore.priceWithDiscount) resultsStore.calculateFencePriceWithDiscount();
 </script>
 
 <template>

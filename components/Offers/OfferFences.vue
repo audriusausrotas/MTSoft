@@ -4,7 +4,7 @@ const props = defineProps(["retail", "blinds"]);
 const settingsStore = useSettingsStore();
 
 const fencess = settingsStore.fences.filter(
-  (item) => item.category === "Tvora"
+  (item) => item.category === "Tvora" || item.name === "Dilė"
 );
 
 const blinds = [
@@ -47,10 +47,6 @@ const blinds = [
       :fence="fence"
       class="print:break-after-page"
       :retail="props.retail"
-      :imgView="fence.name.replace('/', '').replace(' ', '').toLowerCase()"
-      :imgDetail="
-        fence.name.replace('/', '').replace(' ', '').toLowerCase() + 's'
-      "
     />
   </div>
 </template>

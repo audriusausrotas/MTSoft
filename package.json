@@ -27,6 +27,7 @@
     "formidable": "^3.5.2",
     "h3": "^1.10.0",
     "html2pdf.js": "^0.10.1",
+    "mongoose": "^9.0.0",
     "pinia": "^2.1.7",
     "socket.io-client": "^4.8.1",
     "uuid": "^10.0.0"
