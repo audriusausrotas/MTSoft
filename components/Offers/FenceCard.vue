@@ -26,7 +26,10 @@ const img2 = `/images/${
         class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
       >
         <div class="flex flex-col gap-2 w-[400px] justify-evenly">
-          <div v-if="!props.retail" class="flex flex-col">
+          <div
+            v-if="!props.retail || props.fence.name === 'Dilė'"
+            class="flex flex-col"
+          >
             <div class="text-center font-bold text-lg">
               {{ props.fence.name }} metro kaina
             </div>
@@ -57,11 +60,22 @@ const img2 = `/images/${
               <div class="px-2 py-1 border-b border-inherit border-r">
                 Kaina be PVM
               </div>
-              <div class="px-2 py-1 border-b border-inherit border-r">
+              <div
+                v-if="props.fence.name !== 'Dilė'"
+                class="px-2 py-1 border-b border-inherit border-r"
+              >
                 {{
                   props.retail
                     ? props.fence.prices.premium.meter.priceRetail
                     : props.fence.prices.premium.meter.priceWholesale
+                }}
+                €/m
+              </div>
+              <div v-else class="px-2 py-1 border-b border-inherit border-r">
+                {{
+                  props.retail
+                    ? props.fence.prices.priceRetail
+                    : props.fence.prices.priceWholesale
                 }}
                 €/m
               </div>
@@ -79,11 +93,23 @@ const img2 = `/images/${
               <div class="px-2 py-1 border-r border-inherit flex">
                 Kaina su PVM
               </div>
-              <div class="px-2 py-1 border-r border-inherit flex">
+              <div
+                v-if="props.fence.name !== 'Dilė'"
+                class="px-2 py-1 border-r border-inherit flex"
+              >
                 {{
                   (props.retail
                     ? props.fence.prices.premium.meter.priceRetail * 1.21
                     : props.fence.prices.premium.meter.priceWholesale * 1.21
+                  ).toFixed(2)
+                }}
+                €/m
+              </div>
+              <div v-else class="px-2 py-1 border-r border-inherit flex">
+                {{
+                  (props.retail
+                    ? props.fence.prices.priceRetail * 1.21
+                    : props.fence.prices.priceWholesale * 1.21
                   ).toFixed(2)
                 }}
                 €/m
