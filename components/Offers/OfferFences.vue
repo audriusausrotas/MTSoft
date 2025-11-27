@@ -3,7 +3,7 @@ const props = defineProps(["retail", "blinds"]);
 
 const settingsStore = useSettingsStore();
 
-const fencess = settingsStore.fences.filter(
+const fences = settingsStore.fences.filter(
   (item) => item.category === "Tvora" || item.name === "Dilė"
 );
 
@@ -42,7 +42,7 @@ const blinds = [
   </div>
   <div v-else>
     <OffersFenceCard
-      v-for="fence in fencess"
+      v-for="fence in fences"
       :key="fence.name"
       :fence="fence"
       class="print:break-after-page"

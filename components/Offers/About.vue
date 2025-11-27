@@ -108,6 +108,23 @@ const props = defineProps(["phone", "email", "image"]);
                 </NuxtLink>
 
                 <NuxtLink
+                  to="https://maps.app.goo.gl/ViyLc6EaAESFPuMx5"
+                  target="_blank"
+                  class="flex gap-2 hover:scale-105 transition-transform w-fit"
+                >
+                  <NuxtImg
+                    src="/icons/location.svg"
+                    alt="Moderni Tvora logotipas"
+                    width="20"
+                    height="20"
+                    decoding="auto"
+                    loading="lazy"
+                    :ismap="true"
+                  />
+                  <p>Chemijos g. 4, Kaunas</p>
+                </NuxtLink>
+
+                <NuxtLink
                   to="https://modernitvora.lt/lt"
                   target="_blank"
                   class="flex gap-2 hover:scale-105 transition-transform w-fit"
