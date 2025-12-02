@@ -223,6 +223,7 @@ export interface Product {
   _id: Types.ObjectId;
   name: string;
   prices: SeeThroughPrice;
+  profit: ProductProfitPercents;
   category: string;
 }
 
@@ -605,6 +606,11 @@ export interface profitPercents {
   premiumWholesale: number;
   ecoRetail: number;
   ecoWholesale: number;
+}
+
+export interface ProductProfitPercents {
+  retail: number;
+  wholesale: number;
 }
 
 export interface FenceSetup {
