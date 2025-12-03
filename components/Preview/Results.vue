@@ -13,15 +13,14 @@ const { setError, setSuccess } = useError();
 
 const measurement = ref<string>("vnt");
 
-if (props.result.name.includes("Apkaustai")) measurement.value = "m";
-else if (
-  props?.result?.name.includes("Daimond") ||
-  props?.result?.name.includes("Plank") ||
-  props?.result?.name.includes("Eglė") ||
-  props?.result?.name.includes("Žaliuzi")
+if (props.result.category === "Tvora" || props.result.category === "tvoros") {
+  props.result.units ? (measurement.value = "m2") : (measurement.value = "m");
+}
+if (
+  props.result.name.includes("Apkaustai") ||
+  props.result.name.includes("metras")
 )
-  measurement.value = "m2";
-else measurement.value = "vnt";
+  measurement.value = "m";
 
 const deliverHandler = async (value: boolean) => {
   const requestData = { _id: props?._id, measureIndex: props?.index, value };
@@ -63,7 +62,11 @@ const selectData = (value: boolean) => {
   const data = {
     name:
       props?.result?.category === "Tvoralentė"
-        ? props?.result?.name + ", H-" + props.result.height
+        ? props?.result?.name +
+          ", H-" +
+          props.result.height +
+          " " +
+          props.result.material
         : props?.result?.name,
     color: props?.result?.color,
     quantity: props?.result?.quantity,
@@ -98,6 +101,9 @@ const selectData = (value: boolean) => {
       <div class="flex print:gap-4 gap-2 lg:gap-8">
         <span class="w-fit">{{ props?.result?.name }}</span>
         <span v-if="props?.result?.category === 'Tvora'">{{
+          props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
+        }}</span>
+        <span v-if="props?.result?.category === 'Tvora'">{{
           props?.result?.seeThrough
         }}</span>
         <span v-if="props?.result?.category === 'Tvoralentė'"
@@ -106,6 +112,9 @@ const selectData = (value: boolean) => {
         <span
           v-if="props?.result?.color && !props?.result?.name?.includes('RAL')"
           >RAL {{ props?.result?.color }}</span
+        >
+        <span v-if="props?.result?.category === 'Tvoralentė'">
+          {{ props.result.material }}</span
         >
         <span v-if="props?.result?.category.toLowerCase() === 'vartai'"
           >plotis: {{ props?.result?.width }} cm

@@ -4,22 +4,17 @@ import getProductPrice from "./getProductPrice";
 import getFencePrice from "./getFencePrice";
 
 export default function createResultElement(item: any) {
-  const retail = useCalculationsStore().retail;
-  const units = useCalculationsStore().units;
+  const calculationStore = useCalculationsStore();
+  const retail = calculationStore.retail;
+  const units = calculationStore.units;
   const results = useResultsStore();
   const backupStore = useBackupStore();
   const backupExist = backupStore.backupExist;
   const backup = backupStore.results.find(
-    (i) =>
-      i.name
-        .replace(" Eco", "")
-        .replace(" Premium", "")
-        .toLowerCase()
-        .trim() === item.name.toLowerCase().trim()
+    (i) => i.name.toLowerCase().trim() === item.name.toLowerCase().trim()
   );
 
   let product: any = getProductPrice(item.name);
-  let nameUpdate = "";
   let cost = 0;
   let price = 0;
 
@@ -46,22 +41,12 @@ export default function createResultElement(item: any) {
     const retailCheck = backup?.retail === retail || null;
 
     if (product?.category === "Tvora") {
-      nameUpdate = item.manufacturer === "Ukraina" ? " Eco" : " Premium";
-
       const checkSeethrough = item.seeThrough === backup?.seeThrough || null;
-      const checkManufacturer = backup?.name.includes(nameUpdate) || null;
+      const checkManufacturer = backup?.manufacturer || null;
       const checkUnits = units === backup?.units || null;
       const checkName =
-        item.name
-          .replace(" Eco", "")
-          .replace(" Premium", "")
-          .toLowerCase()
-          .trim() ===
-          backup?.name
-            .replace(" Eco", "")
-            .replace(" Premium", "")
-            .toLowerCase()
-            .trim() || null;
+        item.name.toLowerCase().trim() === backup?.name.toLowerCase().trim() ||
+        null;
 
       if (
         backupExist &&
@@ -118,7 +103,7 @@ export default function createResultElement(item: any) {
 
   const resultData: Result = {
     id: uuidv4(),
-    name: item.name + nameUpdate,
+    name: item.name,
     quantity: +item.quantity.toFixed(2),
     color: item.color || "",
     height: item.height || 0,
@@ -138,6 +123,8 @@ export default function createResultElement(item: any) {
     ordered: false,
     retail,
     units,
+    material: item.material || "",
+    manufacturer: item.manufacturer || "",
   };
 
   results.results.push(resultData);

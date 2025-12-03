@@ -21,6 +21,9 @@ else measurement.value = "vnt";
       <div class="flex print:gap-4 gap-2 sm:gap-8">
         <span class="w-fit">{{ props.result.name }}</span>
         <span v-if="props.result.category === 'Tvora'">{{
+          props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
+        }}</span>
+        <span v-if="props.result.category === 'Tvora'">{{
           props.result.seeThrough
         }}</span>
         <span v-if="props.result.category === 'Tvoralentė'"

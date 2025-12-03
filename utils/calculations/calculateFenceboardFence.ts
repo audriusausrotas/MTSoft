@@ -25,6 +25,7 @@ export default function calculateFenceboardFence(
     quantity: 0,
     elements: 0,
     material: item.material,
+    manufacturer: item.manufacturer,
     space: item.space,
     seeThrough: "",
     direction: item.direction,
@@ -36,6 +37,7 @@ export default function calculateFenceboardFence(
       fenceItem.name === item.name &&
       fenceItem.color === item.color &&
       fenceItem.material === item.material &&
+      fenceItem.manufacturer === item.manufacturer &&
       fenceItem.space === item.space &&
       fenceItem.direction === item.direction &&
       fenceItem.height === measure.height &&

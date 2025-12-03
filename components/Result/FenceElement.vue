@@ -16,11 +16,7 @@ const isFence = computed(
     settingsStore.fences.find(
       (fence) =>
         fence.name.toLowerCase().trim() ===
-        props.result?.name
-          .replace(" Eco", "")
-          .replace(" Premium", "")
-          .toLowerCase()
-          .trim()
+        props.result?.name.toLowerCase().trim()
     )?.category === "Tvora"
 );
 
@@ -165,7 +161,7 @@ const colorEditable = computed(
         v-if="isFence"
         label="Skarda"
         :disable="true"
-        :name="props.result.name.includes('Premium') ? 'Premium' : 'Eco'"
+        :name="props.result.manufacturer"
         width="w-36"
       />
     </div>

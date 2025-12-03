@@ -1,4 +1,3 @@
-import type { Project } from "~/data/interfaces";
 import createResultElement from "~/utils/calculations/createResultElement";
 import createWorkElement from "~/utils/calculations/createWorkElement";
 

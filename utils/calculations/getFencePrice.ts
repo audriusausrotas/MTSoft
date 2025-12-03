@@ -3,9 +3,7 @@ export default function getFencePrice(name: string) {
 
   return (
     settingsStore.fences.find(
-      (fence) =>
-        fence.name.toLowerCase().trim() ===
-        name.replace(" Eco", "").replace(" Premium", "").toLowerCase().trim()
+      (fence) => fence.name.toLowerCase().trim() === name.toLowerCase().trim()
     ) || null
   );
 }

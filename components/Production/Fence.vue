@@ -18,6 +18,22 @@ const filterLength = ref<boolean>(false);
 
 const filteredMeasures = ref([...props.fence.measures]);
 
+const fenceSettings = useSettingsStore().fences.find(
+  (item) => item.name === props.fence.name
+);
+
+let step = null;
+
+if (fenceSettings && props.fence.holes === "Taip") {
+  const fenceRename = props?.fence?.seeThrough
+    .replace("š", "s")
+    .replace("25% Pramatomumas", "pramatoma25")
+    .replace("50% Pramatomumas", "pramatoma50")
+    .toLowerCase() as keyof typeof fenceSettings.steps;
+
+  step = fenceSettings?.steps[fenceRename];
+}
+
 const newMeasureHandler = async () => {
   const requestData = { _id: props._id, index: props.fenceIndex };
 
@@ -145,7 +161,8 @@ watch(
       <p
         class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
       >
-        {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }}
+        {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }} -
+        {{ step ? step + " cm" : "" }}
       </p>
       <div
         v-if="isAdmin"

@@ -33,7 +33,9 @@ const isSegment = props.fence.name.includes("Segmentas");
         </div>
         <div v-if="!isFenceBoard && !isSegment">
           {{
-            (fence.measures[0].height / fence.measures[0].elements).toFixed(2)
+            (fence?.measures[0]?.height / fence?.measures[0]?.elements).toFixed(
+              2
+            )
           }}
           cm
         </div>

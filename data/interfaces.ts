@@ -125,6 +125,8 @@ export interface Result {
   ordered: boolean;
   retail: boolean;
   units: boolean;
+  material: string;
+  manufacturer: string;
 }
 
 export interface OtherParts {
@@ -156,6 +158,7 @@ export interface Fences {
   quantity: number;
   elements: number;
   material: string;
+  manufacturer: string;
   space: number;
   seeThrough: string;
   direction: string;
