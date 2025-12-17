@@ -12,7 +12,7 @@ const selected = ref<string>("bendri");
         class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-600 hover:text-white"
         :class="selected === 'bendri' ? 'bg-red-full text-white' : ''"
       >
-        Bendri nustatymai
+        Vartotojų teisės
       </div>
       <div
         @click="selected = 'tvoros'"
@@ -20,6 +20,13 @@ const selected = ref<string>("bendri");
         :class="selected === 'tvoros' ? 'bg-red-full text-white' : ''"
       >
         Tvorų nustatymai
+      </div>
+      <div
+        @click="selected = 'vartai'"
+        class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-full hover:text-white"
+        :class="selected === 'vartai' ? 'bg-red-full text-white' : ''"
+      >
+        Vartų nustatymai
       </div>
       <div
         @click="selected = 'skaiciuokle'"
@@ -38,6 +45,7 @@ const selected = ref<string>("bendri");
     </div>
     <SettingsUserSettings v-if="selected === 'bendri'" />
     <SettingsFences v-else-if="selected === 'tvoros'" />
+    <SettingsGates v-else-if="selected === 'vartai'" />
     <SettingsCalc v-else-if="selected === 'skaiciuokle'" />
     <SettingsSelect v-else-if="selected === 'pasirinkimai'" />
   </div>

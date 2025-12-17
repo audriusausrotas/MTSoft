@@ -179,75 +179,75 @@ export default function generateResults() {
     });
   }
 
-  if (results.gates.length > 0) {
-    results.gates.forEach((item) => {
-      if (item.name === "Stumdomi") {
-        if (item.auto === "Taip") {
-          createResultElement({
-            ...item,
-            name: settingsStore.defaultValues.gatesAuto,
-            quantity: 1,
-          });
-        } else {
-          createResultElement({
-            ...item,
-            name: settingsStore.defaultValues.gates,
-            quantity: 1,
-          });
-        }
-      } else if (item.name === "Varstomi") {
-        if (item.auto !== "Taip") {
-          createResultElement({
-            ...item,
-            name: settingsStore.defaultValues.gates2,
-            quantity: 1,
-          });
-        } else {
-          createResultElement({
-            ...item,
-            name: settingsStore.defaultValues.gates2Auto,
-            quantity: 1,
-          });
-        }
-      } else if (item.name === "Segmentiniai") {
-        createResultElement({
-          ...item,
-          name: settingsStore.defaultValues.gateSegment,
-          quantity: 1,
-        });
-        createWorkElement({
-          name: settingsStore.defaultValues.segmentGateWork,
-          quantity: 1,
-        });
-      } else {
-        if (item.option === "Gaminami") {
-          if (item.lock === "Elektromagnetinė") {
-            createResultElement({
-              ...item,
-              name: settingsStore.defaultValues.smallGates2,
-              quantity: 1,
-            });
-          } else {
-            createResultElement({
-              ...item,
-              name: settingsStore.defaultValues.smallGates,
-              quantity: 1,
-            });
-          }
-        } else {
-          createResultElement({
-            ...item,
-            name: settingsStore.defaultValues.smallGatesSegment,
-            quantity: 1,
-          });
-          createWorkElement({
-            name: settingsStore.defaultValues.segmentGatesWork,
-            quantity: 1,
-          });
-        }
-      }
-    });
-  }
+  // if (results.gates.length > 0) {
+  //   results.gates.forEach((item) => {
+  //     if (item.name === "Stumdomi") {
+  //       if (item.auto === "Taip") {
+  //         createResultElement({
+  //           ...item,
+  //           name: settingsStore.defaultValues.gatesAuto,
+  //           quantity: 1,
+  //         });
+  //       } else {
+  //         createResultElement({
+  //           ...item,
+  //           name: settingsStore.defaultValues.gates,
+  //           quantity: 1,
+  //         });
+  //       }
+  //     } else if (item.name === "Varstomi") {
+  //       if (item.auto !== "Taip") {
+  //         createResultElement({
+  //           ...item,
+  //           name: settingsStore.defaultValues.gates2,
+  //           quantity: 1,
+  //         });
+  //       } else {
+  //         createResultElement({
+  //           ...item,
+  //           name: settingsStore.defaultValues.gates2Auto,
+  //           quantity: 1,
+  //         });
+  //       }
+  //     } else if (item.name === "Segmentiniai") {
+  //       createResultElement({
+  //         ...item,
+  //         name: settingsStore.defaultValues.gateSegment,
+  //         quantity: 1,
+  //       });
+  //       createWorkElement({
+  //         name: settingsStore.defaultValues.segmentGateWork,
+  //         quantity: 1,
+  //       });
+  //     } else {
+  //       if (item.option === "Gaminami") {
+  //         if (item.lock === "Elektromagnetinė") {
+  //           createResultElement({
+  //             ...item,
+  //             name: settingsStore.defaultValues.smallGates2,
+  //             quantity: 1,
+  //           });
+  //         } else {
+  //           createResultElement({
+  //             ...item,
+  //             name: settingsStore.defaultValues.smallGates,
+  //             quantity: 1,
+  //           });
+  //         }
+  //       } else {
+  //         createResultElement({
+  //           ...item,
+  //           name: settingsStore.defaultValues.smallGatesSegment,
+  //           quantity: 1,
+  //         });
+  //         createWorkElement({
+  //           name: settingsStore.defaultValues.segmentGatesWork,
+  //           quantity: 1,
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   // calculate works
 

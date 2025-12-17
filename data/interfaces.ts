@@ -226,7 +226,7 @@ export interface Product {
   _id: Types.ObjectId;
   name: string;
   prices: SeeThroughPrice;
-  profit: ProductProfitPercents;
+  profit: Profit;
   category: string;
 }
 
@@ -611,7 +611,7 @@ export interface profitPercents {
   ecoWholesale: number;
 }
 
-export interface ProductProfitPercents {
+export interface Profit {
   retail: number;
   wholesale: number;
 }
@@ -625,4 +625,29 @@ export interface FenceSetup {
   steps: SeeThroughSteps;
   prices: PriceTier;
   profit: profitPercents;
+}
+
+export interface PriceBlock {
+  frame: number;
+  automation?: number;
+  installation: number;
+  inox?: number;
+  locinox?: number;
+  iseo_el?: number;
+  locinox_el?: number;
+}
+
+export interface Prices {
+  cost: PriceBlock;
+  priceRetail: PriceBlock;
+  priceWholesale: PriceBlock;
+}
+
+export interface Gates {
+  _id?: Types.ObjectId;
+  name: string;
+  length: number;
+  category: "varstomi" | "stumdomi" | "varteliai";
+  profit: Profit;
+  prices: Prices;
 }
