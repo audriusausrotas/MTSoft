@@ -116,14 +116,14 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col" :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'">
     <p v-if="props.fence.comment">{{ props.fence.comment }}</p>
-    <div class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0">
-      <p class="w-40 flex items-center justify-center h-full border-r border-black">
+    <div class="flex items-center font-bold text-lg border-black border-t border-r border-l">
+      <p class="w-40 flex items-center justify-center h-full border-black">
         {{ props.fence.side }}
       </p>
       <p
-        class="w-40 flex items-center justify-center h-full border-r border-black"
+        class="w-40 flex items-center justify-center h-full border-black"
         :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
       >
         {{ props.fence.color }}
@@ -149,13 +149,13 @@ watch(
     </div>
 
     <div class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0">
-      <p class="w-40 flex items-center justify-center h-full border-r border-black">
+      <p class="w-40 flex items-center justify-center h-full border-black">
         {{ props.fence.manufacturer || "Nežinoma" }}
       </p>
       <p class="w-40 flex items-center justify-center h-full border-r border-black">
         {{ props.fence.material }}
       </p>
-      <p class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black">
+      <p class="flex-1 min-w-fit flex items-center justify-center h-full border-black">
         {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }} -
         {{ step ? step + " cm" : "" }}
       </p>

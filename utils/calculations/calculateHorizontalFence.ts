@@ -1,9 +1,6 @@
 import type { Fence, Fences } from "~/data/interfaces";
 
-export default function calculateHorizontalFence(
-  fenceTemp: Fences[],
-  item: Fence
-) {
+export default function calculateHorizontalFence(fenceTemp: Fences[], item: Fence) {
   const tempFence: Fences[] = [...fenceTemp];
   const units = useCalculationsStore().units;
 
@@ -24,6 +21,7 @@ export default function calculateHorizontalFence(
       fenceItem.name === item.name &&
       fenceItem.color === item.color &&
       fenceItem.material === item.material &&
+      fenceItem.manufacturer === item.manufacturer &&
       fenceItem.space === item.space &&
       fenceItem.seeThrough === item.seeThrough &&
       fenceItem.direction === item.direction

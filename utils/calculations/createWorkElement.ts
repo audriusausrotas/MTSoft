@@ -2,10 +2,7 @@ import type { Works } from "~/data/interfaces";
 import { v4 as uuidv4 } from "uuid";
 import getProductPrice from "~/utils/calculations/getProductPrice";
 
-export default function createWorkElement(item: {
-  name: string;
-  quantity: number;
-}) {
+export default function createWorkElement(item: { name: string; quantity: number }) {
   const product: any = getProductPrice(item.name);
   const retail = useCalculationsStore().retail;
   const backupStore = useBackupStore();
@@ -28,19 +25,21 @@ export default function createWorkElement(item: {
     price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
   }
 
-  const totalPrice = +(price * item.quantity).toFixed(2);
-  const totalCost = +(cost * item.quantity).toFixed(2);
-  const profit = +(totalPrice - totalCost).toFixed(2);
-  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
-  let roundedQuantity = +item.quantity.toFixed(2);
+  let calculatedQuantity = item.quantity;
 
   if (item.name.toLowerCase() === "transportas" && backupExist && backup) {
-    roundedQuantity = backup.quantity;
+    calculatedQuantity = backup.quantity;
   }
+
+  const totalPrice = +(price * calculatedQuantity).toFixed(2);
+  const totalCost = +(cost * calculatedQuantity).toFixed(2);
+  const profit = +(totalPrice - totalCost).toFixed(2);
+  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+
   const resultData: Works = {
     id: uuidv4(),
     name: item.name,
-    quantity: roundedQuantity,
+    quantity: calculatedQuantity,
     price,
     totalPrice: totalPrice,
     cost,

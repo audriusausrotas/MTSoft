@@ -1,8 +1,6 @@
 import type { UserRights } from "~/data/interfaces";
 
-export const fetchInitialUserData = async (
-  userRights: UserRights | undefined
-) => {
+export const fetchInitialUserData = async (userRights: UserRights | undefined) => {
   const fetchData = [fetchUsers()];
 
   if (userRights?.project || userRights?.warehouse) {
@@ -10,7 +8,10 @@ export const fetchInitialUserData = async (
     fetchData.push(fetchSuppliers());
   }
   if (userRights?.schedule) fetchData.push(fetchSchedules());
-  if (userRights?.production) fetchData.push(fetchProductions());
+  if (userRights?.production) {
+    fetchData.push(fetchProductions());
+    fetchData.push(fetchFences());
+  }
   if (userRights?.installation) fetchData.push(fetchInstallation());
   if (userRights?.orders) fetchData.push(fetchOrders());
   if (userRights?.gate) fetchData.push(fetchGates());

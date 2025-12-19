@@ -17,11 +17,13 @@ export default function calculateFenceboardFence(
     item.twoSided
   );
 
+  const convertedHeight = item.direction === "Vertikali" ? measure.height : measure.length;
+
   const initialFenceData = {
     name: item.name,
     color: item.color,
     length: 0,
-    height: item.direction === "Vertikali" ? measure.height : measure.length,
+    height: convertedHeight,
     quantity: 0,
     elements: 0,
     material: item.material,
@@ -40,7 +42,7 @@ export default function calculateFenceboardFence(
       fenceItem.manufacturer === item.manufacturer &&
       fenceItem.space === item.space &&
       fenceItem.direction === item.direction &&
-      fenceItem.height === measure.height &&
+      fenceItem.height === convertedHeight &&
       fenceItem.twoSided === item.twoSided
     ) {
       fenceItem.elements += elements;

@@ -15,6 +15,7 @@ const productionStore = useProductionStore();
 const userStore = useUserStore();
 
 const isAdmin = userStore.user?.accountType === "Administratorius";
+const isGate = computed(() => props.data.gates?.exist || false);
 
 const cut = ref<number>(props.data.cut);
 const done = ref<number>(props.data.done);
@@ -115,6 +116,32 @@ const saveHandler = async (field: string) => {
     }
 
     iMadeChanges.value = false;
+  } else {
+    setError(response.message);
+  }
+};
+
+const gateHandler = async () => {
+  if (!isAdmin) return;
+
+  const requestData = {
+    _id: props._id,
+    index: props.fenceIndex,
+    measureIndex: props.index,
+    value: !isGate.value,
+  };
+
+  const response: any = await request.patch("updateProductionGate", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      productionStore.updateGate(
+        response.data._id,
+        response.data.index,
+        response.data.measureIndex,
+        response.data.value
+      );
+    setSuccess(response.message);
   } else {
     setError(response.message);
   }
@@ -286,7 +313,6 @@ watch(
       }
       if (fence.done !== done.value) {
         done.value = +fence.done;
-        console.log(done.value, fence.done);
       }
       if (fence.height !== height.value) {
         height.value = +fence.height;
@@ -360,12 +386,13 @@ watch(
     </div>
   </div>
   <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none">
-    <p
+    <div
+      @click="gateHandler"
       class="w-10 flex items-center justify-center h-full border-x border-black"
-      :class="indexColor"
+      :class="(indexColor, isAdmin ? 'hover:cursor-pointer' : '')"
     >
-      {{ props.index + 1 }} {{ props.data.gates.exist ? "v" : "" }}
-    </p>
+      {{ props.index + 1 }} {{ isGate ? "v" : "" }}
+    </div>
 
     <div class="w-20 flex items-center justify-center h-full border-r border-black px-1">
       <input
