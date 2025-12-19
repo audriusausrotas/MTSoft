@@ -86,6 +86,8 @@ export interface Fence {
 }
 
 export interface Measure {
+  _id?: Types.ObjectId;
+  index?: number;
   length: number;
   height: number;
   MeasureSpace: number;

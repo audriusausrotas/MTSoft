@@ -1,11 +1,4 @@
-import type {
-  Client,
-  Measure,
-  Result,
-  MenuLinks,
-  Works,
-  Fence,
-} from "~/data/interfaces";
+import type { Client, Measure, Result, MenuLinks, Works } from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -25,6 +18,7 @@ export const initialWorkData: Works = {
   margin: 0,
   profit: 0,
   done: false,
+  retail: false,
 };
 
 export const initialResultData: Result = {
@@ -47,6 +41,10 @@ export const initialResultData: Result = {
   width: null,
   delivered: false,
   ordered: false,
+  retail: false,
+  units: false,
+  material: "",
+  manufacturer: "Arcelor",
 };
 
 export const navigationLinks: MenuLinks[] = [
@@ -99,3 +97,14 @@ export const createInitialMeasure = (): Measure => ({
     direction: "Aukštyn",
   },
 });
+
+export const RALcolors = {
+  "7016": "#686B7A",
+  "7024": "#7E8394",
+  "8019": "#785853",
+  "8017": "#8C4F45",
+  "6020": "#4D7849",
+  "6005": "#289E4B",
+  "9005": "#0A0A0A",
+  "3009": "#D15441",
+};

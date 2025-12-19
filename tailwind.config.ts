@@ -1,3 +1,5 @@
+import { RALcolors } from "./data/initialValues";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -8,6 +10,7 @@ export default {
     "./app.vue",
     "./error.vue",
   ],
+  safelist: [...Object.values(RALcolors).map((color) => `bg-[${color}]`)],
   theme: {
     extend: {
       colors: {

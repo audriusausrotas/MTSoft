@@ -1,3 +1,4 @@
+import type { FenceSetup } from "~/data/interfaces";
 import createResultElement from "~/utils/calculations/createResultElement";
 import createWorkElement from "~/utils/calculations/createWorkElement";
 
@@ -14,17 +15,18 @@ export default function generateResults() {
 
       if (item.holes === "Taip") {
         const fenceSettings = settingsStore.fences.find(
-          (fence) => fence.name === item.name
+          (fence: FenceSetup) => fence.name === item.name
         );
 
-        const holesQuantity =
-          (fenceSettings?.details?.holes || 0) * results.totalElements;
+        if (fenceSettings?.category === "Tvora") {
+          const holesQuantity = (fenceSettings?.details?.holes || 0) * results.totalElements;
 
-        if (holesQuantity)
-          createWorkElement({
-            name: settingsStore.defaultValues.holesWork,
-            quantity: holesQuantity,
-          });
+          if (holesQuantity)
+            createWorkElement({
+              name: settingsStore.defaultValues.holesWork,
+              quantity: holesQuantity,
+            });
+        }
       }
 
       if (item.name.includes("Dilė")) {
@@ -134,9 +136,7 @@ export default function generateResults() {
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.rivets,
@@ -147,9 +147,7 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil(
-        (item.quantity + item.quantity * 0.1) / 1000
-      );
+      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.bolts,
