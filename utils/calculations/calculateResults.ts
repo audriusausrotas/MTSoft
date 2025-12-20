@@ -48,6 +48,11 @@ export default function calculateResults() {
     item.measures.forEach((measure) => {
       const isFence = !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
 
+      //calculate holes
+      if (item.holes === "Taip" && fenceSettings.category === "Tvora") {
+        results.addTotalHoles(measure.elements * fenceSettings.details.holes);
+      }
+
       // calculate gates
       if (measure.gates.exist) {
         results.addGates({
@@ -56,6 +61,7 @@ export default function calculateResults() {
           auto: measure.length > 200 ? measure.gates.automatics : "",
           width: measure.length,
           height: measure.height,
+          installation: measure.gates.installation,
           color: item.color,
           filling: item.name,
           ready: false,

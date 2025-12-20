@@ -45,6 +45,9 @@ export const initialResultData: Result = {
   units: false,
   material: "",
   manufacturer: "Arcelor",
+  auto: "Taip",
+  lock: "Inox",
+  installation: "Taip",
 };
 
 export const navigationLinks: MenuLinks[] = [
@@ -76,15 +79,17 @@ export const createInitialMeasure = (): Measure => ({
   height: 0,
   MeasureSpace: 0,
   elements: 0,
+
   gates: {
     exist: false,
     name: "Stumdomi",
     automatics: "Taip",
     comment: "",
     direction: "Nežinoma",
-    lock: "Paprasta",
+    lock: "Inox",
     bankette: "Taip",
     option: "Gaminami",
+    installation: "Taip",
   },
   kampas: {
     exist: false,

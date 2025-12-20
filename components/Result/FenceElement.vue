@@ -7,16 +7,14 @@ const settingsStore = useSettingsStore();
 
 const isFenceboard = computed(
   () =>
-    settingsStore.fences.find((fence) => fence.name === props.result?.name)
-      ?.category === "Tvoralentė"
+    settingsStore.fences.find((fence) => fence.name === props.result?.name)?.category ===
+    "Tvoralentė"
 );
 
 const isFence = computed(
   () =>
     settingsStore.fences.find(
-      (fence) =>
-        fence.name.toLowerCase().trim() ===
-        props.result?.name.toLowerCase().trim()
+      (fence) => fence.name.toLowerCase().trim() === props.result?.name.toLowerCase().trim()
     )?.category === "Tvora"
 );
 
@@ -28,12 +26,7 @@ const colorEditable = computed(
 <template>
   <div class="flex flex-wrap gap-4 p-4">
     <div class="flex flex-col gap-8">
-      <BaseInput
-        label="Nr"
-        width="w-10"
-        :disable="true"
-        :name="props.index + 1"
-      />
+      <BaseInput label="Nr" width="w-10" :disable="true" :name="props.index + 1" />
       <NuxtImg
         src="/icons/delete.svg"
         width="20"
@@ -99,34 +92,14 @@ const colorEditable = computed(
         :name="props.result.totalCost"
         :disable="true"
       />
-      <BaseInput
-        width="w-24"
-        label="viso kaina"
-        :name="props.result.totalPrice"
-        :disable="true"
-      />
+      <BaseInput width="w-24" label="viso kaina" :name="props.result.totalPrice" :disable="true" />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput
-        width="w-24"
-        label="marža"
-        :name="props.result.margin + ' %'"
-        :disable="true"
-      />
-      <BaseInput
-        width="w-24"
-        :name="props.result.profit"
-        label="pelnas"
-        :disable="true"
-      />
+      <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" :disable="true" />
+      <BaseInput width="w-24" :name="props.result.profit" label="pelnas" :disable="true" />
     </div>
     <div v-if="isFenceboard" class="flex flex-col gap-2">
-      <BaseInput
-        label="Ilgis"
-        :name="props.result.height"
-        :disable="true"
-        width="w-24"
-      />
+      <BaseInput label="Ilgis" :name="props.result.height" :disable="true" width="w-24" />
       <BaseInput
         v-if="isFenceboard"
         :name="props.result.direction"
@@ -136,7 +109,7 @@ const colorEditable = computed(
       />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput
+      <!-- <BaseInput
         v-if="isFenceboard"
         width="w-24"
         label="dvipusė"
@@ -149,7 +122,7 @@ const colorEditable = computed(
         label="tarpas"
         :name="props.result.space"
         :disable="true"
-      />
+      /> -->
       <BaseInput
         v-if="isFence"
         label="pramatomumas"

@@ -1,25 +1,19 @@
 <script setup lang="ts">
-const props = defineProps([
-  "result",
-  "index",
-  "hidePrices",
-  "_id",
-  "showbuttons",
-  "location",
-]);
+const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons", "location"]);
 const emit = defineEmits(["checked", "unchecked"]);
 
 const { setError, setSuccess } = useError();
 
 const measurement = ref<string>("vnt");
+const isGate =
+  props.result.category === "stumdomi" ||
+  props.result.category === "varstomi" ||
+  props.result.category === "varteliai";
 
 if (props.result.category === "Tvora" || props.result.category === "tvoros") {
   props.result.units ? (measurement.value = "m2") : (measurement.value = "m");
 }
-if (
-  props.result.name.includes("Apkaustai") ||
-  props.result.name.includes("metras")
-)
+if (props.result.name.includes("Apkaustai") || props.result.name.includes("metras"))
   measurement.value = "m";
 
 const deliverHandler = async (value: boolean) => {
@@ -62,11 +56,7 @@ const selectData = (value: boolean) => {
   const data = {
     name:
       props?.result?.category === "Tvoralentė"
-        ? props?.result?.name +
-          ", H-" +
-          props.result.height +
-          " " +
-          props.result.material
+        ? props?.result?.name + ", H-" + props.result.height + " " + props.result.material
         : props?.result?.name,
     color: props?.result?.color,
     quantity: props?.result?.quantity,
@@ -100,22 +90,23 @@ const selectData = (value: boolean) => {
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 lg:gap-8">
         <span class="w-fit">{{ props?.result?.name }}</span>
+        <span v-if="isGate">su {{ props.result.auto === "Taip" ? "automatika" : "" }}</span>
+        <span v-if="isGate"
+          >{{ props.result.auto === "Taip" ? "ir " : "" }}
+          {{ props.result.installation === "Taip" ? "montavimu" : "" }}</span
+        >
+        <span v-if="isGate">{{
+          props.result.lock.includes("el.") ? "elektromagnetine spyna" : ""
+        }}</span>
         <span v-if="props?.result?.category === 'Tvora'">{{
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>
-        <span v-if="props?.result?.category === 'Tvora'">{{
-          props?.result?.seeThrough
-        }}</span>
-        <span v-if="props?.result?.category === 'Tvoralentė'"
-          >H-{{ props?.result?.height }}</span
-        >
-        <span
-          v-if="props?.result?.color && !props?.result?.name?.includes('RAL')"
+        <span v-if="props?.result?.category === 'Tvora'">{{ props?.result?.seeThrough }}</span>
+        <span v-if="props?.result?.category === 'Tvoralentė'">H-{{ props?.result?.height }}</span>
+        <span v-if="props?.result?.color && !props?.result?.name?.includes('RAL')"
           >RAL {{ props?.result?.color }}</span
         >
-        <span v-if="props?.result?.category === 'Tvoralentė'">
-          {{ props.result.material }}</span
-        >
+        <span v-if="props?.result?.category === 'Tvoralentė'"> {{ props.result.material }}</span>
         <span v-if="props?.result?.category.toLowerCase() === 'vartai'"
           >plotis: {{ props?.result?.width }} cm
         </span>
@@ -187,9 +178,7 @@ const selectData = (value: boolean) => {
         <p class="block lg:hidden font-bold">Užsakyta:</p>
         <div
           class="w-16 items-center"
-          :class="
-            props?.location === 'installation' ? 'pointer-events-none ' : ''
-          "
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
         >
           <BaseCheckField
             :name="'vartai' + index"
@@ -203,9 +192,7 @@ const selectData = (value: boolean) => {
         <p class="block lg:hidden font-bold">Pristatyta:</p>
         <div
           class="w-16 items-center"
-          :class="
-            props?.location === 'installation' ? 'pointer-events-none ' : ''
-          "
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
         >
           <BaseCheckField
             :name="'vartai' + index"

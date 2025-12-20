@@ -129,6 +129,9 @@ export interface Result {
   units: boolean;
   material: string;
   manufacturer: string;
+  auto: string;
+  lock: string;
+  installation: string;
 }
 
 export interface OtherParts {
@@ -181,6 +184,7 @@ export interface Gate {
   lock: string;
   comment: string;
   option: string;
+  installation: string;
 }
 
 export interface GateSchema {
@@ -211,6 +215,7 @@ export interface GateInfo {
   lock: string;
   bankette: string;
   option: string;
+  installation: string;
 }
 
 export interface User {

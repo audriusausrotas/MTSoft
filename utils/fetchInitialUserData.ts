@@ -19,6 +19,7 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
   if (userRights?.admin) {
     fetchData.push(
       fetchFences(),
+      fetchGateData(),
       fetchSelects(),
       fetchProducts(),
       fetchClients(),

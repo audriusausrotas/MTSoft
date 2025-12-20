@@ -28,6 +28,7 @@ export const useResultsStore = defineStore("results", {
     rivets: [] as OtherParts[],
     bolts: [] as OtherParts[],
     totalElements: 0 as number,
+    totalHoles: 0 as number,
     bindingsLength: [] as OtherParts[],
     segments: [] as OtherParts[],
     totalSegments: 0 as number,
@@ -229,6 +230,7 @@ export const useResultsStore = defineStore("results", {
       this.crossbars = [];
       this.crossbarHolders = [];
       this.totalElements = 0;
+      this.totalHoles = 0;
       this.bindingsLength = [];
       this.segments = [];
       this.segmentHolders = [];
@@ -382,6 +384,10 @@ export const useResultsStore = defineStore("results", {
       } else {
         this.rivets = this.addPart(this.rivets, color, Math.ceil(elements) * 4, 0);
       }
+    },
+
+    addTotalHoles(holes: number): void {
+      this.totalHoles += holes;
     },
 
     addRetailLeg(height: number, color: string, name: string): void {

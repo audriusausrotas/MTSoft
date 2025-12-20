@@ -10,9 +10,8 @@ const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
 
 const isSegment = computed(
   () =>
-    settingsStore.fences.find(
-      (fence) => fence.name === calculationsStore.fences[props.index].name
-    )?.category === "Segmentas"
+    settingsStore.fences.find((fence) => fence.name === calculationsStore.fences[props.index].name)
+      ?.category === "Segmentas"
 );
 
 function toggleCheckbox(value: boolean) {
@@ -33,19 +32,12 @@ function toggleCheckbox(value: boolean) {
         label="ilgis"
         type="number"
         variant="light"
-        :active="
-          calculationsStore.fences[props.index].measures.length - 1 ===
-          props.measureIndex
-        "
+        :active="calculationsStore.fences[props.index].measures.length - 1 === props.measureIndex"
         :name="props.measure.length"
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureLength(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            calculationsStore.updateMeasureLength(props.index, props.measureIndex, value)
         "
       />
 
@@ -60,11 +52,7 @@ function toggleCheckbox(value: boolean) {
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureHeight(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            calculationsStore.updateMeasureHeight(props.index, props.measureIndex, value)
         "
       />
 
@@ -74,18 +62,10 @@ function toggleCheckbox(value: boolean) {
         :disable="calculationsStore.retail || isSegment"
         label="elementai"
         :variant="isSegment ? '' : !calculationsStore.retail ? 'light' : ''"
-        :name="
-          isSegment
-            ? Math.ceil(props.measure.length / 255)
-            : props.measure.elements
-        "
+        :name="isSegment ? Math.ceil(props.measure.length / 255) : props.measure.elements"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureElements(
-              props.index,
-              props.measureIndex,
-              value
-            )
+            calculationsStore.updateMeasureElements(props.index, props.measureIndex, value)
         "
       />
 
@@ -114,11 +94,7 @@ function toggleCheckbox(value: boolean) {
         :name="props.measure.kampas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampas(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            calculationsStore.updateMeasureKampas(props.index, value, props.measureIndex)
         "
       />
       <BaseInput
@@ -130,11 +106,7 @@ function toggleCheckbox(value: boolean) {
         :name="props.measure.kampas.comment"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampasComment(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            calculationsStore.updateMeasureKampasComment(props.index, value, props.measureIndex)
         "
       />
 
@@ -155,11 +127,7 @@ function toggleCheckbox(value: boolean) {
         :name="props.measure.laiptas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureLaiptas(
-              props.index,
-              value,
-              props.measureIndex
-            )
+            calculationsStore.updateMeasureLaiptas(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -183,21 +151,13 @@ function toggleCheckbox(value: boolean) {
         height="20"
         decoding="auto"
         class="hover:bg-red-ulta-light pb-3 rounded-xl hover:cursor-pointer"
-        @click="
-          calculationsStore.deleteMeasure(props.index, props.measureIndex)
-        "
+        @click="calculationsStore.deleteMeasure(props.index, props.measureIndex)"
       />
     </div>
 
-    <div
-      v-if="isChecked"
-      class="flex flex-wrap justify-center md:justify-between gap-2"
-    >
+    <div v-if="isChecked" class="flex flex-wrap justify-center md:justify-between gap-2">
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 &&
-          props.measure.gates.name !== 'Segmentiniai'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.name !== 'Segmentiniai'"
         :values="yesno"
         label="Automatika"
         id="automatics"
@@ -218,9 +178,7 @@ function toggleCheckbox(value: boolean) {
         "
       />
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 && props.measure.gates.name === 'Stumdomi'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.name === 'Stumdomi'"
         :values="yesno"
         id="bankette"
         label="vartų pamatas"
@@ -231,10 +189,7 @@ function toggleCheckbox(value: boolean) {
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length <= 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="gateDirection"
         id="gateDirection"
         label="vartelių atidarymas"
@@ -245,10 +200,7 @@ function toggleCheckbox(value: boolean) {
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length <= 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="settingsStore.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"

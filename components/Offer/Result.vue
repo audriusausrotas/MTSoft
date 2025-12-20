@@ -2,6 +2,11 @@
 const props = defineProps(["result", "index", "hidePrices"]);
 const measurement = ref<string>("vnt");
 
+const isGate =
+  props.result.category === "stumdomi" ||
+  props.result.category === "varstomi" ||
+  props.result.category === "varteliai";
+
 if (props.result.name.includes("Apkaustai")) measurement.value = "m";
 else if (props.result.category === "Tvora") measurement.value = "m2";
 else measurement.value = "vnt";
@@ -20,15 +25,19 @@ else measurement.value = "vnt";
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
       <div class="flex print:gap-4 gap-2 sm:gap-8">
         <span class="w-fit">{{ props.result.name }}</span>
+        <span v-if="isGate">su {{ props.result.auto === "Taip" ? "automatika" : "" }}</span>
+        <span v-if="isGate"
+          >{{ props.result.auto === "Taip" ? "ir " : "" }}
+          {{ props.result.installation === "Taip" ? "montavimu" : "" }}</span
+        >
+        <span v-if="isGate">{{
+          props.result.lock.includes("el.") ? "elektromagnetine spyna" : ""
+        }}</span>
         <span v-if="props.result.category === 'Tvora'">{{
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>
-        <span v-if="props.result.category === 'Tvora'">{{
-          props.result.seeThrough
-        }}</span>
-        <span v-if="props.result.category === 'Tvoralentė'"
-          >H-{{ props.result.height }}</span
-        >
+        <span v-if="props.result.category === 'Tvora'">{{ props.result.seeThrough }}</span>
+        <span v-if="props.result.category === 'Tvoralentė'">H-{{ props.result.height }}</span>
 
         <span v-if="props.result.color && !props.result.name.includes('RAL')"
           >RAL {{ props.result.color }}</span

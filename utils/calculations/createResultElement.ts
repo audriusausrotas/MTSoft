@@ -2,6 +2,7 @@ import type { Result } from "~/data/interfaces";
 import { v4 as uuidv4 } from "uuid";
 import getProductPrice from "./getProductPrice";
 import getFencePrice from "./getFencePrice";
+import getGatePrice from "./getGatePrice";
 
 export default function createResultElement(item: any) {
   const calculationStore = useCalculationsStore();
@@ -19,34 +20,61 @@ export default function createResultElement(item: any) {
   let price = 0;
 
   if (product) {
-    if (
-      backupExist &&
-      backup &&
-      backup.retail === retail &&
-      units === backup.units
-    ) {
+    if (backupExist && backup && backup.retail === retail && units === backup.units) {
       cost = backup.cost;
       price = backup.price;
     } else {
       cost = product.prices.cost;
-      price = retail
-        ? product.prices.priceRetail
-        : product.prices.priceWholesale;
+      price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
     }
   } else {
     product = getFencePrice(item.name);
 
+    if (!product) product = getGatePrice(item.name);
+
     if (!product) return;
 
     const retailCheck = backup?.retail === retail || null;
+    const checkName = item.name.toLowerCase().trim() === backup?.name.toLowerCase().trim() || null;
 
-    if (product?.category === "Tvora") {
+    // calculate gate price
+    if (
+      product?.category === "stumdomi" ||
+      product?.category === "varstomi" ||
+      product?.category === "varteliai"
+    ) {
+      console.log(item);
+      if (
+        backupExist &&
+        backup &&
+        retailCheck &&
+        checkName &&
+        backup.width === item.width &&
+        backup.auto === item.auto &&
+        backup.lock === item.lock &&
+        backup.installation === item.installation
+      ) {
+        cost = backup.cost;
+        price = backup.price;
+      } else {
+        const isRetail = retail ? "priceRetail" : "priceWholesale";
+        const lockName = item.lock.toLowerCase().replace(" ", "_").replace(".", "");
+
+        cost = product.prices.cost.frame || 0;
+        if (item.auto === "Taip") cost += product.prices.cost.automation || 0;
+        cost += product.prices.cost.installation || 0;
+        cost += product.prices.cost[lockName] || 0;
+
+        price = product.prices[isRetail].frame || 0;
+        if (item.auto === "Taip") price += product.prices[isRetail].automation || 0;
+        price += product.prices[isRetail].installation || 0;
+        price += product.prices[isRetail][lockName] || 0;
+      }
+      // calculate fence price
+    } else if (product?.category === "Tvora") {
       const checkSeethrough = item.seeThrough === backup?.seeThrough || null;
       const checkManufacturer = backup?.manufacturer || null;
       const checkUnits = units === backup?.units || null;
-      const checkName =
-        item.name.toLowerCase().trim() === backup?.name.toLowerCase().trim() ||
-        null;
 
       if (
         backupExist &&
@@ -69,9 +97,7 @@ export default function createResultElement(item: any) {
           : "meter";
 
         const source =
-          item.manufacturer === "Ukraina"
-            ? product.prices.eco
-            : product.prices.premium;
+          item.manufacturer === "Ukraina" ? product.prices.eco : product.prices.premium;
 
         const fenceData = source[fenceRename as keyof typeof source];
 
@@ -81,17 +107,14 @@ export default function createResultElement(item: any) {
       // if fenceboard
     } else if (product.category === "Tvoralentė") {
       price = +(
-        ((retail ? product.prices.priceRetail : product.prices.priceWholesale) *
-          item.height) /
+        ((retail ? product.prices.priceRetail : product.prices.priceWholesale) * item.height) /
         100
       ).toFixed(2);
       cost = +((product.prices.cost * item.height) / 100).toFixed(2);
 
       // other parts
     } else {
-      price = retail
-        ? +product.prices.priceRetail
-        : +product.prices.priceWholesale;
+      price = retail ? +product.prices.priceRetail : +product.prices.priceWholesale;
       cost = +product.prices.cost;
     }
   }
@@ -125,6 +148,9 @@ export default function createResultElement(item: any) {
     units,
     material: item.material || "",
     manufacturer: item.manufacturer || "",
+    auto: item.auto,
+    lock: item.lock,
+    installation: item.installation,
   };
 
   results.results.push(resultData);

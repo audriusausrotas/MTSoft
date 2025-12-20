@@ -30,4 +30,8 @@ export default function settingsListeners(socket: Socket) {
   socket.on("deleteFenceSettings", ({ _id }) => {
     settingsStore.deleteFence(_id);
   });
+
+  socket.on("updateGateData", (data) => {
+    settingsStore.updateGateData(data);
+  });
 }

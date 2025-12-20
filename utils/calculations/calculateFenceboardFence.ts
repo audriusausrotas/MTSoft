@@ -42,8 +42,8 @@ export default function calculateFenceboardFence(
       fenceItem.manufacturer === item.manufacturer &&
       fenceItem.space === item.space &&
       fenceItem.direction === item.direction &&
-      fenceItem.height === convertedHeight &&
-      fenceItem.twoSided === item.twoSided
+      fenceItem.height === convertedHeight
+      // fenceItem.twoSided === item.twoSided
     ) {
       fenceItem.elements += elements;
       fenceItem.quantity += elements;
