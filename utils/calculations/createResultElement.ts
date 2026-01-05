@@ -43,7 +43,6 @@ export default function createResultElement(item: any) {
       product?.category === "varstomi" ||
       product?.category === "varteliai"
     ) {
-      console.log(item);
       if (
         backupExist &&
         backup &&

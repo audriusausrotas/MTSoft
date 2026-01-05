@@ -197,25 +197,12 @@ export default function generateResults() {
         return;
       }
 
-      const length = Math.ceil(item.width) / 100;
-      const gate = gates.find((gate) => {
-        console.log(
-          "checking gate category:",
-          gate.category,
-          "length:",
-          gate.length,
-          "vs item.name:",
-          item.name,
-          "length:",
-          length
-        );
-        return gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length;
-      });
+      const length = Math.ceil(item.width);
+      const gate = gates.find(
+        (gate) => gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length
+      );
 
-      if (!gate) {
-        console.log("Vartai nerasti");
-        return;
-      }
+      if (!gate) return;
 
       createResultElement({
         ...item,
