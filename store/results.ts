@@ -124,7 +124,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateWorkQuantity(index: number, value: number): void {
-      this.works[index].quantity = +value;
+      this.works[index].quantity = +value.toFixed(2);
       this.recalculateWorkTotals(index);
     },
 
