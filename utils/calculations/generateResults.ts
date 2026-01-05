@@ -170,7 +170,7 @@ export default function generateResults() {
 
   if (results.gates.length > 0) {
     const gates = useSettingsStore().gates;
-    
+
     results.gates.forEach((item) => {
       if (item.option === "Segmentiniai") {
         if (item.name === "Varteliai") {
@@ -201,6 +201,9 @@ export default function generateResults() {
       const gate = gates.find(
         (gate) => gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length
       );
+      console.log(gate);
+
+      console.log(gates);
 
       if (!gate) return;
 
