@@ -197,7 +197,7 @@ export default function generateResults() {
         return;
       }
 
-      const length = Math.ceil(item.width);
+      const length = Math.ceil(item.width) / 100;
       const gate = gates.find((gate) => {
         console.log(
           "checking gate category:",
