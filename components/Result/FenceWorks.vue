@@ -39,7 +39,7 @@ const resultsStore = useResultsStore();
           type="number"
           :name="props.work.quantity"
           :disable="false"
-          @onChange="(value) => resultsStore.updateWorkQuantity(props.index, value)"
+          @onChange="(value) => resultsStore.updateWorkQuantity(props.index, +value)"
         />
 
         <BaseInput

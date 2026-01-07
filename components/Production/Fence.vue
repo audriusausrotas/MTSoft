@@ -149,15 +149,15 @@ watch(
     </div>
 
     <div class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0">
-      <p class="w-40 flex items-center justify-center h-full border-black">
+      <p class="w-40 flex items-center justify-center h-full border-r border-black">
         {{ props.fence.manufacturer || "Nežinoma" }}
       </p>
       <p class="w-40 flex items-center justify-center h-full border-r border-black">
         {{ props.fence.material }}
       </p>
       <p class="flex-1 min-w-fit flex items-center justify-center h-full border-black">
-        {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }} -
-        {{ step ? step + " cm" : "" }}
+        {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }}
+        {{ step ? " - " + step + " cm" : "" }}
       </p>
       <div
         v-if="isAdmin"

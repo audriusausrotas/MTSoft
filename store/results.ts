@@ -106,7 +106,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateQuantity(index: number, value: number): void {
-      this.results[index].quantity = +value;
+      this.results[index].quantity = value;
       this.recalculateTotals(index);
     },
 
@@ -124,7 +124,7 @@ export const useResultsStore = defineStore("results", {
     },
 
     updateWorkQuantity(index: number, value: number): void {
-      this.works[index].quantity = +value.toFixed(2);
+      this.works[index].quantity = +value;
       this.recalculateWorkTotals(index);
     },
 
@@ -133,6 +133,7 @@ export const useResultsStore = defineStore("results", {
     },
     updateWorkName(index: number, value: string): void {
       this.works[index].name = value;
+      this.recalculateWorkTotals(index);
     },
 
     updateWorkPrice(index: number, value: number): void {

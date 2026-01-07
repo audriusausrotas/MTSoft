@@ -72,7 +72,7 @@ export default function createResultElement(item: any) {
       // calculate fence price
     } else if (product?.category === "Tvora") {
       const checkSeethrough = item.seeThrough === backup?.seeThrough || null;
-      const checkManufacturer = backup?.manufacturer || null;
+      const checkManufacturer = backup?.manufacturer === item.manufacturer || null;
       const checkUnits = units === backup?.units || null;
 
       if (
@@ -94,7 +94,6 @@ export default function createResultElement(item: any) {
               .replace("50% Pramatomumas", "pramatoma50")
               .toLowerCase()
           : "meter";
-
         const source =
           item.manufacturer === "Ukraina" ? product.prices.eco : product.prices.premium;
 
