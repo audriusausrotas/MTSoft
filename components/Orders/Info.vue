@@ -14,79 +14,89 @@ const clipboardHandler = async (value: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex gap-4 w-full flex-wrap justify-around lg:justify-normal">
-      <BaseInput
-        :disable="true"
-        :name="props.order?.client?.username"
-        label="klientas"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.client?.username)"
-      />
-      <BaseInput
-        :disable="true"
-        :name="props.order?.client?.address"
-        label="adresas"
-        width="w-96"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.client?.address)"
-      />
+  <div class="flex flex-col gap-12">
+    <div class="flex justify-center lg:justify-between gap-4 flex-wrap">
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xl font-semibold">Pristatymo duomenys</h3>
+        <BaseInput
+          :disable="true"
+          :name="props.order?.orderDate"
+          label="Užsakymo data"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.orderDate)"
+        />
+        <BaseInput
+          :disable="true"
+          :name="props.order?.deliveryDate"
+          label="Pristatyti iki"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.deliveryDate)"
+        />
 
-      <BaseInput
-        :disable="true"
-        :name="props.order?.client?.phone"
-        label="telefono numeris"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.client?.phone)"
-      />
+        <BaseInput
+          :disable="true"
+          :name="props.order?.deliveryMethod"
+          label="Pristatymas"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.deliveryMethod)"
+        />
+      </div>
 
-      <BaseInput
-        :disable="true"
-        :name="props.order?.creator?.username"
-        label="Užsakovas"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.creator?.username)"
-      />
-    </div>
-    <div class="flex gap-4 w-full flex-wrap justify-around lg:justify-normal">
-      <BaseInput
-        :disable="true"
-        :name="props.order?.orderNr"
-        label="Užsakymo numeris"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.client?.orderNr)"
-      />
-      <BaseInput
-        :disable="true"
-        :name="props.order?.deliveryMethod"
-        label="Pristatymas"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.deliveryMethod)"
-      />
-      <BaseInput
-        :disable="true"
-        :name="props.order?.orderDate"
-        label="Užsakymo data"
-        width="w-48"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.orderDate)"
-      />
-      <BaseInput
-        :disable="true"
-        :name="props.order?.deliveryDate"
-        label="Pristyti iki"
-        width="w-48"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.deliveryDate)"
-      />
-      <BaseInput
-        :disable="true"
-        :name="props.order?.status ? 'Užsakyta' : 'Baigta'"
-        label="Būsena"
-        width="w-56"
-        class="hover:cursor-pointer"
-        @click="clipboardHandler(props.order?.status ? 'Užsakyta' : 'Baigta')"
-      />
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xl font-semibold">Užsakymo duomenys</h3>
+
+        <BaseInput
+          :disable="true"
+          :name="props.order?.creator?.email"
+          label="Užsakovas"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.creator?.username)"
+        />
+        <BaseInput
+          :disable="true"
+          :name="props.order?.status ? 'Užsakyta' : 'Baigta'"
+          label="Būsena"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.status ? 'Užsakyta' : 'Baigta')"
+        />
+
+        <BaseInput
+          :disable="true"
+          :name="props.order?.orderNr"
+          label="Užsakymo numeris"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.client?.orderNr)"
+        />
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xl font-semibold">Kliento duomenys</h3>
+        <BaseInput
+          :disable="true"
+          :name="props.order?.client?.username"
+          label="klientas"
+          width="w-80"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.client?.username)"
+        />
+        <BaseInput
+          :disable="true"
+          :name="props.order?.client?.address"
+          label="adresas"
+          width="w-80"
+          class="hover:cursor-pointer"
+          @click="clipboardHandler(props.order?.client?.address)"
+        />
+
+        <BaseInput
+          :disable="true"
+          :name="props.order?.client?.phone"
+          label="telefono numeris"
+          class="hover:cursor-pointer"
+          width="w-80"
+          @click="clipboardHandler(props.order?.client?.phone)"
+        />
+      </div>
     </div>
   </div>
 </template>

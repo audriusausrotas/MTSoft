@@ -6,6 +6,7 @@ const username = ref<string>("");
 const email = ref<string>("");
 const phone = ref<string>("");
 const address = ref<string>("");
+const company = ref<string>("");
 
 const saveHandler = async () => {
   const supplier = {
@@ -13,12 +14,12 @@ const saveHandler = async () => {
     email: email.value,
     phone: phone.value,
     address: address.value,
+    company: company.value,
   };
 
   const response: any = await request.post("newSupplier", supplier);
   if (response.success) {
-    !useSocketStore().connected &&
-      useSuppliersStore().addSupplier(response.data);
+    !useSocketStore().connected && useSuppliersStore().addSupplier(response.data);
     setSuccess(response.message);
   } else {
     setError(response.message);
@@ -32,6 +33,7 @@ const cancelHandler = () => {
   email.value = "";
   phone.value = "";
   address.value = "";
+  company.value = "";
   open.value = false;
 };
 </script>
@@ -45,10 +47,11 @@ const cancelHandler = () => {
         <BaseButton name="Atšaukti" @click="cancelHandler" />
       </div>
       <div class="flex gap-4 flex-wrap">
+        <BaseInput label="Vardas" placeholder="vardas" @onChange="(value) => (username = value)" />
         <BaseInput
-          label="Vardas"
-          placeholder="vardas"
-          @onChange="(value) => (username = value)"
+          label="įmonė"
+          placeholder="įmonės pavadinimas"
+          @onChange="(value) => (company = value)"
         />
         <BaseInput
           label="el. paštas"
@@ -60,11 +63,7 @@ const cancelHandler = () => {
           placeholder="telefono numeris"
           @onChange="(value) => (phone = value)"
         />
-        <BaseInput
-          label="adresas"
-          placeholder="adresas"
-          @onChange="(value) => (address = value)"
-        />
+        <BaseInput label="adresas" placeholder="adresas" @onChange="(value) => (address = value)" />
       </div>
     </div>
   </div>

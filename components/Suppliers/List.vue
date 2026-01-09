@@ -6,8 +6,7 @@ const deleteHandler = async (_id: string) => {
   const response: any = await request.delete(`deleteSupplier/${_id}`);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      suppliersStore.deleteSupplier(response.data._id);
+    !useSocketStore().connected && suppliersStore.deleteSupplier(response.data._id);
     setSuccess(response.message);
   } else {
     setError(response.message);
@@ -20,6 +19,7 @@ const deleteHandler = async (_id: string) => {
     <div class="flex gap-4 border-b">
       <p class="w-6">Nr</p>
       <p class="w-60">Vardas</p>
+      <p class="w-60">Įmonė</p>
       <p class="w-60">El. Paštas</p>
       <p class="w-28">Telefonas</p>
       <p class="w-60">Adresas</p>
@@ -31,13 +31,11 @@ const deleteHandler = async (_id: string) => {
     >
       <p class="w-6">{{ index + 1 }}</p>
       <p class="w-60">{{ supplier?.username }}</p>
+      <p class="w-60">{{ supplier?.company }}</p>
       <p class="w-60">{{ supplier?.email }}</p>
       <p class="w-28">{{ supplier?.phone }}</p>
       <p class="w-60">{{ supplier?.address }}</p>
-      <div
-        @click="deleteHandler(supplier._id!)"
-        class="w-6 hover:cursor-pointer"
-      >
+      <div @click="deleteHandler(supplier._id!)" class="w-6 hover:cursor-pointer">
         <NuxtImg
           src="/icons/delete.svg"
           width="18"

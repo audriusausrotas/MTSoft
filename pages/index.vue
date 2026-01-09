@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
+import { statusFilters } from "~/data/selectFieldData";
 
 const { setError, setSuccess } = useError();
 
@@ -16,29 +17,17 @@ const filteredProjects = () => {
   if (searchQuery.value.length > 2) {
     return filtered.filter(
       (project) =>
-        project.client.address
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.email
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.phone
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.client.username
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase())
+        project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered.filter((item) =>
-      item?.creator?.username
-        .toLowerCase()
-        .startsWith(filterUser.value.toLowerCase())
+      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase())
     );
   }
 
@@ -95,22 +84,14 @@ const projects = computed(() => {
 
   if (filterBy.value === "Datą") {
     categories.confirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateConfirmed
-        ? new Date(a.dates.dateConfirmed).getTime()
-        : 0;
-      const dateB = b.dates.dateConfirmed
-        ? new Date(b.dates.dateConfirmed).getTime()
-        : 0;
+      const dateA = a.dates.dateConfirmed ? new Date(a.dates.dateConfirmed).getTime() : 0;
+      const dateB = b.dates.dateConfirmed ? new Date(b.dates.dateConfirmed).getTime() : 0;
       return dateB - dateA;
     });
 
     categories.unconfirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateCreated
-        ? new Date(a.dates.dateCreated).getTime()
-        : 0;
-      const dateB = b.dates.dateCreated
-        ? new Date(b.dates.dateCreated).getTime()
-        : 0;
+      const dateA = a.dates.dateCreated ? new Date(a.dates.dateCreated).getTime() : 0;
+      const dateB = b.dates.dateCreated ? new Date(b.dates.dateCreated).getTime() : 0;
       return dateB - dateA;
     });
   }
@@ -120,25 +101,7 @@ const projects = computed(() => {
 
 const users = [
   "Visi",
-  ...new Set(
-    projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)
-  ),
-];
-
-const statusFilters = [
-  "Visi",
-  "Nepatvirtintas",
-  "Patvirtintas",
-  "Netinkamas",
-  "Tinkamas",
-  "Betonuojama",
-  "Gaminama",
-  "Montuojama",
-  "Laukiam Vartų",
-  "Vartai Sumontuoti",
-  "Pridavimas",
-  "Apmokėjimas",
-  "Baigtas",
+  ...new Set(projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)),
 ];
 
 const filterByValues = ["Statusą", "Datą"];
@@ -188,10 +151,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation
-          name="laisvas test mygtukas"
-          @onConfirm="removeUnconfirmed"
-        />
+        <BaseButtonWithConfirmation name="laisvas test mygtukas" @onConfirm="removeUnconfirmed" />
         <BaseSelectField
           label="Vartotojas"
           :values="users"

@@ -80,7 +80,7 @@ const selectData = (value: boolean) => {
       <BaseCheckField
         :name="'order' + index"
         @onChange="selectData"
-        :checked="props?.result?.delivered"
+        :checked="false"
         height="h-6"
       />
     </div>

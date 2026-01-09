@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Production } from "~/data/interfaces";
+import type { Production, Supplier } from "~/data/interfaces";
 
 const props = defineProps(["offer", "location"]);
 
@@ -7,24 +7,28 @@ const { setError, setSuccess } = useError();
 
 const suppliersStore = useSuppliersStore();
 
+let selectedProducts: any = [];
+const selectedSuppliers = ref<Supplier[]>([]);
+
+const production = computed<Production | null>(
+  () => useProductionStore().production.find((item) => item._id === props?.offer?._id) ?? null
+);
+
+const companies = computed<string[]>(() => [
+  ...new Set(suppliersStore?.suppliers?.map((item) => item.company) || []),
+]);
+
+const suppliers = computed<Supplier[]>(
+  () => suppliersStore?.suppliers?.filter((item) => item.company === company.value) ?? []
+);
+
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
-const supplier = ref<string>(suppliersStore?.suppliers[0]?.email);
+const company = ref<string>(companies.value[0] || "");
 const deliveryMethod = ref<string>(deliveryValues[0]);
 const showOrderButtons = ref<boolean>(false);
 const date = ref<Date | null>(null);
 const message = ref<string>("");
-let selectedProducts: any = [];
-
-const production = computed<Production | null>(
-  () =>
-    useProductionStore().production.find(
-      (item) => item._id === props?.offer?._id
-    ) ?? null
-);
-
-const suppliers = computed<string[] | null>(() =>
-  suppliersStore?.suppliers?.map((item) => item?.email)
-);
+const isOpen = ref<boolean>(false);
 
 const resultsTotal = computed(() => {
   let cost = 0;
@@ -65,6 +69,16 @@ const worksTotal = computed(() => {
 });
 
 const orderConfirmHandler = async () => {
+  if (!selectedProducts.length) {
+    setError("Nepasirinktos medžiagos");
+    return;
+  }
+
+  if (!selectedSuppliers.value.length) {
+    setError("Nepasirinktas gavėjas");
+    return;
+  }
+
   const requestData = {
     _id: props?.offer?._id,
     data: selectedProducts,
@@ -72,7 +86,7 @@ const orderConfirmHandler = async () => {
     date: date?.value,
     deliveryMethod: deliveryMethod?.value,
     message: message.value,
-    to: supplier.value,
+    to: selectedSuppliers.value,
   };
 
   const response: any = await request.post("newOrder", requestData);
@@ -81,11 +95,7 @@ const orderConfirmHandler = async () => {
     if (!useSocketStore().connected) {
       useOrderStore().newOrder(response.data.orderData);
       for (const item of response.data.data) {
-        useProjectsStore().partsDelivered(
-          response.data._id,
-          item.measureIndex,
-          true
-        );
+        useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
       }
     }
 
@@ -111,7 +121,9 @@ const cancelHandler = () => {
   deliveryMethod.value = deliveryValues[0];
   date.value = null;
   message.value = "";
-  supplier.value = suppliersStore.suppliers[0].email;
+  selectedSuppliers.value = [];
+  company.value = companies.value[0];
+  isOpen.value = false;
 };
 
 const addComment = async (comment: Comment) => {
@@ -139,17 +151,11 @@ const deleteComment = async (_id: string, comment: Comment) => {
     comment,
   };
 
-  const response: any = await request.delete(
-    "deleteProjectComment",
-    requestData
-  );
+  const response: any = await request.delete("deleteProjectComment", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      useProjectsStore().deleteComment(
-        response.data._id,
-        response.data.comment
-      );
+      useProjectsStore().deleteComment(response.data._id, response.data.comment);
 
     setSuccess(response.message);
   } else {
@@ -157,10 +163,34 @@ const deleteComment = async (_id: string, comment: Comment) => {
   }
 };
 
+const changeHandler = (value: Supplier) => {
+  if (!value._id) return;
+  const index = selectedSuppliers.value.findIndex((supplier) => supplier._id === value._id);
+  if (index === -1) {
+    selectedSuppliers.value.push(value);
+  } else {
+    selectedSuppliers.value.splice(index, 1);
+  }
+};
+
+const isSelected = (id?: string) => {
+  return !!id && selectedSuppliers.value.some((s) => s._id === id);
+};
+
+watch(
+  () => suppliers.value,
+  (newSuppliers) => {
+    if (newSuppliers.length === 1) {
+      selectedSuppliers.value = [newSuppliers[0]];
+      isOpen.value = false;
+    } else {
+      selectedSuppliers.value = [];
+    }
+  }
+);
+
 onMounted(async () => {
-  const exists = useProductionStore().production.find(
-    (item) => item._id === props?.offer?._id
-  );
+  const exists = useProductionStore().production.find((item) => item._id === props?.offer?._id);
   if (!exists) {
     await fetchProduction(props?.offer?._id as string);
   }
@@ -174,7 +204,7 @@ onMounted(async () => {
       :versions="props?.offer?.versions"
       :_id="props?.offer?._id"
       class="print:hidden"
-    />
+    />-
 
     <PreviewClient
       :client="props?.offer?.client"
@@ -198,14 +228,73 @@ onMounted(async () => {
       class="flex gap-4 flex-wrap justify-around md:justify-normal border px-4 py-2 rounded-lg shadow-lg w-full max-w-[1264px]"
     >
       <BaseSelectField
-        :values="suppliers"
-        id="supplier"
-        label="Gavėjas"
-        :defaultValue="supplier"
-        width="w-72"
-        @onChange="(value: string) => supplier = value
+        :values="companies"
+        id="companies"
+        label="Įmonė"
+        :defaultValue="company"
+        width="w-48"
+        @onChange="(value: string) => company = value
     "
       />
+
+      <div class="flex flex-col gap-1 select-none rounded-lg">
+        <label class="pl-2 text-sm">Gavėjas</label>
+        <div class="relative selct-none h-10 w-60">
+          <div
+            v-if="suppliers.length === 1"
+            class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg bg-inherit shadow-sm"
+          >
+            {{ selectedSuppliers[0]?.username }}
+          </div>
+          <div
+            v-else
+            @click="isOpen = !isOpen"
+            class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg bg-inherit shadow-sm hover:cursor-pointer"
+          >
+            <div class="flex gap-3">
+              {{
+                selectedSuppliers.length
+                  ? selectedSuppliers.length === 1
+                    ? selectedSuppliers[0].username
+                    : selectedSuppliers.length
+                  : "Pasirinkti gavėjus"
+              }}
+            </div>
+            <NuxtImg
+              src="/icons/doubleArrow.svg"
+              width="20"
+              height="20"
+              decoding="auto"
+              loading="lazy"
+              :ismap="true"
+            />
+          </div>
+          <div
+            v-if="isOpen"
+            class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border shadow-lg max-h-52 rounded-lg top-10 border-dark-light"
+          >
+            <div
+              v-for="value in suppliers"
+              :key="value._id"
+              @click="changeHandler(value)"
+              class="flex gap-1 px-4 py-2 bg-white hover:bg-red-full hover:cursor-pointer hover:text-white"
+            >
+              <NuxtImg
+                v-if="isSelected(value._id)"
+                src="/icons/checked.svg"
+                width="20"
+                height="20"
+                decoding="auto"
+                loading="lazy"
+                :ismap="true"
+              />
+              <p>
+                {{ value.username }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="flex flex-col">
         <label for="finalDate" class="mb-1 text-sm">Pristatymo data iki:</label>
@@ -236,11 +325,7 @@ onMounted(async () => {
       />
     </div>
 
-    <BaseGalleryElement
-      :_id="offer?._id"
-      :files="offer?.files"
-      :category="props?.location"
-    />
+    <BaseGalleryElement :_id="offer?._id" :files="offer?.files" :category="props?.location" />
 
     <BaseComment
       :commentsArray="props.offer?.comments"
@@ -263,9 +348,7 @@ onMounted(async () => {
 
     <div class="text-2xl font-semibold text-black text-center">Medžiagos</div>
     <div class="flex flex-col">
-      <div
-        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
-      >
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
         <div class="w-6 text-center">Nr</div>
         <div v-if="showOrderButtons" class="w-6"></div>
         <div class="flex-1">Pavadinimas</div>
@@ -293,19 +376,13 @@ onMounted(async () => {
           @unchecked="uncheckedHandler"
         />
 
-        <PreviewTotal
-          v-if="props?.location === 'projects'"
-          :values="resultsTotal"
-          :parts="true"
-        />
+        <PreviewTotal v-if="props?.location === 'projects'" :values="resultsTotal" :parts="true" />
       </div>
     </div>
 
     <div class="text-2xl font-semibold text-black text-center">Darbai</div>
     <div class="flex flex-col">
-      <div
-        class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex"
-      >
+      <div class="border-y border-black font-semibold gap-6 px-2 py-2 hidden lg:flex">
         <div class="w-6 text-center">Nr</div>
         <div class="flex-1">Pavadinimas</div>
         <div class="w-20">Kiekis</div>
@@ -326,10 +403,7 @@ onMounted(async () => {
           :location="props.location"
           :_id="props.offer._id"
         />
-        <PreviewTotal
-          v-if="props?.location === 'projects'"
-          :values="worksTotal"
-        />
+        <PreviewTotal v-if="props?.location === 'projects'" :values="worksTotal" />
       </div>
     </div>
 

@@ -59,6 +59,7 @@ export interface Supplier {
   username: string;
   phone: string;
   email: string;
+  company: string;
 }
 
 export interface Fence {
@@ -545,7 +546,7 @@ export interface Order {
   deliveryDate: string;
   deliveryMethod: string;
   comments: Comment[];
-  recipient: string;
+  recipient: Supplier[];
   status: boolean;
   orderNr: string;
 }

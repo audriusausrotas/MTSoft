@@ -1,6 +1,8 @@
 divdivdivdivdivdiv
 
 <script setup lang="ts">
+import { statusFilters } from "~/data/selectFieldData";
+
 const props = defineProps(["offer", "location", "showButtons"]);
 const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
@@ -23,40 +25,9 @@ const allUsers = computed(() =>
     .map((user) => user.username)
 );
 
-const gateUsers = computed(() =>
-  userStore.users
-    .filter((user) => user.accountType === "Vartonas")
-    .map((user) => user.email)
-);
-
 const workers = computed(() =>
-  userStore.users
-    .filter((user) => user.accountType === "Montavimas")
-    .map((user) => user.lastName)
+  userStore.users.filter((user) => user.accountType === "Montavimas").map((user) => user.lastName)
 );
-
-const gateOrdered = computed(() => {
-  return gateStore.gates.some(
-    (item) => item._id.toString() === props.offer?._id?.toString()
-  );
-});
-
-const gateExist = computed(() => {
-  const gates = props.offer?.gates || [];
-  return gates.some(
-    (item: any) =>
-      item.name !== "Segmentiniai" && item.option !== "Segmentiniai"
-  );
-});
-
-const statusValues = [
-  "Patvirtintas",
-  "Gaminama",
-  "Betonuojama",
-  "Montuojama",
-  "Laukiam Vartų",
-  "Vartai Sumontuoti",
-];
 
 const uploadFiles = async (data: any) => {
   const url =
@@ -85,11 +56,7 @@ const statusHandler = async (value: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      projectsStore.updateProjectField(
-        response.data._id,
-        "status",
-        response.data.status
-      );
+      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
 
     setSuccess(response.message);
   } else {
@@ -116,61 +83,6 @@ const sendEmailHandler = async () => {
   isLoading.value = false;
 };
 
-const gateOrderHandler = async (name: string): Promise<void> => {
-  isLoading.value = true;
-
-  const requestData = {
-    _id: props.offer?._id,
-    manager: name,
-  };
-
-  const response: any = await request.post("newGateOrder", requestData);
-
-  if (response.success) {
-    !useSocketStore().connected && gateStore.addGate(response.data);
-
-    const link = `https://mtsoft.lt/vartai/${props.offer?._id}`;
-
-    const emailRequestData = {
-      to: name,
-      message: `Turi naują užsakymą "${response.data.client.address}.  Peržiūrėti galite čia: ${link}"`,
-      title: "Naujas užsakymas",
-    };
-
-    const emailResponse: any = await request.post(
-      "sendGateInfo",
-      emailRequestData
-    );
-
-    if (emailResponse.success) {
-      setSuccess(emailResponse.message);
-    } else {
-      setError(emailResponse.message);
-    }
-
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
-  isLoading.value = false;
-  isOpenGates.value = false;
-};
-
-const gateCancelHandler = async (): Promise<void> => {
-  isLoading.value = true;
-
-  const response: any = await request.delete(`cancelOrder/${props.offer?._id}`);
-
-  if (response.success) {
-    !useSocketStore().connected && gateStore.removeGates(response.data._id);
-
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
-  isLoading.value = false;
-};
-
 const changeCreatorHandler = async (value: string) => {
   const requestData = { _id: props.offer?._id, value };
 
@@ -178,11 +90,7 @@ const changeCreatorHandler = async (value: string) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      projectsStore.updateProjectField(
-        response.data._id,
-        "creator",
-        response.data.user
-      );
+      projectsStore.updateProjectField(response.data._id, "creator", response.data.user);
 
     setSuccess(response.message);
   } else {
@@ -198,16 +106,8 @@ const advanceHandler = async (advance: string) => {
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      projectsStore.updateProjectField(
-        response.data._id,
-        "advance",
-        response.data.value
-      );
-      projectsStore.updateProjectField(
-        response.data._id,
-        "status",
-        "Patvirtintas"
-      );
+      projectsStore.updateProjectField(response.data._id, "advance", response.data.value);
+      projectsStore.updateProjectField(response.data._id, "status", "Patvirtintas");
     }
 
     setSuccess(response.message);
@@ -218,9 +118,7 @@ const advanceHandler = async (advance: string) => {
 };
 
 const orderFinishHandler = async () => {
-  const response: any = await request.patch(
-    `projectFinished/${props.offer?._id}`
-  );
+  const response: any = await request.patch(`projectFinished/${props.offer?._id}`);
 
   if (response.success) {
     if (!useSocketStore().connected) {
@@ -260,11 +158,7 @@ const installationHandler = async (value: string) => {
   if (response.success) {
     if (!useSocketStore().connected) {
       installationStore.addInstallation(response.data);
-      projectsStore.updateProjectField(
-        response.data._id,
-        "status",
-        "Montuojama"
-      );
+      projectsStore.updateProjectField(response.data._id, "status", "Montuojama");
     }
 
     setSuccess(response.message);
@@ -285,10 +179,7 @@ const dateHandler = async () => {
     date: date.value,
   };
 
-  const response: any = await request.patch(
-    "changeCompletionDate",
-    requestData
-  );
+  const response: any = await request.patch("changeCompletionDate", requestData);
   if (response.success) {
     !useSocketStore().connected &&
       projectsStore.changeCompletionDate(response.data._id, response.data.date);
@@ -320,7 +211,7 @@ const dateHandler = async () => {
 
       <BaseSelectField
         v-if="props.location === 'projects'"
-        :values="statusValues"
+        :values="statusFilters"
         id="orderStatus"
         label="Statusas"
         :defaultValue="props.offer?.status"
@@ -356,10 +247,7 @@ const dateHandler = async () => {
         type="number"
       />
 
-      <div
-        v-if="props.location !== 'installation'"
-        class="flex gap-4 items-end"
-      >
+      <div v-if="props.location !== 'installation'" class="flex gap-4 items-end">
         <BaseButton
           v-if="!isChangeDate"
           name="Pakeisti darbų pradžios datą"
@@ -370,10 +258,7 @@ const dateHandler = async () => {
           <div
             class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
           >
-            <button
-              class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full"
-              @click="dateHandler"
-            >
+            <button class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full" @click="dateHandler">
               Patvirtinti
             </button>
             <button
@@ -386,42 +271,18 @@ const dateHandler = async () => {
         </div>
       </div>
 
-      <BaseUploadButton
-        @upload="uploadFiles"
-        :_id="props.offer?._id"
-        :category="props.location"
-      />
+      <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" :category="props.location" />
 
       <BaseButtonWithConfirmation
         v-if="props.location !== 'installation'"
-        name="Į gamybą"
-        @onConfirm="productionHandler"
+        name="Baigti užsakymą"
+        @onConfirm="
+          props.location === 'projects' ? orderFinishHandler() : statusHandler('Pridavimas')
+        "
         :isLoading="isLoading"
       />
 
-      <div v-if="props.location !== 'installation'">
-        <BaseButton
-          v-if="!isOpenInstallation"
-          name="Į montavimą"
-          @click="isOpenInstallation = true"
-          :isLoading="isLoading"
-        />
-
-        <BaseSelectField
-          v-else
-          :values="workers"
-          id="workersList"
-          defaultValue="Pasirinkti montuotoją"
-          width="w-60"
-          @onChange="(value: string) => installationHandler(value)
-                "
-        />
-      </div>
-
-      <div
-        v-if="props.location !== 'installation'"
-        class="flex gap-4 items-end"
-      >
+      <div v-if="props.location !== 'installation'" class="flex gap-4 items-end">
         <BaseButton
           v-if="!props.showButtons"
           name="Užsakyti medžiagas"
@@ -448,44 +309,31 @@ const dateHandler = async () => {
         </div>
       </div>
 
-      <div
-        v-if="gateExist && props.location !== 'installation'"
-        class="flex gap-4 items-end"
-      >
-        <BaseButton
-          v-if="gateOrdered"
-          name="Atšaukti vartų užsakymą"
-          @click="gateCancelHandler"
-        />
+      <BaseButtonWithConfirmation
+        v-if="props.location !== 'installation'"
+        name="Į gamybą"
+        @onConfirm="productionHandler"
+        :isLoading="isLoading"
+      />
 
+      <div v-if="props.location !== 'installation'">
         <BaseButton
-          v-else-if="!gateOrdered && !isOpenGates"
-          name="Užsakyti vartus"
-          @click="isOpenGates = true"
+          v-if="!isOpenInstallation"
+          name="Į montavimą"
+          @click="isOpenInstallation = true"
           :isLoading="isLoading"
         />
 
         <BaseSelectField
-          v-else-if="!gateOrdered && isOpenGates"
-          :values="gateUsers"
-          id="userSelect"
-          defaultValue="Priskirti vartotoja"
+          v-else
+          :values="workers"
+          id="workersList"
+          defaultValue="Pasirinkti montuotoją"
           width="w-60"
-          @onChange="(value: string) => gateOrderHandler(value)
+          @onChange="(value: string) => installationHandler(value)
                 "
         />
       </div>
-
-      <BaseButtonWithConfirmation
-        v-if="props.location !== 'installation'"
-        name="Baigti užsakymą"
-        @onConfirm="
-          props.location === 'projects'
-            ? orderFinishHandler()
-            : statusHandler('Pridavimas')
-        "
-        :isLoading="isLoading"
-      />
     </div>
     <div v-if="isChangeDate" class="border py-2 px-4 rounded w-fit shadow-lg">
       <p class="font-medium">Pasirinkti datą:</p>

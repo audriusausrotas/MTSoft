@@ -30,11 +30,7 @@ export const fenceTypes = ["Tvora", "Tvoralentė", "Segmentas", "Žaliuzė"];
 
 export const fenceDirection = ["Vertikali", "Horizontali"];
 
-export const services = [
-  "Medžiagos, Montavimas",
-  "Tik Medžiagos",
-  "Tik Montavimas",
-];
+export const services = ["Medžiagos, Montavimas", "Tik Medžiagos", "Tik Montavimas"];
 
 export const parts = [
   "Borteliai, Stulpai",
@@ -51,23 +47,24 @@ export const accountStatus = ["Patvirtintas", "Nepatvirtintas"];
 
 export const laiptasDirection = ["Aukštyn", "Žemyn"];
 
-export const ProductionStatus = [
+export const ProductionStatus = ["Gaminama", "Laukiama", "Pagaminta", "Negaminti"];
+
+export const InstallationStatus = ["Montuojama", "Laukiama", "Sumontuota", "Nemontuoti"];
+
+export const OffersStatus = ["Nežinoma", "Domina", "Nelabai domina", "Nedomina"];
+
+export const statusFilters = [
+  "Visi",
+  "Nepatvirtintas",
+  "Patvirtintas",
+  "Netinkamas",
+  "Tinkamas",
+  "Betonuojama",
   "Gaminama",
-  "Laukiama",
-  "Pagaminta",
-  "Negaminti",
-];
-
-export const InstallationStatus = [
   "Montuojama",
-  "Laukiama",
-  "Sumontuota",
-  "Nemontuoti",
-];
-
-export const OffersStatus = [
-  "Nežinoma",
-  "Domina",
-  "Nelabai domina",
-  "Nedomina",
+  "Laukiam Vartų",
+  "Vartai Sumontuoti",
+  "Pridavimas",
+  "Apmokėjimas",
+  "Baigtas",
 ];

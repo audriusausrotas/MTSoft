@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Supplier } from "~/data/interfaces";
+
 const props = defineProps(["order", "index"]);
 const { setError, setSuccess } = useError();
 const userStore = useUserStore();
@@ -23,11 +25,7 @@ const dateColor =
 const statusColor = computed(() => {
   const items = props?.order?.data ?? [];
 
-  if (
-    items.every(
-      (item: any) => !item.delivered && !item.inWarehouse && !item.ordered
-    )
-  )
+  if (items.every((item: any) => !item.delivered && !item.inWarehouse && !item.ordered))
     return "bg-white";
   else if (items.every((item: any) => item.delivered)) return "bg-stone-400";
   else if (items.every((item: any) => item.inWarehouse)) return "bg-green-500";
@@ -61,11 +59,7 @@ const clickHandler = () => {
       class="flex sm:gap-2 gap-y-4 flex-wrap hover:scale-105 transition-transform hover:cursor-pointer select-none"
     >
       <BaseInput :name="index + 1" width="w-14 order-1" :disable="true" />
-      <BaseInput
-        :name="props.order?.orderNr"
-        width="w-36 order-2"
-        :disable="true"
-      />
+      <BaseInput :name="props.order?.orderNr" width="w-36 order-2" :disable="true" />
       <BaseInput
         :name="props.order?.client?.address"
         width="w-full md:w-80 order-6 md:order-3"
@@ -78,27 +72,27 @@ const clickHandler = () => {
         class="capitalize"
       />
 
-      <BaseInfoField
-        v-if="userStore.user?.accountType === 'Administratorius'"
-        :name="props.order?.recipient?.split('@')[0].replace('.', ' ')"
-        width="w-52 order-4 "
-        class="capitalize"
-      />
+      <div v-if="userStore.user?.accountType === 'Administratorius'" class="order-4 flex gap-2">
+        <BaseInfoField :name="props.order?.recipient[0]?.company" width="w-40 " />
+
+        <div
+          class="flex flex-col items-center justify-center border rounded-lg shadow-sm border-dark-light bg-gray-ultra-light order-5 w-60"
+        >
+          <p v-for="item of props.order.recipient">{{ item.email }}</p>
+        </div>
+      </div>
 
       <BaseInfoField
         v-if="props.order.status"
         :name="props.order?.deliveryDate?.slice(0, 10)"
         width="w-32"
-        class="order-5"
+        class="order-6"
         :class="[statusColor, dateColor]"
       />
-      <BaseInfoField
-        v-else
-        name="Baigta"
-        width="w-32"
-        class="order-5 bg-stone-400"
-      />
+
+      <BaseInfoField v-else name="Baigta" width="w-32" class="order-7 bg-stone-400" />
     </div>
+
     <div
       v-if="userStore.user?.accountType === 'Administratorius'"
       @click="deleteHandler"

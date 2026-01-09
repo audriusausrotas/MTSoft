@@ -2,9 +2,7 @@
 const { setError, setSuccess } = useError();
 const route = useRoute();
 
-const order = computed(() =>
-  useOrderStore().orders.find((item) => item._id === route.params.id)
-);
+const order = computed(() => useOrderStore().orders.find((item) => item._id === route.params.id));
 
 const addComment = async (comment: Comment) => {
   const requestData = {
@@ -39,9 +37,7 @@ const deleteComment = async (_id: string, comment: Comment) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <OrdersInfo :order="order" />
-
+  <div class="flex flex-col gap-8">
     <OrdersButtons :_id="order?._id" :projectID="order?.projectID" />
 
     <BaseComment
@@ -51,6 +47,8 @@ const deleteComment = async (_id: string, comment: Comment) => {
       class="max-w-[1260px]"
       @onDelete="deleteComment"
     />
+
+    <OrdersInfo :order="order" />
 
     <div class="text-2xl font-bold m-auto">Užsakomos medžiagos</div>
 
