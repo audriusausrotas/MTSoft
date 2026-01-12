@@ -168,16 +168,6 @@ function toggleCheckbox(value: boolean) {
       />
 
       <BaseSelectField
-        v-if="props.measure.length > 200"
-        :values="settingsStore.selectValues.gateTypes"
-        id="gateTypes"
-        label="vartų tipas"
-        :defaultValue="props.measure.gates.name"
-        width="w-36"
-        @onChange="(value: string) => calculationsStore.updateGateType(props.index, value, props.measureIndex)
-        "
-      />
-      <BaseSelectField
         v-if="props.measure.length > 200 && props.measure.gates.name === 'Stumdomi'"
         :values="yesno"
         id="bankette"
@@ -185,6 +175,17 @@ function toggleCheckbox(value: boolean) {
         :defaultValue="props.measure.gates.bankette"
         width="w-36"
         @onChange="(value: string) => calculationsStore.updateBankette(props.index, value, props.measureIndex)
+        "
+      />
+
+      <BaseSelectField
+        v-if="props.measure.length > 200"
+        :values="settingsStore.selectValues.gateTypes"
+        id="gateTypes"
+        label="vartų tipas"
+        :defaultValue="props.measure.gates.name"
+        width="w-36"
+        @onChange="(value: string) => calculationsStore.updateGateType(props.index, value, props.measureIndex)
         "
       />
 
@@ -221,17 +222,29 @@ function toggleCheckbox(value: boolean) {
         "
       />
     </div>
-    <BaseInput
-      v-if="isChecked"
-      placeholder="Papidoma informacija"
-      variant="light"
-      width="w-full"
-      :name="props.measure.gates.comment"
-      @onChange="(value: string) =>
+    <div v-if="isChecked" class="flex gap-6">
+      <BaseSelectField
+        :values="yesno"
+        id="gateInstallation"
+        label="Montavimas"
+        :defaultValue="props.measure.gates.installation"
+        width="w-36"
+        @onChange="(value: string) => calculationsStore.updateInstallation(props.index, value, props.measureIndex)
+      "
+      />
+
+      <BaseInput
+        placeholder="Papidoma informacija"
+        variant="light"
+        width="w-full"
+        label="Komentaras"
+        :name="props.measure.gates.comment"
+        @onChange="(value: string) =>
         calculationsStore.updateGateComment(props.index, value, props.measureIndex
         )
         "
-    />
+      />
+    </div>
   </div>
 </template>
 <style scoped></style>

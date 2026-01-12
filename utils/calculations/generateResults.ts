@@ -183,10 +183,10 @@ export default function generateResults() {
             name: name,
             quantity: 1,
           });
-          createWorkElement({
-            name: settingsStore.defaultValues.segmentGatesWork,
-            quantity: 1,
-          });
+          // createWorkElement({
+          //   name: settingsStore.defaultValues.segmentGatesWork,
+          //   quantity: 1,
+          // });
         } else {
           const name = `${settingsStore.defaultValues.gateSegment} ${
             Math.ceil(item.width / 100) * 100
@@ -197,10 +197,10 @@ export default function generateResults() {
             name: name,
             quantity: 1,
           });
-          createWorkElement({
-            name: settingsStore.defaultValues.segmentGateWork,
-            quantity: 1,
-          });
+          // createWorkElement({
+          //   name: settingsStore.defaultValues.segmentGateWork,
+          //   quantity: 1,
+          // });
         }
         return;
       }

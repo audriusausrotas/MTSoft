@@ -49,6 +49,7 @@ export default function createResultElement(item: any) {
         retailCheck &&
         checkName &&
         backup.width === item.width &&
+        backup.width === item.height &&
         backup.auto === item.auto &&
         backup.lock === item.lock &&
         backup.installation === item.installation
@@ -61,12 +62,12 @@ export default function createResultElement(item: any) {
 
         cost = product.prices.cost.frame || 0;
         if (item.auto === "Taip") cost += product.prices.cost.automation || 0;
-        cost += product.prices.cost.installation || 0;
+        if (item.installation === "Taip") cost += product.prices.cost.installation || 0;
         cost += product.prices.cost[lockName] || 0;
 
         price = product.prices[isRetail].frame || 0;
         if (item.auto === "Taip") price += product.prices[isRetail].automation || 0;
-        price += product.prices[isRetail].installation || 0;
+        if (item.installation === "Taip") price += product.prices[isRetail].installation || 0;
         price += product.prices[isRetail][lockName] || 0;
       }
       // calculate fence price
@@ -132,11 +133,11 @@ export default function createResultElement(item: any) {
     twoSided: item.twoSided || "",
     direction: item.direction || "",
     seeThrough: item.seeThrough || "",
-    price,
-    totalPrice: +totalPrice,
-    cost,
-    totalCost: +totalCost,
-    profit: +profit,
+    price: +price.toFixed(2),
+    totalPrice: +totalPrice.toFixed(2),
+    cost: +cost.toFixed(2),
+    totalCost: +totalCost.toFixed(2),
+    profit: +profit.toFixed(2),
     margin: +margin,
     category: product.category || "",
     width: item.width || 0,

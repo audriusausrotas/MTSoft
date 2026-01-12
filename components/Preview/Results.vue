@@ -8,7 +8,8 @@ const measurement = ref<string>("vnt");
 const isGate =
   props.result.category === "stumdomi" ||
   props.result.category === "varstomi" ||
-  props.result.category === "varteliai";
+  props.result.category === "varteliai" ||
+  props.result.category === "segmentiniai";
 
 if (props.result.category === "Tvora" || props.result.category === "tvoros") {
   props.result.units ? (measurement.value = "m2") : (measurement.value = "m");
@@ -65,7 +66,6 @@ const selectData = (value: boolean) => {
 
   value ? emit("checked", data) : emit("unchecked", data.name);
 };
-
 </script>
 
 <template>

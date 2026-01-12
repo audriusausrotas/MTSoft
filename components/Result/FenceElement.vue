@@ -72,7 +72,7 @@ const colorEditable = computed(
           width="w-24"
           type="number"
           :name="+props.result.price"
-          @onChange="(value: number) => resultsStore.updatePrice(props.index, value)"
+          @onChange="(value: number) => resultsStore.updatePrice(props.index, +value)"
         />
         <BaseInput
           label="savikaina"
@@ -80,7 +80,7 @@ const colorEditable = computed(
           type="number"
           width="w-24"
           variant="light"
-          @onChange="(value: number) => resultsStore.updateResultCost(props.index, value)"
+          @onChange="(value: number) => resultsStore.updateResultCost(props.index, +value)"
         />
       </div>
     </div>
