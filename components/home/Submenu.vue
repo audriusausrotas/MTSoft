@@ -19,8 +19,7 @@ const deleteHandler = async () => {
 
   let response;
 
-  if (props.location === "projects")
-    response = await request.delete(`deleteProject/${props._id}`);
+  if (props.location === "projects") response = await request.delete(`deleteProject/${props._id}`);
   else response = await request.delete("deleteArchive", requestData);
 
   if (response.success) {
@@ -52,10 +51,10 @@ const editHandler = async () => {
   }
 
   calculationsStore.setProject({
-    client: project.client,
-    fenceMeasures: project.fenceMeasures,
-    retail: project.retail,
-    units: project.results[0].units,
+    client: project?.client,
+    fenceMeasures: project?.fenceMeasures,
+    retail: project?.retail,
+    units: project?.results[0]?.units,
   });
   resultsStore.setProject(project);
   backupStore.addBackup(project.results, project.works);
@@ -103,8 +102,7 @@ const archiveHandler = async () => {
 
   let response;
 
-  if (props.location === "projects")
-    response = await request.post(`addArchive/${props._id}`);
+  if (props.location === "projects") response = await request.post(`addArchive/${props._id}`);
   else response = await request.patch("restoreArchive", requestData);
   if (response.success) {
     if (!useSocketStore().connected) {
@@ -113,10 +111,7 @@ const archiveHandler = async () => {
         projectsStore.deleteProject(response.data._id);
       } else {
         projectsStore.addProject(response.data.data);
-        archiveStore.deleteArchive(
-          response.data.data._id,
-          response.data.location
-        );
+        archiveStore.deleteArchive(response.data.data._id, response.data.location);
       }
     }
 
@@ -127,9 +122,7 @@ const archiveHandler = async () => {
 };
 
 const extendHandler = async () => {
-  const response: any = await request.patch(
-    `extendExparationDate/${props._id}`
-  );
+  const response: any = await request.patch(`extendExparationDate/${props._id}`);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -170,12 +163,7 @@ const unconfirmedHandler = async () => {
       @click="openInNewHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/document-forward.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/document-forward.svg" alt="edit button" width="20" height="20" />
       <p>Atidaryti pasiūlymą</p>
     </div>
 
@@ -202,12 +190,7 @@ const unconfirmedHandler = async () => {
       @click="editHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/edit-2.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/edit-2.svg" alt="edit button" width="20" height="20" />
       <p>Redaguoti</p>
     </div>
 
@@ -216,12 +199,7 @@ const unconfirmedHandler = async () => {
       @click="copyHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/pageflip.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
       <p>Kopijuoti projektą</p>
     </div>
 
@@ -230,12 +208,7 @@ const unconfirmedHandler = async () => {
       @click="extendHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/clock.svg"
-        alt="edit button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/clock.svg" alt="edit button" width="20" height="20" />
       <p>Pratęsti galiojimą</p>
     </div>
 
@@ -243,12 +216,7 @@ const unconfirmedHandler = async () => {
       @click="archiveHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/archive-tick.svg"
-        alt="archive button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/archive-tick.svg" alt="archive button" width="20" height="20" />
       <p v-if="props.location === 'projects'">Archyvuoti</p>
       <p v-else>Sugrąžinti</p>
     </div>
@@ -258,12 +226,7 @@ const unconfirmedHandler = async () => {
       @click="unconfirmedHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/archive-book.svg"
-        alt="archive button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/archive-book.svg" alt="archive button" width="20" height="20" />
       <p>Nepatvirtintas</p>
     </div>
 
@@ -271,12 +234,7 @@ const unconfirmedHandler = async () => {
       @click="deleteHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
-      <NuxtImg
-        src="/icons/delete.svg"
-        alt="delete button"
-        width="20"
-        height="20"
-      />
+      <NuxtImg src="/icons/delete.svg" alt="delete button" width="20" height="20" />
       <p>Ištrinti</p>
     </div>
   </div>

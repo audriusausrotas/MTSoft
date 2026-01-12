@@ -54,6 +54,7 @@ const projects = computed(() => {
     done: [] as Project[],
     finished: [] as Project[],
     payment: [] as Project[],
+    measure: [] as Project[],
     other: [] as Project[],
   };
 
@@ -70,6 +71,7 @@ const projects = computed(() => {
     Pridavimas: "done",
     Apmokėjimas: "payment",
     Baigtas: "finished",
+    Matavimas: "measure",
   };
 
   allProjects.forEach((item: Project) => {
@@ -132,17 +134,16 @@ const newProjectHandler = () => {
 };
 
 const removeUnconfirmed = async () => {
-  const response: any = await request.delete("removeUnconfirmed");
-  if (response.success) {
-    if (!useSocketStore().connected) {
-      useArchiveStore().addArchive("unconfirmed", response.data);
-      useProjectsStore().deleteProject(response.data._id);
-    }
-
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  // const response: any = await request.delete("removeUnconfirmed");
+  // if (response.success) {
+  //   if (!useSocketStore().connected) {
+  //     useArchiveStore().addArchive("unconfirmed", response.data);
+  //     useProjectsStore().deleteProject(response.data._id);
+  //   }
+  //   setSuccess(response.message);
+  // } else {
+  //   setError(response.message);
+  // }
 };
 </script>
 
@@ -199,6 +200,20 @@ const removeUnconfirmed = async () => {
     </div>
 
     <div class="flex flex-col gap-4 w-full">
+      <div
+        v-if="projects.finished.length"
+        class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
+      >
+        Matavimas
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.measure"
+        :key="project._id"
+        :index="index"
+        :length="projects.measure.length"
+        :project="project"
+        location="projects"
+      />
       <div
         v-if="projects.finished.length"
         class="text-xl font-semibold p-2 bg-gray-400 rounded-lg text-center"

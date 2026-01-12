@@ -29,7 +29,6 @@ export default function createResultElement(item: any) {
     }
   } else {
     product = getFencePrice(item.name);
-
     if (!product) product = getGatePrice(item.name);
 
     if (!product) return;
@@ -41,7 +40,8 @@ export default function createResultElement(item: any) {
     if (
       product?.category === "stumdomi" ||
       product?.category === "varstomi" ||
-      product?.category === "varteliai"
+      product?.category === "varteliai" ||
+      product?.category === "segmentiniai"
     ) {
       if (
         backupExist &&

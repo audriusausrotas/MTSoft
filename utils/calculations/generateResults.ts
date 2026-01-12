@@ -173,10 +173,14 @@ export default function generateResults() {
 
     results.gates.forEach((item) => {
       if (item.option === "Segmentiniai") {
-        if (item.name === "Varteliai") {
+        if (item.name.includes("Varteliai")) {
+          const name = `${settingsStore.defaultValues.smallGatesSegment} 100x${
+            Math.floor(item.height / 10) * 10
+          }`;
+
           createResultElement({
             ...item,
-            name: settingsStore.defaultValues.smallGatesSegment,
+            name: name,
             quantity: 1,
           });
           createWorkElement({
@@ -184,9 +188,13 @@ export default function generateResults() {
             quantity: 1,
           });
         } else {
+          const name = `${settingsStore.defaultValues.gateSegment} ${
+            Math.ceil(item.width / 100) * 100
+          }x${Math.floor(item.height / 10) * 10}`;
+
           createResultElement({
             ...item,
-            name: settingsStore.defaultValues.gateSegment,
+            name: name,
             quantity: 1,
           });
           createWorkElement({
