@@ -65,6 +65,7 @@ const selectData = (value: boolean) => {
 
   value ? emit("checked", data) : emit("unchecked", data.name);
 };
+
 </script>
 
 <template>
@@ -88,7 +89,7 @@ const selectData = (value: boolean) => {
     <div class="border lg:hidden w-full"></div>
     <div class="flex-1">
       <p class="block lg:hidden font-bold">Pavadinimas:</p>
-      <div class="flex print:gap-4 gap-2 lg:gap-8">
+      <div class="flex gap-2">
         <span class="w-fit">{{ props?.result?.name }}</span>
         <span v-if="isGate">su {{ props.result.auto === "Taip" ? "automatika" : "" }}</span>
         <span v-if="isGate"

@@ -204,7 +204,7 @@ onMounted(async () => {
       :versions="props?.offer?.versions"
       :_id="props?.offer?._id"
       class="print:hidden"
-    />-
+    />
 
     <PreviewClient
       :client="props?.offer?.client"

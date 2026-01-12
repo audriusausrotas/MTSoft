@@ -42,15 +42,21 @@ export const useResultsStore = defineStore("results", {
     priceVAT: 0 as number,
     priceWithDiscount: 0 as number,
     discount: false as boolean,
+    initializing: false as boolean,
   }),
 
   actions: {
+    initialize(value: boolean): void {
+      this.initializing = value;
+    },
+
     useDiscount(): void {
       this.discount = !this.discount;
     },
 
     updateDiscount(value: number) {
-      this.priceWithDiscount = +value;
+      if (!this.initializing) this.priceWithDiscount = +value;
+      else this.initializing = false;
     },
 
     addFences(data: Fences[]): void {
@@ -205,6 +211,7 @@ export const useResultsStore = defineStore("results", {
 
     clearResults(): void {
       this.results = [];
+      this.initializing = false;
       this.clearTotals();
     },
 
@@ -215,7 +222,6 @@ export const useResultsStore = defineStore("results", {
       this.totalMargin = 0;
       this.priceVAT = 0;
       this.priceWithDiscount = 0;
-      this.discount = false;
     },
 
     clearParts(): void {

@@ -40,6 +40,7 @@ const editHandler = async () => {
   resultsStore.clearAll();
   projectsStore.clearSelected();
   backupStore.clearBackup();
+  resultsStore.discount = false;
 
   const project: Project | undefined = projectsStore.projects.find(
     (project) => project._id === props._id
@@ -56,9 +57,11 @@ const editHandler = async () => {
     retail: project?.retail,
     units: project?.results[0]?.units,
   });
+
   resultsStore.setProject(project);
   backupStore.addBackup(project.results, project.works);
   projectsStore.setSelectedProject(project._id ? project._id : "");
+  resultsStore.initialize(true);
   navigateTo("/skaiciuokle");
 };
 

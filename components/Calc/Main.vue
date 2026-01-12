@@ -3,6 +3,7 @@ import { laserInstructions } from "~/data/laserInstruction";
 import calculateResults from "~/utils/calculations/calculateResults";
 const emit = defineEmits(["onCalculate"]);
 const calculationsStore = useCalculationsStore();
+const resultsStore = useResultsStore();
 
 const modalOpen = ref<boolean>(false);
 const textArea = ref<string>("");
@@ -18,15 +19,12 @@ const createFenceHandler = () => {
 
 const calculateResultsHandler = () => {
   calculateResults();
+  resultsStore.calculateTotals();
   emit("onCalculate");
 };
 
 const confirmHandler = () => {
-  calculationsStore.lazerCalculate(
-    textArea.value,
-    units.value,
-    precision.value
-  );
+  calculationsStore.lazerCalculate(textArea.value, units.value, precision.value);
   modalOpen.value = false;
 };
 
@@ -41,9 +39,7 @@ const unitHandler = (value: string) => {
 
 <template>
   <div class="flex w-full flex-col">
-    <div
-      class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b"
-    >
+    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
       <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
       <BaseButton name="Iš lazerio" @click="modalOpen = true" />
       <BaseModal
@@ -125,9 +121,7 @@ const unitHandler = (value: string) => {
       <BaseSelectField
         :values="['Kvadratinis metras', 'Metras']"
         id="units"
-        :defaultValue="
-          calculationsStore.units ? 'Kvadratinis metras' : 'Metras'
-        "
+        :defaultValue="calculationsStore.units ? 'Kvadratinis metras' : 'Metras'"
         width="w-60"
         @onChange="unitHandler"
       />

@@ -129,6 +129,7 @@ const newProjectHandler = () => {
   resultsStore.clearAll();
   projectsStore.clearSelected();
   backupStore.clearBackup();
+  resultsStore.discount = false;
 
   navigateTo("/skaiciuokle");
 };
@@ -201,7 +202,7 @@ const removeUnconfirmed = async () => {
 
     <div class="flex flex-col gap-4 w-full">
       <div
-        v-if="projects.finished.length"
+        v-if="projects.measure.length"
         class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
       >
         Matavimas
