@@ -31,10 +31,10 @@ onMounted(() => {
 
 <template>
   <div
-    class="flex flex-col bg-white"
+    class="flex flex-col"
     :class="[props.width ? props.width : 'w-60', props.label ? 'h-16' : 'h-10']"
   >
-    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 capitalize text-sm">{{
+    <label v-if="props.label" :for="props.label" class="pl-2 pb-1 capitalize text-sm bg-inherit">{{
       props.label
     }}</label>
 

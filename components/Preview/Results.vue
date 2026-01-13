@@ -96,9 +96,7 @@ const selectData = (value: boolean) => {
           >{{ props.result.auto === "Taip" ? "ir " : "" }}
           {{ props.result.installation === "Taip" ? "montavimu" : "" }}</span
         >
-        <span v-if="isGate">{{
-          props.result.lock.includes("el.") ? "elektromagnetine spyna" : ""
-        }}</span>
+        <span v-if="isGate && props.result.width < 200">{{ props.result.lock }} spyna</span>
         <span v-if="props?.result?.category === 'Tvora'">{{
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>

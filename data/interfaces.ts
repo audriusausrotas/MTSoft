@@ -181,7 +181,7 @@ export interface Gate {
   filling: string;
   ready: boolean;
   bankette: string;
-  direction: string;
+  direction: string; //nereikalingas
   lock: string;
   comment: string;
   option: string;
@@ -539,6 +539,7 @@ export interface UserRights {
 export interface Order {
   _id?: string;
   projectID: string;
+  projectOrderNr: string;
   creator: Creator;
   client: Client;
   data: OrderData[];

@@ -7,7 +7,7 @@ const calculationsStore = useCalculationsStore();
   <div class="flex flex-col lg:sticky top-16 bg-white border-b z-40 py-2 gap-4">
     <CalcFenceButtons :index="props.index" />
   </div>
-  <div class="flex flex-wrap justify-evenly">
+  <div class="flex flex-wrap justify-evenly gap-4">
     <CalcFenceMeasureElement
       v-for="(measure, measureIndex) in calculationsStore.fences[props.index].measures"
       :key="v4()"

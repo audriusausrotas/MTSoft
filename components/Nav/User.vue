@@ -28,10 +28,9 @@ async function logoutHandler() {
       class="relative flex items-center gap-2 select-none hover:cursor-pointer"
     >
       <div
-        v-if="userStore.user?.accountType === 'Administratorius'"
         class="md:flex hidden items-center justify-center w-10 h-10 overflow-hidden font-semibold text-center uppercase rounded-full bg-red-full"
       >
-        <NuxtImg
+        <!-- <NuxtImg
           v-if="props.userStore.user?.photo?.url && props.userStore.user.photo.url !== ''"
           :src="props.userStore.user?.photo?.url"
           class="object-cover object-center w-full h-full"
@@ -40,8 +39,8 @@ async function logoutHandler() {
           decoding="auto"
           loading="lazy"
           :ismap="true"
-        />
-        <p v-else>{{ initials }}</p>
+        /> -->
+        <p>{{ initials }}</p>
       </div>
 
       <!-- <div v-if="userStore.user?.accountType === 'Administratorius'">

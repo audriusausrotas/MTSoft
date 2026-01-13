@@ -81,6 +81,7 @@ const orderConfirmHandler = async () => {
 
   const requestData = {
     _id: props?.offer?._id,
+    projectOrderNr: props.offer.orderNumber,
     data: selectedProducts,
     client: props?.offer?.client,
     date: date?.value,
@@ -106,7 +107,7 @@ const orderConfirmHandler = async () => {
     setError(response.message);
   }
 };
-
+console.log(props.offer.orderNumber);
 const checkedHandler = (data: any) => {
   selectedProducts.push(data);
 };
