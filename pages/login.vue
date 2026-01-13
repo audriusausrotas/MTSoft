@@ -83,6 +83,7 @@ const clearFields = () => {
         @onChange="(v) => (username = v)"
         placeholder="Vardas"
         label="Vartotojo vardas"
+        @keyup.enter="registerHandler"
       />
 
       <BaseInput
@@ -90,6 +91,7 @@ const clearFields = () => {
         @onChange="(v) => (email = v)"
         placeholder="pavyzdys@gmail.com"
         label="Elektroninis paštas"
+        @keyup.enter="login ? loginHandler : registerHandler"
       />
 
       <BaseInput
@@ -98,6 +100,7 @@ const clearFields = () => {
         placeholder="Slaptažodis"
         label="Slaptažodis"
         type="password"
+        @keyup.enter="login ? loginHandler : registerHandler"
       />
       <BaseInput
         :name="retypePassword"
@@ -106,33 +109,20 @@ const clearFields = () => {
         placeholder="Slaptažodis"
         label="Slaptažodio patvirtinimas"
         type="password"
+        @keyup.enter="registerHandler"
       />
 
-      <BaseButton
-        v-if="login"
-        name="login"
-        @click="loginHandler"
-        :isLoading="isLoading"
-      />
-      <BaseButton
-        v-else
-        name="register"
-        @click="registerHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton v-if="login" name="login" @click="loginHandler" :isLoading="isLoading" />
+      <BaseButton v-else name="register" @click="registerHandler" :isLoading="isLoading" />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Registruokis</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Registruokis</span>
       </p>
 
       <p v-else class="self-center mt-4">
         Turi paskyrą?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
-          >Prisijunk</span
-        >
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Prisijunk</span>
       </p>
     </div>
   </div>
