@@ -22,6 +22,7 @@ export interface Project {
   results: Result[];
   works: Works[];
   gates: Gate[];
+  gateManufacturer: string;
   totalPrice: number;
   totalCost: number;
   totalProfit: number;

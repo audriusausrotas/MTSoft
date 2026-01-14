@@ -1,3 +1,4 @@
+-
 <script setup lang="ts">
 import type { Production, Supplier } from "~/data/interfaces";
 
@@ -99,15 +100,11 @@ const orderConfirmHandler = async () => {
         useProjectsStore().partsDelivered(response.data._id, item.measureIndex, true);
       }
     }
-
     cancelHandler();
-
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
 };
-console.log(props.offer.orderNumber);
+
 const checkedHandler = (data: any) => {
   selectedProducts.push(data);
 };

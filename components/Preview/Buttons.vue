@@ -10,14 +10,13 @@ const { setError, setSuccess } = useError();
 const installationStore = useInstallationStore();
 const projectsStore = useProjectsStore();
 const productionStore = useProductionStore();
-const gateStore = useGateStore();
 const userStore = useUserStore();
 
 const isOpenInstallation = ref<boolean>(false);
-const isOpenGates = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const isChangeDate = ref<boolean>(false);
 const date = ref<Date | null>(null);
+const showLoading = ref<boolean>(false);
 
 const allUsers = computed(() =>
   userStore.users
@@ -30,6 +29,7 @@ const workers = computed(() =>
 );
 
 const uploadFiles = async (data: any) => {
+  isLoading.value = true;
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3001/api/uploadFiles"
@@ -47,9 +47,11 @@ const uploadFiles = async (data: any) => {
 
     setSuccess(response.message);
   } else setError(response.message);
+  isLoading.value = false;
 };
 
 const statusHandler = async (value: string) => {
+  isLoading.value = true;
   const requestData = { _id: props.offer?._id, value };
 
   const response: any = await request.patch("updateProjectStatus", requestData);
@@ -57,11 +59,10 @@ const statusHandler = async (value: string) => {
   if (response.success) {
     !useSocketStore().connected &&
       projectsStore.updateProjectField(response.data._id, "status", response.data.status);
-
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
+  isLoading.value = false;
 };
 
 const sendEmailHandler = async () => {
@@ -77,13 +78,13 @@ const sendEmailHandler = async () => {
 
   if (response.success) {
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
   isLoading.value = false;
 };
 
 const changeCreatorHandler = async (value: string) => {
+  isLoading.value = true;
   const requestData = { _id: props.offer?._id, value };
 
   const response: any = await request.patch("changeManager", requestData);
@@ -93,9 +94,9 @@ const changeCreatorHandler = async (value: string) => {
       projectsStore.updateProjectField(response.data._id, "creator", response.data.user);
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
+  isLoading.value = false;
 };
 
 const advanceHandler = async (advance: string) => {
@@ -109,15 +110,31 @@ const advanceHandler = async (advance: string) => {
       projectsStore.updateProjectField(response.data._id, "advance", response.data.value);
       projectsStore.updateProjectField(response.data._id, "status", "Patvirtintas");
     }
+    setSuccess(response.message);
+  } else setError(response.message);
+
+  isLoading.value = false;
+};
+
+const gateManufacturerHandler = async (manufacturer: string) => {
+  isLoading.value = true;
+  const requestData = { _id: props.offer?._id, manufacturer };
+
+  const response: any = await request.patch("addGateManufacturer", requestData);
+
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      projectsStore.updateProjectField(response.data._id, "gateManufacturer", response.data.value);
+    }
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
   isLoading.value = false;
 };
 
 const orderFinishHandler = async () => {
+  isLoading.value = true;
   const response: any = await request.patch(`projectFinished/${props.offer?._id}`);
 
   if (response.success) {
@@ -130,12 +147,13 @@ const orderFinishHandler = async () => {
     navigateTo("/");
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
+  isLoading.value = false;
 };
 
 const productionHandler = async () => {
+  isLoading.value = true;
   const response: any = await request.post(`newProduction/${props.offer?._id}`);
 
   if (response.success) {
@@ -145,12 +163,13 @@ const productionHandler = async () => {
     }
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
+  isLoading.value = false;
 };
 
 const installationHandler = async (value: string) => {
+  isLoading.value = true;
   const requestData = { _id: props.offer?._id, worker: value };
 
   const response: any = await request.post("addInstallation", requestData);
@@ -162,10 +181,10 @@ const installationHandler = async (value: string) => {
     }
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
   isOpenInstallation.value = false;
+  isLoading.value = false;
 };
 
 const cancelHandler = () => {
@@ -174,6 +193,7 @@ const cancelHandler = () => {
 };
 
 const dateHandler = async () => {
+  isLoading.value = true;
   const requestData = {
     _id: props.offer?._id,
     date: date.value,
@@ -185,10 +205,15 @@ const dateHandler = async () => {
       projectsStore.changeCompletionDate(response.data._id, response.data.date);
 
     setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+  } else setError(response.message);
+
   cancelHandler();
+  isLoading.value = false;
+};
+
+const confirmOrder = () => {
+  showLoading.value = true;
+  emit("conformOrder");
 };
 </script>
 
@@ -200,6 +225,13 @@ const dateHandler = async () => {
         :disable="true"
         label="Avansas"
         :name="props.offer?.advance"
+      />
+
+      <BaseInput
+        v-if="props.location === 'projects'"
+        :disable="true"
+        label="Vartų gamintojas"
+        :name="props.offer?.gateManufacturer"
       />
 
       <BaseInput
@@ -245,6 +277,7 @@ const dateHandler = async () => {
         name="Pridėti avansą"
         @onConfirm="advanceHandler"
         type="number"
+        :isLoading="isLoading"
       />
 
       <div v-if="props.location !== 'installation'" class="flex gap-4 items-end">
@@ -252,6 +285,7 @@ const dateHandler = async () => {
           v-if="!isChangeDate"
           name="Pakeisti darbų pradžios datą"
           @click="isChangeDate = true"
+          :isLoading="isLoading"
         />
 
         <div v-else class="w-60">
@@ -271,7 +305,12 @@ const dateHandler = async () => {
         </div>
       </div>
 
-      <BaseUploadButton @upload="uploadFiles" :_id="props.offer?._id" :category="props.location" />
+      <BaseUploadButton
+        @upload="uploadFiles"
+        :_id="props.offer?._id"
+        :category="props.location"
+        :isLoading="isLoading"
+      />
 
       <BaseButtonWithConfirmation
         v-if="props.location !== 'installation'"
@@ -287,16 +326,14 @@ const dateHandler = async () => {
           v-if="!props.showButtons"
           name="Užsakyti medžiagas"
           @click="emit('openOrder')"
+          :isLoading="isLoading"
         />
 
-        <div v-else class="w-60">
+        <div v-else-if="props.showButtons && !showLoading" class="w-60">
           <div
             class="flex justify-between overflow-hidden divide-x-2 divide-red-600 text-white rounded-lg"
           >
-            <button
-              class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full"
-              @click="emit('conformOrder')"
-            >
+            <button class="flex-1 px-4 py-2 bg-dark-full hover:bg-red-full" @click="confirmOrder">
               Patvirtinti
             </button>
             <button
@@ -307,7 +344,19 @@ const dateHandler = async () => {
             </button>
           </div>
         </div>
+        <BaseButton
+          v-else-if="props.showButtons && showLoading"
+          name="Užsakyti medžiagas"
+          :isLoading="showLoading"
+        />
       </div>
+
+      <BaseButtonWithInput
+        v-if="props.location === 'projects'"
+        name="Pridėti vartų gamintoją"
+        @onConfirm="gateManufacturerHandler"
+        :isLoading="isLoading"
+      />
 
       <BaseButtonWithConfirmation
         v-if="props.location !== 'installation'"
@@ -332,6 +381,7 @@ const dateHandler = async () => {
           width="w-60"
           @onChange="(value: string) => installationHandler(value)
                 "
+          :isLoading="isLoading"
         />
       </div>
     </div>

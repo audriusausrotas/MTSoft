@@ -56,6 +56,10 @@ export default function projectListeners(socket: Socket) {
     projectsStore.workDone(_id, measureIndex, value);
   });
 
+  socket.on("addGateManufacturer", ({ _id, manufacturer }) => {
+    projectsStore.updateProjectField(_id, "gateManufacturer", manufacturer);
+  });
+
   socket.on("newProject", (project) => {
     projectsStore.addProject(project);
   });
