@@ -215,6 +215,7 @@ onMounted(async () => {
       :offer="props?.offer"
       :location="props?.location"
       class="print:hidden"
+      :companies="companies"
       @conformOrder="orderConfirmHandler"
       @openOrder="showOrderButtons = true"
       @cancel="cancelHandler"

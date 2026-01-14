@@ -3,7 +3,7 @@ divdivdivdivdivdiv
 <script setup lang="ts">
 import { statusFilters } from "~/data/selectFieldData";
 
-const props = defineProps(["offer", "location", "showButtons"]);
+const props = defineProps(["offer", "location", "showButtons", "companies"]);
 const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
 const { setError, setSuccess } = useError();
@@ -12,6 +12,7 @@ const projectsStore = useProjectsStore();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
+const gateManufacturerOpen = ref<boolean>(false);
 const isOpenInstallation = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const isChangeDate = ref<boolean>(false);
@@ -131,6 +132,7 @@ const gateManufacturerHandler = async (manufacturer: string) => {
   } else setError(response.message);
 
   isLoading.value = false;
+  gateManufacturerOpen.value = false;
 };
 
 const orderFinishHandler = async () => {
@@ -351,12 +353,31 @@ const confirmOrder = () => {
         />
       </div>
 
-      <BaseButtonWithInput
-        v-if="props.location === 'projects'"
-        name="Pridėti vartų gamintoją"
-        @onConfirm="gateManufacturerHandler"
-        :isLoading="isLoading"
-      />
+      <div v-if="props.location === 'projects'">
+        <BaseButton
+          v-if="!gateManufacturerOpen"
+          name="Pridėti vartų gamintoją"
+          @click="gateManufacturerOpen = true"
+          :isLoading="isLoading"
+        />
+        <div v-else class="flex">
+          <BaseSelectField
+            :values="props.companies"
+            id="companiesList"
+            defaultValue="Pasirinkti tiekėją"
+            width="w-48"
+            @onChange="(value: string) => gateManufacturerHandler(value)
+                "
+            :isLoading="isLoading"
+          />
+          <BaseButton
+            name="X"
+            width="w-12"
+            class="font-bold"
+            @Click="gateManufacturerOpen = false"
+          />
+        </div>
+      </div>
 
       <BaseButtonWithConfirmation
         v-if="props.location !== 'installation'"
@@ -373,16 +394,18 @@ const confirmOrder = () => {
           :isLoading="isLoading"
         />
 
-        <BaseSelectField
-          v-else
-          :values="workers"
-          id="workersList"
-          defaultValue="Pasirinkti montuotoją"
-          width="w-60"
-          @onChange="(value: string) => installationHandler(value)
+        <div v-else class="flex">
+          <BaseSelectField
+            :values="workers"
+            id="workersList"
+            defaultValue="Montuotojai"
+            width="w-48"
+            @onChange="(value: string) => installationHandler(value)
                 "
-          :isLoading="isLoading"
-        />
+            :isLoading="isLoading"
+          />
+          <BaseButton name="X" width="w-12" class="font-bold" @Click="isOpenInstallation = false" />
+        </div>
       </div>
     </div>
     <div v-if="isChangeDate" class="border py-2 px-4 rounded w-fit shadow-lg">
