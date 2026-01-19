@@ -183,10 +183,10 @@ export default function generateResults() {
             name: name,
             quantity: 1,
           });
-          // createWorkElement({
-          //   name: settingsStore.defaultValues.segmentGatesWork,
-          //   quantity: 1,
-          // });
+          createWorkElement({
+            name: settingsStore.defaultValues.segmentGatesWork,
+            quantity: 1,
+          });
         } else {
           const name = `${settingsStore.defaultValues.gateSegment} ${
             Math.ceil(item.width / 100) * 100
@@ -197,17 +197,17 @@ export default function generateResults() {
             name: name,
             quantity: 1,
           });
-          // createWorkElement({
-          //   name: settingsStore.defaultValues.segmentGateWork,
-          //   quantity: 1,
-          // });
+          createWorkElement({
+            name: settingsStore.defaultValues.segmentGateWork,
+            quantity: 1,
+          });
         }
         return;
       }
 
       const length = Math.ceil(item.width);
       const gate = gates.find(
-        (gate) => gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length
+        (gate) => gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length,
       );
 
       if (!gate) return;
@@ -300,14 +300,14 @@ export default function generateResults() {
           item.width <= 500
             ? 2
             : item.width <= 600
-            ? 2.5
-            : item.width <= 700
-            ? 3
-            : item.width <= 800
-            ? 3.5
-            : item.width <= 900
-            ? 4
-            : 5;
+              ? 2.5
+              : item.width <= 700
+                ? 3
+                : item.width <= 800
+                  ? 3.5
+                  : item.width <= 900
+                    ? 4
+                    : 5;
       }
     });
 
@@ -326,10 +326,10 @@ export default function generateResults() {
 
   if (backupStore.backupExist) {
     const tempResults = backupStore.results.filter(
-      (item) => !results.results.some((itm) => itm.name === item.name)
+      (item) => !results.results.some((itm) => itm.name === item.name),
     );
     const tempWorks = backupStore.works.filter(
-      (item) => !results.works.some((itm) => itm.name === item.name)
+      (item) => !results.works.some((itm) => itm.name === item.name),
     );
 
     tempResults.forEach((item) => {

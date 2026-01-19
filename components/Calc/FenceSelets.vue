@@ -20,28 +20,31 @@ const isOpen = ref<boolean>(false);
 
 const isFence = computed(
   () =>
-    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
-      ?.category === "Tvora"
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)?.category === "Tvora",
 );
 
 const isFenceBoards = computed(
   () =>
-    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
-      ?.category === "Tvoralentė"
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)?.category ===
+    "Tvoralentė",
 );
 
 const isSegment = computed(
   () =>
-    settingsStore.fences.find((fence) => fence.name === currentFence?.name)
-      ?.category === "Segmentas"
+    settingsStore.fences.find((fence) => fence.name === currentFence?.name)?.category ===
+    "Segmentas",
 );
+
+const changeTwosided = (value: string) => {
+  calculationsStore.updateTwoSided(props.index, value);
+  value === "Taip"
+    ? calculationsStore.updateSpace(props.index, 6)
+    : calculationsStore.updateSpace(props.index, 2);
+};
 
 watch(isFence, (value) => {
   calculationsStore.updateBindings(props.index, value ? "Taip" : "Ne");
-  calculationsStore.updateDirection(
-    props.index,
-    value ? "Horizontali" : "Vertikali"
-  );
+  calculationsStore.updateDirection(props.index, value ? "Horizontali" : "Vertikali");
   calculationsStore.updateHoles(props.index, value ? "Taip" : "Ne");
 });
 </script>
@@ -55,21 +58,17 @@ watch(isFence, (value) => {
         id="fenceSide"
         :defaultValue="currentFence.side"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateSide(props.index, value)
-      "
+        @onChange="(value: string) => calculationsStore.updateSide(props.index, value)"
       />
     </div>
-    <div
-      class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal"
-    >
+    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
       <BaseSelectField
         label="Tvoros tipas"
         :values="settingsStore.selectValues.fenceTypes"
         id="fenceType"
         :defaultValue="currentFence.name"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateType(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateType(props.index, value)"
       />
 
       <BaseSelectField
@@ -78,8 +77,7 @@ watch(isFence, (value) => {
         id="fenceColor"
         :defaultValue="currentFence.color"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateColor(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateColor(props.index, value)"
       />
 
       <BaseSelectField
@@ -89,8 +87,7 @@ watch(isFence, (value) => {
         id="seeThrough"
         :defaultValue="currentFence.seeThrough"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateSeeThrough(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateSeeThrough(props.index, value)"
       />
 
       <BaseSelectField
@@ -100,8 +97,7 @@ watch(isFence, (value) => {
         id="fenceManufacturers"
         :defaultValue="currentFence.manufacturer"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateManufacturer(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateManufacturer(props.index, value)"
       />
 
       <BaseSelectField
@@ -111,8 +107,7 @@ watch(isFence, (value) => {
         id="fenceMaterials"
         :defaultValue="currentFence.material"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateMaterial(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateMaterial(props.index, value)"
       />
 
       <BaseSelectField
@@ -122,8 +117,7 @@ watch(isFence, (value) => {
         id="fenceDirection"
         :defaultValue="currentFence.direction"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateDirection(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateDirection(props.index, value)"
       />
 
       <BaseSelectField
@@ -132,8 +126,7 @@ watch(isFence, (value) => {
         id="services"
         :defaultValue="currentFence.services"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateServices(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateServices(props.index, value)"
       />
 
       <BaseSelectField
@@ -142,8 +135,7 @@ watch(isFence, (value) => {
         id="parts"
         :defaultValue="currentFence.parts"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateParts(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateParts(props.index, value)"
       />
 
       <BaseSelectField
@@ -153,8 +145,7 @@ watch(isFence, (value) => {
         id="twoSided"
         :defaultValue="currentFence.twoSided"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateTwoSided(props.index, value)
-        "
+        @onChange="changeTwosided"
       />
 
       <BaseInput
@@ -165,11 +156,7 @@ watch(isFence, (value) => {
         label="tarpas tarp elementų"
         width="w-60"
         :name="currentFence.space"
-        @onChange="(value: number) =>
-        calculationsStore.updateSpace(props.index,
-          value,
-        )
-        "
+        @onChange="(value: number) => calculationsStore.updateSpace(props.index, value)"
       />
       <BaseSelectField
         v-if="isFence"
@@ -178,8 +165,7 @@ watch(isFence, (value) => {
         id="bingings"
         :defaultValue="currentFence.bindings"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateBindings(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateBindings(props.index, value)"
       />
       <BaseSelectField
         v-if="needPoles"
@@ -188,8 +174,7 @@ watch(isFence, (value) => {
         id="anchoredPoles"
         :defaultValue="currentFence.anchoredPoles"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateAnchoredPoles(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateAnchoredPoles(props.index, value)"
       />
       <BaseSelectField
         v-if="isFence"
@@ -198,15 +183,11 @@ watch(isFence, (value) => {
         id="holes"
         :defaultValue="currentFence.holes"
         width="w-60"
-        @onChange="(value: string) => calculationsStore.updateHoles(props.index, value)
-        "
+        @onChange="(value: string) => calculationsStore.updateHoles(props.index, value)"
       />
     </div>
     <div>
-      <div
-        class="flex gap-2 hover:cursor-pointer select-none"
-        @click="isOpen = !isOpen"
-      >
+      <div class="flex gap-2 hover:cursor-pointer select-none" @click="isOpen = !isOpen">
         <p class="text-md mb-1 pl-2">Komentarai</p>
         <NuxtImg
           src="icons/arrowDown.svg"
@@ -221,11 +202,7 @@ watch(isFence, (value) => {
         variant="light"
         width="w-full max-w-[1264px]"
         :name="currentFence.comment"
-        @onChange="(value: string) =>
-        calculationsStore.updateComment(props.index,
-          value,
-        )
-        "
+        @onChange="(value: string) => calculationsStore.updateComment(props.index, value)"
       />
     </div>
   </div>

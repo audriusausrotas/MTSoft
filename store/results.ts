@@ -88,15 +88,47 @@ export const useResultsStore = defineStore("results", {
       this.recalculateWorkTotals(index);
     },
 
-    selectItem(index: number, value: Product | any): void {
+    selectItem(index: number, value: any): void {
       const selectedResult = this.results[index];
       selectedResult.name = value.name;
-      selectedResult.price =
-        value?.category === "Tvora"
-          ? value.prices.premium.nepramatoma.priceRetail
-          : value.prices.priceRetail;
-      selectedResult.cost =
-        value?.category === "Tvora" ? value.prices.premium.nepramatoma.cost : value.prices.cost;
+
+      if (value?.category.toLowerCase() === "tvora") {
+        selectedResult.price = value.prices.premium.nepramatoma.priceRetail;
+        selectedResult.cost = value.prices.premium.nepramatoma.cost;
+      } else if (
+        value?.category.toLowerCase() === "varstomi" ||
+        value?.category.toLowerCase() === "stumdomi" ||
+        value?.category.toLowerCase() === "varteliai" ||
+        value?.category.toLowerCase() === "segmentiniai"
+      ) {
+        if (
+          value?.category.toLowerCase() === "varstomi" ||
+          value?.category.toLowerCase() === "stumdomi"
+        )
+          selectedResult.name = value.name + " su automatika ir montavimu";
+
+        if (value?.category.toLowerCase() === "varteliai")
+          selectedResult.name = value.name + " su montavimu";
+
+        const lockPrice =
+          value?.category?.toLowerCase() === "varteliai"
+            ? value.prices.priceRetail.inox
+            : value.prices.priceRetail.automation;
+
+        const lockCost =
+          value?.category?.toLowerCase() === "varteliai"
+            ? value.prices.cost.inox
+            : value.prices.cost.automation;
+
+        selectedResult.price =
+          value.prices.priceRetail.frame + value.prices.priceRetail.installation + lockPrice;
+
+        selectedResult.cost = value.prices.cost.frame + value.prices.cost.installation + lockCost;
+      } else {
+        selectedResult.price = value.prices.priceRetail;
+        selectedResult.cost = value.prices.cost;
+      }
+
       selectedResult.category = value.category;
       selectedResult.quantity = this.results[index].quantity || 1;
       this.recalculateTotals(index);
@@ -195,7 +227,7 @@ export const useResultsStore = defineStore("results", {
 
     calculateFencePriceWithDiscount() {
       const calculatedDiscount = +(this.totalPrice + (this.priceVAT - this.totalPrice) / 2).toFixed(
-        2
+        2,
       );
       this.updateDiscount(calculatedDiscount);
     },

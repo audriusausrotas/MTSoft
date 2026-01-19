@@ -270,7 +270,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     deleteMeasure(index: number, measureIndex: number): void {
       this.fences[index].measures = this.fences[index].measures.filter(
-        (measure, index) => index !== measureIndex
+        (measure, index) => index !== measureIndex,
       );
       this.updateFenceTotals(index);
     },
@@ -302,7 +302,7 @@ export const useCalculationsStore = defineStore("calculations", {
 
     calculateAllElements(index: number) {
       this.fences[index].measures.forEach((measure, measureIndex) =>
-        this.calculateElements(index, measureIndex)
+        this.calculateElements(index, measureIndex),
       );
     },
 
@@ -311,7 +311,7 @@ export const useCalculationsStore = defineStore("calculations", {
       const measure = fence.measures[measureIndex];
 
       const fenceData = useSettingsStore().fences.find(
-        (item) => item.name.trim().toLowerCase() === fence.name.trim().toLowerCase()
+        (item) => item.name.trim().toLowerCase() === fence.name.trim().toLowerCase(),
       );
 
       if (!fenceData || fenceData?.category === "Segmentas") return;
@@ -324,7 +324,7 @@ export const useCalculationsStore = defineStore("calculations", {
           fence.direction === "Vertikali" ? measure.length : measure.height,
           fence.space,
           fenceData.details.width,
-          fence.twoSided
+          fence.twoSided,
         );
       } else {
         const fenceRename = fence.seeThrough
@@ -415,6 +415,8 @@ export const useCalculationsStore = defineStore("calculations", {
 
         if (precision === "Žemyn") {
           return Math.floor(value);
+        } else if (precision === "Neapvalinti") {
+          return value;
         } else if (precision === "Standartas") {
           return Math.round(value);
         } else if (precision === "Andriaus") {
@@ -631,7 +633,7 @@ export const useCalculationsStore = defineStore("calculations", {
           this.updateMeasureLaiptasDirection(
             lastIndex,
             direction,
-            this.fences[lastIndex].measures.length - 1
+            this.fences[lastIndex].measures.length - 1,
           );
 
           // handle gates
@@ -692,12 +694,12 @@ export const useCalculationsStore = defineStore("calculations", {
           this.updateMeasureLength(
             lastIndex,
             this.fences[lastIndex].measures.length - 1,
-            formatLength(item)
+            formatLength(item),
           );
           this.updateMeasureHeight(
             lastIndex,
             this.fences[lastIndex].measures.length - 1,
-            lastHeight
+            lastHeight,
           );
 
           // measure height
@@ -708,7 +710,7 @@ export const useCalculationsStore = defineStore("calculations", {
           this.updateMeasureHeight(
             lastIndex,
             this.fences[lastIndex].measures.length - 1,
-            formatHeight(temp)
+            formatHeight(temp),
           );
 
           // calculate from long length

@@ -10,7 +10,7 @@ const input = ref<string>(props.name);
 
 const emitClick = (value: Product): void => {
   shouldClose.value = true;
-  input.value = value.name;
+  input.value = value?.name;
   emit("onClick", value);
   open.value = false;
 };
@@ -29,9 +29,7 @@ const emitUpdate = (value: string): void => {
 const filteredItems = (value: string): void => {
   const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "");
   const regex = new RegExp(escapedValue, "i");
-  const filteredItemsArray = props.data.filter((item: Product) =>
-    regex.test(item.name)
-  );
+  const filteredItemsArray = props.data.filter((item: Product) => regex.test(item.name));
   filteredData.value = [...filteredItemsArray];
 
   if (filteredItemsArray.length === 0) {
@@ -59,13 +57,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="relative flex flex-col font-medium gap-1"
-    :class="props.width ? props.width : 'w-60'"
-  >
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
-      props.label
-    }}</label>
+  <div class="relative flex flex-col font-medium gap-1" :class="props.width ? props.width : 'w-60'">
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
     <input
       class="h-10 px-4 overflow-auto rounded-lg shadow-sm outline-none costom-border w-full"
       :class="props.disable ? 'bg-gray-ultra-light' : 'bg-white'"

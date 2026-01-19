@@ -10,7 +10,7 @@ const textArea = ref<string>("");
 const units = ref<string>("Metrai");
 const precision = ref<string>("Žemyn");
 const unitValues = ["Metrai", "Centimetrai", "Milimetrai"];
-const precisionValues = ["Žemyn", "Standartas", "Andriaus"];
+const precisionValues = ["Žemyn", "Standartas", "Andriaus", "Neapvalinti"];
 const instructionOpen = ref<boolean>(false);
 
 const createFenceHandler = () => {
