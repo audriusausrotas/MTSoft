@@ -7,8 +7,10 @@ const isGate =
   props.result.category === "varstomi" ||
   props.result.category === "varteliai";
 
-if (props.result.name.includes("Apkaustai")) measurement.value = "m";
-else if (props.result.category === "Tvora") measurement.value = "m2";
+if (props.result.name.toLowerCase().includes("apkausta")) measurement.value = "m";
+else if (props.result.name.toLowerCase().includes("metras")) measurement.value = "m";
+else if (props.result.category === "Tvora" && props.result.retail) measurement.value = "m2";
+else if (props.result.category === "Tvora" && !props.result.retail) measurement.value = "m";
 else measurement.value = "vnt";
 </script>
 
