@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { data } from "autoprefixer";
 import { statusFilters } from "~/data/selectFieldData";
 
-const { setError, setSuccess } = useError();
-await fetchFinished();
+fetchFinished();
 
 const MONTHS = [
   "Visi",
@@ -38,17 +36,6 @@ const filters = reactive({
   search: "",
 });
 
-const financialData = reactive({
-  filteredRevenue: 0,
-  filteredProfit: 0,
-  filteredMargin: 0,
-  moneyLeftFiltered: 0,
-  totalRevenue: 0,
-  totalProfit: 0,
-  totalMargin: 0,
-  moneyLeftTotal: 0,
-});
-
 const users = [
   "Visi",
   ...new Set(projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)),
@@ -67,6 +54,17 @@ const allProjects = computed(() => {
 
 const filteredProjects = computed(() => {
   let filteredTemp = allProjects.value;
+
+  if (filters.search.length >= 3) {
+    return filteredTemp.filter(
+      (project) =>
+        project.orderNumber.toLowerCase().includes(filters.search.toLowerCase()) ||
+        project.client.username.toLowerCase().includes(filters.search.toLowerCase()) ||
+        project.client.email.toLowerCase().includes(filters.search.toLowerCase()) ||
+        project.client.address.toLowerCase().includes(filters.search.toLowerCase()) ||
+        project.client.phone.toLowerCase().includes(filters.search.toLowerCase()),
+    );
+  }
 
   if (filters.manager.toLowerCase() !== "visi") {
     filteredTemp = filteredTemp.filter((project) => project.creator.username === filters.manager);
@@ -134,9 +132,7 @@ const financialFiltered = computed(() => {
     margin += item.totalMargin || 0;
     moneyLeft += item.status === "Baigtas" ? 0 : item.totalPrice - item.advance;
 
-    if (!item.totalPrice || !item.totalCost) {
-      badInfo++;
-    }
+    if (!item.totalPrice || !item.totalCost) badInfo++;
   }
 
   return {
@@ -163,9 +159,7 @@ const financialTotal = computed(() => {
     margin += item.totalMargin || 0;
     moneyLeft += item.status === "Baigtas" ? 0 : item.totalPrice - item.advance;
 
-    if (!item.totalPrice || !item.totalCost) {
-      badInfo++;
-    }
+    if (!item.totalPrice || !item.totalCost) badInfo++;
   }
 
   return {
@@ -212,7 +206,7 @@ const financialTotal = computed(() => {
         label="Paieška"
         width="flex-1"
         variant="light"
-        @onChange=""
+        @onChange="(value: string) => (filters.search = value)"
       />
 
       <BaseSelectField

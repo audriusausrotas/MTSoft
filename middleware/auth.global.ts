@@ -73,23 +73,20 @@ export default defineNuxtRouteMiddleware(async (to) => {
     case "/uzsakymai":
       if (!userRights?.orders) return navigateTo(middlewareHelper(userRights!));
       break;
-    case "/vartai":
-      if (!userRights?.gate) return navigateTo(middlewareHelper(userRights!));
-      break;
     case "/kainos":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/ataskaitos":
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/pasiulymai":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/klientai":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/tiekejai":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/vartotojai":
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
@@ -98,16 +95,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/archyvas/baigti":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/archyvas/archyvas":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/archyvas/nepasitvirtine":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/archyvas/istrinti":
-      if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));
+      if (!userRights?.other) return navigateTo(middlewareHelper(userRights!));
       break;
     case "/archyvas/atsargines_kopijos":
       if (!userRights?.admin) return navigateTo(middlewareHelper(userRights!));

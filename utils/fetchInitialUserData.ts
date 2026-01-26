@@ -14,9 +14,8 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
   }
   if (userRights?.installation) fetchData.push(fetchInstallation());
   if (userRights?.orders) fetchData.push(fetchOrders());
-  if (userRights?.gate) fetchData.push(fetchGates());
 
-  if (userRights?.admin) {
+  if (userRights?.admin || userRights?.other) {
     fetchData.push(
       fetchFences(),
       fetchGateData(),
@@ -24,7 +23,7 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
       fetchProducts(),
       fetchClients(),
       fetchDefaultValues(),
-      fetchPotentialClients()
+      fetchPotentialClients(),
     );
   }
 

@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { navigationLinks, optionLinks } from "~/data/initialValues";
+import { navigationLinks, optionLinks, adminLinks } from "~/data/initialValues";
 import type { MenuLinks } from "~/data/interfaces";
 
 const settingsStore = useSettingsStore();
 const userStore = useUserStore();
 const route = useRoute();
 
-const currentPath = ref("");
+// const currentPath = ref("");
 
 const userRights = settingsStore.userRights.find(
-  (item) => item.accountType === userStore?.user?.accountType
+  (item) => item.accountType === userStore?.user?.accountType,
 );
 
-const adminLinks = userRights?.admin ? optionLinks : null;
+const optionLinksFiltered = userRights?.other ? optionLinks : null;
+const adminLinksFiltered = userRights?.admin ? adminLinks : null;
 
 const currentLinks: MenuLinks[] = navigationLinks.filter((link) => {
   if (link.name === "Projektai" && userRights?.project) return true;
@@ -21,44 +22,27 @@ const currentLinks: MenuLinks[] = navigationLinks.filter((link) => {
   else if (link.name === "Montavimas" && userRights?.installation) return true;
   else if (link.name === "Sandėlys" && userRights?.warehouse) return true;
   else if (link.name === "Užsakymai" && userRights?.orders) return true;
-  else if (link.name === "Vartai" && userRights?.gate) return true;
   else return false;
 });
 
-const routeHandler = (newPath: string) => {
-  if (newPath.includes("/projektai")) {
-    currentPath.value = "Projektai";
-  } else if (newPath === "/") {
-    currentPath.value = "Projektai";
-  } else if (newPath === "/skaiciuokle") {
-    currentPath.value = "Projektai";
-  } else if (newPath.includes("/perziura")) {
-    currentPath.value = "Projektai";
-  } else if (newPath === "/grafikas") {
-    currentPath.value = "Grafikas";
-  } else if (newPath.includes("/gamyba")) {
-    currentPath.value = "Gamyba";
-  } else if (newPath.includes("/montavimas")) {
-    currentPath.value = "Montavimas";
-  } else if (newPath.includes("/sandelys")) {
-    currentPath.value = "Sandėlys";
-  } else if (newPath.includes("/uzsakymai")) {
-    currentPath.value = "Užsakymai";
-  } else if (newPath.includes("/vartai")) {
-    currentPath.value = "Vartai";
-  } else {
-    currentPath.value = "Admin";
-  }
-};
+const currentPath = computed(() => {
+  const newPath = route.path;
 
-routeHandler(route.path);
+  if (newPath.includes("/projektai")) return "Projektai";
+  if (newPath === "/") return "Projektai";
+  if (newPath === "/skaiciuokle") return "Projektai";
+  if (newPath.includes("/perziura")) return "Projektai";
+  if (newPath === "/grafikas") return "Grafikas";
+  if (newPath.includes("/gamyba")) return "Gamyba";
+  if (newPath.includes("/montavimas")) return "Montavimas";
+  if (newPath.includes("/sandelys")) return "Sandėlys";
+  if (newPath.includes("/uzsakymai")) return "Užsakymai";
+  if (newPath.includes("/vartotojai")) return "Admin";
+  if (newPath.includes("/ataskaitos")) return "Admin";
+  if (newPath.includes("/nustatymai")) return "Admin";
 
-watch(
-  () => route.path,
-  (newPath: string) => {
-    routeHandler(newPath);
-  }
-);
+  return "Kita";
+});
 </script>
 
 <template>
@@ -79,12 +63,14 @@ watch(
         <NavDesktop
           :currentPath="currentPath"
           :currentLinks="currentLinks"
-          :adminLinks="adminLinks"
+          :adminLinks="adminLinksFiltered"
+          :optionLinks="optionLinksFiltered"
         />
         <NavMobile
           :currentPath="currentPath"
           :currentLinks="currentLinks"
           :adminLinks="adminLinks"
+          :optionLinks="optionLinksFiltered"
         />
         <NavUser :userStore="userStore" class="self-start" />
       </div>

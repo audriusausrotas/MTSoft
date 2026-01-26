@@ -4,7 +4,9 @@ const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
-const isAdmin = userStore.user?.accountType === "Administratorius";
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
 
 const cut = ref<number>(props.binding.cut);
 const done = ref<number>(props.binding.done);
@@ -25,35 +27,34 @@ const indexColor = computed(() => {
   return props.binding.postone
     ? "bg-red-full text-white"
     : +props.binding.cut === 0 || props.binding.cut === undefined
-    ? "bg-transparent"
-    : +props.binding.cut === +props.binding.quantity &&
-      +done === +props.binding.quantity
-    ? "bg-green-500"
-    : +props.binding.cut > +props.binding.quantity
-    ? "bg-red-full"
-    : +props.binding.cut === +props.binding.quantity
-    ? "bg-green-300"
-    : "bg-orange-400";
+      ? "bg-transparent"
+      : +props.binding.cut === +props.binding.quantity && +done === +props.binding.quantity
+        ? "bg-green-500"
+        : +props.binding.cut > +props.binding.quantity
+          ? "bg-red-full"
+          : +props.binding.cut === +props.binding.quantity
+            ? "bg-green-300"
+            : "bg-orange-400";
 });
 
 const cutColor = computed(() => {
   return +props.binding.cut === +props.binding.quantity
     ? "bg-green-500"
     : +props.binding.cut === 0 || props.binding.cut === undefined
-    ? "bg-transparent"
-    : +props.binding.cut > +props.binding.quantity
-    ? "bg-red-full"
-    : "bg-orange-500";
+      ? "bg-transparent"
+      : +props.binding.cut > +props.binding.quantity
+        ? "bg-red-full"
+        : "bg-orange-500";
 });
 
 const doneColor = computed(() => {
   return +props.binding.done === +props.binding.quantity
     ? "bg-green-500"
     : +props.binding.done === 0 || props.binding.done === undefined
-    ? "bg-transparent"
-    : +props.binding.done > +props.binding.quantity
-    ? "bg-red-full"
-    : "bg-orange-500";
+      ? "bg-transparent"
+      : +props.binding.done > +props.binding.quantity
+        ? "bg-red-full"
+        : "bg-orange-500";
 });
 
 const saveHandler = async (field: string) => {
@@ -64,14 +65,14 @@ const saveHandler = async (field: string) => {
       field === "cut"
         ? +props.binding.cut
         : field === "done"
-        ? +props.binding.done
-        : field === "name"
-        ? props.binding.name
-        : field === "height"
-        ? +props.binding.height
-        : field === "quantity"
-        ? +props.binding.quantity
-        : props.binding.color,
+          ? +props.binding.done
+          : field === "name"
+            ? props.binding.name
+            : field === "height"
+              ? +props.binding.height
+              : field === "quantity"
+                ? +props.binding.quantity
+                : props.binding.color,
     field,
     option: "bindings",
   };
@@ -86,7 +87,7 @@ const saveHandler = async (field: string) => {
         null,
         response.data.value,
         response.data.field,
-        response.data.option
+        response.data.option,
       );
 
     setSuccess(response.message);
@@ -125,10 +126,7 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch(
-    "updateProductionPostone",
-    requestData
-  );
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -138,7 +136,7 @@ const postoneHandler = async () => {
         null,
         response.data.value,
         "postone",
-        response.data.option
+        response.data.option,
       );
 
     setSuccess(response.message);
@@ -176,29 +174,21 @@ const updateMeasure = (field: string, event: Event) => {
     null,
     inputElement.value,
     field,
-    "bindings"
+    "bindings",
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value
-      ? (isSavedCut.value = false)
-      : (isSavedCut.value = true);
+    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
   else if (field === "name")
-    inputElement.value !== name.value
-      ? (isSavedName.value = false)
-      : (isSavedName.value = true);
+    inputElement.value !== name.value ? (isSavedName.value = false) : (isSavedName.value = true);
   else if (field === "color")
-    inputElement.value !== color.value
-      ? (isSavedColor.value = false)
-      : (isSavedColor.value = true);
+    inputElement.value !== color.value ? (isSavedColor.value = false) : (isSavedColor.value = true);
   else if (field === "height")
     +inputElement.value !== height.value
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value
-      ? (isSavedDone.value = false)
-      : (isSavedDone.value = true);
+    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
   else if (field === "quantity")
     +inputElement.value !== quantity.value
       ? (isSavedQuantity.value = false)
@@ -229,7 +219,7 @@ watch(
       }
     }
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

@@ -14,7 +14,9 @@ const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
-const isAdmin = userStore.user?.accountType === "Administratorius";
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
 const isGate = computed(() => props.data.gates?.exist || false);
 
 const cut = ref<number>(props.data.cut);
@@ -34,34 +36,34 @@ const indexColor = computed(() => {
   return props.data.postone
     ? "bg-red-full text-white"
     : +props.data.cut === 0 || props.data.cut === undefined
-    ? "bg-transparent"
-    : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
-    ? "bg-green-500"
-    : +props.data.cut > +props.data.elements
-    ? "bg-red-full"
-    : +props.data.cut === +props.data.elements
-    ? "bg-green-300"
-    : "bg-orange-400";
+      ? "bg-transparent"
+      : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
+        ? "bg-green-500"
+        : +props.data.cut > +props.data.elements
+          ? "bg-red-full"
+          : +props.data.cut === +props.data.elements
+            ? "bg-green-300"
+            : "bg-orange-400";
 });
 
 const cutColor = computed(() => {
   return +props.data.cut === +props.data.elements
     ? "bg-green-500"
     : +props.data.cut === 0 || props.data.cut === undefined
-    ? "bg-transparent"
-    : +props.data.cut > +props.data.elements
-    ? "bg-red-full"
-    : "bg-orange-500";
+      ? "bg-transparent"
+      : +props.data.cut > +props.data.elements
+        ? "bg-red-full"
+        : "bg-orange-500";
 });
 
 const doneColor = computed(() => {
   return +props.data.done === +props.data.elements
     ? "bg-green-500"
     : +props.data.done === 0 || props.data.done === undefined
-    ? "bg-transparent"
-    : +props.data.done > +props.data.elements
-    ? "bg-red-full"
-    : "bg-orange-500";
+      ? "bg-transparent"
+      : +props.data.done > +props.data.elements
+        ? "bg-red-full"
+        : "bg-orange-500";
 });
 
 const saveHandler = async (field: string) => {
@@ -73,12 +75,12 @@ const saveHandler = async (field: string) => {
       field === "cut"
         ? +props.data.cut
         : field === "done"
-        ? +props.data.done
-        : field === "elements"
-        ? +props.data.elements
-        : field === "length"
-        ? +props.data.length
-        : +props.data.height,
+          ? +props.data.done
+          : field === "elements"
+            ? +props.data.elements
+            : field === "length"
+              ? +props.data.length
+              : +props.data.height,
     field,
     option: "fences",
   };
@@ -93,7 +95,7 @@ const saveHandler = async (field: string) => {
         response.data.measureIndex,
         response.data.value,
         response.data.field,
-        response.data.option
+        response.data.option,
       );
 
     setSuccess(response.message);
@@ -139,7 +141,7 @@ const gateHandler = async () => {
         response.data._id,
         response.data.index,
         response.data.measureIndex,
-        response.data.value
+        response.data.value,
       );
     setSuccess(response.message);
   } else {
@@ -166,7 +168,7 @@ const postoneHandler = async () => {
         response.data.measureIndex,
         response.data.value,
         "postone",
-        response.data.option
+        response.data.option,
       );
     setSuccess(response.message);
   } else {
@@ -191,7 +193,7 @@ const deleteHandler = async () => {
       productionStore.deleteMeasure(
         response.data._id,
         response.data.index,
-        response.data.measureIndex
+        response.data.measureIndex,
       );
     setSuccess(response.message);
   } else {
@@ -280,7 +282,7 @@ const updateMeasure = (field: string, event: Event) => {
     props.index,
     +inputElement.value,
     field,
-    "fence"
+    "fence",
   );
 
   if (field === "cut")
@@ -322,7 +324,7 @@ watch(
       }
     }
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

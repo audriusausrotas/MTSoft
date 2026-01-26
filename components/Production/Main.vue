@@ -7,7 +7,9 @@ const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
-const isAdmin = userStore.user?.accountType === "Administratorius";
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
 const filterIndex = ref<boolean>(false);
 const filterLength = ref<boolean>(false);
 
@@ -127,7 +129,7 @@ watch(
     if (filterIndex.value) filterByIndex();
     else if (filterLength.value) filterByLength();
   },
-  { deep: true }
+  { deep: true },
 );
 
 filterByIndex();
@@ -139,9 +141,7 @@ filterByIndex();
       <div class="flex gap-4 items-center mb-2">
         <p class="text-2xl font-bold">Apkaustai</p>
       </div>
-      <div
-        class="flex w-fit border-y items-center h-8 border-black select-none"
-      >
+      <div class="flex w-fit border-y items-center h-8 border-black select-none">
         <p
           class="hover:cursor-pointer h-full items-center w-10 border-x border-black flex justify-evenly"
           @click="filterByIndex"
@@ -158,11 +158,7 @@ filterByIndex();
             class="transition-all"
           />
         </p>
-        <p
-          class="w-48 border-r border-black h-full flex justify-center items-center"
-        >
-          tipas
-        </p>
+        <p class="w-48 border-r border-black h-full flex justify-center items-center">tipas</p>
         <p
           class="hover:cursor-pointer w-16 flex gap-1 justify-center border-r border-black h-full items-center"
           @click="filterByLength"
@@ -179,26 +175,10 @@ filterByIndex();
             class="transition-all"
           />
         </p>
-        <p
-          class="w-16 border-r border-black h-full flex justify-center items-center"
-        >
-          Kiekis
-        </p>
-        <p
-          class="w-16 border-r border-black h-full flex justify-center items-center"
-        >
-          spalva
-        </p>
-        <p
-          class="w-24 border-r border-black h-full flex justify-center items-center"
-        >
-          Išpjauta
-        </p>
-        <p
-          class="w-24 border-r border-black h-full flex justify-center items-center"
-        >
-          Pagaminta
-        </p>
+        <p class="w-16 border-r border-black h-full flex justify-center items-center">Kiekis</p>
+        <p class="w-16 border-r border-black h-full flex justify-center items-center">spalva</p>
+        <p class="w-24 border-r border-black h-full flex justify-center items-center">Išpjauta</p>
+        <p class="w-24 border-r border-black h-full flex justify-center items-center">Pagaminta</p>
         <p
           v-if="isAdmin"
           class="w-24 border-r border-black h-full flex justify-center items-center print:hidden"
@@ -219,11 +199,7 @@ filterByIndex();
         :_id="props._id"
       />
       <div class="flex gap-4 flex-wrap mt-2">
-        <BaseButton
-          v-if="isAdmin"
-          @click="newBindingHandler"
-          name="Pridėti naują"
-        />
+        <BaseButton v-if="isAdmin" @click="newBindingHandler" name="Pridėti naują" />
         <BaseButton @click="bindingPrintHandler" name="Spausdinti lipduką" />
       </div>
     </div>

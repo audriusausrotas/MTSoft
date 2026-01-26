@@ -14,7 +14,7 @@ const accountTypes = settingsStore.selectValues.accountTypes;
       <p class="w-28">Montavimas</p>
       <p class="w-28">Sandėlys</p>
       <p class="w-28">Užsakymai</p>
-      <p class="w-28">Vartai</p>
+      <p class="w-28">Kita</p>
       <p class="w-28">Admin</p>
     </div>
     <SettingsUserRights

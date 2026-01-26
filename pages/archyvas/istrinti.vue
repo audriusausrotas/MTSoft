@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
 
-onBeforeMount(() => {
-  fetchDeleted();
-});
+fetchDeleted();
 </script>
 
 <template>

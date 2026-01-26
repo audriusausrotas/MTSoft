@@ -531,7 +531,7 @@ export interface UserRights {
   schedule: boolean;
   production: boolean;
   installation: boolean;
-  gate: boolean;
+  other: boolean;
   orders: boolean;
   admin: boolean;
   warehouse: boolean;

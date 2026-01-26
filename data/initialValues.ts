@@ -67,11 +67,15 @@ export const navigationLinks: MenuLinks[] = [
 export const optionLinks: MenuLinks[] = [
   { name: "Pasiūlymai", link: "/pasiulymai", iconPath: "" },
   { name: "Kainos", link: "/kainos", iconPath: "/icons/prices.svg" },
-  { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Klientai", link: "/klientai", iconPath: "/icons/users.svg" },
   { name: "Tiekėjai", link: "/tiekejai", iconPath: "/icons/users.svg" },
-  { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
   { name: "Archyvas", link: "/archyvas/baigti", iconPath: "" },
+];
+
+export const adminLinks: MenuLinks[] = [
+  { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
+  { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
+  { name: "Ataskaitos", link: "/ataskaitos", iconPath: "/icons/users.svg" },
 ];
 
 export const createInitialMeasure = (): Measure => ({

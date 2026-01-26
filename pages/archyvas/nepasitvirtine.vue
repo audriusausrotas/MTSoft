@@ -1,9 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: "archive" });
-
-onBeforeMount(() => {
-  fetchUnconfirmed();
-});
+fetchUnconfirmed();
 </script>
 
 <template>

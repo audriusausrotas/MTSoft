@@ -9,18 +9,18 @@ const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
   if (!confirmed) return;
 
-  if (userStore.user?.accountType !== "Administratorius") {
+  if (
+    userStore.user?.accountType !== "Administratorius" &&
+    userStore.user?.accountType !== "Vadybininkas"
+  ) {
     setError("Ištrinti gali tik administratorius");
     return;
   }
 
-  const response: any = await request.delete(
-    `deleteProduction/${props.order._id}`
-  );
+  const response: any = await request.delete(`deleteProduction/${props.order._id}`);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      productionStore.deleteProductionOrder(response.data._id);
+    !useSocketStore().connected && productionStore.deleteProductionOrder(response.data._id);
     await router.replace("/gamyba");
     setSuccess(response.message);
   } else {
@@ -47,26 +47,15 @@ const clickHandler = () => {
         props.order.status === 'Pagaminta'
           ? 'bg-violet-500'
           : props.order.status === 'Negaminti'
-          ? 'bg-red-full'
-          : props.order.status === 'Laukiama'
-          ? 'bg-orange-500'
-          : 'bg-green-500'
+            ? 'bg-red-full'
+            : props.order.status === 'Laukiama'
+              ? 'bg-orange-500'
+              : 'bg-green-500'
       "
     />
-    <BaseInfoField
-      class="pointer-events-none"
-      :name="order?.client?.address"
-      width="w-96"
-    />
-    <BaseInfoField
-      class="pointer-events-none"
-      :name="order?.creator?.username"
-      width="w-24"
-    />
-    <div
-      @click.stop="deleteHandler"
-      class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1"
-    >
+    <BaseInfoField class="pointer-events-none" :name="order?.client?.address" width="w-96" />
+    <BaseInfoField class="pointer-events-none" :name="order?.creator?.username" width="w-24" />
+    <div @click.stop="deleteHandler" class="hover:cursor-pointer hover:bg-red-200 rounded-md p-1">
       <NuxtImg
         src="/icons/delete.svg"
         width="24"

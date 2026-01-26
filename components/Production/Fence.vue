@@ -19,7 +19,9 @@ const { setError, setSuccess } = useError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
-const isAdmin = userStore.user?.accountType === "Administratorius";
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
 const filterIndex = ref<boolean>(false);
 const filterLength = ref<boolean>(false);
 
@@ -51,7 +53,7 @@ const newMeasureHandler = async () => {
       productionStore.addNewMeasure(
         response.data_id,
         response.data.index,
-        response.data.newMeasure
+        response.data.newMeasure,
       );
 
     setSuccess(response.message);
@@ -111,7 +113,7 @@ watch(
     if (filterIndex.value) filterByIndex();
     else if (filterLength.value) filterByLength();
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

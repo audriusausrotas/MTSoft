@@ -39,11 +39,14 @@ export const useGateStore = defineStore("gate", {
             (item) =>
               item.client.address.toLowerCase().includes(value.toLowerCase()) ||
               item.manager.toLowerCase().includes(value.toLowerCase()) ||
-              item.orderNr.toLowerCase().includes(value.toLowerCase())
+              item.orderNr.toLowerCase().includes(value.toLowerCase()),
           );
         }
 
-        if (userStore.user?.accountType !== "Administratorius") {
+        if (
+          userStore.user?.accountType !== "Administratorius" &&
+          userStore.user?.accountType !== "Vadybininkas"
+        ) {
           filteredGates = filteredGates.filter((item) => item.manager === userStore.user?.email);
         }
 

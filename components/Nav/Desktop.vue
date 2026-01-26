@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const props = defineProps(["currentPath", "currentLinks", "adminLinks"]);
-
+const props = defineProps(["currentPath", "currentLinks", "adminLinks", "optionLinks"]);
 const optionsOpen = ref<boolean>(false);
+const adminOpen = ref<boolean>(false);
 </script>
 
 <template>
@@ -26,16 +26,39 @@ const optionsOpen = ref<boolean>(false);
     </div>
 
     <div
-      v-if="props.adminLinks"
+      v-if="props.optionLinks"
       @mouseenter="optionsOpen = true"
       @mouseleave="optionsOpen = false"
+      class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative hover:cursor-pointer"
+      :class="props.currentPath === 'Kita' ? 'bg-red-full text-white' : ''"
+    >
+      <p>Kita</p>
+
+      <div
+        v-if="optionsOpen"
+        class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
+      >
+        <NuxtLink
+          v-for="link in props.optionLinks"
+          :key="link.name"
+          :to="link.link"
+          class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white hidden relative"
+          :class="props.currentPath === link.name ? 'bg-red-full text-white' : 'text-black'"
+          >{{ link.name }}</NuxtLink
+        >
+      </div>
+    </div>
+    <div
+      v-if="props.adminLinks"
+      @mouseenter="adminOpen = true"
+      @mouseleave="adminOpen = false"
       class="md:flex gap-2 px-4 py-2 rounded-md w-40 justify-center hover:bg-red-full hover:text-white relative hover:cursor-pointer"
       :class="props.currentPath === 'Admin' ? 'bg-red-full text-white' : ''"
     >
       <p>Admin</p>
 
       <div
-        v-if="optionsOpen"
+        v-if="adminOpen"
         class="absolute top-10 left-0 w-40 z-50 bg-white shadow-lg rounded-md border border-dark-light"
       >
         <NuxtLink

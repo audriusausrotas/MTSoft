@@ -21,12 +21,14 @@ const showLoading = ref<boolean>(false);
 
 const allUsers = computed(() =>
   userStore.users
-    .filter((user) => user.accountType === "Administratorius")
-    .map((user) => user.username)
+    .filter(
+      (user) => user.accountType === "Administratorius" || user.accountType === "Vadybininkas",
+    )
+    .map((user) => user.username),
 );
 
 const workers = computed(() =>
-  userStore.users.filter((user) => user.accountType === "Montavimas").map((user) => user.lastName)
+  userStore.users.filter((user) => user.accountType === "Montavimas").map((user) => user.lastName),
 );
 
 const uploadFiles = async (data: any) => {
@@ -250,8 +252,7 @@ const confirmOrder = () => {
         label="Statusas"
         :defaultValue="props.offer?.status"
         width="w-60"
-        @onChange="(value: string) => statusHandler(value)
-              "
+        @onChange="(value: string) => statusHandler(value)"
       />
 
       <BaseSelectField
@@ -261,8 +262,7 @@ const confirmOrder = () => {
         width="w-60"
         label="Atsakingas vadybininkas"
         :defaultValue="props.offer?.creator.username"
-        @onChange="(value: string) => changeCreatorHandler(value)
-              "
+        @onChange="(value: string) => changeCreatorHandler(value)"
       />
     </div>
 
@@ -366,8 +366,7 @@ const confirmOrder = () => {
             id="companiesList"
             defaultValue="Pasirinkti tiekėją"
             width="w-48"
-            @onChange="(value: string) => gateManufacturerHandler(value)
-                "
+            @onChange="(value: string) => gateManufacturerHandler(value)"
             :isLoading="isLoading"
           />
           <BaseButton
@@ -400,8 +399,7 @@ const confirmOrder = () => {
             id="workersList"
             defaultValue="Montuotojai"
             width="w-48"
-            @onChange="(value: string) => installationHandler(value)
-                "
+            @onChange="(value: string) => installationHandler(value)"
             :isLoading="isLoading"
           />
           <BaseButton name="X" width="w-12" class="font-bold" @Click="isOpenInstallation = false" />

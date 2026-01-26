@@ -57,7 +57,7 @@ const clickHandler = () => {
     :class="'rounded-xl p-4 border border-gray-300 shadow-md hover:bg-stone-100 hover:shadow-inner hover:shadow-stone-400 transition-all duration-50'"
   >
     <BaseInput :name="index + 1" width="w-14 " :disable="true" label="Nr" />
-    <div v-if="userStore.user?.accountType === 'Administratorius'" class="flex gap-2">
+    <div v-if="userStore.user?.accountType === 'Administratorius' || userStore.user?.accountType === 'Vadybininkas'" class="flex gap-2">
       <BaseInput
         disable="true"
         :name="props.order?.projectOrderNr"
@@ -89,7 +89,7 @@ const clickHandler = () => {
 
     <BaseInput :name="props.order?.orderNr" width="w-32 " :disable="true" label="Užsakymo nr" />
 
-    <div v-if="userStore.user?.accountType === 'Administratorius'" class="flex gap-2 h-16">
+    <div v-if="userStore.user?.accountType === 'Administratorius' || userStore.user?.accountType === 'Vadybininkas'" class="flex gap-2 h-16">
       <BaseInput
         disable="true"
         :name="props.order?.recipient[0]?.company"
@@ -136,7 +136,7 @@ const clickHandler = () => {
     />
 
     <NuxtImg
-      v-if="userStore.user?.accountType === 'Administratorius'"
+      v-if="userStore.user?.accountType === 'Administratorius' || userStore.user?.accountType === 'Vadybininkas'"
       src="/icons/delete.svg"
       width="20"
       height="20"

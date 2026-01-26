@@ -6,15 +6,14 @@ const workers = computed(() =>
   userStore.users.filter((worker) => {
     if (
       userStore.user?.accountType === "Administratorius" ||
-      userStore.user?.accountType === "Sandėlys"
+      userStore.user?.accountType === "Sandėlys" ||
+      userStore.user?.accountType === "Vadybininkas"
     ) {
-      return (
-        worker.accountType === "Gamyba" || worker.accountType === "Montavimas"
-      );
+      return worker.accountType === "Gamyba" || worker.accountType === "Montavimas";
     } else {
       return worker._id === userStore.user?._id;
     }
-  })
+  }),
 );
 
 onMounted(() => {
@@ -34,15 +33,13 @@ function scrollToToday() {
   if (todayIndex !== -1) {
     const scrollableContainer = document.querySelector(".overflow-y-auto");
 
-    const todayElement =
-      document.querySelectorAll(".calendar-item")[todayIndex];
+    const todayElement = document.querySelectorAll(".calendar-item")[todayIndex];
 
     if (todayElement && scrollableContainer) {
       const rect = todayElement.getBoundingClientRect();
       const containerRect = scrollableContainer.getBoundingClientRect();
       const alt = userStore.user?.accountType === "Montavimas" ? 0 : 44;
-      const y =
-        rect.top - containerRect.top + scrollableContainer.scrollTop - alt;
+      const y = rect.top - containerRect.top + scrollableContainer.scrollTop - alt;
 
       scrollableContainer.scrollTo({
         top: y,
@@ -59,7 +56,8 @@ function scrollToToday() {
       <div
         v-if="
           userStore.user?.accountType === 'Administratorius' ||
-          userStore.user?.accountType === 'Sandėlys'
+          userStore.user?.accountType === 'Sandėlys' ||
+          userStore.user?.accountType === 'Vadybininkas'
         "
         class="flex gap-1 sticky top-0 left-0 z-40 bg-white text-white"
       >

@@ -14,16 +14,14 @@ const finishOrderHandler = async () => {
 
       orderStore.finishOrder(response.data._id);
 
-      const order = orderStore.orders.find(
-        (item) => item._id === response.data._id
-      );
+      const order = orderStore.orders.find((item) => item._id === response.data._id);
 
       if (order) {
         order.data.forEach((item) => {
           useProjectsStore().partsDelivered(
             response.data.projectID,
             item.measureIndex,
-            item.delivered
+            item.delivered,
           );
         });
       }
@@ -34,7 +32,10 @@ const finishOrderHandler = async () => {
     setError(response.message);
   }
   navigateTo("/uzsakymai");
-  if (useUserStore().user?.accountType !== "Administratorius")
+  if (
+    useUserStore().user?.accountType !== "Administratorius" &&
+    useUserStore().user?.accountType !== "Vadybininkas"
+  )
     useOrderStore().deleteOrder(response.data._id);
 };
 
@@ -56,14 +57,8 @@ const orderNrHandler = async (value: string) => {
 
 <template>
   <div class="flex gap-4">
-    <BaseButtonWithInput
-      @onConfirm="orderNrHandler"
-      name="Pridėti užsakymo numerį"
-    />
-    <BaseButtonWithConfirmation
-      @onConfirm="finishOrderHandler"
-      name="užbaigti užsakymą"
-    />
+    <BaseButtonWithInput @onConfirm="orderNrHandler" name="Pridėti užsakymo numerį" />
+    <BaseButtonWithConfirmation @onConfirm="finishOrderHandler" name="užbaigti užsakymą" />
   </div>
 </template>
 <style scoped></style>

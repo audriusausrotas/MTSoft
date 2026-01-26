@@ -19,19 +19,20 @@ const filteredInstallation = computed(() => {
         project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
     );
   }
 
   if (
     userStore.user?.accountType === "Administratorius" ||
-    userStore.user?.accountType === "Sandėlys"
+    userStore.user?.accountType === "Sandėlys" ||
+    userStore.user?.accountType === "Vadybininkas"
   ) {
     if (filteredUser.value !== "Visi")
       filtered = filtered.filter((item: Installation) => item.workers.includes(filteredUser.value));
   } else
     filtered = filtered.filter((item: Installation) =>
-      item.workers.includes(userStore.user?.lastName!)
+      item.workers.includes(userStore.user?.lastName!),
     );
 
   return filtered;
@@ -46,23 +47,23 @@ const changeFilter = (value: string) => {
   <div class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <BaseSelectField
-        v-if="userStore.user?.accountType === 'Administratorius'"
+        v-if="
+          userStore.user?.accountType === 'Administratorius' ||
+          userStore.user?.accountType === 'Vadybininkas'
+        "
         label="Montuotojas"
         :values="['Visi', ...workers]"
         id="userFilter"
         defaultValue="Visi"
         width="w-60"
-        @onChange="(value: string) => changeFilter(value)
-      "
+        @onChange="(value: string) => changeFilter(value)"
       />
       <BaseInput
         placeholder="Paieška"
         width="w-full"
         variant="light"
         label="Paieška"
-        @onChange="
-          (value: string)=> searchQuery = value
-        "
+        @onChange="(value: string) => (searchQuery = value)"
       >
         <NuxtImg
           src="/icons/search.svg"
