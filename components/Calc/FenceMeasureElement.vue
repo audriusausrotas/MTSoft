@@ -11,13 +11,13 @@ const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
 const isSegment = computed(
   () =>
     settingsStore.fences.find((fence) => fence.name === calculationsStore.fences[props.index].name)
-      ?.category === "Segmentas"
+      ?.category === "Segmentas",
 );
 
-function toggleCheckbox(value: boolean) {
+const toggleCheckbox = (value: boolean) => {
   isChecked.value = value;
   calculationsStore.updateMeasureGate(props.index, value, props.measureIndex);
-}
+};
 </script>
 
 <template>
@@ -143,11 +143,9 @@ function toggleCheckbox(value: boolean) {
         label="kryptis"
         :defaultValue="props.measure.laiptas.direction"
         width="w-32"
-        @onChange="(value: string) => calculationsStore.updateMeasureLaiptasDirection(
-        props.index,
-        value,
-        props.measureIndex
-      )
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateMeasureLaiptasDirection(props.index, value, props.measureIndex)
         "
       />
 
@@ -168,29 +166,22 @@ function toggleCheckbox(value: boolean) {
         label="Montavimas"
         :defaultValue="props.measure.gates.installation"
         width="w-36"
-        @onChange="(value: string) => calculationsStore.updateInstallation(props.index, value, props.measureIndex)
-      "
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateInstallation(props.index, value, props.measureIndex)
+        "
       />
 
       <BaseSelectField
-        v-if="props.measure.length > 200 && props.measure.gates.name !== 'Segmentiniai'"
+        v-if="props.measure.length > 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="yesno"
         label="Automatika"
         id="automatics"
         :defaultValue="props.measure.gates.automatics"
         width="w-36"
-        @onChange="(value: string) => calculationsStore.updateAutomatics(props.index, value, props.measureIndex)
-        "
-      />
-
-      <BaseSelectField
-        v-if="props.measure.length > 200"
-        :values="settingsStore.selectValues.gateTypes"
-        id="gateTypes"
-        label="vartų tipas"
-        :defaultValue="props.measure.gates.name"
-        width="w-36"
-        @onChange="(value: string) => calculationsStore.updateGateType(props.index, value, props.measureIndex)
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateAutomatics(props.index, value, props.measureIndex)
         "
       />
 
@@ -201,30 +192,49 @@ function toggleCheckbox(value: boolean) {
         label="vartelių spyna"
         :defaultValue="props.measure.gates.lock"
         width="w-36"
-        @onChange="(value: string) => calculationsStore.updateGateLock(props.index, value, props.measureIndex)
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateGateLock(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
-        v-if="props.measure.length <= 200"
+        v-if="props.measure.length > 200"
+        :values="settingsStore.selectValues.gateTypes"
+        id="gateTypes"
+        label="vartų tipas"
+        :defaultValue="props.measure.gates.option"
+        width="w-36"
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateGateOption(props.index, value, props.measureIndex)
+        "
+      />
+      <BaseSelectField
+        v-else
         :values="settingsStore.selectValues.gateOption"
         id="gateOption"
         label="Vartelių tipas"
         :defaultValue="props.measure.gates.option"
         width="w-36"
-        @onChange="(value: string) => calculationsStore.updateGateOption(props.index, value, props.measureIndex)
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateGateOption(props.index, value, props.measureIndex)
         "
       />
     </div>
+
     <div v-if="isChecked" class="flex gap-4">
       <BaseSelectField
-        v-if="props.measure.length > 200 && props.measure.gates.name === 'Stumdomi'"
+        v-if="props.measure.length > 200 && props.measure.gates.option === 'Stumdomi'"
         :values="yesno"
         id="bankette"
         label="vartų pamatas"
         :defaultValue="props.measure.gates.bankette"
         width="w-36"
-        @onChange="(value: string) => calculationsStore.updateBankette(props.index, value, props.measureIndex)
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateBankette(props.index, value, props.measureIndex)
         "
       />
 
@@ -234,9 +244,9 @@ function toggleCheckbox(value: boolean) {
         width="w-full"
         label="Komentaras"
         :name="props.measure.gates.comment"
-        @onChange="(value: string) =>
-        calculationsStore.updateGateComment(props.index, value, props.measureIndex
-        )
+        @onChange="
+          (value: string) =>
+            calculationsStore.updateGateComment(props.index, value, props.measureIndex)
         "
       />
     </div>

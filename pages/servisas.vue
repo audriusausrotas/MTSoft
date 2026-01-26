@@ -28,7 +28,7 @@ const searchHandler = async (value: string) => {
           ? `http://localhost:3001/api/serviceSearch?q=${value}`
           : `https://mtsoft.lt/api/serviceSearch?q=${value}`
       } `,
-      options
+      options,
     );
     data.value = response.data || [];
   }, 250);
@@ -76,7 +76,7 @@ watch(input, searchHandler);
       <div class="flex flex-col">
         <div v-for="(item, index) in data" :key="item._id">
           <div class="flex border-b border-black items-center px-2 py-1">
-            <p class="w-8">{{ index + 1 }}</p>
+            <p class="w-8">{{ +index + 1 }}</p>
             <p class="w-96">{{ item.client.address }}</p>
             <div class="w-32 flex items-center justify-center gap-2">
               <p class="">
@@ -84,11 +84,7 @@ watch(input, searchHandler);
               </p>
               <span
                 class="p-1 rounded-full"
-                :class="
-                  isWithinTwoYears(item.dates?.dateArchieved)
-                    ? 'bg-green-500'
-                    : 'bg-red-500'
-                "
+                :class="isWithinTwoYears(item.dates?.dateArchieved) ? 'bg-green-500' : 'bg-red-500'"
               ></span>
             </div>
           </div>

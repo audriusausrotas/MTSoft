@@ -12,7 +12,7 @@ let selectedProducts: any = [];
 const selectedSuppliers = ref<Supplier[]>([]);
 
 const production = computed<Production | null>(
-  () => useProductionStore().production.find((item) => item._id === props?.offer?._id) ?? null
+  () => useProductionStore().production.find((item) => item._id === props?.offer?._id) ?? null,
 );
 
 const companies = computed<string[]>(() => [
@@ -20,7 +20,7 @@ const companies = computed<string[]>(() => [
 ]);
 
 const suppliers = computed<Supplier[]>(
-  () => suppliersStore?.suppliers?.filter((item) => item.company === company.value) ?? []
+  () => suppliersStore?.suppliers?.filter((item) => item.company === company.value) ?? [],
 );
 
 const deliveryValues = ["Kliento adresu", "Į MT sandėlį", "Atsiimsime patys"];
@@ -184,7 +184,7 @@ watch(
     } else {
       selectedSuppliers.value = [];
     }
-  }
+  },
 );
 
 onMounted(async () => {
@@ -232,8 +232,7 @@ onMounted(async () => {
         label="Įmonė"
         :defaultValue="company"
         width="w-48"
-        @onChange="(value: string) => company = value
-    "
+        @onChange="(value: string) => (company = value)"
       />
 
       <div class="flex flex-col gap-1 select-none rounded-lg">
@@ -312,8 +311,7 @@ onMounted(async () => {
         label="Medžiagų pristatymas"
         id="deliferyStuff"
         :defaultValue="deliveryMethod"
-        @onChange="(value: string) => deliveryMethod = value
-        "
+        @onChange="(value: string) => (deliveryMethod = value)"
       />
 
       <textarea
@@ -413,7 +411,7 @@ onMounted(async () => {
           v-for="(fence, index) in props?.offer?.fenceMeasures"
           :key="fence.id"
           :fence="fence"
-          :index="index"
+          :index="+index"
           :showFull="true"
         />
       </div>

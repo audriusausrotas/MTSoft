@@ -57,7 +57,7 @@ export default function calculateResults() {
       if (measure.gates.exist) {
         results.addGates({
           _id: uuidv4(),
-          name: measure.length > 200 ? measure.gates.name : "Varteliai",
+          name: measure.gates.name,
           auto: measure.length > 200 ? measure.gates.automatics : "",
           width: measure.length,
           height: measure.height,
@@ -66,7 +66,7 @@ export default function calculateResults() {
           filling: item.name,
           ready: false,
           bankette:
-            measure.length! > 200 && measure.gates.name === "Stumdomi"
+            measure.length! > 200 && measure.gates.option === "Stumdomi"
               ? measure.gates.bankette
               : "",
 
@@ -83,7 +83,7 @@ export default function calculateResults() {
           item,
           measure,
           fenceTemp,
-          fenceSettings.details.width
+          fenceSettings.details.width,
         );
         if (!onlyServices) fenceTemp = [...temp.arr];
         if (!onlyParts) results.addTotalFenceboards(temp.quantity);
@@ -133,7 +133,7 @@ export default function calculateResults() {
               measure.height,
               item.color,
               item.name,
-              Math.ceil(measure.length / 255)
+              Math.ceil(measure.length / 255),
             );
           if (!onlyParts) results.addTotalSegments();
         }
@@ -185,7 +185,7 @@ export default function calculateResults() {
                   item.color,
                   isSegment
                     ? settingsStore.defaultValues.poleAlt
-                    : settingsStore.defaultValues.poleMain
+                    : settingsStore.defaultValues.poleMain,
                 );
 
           if (results.totalPoles === 0 && !onlyParts)

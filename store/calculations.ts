@@ -140,17 +140,21 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].bindings = value;
     },
 
-    updateGateType(index: number, value: string, measureIndex: number): void {
-      this.fences[index].measures[measureIndex].gates.name = value;
+    updateGateOption(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.option = value;
       if (value.toLowerCase() === "segmentiniai") {
         this.updateBankette(index, "Ne", measureIndex);
         this.updateAutomatics(index, "Ne", measureIndex);
       } else {
-        this.fences[index].measures[measureIndex].gates.option = value;
         this.updateBankette(index, "Taip", measureIndex);
         this.updateAutomatics(index, "Taip", measureIndex);
       }
     },
+
+    updateGateName(index: number, value: string, measureIndex: number): void {
+      this.fences[index].measures[measureIndex].gates.name = value;
+    },
+
     updateBankette(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.bankette = value;
     },
@@ -161,10 +165,6 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateGateLock(index: number, value: string, measureIndex: number): void {
       this.fences[index].measures[measureIndex].gates.lock = value;
-    },
-
-    updateGateOption(index: number, value: string, measureIndex: number): void {
-      this.fences[index].measures[measureIndex].gates.option = value;
     },
 
     updateAutomatics(index: number, value: string, measureIndex: number): void {
@@ -185,7 +185,10 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     updateMeasureGate(index: number, value: boolean, measureIndex: number): void {
-      this.fences[index].measures[measureIndex].gates.exist = value;
+      const measure = this.fences[index].measures[measureIndex];
+      measure.gates.exist = value;
+      measure.gates.name = measure.length > 200 ? "Vartai" : "Varteliai";
+      measure.gates.option = measure.length > 200 ? "Stumdomi" : "Gaminami";
     },
 
     updateTwoSided(index: number, value: string): void {
@@ -682,7 +685,7 @@ export const useCalculationsStore = defineStore("calculations", {
           if (lock) this.updateGateLock(lastIndex, "Elektromagnetinė", lastMeasure);
           this.updateMeasureLength(lastIndex, lastMeasure, formatLength(temp));
           this.updateMeasureHeight(lastIndex, lastMeasure, lastHeight);
-          this.updateGateType(lastIndex, gateType, lastMeasure);
+          this.updateGateOption(lastIndex, gateType, lastMeasure);
 
           //measure length
         } else if (/^[0-9]*\.?[0-9]+$/.test(item)) {

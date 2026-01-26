@@ -1,8 +1,20 @@
 <script setup lang="ts">
-const props = defineProps(["fence", "index"]);
+import type { Fence, SeeThroughSteps } from "~/data/interfaces";
 
-const isFenceBoard = props.fence.elements;
-const isSegment = props.fence.name.includes("Segmentas");
+const props = defineProps({
+  fence: {
+    type: Object as () => Fence,
+    required: true,
+  },
+  index: Number,
+});
+
+const fenceInfo = useSettingsStore().fences.find((fence) => fence.name === props.fence.name);
+
+const isSegment = fenceInfo?.category === "Segmentas";
+const isFenceBoard = fenceInfo?.category === "Tvoralentė";
+const isFence = fenceInfo?.category === "Tvora";
+const step = fenceInfo?.steps[props.fence.seeThrough.toLowerCase() as keyof SeeThroughSteps];
 </script>
 
 <template>
@@ -21,22 +33,14 @@ const isSegment = props.fence.name.includes("Segmentas");
         <div class="font-medium">Tvoros spalva</div>
         <div>RAL {{ props.fence.color }}</div>
 
-        <div v-if="!isFenceBoard && !isSegment" class="font-medium">
-          Pramatomumas
-        </div>
-        <div v-if="!isFenceBoard && !isSegment">
+        <div v-if="isFence" class="font-medium">Pramatomumas</div>
+        <div v-if="isFence">
           {{ props.fence.seeThrough }}
         </div>
 
-        <div v-if="!isFenceBoard && !isSegment" class="font-medium">
-          Žingsnis
-        </div>
-        <div v-if="!isFenceBoard && !isSegment">
-          {{
-            (fence?.measures[0]?.height / fence?.measures[0]?.elements).toFixed(
-              2
-            )
-          }}
+        <div v-if="isFence" class="font-medium">Žingsnis apie</div>
+        <div v-if="isFence">
+          {{ step || "nežinoma" }}
           cm
         </div>
 
@@ -54,17 +58,11 @@ const isSegment = props.fence.name.includes("Segmentas");
         <div v-if="isFenceBoard" class="font-medium">Viso elementų</div>
         <div v-if="isFenceBoard">{{ isFenceBoard }} vnt</div>
 
-        <div v-if="!isFenceBoard && props.fence.name" class="font-medium">
-          Kvadratūra
-        </div>
-        <div v-if="!isFenceBoard">
+        <div v-if="!isFenceBoard && !isSegment" class="font-medium">Kvadratūra</div>
+        <div v-if="!isFenceBoard && !isSegment">
           {{ props.fence.totalQuantity }} m<span>²</span>
         </div>
       </div>
-
-      <p v-if="props.fence.comment" class="text-sm text-gray-700 italic">
-        Komentarai: {{ props.fence.comment }}
-      </p>
     </div>
 
     <div class="table_layout">

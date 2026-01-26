@@ -21,13 +21,13 @@ const filteredProjects = () => {
         project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered.filter((item) =>
-      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase())
+      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase()),
     );
   }
 
@@ -133,19 +133,6 @@ const newProjectHandler = () => {
 
   navigateTo("/skaiciuokle");
 };
-
-const removeUnconfirmed = async () => {
-  // const response: any = await request.delete("removeUnconfirmed");
-  // if (response.success) {
-  //   if (!useSocketStore().connected) {
-  //     useArchiveStore().addArchive("unconfirmed", response.data);
-  //     useProjectsStore().deleteProject(response.data._id);
-  //   }
-  //   setSuccess(response.message);
-  // } else {
-  //   setError(response.message);
-  // }
-};
 </script>
 
 <template>
@@ -153,7 +140,7 @@ const removeUnconfirmed = async () => {
     <div class="flex flex-col gap-4 w-full">
       <div class="flex gap-4 items-end">
         <BaseButton @click="newProjectHandler"> Naujas projektas </BaseButton>
-        <BaseButtonWithConfirmation name="laisvas test mygtukas" @onConfirm="removeUnconfirmed" />
+
         <BaseSelectField
           label="Vartotojas"
           :values="users"
@@ -186,7 +173,7 @@ const removeUnconfirmed = async () => {
         label="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string) => searchQuery = value"
+        @onChange="(value: string) => (searchQuery = value)"
       >
         <NuxtImg
           src="/icons/search.svg"

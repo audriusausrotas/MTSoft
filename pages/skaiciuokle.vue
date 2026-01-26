@@ -52,6 +52,7 @@ const saveHandler = async (): Promise<void> => {
       dateArchieved: "",
     },
     workers: [],
+    gateManufacturer: "",
   };
   try {
     let response;

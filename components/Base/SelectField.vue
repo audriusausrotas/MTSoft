@@ -23,19 +23,14 @@ watch(
   () => props.defaultValue,
   (newVal) => {
     selectedValue.value = newVal;
-  }
+  },
 );
 </script>
 
 <template>
   <div class="flex flex-col gap-1 select-none rounded-lg">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{
-      props.label
-    }}</label>
-    <div
-      class="relative selct-none h-10"
-      :class="[props.width ? `${props.width}` : 'w-48']"
-    >
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
+    <div class="relative selct-none h-10" :class="[props.width ? `${props.width}` : 'w-48']">
       <div
         @click="props.disable ? '' : (isOpen = !isOpen)"
         class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg bg-inherit shadow-sm"
@@ -43,8 +38,8 @@ watch(
           props.variant !== 'light'
             ? 'bg-gray-ultra-light'
             : props.disable
-            ? 'bg-gray-ultra-light'
-            : 'bg-white',
+              ? 'bg-gray-ultra-light'
+              : 'bg-white',
           props.disable ? '' : 'cursor-pointer',
           props?.defaultValue?.includes('@') ? 'lowercase' : 'capitalize',
         ]"
@@ -53,9 +48,7 @@ watch(
           <NuxtImg
             v-if="props.name === 'verified'"
             :src="
-              props.defaultValue === 'patvirtintas'
-                ? '/icons/ellipseg.svg'
-                : '/icons/ellipser.svg'
+              props.defaultValue === 'patvirtintas' ? '/icons/ellipseg.svg' : '/icons/ellipser.svg'
             "
             width="8"
             height="8"
@@ -77,7 +70,10 @@ watch(
       <div
         v-if="isOpen"
         class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border shadow-lg max-h-52 rounded-lg top-10 border-dark-light"
-        :class="[props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light', props.values?.some((item: any) => item.value?.includes('@'))]"
+        :class="[
+          props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
+          props.values?.some((item: any) => item.value?.includes('@')),
+        ]"
       >
         <div
           v-for="(value, index) in props.values"

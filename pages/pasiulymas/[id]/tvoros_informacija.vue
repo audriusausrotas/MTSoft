@@ -11,7 +11,7 @@ const offer = useOfferStore().offer;
       v-for="(fence, index) in offer?.fenceMeasures"
       :key="fence.id"
       :fence="fence"
-      :index="index"
+      :index="+index"
       :showFull="true"
     />
   </div>

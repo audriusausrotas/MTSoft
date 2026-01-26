@@ -8,18 +8,18 @@ const settingsStore = useSettingsStore();
 const isFenceboard = computed(
   () =>
     settingsStore.fences.find((fence) => fence.name === props.result?.name)?.category ===
-    "Tvoralentė"
+    "Tvoralentė",
 );
 
 const isFence = computed(
   () =>
     settingsStore.fences.find(
-      (fence) => fence.name.toLowerCase().trim() === props.result?.name.toLowerCase().trim()
-    )?.category === "Tvora"
+      (fence) => fence.name.toLowerCase().trim() === props.result?.name.toLowerCase().trim(),
+    )?.category === "Tvora",
 );
 
 const colorEditable = computed(
-  () => props.result.color === "Kita" || props.result.category !== "tvoros"
+  () => props.result.color === "Kita" || props.result.category !== "tvoros",
 );
 </script>
 
@@ -39,13 +39,14 @@ const colorEditable = computed(
       <BaseSearchField
         width="w-full"
         label="Pavadinimas"
-        :name="props.result.name"
-        :data="props.parts"
+        :name="props?.result?.name"
+        :data="props?.parts"
         @onChange="(value) => resultsStore.updateName(props.index, value)"
-        @OnClick="(value: Product) => {
-      resultsStore.selectItem(props.index, value);
-    }
-      "
+        @OnClick="
+          (value: Product) => {
+            resultsStore.selectItem(props.index, value);
+          }
+        "
       />
       <div class="flex gap-2">
         <BaseInput
@@ -53,7 +54,7 @@ const colorEditable = computed(
           width="w-24"
           :variant="colorEditable ? 'light' : ''"
           :disable="colorEditable ? false : true"
-          :name="props.result.color"
+          :name="props?.result?.color"
           @onChange="(value) => resultsStore.updateColor(props.index, value)"
         />
 
@@ -62,7 +63,7 @@ const colorEditable = computed(
           variant="light"
           label="kiekis"
           type="number"
-          :name="+props.result.quantity"
+          :name="+props?.result?.quantity"
           @onChange="(value: number) => resultsStore.updateQuantity(props.index, +value)"
         />
 
@@ -71,12 +72,12 @@ const colorEditable = computed(
           label="kaina"
           width="w-24"
           type="number"
-          :name="+props.result.price"
+          :name="+props?.result?.price"
           @onChange="(value: number) => resultsStore.updatePrice(props.index, +value)"
         />
         <BaseInput
           label="savikaina"
-          :name="+props.result.cost"
+          :name="+props?.result?.cost"
           type="number"
           width="w-24"
           variant="light"
@@ -89,17 +90,22 @@ const colorEditable = computed(
       <BaseInput
         width="w-24"
         label="viso savikaina"
-        :name="props.result.totalCost"
+        :name="props?.result?.totalCost"
         :disable="true"
       />
-      <BaseInput width="w-24" label="viso kaina" :name="props.result.totalPrice" :disable="true" />
+      <BaseInput
+        width="w-24"
+        label="viso kaina"
+        :name="props?.result?.totalPrice"
+        :disable="true"
+      />
     </div>
     <div class="flex flex-col gap-2">
-      <BaseInput width="w-24" label="marža" :name="props.result.margin + ' %'" :disable="true" />
-      <BaseInput width="w-24" :name="props.result.profit" label="pelnas" :disable="true" />
+      <BaseInput width="w-24" label="marža" :name="props?.result?.margin + ' %'" :disable="true" />
+      <BaseInput width="w-24" :name="props?.result?.profit" label="pelnas" :disable="true" />
     </div>
     <div v-if="isFenceboard" class="flex flex-col gap-2">
-      <BaseInput label="Ilgis" :name="props.result.height" :disable="true" width="w-24" />
+      <BaseInput label="Ilgis" :name="props?.result?.height" :disable="true" width="w-24" />
       <BaseInput
         v-if="isFenceboard"
         :name="props.result.direction"
@@ -109,32 +115,18 @@ const colorEditable = computed(
       />
     </div>
     <div class="flex flex-col gap-2">
-      <!-- <BaseInput
-        v-if="isFenceboard"
-        width="w-24"
-        label="dvipusė"
-        :name="props.result.twoSided"
-        :disable="true"
-      />
-      <BaseInput
-        v-if="isFenceboard"
-        width="w-24"
-        label="tarpas"
-        :name="props.result.space"
-        :disable="true"
-      /> -->
       <BaseInput
         v-if="isFence"
         label="pramatomumas"
         :disable="true"
-        :name="props.result.seeThrough"
+        :name="props?.result?.seeThrough"
         width="w-36"
       />
       <BaseInput
         v-if="isFence"
         label="Skarda"
         :disable="true"
-        :name="props.result.manufacturer"
+        :name="props?.result?.manufacturer"
         width="w-36"
       />
     </div>

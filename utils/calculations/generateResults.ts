@@ -173,7 +173,7 @@ export default function generateResults() {
 
     results.gates.forEach((item) => {
       if (item.option === "Segmentiniai") {
-        if (item.name.includes("Varteliai")) {
+        if (item.name === "Varteliai") {
           const name = `${settingsStore.defaultValues.smallGatesSegment} 100x${
             Math.floor(item.height / 10) * 10
           }`;
@@ -207,7 +207,9 @@ export default function generateResults() {
 
       const length = Math.ceil(item.width);
       const gate = gates.find(
-        (gate) => gate.category.toLowerCase() === item.name.toLowerCase() && length === gate.length,
+        (gate) =>
+          gate.category.toLowerCase() ===
+            item.option.replace("Gaminami", "Varteliai").toLowerCase() && length === gate.length,
       );
 
       if (!gate) return;

@@ -82,13 +82,13 @@ export const createInitialMeasure = (): Measure => ({
 
   gates: {
     exist: false,
-    name: "Stumdomi",
+    name: "Vartai",
     automatics: "Taip",
     comment: "",
     direction: "Nežinoma",
     lock: "Inox",
     bankette: "Taip",
-    option: "Gaminami",
+    option: "Stumdomi",
     installation: "Taip",
   },
   kampas: {
