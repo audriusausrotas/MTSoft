@@ -1,4 +1,62 @@
-name: Deploy Nuxt 3 App
+# name: Deploy Nuxt 3 App
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: self-hosted
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20.18.0"
+
+#       - name: Install dependencies
+#         run: npm install
+#         env:
+#           NODE_NO_WARNINGS: "1"
+
+#       - name: Build the application
+#         run: npm run build
+#         env:
+#           NODE_NO_WARNINGS: "1"
+
+#       - name: Deploy to VPS
+#         env:
+#           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+#           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+#           VPS_IP: ${{ secrets.VPS_IP }}
+#           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+#           MONGODB_URI: ${{ secrets.MONGODB_URI }}
+#           SALT: ${{ secrets.SALT }}
+#           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+#           NODE_NO_WARNINGS: "1"
+#           NODE_ENV: "production"
+
+#         run: |
+#           # Define the environment variables
+#           $vpsUsername = $env:VPS_USERNAME
+#           $vpsPassword = $env:VPS_PASSWORD
+#           $vpsIP = $env:VPS_IP
+#           $projectPath = $env:PROJECT_PATH
+
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && git pull"
+#           # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm ci"
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
+#           # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && if exist .output (rd /s /q .output) else (echo '.output does not exist')"
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm run build"
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 start ecosystem.config.cjs"
+#           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 save"
+
+name: Build & Deploy Nuxt
 
 on:
   push:
@@ -7,51 +65,40 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest # CI build OS (Linux, gali pakeisti jei reikia)
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20.18.0"
+          node-version: "20"
 
       - name: Install dependencies
-        run: npm install
-        env:
-          NODE_NO_WARNINGS: "1"
+        run: npm ci
 
-      - name: Build the application
+      - name: Build Nuxt
         run: npm run build
-        env:
-          NODE_NO_WARNINGS: "1"
 
-      - name: Deploy to VPS
-        env:
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_IP: ${{ secrets.VPS_IP }}
-          PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          SALT: ${{ secrets.SALT }}
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          NODE_NO_WARNINGS: "1"
-          NODE_ENV: "production"
+      - name: Archive dist
+        run: zip -r dist.zip .nuxt dist static package.json package-lock.json
 
+      - name: Deploy to Windows VPS
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "dist.zip"
+          target: "C:/MTwebsite/MTSoftServer/"
+
+      - name: Deploy on Windows server
         run: |
-          # Define the environment variables
-          $vpsUsername = $env:VPS_USERNAME
-          $vpsPassword = $env:VPS_PASSWORD
-          $vpsIP = $env:VPS_IP
-          $projectPath = $env:PROJECT_PATH
-
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && git pull"
-          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm ci"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
-          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && if exist .output (rd /s /q .output) else (echo '.output does not exist')"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm run build"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 start ecosystem.config.cjs"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 save"
+          powershell -Command "
+            cd C:/MTwebsite/MTSoftServer
+            Expand-Archive -Force dist.zip
+            Remove-Item dist.zip
+            pm2 restart MTSoftServer
+          "
