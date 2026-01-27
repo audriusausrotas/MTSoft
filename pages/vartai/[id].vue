@@ -7,7 +7,7 @@ const userStore = useUserStore();
 const gate = computed(() => {
   return gateStore.gates.find((item) => item._id === route.params.id);
 });
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const gateUsers = userStore.users
   .filter((user) => user.accountType === "Vartonas")
@@ -104,8 +104,8 @@ const updateHandler = async (change: string, value: any) => {
             gate?.measure === 'Eilėje'
               ? 'text-red-full'
               : gate?.measure === 'Galima matuoti'
-              ? ' text-orange-500'
-              : 'text-green-500'
+                ? ' text-orange-500'
+                : 'text-green-500'
           "
         />
         <BaseInput

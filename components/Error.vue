@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { message, isError } = useError();
+const { message, isError } = useCustomError();
 </script>
 
 <template>

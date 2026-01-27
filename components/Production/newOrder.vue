@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 
 const newOpen = ref<boolean>(false);
@@ -22,11 +22,7 @@ const newHandler = async () => {
   if (response.success) {
     if (!useSocketStore().connected) {
       productionStore.addProduction(response.data);
-      useProjectsStore().updateProjectField(
-        response.data._id,
-        "status",
-        "Gaminama"
-      );
+      useProjectsStore().updateProjectField(response.data._id, "status", "Gaminama");
     }
     setSuccess(response.message);
     newOpen.value = false;

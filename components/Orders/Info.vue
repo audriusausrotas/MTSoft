@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["order"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const clipboardHandler = async (value: string) => {
   if (!value) return;

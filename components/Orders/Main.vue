@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "data", "index"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const disabled = ref<boolean>(true);
 const name = ref<string>(props.data?.name);
@@ -18,7 +18,7 @@ const updateOrderHandler = async (field: string, value: boolean) => {
         response.data._id,
         response.data.dataIndex,
         response.data.field,
-        response.data.value
+        response.data.value,
       );
 
     setSuccess(response.message);
@@ -43,11 +43,7 @@ const saveHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      useOrderStore().updateOrder(
-        response.data._id,
-        response.data.dataIndex,
-        response.data.data
-      );
+      useOrderStore().updateOrder(response.data._id, response.data.dataIndex, response.data.data);
 
     setSuccess(response.message);
   } else {
@@ -86,21 +82,21 @@ const saveHandler = async () => {
 
     <BaseCheckField
       :name="data._id + index"
-      @onChange="(value:boolean)=>updateOrderHandler('ordered', value)"
+      @onChange="(value: boolean) => updateOrderHandler('ordered', value)"
       :checked="data?.ordered"
       height="h-6"
       class="w-24"
     />
     <BaseCheckField
       :name="data._id + index"
-      @onChange="(value:boolean)=>updateOrderHandler('inWarehouse', value)"
+      @onChange="(value: boolean) => updateOrderHandler('inWarehouse', value)"
       :checked="data?.inWarehouse"
       height="h-6"
       class="w-24"
     />
     <BaseCheckField
       :name="data._id + index"
-      @onChange="(value:boolean)=>updateOrderHandler('delivered', value)"
+      @onChange="(value: boolean) => updateOrderHandler('delivered', value)"
       :checked="data?.delivered"
       height="h-6"
       class="w-24"

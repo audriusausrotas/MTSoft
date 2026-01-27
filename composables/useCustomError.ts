@@ -16,7 +16,7 @@ const showMessage = (text: string, type: boolean) => {
 const setSuccess = (text: string) => showMessage(text, false);
 const setError = (text: string) => showMessage(text, true);
 
-export default function useError() {
+export default function useCustomError() {
   return {
     message,
     isError,

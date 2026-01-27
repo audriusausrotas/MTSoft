@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const suppliersStore = useSuppliersStore();
 
 const deleteHandler = async (_id: string) => {

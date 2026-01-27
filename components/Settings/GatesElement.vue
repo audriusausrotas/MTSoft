@@ -3,7 +3,7 @@ import { calculateProductPrice } from "~/utils/calculations/calculateProductPric
 
 const props = defineProps(["data"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
@@ -98,11 +98,11 @@ const calculateHandler = () => {
   prices.priceWholesale.frame = calculateProductPrice(prices.cost.frame, profit.wholesale);
   prices.priceWholesale.automation = calculateProductPrice(
     prices.cost.automation,
-    profit.wholesale
+    profit.wholesale,
   );
   prices.priceWholesale.installation = calculateProductPrice(
     prices.cost.installation,
-    profit.wholesale
+    profit.wholesale,
   );
   prices.priceWholesale.inox = calculateProductPrice(prices.cost.inox, profit.wholesale);
 
@@ -110,7 +110,7 @@ const calculateHandler = () => {
   prices.priceWholesale.iseo_el = calculateProductPrice(prices.cost.iseo_el, profit.wholesale);
   prices.priceWholesale.locinox_el = calculateProductPrice(
     prices.cost.locinox_el,
-    profit.wholesale
+    profit.wholesale,
   );
 
   prices.priceRetail.frame = calculateProductPrice(prices.cost.frame, profit.retail);

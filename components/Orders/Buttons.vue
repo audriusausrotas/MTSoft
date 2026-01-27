@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "projectID"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const finishOrderHandler = async () => {
   const requestData = { _id: props._id, projectID: props.projectID };

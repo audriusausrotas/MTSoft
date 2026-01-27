@@ -15,7 +15,7 @@ const props = defineProps<Props>();
 
 type RALColorCode = keyof typeof RALcolors;
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 

@@ -19,7 +19,9 @@ const MONTHS = [
   "Gruodis",
 ];
 
-const FILTERBY = ["Sukūrimo datą", "Patvirtinimo datą", "Užbaigimo datą"];
+const FILTERBY = ["Sukūrimo data", "Patvirtinimo data", "Užbaigimo data"];
+
+const STATUS = ["Visi", "Aktyvus", "Baigtas"];
 
 const projectsStore = useProjectsStore();
 const archiveStore = useArchiveStore();
@@ -32,7 +34,7 @@ const filters = reactive({
   year: currentYear.toString(),
   month: MONTHS[currentDate.getMonth() + 1],
   status: "Visi",
-  filterBy: "Sukūrimo datą",
+  filterBy: "Sukūrimo data",
   search: "",
 });
 
@@ -70,16 +72,19 @@ const filteredProjects = computed(() => {
     filteredTemp = filteredTemp.filter((project) => project.creator.username === filters.manager);
   }
 
-  if (filters.status.toLowerCase() !== "visi") {
-    filteredTemp = filteredTemp.filter((project) => project.status === filters.status);
+  if (filters.status.toLowerCase() === "baigtas") {
+    filteredTemp = filteredTemp.filter((project) => project.status.toLowerCase() === "baigtas");
+  } else if (filters.status.toLowerCase() === "aktyvus") {
+    filteredTemp = filteredTemp.filter((project) => project.status.toLowerCase() !== "baigtas");
+  } else if (filters.status.toLowerCase() === "visi") {
   }
 
   if (filters.year !== "Visi") {
     filteredTemp = filteredTemp.filter((project) => {
       const year =
-        filters.filterBy === "Sukūrimo datą"
+        filters.filterBy === "Sukūrimo data"
           ? project.dates.dateCreated
-          : filters.filterBy === "Patvirtinimo datą"
+          : filters.filterBy === "Patvirtinimo data"
             ? project.dates.dateConfirmed
             : project.dates.dateArchieved;
 
@@ -90,9 +95,9 @@ const filteredProjects = computed(() => {
   if (filters.month !== "Visi") {
     filteredTemp = filteredTemp.filter((project) => {
       const month =
-        filters.filterBy === "Sukūrimo datą"
+        filters.filterBy === "Sukūrimo data"
           ? project.dates.dateCreated
-          : filters.filterBy === "Patvirtinimo datą"
+          : filters.filterBy === "Patvirtinimo data"
             ? project.dates.dateConfirmed
             : project.dates.dateArchieved;
 
@@ -172,7 +177,7 @@ const financialTotal = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full bg-slate-100 p-8 rounded-lg">
+  <div class="flex flex-col gap-4 w-full rounded-lg">
     <div class="flex gap-8">
       <ReportsInfoCard
         name="Apyvarta"
@@ -191,6 +196,7 @@ const financialTotal = computed(() => {
         :filtered="financialFiltered.margin"
         :total="financialTotal.margin"
         :extra="`${currentYear} metų marža`"
+        sign="%"
       />
       <ReportsInfoCard
         name="Likę atsiskaityti"
@@ -200,7 +206,7 @@ const financialTotal = computed(() => {
       />
     </div>
 
-    <div class="flex gap-4 p-4 border rounded-lg bg-white">
+    <div class="flex gap-4 p-4 border rounded-lg shadow-lg">
       <BaseInput
         placeholder="Paieška"
         label="Paieška"
@@ -211,7 +217,7 @@ const financialTotal = computed(() => {
 
       <BaseSelectField
         label="Statusas"
-        :values="statusFilters"
+        :values="STATUS"
         id="statusFilter"
         :defaultValue="filters.status"
         width="w-40"
@@ -254,23 +260,21 @@ const financialTotal = computed(() => {
         @onChange="(value: string) => (filters.month = value)"
       />
     </div>
-    <div class="flex flex-col overflow-scroll max-h-[60dvh] border rounded-lg">
-      <div class="flex px-6 py-4 sticky top-0 z-10 bg-slate-100 font-semibold">
-        <div class="w-10 flex-shrink-0">Nr</div>
-        <div class="w-32 flex-shrink-0">Užsakymo Nr</div>
-        <div class="w-[400px] flex-shrink-0">Objekto adresas</div>
-        <div class="w-36 flex-shrink-0">Vadybininkas</div>
-        <div class="w-36 flex-shrink-0">Sukūrimo data</div>
-        <div class="w-36 flex-shrink-0">Užbaigimo data</div>
-        <div class="w-36 flex-shrink-0 ml-8">Statusas</div>
-        <div class="w-32 flex-shrink-0">Avansas</div>
-        <div class="w-32 flex-shrink-0">Likusi suma</div>
-        <div class="w-32 flex-shrink-0">Savikaina</div>
-        <div class="w-32 flex-shrink-0">Kaina</div>
-        <div class="w-32 flex-shrink-0">Pelnas</div>
-        <div class="w-32 flex-shrink-0">Marža</div>
+    <div class="flex flex-col overflow-y-scroll max-h-[60dvh] border rounded-lg shadow-lg">
+      <div class="flex p-4 sticky top-0 z-10 bg-slate-100 font-semibold gap-4">
+        <div class="w-8 flex-shrink-0">Nr</div>
+        <div class="w-28 flex-shrink-0">Užsakymo Nr</div>
+        <div class="w-72 flex-shrink-0">Objekto adresas</div>
+        <div class="w-32 flex-shrink-0">Vadybininkas</div>
+        <div class="w-32 flex-shrink-0">{{ filters.filterBy }}</div>
+        <div class="w-24 flex-shrink-0">Avansas</div>
+        <div class="w-24 flex-shrink-0">Likusi suma</div>
+        <div class="w-24 flex-shrink-0">Savikaina</div>
+        <div class="w-24 flex-shrink-0">Kaina</div>
+        <div class="w-24 flex-shrink-0">Pelnas</div>
+        <div class="w-16 flex-shrink-0">Marža</div>
       </div>
-      <div class="bg-white flex flex-col divide-y">
+      <div class="flex flex-col divide-y">
         <ReportsProject
           v-for="(project, index) in filteredProjects"
           :key="project._id"

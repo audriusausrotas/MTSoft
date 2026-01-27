@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["binding", "index", "_id"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 

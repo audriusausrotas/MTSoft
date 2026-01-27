@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Product } from "~/data/interfaces";
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const props = defineProps(["value", "data", "field", "name"]);
 const settingsStore = useSettingsStore();
 const input = ref<string>("");
@@ -19,10 +19,7 @@ const saveHandler = async () => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      settingsStore.changeDefaultValue(
-        response.data.value,
-        response.data.field
-      );
+      settingsStore.changeDefaultValue(response.data.value, response.data.field);
     editable.value = false;
     setSuccess(response.message);
   } else {
@@ -57,11 +54,7 @@ const saveHandler = async () => {
       class="hover:cursor-pointer hover:scale-125 transition-transform"
     />
     <BaseInfoField width="w-96" :name="props.name" />
-    <BaseInfoField
-      v-if="!editable"
-      width="w-full max-w-[500px] "
-      :name="props.value"
-    />
+    <BaseInfoField v-if="!editable" width="w-full max-w-[500px] " :name="props.value" />
     <BaseSearchField
       v-else
       width="w-full max-w-[500px]"

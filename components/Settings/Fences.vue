@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const settingsStore = useSettingsStore();
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const newFenceHandler = async (name: string) => {
   const requestData = {
@@ -18,17 +18,10 @@ const newFenceHandler = async (name: string) => {
 </script>
 
 <template>
-  <BaseButtonWithInput
-    name="Nauja Tvora"
-    placeholder="Pavadinimas"
-    @onConfirm="newFenceHandler"
-  />
+  <BaseButtonWithInput name="Nauja Tvora" placeholder="Pavadinimas" @onConfirm="newFenceHandler" />
 
   <div class="flex flex-wrap gap-20 justify-around">
-    <SettingsFencesElement
-      v-for="fence in settingsStore.fences"
-      :fence="fence"
-    />
+    <SettingsFencesElement v-for="fence in settingsStore.fences" :fence="fence" />
   </div>
 </template>
 <style scoped></style>

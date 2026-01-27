@@ -6,7 +6,7 @@ import { calculateProductPrice } from "@/utils/calculations/calculateProductPric
 import type { Product } from "~/data/interfaces";
 const props = defineProps(["fence"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
@@ -255,10 +255,10 @@ const recalculateHandler = () => {
     const legNamePremium = settingsStore.defaultValues.retailDoubleLeg;
     const legNameEco = settingsStore.defaultValues.retailDoubleLegEco;
     const legPricePremium: Product | undefined = useProductsStore().products.find(
-      (item) => item.name === legNamePremium
+      (item) => item.name === legNamePremium,
     );
     const legPriceEco: Product | undefined = useProductsStore().products.find(
-      (item) => item.name === legNameEco
+      (item) => item.name === legNameEco,
     );
 
     if (!legPricePremium || !legPriceEco) return;
@@ -274,7 +274,7 @@ const recalculateHandler = () => {
     ).toFixed(2);
 
     pricesEco.meter.priceRetail = (pricesEco.meter.cost / ((100 - profit.ecoRetail) / 100)).toFixed(
-      2
+      2,
     );
 
     pricesEco.meter.priceWholesale = (
@@ -286,95 +286,95 @@ const recalculateHandler = () => {
     pricesPremium.aklina.cost = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
     pricesPremium.nepramatoma.cost = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
     pricesPremium.vidutiniska.cost = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
     pricesPremium.pramatoma.cost = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
     pricesPremium.pramatoma25.cost = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
     pricesPremium.pramatoma50.cost = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.cost,
-      legPricePremium?.prices?.cost
+      legPricePremium?.prices?.cost,
     );
 
     // wholesale
     pricesPremium.aklina.priceWholesale = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     pricesPremium.nepramatoma.priceWholesale = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     pricesPremium.vidutiniska.priceWholesale = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     pricesPremium.pramatoma.priceWholesale = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     pricesPremium.pramatoma25.priceWholesale = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     pricesPremium.pramatoma50.priceWholesale = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.priceWholesale,
-      legPricePremium?.prices?.priceWholesale
+      legPricePremium?.prices?.priceWholesale,
     );
     // Retail
     pricesPremium.aklina.priceRetail = calculateFencePrice(
       steps.aklina,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
     pricesPremium.nepramatoma.priceRetail = calculateFencePrice(
       steps.nepramatoma,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
     pricesPremium.vidutiniska.priceRetail = calculateFencePrice(
       steps.vidutiniska,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
     pricesPremium.pramatoma.priceRetail = calculateFencePrice(
       steps.pramatoma,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
     pricesPremium.pramatoma25.priceRetail = calculateFencePrice(
       steps.pramatoma25,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
     pricesPremium.pramatoma50.priceRetail = calculateFencePrice(
       steps.pramatoma50,
       pricesPremium.meter.priceRetail,
-      legPricePremium?.prices?.priceRetail
+      legPricePremium?.prices?.priceRetail,
     );
 
     //// eco
@@ -382,95 +382,95 @@ const recalculateHandler = () => {
     pricesEco.aklina.cost = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
     pricesEco.nepramatoma.cost = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
     pricesEco.vidutiniska.cost = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
     pricesEco.pramatoma.cost = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
     pricesEco.pramatoma25.cost = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
     pricesEco.pramatoma50.cost = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.cost,
-      legPriceEco?.prices?.cost
+      legPriceEco?.prices?.cost,
     );
 
     // wholesale
     pricesEco.aklina.priceWholesale = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     pricesEco.nepramatoma.priceWholesale = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     pricesEco.vidutiniska.priceWholesale = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     pricesEco.pramatoma.priceWholesale = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     pricesEco.pramatoma25.priceWholesale = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     pricesEco.pramatoma50.priceWholesale = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.priceWholesale,
-      legPriceEco?.prices?.priceWholesale
+      legPriceEco?.prices?.priceWholesale,
     );
     // Retail
     pricesEco.aklina.priceRetail = calculateFencePrice(
       steps.aklina,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
     pricesEco.nepramatoma.priceRetail = calculateFencePrice(
       steps.nepramatoma,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
     pricesEco.vidutiniska.priceRetail = calculateFencePrice(
       steps.vidutiniska,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
     pricesEco.pramatoma.priceRetail = calculateFencePrice(
       steps.pramatoma,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
     pricesEco.pramatoma25.priceRetail = calculateFencePrice(
       steps.pramatoma25,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
     pricesEco.pramatoma50.priceRetail = calculateFencePrice(
       steps.pramatoma50,
       pricesEco.meter.priceRetail,
-      legPriceEco?.prices?.priceRetail
+      legPriceEco?.prices?.priceRetail,
     );
   } else {
     if (!prices.cost) return;

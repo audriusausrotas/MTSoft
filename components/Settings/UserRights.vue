@@ -2,7 +2,7 @@
 import { reactive, watchEffect } from "vue";
 
 const props = defineProps(["accountType"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const editable = ref(false);

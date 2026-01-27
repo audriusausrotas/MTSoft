@@ -4,7 +4,7 @@ const calculationsStore = useCalculationsStore();
 const resultsStore = useResultsStore();
 const projectsStore = useProjectsStore();
 const backupStore = useBackupStore();
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const open = ref<boolean>(false);
 

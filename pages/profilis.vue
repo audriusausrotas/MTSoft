@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const userStore = useUserStore();
 const initials = userStore.user?.username.slice(0, 2);
 const newPassword = ref<string>("");

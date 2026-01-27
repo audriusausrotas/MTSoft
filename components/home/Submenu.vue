@@ -9,7 +9,7 @@ const resultsStore = useResultsStore();
 const calculationsStore = useCalculationsStore();
 const backupStore = useBackupStore();
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti projektą?");
@@ -43,7 +43,7 @@ const editHandler = async () => {
   resultsStore.discount = false;
 
   const project: Project | undefined = projectsStore.projects.find(
-    (project) => project._id === props._id
+    (project) => project._id === props._id,
   );
 
   if (!project) {
@@ -132,7 +132,7 @@ const extendHandler = async () => {
       projectsStore.updateProjectDates(
         response.data._id,
         "dateExparation",
-        response.data.dateExparation
+        response.data.dateExparation,
       );
 
     setSuccess(response.message);

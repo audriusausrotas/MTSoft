@@ -5,7 +5,7 @@ import { calculateProductPrice } from "~/utils/calculations/calculateProductPric
 const props = defineProps(["product", "index"]);
 const productsStore = useProductsStore();
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const editable = ref<boolean>(false);
 const productName = ref<string>(props.product?.name);
 const priceRetail = ref<number>(props.product?.prices?.priceRetail || 0);
@@ -26,8 +26,7 @@ const deleteHandler = async (): Promise<void> => {
   const response = await request.delete(`deleteProduct/${props.product._id}`);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      productsStore.deleteProduct(response.data._id);
+    !useSocketStore().connected && productsStore.deleteProduct(response.data._id);
 
     setSuccess(response.message);
   } else {
@@ -71,17 +70,10 @@ const saveHandler = async () => {
 };
 
 const calculateHandler = () => {
-  if (!productCost.value || !retailMargin.value || !wholesaleMargin.value)
-    return;
+  if (!productCost.value || !retailMargin.value || !wholesaleMargin.value) return;
 
-  priceRetail.value = calculateProductPrice(
-    productCost.value,
-    retailMargin.value
-  );
-  priceWholesale.value = calculateProductPrice(
-    productCost.value,
-    wholesaleMargin.value
-  );
+  priceRetail.value = calculateProductPrice(productCost.value, retailMargin.value);
+  priceWholesale.value = calculateProductPrice(productCost.value, wholesaleMargin.value);
 };
 
 watch(
@@ -93,15 +85,12 @@ watch(
     productCost.value = newProduct.prices.cost;
     productCategory.value = newProduct.category;
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-1"
-    :class="editable ? 'border-y-2 border-red-500 my-2 py-4' : ''"
-  >
+  <div class="flex flex-col gap-1" :class="editable ? 'border-y-2 border-red-500 my-2 py-4' : ''">
     <div class="flex items-center gap-4">
       <div class="w-8 p-3">{{ props.index + 1 }}</div>
       <div class="w-[500px]">
@@ -201,10 +190,7 @@ watch(
       </div>
     </div>
     <div v-if="editable" class="flex gap-4 items-end pl-12">
-      <BaseInfoField
-        name="Pelno skaičiavimas pagal maržą %"
-        width="w-[500px]"
-      />
+      <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="w-[500px]" />
       <BaseInfoField name="------->" width="w-24" />
       <BaseInput
         width="w-24"

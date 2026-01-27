@@ -12,7 +12,7 @@ const isLoading = ref<boolean>(false);
 const newCategory = ref<string>("Kita");
 const retailMargin = ref<number>(0);
 const wholesaleMargin = ref<number>(0);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -45,10 +45,7 @@ const calculateHandler = () => {
   if (!cost.value || !retailMargin.value || !wholesaleMargin.value) return;
 
   priceRetail.value = calculateProductPrice(cost.value, retailMargin.value);
-  priceWholesale.value = calculateProductPrice(
-    cost.value,
-    wholesaleMargin.value
-  );
+  priceWholesale.value = calculateProductPrice(cost.value, wholesaleMargin.value);
 };
 
 const clearHandler = (): void => {
@@ -65,11 +62,7 @@ const clearHandler = (): void => {
   <div class="flex flex-col gap-4">
     <BaseButton v-if="!open" name="pridėti naują" @click="open = true" />
     <div v-else class="flex gap-4">
-      <BaseButton
-        name="išsaugoti"
-        @click="saveHandler"
-        :isLoading="isLoading"
-      />
+      <BaseButton name="išsaugoti" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
     <div v-if="open" class="flex gap-4">
@@ -115,10 +108,7 @@ const clearHandler = (): void => {
       />
     </div>
     <div v-if="open" class="flex gap-4">
-      <BaseInfoField
-        name="Pelno skaičiavimas pagal maržą %"
-        width="w-[500px]"
-      />
+      <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="w-[500px]" />
       <BaseInfoField name="------->" width="w-24" />
       <BaseInput
         width="w-24"

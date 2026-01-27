@@ -2,7 +2,7 @@
 import type { FenceSetup } from "~/data/interfaces";
 
 const props = defineProps(["data", "field", "name"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const fenceTypes = props.field.toLowerCase().includes("fencetypes");

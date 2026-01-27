@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const route = useRoute();
 
 const order = computed(() => useOrderStore().orders.find((item) => item._id === route.params.id));

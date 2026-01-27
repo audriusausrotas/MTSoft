@@ -7,7 +7,7 @@ const resultsStore = useResultsStore();
 const backupStore = useBackupStore();
 const userStore = useUserStore();
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);

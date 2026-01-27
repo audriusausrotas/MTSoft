@@ -3,7 +3,7 @@ definePageMeta({
   layout: false,
 });
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const login = ref<boolean>(true);
 const username = ref<string>("");
 const email = ref<string>("");
@@ -26,7 +26,7 @@ const loginHandler = async () => {
 
     await fetchUserRights();
     const rights = useSettingsStore().userRights.find(
-      (item) => item.accountType === response.data.accountType
+      (item) => item.accountType === response.data.accountType,
     );
 
     if (rights) await fetchInitialUserData(rights);

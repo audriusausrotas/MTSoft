@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const projectsStore = useProjectsStore();
 
 const searchQuery = ref<string>("");
@@ -17,7 +17,7 @@ const projects = computed(() => {
       label="Paieška"
       width="flex-1"
       variant="light"
-      @onChange="(value: string) => searchQuery = value"
+      @onChange="(value: string) => (searchQuery = value)"
     >
       <NuxtImg
         src="/icons/search.svg"

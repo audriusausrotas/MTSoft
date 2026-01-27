@@ -33,23 +33,25 @@ const getStatusColor = (status: string) => {
 </script>
 
 <template>
-  <div class="flex items-center w-full min-w-max bg-white px-6 py-4">
-    <div class="w-10 flex-shrink-0 font-semibold">{{ index + 1 }}</div>
-    <div class="w-32 flex-shrink-0 font-semibold">{{ project?.orderNumber }}</div>
-    <div class="w-[400px] flex-shrink-0">{{ project?.client?.address }}</div>
-    <div class="w-36 flex-shrink-0">
+  <div class="flex items-center px-4 py-4 gap-4">
+    <div class="w-8 flex-shrink-0">
+      <div
+        class="rounded-full text-white font-bold py-1 text-center w-8 h-8"
+        :class="getStatusColor(project.status)"
+      >
+        {{ index + 1 }}
+      </div>
+    </div>
+    <div class="w-28 flex-shrink-0 font-semibold">
+      {{ project?.orderNumber }}
+    </div>
+    <div class="w-72 flex-shrink-0">{{ project?.client?.address }}</div>
+    <div class="w-32 flex-shrink-0">
       {{ project?.creator?.username }} {{ project?.creator?.lastName?.slice(0, 1) }}.
     </div>
-    <div class="w-36 flex-shrink-0">{{ project?.dates?.dateCreated?.slice(0, 10) }}</div>
-    <div class="w-36 flex-shrink-0">{{ project?.dates?.dateArchieved?.slice(0, 10) }}</div>
-    <div
-      class="w-36 flex-shrink-0 rounded-full py-2 text-center mr-8 font-medium"
-      :class="getStatusColor(project.status)"
-    >
-      {{ project?.status }}
-    </div>
-    <div class="w-32 flex-shrink-0 font-medium">{{ project?.advance }} €</div>
-    <div class="w-32 flex-shrink-0 font-medium">
+    <div class="w-32 flex-shrink-0">{{ project?.dates?.dateCreated?.slice(0, 10) }}</div>
+    <div class="w-24 flex-shrink-0 font-medium">{{ project?.advance }} €</div>
+    <div class="w-24 flex-shrink-0 font-medium">
       {{
         (
           (project.discount ? project.priceWithDiscount : project.totalPrice) - project.advance
@@ -57,10 +59,10 @@ const getStatusColor = (status: string) => {
       }}
       €
     </div>
-    <div class="w-32 flex-shrink-0 font-medium">{{ project?.totalCost }} €</div>
-    <div class="w-32 flex-shrink-0 font-medium">{{ project?.totalPrice }} €</div>
-    <div class="w-32 flex-shrink-0 font-medium text-red-600">{{ project?.totalProfit }} €</div>
-    <div class="w-32 flex-shrink-0 font-medium">{{ project?.totalMargin }} %</div>
+    <div class="w-24 flex-shrink-0 font-medium">{{ project?.totalCost }} €</div>
+    <div class="w-24 flex-shrink-0 font-medium">{{ project?.totalPrice }} €</div>
+    <div class="w-24 flex-shrink-0 font-medium text-red-600">{{ project?.totalProfit }} €</div>
+    <div class="font-medium">{{ project?.totalMargin }} %</div>
   </div>
 </template>
 

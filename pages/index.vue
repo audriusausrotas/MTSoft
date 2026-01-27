@@ -2,7 +2,7 @@
 import type { Project } from "~/data/interfaces";
 import { statusFilters } from "~/data/selectFieldData";
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const projectsStore = useProjectsStore();
 

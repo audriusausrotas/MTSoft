@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["work", "index", "hidePrices", "location", "_id"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const doneHandler = async (value: boolean) => {
   const requestData = { _id: props?._id, measureIndex: props?.index, value };
@@ -12,7 +12,7 @@ const doneHandler = async (value: boolean) => {
       useProjectsStore().workDone(
         response?.data?._id,
         response?.data?.measureIndex,
-        response?.data?.value
+        response?.data?.value,
       );
 
     setSuccess(response?.message);
@@ -48,8 +48,8 @@ const doneHandler = async (value: boolean) => {
               props.work.name.includes("Tvoros montavimas")
                 ? "m2"
                 : props.work.name.includes("Vartų pamato betonavimas")
-                ? "m"
-                : "vnt"
+                  ? "m"
+                  : "vnt"
             }}
           </p>
         </div>
@@ -108,9 +108,7 @@ const doneHandler = async (value: boolean) => {
         <p class="block lg:hidden font-bold">Užsakyta:</p>
         <div
           class="w-16 items-center"
-          :class="
-            props?.location === 'installation' ? 'pointer-events-none ' : ''
-          "
+          :class="props?.location === 'installation' ? 'pointer-events-none ' : ''"
         >
           <BaseCheckField
             :name="'vartai' + index"

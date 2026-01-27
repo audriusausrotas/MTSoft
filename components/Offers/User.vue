@@ -3,7 +3,7 @@ import type { PotentialClient } from "~/data/interfaces";
 import { OffersStatus } from "~/data/selectFieldData";
 
 const props = defineProps(["index", "client"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const potentialClientsStore = usePotentialClientsStore();
 
 const editable = ref<boolean>(false);
@@ -18,13 +18,10 @@ const input = ref<string>(props.client.comment);
 if (props.client.name === "testas") console.log(props.client);
 
 const deleteHandler = async () => {
-  const response: any = await request.delete(
-    `deletePotentialClient/${props.client._id}`
-  );
+  const response: any = await request.delete(`deletePotentialClient/${props.client._id}`);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      potentialClientsStore.deletePotentialClient(response.data._id);
+    !useSocketStore().connected && potentialClientsStore.deletePotentialClient(response.data._id);
 
     setSuccess(response.message);
   } else {
@@ -47,8 +44,7 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateClient", client);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      potentialClientsStore.updatePotentialClients(response.data);
+    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
 
     setSuccess(response.message);
     editable.value = false;
@@ -66,7 +62,7 @@ watch(
     address.value = client.address;
     status.value = client.status;
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 
@@ -78,10 +74,10 @@ watch(
       props.client.status === 'Domina'
         ? 'bg-green-100'
         : props.client.status === 'Nelabai domina'
-        ? 'bg-orange-100'
-        : props.client.status === 'Nedomina'
-        ? 'bg-red-100'
-        : '',
+          ? 'bg-orange-100'
+          : props.client.status === 'Nedomina'
+            ? 'bg-red-100'
+            : '',
     ]"
   >
     <div
@@ -117,9 +113,7 @@ watch(
         />
       </div>
 
-      <div
-        class="w-6 hover:cursor-pointer hover:scale-150 transition-transform"
-      >
+      <div class="w-6 hover:cursor-pointer hover:scale-150 transition-transform">
         <NuxtImg
           v-if="!editable"
           @click="editable = true"

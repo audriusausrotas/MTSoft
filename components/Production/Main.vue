@@ -3,7 +3,7 @@
 import type { Bindings } from "~/data/interfaces";
 
 const props = defineProps(["_id", "orderNr", "client", "creator", "bindings"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 

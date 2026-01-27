@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import type { Comment } from "~/data/interfaces";
 import { ProductionStatus } from "~/data/selectFieldData";
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const route = useRoute();
 

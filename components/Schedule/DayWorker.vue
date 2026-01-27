@@ -3,7 +3,7 @@ import type { Project, Job } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const projectsStore = useProjectsStore();
 const scheduleStore = useScheduleStore();

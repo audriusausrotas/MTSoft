@@ -5,7 +5,7 @@ const settingsStore = useSettingsStore();
 const gateStore = useGateStore();
 const open = ref<boolean>(false);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const date = props.project?.dates?.dateConfirmed
   ? props.project?.dates?.dateConfirmed
@@ -28,28 +28,28 @@ const color =
   props.project.status === "Pridavimas"
     ? "bg-lime-400"
     : props.project.status === "Netinkamas"
-    ? "bg-red-600"
-    : props.project.status === "Tinkamas"
-    ? "bg-pink-400"
-    : props.project.status === "Nepatvirtintas"
-    ? "bg-orange-300"
-    : props.project.status === "Patvirtintas"
-    ? "bg-green-400 "
-    : props.project.status === "Betonuojama"
-    ? "bg-emerald-400"
-    : props.project.status === "Gaminama"
-    ? "bg-teal-400"
-    : props.project.status === "Montuojama"
-    ? "bg-indigo-400"
-    : props.project.status === "Laukiam Vartų"
-    ? "bg-blue-400"
-    : props.project.status === "Vartai Sumontuoti"
-    ? "bg-violet-400"
-    : props.project.status === "Apmokėjimas"
-    ? "bg-fuchsia-400"
-    : props.project.status === "Baigtas"
-    ? "bg-stone-400"
-    : "bg-yellow-400";
+      ? "bg-red-600"
+      : props.project.status === "Tinkamas"
+        ? "bg-pink-400"
+        : props.project.status === "Nepatvirtintas"
+          ? "bg-orange-300"
+          : props.project.status === "Patvirtintas"
+            ? "bg-green-400 "
+            : props.project.status === "Betonuojama"
+              ? "bg-emerald-400"
+              : props.project.status === "Gaminama"
+                ? "bg-teal-400"
+                : props.project.status === "Montuojama"
+                  ? "bg-indigo-400"
+                  : props.project.status === "Laukiam Vartų"
+                    ? "bg-blue-400"
+                    : props.project.status === "Vartai Sumontuoti"
+                      ? "bg-violet-400"
+                      : props.project.status === "Apmokėjimas"
+                        ? "bg-fuchsia-400"
+                        : props.project.status === "Baigtas"
+                          ? "bg-stone-400"
+                          : "bg-yellow-400";
 
 const statusHandler = async (value: string) => {
   const requestData = { _id: props.project._id, value };
@@ -134,8 +134,7 @@ const statusHandler = async (value: string) => {
         id="orderStatus"
         :defaultValue="props.project?.status"
         width="w-48"
-        @onChange="(value: string) => statusHandler(value)
-              "
+        @onChange="(value: string) => statusHandler(value)"
         :class="color"
       />
 
@@ -146,10 +145,10 @@ const statusHandler = async (value: string) => {
           time < 0
             ? 'bg-black text-white'
             : time < 3
-            ? 'bg-red-600'
-            : time < 10
-            ? 'bg-red-400'
-            : ' bg-inherit'
+              ? 'bg-red-600'
+              : time < 10
+                ? 'bg-red-400'
+                : ' bg-inherit'
         "
       >
         {{ time > 0 ? time : 0 }}

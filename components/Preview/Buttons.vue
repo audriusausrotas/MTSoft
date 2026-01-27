@@ -6,7 +6,7 @@ import { statusFilters } from "~/data/selectFieldData";
 const props = defineProps(["offer", "location", "showButtons", "companies"]);
 const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const installationStore = useInstallationStore();
 const projectsStore = useProjectsStore();
 const productionStore = useProductionStore();

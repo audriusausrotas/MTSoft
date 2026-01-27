@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["order", "index"]);
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const installationStore = useInstallationStore();
 const userStore = useUserStore();
 

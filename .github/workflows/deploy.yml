@@ -48,7 +48,7 @@ jobs:
           $projectPath = $env:PROJECT_PATH
 
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && git pull"
-          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm install"
+          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm ci"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
           # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
           echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && if exist .output (rd /s /q .output) else (echo '.output does not exist')"

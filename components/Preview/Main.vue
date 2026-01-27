@@ -4,7 +4,7 @@ import type { Production, Supplier } from "~/data/interfaces";
 
 const props = defineProps(["offer", "location"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const suppliersStore = useSuppliersStore();
 

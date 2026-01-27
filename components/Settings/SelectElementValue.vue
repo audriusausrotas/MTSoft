@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["value", "editable", "index", "field", "disable"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const deleteHandler = async () => {

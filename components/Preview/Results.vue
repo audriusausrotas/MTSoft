@@ -2,7 +2,7 @@
 const props = defineProps(["result", "index", "hidePrices", "_id", "showbuttons", "location"]);
 const emit = defineEmits(["checked", "unchecked"]);
 
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const measurement = ref<string>("vnt");
 const isGate =
@@ -26,7 +26,7 @@ const deliverHandler = async (value: boolean) => {
       useProjectsStore().partsDelivered(
         response?.data?._id,
         response?.data?.measureIndex,
-        response?.data?.value
+        response?.data?.value,
       );
 
     setSuccess(response?.message);
@@ -44,7 +44,7 @@ const orderHandler = async (value: boolean) => {
       useProjectsStore().partsOrdered(
         response?.data?._id,
         response?.data?.measureIndex,
-        response?.data?.value
+        response?.data?.value,
       );
 
     setSuccess(response?.message);

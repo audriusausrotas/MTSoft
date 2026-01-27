@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["index", "client"]);
 const potentialClientsStore = usePotentialClientsStore();
-const { setError, setSuccess } = useError();
+const { setError, setSuccess } = useCustomError();
 
 const updateHandler = async (value: boolean) => {
   const requestData = { _id: props.client._id, all: false, send: value };
@@ -9,8 +9,7 @@ const updateHandler = async (value: boolean) => {
   const response: any = await request.patch("selectClients", requestData);
 
   if (response.success) {
-    !useSocketStore().connected &&
-      potentialClientsStore.updatePotentialClients(response.data);
+    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
 
     setSuccess(response.message);
   } else {
@@ -26,17 +25,13 @@ const updateHandler = async (value: boolean) => {
       props.client.status === 'Domina'
         ? 'bg-green-100'
         : props.client.status === 'Nelabai domina'
-        ? 'bg-orange-100'
-        : props.client.status === 'Nedomina'
-        ? 'bg-red-100'
-        : ''
+          ? 'bg-orange-100'
+          : props.client.status === 'Nedomina'
+            ? 'bg-red-100'
+            : ''
     "
   >
-    <BaseCheckField
-      height="h-4"
-      :checked="props.client.send"
-      @onChange="updateHandler"
-    />
+    <BaseCheckField height="h-4" :checked="props.client.send" @onChange="updateHandler" />
     <p class="w-6">{{ props.index + 1 }}</p>
     <p class="w-48">{{ props.client.name }}</p>
     <p class="w-80">{{ props.client.email }}</p>
