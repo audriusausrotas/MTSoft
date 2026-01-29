@@ -54,6 +54,7 @@ export default function calculateResults() {
       }
 
       // calculate gates
+
       if (measure.gates.exist) {
         results.addGates({
           _id: uuidv4(),
