@@ -507,6 +507,14 @@ const recalculateHandler = () => {
     prices.priceWholesale = (prices.cost / ((100 - profit.premiumWholesale) / 100)).toFixed(2);
   }
 };
+
+const addImage = () => {
+  aditional.images.push({
+    url: "",
+    alt: "",
+    altEN: "",
+  });
+};
 </script>
 
 <template>
@@ -1074,15 +1082,32 @@ const recalculateHandler = () => {
                 class="border border-dark-light w-full h-20 p-2 rounded-md"
               />
             </div>
-            <div>
-              <label for="fenceImages">Nuotraukų URL (atskirti kableliu)</label>
-              <textarea
-                :disabled="!editable"
-                v-model="aditional.images"
-                name="images"
-                id="fenceImages"
-                class="border border-dark-light w-full h-20 p-2 rounded-md"
-              />
+            <div class="flex flex-col gap-4">
+              <BaseButton @click="addImage" :disabled="!editable">Pridėti nuotrauką</BaseButton>
+
+              <div v-for="(image, index) in aditional.images" :key="index" class="flex gap-4">
+                <BaseInput
+                  :disable="!editable"
+                  label="Nuotraukos URL"
+                  :name="image.url"
+                  width="flex-1"
+                  @onChange="(value: string) => (aditional.images[index].url = value)"
+                />
+                <BaseInput
+                  :disable="!editable"
+                  label="Nuotraukos aprašymas"
+                  :name="image.alt"
+                  width="flex-1"
+                  @onChange="(value: string) => (aditional.images[index].alt = value)"
+                />
+                <BaseInput
+                  :disable="!editable"
+                  label="Nuotraukos aprašymas EN"
+                  :name="image.altEN"
+                  width="flex-1"
+                  @onChange="(value: string) => (aditional.images[index].altEN = value)"
+                />
+              </div>
             </div>
           </div>
         </Transition>
