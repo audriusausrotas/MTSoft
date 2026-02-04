@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["name", "label", "checked", "height"]);
+const props = defineProps(["name", "label", "checked", "height", "disabled"]);
 
 const emit = defineEmits(["onChange"]);
 
@@ -11,19 +11,17 @@ const emitUpdate = (value: boolean): void => {
 <template>
   <div
     class="flex flex-col text-sm items-center gap-4 justify-start"
-    :class="props.height ? props.height : 'h-[64px]'"
+    :class="height ? height : 'h-[64px]'"
   >
-    <label
-      v-if="props.label"
-      :for="props.name"
-      class="capitalize cursor-pointer select-none"
-      >{{ props.label }}
+    <label v-if="label" :for="name" class="capitalize cursor-pointer select-none"
+      >{{ label }}
     </label>
     <input
+      :disabled="disabled"
       class="hover:cursor-pointer h-4 w-4"
       type="checkbox"
-      :checked="props.checked"
-      :id="props.name"
+      :checked="checked"
+      :id="name"
       @change="emitUpdate(($event.target as HTMLInputElement)?.checked)"
     />
   </div>

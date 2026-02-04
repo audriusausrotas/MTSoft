@@ -61,7 +61,6 @@ export const navigationLinks: MenuLinks[] = [
   { name: "Montavimas", link: "/montavimas", iconPath: "" },
   { name: "Sandėlys", link: "/sandelys", iconPath: "" },
   { name: "Užsakymai", link: "/uzsakymai", iconPath: "" },
-  { name: "Vartai", link: "/vartai", iconPath: "" },
 ];
 
 export const optionLinks: MenuLinks[] = [

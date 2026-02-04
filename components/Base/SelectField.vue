@@ -1,13 +1,25 @@
 <script setup lang="ts">
-const props = defineProps([
-  "values",
-  "defaultValue",
-  "name",
-  "label",
-  "width",
-  "disable",
-  "variant",
-]);
+const props = withDefaults(
+  defineProps<{
+    values?: string[];
+    defaultValue?: string;
+    name?: string;
+    label?: string;
+    width?: string;
+    disable?: boolean;
+    variant?: string;
+  }>(),
+  {
+    values: () => [],
+    defaultValue: "",
+    name: "",
+    label: "",
+    width: "w-48",
+    disable: false,
+    variant: "light",
+  },
+);
+
 const emit = defineEmits(["onChange"]);
 
 const isOpen = ref<boolean>(false);
@@ -29,27 +41,25 @@ watch(
 
 <template>
   <div class="flex flex-col gap-1 select-none rounded-lg">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
-    <div class="relative selct-none h-10" :class="[props.width ? `${props.width}` : 'w-48']">
+    <label v-if="label" :for="label" class="pl-2 text-sm">{{ label }}</label>
+    <div class="relative selct-none h-10" :class="[width, disable ? 'bg-stone-100' : '']">
       <div
-        @click="props.disable ? '' : (isOpen = !isOpen)"
+        @click="disable ? '' : (isOpen = !isOpen)"
         class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg bg-inherit shadow-sm"
         :class="[
-          props.variant !== 'light'
+          variant !== 'light'
             ? 'bg-gray-ultra-light'
-            : props.disable
+            : disable
               ? 'bg-gray-ultra-light'
               : 'bg-white',
-          props.disable ? '' : 'cursor-pointer',
+          disable ? '' : 'cursor-pointer',
           props?.defaultValue?.includes('@') ? 'lowercase' : 'capitalize',
         ]"
       >
         <div class="flex gap-3">
           <NuxtImg
-            v-if="props.name === 'verified'"
-            :src="
-              props.defaultValue === 'patvirtintas' ? '/icons/ellipseg.svg' : '/icons/ellipser.svg'
-            "
+            v-if="name === 'verified'"
+            :src="defaultValue === 'patvirtintas' ? '/icons/ellipseg.svg' : '/icons/ellipser.svg'"
             width="8"
             height="8"
             decoding="auto"
@@ -71,12 +81,12 @@ watch(
         v-if="isOpen"
         class="absolute left-0 z-50 flex flex-col w-[inherit] overflow-y-auto border shadow-lg max-h-52 rounded-lg top-10 border-dark-light"
         :class="[
-          props.variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
-          props.values?.some((item: any) => item.value?.includes('@')),
+          variant === 'light' ? 'bg-white' : 'bg-gray-ultra-light',
+          values?.some((item: any) => item.value?.includes('@')),
         ]"
       >
         <div
-          v-for="(value, index) in props.values"
+          v-for="(value, index) in values"
           :key="index"
           @click="changeHandler(value)"
           class="px-4 py-2 hover:bg-red-full hover:cursor-pointer hover:text-white"

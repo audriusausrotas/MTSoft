@@ -1,15 +1,33 @@
+div
 <script setup lang="ts">
 import { fenceTypes, fenceDirection } from "~/data/selectFieldData";
 import FencesElementBlock from "./FencesElementBlock.vue";
 import { calculateFencePrice } from "@/utils/calculations/calculateFencePrice";
 import { calculateProductPrice } from "@/utils/calculations/calculateProductPrice";
 import type { Product } from "~/data/interfaces";
-const props = defineProps(["fence"]);
+const props = defineProps(["fence", "index"]);
 
 const { setError, setSuccess } = useCustomError();
 const settingsStore = useSettingsStore();
 
 const editable = ref<boolean>(false);
+const stepOpen = ref<boolean>(false);
+const premiumPricesOpen = ref<boolean>(false);
+const ecoPricesOpen = ref<boolean>(false);
+const infoOpen = ref<boolean>(false);
+const fenceOpen = ref<boolean>(false);
+const aditionalInfoOpen = ref<boolean>(false);
+
+const aditional = reactive({
+  show: props.fence.aditional?.show || false,
+  description: props.fence.aditional?.description || "",
+  seoTitle: props.fence.aditional?.seoTitle || "",
+  seoDescription: props.fence.aditional?.seoDescription || "",
+  descriptionEn: props.fence.aditional?.descriptionEn || "",
+  seoTitleEn: props.fence.aditional?.seoTitleEn || "",
+  seoDescriptionEn: props.fence.aditional?.seoDescriptionEn || "",
+  images: props.fence.aditional?.images || [],
+});
 
 const profit = reactive({
   premiumRetail: props.fence?.profit?.premiumRetail || 0,
@@ -136,6 +154,16 @@ const saveHandler = async () => {
       width: +fenceDetails.width,
       bends: +fenceDetails.bends,
       holes: +fenceDetails.holes,
+    },
+    aditional: {
+      show: aditional.show,
+      description: aditional.description,
+      seoTitle: aditional.seoTitle,
+      seoDescription: aditional.seoDescription,
+      descriptionEn: aditional.descriptionEn,
+      seoTitleEn: aditional.seoTitleEn,
+      seoDescriptionEn: aditional.seoDescriptionEn,
+      images: aditional.images,
     },
     steps: {
       aklina: +steps.aklina,
@@ -482,12 +510,20 @@ const recalculateHandler = () => {
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-8 w-full items-center border border-dark-full p-8 rounded-xl relative"
-  >
-    <div class="flex flex-col gap-4 justify-center items-center">
+  <div class="flex flex-col w-full border border-gray-full p-4 rounded-xl relative gap-8">
+    <div class="f flex justify-between items-center">
       <div class="flex gap-4">
-        <p class="font-bold text-xl">Lankstinio informacija</p>
+        <NuxtImg
+          @click="fenceOpen = !fenceOpen"
+          src="/icons/arrowDown.svg"
+          alt="arrow-down"
+          class="w-4 hover:cursor-pointer transition-transform duration-300"
+          :class="fenceOpen ? 'rotate-180' : ''"
+        />
+        <div class="font-bold text-xl">{{ fenceDetails.name }}</div>
+      </div>
+
+      <div class="flex gap-8">
         <NuxtImg
           v-if="editable"
           src="/icons/save.svg"
@@ -510,393 +546,551 @@ const recalculateHandler = () => {
           class="hover:cursor-pointer hover:scale-125 transition-transform"
           @click="editable = !editable"
         />
-      </div>
-      <div v-if="editable" class="flex flex-col gap-4 items-center w-full">
-        <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"></div>
-        <p class="font-semibold text-lg">Maržos skaičiavimui</p>
-
-        <div class="flex gap-4 items-end">
-          <BaseButton name="Skaičiuoti" @click="recalculateHandler" />
-
-          <BaseInput
-            :name="profit.premiumWholesale"
-            placeholder="Didmenos %"
-            :label="props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'"
-            type="number"
-            width="w-40"
-            @onChange="(value) => (profit.premiumWholesale = value)"
-          />
-          <BaseInput
-            :name="profit.premiumRetail"
-            placeholder="Mažmenos %"
-            :label="props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'"
-            type="number"
-            width="w-40"
-            @onChange="(value) => (profit.premiumRetail = value)"
-          />
-          <BaseInput
-            v-if="props.fence.category === 'Tvora'"
-            :name="profit.ecoWholesale"
-            placeholder="Didmenos %"
-            label="Didmena Eco"
-            type="number"
-            width="w-40"
-            @onChange="(value) => (profit.ecoWholesale = value)"
-          />
-          <BaseInput
-            v-if="props.fence.category === 'Tvora'"
-            :name="profit.ecoRetail"
-            placeholder="Mažmenos %"
-            label="Mažmena Eco"
-            type="number"
-            width="w-40"
-            @onChange="(value) => (profit.ecoRetail = value)"
-          />
-        </div>
-        <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400"></div>
-      </div>
-
-      <div
-        class="absolute top-2 right-2 hover:scale-125 transition-transform hover:cursor-pointer"
-        @click="deleteHandler"
-      >
-        <NuxtImg
-          src="/icons/delete.svg"
-          width="20"
-          height="20"
-          decoding="auto"
-          :ismap="true"
-          loading="lazy"
-        />
-      </div>
-
-      <div class="flex gap-4 items-center justify-center w-full">
-        <BaseInput
-          :name="fenceDetails.name"
-          width="flex-1 min-w-60"
-          label="Tvoros Pavadinimas"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (fenceDetails.name = value)"
-        />
-
-        <BaseSelectField
-          label="Tvoros Tipas"
-          :values="fenceTypes"
-          :defaultValue="fenceDetails.category"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          width="w-40"
-          @onChange="(value) => (fenceDetails.category = value)"
-        />
-
-        <BaseSelectField
-          v-if="fenceDetails.category !== 'Segmentas'"
-          label="Kryptis"
-          :values="fenceDirection"
-          :defaultValue="fenceDetails.defaultDirection"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          width="w-40"
-          @onChange="(value) => (fenceDetails.defaultDirection = value)"
-        />
-
-        <BaseInput
-          :name="fenceDetails?.height"
-          label="aukštis"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (fenceDetails.height = value)"
-        />
-
-        <BaseInput
-          :name="fenceDetails?.width"
-          label="plotis"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (fenceDetails.width = value)"
-        />
-
-        <BaseInput
-          v-if="fenceDetails.category === 'Tvora'"
-          :name="fenceDetails?.bends"
-          label="lenkimai"
-          width="w-24"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (fenceDetails.bends = value)"
-        />
-
-        <BaseInput
-          v-if="fenceDetails.category === 'Tvora'"
-          :name="fenceDetails?.holes"
-          label="Skyluės lankstinyje"
-          width="w-36"
-          type="number"
-          :disable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(value) => (fenceDetails.holes = value)"
-        />
-      </div>
-    </div>
-
-    <div class="flex gap-12 w-full border-t pt-4 justify-evenly border-gray-400">
-      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col gap-4 items-center">
-        <p class="font-bold text-xl">Montavimo žingsnis</p>
-        <div class="flex gap-4 items-center justify-center">
-          <BaseInput
-            :name="steps.aklina"
-            label="Aklina"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.aklina = value)"
-          />
-          <BaseInput
-            :name="steps.nepramatoma"
-            label="Nepramatoma"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.nepramatoma = value)"
-          />
-          <BaseInput
-            :name="steps.vidutiniska"
-            label="Vidutiniška"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.vidutiniska = value)"
-          />
-          <BaseInput
-            :name="steps.pramatoma"
-            label="Pramatoma"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.pramatoma = value)"
-          />
-          <BaseInput
-            :name="steps.pramatoma25"
-            label="25%"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.pramatoma25 = value)"
-          />
-          <BaseInput
-            :name="steps.pramatoma50"
-            label="50%"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (steps.pramatoma50 = value)"
-          />
-        </div>
-      </div>
-      <div v-if="fenceDetails.category !== 'Tvora'" class="flex flex-col gap-4 items-center">
-        <p class="font-bold text-xl">Kainos</p>
-        <div class="flex gap-4 items-center justify-center">
-          <BaseInput
-            :name="prices.cost"
-            label="Savikaina"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (prices.cost = value)"
-          />
-          <BaseInput
-            :name="prices.priceWholesale"
-            label="Didmena"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (prices.priceWholesale = value)"
-          />
-          <BaseInput
-            :name="prices.priceRetail"
-            label="Mažmena"
-            width="w-24"
-            type="number"
-            :disable="!editable"
-            :variant="editable ? 'light' : ''"
-            @onChange="(value) => (prices.priceRetail = value)"
+        <div
+          class="hover:scale-125 transition-transform hover:cursor-pointer"
+          @click="deleteHandler"
+        >
+          <NuxtImg
+            src="/icons/delete.svg"
+            width="20"
+            height="20"
+            decoding="auto"
+            :ismap="true"
+            loading="lazy"
           />
         </div>
       </div>
     </div>
+    <div v-if="fenceOpen" class="flex flex-col gap-4">
+      <div class="flex flex-col justify-center">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="infoOpen = !infoOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="infoOpen ? 'rotate-180' : ''"
+          />
+          <div>lankstinio informacija</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div
+            v-if="infoOpen"
+            class="flex flex-col gap-4 w-full border rounded-lg p-4 border-gray-full"
+          >
+            <div v-if="editable" class="flex flex-col gap-4 w-full">
+              <div class="flex w-full justify-evenly"></div>
+              <p class="font-semibold text-lg">Maržos skaičiavimui</p>
 
-    <div
-      v-if="fenceDetails.category === 'Tvora'"
-      class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
-    >
-      <p class="font-bold text-xl">Premium skardos kainos</p>
-      <div class="flex gap-4">
-        <FencesElementBlock
-          name="Metras"
-          :editable="editable"
-          :cost="pricesPremium.meter.cost"
-          :wholesale="pricesPremium.meter.priceWholesale"
-          :retail="pricesPremium.meter.priceRetail"
-          @cost="(value) => (pricesPremium.meter.cost = value)"
-          @wholesale="(value) => (pricesPremium.meter.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.meter.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Aklina"
-          :editable="editable"
-          :cost="pricesPremium.aklina.cost"
-          :wholesale="pricesPremium.aklina.priceWholesale"
-          :retail="pricesPremium.aklina.priceRetail"
-          @cost="(value) => (pricesPremium.aklina.cost = value)"
-          @wholesale="(value) => (pricesPremium.aklina.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.aklina.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Nepramatoma"
-          :editable="editable"
-          :cost="pricesPremium.nepramatoma.cost"
-          :wholesale="pricesPremium.nepramatoma.priceWholesale"
-          :retail="pricesPremium.nepramatoma.priceRetail"
-          @cost="(value) => (pricesPremium.nepramatoma.cost = value)"
-          @wholesale="(value) => (pricesPremium.nepramatoma.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.nepramatoma.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Vidutiniska"
-          :editable="editable"
-          :cost="pricesPremium.vidutiniska.cost"
-          :wholesale="pricesPremium.vidutiniska.priceWholesale"
-          :retail="pricesPremium.vidutiniska.priceRetail"
-          @cost="(value) => (pricesPremium.vidutiniska.cost = value)"
-          @wholesale="(value) => (pricesPremium.vidutiniska.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.vidutiniska.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Pramatoma"
-          :editable="editable"
-          :cost="pricesPremium.pramatoma.cost"
-          :wholesale="pricesPremium.pramatoma.priceWholesale"
-          :retail="pricesPremium.pramatoma.priceRetail"
-          @cost="(value) => (pricesPremium.pramatoma.cost = value)"
-          @wholesale="(value) => (pricesPremium.pramatoma.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.pramatoma.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="25% pramatomumas"
-          :editable="editable"
-          :cost="pricesPremium.pramatoma25.cost"
-          :wholesale="pricesPremium.pramatoma25.priceWholesale"
-          :retail="pricesPremium.pramatoma25.priceRetail"
-          @cost="(value) => (pricesPremium.pramatoma25.cost = value)"
-          @wholesale="(value) => (pricesPremium.pramatoma25.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.pramatoma25.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="50% pramatomumas"
-          :editable="editable"
-          :cost="pricesPremium.pramatoma50.cost"
-          :wholesale="pricesPremium.pramatoma50.priceWholesale"
-          :retail="pricesPremium.pramatoma50.priceRetail"
-          @cost="(value) => (pricesPremium.pramatoma50.cost = value)"
-          @wholesale="(value) => (pricesPremium.pramatoma50.priceWholesale = value)"
-          @retail="(value) => (pricesPremium.pramatoma50.priceRetail = value)"
-        />
+              <div class="flex gap-4 items-end">
+                <BaseButton name="Skaičiuoti" @click="recalculateHandler" />
+
+                <BaseInput
+                  :name="profit.premiumWholesale"
+                  placeholder="Didmenos %"
+                  :label="props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'"
+                  type="number"
+                  width="w-40"
+                  @onChange="(value) => (profit.premiumWholesale = value)"
+                />
+                <BaseInput
+                  :name="profit.premiumRetail"
+                  placeholder="Mažmenos %"
+                  :label="props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'"
+                  type="number"
+                  width="w-40"
+                  @onChange="(value) => (profit.premiumRetail = value)"
+                />
+                <BaseInput
+                  v-if="props.fence.category === 'Tvora'"
+                  :name="profit.ecoWholesale"
+                  placeholder="Didmenos %"
+                  label="Didmena Eco"
+                  type="number"
+                  width="w-40"
+                  @onChange="(value) => (profit.ecoWholesale = value)"
+                />
+                <BaseInput
+                  v-if="props.fence.category === 'Tvora'"
+                  :name="profit.ecoRetail"
+                  placeholder="Mažmenos %"
+                  label="Mažmena Eco"
+                  type="number"
+                  width="w-40"
+                  @onChange="(value) => (profit.ecoRetail = value)"
+                />
+              </div>
+              <div class="flex gap-12 w-full justify-evenly"></div>
+            </div>
+
+            <div class="flex gap-4 justify-center w-full">
+              <BaseInput
+                :name="fenceDetails.name"
+                width="flex-1 min-w-60"
+                label="Tvoros Pavadinimas"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (fenceDetails.name = value)"
+              />
+
+              <BaseSelectField
+                label="Tvoros Tipas"
+                :values="fenceTypes"
+                :defaultValue="fenceDetails.category"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                width="w-40"
+                @onChange="(value) => (fenceDetails.category = value)"
+              />
+
+              <BaseSelectField
+                v-if="fenceDetails.category !== 'Segmentas'"
+                label="Kryptis"
+                :values="fenceDirection"
+                :defaultValue="fenceDetails.defaultDirection"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                width="w-40"
+                @onChange="(value) => (fenceDetails.defaultDirection = value)"
+              />
+
+              <BaseInput
+                :name="fenceDetails?.height"
+                label="aukštis"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (fenceDetails.height = value)"
+              />
+
+              <BaseInput
+                :name="fenceDetails?.width"
+                label="plotis"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (fenceDetails.width = value)"
+              />
+
+              <BaseInput
+                v-if="fenceDetails.category === 'Tvora'"
+                :name="fenceDetails?.bends"
+                label="lenkimai"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (fenceDetails.bends = value)"
+              />
+
+              <BaseInput
+                v-if="fenceDetails.category === 'Tvora'"
+                :name="fenceDetails?.holes"
+                label="Skyluės lankstinyje"
+                width="w-36"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (fenceDetails.holes = value)"
+              />
+            </div>
+          </div>
+        </Transition>
       </div>
-    </div>
 
-    <div
-      v-if="fenceDetails.category === 'Tvora'"
-      class="flex flex-col gap-4 items-center border-t pt-4 border-gray-400"
-    >
-      <p class="font-bold text-xl">Eco skardos kainos</p>
-      <div class="flex gap-4">
-        <FencesElementBlock
-          name="Metras"
-          :editable="editable"
-          :cost="pricesEco.meter.cost"
-          :wholesale="pricesEco.meter.priceWholesale"
-          :retail="pricesEco.meter.priceRetail"
-          @cost="(value) => (pricesEco.meter.cost = value)"
-          @wholesale="(value) => (pricesEco.meter.priceWholesale = value)"
-          @retail="(value) => (pricesEco.meter.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Aklina"
-          :editable="editable"
-          :cost="pricesEco.aklina.cost"
-          :wholesale="pricesEco.aklina.priceWholesale"
-          :retail="pricesEco.aklina.priceRetail"
-          @cost="(value) => (pricesEco.aklina.cost = value)"
-          @wholesale="(value) => (pricesEco.aklina.priceWholesale = value)"
-          @retail="(value) => (pricesEco.aklina.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Nepramatoma"
-          :editable="editable"
-          :cost="pricesEco.nepramatoma.cost"
-          :wholesale="pricesEco.nepramatoma.priceWholesale"
-          :retail="pricesEco.nepramatoma.priceRetail"
-          @cost="(value) => (pricesEco.nepramatoma.cost = value)"
-          @wholesale="(value) => (pricesEco.nepramatoma.priceWholesale = value)"
-          @retail="(value) => (pricesEco.nepramatoma.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Vidutiniska"
-          :editable="editable"
-          :cost="pricesEco.vidutiniska.cost"
-          :wholesale="pricesEco.vidutiniska.priceWholesale"
-          :retail="pricesEco.vidutiniska.priceRetail"
-          @cost="(value) => (pricesEco.vidutiniska.cost = value)"
-          @wholesale="(value) => (pricesEco.vidutiniska.priceWholesale = value)"
-          @retail="(value) => (pricesEco.vidutiniska.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="Pramatoma"
-          :editable="editable"
-          :cost="pricesEco.pramatoma.cost"
-          :wholesale="pricesEco.pramatoma.priceWholesale"
-          :retail="pricesEco.pramatoma.priceRetail"
-          @cost="(value) => (pricesEco.pramatoma.cost = value)"
-          @wholesale="(value) => (pricesEco.pramatoma.priceWholesale = value)"
-          @retail="(value) => (pricesEco.pramatoma.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="25% pramatomumas"
-          :editable="editable"
-          :cost="pricesEco.pramatoma25.cost"
-          :wholesale="pricesEco.pramatoma25.priceWholesale"
-          :retail="pricesEco.pramatoma25.priceRetail"
-          @cost="(value) => (pricesEco.pramatoma25.cost = value)"
-          @wholesale="(value) => (pricesEco.pramatoma25.priceWholesale = value)"
-          @retail="(value) => (pricesEco.pramatoma25.priceRetail = value)"
-        />
-        <FencesElementBlock
-          name="50% pramatomumas"
-          :editable="editable"
-          :cost="pricesEco.pramatoma50.cost"
-          :wholesale="pricesEco.pramatoma50.priceWholesale"
-          :retail="pricesEco.pramatoma50.priceRetail"
-          @cost="(value) => (pricesEco.pramatoma50.cost = value)"
-          @wholesale="(value) => (pricesEco.pramatoma50.priceWholesale = value)"
-          @retail="(value) => (pricesEco.pramatoma50.priceRetail = value)"
-        />
+      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="stepOpen = !stepOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="stepOpen ? 'rotate-180' : ''"
+          />
+          <div>Montavimo žingsnis</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div v-if="stepOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
+            <BaseInput
+              :name="steps.aklina"
+              label="Aklina"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.aklina = value)"
+            />
+            <BaseInput
+              :name="steps.nepramatoma"
+              label="Nepramatoma"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.nepramatoma = value)"
+            />
+            <BaseInput
+              :name="steps.vidutiniska"
+              label="Vidutiniška"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.vidutiniska = value)"
+            />
+            <BaseInput
+              :name="steps.pramatoma"
+              label="Pramatoma"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.pramatoma = value)"
+            />
+            <BaseInput
+              :name="steps.pramatoma25"
+              label="25%"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.pramatoma25 = value)"
+            />
+            <BaseInput
+              :name="steps.pramatoma50"
+              label="50%"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (steps.pramatoma50 = value)"
+            />
+          </div>
+        </Transition>
+
+        <div v-if="fenceDetails.category !== 'Tvora'" class="flex flex-col gap-4">
+          <div class="font-bold text-xl flex gap-4">
+            <NuxtImg
+              @click="premiumPricesOpen = !premiumPricesOpen"
+              src="/icons/arrowDown.svg"
+              alt="arrow-down"
+              class="w-4 hover:cursor-pointer transition-transform duration-300"
+              :class="premiumPricesOpen ? 'rotate-180' : ''"
+            />
+            <div>Kainos</div>
+          </div>
+          <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+            <div v-if="premiumPricesOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
+              <BaseInput
+                :name="prices.cost"
+                label="Savikaina"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (prices.cost = value)"
+              />
+              <BaseInput
+                :name="prices.priceWholesale"
+                label="Didmena"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (prices.priceWholesale = value)"
+              />
+              <BaseInput
+                :name="prices.priceRetail"
+                label="Mažmena"
+                width="w-24"
+                type="number"
+                :disable="!editable"
+                :variant="editable ? 'light' : ''"
+                @onChange="(value) => (prices.priceRetail = value)"
+              />
+            </div>
+          </Transition>
+        </div>
+      </div>
+
+      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="premiumPricesOpen = !premiumPricesOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="premiumPricesOpen ? 'rotate-180' : ''"
+          />
+          <div>Premium skardos kainos</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div v-if="premiumPricesOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
+            <FencesElementBlock
+              name="Metras"
+              :editable="editable"
+              :cost="pricesPremium.meter.cost"
+              :wholesale="pricesPremium.meter.priceWholesale"
+              :retail="pricesPremium.meter.priceRetail"
+              @cost="(value) => (pricesPremium.meter.cost = value)"
+              @wholesale="(value) => (pricesPremium.meter.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.meter.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Aklina"
+              :editable="editable"
+              :cost="pricesPremium.aklina.cost"
+              :wholesale="pricesPremium.aklina.priceWholesale"
+              :retail="pricesPremium.aklina.priceRetail"
+              @cost="(value) => (pricesPremium.aklina.cost = value)"
+              @wholesale="(value) => (pricesPremium.aklina.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.aklina.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Nepramatoma"
+              :editable="editable"
+              :cost="pricesPremium.nepramatoma.cost"
+              :wholesale="pricesPremium.nepramatoma.priceWholesale"
+              :retail="pricesPremium.nepramatoma.priceRetail"
+              @cost="(value) => (pricesPremium.nepramatoma.cost = value)"
+              @wholesale="(value) => (pricesPremium.nepramatoma.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.nepramatoma.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Vidutiniska"
+              :editable="editable"
+              :cost="pricesPremium.vidutiniska.cost"
+              :wholesale="pricesPremium.vidutiniska.priceWholesale"
+              :retail="pricesPremium.vidutiniska.priceRetail"
+              @cost="(value) => (pricesPremium.vidutiniska.cost = value)"
+              @wholesale="(value) => (pricesPremium.vidutiniska.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.vidutiniska.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Pramatoma"
+              :editable="editable"
+              :cost="pricesPremium.pramatoma.cost"
+              :wholesale="pricesPremium.pramatoma.priceWholesale"
+              :retail="pricesPremium.pramatoma.priceRetail"
+              @cost="(value) => (pricesPremium.pramatoma.cost = value)"
+              @wholesale="(value) => (pricesPremium.pramatoma.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.pramatoma.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="25% pramatomumas"
+              :editable="editable"
+              :cost="pricesPremium.pramatoma25.cost"
+              :wholesale="pricesPremium.pramatoma25.priceWholesale"
+              :retail="pricesPremium.pramatoma25.priceRetail"
+              @cost="(value) => (pricesPremium.pramatoma25.cost = value)"
+              @wholesale="(value) => (pricesPremium.pramatoma25.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.pramatoma25.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="50% pramatomumas"
+              :editable="editable"
+              :cost="pricesPremium.pramatoma50.cost"
+              :wholesale="pricesPremium.pramatoma50.priceWholesale"
+              :retail="pricesPremium.pramatoma50.priceRetail"
+              @cost="(value) => (pricesPremium.pramatoma50.cost = value)"
+              @wholesale="(value) => (pricesPremium.pramatoma50.priceWholesale = value)"
+              @retail="(value) => (pricesPremium.pramatoma50.priceRetail = value)"
+            />
+          </div>
+        </Transition>
+      </div>
+
+      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="ecoPricesOpen = !ecoPricesOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="ecoPricesOpen ? 'rotate-180' : ''"
+          />
+          <div>Eco skardos kainos</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div v-if="ecoPricesOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
+            <FencesElementBlock
+              name="Metras"
+              :editable="editable"
+              :cost="pricesEco.meter.cost"
+              :wholesale="pricesEco.meter.priceWholesale"
+              :retail="pricesEco.meter.priceRetail"
+              @cost="(value) => (pricesEco.meter.cost = value)"
+              @wholesale="(value) => (pricesEco.meter.priceWholesale = value)"
+              @retail="(value) => (pricesEco.meter.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Aklina"
+              :editable="editable"
+              :cost="pricesEco.aklina.cost"
+              :wholesale="pricesEco.aklina.priceWholesale"
+              :retail="pricesEco.aklina.priceRetail"
+              @cost="(value) => (pricesEco.aklina.cost = value)"
+              @wholesale="(value) => (pricesEco.aklina.priceWholesale = value)"
+              @retail="(value) => (pricesEco.aklina.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Nepramatoma"
+              :editable="editable"
+              :cost="pricesEco.nepramatoma.cost"
+              :wholesale="pricesEco.nepramatoma.priceWholesale"
+              :retail="pricesEco.nepramatoma.priceRetail"
+              @cost="(value) => (pricesEco.nepramatoma.cost = value)"
+              @wholesale="(value) => (pricesEco.nepramatoma.priceWholesale = value)"
+              @retail="(value) => (pricesEco.nepramatoma.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Vidutiniska"
+              :editable="editable"
+              :cost="pricesEco.vidutiniska.cost"
+              :wholesale="pricesEco.vidutiniska.priceWholesale"
+              :retail="pricesEco.vidutiniska.priceRetail"
+              @cost="(value) => (pricesEco.vidutiniska.cost = value)"
+              @wholesale="(value) => (pricesEco.vidutiniska.priceWholesale = value)"
+              @retail="(value) => (pricesEco.vidutiniska.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="Pramatoma"
+              :editable="editable"
+              :cost="pricesEco.pramatoma.cost"
+              :wholesale="pricesEco.pramatoma.priceWholesale"
+              :retail="pricesEco.pramatoma.priceRetail"
+              @cost="(value) => (pricesEco.pramatoma.cost = value)"
+              @wholesale="(value) => (pricesEco.pramatoma.priceWholesale = value)"
+              @retail="(value) => (pricesEco.pramatoma.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="25% pramatomumas"
+              :editable="editable"
+              :cost="pricesEco.pramatoma25.cost"
+              :wholesale="pricesEco.pramatoma25.priceWholesale"
+              :retail="pricesEco.pramatoma25.priceRetail"
+              @cost="(value) => (pricesEco.pramatoma25.cost = value)"
+              @wholesale="(value) => (pricesEco.pramatoma25.priceWholesale = value)"
+              @retail="(value) => (pricesEco.pramatoma25.priceRetail = value)"
+            />
+            <FencesElementBlock
+              name="50% pramatomumas"
+              :editable="editable"
+              :cost="pricesEco.pramatoma50.cost"
+              :wholesale="pricesEco.pramatoma50.priceWholesale"
+              :retail="pricesEco.pramatoma50.priceRetail"
+              @cost="(value) => (pricesEco.pramatoma50.cost = value)"
+              @wholesale="(value) => (pricesEco.pramatoma50.priceWholesale = value)"
+              @retail="(value) => (pricesEco.pramatoma50.priceRetail = value)"
+            />
+          </div>
+        </Transition>
+      </div>
+      <div class="flex flex-col">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="aditionalInfoOpen = !aditionalInfoOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="aditionalInfoOpen ? 'rotate-180' : ''"
+          />
+          <div>Papildoma informacija</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div
+            v-if="aditionalInfoOpen"
+            class="flex flex-col gap-4 border rounded-lg p-4 border-gray-full font-medium"
+          >
+            <div class="flex gap-4 items-center">
+              <div class="text-xl font font-semibold">Rodyti tinklapyje</div>
+              <BaseCheckField
+                :disabled="!editable"
+                :name="'FenceAditionalShowCheckbox' + index"
+                @onChange="(value: boolean) => (aditional.show = value)"
+                :checked="aditional.show"
+                height="h-4"
+              />
+            </div>
+            <div>
+              <label for="fenceDescription">Tvoros aprašymas</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.description"
+                name="description"
+                id="fenceDescription"
+                class="border border-dark-light w-full h-40 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceDescriptionEn">Tvoros aprašymas Anglų kalba</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.descriptionEn"
+                name="descriptionEn"
+                id="fenceDescriptionEn"
+                class="border border-dark-light w-full h-40 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceSeoTitle">Seo pavadinimas</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.seoTitle"
+                name="seoTitle"
+                id="fenceSeoTitle"
+                class="border border-dark-light w-full h-12 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceSeoTitleEn">Seo Pavadinimas Anglų kalba</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.seoTitleEn"
+                name="seoTitleEn"
+                id="fenceSeoTitleEn"
+                class="border border-dark-light w-full h-12 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceSeoDescription">Seo aprašymas</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.seoDescription"
+                name="seoDescription"
+                id="fenceSeoDescription"
+                class="border border-dark-light w-full h-20 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceSeoDescriptionEn">Seo aprašymas Anglų kalba</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.seoDescriptionEn"
+                name="seoDescriptionEn"
+                id="fenceSeoDescriptionEn"
+                class="border border-dark-light w-full h-20 p-2 rounded-md"
+              />
+            </div>
+            <div>
+              <label for="fenceImages">Nuotraukų URL (atskirti kableliu)</label>
+              <textarea
+                :disabled="!editable"
+                v-model="aditional.images"
+                name="images"
+                id="fenceImages"
+                class="border border-dark-light w-full h-20 p-2 rounded-md"
+              />
+            </div>
+          </div>
+        </Transition>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped></style>
 
 <style scoped></style>

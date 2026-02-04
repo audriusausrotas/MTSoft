@@ -20,8 +20,12 @@ const newFenceHandler = async (name: string) => {
 <template>
   <BaseButtonWithInput name="Nauja Tvora" placeholder="Pavadinimas" @onConfirm="newFenceHandler" />
 
-  <div class="flex flex-wrap gap-20 justify-around">
-    <SettingsFencesElement v-for="fence in settingsStore.fences" :fence="fence" />
+  <div class="flex flex-wrap gap-4 justify-around">
+    <SettingsFencesElement
+      v-for="(fence, index) in settingsStore.fences"
+      :fence="fence"
+      :index="index"
+    />
   </div>
 </template>
 <style scoped></style>

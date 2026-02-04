@@ -296,8 +296,9 @@ export default function generateResults() {
 
   if (results.gates.length > 0) {
     let quantity = 0;
+
     results.gates.forEach((item) => {
-      if (item.bankette === "Taip" && item.name.includes("Stumdomi")) {
+      if (item.bankette === "Taip" && item.option.includes("Stumdomi")) {
         quantity +=
           item.width <= 500
             ? 2
