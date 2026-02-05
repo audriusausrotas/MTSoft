@@ -1088,6 +1088,12 @@ const addImage = () => {
               <div v-for="(image, index) in aditional.images" :key="index" class="flex gap-4">
                 <BaseInput
                   :disable="!editable"
+                  label="Nuotraukos pavadinimas"
+                  :name="image.name"
+                  @onChange="(value: string) => (aditional.images[index].name = value)"
+                />
+                <BaseInput
+                  :disable="!editable"
                   label="Nuotraukos URL"
                   :name="image.url"
                   width="flex-1"
