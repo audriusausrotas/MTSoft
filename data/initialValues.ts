@@ -74,6 +74,7 @@ export const optionLinks: MenuLinks[] = [
 export const adminLinks: MenuLinks[] = [
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
+  { name: "Tinklapis", link: "/tinklapio-nustatymai", iconPath: "/icons/users.svg" },
   { name: "Ataskaitos", link: "/ataskaitos", iconPath: "/icons/users.svg" },
 ];
 

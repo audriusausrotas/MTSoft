@@ -14,9 +14,13 @@ const editable = ref<boolean>(false);
 const stepOpen = ref<boolean>(false);
 const premiumPricesOpen = ref<boolean>(false);
 const ecoPricesOpen = ref<boolean>(false);
+const pricesOpen = ref<boolean>(false);
 const infoOpen = ref<boolean>(false);
 const fenceOpen = ref<boolean>(false);
 const aditionalInfoOpen = ref<boolean>(false);
+
+const isFence = props.fence?.category === "Tvora";
+const isSegment = props.fence?.category === "Segmentas";
 
 const aditional = reactive({
   show: props.fence.aditional?.show || false,
@@ -277,7 +281,7 @@ const deleteHandler = async () => {
 };
 
 const recalculateHandler = () => {
-  if (props.fence?.category === "Tvora") {
+  if (isFence) {
     if (!pricesPremium.meter.cost || !pricesEco.meter.cost) return;
 
     const legNamePremium = settingsStore.defaultValues.retailDoubleLeg;
@@ -631,10 +635,10 @@ const addImage = () => {
               <div class="flex gap-12 w-full justify-evenly"></div>
             </div>
 
-            <div class="flex gap-4 justify-center w-full">
+            <div class="flex gap-4 w-full">
               <BaseInput
                 :name="fenceDetails.name"
-                width="flex-1 min-w-60"
+                width="max-w-96 w-full "
                 label="Tvoros Pavadinimas"
                 :disable="!editable"
                 :variant="editable ? 'light' : ''"
@@ -652,7 +656,7 @@ const addImage = () => {
               />
 
               <BaseSelectField
-                v-if="fenceDetails.category !== 'Segmentas'"
+                v-if="!isSegment"
                 label="Kryptis"
                 :values="fenceDirection"
                 :defaultValue="fenceDetails.defaultDirection"
@@ -683,7 +687,7 @@ const addImage = () => {
               />
 
               <BaseInput
-                v-if="fenceDetails.category === 'Tvora'"
+                v-if="isFence"
                 :name="fenceDetails?.bends"
                 label="lenkimai"
                 width="w-24"
@@ -694,7 +698,7 @@ const addImage = () => {
               />
 
               <BaseInput
-                v-if="fenceDetails.category === 'Tvora'"
+                v-if="isFence"
                 :name="fenceDetails?.holes"
                 label="Skyluės lankstinyje"
                 width="w-36"
@@ -708,7 +712,7 @@ const addImage = () => {
         </Transition>
       </div>
 
-      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+      <div v-if="isFence" class="flex flex-col">
         <div class="font-bold text-xl flex gap-4">
           <NuxtImg
             @click="stepOpen = !stepOpen"
@@ -777,53 +781,53 @@ const addImage = () => {
             />
           </div>
         </Transition>
-
-        <div v-if="fenceDetails.category !== 'Tvora'" class="flex flex-col gap-4">
-          <div class="font-bold text-xl flex gap-4">
-            <NuxtImg
-              @click="premiumPricesOpen = !premiumPricesOpen"
-              src="/icons/arrowDown.svg"
-              alt="arrow-down"
-              class="w-4 hover:cursor-pointer transition-transform duration-300"
-              :class="premiumPricesOpen ? 'rotate-180' : ''"
-            />
-            <div>Kainos</div>
-          </div>
-          <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
-            <div v-if="premiumPricesOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
-              <BaseInput
-                :name="prices.cost"
-                label="Savikaina"
-                width="w-24"
-                type="number"
-                :disable="!editable"
-                :variant="editable ? 'light' : ''"
-                @onChange="(value) => (prices.cost = value)"
-              />
-              <BaseInput
-                :name="prices.priceWholesale"
-                label="Didmena"
-                width="w-24"
-                type="number"
-                :disable="!editable"
-                :variant="editable ? 'light' : ''"
-                @onChange="(value) => (prices.priceWholesale = value)"
-              />
-              <BaseInput
-                :name="prices.priceRetail"
-                label="Mažmena"
-                width="w-24"
-                type="number"
-                :disable="!editable"
-                :variant="editable ? 'light' : ''"
-                @onChange="(value) => (prices.priceRetail = value)"
-              />
-            </div>
-          </Transition>
-        </div>
       </div>
 
-      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+      <div v-if="!isFence" class="flex flex-col gap-4">
+        <div class="font-bold text-xl flex gap-4">
+          <NuxtImg
+            @click="pricesOpen = !pricesOpen"
+            src="/icons/arrowDown.svg"
+            alt="arrow-down"
+            class="w-4 hover:cursor-pointer transition-transform duration-300"
+            :class="pricesOpen ? 'rotate-180' : ''"
+          />
+          <div>Kainos</div>
+        </div>
+        <Transition name="slide-fade" :duration="{ enter: 100, leave: 250 }">
+          <div v-if="pricesOpen" class="flex gap-4 border rounded-lg p-4 border-gray-full">
+            <BaseInput
+              :name="prices.cost"
+              label="Savikaina"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (prices.cost = value)"
+            />
+            <BaseInput
+              :name="prices.priceWholesale"
+              label="Didmena"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (prices.priceWholesale = value)"
+            />
+            <BaseInput
+              :name="prices.priceRetail"
+              label="Mažmena"
+              width="w-24"
+              type="number"
+              :disable="!editable"
+              :variant="editable ? 'light' : ''"
+              @onChange="(value) => (prices.priceRetail = value)"
+            />
+          </div>
+        </Transition>
+      </div>
+
+      <div v-if="isFence" class="flex flex-col">
         <div class="font-bold text-xl flex gap-4">
           <NuxtImg
             @click="premiumPricesOpen = !premiumPricesOpen"
@@ -910,7 +914,7 @@ const addImage = () => {
         </Transition>
       </div>
 
-      <div v-if="fenceDetails.category === 'Tvora'" class="flex flex-col">
+      <div v-if="isFence" class="flex flex-col">
         <div class="font-bold text-xl flex gap-4">
           <NuxtImg
             @click="ecoPricesOpen = !ecoPricesOpen"
@@ -996,6 +1000,7 @@ const addImage = () => {
           </div>
         </Transition>
       </div>
+
       <div class="flex flex-col">
         <div class="font-bold text-xl flex gap-4">
           <NuxtImg

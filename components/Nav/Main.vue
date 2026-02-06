@@ -40,6 +40,7 @@ const currentPath = computed(() => {
   if (newPath.includes("/vartotojai")) return "Admin";
   if (newPath.includes("/ataskaitos")) return "Admin";
   if (newPath.includes("/nustatymai")) return "Admin";
+  if (newPath.includes("/tinklapio-nustatymai")) return "Admin";
 
   return "Kita";
 });
