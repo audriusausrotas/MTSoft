@@ -47,11 +47,7 @@ watch(
         @click="disable ? '' : (isOpen = !isOpen)"
         class="flex justify-between h-10 gap-3 py-2 pl-4 border border-dark-light rounded-lg bg-inherit shadow-sm"
         :class="[
-          variant !== 'light'
-            ? 'bg-gray-ultra-light'
-            : disable
-              ? 'bg-gray-ultra-light'
-              : 'bg-white',
+          variant !== 'light' ? 'bg-gray-ultra-light' : disable ? 'bg-gray-ultra-light' : '',
           disable ? '' : 'cursor-pointer',
           props?.defaultValue?.includes('@') ? 'lowercase' : 'capitalize',
         ]"
