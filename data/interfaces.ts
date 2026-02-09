@@ -681,3 +681,7 @@ export interface Gates {
   profit: Profit;
   prices: Prices;
 }
+
+export interface WebsiteSettings {
+  gallery: Image[];
+}

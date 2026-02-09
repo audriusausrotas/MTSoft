@@ -18,11 +18,12 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
   if (userRights?.admin || userRights?.other) {
     fetchData.push(
       fetchFences(),
-      fetchGateData(),
+      fetchClients(),
       fetchSelects(),
       fetchProducts(),
-      fetchClients(),
+      fetchGateData(),
       fetchDefaultValues(),
+      fetchWebsiteSettings(),
       fetchPotentialClients(),
     );
   }

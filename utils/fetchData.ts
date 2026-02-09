@@ -206,6 +206,16 @@ export async function fetchSelects() {
   }
 }
 
+export async function fetchWebsiteSettings() {
+  try {
+    const response: any = await request.get("getWebsiteSettings");
+    response.success && useWebsiteSettingsStore().addWebsiteSettings(response.data);
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
+  }
+}
+
 export async function fetchFences() {
   try {
     const response: any = await request.get("getFences");
