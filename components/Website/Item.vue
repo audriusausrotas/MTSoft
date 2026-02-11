@@ -23,6 +23,7 @@ const saveHandler = async () => {
     altEN: altEN.value,
     index: props.index,
   });
+  editable.value = false;
 };
 
 const editHandler = () => {
