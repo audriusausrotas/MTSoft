@@ -2,16 +2,42 @@
 const props = defineProps(["name", "width", "label"]);
 
 const googleLink = computed(() => {
-  return `https://www.google.com/maps/search/?api=1&query=${props.name}`;
+  return `comgooglemaps://?q=${encodeURIComponent(props.name)}`;
 });
 
 const wazeLink = computed(() => {
+  return `waze://?q=${encodeURIComponent(props.name)}&navigate=yes`;
+});
+
+const googleWebLink = computed(() => {
+  return `https://www.google.com/maps/search/?api=1&query=${props.name}`;
+});
+
+const wazeWebLink = computed(() => {
   return `https://www.waze.com/ul?q=${encodeURIComponent(props.name)}&navigate=yes`;
 });
 
 const uniqueId = computed(() => {
   return props.label || `address-link-${Math.random().toString(36).substr(2, 9)}`;
 });
+
+const handleGoogleClick = (event: MouseEvent) => {
+  event.preventDefault();
+  window.location.href = googleLink.value;
+
+  setTimeout(() => {
+    window.open(googleWebLink.value, "_blank");
+  }, 2000);
+};
+
+const handleWazeClick = (event: MouseEvent) => {
+  event.preventDefault();
+  window.location.href = wazeLink.value;
+
+  setTimeout(() => {
+    window.open(wazeWebLink.value, "_blank");
+  }, 2000);
+};
 </script>
 
 <template>
@@ -28,13 +54,13 @@ const uniqueId = computed(() => {
     >
       <a
         :href="googleLink"
-        target="_blank"
         :id="uniqueId"
         class="flex-1 flex items-center justify-center h-10 px-2"
+        @click="handleGoogleClick"
       >
         {{ props.name }}
       </a>
-      <a :href="wazeLink" target="_blank">
+      <a :href="wazeLink" @click="handleWazeClick">
         <NuxtImg
           src="/icons/waze.svg"
           alt="Waze ikona"
