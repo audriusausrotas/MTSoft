@@ -1,35 +1,12 @@
 divdivdivdiv
 <script setup lang="ts">
-import type { Image } from "~/data/interfaces";
-const { setError, setSuccess } = useCustomError();
-const websiteSettings = useWebsiteSettingsStore();
+const emit = defineEmits(["onSave"]);
 
 const newOpen = ref<boolean>(false);
 const name = ref<string>("");
 const url = ref<string>("");
 const alt = ref<string>("");
 const altEN = ref<string>("");
-
-const saveHandler = async () => {
-  const requestData: Image = {
-    name: name.value,
-    url: url.value,
-    alt: alt.value,
-    altEN: altEN.value,
-  };
-
-  const response: any = await request.post("newGalleryImage", requestData);
-
-  if (response.success) {
-    if (!useSocketStore().connected) {
-      websiteSettings.addGalleryImage(requestData);
-    }
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
-  cancelHandler();
-};
 
 const cancelHandler = () => {
   newOpen.value = false;
@@ -38,6 +15,17 @@ const cancelHandler = () => {
   url.value = "";
   alt.value = "";
   altEN.value = "";
+};
+
+const saveHandler = () => {
+  emit("onSave", {
+    name: name.value,
+    url: url.value,
+    alt: alt.value,
+    altEN: altEN.value,
+  });
+
+  cancelHandler();
 };
 </script>
 

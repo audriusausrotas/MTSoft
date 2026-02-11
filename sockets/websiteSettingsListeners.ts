@@ -15,4 +15,16 @@ export default function settingsListeners(socket: Socket) {
   socket.on("newGalleryImage", (data: Image) => {
     websiteSettingsStore.addGalleryImage(data);
   });
+
+  socket.on("deleteFundedImage", (url: string) => {
+    websiteSettingsStore.deleteFundedImage(url);
+  });
+
+  socket.on("updateFundedImage", ({ data, index }) => {
+    websiteSettingsStore.editFundedImage(index, data);
+  });
+
+  socket.on("newFundedImage", (data: Image) => {
+    websiteSettingsStore.addFundedImage(data);
+  });
 }

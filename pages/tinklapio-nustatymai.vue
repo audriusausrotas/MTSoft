@@ -1,20 +1,9 @@
-<script setup lang="ts">
-const galleryOpen = ref<boolean>(false);
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="flex flex-col gap-8 w-full">
-    <div class="flex gap-4">
-      <NuxtImg
-        @click="galleryOpen = !galleryOpen"
-        src="/icons/arrowDown.svg"
-        alt="arrow-down"
-        class="w-4 hover:cursor-pointer transition-transform duration-300"
-        :class="galleryOpen ? 'rotate-180' : ''"
-      />
-      <div class="font-bold text-xl">Galerija</div>
-    </div>
-    <WebsiteGallery v-if="galleryOpen" />
+    <WebsiteWrapper title="Galerijos puslapis" type="Gallery" />
+    <WebsiteWrapper title="Paramos puslapis" type="Funded" />
   </div>
 </template>
 
