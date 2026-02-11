@@ -8,7 +8,7 @@ const props = defineProps(["client", "orderNr", "creator", "location"]);
     <div class="flex gap-4 w-full flex-wrap justify-around lg:justify-normal">
       <BaseInput :disable="true" :name="props.orderNr" label="Užsakymo nr" />
       <BaseInput :disable="true" :name="props.client?.username" label="klientas" />
-      <BaseInput :disable="true" :name="props.client?.address" label="adresas" />
+      <BaseAddressLink :name="props.client?.address" label="adresas" />
 
       <a :href="'tel:' + props.client?.phone">
         <BaseInput

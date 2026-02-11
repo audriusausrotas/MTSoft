@@ -107,7 +107,7 @@ const statusHandler = async (value: string) => {
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
         :class="gateOrdered"
       ></div> -->
-      <BaseInfoField :name="props.project?.client?.address" width="w-full" />
+      <BaseAddressLink :name="props.project?.client?.address" width="w-full" />
     </div>
 
     <div class="relative">
