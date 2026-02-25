@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type { Project } from "~/data/interfaces";
-import { statusFilters } from "~/data/selectFieldData";
-
-const { setError, setSuccess } = useCustomError();
 
 const projectsStore = useProjectsStore();
+const settingsStore = useSettingsStore();
 
 const filterUser = ref<string>(useUserStore().user!.username);
 const filterStatus = ref<string>("Visi");
@@ -55,6 +53,7 @@ const projects = computed(() => {
     finished: [] as Project[],
     payment: [] as Project[],
     measure: [] as Project[],
+    repair: [] as Project[],
     other: [] as Project[],
   };
 
@@ -72,6 +71,7 @@ const projects = computed(() => {
     Apmokėjimas: "payment",
     Baigtas: "finished",
     Matavimas: "measure",
+    Remontas: "repair",
   };
 
   allProjects.forEach((item: Project) => {
@@ -151,7 +151,7 @@ const newProjectHandler = () => {
         />
         <BaseSelectField
           label="Statusas"
-          :values="statusFilters"
+          :values="settingsStore.selectValues.status"
           id="statusFilter"
           :defaultValue="filterStatus"
           width="w-60"
@@ -199,6 +199,21 @@ const newProjectHandler = () => {
         :key="project._id"
         :index="index"
         :length="projects.measure.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.repair.length"
+        class="text-xl font-semibold p-2 bg-rose-400 rounded-lg text-center"
+      >
+        Remontas
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.repair"
+        :key="project._id"
+        :index="index"
+        :length="projects.repair.length"
         :project="project"
         location="projects"
       />

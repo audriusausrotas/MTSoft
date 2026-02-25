@@ -11,7 +11,6 @@ import projectListeners from "./projectListeners";
 import clientListeners from "./clientListeners";
 import orderListeners from "./orderListeners";
 import userListeners from "./userListeners";
-import gateListeners from "./gateListeners";
 import { Socket } from "socket.io-client";
 
 export default (socket: Socket) => {
@@ -28,5 +27,4 @@ export default (socket: Socket) => {
   clientListeners(socket);
   orderListeners(socket);
   userListeners(socket);
-  gateListeners(socket);
 };

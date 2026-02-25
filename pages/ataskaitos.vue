@@ -49,7 +49,8 @@ const allProjects = computed(() => {
       project.status !== "Nepatvirtintas" &&
       project.status !== "Netinkamas" &&
       project.status !== "Tinkamas" &&
-      project.status !== "Matavimas",
+      project.status !== "Matavimas" &&
+      project.status !== "Remontas",
   );
   return [...filteredProjects, ...archiveStore.data.finished];
 });

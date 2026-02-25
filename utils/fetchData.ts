@@ -9,16 +9,6 @@ export async function fetchUser() {
   }
 }
 
-export async function fetchGates() {
-  try {
-    const response: any = await request.get("getGates");
-    response.success && useGateStore().addGates(response.data);
-  } catch (error) {
-    console.log("Serverio klaida: " + error);
-    return { success: false, data: null };
-  }
-}
-
 export async function fetchOrders() {
   try {
     const response: any = await request.get("getOrders");

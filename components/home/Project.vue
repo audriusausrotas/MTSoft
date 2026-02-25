@@ -2,7 +2,6 @@
 const props = defineProps(["project", "index", "length", "location"]);
 const projectsStore = useProjectsStore();
 const settingsStore = useSettingsStore();
-const gateStore = useGateStore();
 const open = ref<boolean>(false);
 
 const { setError, setSuccess } = useCustomError();
@@ -16,13 +15,6 @@ const time = computed(() => {
   const expirationDate = new Date(props.project?.dates?.dateExparation);
   return Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 });
-
-// const gateOrdered = computed(() => {
-//   const test = gateStore.gates.some(
-//     (item) => item._id.toString() === props.project?._id.toString()
-//   );
-//   return test ? "bg-green-500" : "bg-red-500";
-// });
 
 const color =
   props.project.status === "Pridavimas"
@@ -47,9 +39,11 @@ const color =
                       ? "bg-violet-400"
                       : props.project.status === "Apmokėjimas"
                         ? "bg-fuchsia-400"
-                        : props.project.status === "Baigtas"
-                          ? "bg-stone-400"
-                          : "bg-yellow-400";
+                        : props.project.status === "Remontas"
+                          ? "bg-rose-400"
+                          : props.project.status === "Baigtas"
+                            ? "bg-stone-400"
+                            : "bg-yellow-400";
 
 const statusHandler = async (value: string) => {
   const requestData = { _id: props.project._id, value };

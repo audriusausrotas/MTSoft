@@ -10,7 +10,7 @@ const searchQuery = ref<string>("");
         placeholder="Paieška"
         width="flex-1"
         variant="light"
-        @onChange="(value: string) => searchQuery = value"
+        @onChange="(value: string) => (searchQuery = value)"
       >
         <NuxtImg
           src="/icons/search.svg"
@@ -24,28 +24,25 @@ const searchQuery = ref<string>("");
       </BaseInput>
       <PriceNew />
     </div>
-    <div class="overflow-auto">
-      <div class="overflow-hidden font-semibold capitalize bg-gray-ultra-light">
-        <div class="flex items-center gap-4">
-          <div class="w-8 p-3 rounded-tl-2xl">nr</div>
-          <div class="min-w-[500px]">pavadinimas</div>
-          <div class="w-24 p-3">savikaina</div>
-          <div class="w-24 p-3">Didmena</div>
-          <div class="w-24 p-3">Mažmena</div>
-          <div class="w-24 p-3">Kategorija</div>
-          <div class="w-8 p-3"></div>
-          <div class="w-8 p-3 rounded-tr-2xl"></div>
-        </div>
+    <div class="flex flex-col gap-2">
+      <div
+        class="grid grid-cols-[40px_auto_150px_150px_150px_200px_100px] gap-4 overflow-hidden font-semibold capitalize py-2 rounded-t-2xl bg-gray-ultra-light"
+      >
+        <div class="text-center">nr</div>
+        <div class="pl-2">pavadinimas</div>
+        <div class="pl-2">savikaina</div>
+        <div class="pl-2">Didmena</div>
+        <div class="pl-2">Mažmena</div>
+        <div class="pl-2">Kategorija</div>
+        <div class="pl-2">Veiksmai</div>
       </div>
 
-      <div class="flex flex-col gap-1">
-        <PriceElement
-          v-for="(product, index) in productsStore.search(searchQuery)"
-          :key="product._id.toString()"
-          :index="index"
-          :product="product"
-        />
-      </div>
+      <PriceElement
+        v-for="(product, index) in productsStore.search(searchQuery)"
+        :key="product._id.toString()"
+        :index="index"
+        :product="product"
+      />
     </div>
   </div>
 </template>

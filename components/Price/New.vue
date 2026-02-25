@@ -3,16 +3,24 @@ import { calculateProductPrice } from "~/utils/calculations/calculateProductPric
 import { categories } from "~/data/selectFieldData";
 
 const productsStore = useProductsStore();
+const { setError, setSuccess } = useCustomError();
+
 const open = ref<boolean>(false);
+
 const name = ref<string>("");
-const priceRetail = ref<number>(0);
-const priceWholesale = ref<number>(0);
-const cost = ref<number>(0);
 const isLoading = ref<boolean>(false);
 const newCategory = ref<string>("Kita");
-const retailMargin = ref<number>(0);
-const wholesaleMargin = ref<number>(0);
-const { setError, setSuccess } = useCustomError();
+
+const prices = reactive({
+  priceRetail: 0,
+  priceWholesale: 0,
+  cost: 0,
+});
+
+const profit = reactive({
+  retail: 0,
+  wholesale: 0,
+});
 
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -20,12 +28,9 @@ const saveHandler = async (): Promise<void> => {
 
   const requestData = {
     name: name.value,
-    priceRetail: priceRetail.value,
-    priceWholesale: priceWholesale.value,
-    cost: cost.value,
     category: newCategory.value,
-    profitRetail: retailMargin.value,
-    profitWholesale: wholesaleMargin.value,
+    prices: { ...prices },
+    profit: { ...profit },
   };
 
   const response: any = await request.post("newProduct", requestData);
@@ -42,17 +47,17 @@ const saveHandler = async (): Promise<void> => {
 };
 
 const calculateHandler = () => {
-  if (!cost.value || !retailMargin.value || !wholesaleMargin.value) return;
+  if (!prices.cost || !profit.retail || !profit.wholesale) return;
 
-  priceRetail.value = calculateProductPrice(cost.value, retailMargin.value);
-  priceWholesale.value = calculateProductPrice(cost.value, wholesaleMargin.value);
+  prices.priceRetail = calculateProductPrice(prices.cost, profit.retail);
+  prices.priceWholesale = calculateProductPrice(prices.cost, profit.wholesale);
 };
 
 const clearHandler = (): void => {
   name.value = "";
-  priceRetail.value = 0;
-  priceWholesale.value = 0;
-  cost.value = 0;
+  prices.priceRetail = 0;
+  prices.priceWholesale = 0;
+  prices.cost = 0;
   newCategory.value = categories[0];
   open.value = false;
 };
@@ -65,37 +70,37 @@ const clearHandler = (): void => {
       <BaseButton name="išsaugoti" @click="saveHandler" :isLoading="isLoading" />
       <BaseButton name="atšaukti" @click="clearHandler" />
     </div>
-    <div v-if="open" class="flex gap-4">
+    <div v-if="open" class="grid grid-cols-[auto_150px_150px_150px_250px] gap-4">
       <BaseInput
         :name="name"
-        width=" w-[500px]"
+        width="w-full"
         variant="light"
         label="Pavadinimas"
         @onChange="(v) => (name = v)"
       />
       <BaseInput
-        :name="cost"
-        width="w-24"
+        :name="prices.cost"
+        width="w-full"
         type="number"
         label="Savikaina"
         variant="light"
-        @onChange="(v) => (cost = v)"
+        @onChange="(v) => (prices.cost = v)"
       />
       <BaseInput
-        :name="priceWholesale"
-        width="w-24"
+        :name="prices.priceWholesale"
+        width="w-full"
         type="number"
         label="Didmena"
         variant="light"
-        @onChange="(v) => (priceWholesale = v)"
+        @onChange="(v) => (prices.priceWholesale = v)"
       />
       <BaseInput
-        :name="priceRetail"
-        width="w-24"
+        :name="prices.priceRetail"
+        width="w-full"
         type="number"
         label="mažmena"
         variant="light"
-        @onChange="(v) => (priceRetail = v)"
+        @onChange="(v) => (prices.priceRetail = v)"
       />
       <BaseSelectField
         label="Kategorija"
@@ -103,28 +108,29 @@ const clearHandler = (): void => {
         variant="light"
         id="categories"
         :defaultValue="newCategory"
-        width="w-56"
+        width="w-full"
         @onChange="(v) => (newCategory = v)"
       />
     </div>
-    <div v-if="open" class="flex gap-4">
-      <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="w-[500px]" />
-      <BaseInfoField name="------->" width="w-24" />
+    <div v-if="open" class="grid grid-cols-[auto_150px_150px_150px_250px] gap-4">
+      <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="w-full" />
+
       <BaseInput
-        width="w-24"
+        class="col-start-3"
+        width="w-full"
         variant="light"
         type="number"
         placeholder="Marža %"
-        @onChange="(value) => (wholesaleMargin = value)"
+        @onChange="(value) => (profit.wholesale = value)"
       />
       <BaseInput
-        width="w-24"
+        width="w-full"
         variant="light"
         type="number"
         placeholder="Marža %"
-        @onChange="(value) => (retailMargin = value)"
+        @onChange="(value) => (profit.retail = value)"
       />
-      <BaseButton name="Skaičiuoti" width="w-56" @click="calculateHandler" />
+      <BaseButton name="Skaičiuoti" width="w-full" @click="calculateHandler" />
     </div>
   </div>
 </template>

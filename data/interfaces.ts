@@ -237,6 +237,7 @@ export interface Product {
   prices: SeeThroughPrice;
   profit: Profit;
   category: string;
+  aditional: AditionalFenceInformation;
 }
 
 export interface SeeThrough {

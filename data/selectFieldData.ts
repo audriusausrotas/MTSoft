@@ -1,5 +1,4 @@
 export const fenceSide = ["Priekis", "Galas", "Kairė", "Dešinė"];
-export const gateStatus = ["Eilėje", "Galima matuoti", "Pamatuota"];
 export const categories = [
   "Stulpai",
   "Borteliai",
@@ -52,19 +51,3 @@ export const ProductionStatus = ["Gaminama", "Laukiama", "Pagaminta", "Negaminti
 export const InstallationStatus = ["Montuojama", "Laukiama", "Sumontuota", "Nemontuoti"];
 
 export const OffersStatus = ["Nežinoma", "Domina", "Nelabai domina", "Nedomina"];
-
-export const statusFilters = [
-  "Visi",
-  "Nepatvirtintas",
-  "Patvirtintas",
-  "Netinkamas",
-  "Tinkamas",
-  "Betonuojama",
-  "Gaminama",
-  "Montuojama",
-  "Laukiam Vartų",
-  "Vartai Sumontuoti",
-  "Pridavimas",
-  "Apmokėjimas",
-  "Baigtas",
-];

@@ -80,6 +80,6 @@ const cancelHandler = () => {
 
 <style scoped>
 .default-button {
-  @apply hover:cursor-pointer hover:scale-125 transition-transform border h-10 rounded-lg w-10 p-2 bg-gray-ultra-light border-dark-light;
+  @apply hover:cursor-pointer hover:scale-110 transition-transform border h-10 rounded-lg w-10 p-2 bg-gray-ultra-light border-dark-light;
 }
 </style>

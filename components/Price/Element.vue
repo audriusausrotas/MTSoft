@@ -7,17 +7,31 @@ const productsStore = useProductsStore();
 
 const { setError, setSuccess } = useCustomError();
 const editable = ref<boolean>(false);
-const productName = ref<string>(props.product?.name);
-const priceRetail = ref<number>(props.product?.prices?.priceRetail || 0);
-const priceWholesale = ref<number>(props.product?.prices?.priceWholesale || 0);
-const productCost = ref<number>(props.product?.prices?.cost || 0);
-const productCategory = ref<string>(props.product?.category);
-const retailMargin = ref<number>(props.product?.profit?.retail || 0);
-const wholesaleMargin = ref<number>(props.product?.profit?.wholesale || 0);
 
-const editHandler = (): void => {
-  editable.value = !editable.value;
-};
+const productName = ref<string>(props.product?.name);
+const productCategory = ref<string>(props.product?.category);
+
+const prices = reactive({
+  priceRetail: props.product?.prices?.priceRetail,
+  priceWholesale: props.product?.prices?.priceWholesale,
+  cost: props.product?.prices?.cost,
+});
+
+const profit = reactive({
+  retail: props.product?.profit?.retail,
+  wholesale: props.product?.profit?.wholesale,
+});
+
+const aditional = reactive({
+  show: props.product.aditional?.show || false,
+  description: props.product.aditional?.description || "",
+  seoTitle: props.product.aditional?.seoTitle || "",
+  seoDescription: props.product.aditional?.seoDescription || "",
+  descriptionEn: props.product.aditional?.descriptionEn || "",
+  seoTitleEn: props.product.aditional?.seoTitleEn || "",
+  seoDescriptionEn: props.product.aditional?.seoDescriptionEn || "",
+  images: props.product.aditional?.images || [],
+});
 
 const deleteHandler = async (): Promise<void> => {
   const confirmed = confirm("Ar tikrai norite ištrinti produktą?");
@@ -35,28 +49,15 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const saveHandler = async () => {
-  if (
-    props.product.prices.cost === productCost.value &&
-    props.product.prices.priceRetail === priceRetail.value &&
-    props.product.prices.priceWholesale === priceWholesale.value &&
-    props.product.name === productName.value &&
-    productCategory.value === props.product.category
-  ) {
-    editable.value = false;
-    return;
-  }
-
   const requestData = {
     _id: props.product._id,
     name: productName.value,
-    priceRetail: priceRetail.value,
-    priceWholesale: priceWholesale.value,
-    cost: productCost.value,
+    prices: { ...prices },
     category: productCategory.value,
-    profitRetail: retailMargin.value,
-    profitWholesale: wholesaleMargin.value,
+    profit: { ...profit },
+    aditional: { ...aditional },
   };
-
+  console.log(requestData);
   const response = await request.patch("updateProduct", requestData);
 
   if (response.success) {
@@ -70,19 +71,27 @@ const saveHandler = async () => {
 };
 
 const calculateHandler = () => {
-  if (!productCost.value || !retailMargin.value || !wholesaleMargin.value) return;
+  if (!prices.cost || !profit.retail || !profit.wholesale) return;
 
-  priceRetail.value = calculateProductPrice(productCost.value, retailMargin.value);
-  priceWholesale.value = calculateProductPrice(productCost.value, wholesaleMargin.value);
+  prices.priceRetail = calculateProductPrice(prices.cost, profit.retail);
+  prices.priceWholesale = calculateProductPrice(prices.cost, profit.wholesale);
+};
+
+const addImage = () => {
+  aditional.images.push({
+    url: "",
+    alt: "",
+    altEN: "",
+  });
 };
 
 watch(
   () => props.product,
   (newProduct) => {
     productName.value = newProduct.name;
-    priceRetail.value = newProduct.prices.priceRetail;
-    priceWholesale.value = newProduct.prices.priceWholesale;
-    productCost.value = newProduct.prices.cost;
+    prices.priceRetail = newProduct.prices.priceRetail;
+    prices.priceWholesale = newProduct.prices.priceWholesale;
+    prices.cost = newProduct.prices.cost;
     productCategory.value = newProduct.category;
   },
   { deep: true },
@@ -90,125 +99,190 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-1" :class="editable ? 'border-y-2 border-red-500 my-2 py-4' : ''">
-    <div class="flex items-center gap-4">
+  <div
+    class="flex flex-col gap-1"
+    :class="editable ? 'border border-gray-full rounded-lg p-4' : ''"
+  >
+    <div class="grid grid-cols-[40px_auto_150px_150px_150px_200px_100px] gap-4">
       <div class="w-8 p-3">{{ props.index + 1 }}</div>
-      <div class="w-[500px]">
-        <BaseInput
-          :name="productName"
-          width="w-auto"
-          :editable="!editable"
-          :variant="editable ? 'light' : ''"
-          @onChange="(v) => (productName = v)"
-        />
-      </div>
 
       <BaseInput
-        :name="productCost || 0"
-        width="w-24"
-        type="number"
-        :editable="!editable"
-        :variant="editable ? 'light' : ''"
-        @onChange="(v) => (productCost = v)"
+        :name="productName"
+        width=""
+        :disable="!editable"
+        @onChange="(v) => (productName = v)"
       />
 
       <BaseInput
-        :name="priceWholesale || 0"
-        width="w-24"
+        :name="prices.cost || 0"
+        width=""
         type="number"
-        :editable="!editable"
-        :variant="editable ? 'light' : ''"
-        @onChange="(v) => (priceWholesale = v)"
+        :disable="!editable"
+        @onChange="(v) => (prices.cost = v)"
       />
 
       <BaseInput
-        :name="priceRetail || 0"
-        width="w-24"
+        :name="prices.priceWholesale || 0"
+        width=""
         type="number"
-        :editable="!editable"
-        :variant="editable ? 'light' : ''"
-        @onChange="(v) => (priceRetail = v)"
+        :disable="!editable"
+        @onChange="(v) => (prices.priceWholesale = v)"
+      />
+
+      <BaseInput
+        :name="prices.priceRetail || 0"
+        width=""
+        type="number"
+        :disable="!editable"
+        @onChange="(v) => (prices.priceRetail = v)"
       />
 
       <BaseSelectField
         :values="categories"
-        :editable="!editable"
+        :disable="!editable"
         variant="light"
         id="categories"
+        width="w-full"
         :defaultValue="productCategory"
-        width="w-56"
         @onChange="(v) => (productCategory = v)"
       />
-
-      <div class="w-8">
-        <NuxtImg
-          v-if="!editable"
-          src="/icons/edit.svg"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          @click="editHandler"
-          class="w-full p-1 hover:cursor-pointer hover:scale-125 transition-transform"
-        />
-        <NuxtImg
-          v-else
-          src="/icons/checked.svg"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          @click="saveHandler"
-          class="w-full p-1 hover:cursor-pointer hover:scale-125 transition-transform"
-        />
-      </div>
-      <div class="w-8">
-        <NuxtImg
-          v-if="!editable"
-          src="/icons/delete.svg"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          @click="deleteHandler"
-          class="w-full p-1 hover:cursor-pointer hover:scale-125 transition-transform"
-        />
-        <NuxtImg
-          v-else
-          src="/icons/close.svg"
-          width="20"
-          height="20"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-          @click="editHandler"
-          class="w-full p-1 hover:cursor-pointer hover:scale-125 transition-transform"
-        />
-      </div>
+      <BaseActionButtons
+        class=""
+        @onSave="saveHandler"
+        @onEdit="editable = true"
+        @onDelete="deleteHandler"
+        @onCancel="editable = false"
+      />
     </div>
-    <div v-if="editable" class="flex gap-4 items-end pl-12">
-      <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="w-[500px]" />
-      <BaseInfoField name="------->" width="w-24" />
-      <BaseInput
-        width="w-24"
-        variant="light"
-        type="number"
-        placeholder="Marža %"
-        :name="wholesaleMargin"
-        @onChange="(value) => (wholesaleMargin = value)"
-      />
-      <BaseInput
-        width="w-24"
-        variant="light"
-        type="number"
-        placeholder="Marža %"
-        :name="retailMargin"
-        @onChange="(value) => (retailMargin = value)"
-      />
-      <BaseButton name="Skaičiuoti" width="w-56" @click="calculateHandler" />
+
+    <div v-if="editable" class="flex gap-4 flex-col">
+      <div class="grid grid-cols-[40px_auto_150px_150px_150px_200px_100px] gap-4">
+        <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="full" class="col-start-2" />
+
+        <BaseInput
+          width="w-full col-start-4"
+          variant="light"
+          type="number"
+          placeholder="Marža %"
+          :name="profit.wholesale"
+          @onChange="(value) => (profit.wholesale = value)"
+        />
+        <BaseInput
+          width="w-full"
+          variant="light"
+          type="number"
+          placeholder="Marža %"
+          :name="profit.retail"
+          @onChange="(value) => (profit.retail = value)"
+        />
+        <BaseButton name="Skaičiuoti" width="w-full" @click="calculateHandler" />
+      </div>
+
+      <SettingsFenceElementWraper name="Papildoma informacija">
+        <div class="flex gap-4 items-center">
+          <div class="text-lg font font-semibold">Rodyti tinklapyje</div>
+          <BaseCheckField
+            :disabled="!editable"
+            :name="'FenceAditionalShowCheckbox' + index"
+            @onChange="(value: boolean) => (aditional.show = value)"
+            :checked="aditional.show"
+            height="h-4"
+          />
+        </div>
+        <div>
+          <label for="fenceDescription">Tvoros aprašymas</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.description"
+            name="description"
+            id="fenceDescription"
+            class="border border-dark-light w-full h-40 p-2 rounded-md"
+          />
+        </div>
+        <div>
+          <label for="fenceDescriptionEn">Tvoros aprašymas Anglų kalba</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.descriptionEn"
+            name="descriptionEn"
+            id="fenceDescriptionEn"
+            class="border border-dark-light w-full h-40 p-2 rounded-md"
+          />
+        </div>
+        <div>
+          <label for="fenceSeoTitle">Seo pavadinimas</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.seoTitle"
+            name="seoTitle"
+            id="fenceSeoTitle"
+            class="border border-dark-light w-full h-12 p-2 rounded-md"
+          />
+        </div>
+        <div>
+          <label for="fenceSeoTitleEn">Seo Pavadinimas Anglų kalba</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.seoTitleEn"
+            name="seoTitleEn"
+            id="fenceSeoTitleEn"
+            class="border border-dark-light w-full h-12 p-2 rounded-md"
+          />
+        </div>
+        <div>
+          <label for="fenceSeoDescription">Seo aprašymas</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.seoDescription"
+            name="seoDescription"
+            id="fenceSeoDescription"
+            class="border border-dark-light w-full h-20 p-2 rounded-md"
+          />
+        </div>
+        <div>
+          <label for="fenceSeoDescriptionEn">Seo aprašymas Anglų kalba</label>
+          <textarea
+            :disabled="!editable"
+            v-model="aditional.seoDescriptionEn"
+            name="seoDescriptionEn"
+            id="fenceSeoDescriptionEn"
+            class="border border-dark-light w-full h-20 p-2 rounded-md"
+          />
+        </div>
+        <div class="flex flex-col gap-4">
+          <BaseButton @click="addImage" :disabled="!editable">Pridėti nuotrauką</BaseButton>
+
+          <div v-for="(image, index) in aditional.images" :key="index" class="flex gap-4">
+            <BaseInput
+              :disable="!editable"
+              label="Nuotraukos pavadinimas"
+              :name="image.name"
+              @onChange="(value: string) => (aditional.images[index].name = value)"
+            />
+            <BaseInput
+              :disable="!editable"
+              label="Nuotraukos URL"
+              :name="image.url"
+              width="flex-1"
+              @onChange="(value: string) => (aditional.images[index].url = value)"
+            />
+            <BaseInput
+              :disable="!editable"
+              label="Nuotraukos aprašymas"
+              :name="image.alt"
+              width="flex-1"
+              @onChange="(value: string) => (aditional.images[index].alt = value)"
+            />
+            <BaseInput
+              :disable="!editable"
+              label="Nuotraukos aprašymas EN"
+              :name="image.altEN"
+              width="flex-1"
+              @onChange="(value: string) => (aditional.images[index].altEN = value)"
+            />
+          </div>
+        </div>
+      </SettingsFenceElementWraper>
     </div>
   </div>
 </template>

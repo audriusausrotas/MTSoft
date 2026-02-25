@@ -9,7 +9,7 @@ export default function createWorkElement(item: { name: string; quantity: number
   const works = useResultsStore();
   const backupExist = backupStore.backupExist;
   const backup = backupStore.works.find(
-    (i) => i.name.toLowerCase().trim() === item.name.toLowerCase().trim()
+    (i) => i.name.toLowerCase().trim() === item.name.toLowerCase().trim(),
   );
 
   let cost = 0;
@@ -25,27 +25,27 @@ export default function createWorkElement(item: { name: string; quantity: number
     price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
   }
 
-  let calculatedQuantity = item.quantity;
+  let quantity = +item.quantity.toFixed(2);
 
   if (item.name.toLowerCase() === "transportas" && backupExist && backup) {
-    calculatedQuantity = backup.quantity;
+    quantity = backup.quantity;
   }
 
-  const totalPrice = +(price * calculatedQuantity).toFixed(2);
-  const totalCost = +(cost * calculatedQuantity).toFixed(2);
+  const totalPrice = +(price * quantity).toFixed(2);
+  const totalCost = +(cost * quantity).toFixed(2);
   const profit = +(totalPrice - totalCost).toFixed(2);
   const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
 
   const resultData: Works = {
     id: uuidv4(),
     name: item.name,
-    quantity: calculatedQuantity,
+    quantity,
     price,
-    totalPrice: totalPrice,
+    totalPrice,
     cost,
-    totalCost: totalCost,
-    profit: profit,
-    margin: margin,
+    totalCost,
+    profit,
+    margin,
     done: false,
     retail,
   };
