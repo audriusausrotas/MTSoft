@@ -1,8 +1,4 @@
-divdivdivdivdivdiv
-
 <script setup lang="ts">
-import { statusFilters } from "~/data/selectFieldData";
-
 const props = defineProps(["offer", "location", "showButtons", "companies"]);
 const emit = defineEmits(["conformOrder", "openOrder", "cancel"]);
 
@@ -11,6 +7,7 @@ const installationStore = useInstallationStore();
 const projectsStore = useProjectsStore();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
+const settingsStore = useSettingsStore();
 
 const gateManufacturerOpen = ref<boolean>(false);
 const isOpenInstallation = ref<boolean>(false);
@@ -247,7 +244,7 @@ const confirmOrder = () => {
 
       <BaseSelectField
         v-if="props.location === 'projects'"
-        :values="statusFilters"
+        :values="settingsStore.selectValues.status"
         id="orderStatus"
         label="Statusas"
         :defaultValue="props.offer?.status"
