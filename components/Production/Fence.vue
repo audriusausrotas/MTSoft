@@ -27,9 +27,13 @@ const filterLength = ref<boolean>(false);
 
 const filteredMeasures = ref([...props.fence.measures]);
 
-const fenceSettings = useSettingsStore().fences.find((item) => item.name === props.fence.name);
+const fenceSettings = useSettingsStore().fences.find(
+  (item) => item.name === props.fence.name,
+);
 
-const RALcolor = computed(() => RALcolors[props.fence.color as RALColorCode] || "#FFFFFF");
+const RALcolor = computed(
+  () => RALcolors[props.fence.color as RALColorCode] || "#FFFFFF",
+);
 
 let step = null;
 
@@ -118,19 +122,29 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col" :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'">
+  <div
+    class="flex flex-col"
+    :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'"
+  >
     <p v-if="props.fence.comment">{{ props.fence.comment }}</p>
-    <div class="flex items-center font-bold text-lg border-black border-t border-r border-l">
+    <div
+      class="flex items-center font-bold text-lg border-black border-t border-r border-l"
+    >
       <p class="w-40 flex items-center justify-center h-full border-black">
         {{ props.fence.side }}
       </p>
       <p
         class="w-40 flex items-center justify-center h-full border-black"
-        :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
+        :class="[
+          `bg-[${RALcolor}]`,
+          RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+        ]"
       >
         {{ props.fence.color }}
       </p>
-      <p class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black">
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-r border-black"
+      >
         {{ props.fence.name }}
       </p>
       <div
@@ -150,14 +164,22 @@ watch(
       </div>
     </div>
 
-    <div class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0">
-      <p class="w-40 flex items-center justify-center h-full border-r border-black">
+    <div
+      class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0"
+    >
+      <p
+        class="w-40 flex items-center justify-center h-full border-r border-black"
+      >
         {{ props.fence.manufacturer || "Nežinoma" }}
       </p>
-      <p class="w-40 flex items-center justify-center h-full border-r border-black">
+      <p
+        class="w-40 flex items-center justify-center h-full border-r border-black"
+      >
         {{ props.fence.material }}
       </p>
-      <p class="flex-1 min-w-fit flex items-center justify-center h-full border-black">
+      <p
+        class="flex-1 min-w-fit flex items-center justify-center h-full border-black"
+      >
         {{ props.fence.holes === "Taip" ? "Su skylutėmis" : "Be skylučių" }}
         {{ step ? " - " + step + " cm" : "" }}
       </p>
@@ -200,11 +222,29 @@ watch(
           class="transition-all"
         />
       </p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Elementai</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Aukštis</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Išpjauti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Pagaminti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black print:hidden">
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Elementai
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Aukštis
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Išpjauti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Pagaminti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black print:hidden"
+      >
         Veiksmai
       </p>
       <p
@@ -232,7 +272,12 @@ watch(
         :orderNr="props.orderNr"
         :clientAddress="props.clientAddress"
       />
-      <BaseButton v-if="isAdmin" name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
+      <BaseButton
+        v-if="isAdmin"
+        name="Pridėti naują"
+        class="mt-2"
+        @click="newMeasureHandler"
+      />
     </div>
   </div>
 </template>
