@@ -159,7 +159,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].measures[measureIndex].gates.bankette = value;
     },
 
-    updateGateDirection(index: number, value: string, measureIndex: number): void {
+    updateGateDirection(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].gates.direction = value;
     },
 
@@ -171,7 +175,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].measures[measureIndex].gates.automatics = value;
     },
 
-    updateInstallation(index: number, value: string, measureIndex: number): void {
+    updateInstallation(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].gates.installation = value;
     },
 
@@ -184,7 +192,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.calculateAllElements(index);
     },
 
-    updateMeasureGate(index: number, value: boolean, measureIndex: number): void {
+    updateMeasureGate(
+      index: number,
+      value: boolean,
+      measureIndex: number,
+    ): void {
       const measure = this.fences[index].measures[measureIndex];
       measure.gates.exist = value;
       measure.gates.name = measure.length > 200 ? "Vartai" : "Varteliai";
@@ -196,7 +208,11 @@ export const useCalculationsStore = defineStore("calculations", {
       this.calculateAllElements(index);
     },
 
-    updateGateComment(index: number, value: string, measureIndex: number): void {
+    updateGateComment(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].gates.comment = value;
     },
 
@@ -212,19 +228,35 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences[index].holes = value;
     },
 
-    updateMeasureKampas(index: number, value: string, measureIndex: number): void {
+    updateMeasureKampas(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].kampas.value = +value;
     },
 
-    updateMeasureKampasComment(index: number, value: string, measureIndex: number): void {
+    updateMeasureKampasComment(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].kampas.comment = value;
     },
 
-    updateMeasureLaiptas(index: number, value: string, measureIndex: number): void {
+    updateMeasureLaiptas(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].laiptas.value = +value;
     },
 
-    updateMeasureLaiptasDirection(index: number, value: string, measureIndex: number): void {
+    updateMeasureLaiptasDirection(
+      index: number,
+      value: string,
+      measureIndex: number,
+    ): void {
       this.fences[index].measures[measureIndex].laiptas.direction = value;
     },
 
@@ -287,19 +319,31 @@ export const useCalculationsStore = defineStore("calculations", {
       this.fences = this.fences.filter((fence) => fence.id !== id);
     },
 
-    updateMeasureHeight(index: number, measureIndex: number, value: number): void {
+    updateMeasureHeight(
+      index: number,
+      measureIndex: number,
+      value: number,
+    ): void {
       this.fences[index].measures[measureIndex].height = +value;
       this.calculateElements(index, measureIndex);
       this.updateFenceTotals(index);
     },
 
-    updateMeasureLength(index: number, measureIndex: number, value: number): void {
+    updateMeasureLength(
+      index: number,
+      measureIndex: number,
+      value: number,
+    ): void {
       this.fences[index].measures[measureIndex].length = +value;
       this.calculateElements(index, measureIndex);
       this.updateFenceTotals(index);
     },
 
-    updateMeasureElements(index: number, measureIndex: number, value: number): void {
+    updateMeasureElements(
+      index: number,
+      measureIndex: number,
+      value: number,
+    ): void {
       this.fences[index].measures[measureIndex].elements = +value;
     },
 
@@ -314,7 +358,8 @@ export const useCalculationsStore = defineStore("calculations", {
       const measure = fence.measures[measureIndex];
 
       const fenceData = useSettingsStore().fences.find(
-        (item) => item.name.trim().toLowerCase() === fence.name.trim().toLowerCase(),
+        (item) =>
+          item.name.trim().toLowerCase() === fence.name.trim().toLowerCase(),
       );
 
       if (!fenceData || fenceData?.category === "Segmentas") return;
@@ -336,9 +381,14 @@ export const useCalculationsStore = defineStore("calculations", {
           .replace("50% Pramatomumas", "pramatoma50")
           .toLowerCase() as keyof typeof fenceData.steps;
 
-        const seeThroughStep = fenceRename in fenceData.steps ? fenceData.steps[fenceRename] : null;
+        const seeThroughStep =
+          fenceRename in fenceData.steps ? fenceData.steps[fenceRename] : null;
 
-        if (measure.height && this.fences[index].direction === "Horizontali" && seeThroughStep) {
+        if (
+          measure.height &&
+          this.fences[index].direction === "Horizontali" &&
+          seeThroughStep
+        ) {
           elements = measure.height / seeThroughStep;
         } else if (
           measure.length &&
@@ -349,7 +399,17 @@ export const useCalculationsStore = defineStore("calculations", {
         }
       }
       this.fences[index].measures[measureIndex].elements = Math.round(elements);
-      this.fences[index].elements += Math.round(elements);
+      this.recalculateTotalElements(index);
+    },
+
+    recalculateTotalElements(index: number) {
+      let totalElements = 0;
+
+      this.fences[index].measures.forEach((measure) => {
+        totalElements += measure.elements || 0;
+      });
+
+      this.fences[index].elements = totalElements;
     },
 
     setProject(project: any) {
@@ -395,10 +455,18 @@ export const useCalculationsStore = defineStore("calculations", {
           lastElement = this.fences[index].measures[0];
         }
 
-        if (lastElement.length !== 0 || lastElement.kampas.exist || lastElement.laiptas.exist) {
+        if (
+          lastElement.length !== 0 ||
+          lastElement.kampas.exist ||
+          lastElement.laiptas.exist
+        ) {
           this.addMeasure(index);
         }
-        this.updateMeasureLength(index, this.fences[index].measures.length - 1, item);
+        this.updateMeasureLength(
+          index,
+          this.fences[index].measures.length - 1,
+          item,
+        );
       });
     },
 
@@ -411,7 +479,8 @@ export const useCalculationsStore = defineStore("calculations", {
 
       let lastHeight: number = 0;
 
-      const formatHeight = (number: string): number => +number.replace(",", ".") * unit;
+      const formatHeight = (number: string): number =>
+        +number.replace(",", ".") * unit;
 
       const formatLength = (number: string): number => {
         const value = +number.replace(",", ".") * unit;
@@ -526,7 +595,11 @@ export const useCalculationsStore = defineStore("calculations", {
           checkFence();
           let found = "Nerasta";
 
-          if (settingsStore.selectValues.fenceTypes.some((item) => item === capitalize(temp))) {
+          if (
+            settingsStore.selectValues.fenceTypes.some(
+              (item) => item === capitalize(temp),
+            )
+          ) {
             found = capitalize(temp);
           } else {
             if (temp === "60x90") found = "Daimond 60/90";
@@ -614,7 +687,11 @@ export const useCalculationsStore = defineStore("calculations", {
           checkFence();
           const lastIndex = this.fences.length - 1;
           this.addKampas(lastIndex);
-          this.updateMeasureKampas(lastIndex, temp, this.fences[lastIndex].measures.length - 1);
+          this.updateMeasureKampas(
+            lastIndex,
+            temp,
+            this.fences[lastIndex].measures.length - 1,
+          );
 
           // step
         } else if (item.startsWith("la.") || item.startsWith("lz.")) {
@@ -632,7 +709,11 @@ export const useCalculationsStore = defineStore("calculations", {
           }
 
           this.addLaiptas(lastIndex);
-          this.updateMeasureLaiptas(lastIndex, measure, this.fences[lastIndex].measures.length - 1);
+          this.updateMeasureLaiptas(
+            lastIndex,
+            measure,
+            this.fences[lastIndex].measures.length - 1,
+          );
           this.updateMeasureLaiptasDirection(
             lastIndex,
             direction,
@@ -682,7 +763,8 @@ export const useCalculationsStore = defineStore("calculations", {
 
           if (!auto) this.updateAutomatics(lastIndex, "Ne", lastMeasure);
           if (!bankette) this.updateBankette(lastIndex, "Ne", lastMeasure);
-          if (lock) this.updateGateLock(lastIndex, "Elektromagnetinė", lastMeasure);
+          if (lock)
+            this.updateGateLock(lastIndex, "Elektromagnetinė", lastMeasure);
           this.updateMeasureLength(lastIndex, lastMeasure, formatLength(temp));
           this.updateMeasureHeight(lastIndex, lastMeasure, lastHeight);
           this.updateGateOption(lastIndex, gateType, lastMeasure);
@@ -720,7 +802,10 @@ export const useCalculationsStore = defineStore("calculations", {
         } else if (item.startsWith("i.")) {
           const temp = item.replace("i.", "");
           checkFence();
-          this.calculatefromTotalLength(this.fences.length - 1, formatHeight(temp));
+          this.calculatefromTotalLength(
+            this.fences.length - 1,
+            formatHeight(temp),
+          );
           this.oneHeight(this.fences.length - 1, lastHeight);
         } else return;
       });

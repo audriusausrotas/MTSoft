@@ -23,7 +23,11 @@ const dateColor =
 const statusColor = computed(() => {
   const items = props?.order?.data ?? [];
 
-  if (items.every((item: any) => !item.delivered && !item.inWarehouse && !item.ordered))
+  if (
+    items.every(
+      (item: any) => !item.delivered && !item.inWarehouse && !item.ordered,
+    )
+  )
     return "bg-gray-ultra-light";
   else if (items.every((item: any) => item.delivered)) return "bg-stone-400";
   else if (items.every((item: any) => item.inWarehouse)) return "bg-green-500";
@@ -65,13 +69,13 @@ const clickHandler = () => {
       class="flex gap-2"
     >
       <BaseInput
-        disable="true"
+        :disable="true"
         :name="props.order?.projectOrderNr"
         width="w-28 "
         label="Užsakymo nr"
       />
       <BaseInput
-        disable="true"
+        :disable="true"
         :name="props.order?.creator?.username"
         width="w-28 "
         label="Užsakovas"
@@ -86,14 +90,19 @@ const clickHandler = () => {
     />
 
     <BaseInput
-      disable="true"
+      :disable="true"
       :name="props.order?.deliveryMethod"
       width="w-40  "
       class="capitalize"
       label="Atsiėmimo"
     />
 
-    <BaseInput :name="props.order?.orderNr" width="w-32 " :disable="true" label="Užsakymo nr" />
+    <BaseInput
+      :name="props.order?.orderNr"
+      width="w-32 "
+      :disable="true"
+      label="Užsakymo nr"
+    />
 
     <div
       v-if="
@@ -103,7 +112,7 @@ const clickHandler = () => {
       class="flex gap-2 h-16"
     >
       <BaseInput
-        disable="true"
+        :disable="true"
         :name="props.order?.recipient[0]?.company"
         width="w-40 "
         label="Tiekėjo įmonė"
@@ -111,10 +120,12 @@ const clickHandler = () => {
 
       <div class="relative group/2">
         <BaseInput
-          disable="true"
+          :disable="true"
           :name="
             props.order.recipient[0].email +
-            (props.order.recipient.length > 1 ? ' +' + (props.order.recipient.length - 1) : '')
+            (props.order.recipient.length > 1
+              ? ' +' + (props.order.recipient.length - 1)
+              : '')
           "
           width="w-60 "
           label="Tiekėjo el. paštas"
@@ -139,7 +150,7 @@ const clickHandler = () => {
     </div>
 
     <BaseInput
-      disable="true"
+      :disable="true"
       v-else
       name="Baigta"
       width="w-32"

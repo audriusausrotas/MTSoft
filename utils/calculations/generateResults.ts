@@ -127,7 +127,9 @@ export default function generateResults() {
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000,
+      );
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.rivets,
@@ -138,7 +140,9 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000,
+      );
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.bolts,
@@ -209,7 +213,8 @@ export default function generateResults() {
       const gate = gates.find(
         (gate) =>
           gate.category.toLowerCase() ===
-            item.option.replace("Gaminami", "Varteliai").toLowerCase() && length === gate.length,
+            item.option.replace("Gaminami", "Varteliai").toLowerCase() &&
+          length === gate.length,
       );
 
       if (!gate) return;

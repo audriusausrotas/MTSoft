@@ -9,12 +9,17 @@ const props = defineProps({
   index: Number,
 });
 
-const fenceInfo = useSettingsStore().fences.find((fence) => fence.name === props.fence.name);
+const fenceInfo = useSettingsStore().fences.find(
+  (fence) => fence.name === props.fence.name,
+);
 
 const isSegment = fenceInfo?.category === "Segmentas";
 const isFenceBoard = fenceInfo?.category === "Tvoralentė";
 const isFence = fenceInfo?.category === "Tvora";
-const step = fenceInfo?.steps[props.fence.seeThrough.toLowerCase() as keyof SeeThroughSteps];
+const step =
+  fenceInfo?.steps[
+    props.fence.seeThrough.toLowerCase() as keyof SeeThroughSteps
+  ];
 </script>
 
 <template>
@@ -56,9 +61,11 @@ const step = fenceInfo?.steps[props.fence.seeThrough.toLowerCase() as keyof SeeT
         <div>{{ props.fence.totalLength }} m</div>
 
         <div v-if="isFenceBoard" class="font-medium">Viso elementų</div>
-        <div v-if="isFenceBoard">{{ isFenceBoard }} vnt</div>
+        <div v-if="isFenceBoard">{{ props.fence.elements }} vnt</div>
 
-        <div v-if="!isFenceBoard && !isSegment" class="font-medium">Kvadratūra</div>
+        <div v-if="!isFenceBoard && !isSegment" class="font-medium">
+          Kvadratūra
+        </div>
         <div v-if="!isFenceBoard && !isSegment">
           {{ props.fence.totalQuantity }} m<span>²</span>
         </div>

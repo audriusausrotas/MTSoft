@@ -13,7 +13,9 @@ const skaiciuokle = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 
 const project = computed(() => {
-  return projectsStore.projects.find((item) => item._id === projectsStore.selectedProject);
+  return projectsStore.projects.find(
+    (item) => item._id === projectsStore.selectedProject,
+  );
 });
 const saveHandler = async (): Promise<void> => {
   isLoading.value = true;
@@ -54,14 +56,17 @@ const saveHandler = async (): Promise<void> => {
     workers: [],
     gateManufacturer: "",
   };
+
   try {
     let response;
-    if (projectsStore.selectedProject) response = await request.patch("updateProject", newProject);
+    if (projectsStore.selectedProject)
+      response = await request.patch("updateProject", newProject);
     else response = await request.post("newProject", newProject);
 
     if (response.success) {
       if (!useSocketStore().connected) {
-        if (projectsStore.selectedProject) projectsStore.updateProject(response.data);
+        if (projectsStore.selectedProject)
+          projectsStore.updateProject(response.data);
         else projectsStore.addProject(response.data);
       }
 
@@ -87,7 +92,10 @@ const clearHandler = () => {
 
 <template>
   <div class="flex flex-col w-full items-center gap-10 select-none">
-    <div v-if="project && project.versions.length > 0" class="flex gap-4 w-full flex-wrap">
+    <div
+      v-if="project && project.versions.length > 0"
+      class="flex gap-4 w-full flex-wrap"
+    >
       <p class="font-medium text-xl">Projekto versijos:</p>
       <CalcVersions
         v-for="(version, index) in project.versions"

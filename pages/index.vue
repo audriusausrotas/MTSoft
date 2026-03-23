@@ -13,24 +13,36 @@ const filteredProjects = () => {
   let filtered = [...projectsStore.projects];
 
   if (searchQuery.value.length > 2) {
-    return filtered.filter(
+    return filtered?.filter(
       (project) =>
-        project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
+        project?.client.address
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project?.client.email
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project?.client.phone
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project?.client.username
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()) ||
+        project?.orderNumber
+          .toLowerCase()
+          .includes(searchQuery.value.toLowerCase()),
     );
   }
 
   if (filterUser.value !== "Visi") {
-    filtered = filtered.filter((item) =>
-      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase()),
+    filtered = filtered?.filter((item) =>
+      item?.creator?.username
+        .toLowerCase()
+        .startsWith(filterUser.value.toLowerCase()),
     );
   }
 
   if (filterStatus.value !== "Visi") {
-    filtered = filtered.filter((item) => item.status === filterStatus.value);
+    filtered = filtered?.filter((item) => item.status === filterStatus.value);
   }
 
   return filtered;
@@ -44,6 +56,7 @@ const projects = computed(() => {
     confirmed: [] as Project[],
     notAccepted: [] as Project[],
     accepted: [] as Project[],
+    blinds: [] as Project[],
     concreted: [] as Project[],
     inMaking: [] as Project[],
     inWorks: [] as Project[],
@@ -62,6 +75,7 @@ const projects = computed(() => {
     Patvirtintas: "confirmed",
     Netinkamas: "notAccepted",
     Tinkamas: "accepted",
+    "Lauko žaliuzės": "blinds",
     Betonuojama: "concreted",
     Gaminama: "inMaking",
     Montuojama: "inWorks",
@@ -86,14 +100,22 @@ const projects = computed(() => {
 
   if (filterBy.value === "Datą") {
     categories.confirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateConfirmed ? new Date(a.dates.dateConfirmed).getTime() : 0;
-      const dateB = b.dates.dateConfirmed ? new Date(b.dates.dateConfirmed).getTime() : 0;
+      const dateA = a.dates.dateConfirmed
+        ? new Date(a.dates.dateConfirmed).getTime()
+        : 0;
+      const dateB = b.dates.dateConfirmed
+        ? new Date(b.dates.dateConfirmed).getTime()
+        : 0;
       return dateB - dateA;
     });
 
     categories.unconfirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateCreated ? new Date(a.dates.dateCreated).getTime() : 0;
-      const dateB = b.dates.dateCreated ? new Date(b.dates.dateCreated).getTime() : 0;
+      const dateA = a.dates.dateCreated
+        ? new Date(a.dates.dateCreated).getTime()
+        : 0;
+      const dateB = b.dates.dateCreated
+        ? new Date(b.dates.dateCreated).getTime()
+        : 0;
       return dateB - dateA;
     });
   }
@@ -103,7 +125,11 @@ const projects = computed(() => {
 
 const users = [
   "Visi",
-  ...new Set(projectsStore.projects?.map((item) => item.creator.username).filter(Boolean)),
+  ...new Set(
+    projectsStore.projects
+      ?.map((item) => item.creator.username)
+      .filter(Boolean),
+  ),
 ];
 
 const filterByValues = ["Statusą", "Datą"];
@@ -196,7 +222,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.measure"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.measure.length"
         :project="project"
@@ -211,7 +237,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.repair"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.repair.length"
         :project="project"
@@ -225,7 +251,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.finished"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.finished.length"
         :project="project"
@@ -240,7 +266,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.notAccepted"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.notAccepted.length"
         :project="project"
@@ -255,7 +281,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.mounted"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.mounted.length"
         :project="project"
@@ -270,7 +296,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.done"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.done.length"
         :project="project"
@@ -285,7 +311,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.accepted"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.accepted.length"
         :project="project"
@@ -300,9 +326,24 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.confirmed"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.confirmed.length"
+        :project="project"
+        location="projects"
+      />
+
+      <div
+        v-if="projects.blinds.length"
+        class="text-xl font-semibold p-2 bg-cyan-400 rounded-lg text-center"
+      >
+        Lauko žaliuzės
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects.blinds"
+        :key="project?._id"
+        :index="index"
+        :length="projects.blinds.length"
         :project="project"
         location="projects"
       />
@@ -315,7 +356,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.concreted"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.concreted.length"
         :project="project"
@@ -329,7 +370,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.inMaking"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.inMaking.length"
         :project="project"
@@ -344,7 +385,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.inWorks"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.inWorks.length"
         :project="project"
@@ -359,7 +400,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.waiting"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.waiting.length"
         :project="project"
@@ -374,7 +415,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.unconfirmed"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.unconfirmed.length"
         :project="project"
@@ -389,7 +430,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.payment"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.payment.length"
         :project="project"
@@ -404,7 +445,7 @@ const newProjectHandler = () => {
       </div>
       <HomeProject
         v-for="(project, index) in projects.other"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.other.length"
         :project="project"
@@ -414,7 +455,7 @@ const newProjectHandler = () => {
     <!-- <div v-if="filterBy === 'Datą'" class="flex flex-col gap-4 w-full">
       <HomeProject
         v-for="(project, index) in projects.byDate"
-        :key="project._id"
+        :key="project?._id"
         :index="index"
         :length="projects.byDate.length"
         :project="project"
