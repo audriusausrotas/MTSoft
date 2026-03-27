@@ -14,8 +14,8 @@ const blinds = [
     imgView: "blinds",
     premPriceM: props.retail ? "7.41" : "5.00",
     premPriceMVat: props.retail ? "8.97" : "6.05",
-    holders: props.retail ? "22.50" : "25.88",
-    holdersVat: props.retail ? "27.22" : "31.32",
+    holders: props.retail ? "25.88" : "22.50",
+    holdersVat: props.retail ? "31.32" : "27.22",
   },
   {
     name: "Lauko žaliuzė 18x100",
@@ -23,8 +23,8 @@ const blinds = [
     imgView: "blinds2",
     premPriceM: props.retail ? "7.41" : "5.00",
     premPriceMVat: props.retail ? "8.97" : "6.05",
-    holders: props.retail ? "22.50" : "25.88",
-    holdersVat: props.retail ? "27.22" : "31.32",
+    holders: props.retail ? "25.88" : "22.50",
+    holdersVat: props.retail ? "31.32" : "27.22",
   },
 ];
 </script>
