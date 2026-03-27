@@ -37,7 +37,7 @@ const files = [
         :blinds="true"
       />
 
-      <OffersOfferFences :retail="true" :blinds="true" />
+      <OffersOfferFences :retail="false" :blinds="true" />
 
       <OffersColorsCard />
 

@@ -3,7 +3,14 @@ definePageMeta({
   layout: false,
 });
 
-const files = ["blindsPDF1", "blindsPDF2", "blindsPDF3", "blindsPDF4", "blindsPDF5", "blindsPDF6"];
+const files = [
+  "blindsPDF1",
+  "blindsPDF2",
+  "blindsPDF3",
+  "blindsPDF4",
+  "blindsPDF5",
+  "blindsPDF6",
+];
 </script>
 <template>
   <div class="max-w-[1470px] m-auto py-8">
@@ -24,9 +31,13 @@ const files = ["blindsPDF1", "blindsPDF2", "blindsPDF3", "blindsPDF4", "blindsPD
         </div>
       </OffersBoxWrap>
 
-      <OffersSteelInfo class="print:break-after-page" :hideEco="true" :blinds="true" />
+      <OffersSteelInfo
+        class="print:break-after-page"
+        :hideEco="true"
+        :blinds="true"
+      />
 
-      <OffersOfferFences :retail="false" :blinds="true" />
+      <OffersOfferFences :retail="true" :blinds="true" />
 
       <OffersColorsCard />
 

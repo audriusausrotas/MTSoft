@@ -4,7 +4,7 @@ const props = defineProps(["retail", "blinds"]);
 const settingsStore = useSettingsStore();
 
 const fences = settingsStore.fences.filter(
-  (item) => item.category === "Tvora" || item.name === "Dilė"
+  (item) => item.category === "Tvora" || item.name === "Dilė",
 );
 
 const blinds = [
@@ -12,19 +12,19 @@ const blinds = [
     name: "Lauko žaliuzė 20x100",
     imgDetail: "blind",
     imgView: "blinds",
-    premPriceM: !props.retail ? "5.45" : "7.41",
-    premPriceMVat: !props.retail ? "6.60" : "8.97",
-    holders: !props.retail ? "22.50" : "25.88",
-    holdersVat: !props.retail ? "27.22" : "31.32",
+    premPriceM: props.retail ? "7.41" : "5.00",
+    premPriceMVat: props.retail ? "8.97" : "6.05",
+    holders: props.retail ? "22.50" : "25.88",
+    holdersVat: props.retail ? "27.22" : "31.32",
   },
   {
     name: "Lauko žaliuzė 18x100",
     imgDetail: "blind",
     imgView: "blinds2",
-    premPriceM: !props.retail ? "5.45" : "7.41",
-    premPriceMVat: !props.retail ? "6.60" : "8.97",
-    holders: !props.retail ? "22.50" : "25.88",
-    holdersVat: !props.retail ? "27.22" : "31.32",
+    premPriceM: props.retail ? "7.41" : "5.00",
+    premPriceMVat: props.retail ? "8.97" : "6.05",
+    holders: props.retail ? "22.50" : "25.88",
+    holdersVat: props.retail ? "27.22" : "31.32",
   },
 ];
 </script>
