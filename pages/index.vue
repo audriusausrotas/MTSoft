@@ -4,40 +4,28 @@ import type { Project } from "~/data/interfaces";
 const projectsStore = useProjectsStore();
 const settingsStore = useSettingsStore();
 
-const filterUser = ref<string>(useUserStore().user!.username);
+const filterUser = ref<string>(useUserStore().user?.username || "Visi");
 const filterStatus = ref<string>("Visi");
 const filterBy = ref<string>("Statusą");
 const searchQuery = ref<string>("");
 
-const filteredProjects = () => {
-  let filtered = [...projectsStore.projects];
+const filteredProjects = computed(() => {
+  let filtered = projectsStore.projects ? [...projectsStore.projects] : [];
 
   if (searchQuery.value.length > 2) {
     return filtered?.filter(
       (project) =>
-        project?.client.address
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project?.client.email
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project?.client.phone
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project?.client.username
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        project?.orderNumber
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()),
+        project?.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project?.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project?.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project?.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project?.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered?.filter((item) =>
-      item?.creator?.username
-        .toLowerCase()
-        .startsWith(filterUser.value.toLowerCase()),
+      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase()),
     );
   }
 
@@ -46,10 +34,10 @@ const filteredProjects = () => {
   }
 
   return filtered;
-};
+});
 
 const projects = computed(() => {
-  const allProjects = filteredProjects();
+  const allProjects = filteredProjects.value || [];
 
   const categories = {
     unconfirmed: [] as Project[],
@@ -90,7 +78,7 @@ const projects = computed(() => {
 
   allProjects.forEach((item: Project) => {
     if (filterBy.value === "Statusą") {
-      const category = statusToCategory[item.status] || "other";
+      const category = statusToCategory[item.status as keyof typeof statusToCategory] || "other";
       categories[category].push(item);
     } else if (filterBy.value === "Datą") {
       if (item.dates.dateConfirmed) categories.confirmed.push(item);
@@ -100,22 +88,14 @@ const projects = computed(() => {
 
   if (filterBy.value === "Datą") {
     categories.confirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateConfirmed
-        ? new Date(a.dates.dateConfirmed).getTime()
-        : 0;
-      const dateB = b.dates.dateConfirmed
-        ? new Date(b.dates.dateConfirmed).getTime()
-        : 0;
+      const dateA = a.dates.dateConfirmed ? new Date(a.dates.dateConfirmed).getTime() : 0;
+      const dateB = b.dates.dateConfirmed ? new Date(b.dates.dateConfirmed).getTime() : 0;
       return dateB - dateA;
     });
 
     categories.unconfirmed.sort((a: Project, b: Project) => {
-      const dateA = a.dates.dateCreated
-        ? new Date(a.dates.dateCreated).getTime()
-        : 0;
-      const dateB = b.dates.dateCreated
-        ? new Date(b.dates.dateCreated).getTime()
-        : 0;
+      const dateA = a.dates.dateCreated ? new Date(a.dates.dateCreated).getTime() : 0;
+      const dateB = b.dates.dateCreated ? new Date(b.dates.dateCreated).getTime() : 0;
       return dateB - dateA;
     });
   }
@@ -123,14 +103,10 @@ const projects = computed(() => {
   return categories;
 });
 
-const users = [
+const users = computed(() => [
   "Visi",
-  ...new Set(
-    projectsStore.projects
-      ?.map((item) => item.creator.username)
-      .filter(Boolean),
-  ),
-];
+  ...new Set((projectsStore.projects || []).map((item) => item.creator?.username).filter(Boolean)),
+]);
 
 const filterByValues = ["Statusą", "Datą"];
 
@@ -177,7 +153,7 @@ const newProjectHandler = () => {
         />
         <BaseSelectField
           label="Statusas"
-          :values="settingsStore.selectValues.status"
+          :values="['Visi', ...settingsStore.selectValues.status]"
           id="statusFilter"
           :defaultValue="filterStatus"
           width="w-60"
@@ -215,239 +191,239 @@ const newProjectHandler = () => {
 
     <div class="flex flex-col gap-4 w-full">
       <div
-        v-if="projects.measure.length"
+        v-if="projects?.measure?.length"
         class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
       >
         Matavimas
       </div>
       <HomeProject
-        v-for="(project, index) in projects.measure"
+        v-for="(project, index) in projects?.measure"
         :key="project?._id"
         :index="index"
-        :length="projects.measure.length"
+        :length="projects?.measure?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.repair.length"
+        v-if="projects?.repair?.length"
         class="text-xl font-semibold p-2 bg-rose-400 rounded-lg text-center"
       >
         Remontas
       </div>
       <HomeProject
-        v-for="(project, index) in projects.repair"
+        v-for="(project, index) in projects?.repair"
         :key="project?._id"
         :index="index"
-        :length="projects.repair.length"
+        :length="projects?.repair?.length"
         :project="project"
         location="projects"
       />
       <div
-        v-if="projects.finished.length"
+        v-if="projects?.finished?.length"
         class="text-xl font-semibold p-2 bg-gray-400 rounded-lg text-center"
       >
         Baigti
       </div>
       <HomeProject
-        v-for="(project, index) in projects.finished"
+        v-for="(project, index) in projects?.finished"
         :key="project?._id"
         :index="index"
-        :length="projects.finished.length"
+        :length="projects?.finished?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.notAccepted.length"
+        v-if="projects?.notAccepted?.length"
         class="text-xl bg-red-600 font-semibold p-2 rounded-lg text-center"
       >
         Netinkami
       </div>
       <HomeProject
-        v-for="(project, index) in projects.notAccepted"
+        v-for="(project, index) in projects?.notAccepted"
         :key="project?._id"
         :index="index"
-        :length="projects.notAccepted.length"
+        :length="projects?.notAccepted?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.mounted.length"
+        v-if="projects?.mounted?.length"
         class="text-xl font-semibold p-2 bg-violet-400 rounded-lg text-center"
       >
         Vartai sumontuoti
       </div>
       <HomeProject
-        v-for="(project, index) in projects.mounted"
+        v-for="(project, index) in projects?.mounted"
         :key="project?._id"
         :index="index"
-        :length="projects.mounted.length"
+        :length="projects?.mounted?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.done.length"
+        v-if="projects?.done?.length"
         class="text-xl font-semibold p-2 bg-lime-400 rounded-lg text-center"
       >
         Pridavimas
       </div>
       <HomeProject
-        v-for="(project, index) in projects.done"
+        v-for="(project, index) in projects?.done"
         :key="project?._id"
         :index="index"
-        :length="projects.done.length"
+        :length="projects?.done?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.accepted.length"
+        v-if="projects?.accepted?.length"
         class="text-xl font-semibold p-2 bg-pink-400 rounded-lg text-center"
       >
         Tinkami
       </div>
       <HomeProject
-        v-for="(project, index) in projects.accepted"
+        v-for="(project, index) in projects?.accepted"
         :key="project?._id"
         :index="index"
-        :length="projects.accepted.length"
+        :length="projects?.accepted?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.confirmed.length"
+        v-if="projects?.confirmed?.length"
         class="text-xl font-semibold p-2 bg-green-400 rounded-lg text-center"
       >
         Patvirtinti
       </div>
       <HomeProject
-        v-for="(project, index) in projects.confirmed"
+        v-for="(project, index) in projects?.confirmed"
         :key="project?._id"
         :index="index"
-        :length="projects.confirmed.length"
+        :length="projects?.confirmed?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.blinds.length"
+        v-if="projects?.blinds?.length"
         class="text-xl font-semibold p-2 bg-cyan-400 rounded-lg text-center"
       >
         Lauko žaliuzės
       </div>
       <HomeProject
-        v-for="(project, index) in projects.blinds"
+        v-for="(project, index) in projects?.blinds"
         :key="project?._id"
         :index="index"
-        :length="projects.blinds.length"
+        :length="projects?.blinds?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.concreted.length"
+        v-if="projects?.concreted?.length"
         class="text-xl font-semibold p-2 bg-emerald-400 rounded-lg text-center"
       >
         Betonuojama
       </div>
       <HomeProject
-        v-for="(project, index) in projects.concreted"
+        v-for="(project, index) in projects?.concreted"
         :key="project?._id"
         :index="index"
-        :length="projects.concreted.length"
+        :length="projects?.concreted?.length"
         :project="project"
         location="projects"
       />
       <div
-        v-if="projects.inMaking.length"
+        v-if="projects?.inMaking?.length"
         class="text-xl font-semibold p-2 bg-teal-400 rounded-lg text-center"
       >
         Gaminama
       </div>
       <HomeProject
-        v-for="(project, index) in projects.inMaking"
+        v-for="(project, index) in projects?.inMaking"
         :key="project?._id"
         :index="index"
-        :length="projects.inMaking.length"
+        :length="projects?.inMaking?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.inWorks.length"
+        v-if="projects?.inWorks?.length"
         class="text-xl font-semibold p-2 bg-indigo-400 rounded-lg text-center"
       >
         Montuojama
       </div>
       <HomeProject
-        v-for="(project, index) in projects.inWorks"
+        v-for="(project, index) in projects?.inWorks"
         :key="project?._id"
         :index="index"
-        :length="projects.inWorks.length"
+        :length="projects?.inWorks?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.waiting.length"
+        v-if="projects?.waiting?.length"
         class="text-xl font-semibold p-2 bg-blue-400 rounded-lg text-center"
       >
         Laukiam vartų
       </div>
       <HomeProject
-        v-for="(project, index) in projects.waiting"
+        v-for="(project, index) in projects?.waiting"
         :key="project?._id"
         :index="index"
-        :length="projects.waiting.length"
+        :length="projects?.waiting?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.unconfirmed.length"
+        v-if="projects?.unconfirmed?.length"
         class="text-xl font-semibold p-2 bg-orange-300 rounded-lg text-center"
       >
         Nepatvirtinti
       </div>
       <HomeProject
-        v-for="(project, index) in projects.unconfirmed"
+        v-for="(project, index) in projects?.unconfirmed"
         :key="project?._id"
         :index="index"
-        :length="projects.unconfirmed.length"
+        :length="projects?.unconfirmed?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.payment.length"
+        v-if="projects?.payment?.length"
         class="text-xl font-semibold p-2 bg-fuchsia-400 rounded-lg text-center"
       >
         Laukiama apmokėjimo
       </div>
       <HomeProject
-        v-for="(project, index) in projects.payment"
+        v-for="(project, index) in projects?.payment"
         :key="project?._id"
         :index="index"
-        :length="projects.payment.length"
+        :length="projects?.payment?.length"
         :project="project"
         location="projects"
       />
 
       <div
-        v-if="projects.other.length"
+        v-if="projects?.other?.length"
         class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
       >
         Kiti
       </div>
       <HomeProject
-        v-for="(project, index) in projects.other"
+        v-for="(project, index) in projects?.other"
         :key="project?._id"
         :index="index"
-        :length="projects.other.length"
+        :length="projects?.other?.length"
         :project="project"
         location="projects"
       />

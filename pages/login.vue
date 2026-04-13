@@ -13,6 +13,11 @@ const isLoading = ref<boolean>(false);
 const userStore = useUserStore();
 
 const loginHandler = async () => {
+  if (!email.value || !password.value) {
+    setError("Visi laukai yra privalomi");
+    return;
+  }
+
   isLoading.value = true;
 
   const loginData = { email: email.value, password: password.value };
@@ -38,6 +43,11 @@ const loginHandler = async () => {
 };
 
 const registerHandler = async () => {
+  if (!username.value || !email.value || !password.value || !retypePassword.value) {
+    setError("Visi laukai yra privalomi");
+    return;
+  }
+
   isLoading.value = true;
   const loginData = {
     email: email.value,
@@ -91,7 +101,7 @@ const clearFields = () => {
         @onChange="(v) => (email = v)"
         placeholder="pavyzdys@gmail.com"
         label="Elektroninis paštas"
-        @keyup.enter="login ? loginHandler : registerHandler"
+        @keyup.enter="login ? loginHandler() : registerHandler()"
       />
 
       <BaseInput
@@ -100,7 +110,7 @@ const clearFields = () => {
         placeholder="Slaptažodis"
         label="Slaptažodis"
         type="password"
-        @keyup.enter="login ? loginHandler : registerHandler"
+        @keydown.enter="login ? loginHandler() : registerHandler()"
       />
       <BaseInput
         :name="retypePassword"
@@ -109,10 +119,15 @@ const clearFields = () => {
         placeholder="Slaptažodis"
         label="Slaptažodio patvirtinimas"
         type="password"
-        @keyup.enter="registerHandler"
       />
 
-      <BaseButton v-if="login" name="login" @click="loginHandler" :isLoading="isLoading" />
+      <BaseButton
+        v-if="login"
+        name="login"
+        @click="loginHandler"
+        @keyup.enter="loginHandler"
+        :isLoading="isLoading"
+      />
       <BaseButton v-else name="register" @click="registerHandler" :isLoading="isLoading" />
 
       <p v-if="login" class="self-center mt-4">

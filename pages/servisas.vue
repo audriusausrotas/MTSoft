@@ -50,6 +50,10 @@ watch(input, searchHandler);
 
 <template>
   <div class="flex flex-col gap-10 pt-20 items-center">
+    <div class="flex gap-2 flex-col items-center">
+      <div class="font-bold text-xl">"Moderni Tvora" objektų galima ieškoti pagal:</div>
+      <div class="font-semibold">Vardą, Pavardę | Telefono numerį | Adresą | Elektroninį paštą</div>
+    </div>
     <BaseInput
       :name="input"
       @onChange="(value) => (input = value)"
