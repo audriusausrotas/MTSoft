@@ -70,7 +70,7 @@ const currentPath = computed(() => {
         <NavMobile
           :currentPath="currentPath"
           :currentLinks="currentLinks"
-          :adminLinks="adminLinks"
+          :adminLinks="adminLinksFiltered"
           :optionLinks="optionLinksFiltered"
         />
         <NavUser :userStore="userStore" class="self-start" />
