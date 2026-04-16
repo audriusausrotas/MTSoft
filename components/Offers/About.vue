@@ -26,21 +26,18 @@ const props = defineProps(["phone", "email", "image"]);
           <div class="flex flex-col gap-4 items-center justify-evenly flex-1">
             <p class="text-justify font-normal md:max-w-96 min-w-72">
               <span class="font-bold sm:text-xl text-lg">„Moderni Tvora“</span>
-              – šiuolaikiškus tvorų sprendimus siūlanti įmonė. Ilgametę patirtį
-              turinti profesionalų komanda specializuojasi skardinių tvorų ir
-              lauko žaliuzių gamyboje. Didelį dėmesį skiria gaminių kokybei bei
-              valdymo procesams, kurie užtikrina aukščiausią gaminių kokybę ir
-              greitą bei skalndų užsakymų įgyvendinimą. Pas mus rasite didelį
-              aukščiausios kokybės skardų bei kitų medžiagų pasirinkimą,
-              užtikrinantį šimtaprocentinį jūsų poreikių įgyvendinimą.
+              – šiuolaikiškus tvorų sprendimus siūlanti įmonė. Ilgametę patirtį turinti profesionalų
+              komanda specializuojasi skardinių tvorų ir lauko žaliuzių gamyboje. Didelį dėmesį
+              skiria gaminių kokybei bei valdymo procesams, kurie užtikrina aukščiausią gaminių
+              kokybę ir greitą bei skalndų užsakymų įgyvendinimą. Pas mus rasite didelį aukščiausios
+              kokybės skardų bei kitų medžiagų pasirinkimą, užtikrinantį šimtaprocentinį jūsų
+              poreikių įgyvendinimą.
             </p>
             <div class="flex gap-2 md:gap-4 flex-col md:max-w-96">
-              <div class="md:text-2xl text-xl font-bold">
-                Susisiekite su mumis
-              </div>
+              <div class="md:text-2xl text-xl font-bold">Susisiekite su mumis</div>
               <p class="text-justify text-sm font-normal">
-                Atsakysime į visus jums rūpimus klausimus, pakonsultuosime ir
-                pateiksime individualų pasiūlymą, atitinkantį jūsų poreikius.
+                Atsakysime į visus jums rūpimus klausimus, pakonsultuosime ir pateiksime individualų
+                pasiūlymą, atitinkantį jūsų poreikius.
               </p>
               <div class="flex flex-col gap-2 md:mt-4">
                 <a
@@ -104,7 +101,7 @@ const props = defineProps(["phone", "email", "image"]);
                     loading="lazy"
                     :ismap="true"
                   />
-                  <p>Kauno g. 31, Marijampolė</p>
+                  <p>Lauko g. 1, Trakiškiai, Marijampolė</p>
                 </NuxtLink>
 
                 <NuxtLink

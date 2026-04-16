@@ -2,7 +2,7 @@ export const laserInstructions = [
   {
     name: "Adresas",
     command: "ad.",
-    example: "ad.Kauno,5,Marijampolė",
+    example: "ad.Lauko,1,Trakiškiai,Marijampolė",
     comment: "Žodžius atskiriame kableliais",
   },
   {

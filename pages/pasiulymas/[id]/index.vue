@@ -134,7 +134,11 @@ const orderStatusHandler = async (value: boolean) => {
               label="Atsakingas vadybininkas:"
             />
 
-            <BaseInput :disable="true" name=" Kauno g. 31, Marijampolė" label="adresas" />
+            <BaseInput
+              :disable="true"
+              name=" Lauko g. 1, Trakiškiai, Marijampolė"
+              label="adresas"
+            />
           </div>
           <div class="flex flex-col gap-2">
             <a :href="'tel:' + offer.offer?.creator?.phone" class="hover: cursor-pointer">
@@ -205,7 +209,7 @@ const orderStatusHandler = async (value: boolean) => {
           Vadybininkas:
           {{ offer.offer?.creator?.username + " " + offer.offer?.creator?.lastName }}
         </p>
-        <p>Adresas: Kauno g. 31, Marijampolė</p>
+        <p>Adresas: Lauko g. 1, Trakiškiai, Marijampolė</p>
         <p>Telefonas: {{ offer.offer?.creator?.phone }}</p>
         <p>El. Paštas: {{ offer.offer?.creator?.email }}</p>
       </div>
