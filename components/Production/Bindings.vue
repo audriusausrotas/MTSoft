@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { RALcolors } from "~/data/initialValues";
+
 const props = defineProps(["binding", "index", "_id"]);
 const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
+
+type RALColorCode = keyof typeof RALcolors;
 
 const isAdmin =
   userStore.user?.accountType === "Administratorius" ||
@@ -56,6 +60,8 @@ const doneColor = computed(() => {
         ? "bg-red-full"
         : "bg-orange-500";
 });
+
+const RALcolor = computed(() => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF");
 
 const saveHandler = async (field: string) => {
   const requestData = {
@@ -235,6 +241,7 @@ watch(
         class="w-full"
         :value="props.binding.name"
         @input="updateMeasure('name', $event)"
+        @keydown.enter="saveHandler('name')"
       />
       <NuxtImg
         width="20"
@@ -255,6 +262,7 @@ watch(
         class="w-full"
         :value="props.binding.height"
         @input="updateMeasure('height', $event)"
+        @keydown.enter="saveHandler('height')"
       />
       <NuxtImg
         width="20"
@@ -275,6 +283,7 @@ watch(
         class="w-full"
         :value="props.binding.quantity"
         @input="updateMeasure('quantity', $event)"
+        @keydown.enter="saveHandler('quantity')"
       />
       <NuxtImg
         width="20"
@@ -289,12 +298,16 @@ watch(
       />
     </div>
 
-    <div class="w-16 border-r border-black px-1 flex">
+    <div
+      class="w-16 border-r border-black px-1 flex"
+      :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
+    >
       <input
         type="text"
-        class="w-full"
+        class="w-full text-center"
         :value="props.binding.color"
         @input="updateMeasure('color', $event)"
+        @keydown.enter="saveHandler('color')"
       />
       <NuxtImg
         width="20"
@@ -316,6 +329,7 @@ watch(
         class="w-full"
         :value="props.binding.cut"
         @input="updateMeasure('cut', $event)"
+        @keydown.enter="saveHandler('cut')"
       />
       <NuxtImg
         width="20"
@@ -336,6 +350,7 @@ watch(
         class="w-full"
         :value="props.binding.done"
         @input="updateMeasure('done', $event)"
+        @keydown.enter="saveHandler('done')"
       />
       <NuxtImg
         width="20"

@@ -49,6 +49,39 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
+    updateFence(
+      _id: string,
+      index: number,
+      side: string,
+      color: string,
+      name: string,
+      manufacturer: string,
+      material: string,
+      holes: string,
+      step: number,
+    ) {
+      this.production = this.production.map((item) => {
+        if (item._id === _id) {
+          const fence = item.fences[index];
+
+          if (!fence) return item;
+
+          item.fences[index] = {
+            ...fence,
+            side,
+            color,
+            name,
+            manufacturer,
+            material,
+            holes,
+            step,
+          };
+        }
+
+        return item;
+      });
+    },
+
     deleteBinding(_id: string, bindingId: string) {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
@@ -62,7 +95,7 @@ export const useProductionStore = defineStore("production", {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
           item.fences[index].measures = item.fences[index].measures.filter(
-            (measure, i) => i !== measureIndex
+            (measure, i) => i !== measureIndex,
           );
           return item;
         } else return item;
@@ -75,7 +108,7 @@ export const useProductionStore = defineStore("production", {
       measureIndex: number | null,
       value: boolean | number | string,
       field: string,
-      option: string
+      option: string,
     ) {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
@@ -98,7 +131,7 @@ export const useProductionStore = defineStore("production", {
 
     updateStatus(_id: string, status: string) {
       this.production = this.production.map((item) =>
-        item._id === _id ? { ...item, status } : item
+        item._id === _id ? { ...item, status } : item,
       );
     },
 
@@ -124,7 +157,7 @@ export const useProductionStore = defineStore("production", {
                 item.date === comment.date &&
                 item.creator === comment.creator &&
                 item.comment === comment.comment
-              )
+              ),
           );
         }
         return project;

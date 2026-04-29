@@ -35,6 +35,23 @@ export default function productionListeners(socket: Socket) {
     productionStore.updateGate(_id, index, measureIndex, value);
   });
 
+  socket.on(
+    "updateProductionFence",
+    ({ _id, index, side, color, name, manufacturer, material, holes, step }) => {
+      productionStore.updateFence(
+        _id,
+        index,
+        side,
+        color,
+        name,
+        manufacturer,
+        material,
+        holes,
+        step,
+      );
+    },
+  );
+
   socket.on("newProduction", (production) => {
     productionStore.addProduction(production);
     useProjectsStore().updateProjectField(production._id, "status", "Gaminama");

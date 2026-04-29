@@ -119,11 +119,11 @@ const uploadFiles = async (data: any) => {
     </div>
 
     <ProductionMain
-      :_id="order._id"
+      :_id="order?._id"
       :orderNr="order?.orderNumber"
-      :client="order.client"
-      :creator="order.creator"
-      :bindings="order.bindings"
+      :client="order?.client"
+      :creator="order?.creator"
+      :bindings="order?.bindings"
     />
   </div>
 </template>

@@ -385,9 +385,12 @@ export interface ProductionFence {
   name: string;
   color: string;
   material: string;
+  manufacturer: string;
   services: string;
   seeThrough: string;
   direction: string;
+  holes: string;
+  step: number;
   parts: string;
   comment: string;
   twoSided: string;
@@ -406,8 +409,8 @@ export interface ProductionMeasure {
   MeasureSpace: number;
   elements: number;
   gates: GateInfo;
-  cut: number;
-  done: number;
+  cut: number | undefined;
+  done: number | undefined;
   postone: boolean;
   kampas: {
     exist: boolean;

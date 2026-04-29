@@ -6,8 +6,6 @@ const settingsStore = useSettingsStore();
 const userStore = useUserStore();
 const route = useRoute();
 
-// const currentPath = ref("");
-
 const userRights = settingsStore.userRights.find(
   (item) => item.accountType === userStore?.user?.accountType,
 );

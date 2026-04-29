@@ -37,8 +37,7 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.data.cut === 0 || props.data.cut === undefined
       ? "bg-transparent"
-      : +props.data.cut === +props.data.elements &&
-          +props.data.done === +props.data.elements
+      : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
         ? "bg-green-500"
         : +props.data.cut > +props.data.elements
           ? "bg-red-full"
@@ -46,8 +45,6 @@ const indexColor = computed(() => {
             ? "bg-green-300"
             : "bg-orange-400";
 });
-
-console.log(indexColor.value);
 
 const cutColor = computed(() => {
   return +props.data.cut === +props.data.elements
@@ -136,10 +133,7 @@ const gateHandler = async () => {
     value: !isGate.value,
   };
 
-  const response: any = await request.patch(
-    "updateProductionGate",
-    requestData,
-  );
+  const response: any = await request.patch("updateProductionGate", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -164,10 +158,7 @@ const postoneHandler = async () => {
     option: "fences",
   };
 
-  const response: any = await request.patch(
-    "updateProductionPostone",
-    requestData,
-  );
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -295,9 +286,7 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value
-      ? (isSavedCut.value = false)
-      : (isSavedCut.value = true);
+    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
   else if (field === "elements")
     +inputElement.value !== elements.value
       ? (isSavedElements.value = false)
@@ -307,9 +296,7 @@ const updateMeasure = (field: string, event: Event) => {
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value
-      ? (isSavedDone.value = false)
-      : (isSavedDone.value = true);
+    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
   else if (field === "length")
     +inputElement.value !== length.value
       ? (isSavedLength.value = false)
@@ -346,24 +333,14 @@ watch(
     v-if="props.data.laiptas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+    <p class="w-10 flex items-center justify-center h-full border-x border-black">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Laiptas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full border-r border-black">Laiptas</p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.laiptas.direction }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.laiptas.value }} cm
     </p>
     <p class="flex-1 h-full border-r border-black"></p>
@@ -386,26 +363,14 @@ watch(
     v-else-if="props.data.kampas.exist"
     class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
   >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+    <p class="w-10 flex items-center justify-center h-full border-x border-black">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Kampas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full border-r border-black">Kampas</p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">
       {{ props.data.kampas.value }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
-      laipsnių
-    </p>
+    <p class="w-24 flex items-center justify-center h-full border-r border-black">laipsnių</p>
     <p class="flex-1 h-full border-r border-black"></p>
     <div
       v-if="isAdmin"
@@ -422,10 +387,7 @@ watch(
       />
     </div>
   </div>
-  <div
-    v-else
-    class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none"
-  >
+  <div v-else class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none">
     <div
       @click="gateHandler"
       class="w-10 flex items-center justify-center h-full border-x border-black"
@@ -434,14 +396,13 @@ watch(
       {{ props.index + 1 }} {{ isGate ? "v" : "" }}
     </div>
 
-    <div
-      class="w-20 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-20 flex items-center justify-center h-full border-r border-black px-1">
       <input
         type="number"
         class="w-full"
         :value="props.data.length"
         @input="updateMeasure('length', $event)"
+        @keydown.enter="saveHandler('length')"
       />
       <NuxtImg
         width="20"
@@ -455,13 +416,12 @@ watch(
         class="hover:cursor-pointer"
       />
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
       <input
         type="number"
         :value="props.data.elements"
         @input="updateMeasure('elements', $event)"
+        @keydown.enter="saveHandler('elements')"
         class="w-full"
       />
       <NuxtImg
@@ -476,13 +436,12 @@ watch(
         class="hover:cursor-pointer"
       />
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full border-r border-black px-1">
       <input
         type="number"
         :value="props.data.height"
         @input="updateMeasure('height', $event)"
+        @keydown.enter="saveHandler('height')"
         class="w-full"
       />
       <NuxtImg
@@ -504,6 +463,7 @@ watch(
       <input
         :value="props.data.cut"
         @input="updateMeasure('cut', $event)"
+        @keydown.enter="saveHandler('cut')"
         type="number"
         placeholder="Išpjauti"
         class="w-full"
@@ -527,6 +487,7 @@ watch(
       <input
         :value="props.data.done"
         @input="updateMeasure('done', $event)"
+        @keydown.enter="saveHandler('done')"
         type="number"
         placeholder="Pagaminti"
         class="w-full"
