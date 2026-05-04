@@ -60,6 +60,16 @@ export async function fetchProjects() {
   }
 }
 
+export async function fetchProjectsLight() {
+  try {
+    const response: any = await request.get("getProjectsLight");
+    response.success && useProjectsStore().addProjectsLight(response.data);
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
+  }
+}
+
 export async function fetchProject(id: string) {
   try {
     const response: any = await request.get(`getProject/${id}`);

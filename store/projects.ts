@@ -4,11 +4,17 @@ import type { Project, Comment, Dates } from "~/data/interfaces";
 export const useProjectsStore = defineStore("Projects", {
   state: () => ({
     projects: [] as Project[],
+    loaded: false,
     selectedProject: null as string | null,
   }),
 
   actions: {
-    addProjects(data: any) {
+    addProjects(data: Project[]) {
+      this.projects = [...data];
+      this.loaded = true;
+    },
+
+    addProjectsLight(data: any) {
       this.projects = [...data];
     },
 

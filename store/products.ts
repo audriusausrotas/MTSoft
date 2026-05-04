@@ -16,9 +16,7 @@ export const useProductsStore = defineStore("products", {
     },
 
     updateProduct(data: Product): void {
-      this.products = this.products.map((item) =>
-        item._id === data._id ? data : item
-      );
+      this.products = this.products.map((item) => (item._id === data._id ? data : item));
     },
 
     deleteProduct(_id: string): void {
@@ -31,7 +29,7 @@ export const useProductsStore = defineStore("products", {
       return (value: string) => {
         if (value.length > 2) {
           return state.products.filter((product) =>
-            product.name.toLowerCase().includes(value.toLowerCase())
+            product.name.toLowerCase().includes(value.toLowerCase()),
           );
         } else return state.products;
       };

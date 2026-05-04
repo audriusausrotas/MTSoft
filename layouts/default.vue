@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSocketStore } from "~/store/socket";
+
 const useSocket = useSocketStore();
 
 const upHandler = () => {
@@ -13,16 +14,19 @@ const downHandler = () => {
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
   useSocket.connect();
+
+  // const projectsStore = useProjectsStore();
+
+  // if (!projectsStore.loaded) {
+  //   await fetchProjects();
+  // }
 });
 </script>
 
 <template>
-  <SocketStatus
-    :connected="useSocket.isConnected"
-    :transporter="useSocket.transporter"
-  />
+  <SocketStatus :connected="useSocket.isConnected" :transporter="useSocket.transporter" />
   <NavMain />
   <div
     class="fixed bottom-9 right-0 rounded-full overflow-hidden hidden bg-green-500 hover:scale-125 transition-transform lg:block hover:cursor-pointer z-50"
