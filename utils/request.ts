@@ -4,7 +4,7 @@ const fetchData = async (
   path: string,
   method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
   body: any = null,
-  withCredentials: boolean = true
+  withCredentials: boolean = true,
 ) => {
   const options: any = {
     method,
@@ -27,8 +27,8 @@ const fetchData = async (
   }
 
   try {
-    const url =
-      process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://mtsoft.lt";
+    const url = "http://localhost:3001";
+    // process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://mtsoft.lt";
 
     const data: any = await $fetch(`${url}/api/${path}`, options);
     return data;
