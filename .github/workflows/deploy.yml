@@ -1,4 +1,4 @@
-name: Deploy Nuxt 3 App
+name: Deploy Frontend
 
 on:
   push:
@@ -6,51 +6,44 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
-    runs-on: self-hosted
+  deploy:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24.13.0"
+          node-version: 24
 
       - name: Install dependencies
-        run: npm install
-        env:
-          NODE_NO_WARNINGS: "1"
+        run: npm ci
 
-      - name: Build the application
+      - name: Build frontend
         run: npm run build
-        env:
-          NODE_NO_WARNINGS: "1"
 
-      - name: Deploy to VPS
-        env:
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_IP: ${{ secrets.VPS_IP }}
-          PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          SALT: ${{ secrets.SALT }}
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          NODE_NO_WARNINGS: "1"
-          NODE_ENV: "production"
+      - name: Upload to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: ".output,package.json"
+          target: "/var/www/mtsoft/frontend"
 
-        run: |
-          # Define the environment variables
-          $vpsUsername = $env:VPS_USERNAME
-          $vpsPassword = $env:VPS_PASSWORD
-          $vpsIP = $env:VPS_IP
-          $projectPath = $env:PROJECT_PATH
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && git pull"
-          # echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm install"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 stop MTSoft"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && [ -d .output ] && rm -rf .output || echo '.output does not exist'"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && if exist .output (rd /s /q .output) else (echo '.output does not exist')"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && npm run build"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 start ecosystem.config.cjs"
-          echo y | & "C:\Program Files\PuTTY\plink.exe" -v -pw $vpsPassword $vpsUsername@$vpsIP "cd $projectPath && pm2 save"
+      - name: Restart frontend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/mtsoft/frontend
+
+            npm install --omit=dev
+
+            pm2 reload mtsoft-frontend || pm2 start .output/server/index.mjs --name mtsoft-frontend
+
+            pm2 save
