@@ -22,7 +22,7 @@ const createFenceHandler = () => {
 const calculateResultsHandler = async () => {
   calculateResults();
   resultsStore.calculateTotals();
-  emit("onCalculate");
+  -emit("onCalculate");
 
   // const requestData = {
   //   calculations: {
