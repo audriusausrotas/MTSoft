@@ -2,8 +2,10 @@
 import { laserInstructions } from "~/data/laserInstruction";
 import calculateResults from "~/utils/calculations/calculateResults";
 const emit = defineEmits(["onCalculate"]);
+const { setError, setSuccess } = useCustomError();
 const calculationsStore = useCalculationsStore();
 const resultsStore = useResultsStore();
+const backupStore = useBackupStore();
 
 const modalOpen = ref<boolean>(false);
 const textArea = ref<string>("");
@@ -17,10 +19,31 @@ const createFenceHandler = () => {
   calculationsStore.addFence();
 };
 
-const calculateResultsHandler = () => {
+const calculateResultsHandler = async () => {
   calculateResults();
   resultsStore.calculateTotals();
   emit("onCalculate");
+
+  // const requestData = {
+  //   calculations: {
+  //     fences: calculationsStore.fences,
+  //     retail: calculationsStore.retail,
+  //     units: calculationsStore.units,
+  //     backup: {
+  //       results: backupStore.results,
+  //       works: backupStore.works,
+  //       backupExist: backupStore.backupExist,
+  //     },
+  //   },
+  // };
+
+  // const response = await request.post("calculateEstimate", requestData);
+
+  // if (response.success) {
+  //   resultsStore.addResults(response.data.results);
+  //   resultsStore.addWorks(response.data.works);
+  //   resultsStore.addTotals(response.data.totals);
+  // }
 };
 
 const confirmHandler = () => {

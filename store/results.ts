@@ -50,6 +50,22 @@ export const useResultsStore = defineStore("results", {
       this.initializing = value;
     },
 
+    addTotals(value: {
+      totalPrice: number;
+      totalCost: number;
+      totalProfit: number;
+      totalMargin: number;
+      priceVAT: number;
+      priceWithDiscount: number;
+    }): void {
+      this.totalPrice = value.totalPrice;
+      this.totalCost = value.totalCost;
+      this.totalProfit = value.totalProfit;
+      this.totalMargin = value.totalMargin;
+      this.priceVAT = value.priceVAT;
+      this.priceWithDiscount = value.priceWithDiscount;
+    },
+
     useDiscount(): void {
       this.discount = !this.discount;
     },
@@ -61,6 +77,14 @@ export const useResultsStore = defineStore("results", {
 
     addFences(data: Fences[]): void {
       this.fences = [...data];
+    },
+
+    addResults(data: Result[]): void {
+      this.results = [...data];
+    },
+
+    addWorks(data: Works[]): void {
+      this.works = [...data];
     },
 
     addNew(): void {

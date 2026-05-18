@@ -145,7 +145,7 @@ watch(
         >
           {{ file.name }}
           <button
-            @click="removeFile(index)"
+            @click="removeFile(+index)"
             class="ml-2 text-red-600 hover:text-black hover:bg-red-600 transition w-5 rounded-md"
           >
             ✕
