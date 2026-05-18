@@ -15,17 +15,17 @@ const filteredProjects = computed(() => {
   if (searchQuery.value.length > 2) {
     return filtered?.filter(
       (project) =>
-        project?.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project?.client.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project?.client.phone.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project?.client.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project?.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
+        project?.client.address?.toLowerCase().includes(searchQuery.value?.toLowerCase()) ||
+        project?.client.email?.toLowerCase().includes(searchQuery.value?.toLowerCase()) ||
+        project?.client.phone?.toLowerCase().includes(searchQuery.value?.toLowerCase()) ||
+        project?.client.username?.toLowerCase().includes(searchQuery.value?.toLowerCase()) ||
+        project?.orderNumber?.toLowerCase().includes(searchQuery.value?.toLowerCase()),
     );
   }
 
   if (filterUser.value !== "Visi") {
     filtered = filtered?.filter((item) =>
-      item?.creator?.username.toLowerCase().startsWith(filterUser.value.toLowerCase()),
+      item?.creator?.username?.toLowerCase().startsWith(filterUser.value?.toLowerCase()),
     );
   }
 
