@@ -57,6 +57,10 @@ export default function productionListeners(socket: Socket) {
     useProjectsStore().updateProjectField(production._id, "status", "Gaminama");
   });
 
+  socket.on("newExternalProduction", (production) => {
+    productionStore.addProduction(production);
+  });
+
   socket.on("newProductionBinding", ({ _id, data }) => {
     productionStore.addNewBinding(_id, data);
   });
