@@ -56,6 +56,7 @@ const projects = computed(() => {
     measure: [] as Project[],
     repair: [] as Project[],
     other: [] as Project[],
+    new: [] as Project[],
   };
 
   const statusToCategory: Record<string, keyof typeof categories> = {
@@ -69,6 +70,7 @@ const projects = computed(() => {
     Montuojama: "inWorks",
     "Laukiam Vartų": "waiting",
     "Vartai Sumontuoti": "mounted",
+    "Naujas užsakymas": "new",
     Pridavimas: "done",
     Apmokėjimas: "payment",
     Baigtas: "finished",
@@ -190,6 +192,21 @@ const newProjectHandler = () => {
     </div>
 
     <div class="flex flex-col gap-4 w-full">
+      <div
+        v-if="projects?.new?.length"
+        class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
+      >
+        Nauji užsakymai
+      </div>
+      <HomeProject
+        v-for="(project, index) in projects?.new"
+        :key="project?._id"
+        :index="index"
+        :length="projects?.new?.length"
+        :project="project"
+        location="projects"
+      />
+
       <div
         v-if="projects?.measure?.length"
         class="text-xl font-semibold p-2 bg-yellow-400 rounded-lg text-center"
