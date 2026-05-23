@@ -11,7 +11,7 @@ const filteredProduction = computed(() => {
       (project) =>
         project.client.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         project.creator.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase())
+        project.orderNumber.toLowerCase().includes(searchQuery.value.toLowerCase()),
     );
   }
 

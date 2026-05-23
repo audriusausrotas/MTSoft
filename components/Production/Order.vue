@@ -1,5 +1,18 @@
 <script setup lang="ts">
-const props = defineProps(["order", "index"]);
+import type { Production } from "~/data/interfaces";
+const props = withDefaults(
+  defineProps<{
+    order: Production;
+    index: number;
+    archive?: boolean;
+  }>(),
+  {
+    order: () => ({}) as Production,
+    index: 0,
+    archive: false,
+  },
+);
+
 const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
@@ -17,7 +30,7 @@ const deleteHandler = async (): Promise<void> => {
     return;
   }
 
-  const response: any = await request.delete(`deleteProduction/${props.order._id}`);
+  const response: any = await request.delete(`deleteProduction/${props.order?._id}`);
 
   if (response.success) {
     !useSocketStore().connected && productionStore.deleteProductionOrder(response.data._id);
@@ -29,7 +42,7 @@ const deleteHandler = async (): Promise<void> => {
 };
 
 const clickHandler = () => {
-  navigateTo(`/gamyba/${props.order._id}`);
+  navigateTo(`/gamyba/${props.order?._id}`);
 };
 </script>
 
@@ -44,11 +57,11 @@ const clickHandler = () => {
       :name="props.order?.orderNumber"
       width="w-24"
       :class="
-        props.order.status === 'Pagaminta'
+        props.order?.status === 'Pagaminta'
           ? 'bg-violet-500'
-          : props.order.status === 'Negaminti'
+          : props.order?.status === 'Negaminti'
             ? 'bg-red-full'
-            : props.order.status === 'Laukiama'
+            : props.order?.status === 'Laukiama'
               ? 'bg-orange-500'
               : 'bg-green-500'
       "

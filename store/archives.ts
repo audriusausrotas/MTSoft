@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Project } from "~/data/interfaces";
+import type { Production, Project } from "~/data/interfaces";
 
 export const useArchiveStore = defineStore("Archives", {
   state: () => ({
@@ -9,6 +9,7 @@ export const useArchiveStore = defineStore("Archives", {
       unconfirmed: [] as Project[],
       deleted: [] as Project[],
       backup: [] as Project[],
+      production: [] as any[],
     },
   }),
 
@@ -22,9 +23,11 @@ export const useArchiveStore = defineStore("Archives", {
     deleteArchive(_id: string, location: keyof typeof this.data) {
       if (!this.data[location]) return;
 
-      this.data[location] = this.data[location].filter(
-        (item) => item._id !== _id
-      );
+      this.data[location] = this.data[location].filter((item) => item._id !== _id);
+    },
+
+    deleteProduction(_id: string) {
+      this.data.production = this.data.production.filter((item) => item._id !== _id);
     },
 
     addArchive(location: keyof typeof this.data, project: Project) {
@@ -33,13 +36,15 @@ export const useArchiveStore = defineStore("Archives", {
       this.data[location].unshift(project);
     },
 
+    addProduction(project: Production) {
+      this.data.production.unshift(project);
+    },
+
     searchArchive(location: keyof typeof this.data, input: string): Project[] {
       if (!this.data[location]) return [];
 
       if (input.length > 2) {
-        return this.data[location].filter((project: Project) =>
-          this.matchSearch(project, input)
-        );
+        return this.data[location].filter((project: Project) => this.matchSearch(project, input));
       }
       return this.data[location];
     },
@@ -54,7 +59,7 @@ export const useArchiveStore = defineStore("Archives", {
       ];
 
       return searchFields.some(
-        (field) => field && field.toLowerCase().includes(input.toLowerCase())
+        (field) => field && field.toLowerCase().includes(input.toLowerCase()),
       );
     },
   },

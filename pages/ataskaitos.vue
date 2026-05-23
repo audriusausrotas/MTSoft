@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { statusFilters } from "~/data/selectFieldData";
-
 fetchFinished();
 
 const MONTHS = [

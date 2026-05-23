@@ -105,7 +105,7 @@ export async function fetchUsers() {
 export async function fetchArchives() {
   try {
     const response = await request.get("getArchives");
-    response.success && useArchiveStore().addArchives("archive", response.data);
+    response.success && useArchiveStore().addArchives("production", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
@@ -116,6 +116,16 @@ export async function fetchFinished() {
   try {
     const response = await request.get("getFinished");
     response.success && useArchiveStore().addArchives("finished", response.data);
+  } catch (error) {
+    console.log("Serverio klaida: " + error);
+    return { success: false, data: null };
+  }
+}
+
+export async function fetchProductionArchive() {
+  try {
+    const response = await request.get("getProductionArchive");
+    response.success && useArchiveStore().addArchives("production", response.data);
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };

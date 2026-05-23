@@ -23,27 +23,6 @@ const calculateResultsHandler = async () => {
   calculateResults();
   resultsStore.calculateTotals();
   emit("onCalculate");
-
-  // const requestData = {
-  //   calculations: {
-  //     fences: calculationsStore.fences,
-  //     retail: calculationsStore.retail,
-  //     units: calculationsStore.units,
-  //     backup: {
-  //       results: backupStore.results,
-  //       works: backupStore.works,
-  //       backupExist: backupStore.backupExist,
-  //     },
-  //   },
-  // };
-
-  // const response = await request.post("calculateEstimate", requestData);
-
-  // if (response.success) {
-  //   resultsStore.addResults(response.data.results);
-  //   resultsStore.addWorks(response.data.works);
-  //   resultsStore.addTotals(response.data.totals);
-  // }
 };
 
 const confirmHandler = () => {

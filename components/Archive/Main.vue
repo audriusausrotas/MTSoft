@@ -2,7 +2,7 @@
 const props = defineProps({
   location: {
     type: String as PropType<
-      "archive" | "finished" | "unconfirmed" | "deleted" | "backup"
+      "archive" | "finished" | "unconfirmed" | "deleted" | "backup" | "production"
     >,
     required: true,
   },
@@ -25,7 +25,7 @@ const filteredProjects = computed(() => {
       width="w-full"
       variant="light"
       :name="searchValue"
-      @onChange="(value:string)=> searchValue = value"
+      @onChange="(value: string) => (searchValue = value)"
     >
       <NuxtImg
         src="/icons/search.svg"
@@ -39,6 +39,7 @@ const filteredProjects = computed(() => {
     </BaseInput>
 
     <HomeProject
+      v-if="location !== 'production'"
       v-for="(project, index) in filteredProjects"
       :key="project._id"
       :index="index"
@@ -46,5 +47,10 @@ const filteredProjects = computed(() => {
       :project="project"
       :location="props.location"
     />
+    <div v-else class="text-center text-black">
+      <div v-for="(order, index) in archiveStore.data.production" :key="order._id" :index="index">
+        <ArchiveProduction :order="order" :index="index" />
+      </div>
+    </div>
   </div>
 </template>
