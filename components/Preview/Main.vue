@@ -323,6 +323,7 @@ onMounted(async () => {
             id="finalDate"
             name="finalDate"
             class="h-10 px-4 hover:cursor-text"
+            @wheel="(e) => e.preventDefault()"
           />
         </div>
       </div>

@@ -26,6 +26,7 @@ const confirmHandler = () => {
       <input
         :placeholder="props.placeholder"
         :type="type || 'text'"
+        @wheel="(e)=>e.preventDefault()"
         class="px-2 py-1 outline-none w-36 bg-gray-ultra-light"
         v-model="inputValue"
         :autofocus="open"

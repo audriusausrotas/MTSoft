@@ -4,7 +4,8 @@ const resultsStore = useResultsStore();
 
 resultsStore.calculateTotals();
 
-if (!resultsStore.priceWithDiscount) resultsStore.calculateFencePriceWithDiscount();
+if (!resultsStore.priceWithDiscount)
+  resultsStore.calculateFencePriceWithDiscount();
 </script>
 
 <template>
@@ -25,9 +26,15 @@ if (!resultsStore.priceWithDiscount) resultsStore.calculateFencePriceWithDiscoun
         Suma su nuolaida:
         <input
           type="number"
+          @wheel="(e) => e.preventDefault()"
           class="bg-transparent w-24 px-2"
           :value="props.results?.priceWithDiscount"
-          @change="(event: Event) => resultsStore.updateDiscount(+(event.target as HTMLInputElement)?.value)"
+          @change="
+            (event: Event) =>
+              resultsStore.updateDiscount(
+                +(event.target as HTMLInputElement)?.value,
+              )
+          "
         />
       </div>
     </div>

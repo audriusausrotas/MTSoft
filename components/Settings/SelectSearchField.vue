@@ -38,7 +38,7 @@ const filteredItems = (value: string): void => {
   const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "");
   const regex = new RegExp(escapedValue, "i");
   const filteredItemsArray = props.data.filter((item: Product) =>
-    regex.test(item.name)
+    regex.test(item.name),
   );
 
   filteredData.value = [...filteredItemsArray];

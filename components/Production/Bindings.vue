@@ -32,7 +32,8 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.binding.cut === 0 || props.binding.cut === undefined
       ? "bg-transparent"
-      : +props.binding.cut === +props.binding.quantity && +done === +props.binding.quantity
+      : +props.binding.cut === +props.binding.quantity &&
+          +done === +props.binding.quantity
         ? "bg-green-500"
         : +props.binding.cut > +props.binding.quantity
           ? "bg-red-full"
@@ -61,7 +62,9 @@ const doneColor = computed(() => {
         : "bg-orange-500";
 });
 
-const RALcolor = computed(() => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF");
+const RALcolor = computed(
+  () => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF",
+);
 
 const saveHandler = async (field: string) => {
   const requestData = {
@@ -132,7 +135,10 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch("updateProductionPostone", requestData);
+  const response: any = await request.patch(
+    "updateProductionPostone",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -184,17 +190,25 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+    +inputElement.value !== cut.value
+      ? (isSavedCut.value = false)
+      : (isSavedCut.value = true);
   else if (field === "name")
-    inputElement.value !== name.value ? (isSavedName.value = false) : (isSavedName.value = true);
+    inputElement.value !== name.value
+      ? (isSavedName.value = false)
+      : (isSavedName.value = true);
   else if (field === "color")
-    inputElement.value !== color.value ? (isSavedColor.value = false) : (isSavedColor.value = true);
+    inputElement.value !== color.value
+      ? (isSavedColor.value = false)
+      : (isSavedColor.value = true);
   else if (field === "height")
     +inputElement.value !== height.value
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+    +inputElement.value !== done.value
+      ? (isSavedDone.value = false)
+      : (isSavedDone.value = true);
   else if (field === "quantity")
     +inputElement.value !== quantity.value
       ? (isSavedQuantity.value = false)
@@ -242,6 +256,7 @@ watch(
         :value="props.binding.name"
         @input="updateMeasure('name', $event)"
         @keydown.enter="saveHandler('name')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"
@@ -263,6 +278,7 @@ watch(
         :value="props.binding.height"
         @input="updateMeasure('height', $event)"
         @keydown.enter="saveHandler('height')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"
@@ -284,6 +300,7 @@ watch(
         :value="props.binding.quantity"
         @input="updateMeasure('quantity', $event)"
         @keydown.enter="saveHandler('quantity')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"
@@ -300,7 +317,10 @@ watch(
 
     <div
       class="w-16 border-r border-black px-1 flex"
-      :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
+      :class="[
+        `bg-[${RALcolor}]`,
+        RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+      ]"
     >
       <input
         type="text"
@@ -308,6 +328,7 @@ watch(
         :value="props.binding.color"
         @input="updateMeasure('color', $event)"
         @keydown.enter="saveHandler('color')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"
@@ -330,6 +351,7 @@ watch(
         :value="props.binding.cut"
         @input="updateMeasure('cut', $event)"
         @keydown.enter="saveHandler('cut')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"
@@ -351,6 +373,7 @@ watch(
         :value="props.binding.done"
         @input="updateMeasure('done', $event)"
         @keydown.enter="saveHandler('done')"
+        @wheel="(e) => e.preventDefault()"
       />
       <NuxtImg
         width="20"

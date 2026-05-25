@@ -35,7 +35,9 @@ const filterLength = ref<boolean>(false);
 
 const filteredMeasures = ref([...props.fence.measures]);
 
-const RALcolor = computed(() => RALcolors[color.value as RALColorCode] || "#FFFFFF");
+const RALcolor = computed(
+  () => RALcolors[color.value as RALColorCode] || "#FFFFFF",
+);
 
 const newMeasureHandler = async () => {
   const requestData = { _id: props._id, index: props.fenceIndex };
@@ -162,10 +164,17 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col" :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'">
+  <div
+    class="flex flex-col"
+    :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'"
+  >
     <div v-if="fence.comment">{{ fence.comment }}</div>
-    <div class="flex items-center font-bold text-lg border-black border-t border-r border-l">
-      <div class="w-40 flex items-center justify-center h-full border-black px-2">
+    <div
+      class="flex items-center font-bold text-lg border-black border-t border-r border-l"
+    >
+      <div
+        class="w-40 flex items-center justify-center h-full border-black px-2"
+      >
         <input
           type="text"
           v-model="side"
@@ -177,7 +186,10 @@ watch(
 
       <div
         class="w-40 flex items-center justify-center h-full border-black px-2"
-        :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
+        :class="[
+          `bg-[${RALcolor}]`,
+          RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+        ]"
       >
         <input
           type="text"
@@ -236,8 +248,12 @@ watch(
       </div>
     </div>
 
-    <div class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0">
-      <div class="w-40 flex items-center justify-center h-full border-r border-black px-2">
+    <div
+      class="flex items-center font-bold text-lg max-w-[736px] border border-black border-b-0"
+    >
+      <div
+        class="w-40 flex items-center justify-center h-full border-r border-black px-2"
+      >
         <input
           type="text"
           v-model="manufacturer"
@@ -247,7 +263,9 @@ watch(
         />
       </div>
 
-      <div class="w-40 flex items-center justify-center h-full border-r border-black px-2">
+      <div
+        class="w-40 flex items-center justify-center h-full border-r border-black px-2"
+      >
         <input
           type="text"
           v-model="material"
@@ -259,7 +277,9 @@ watch(
 
       <div class="flex-1 min-w-fit flex justify-center gap-2 border-black px-2">
         <div v-if="!editable" class="cursor-default">
-          {{ holes === "Taip" ? "Su skylutėmis " + step + "  cm" : "Be skylučių" }}
+          {{
+            holes === "Taip" ? "Su skylutėmis " + step + "  cm" : "Be skylučių"
+          }}
         </div>
 
         <div v-else class="flex items-center w-full justify-between">
@@ -275,7 +295,12 @@ watch(
 
           <div v-if="holes === 'Taip'">
             Žingsnis:
-            <input v-model="step" type="number" class="w-10" />
+            <input
+              v-model="step"
+              @wheel="(e) => e.preventDefault()"
+              type="number"
+              class="w-10"
+            />
           </div>
         </div>
       </div>
@@ -318,11 +343,29 @@ watch(
           class="transition-all"
         />
       </p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Elementai</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Aukštis</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Išpjauti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black">Pagaminti</p>
-      <p class="w-24 flex items-center justify-center h-full border-r border-black print:hidden">
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Elementai
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Aukštis
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Išpjauti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black"
+      >
+        Pagaminti
+      </p>
+      <p
+        class="w-24 flex items-center justify-center h-full border-r border-black print:hidden"
+      >
         Veiksmai
       </p>
       <p
@@ -350,7 +393,12 @@ watch(
         :orderNr="props.orderNr"
         :clientAddress="props.clientAddress"
       />
-      <BaseButton v-if="isAdmin" name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
+      <BaseButton
+        v-if="isAdmin"
+        name="Pridėti naują"
+        class="mt-2"
+        @click="newMeasureHandler"
+      />
     </div>
   </div>
 </template>
