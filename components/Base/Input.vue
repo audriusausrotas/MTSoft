@@ -34,6 +34,12 @@ const handleEnterKey = (): void => {
   emit("EnterPressed");
 };
 
+const handleWheel = (e: WheelEvent): void => {
+  if (props.type === "number") {
+    e.preventDefault();
+  }
+};
+
 onMounted(() => {
   if (props.active && inputRef.value) {
     inputRef.value.focus();
@@ -43,14 +49,21 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col" :class="[width, label ? 'h-16' : 'h-10']">
-    <label v-if="label" :for="label" class="pl-2 pb-1 capitalize text-sm bg-inherit">{{
-      label
-    }}</label>
+    <label
+      v-if="label"
+      :for="label"
+      class="pl-2 pb-1 capitalize text-sm bg-inherit"
+      >{{ label }}</label
+    >
 
     <div
       class="flex items-center justify-center h-10 gap-3 px-4 border rounded-lg shadow-sm border-dark-light"
       :class="
-        disable ? 'bg-gray-ultra-light' : variant === 'dark' ? 'bg-gray-ultra-light' : 'bg-white'
+        disable
+          ? 'bg-gray-ultra-light'
+          : variant === 'dark'
+            ? 'bg-gray-ultra-light'
+            : 'bg-white'
       "
     >
       <slot />
@@ -63,6 +76,7 @@ onMounted(() => {
         :disabled="disable"
         @input="emitUpdate(($event.target as HTMLInputElement)?.value)"
         @keyup.enter="handleEnterKey"
+        @wheel="handleWheel"
         ref="inputRef"
         class="w-full h-full bg-inherit"
       />
