@@ -12,12 +12,6 @@ const date = computed(() => props.project?.dates?.dateConfirmed ?? "");
 //   ? props.project?.dates?.dateConfirmed
 //   : props.project?.dates?.dateCreated;
 
-// const time = computed(() => {
-//   const today = new Date();
-//   const expirationDate = new Date(props.project?.dates?.dateExparation);
-//   return Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-// });
-
 const time = computed(() =>
   props.project?.dates?.dateExparation
     ? Math.ceil((new Date(props.project.dates.dateExparation).getTime() - Date.now()) / 86400000)
@@ -110,11 +104,10 @@ const statusHandler = async (value: string) => {
 
     <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
     <div class="relative flex-1">
-      <!-- <div
-        v-if="props.project?.gates?.length > 0 && props.project?.status !== 'Nepatvirtintas'"
+      <div
+        v-if="props.project?.gateManufacturer && props.project?.status !== 'Nepatvirtintas'"
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
-        :class="gateOrdered"
-      ></div> -->
+      ></div>
       <BaseAddressLink :name="props.project?.client?.address" width="w-full" />
     </div>
 
