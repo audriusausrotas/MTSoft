@@ -2,10 +2,8 @@
 import { laserInstructions } from "~/data/laserInstruction";
 import calculateResults from "~/utils/calculations/calculateResults";
 const emit = defineEmits(["onCalculate"]);
-const { setError, setSuccess } = useCustomError();
 const calculationsStore = useCalculationsStore();
 const resultsStore = useResultsStore();
-const backupStore = useBackupStore();
 
 const modalOpen = ref<boolean>(false);
 const textArea = ref<string>("");
@@ -14,6 +12,17 @@ const precision = ref<string>("Žemyn");
 const unitValues = ["Metrai", "Centimetrai", "Milimetrai"];
 const precisionValues = ["Žemyn", "Standartas", "Andriaus", "Neapvalinti"];
 const instructionOpen = ref<boolean>(false);
+
+const totals = computed(() => {
+  let totalLenght = 0;
+  let totalSquare = 0;
+
+  calculationsStore.fences.forEach((fence) => {
+    totalLenght += fence.totalLength;
+    totalSquare += fence.totalQuantity;
+  });
+  return { totalLenght, totalSquare };
+});
 
 const createFenceHandler = () => {
   calculationsStore.addFence();
@@ -41,92 +50,98 @@ const unitHandler = (value: string) => {
 
 <template>
   <div class="flex w-full flex-col">
-    <div class="flex flex-wrap justify-center gap-4 lg:sticky top-0 py-4 z-40 bg-white border-b">
-      <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
-      <BaseButton name="Iš lazerio" @click="modalOpen = true" />
-      <BaseModal
-        v-if="modalOpen"
-        @onClose="modalOpen = false"
-        @onConfirm="confirmHandler"
-        title="Automatinis BOSH lazelio skaičiuotuvas"
-        width="w-fit"
-      >
-        <div class="flex gap-4 items-center">
-          <BaseSelectField
-            label="Pasirinkite matą"
-            :values="unitValues"
-            :defaultValue="units"
-            @onChange="(value) => (units = value)"
-          />
+    <div class="z-40 lg:sticky top-0 flex flex-col border-b bg-white">
+      <div class="flex flex-wrap justify-center gap-4 border-b py-4">
+        <BaseButton name="Sukurti Tvorą" @click="createFenceHandler" />
+        <BaseButton name="Iš lazerio" @click="modalOpen = true" />
+        <BaseModal
+          v-if="modalOpen"
+          @onClose="modalOpen = false"
+          @onConfirm="confirmHandler"
+          title="Automatinis BOSH lazelio skaičiuotuvas"
+          width="w-fit"
+        >
+          <div class="flex gap-4 items-center">
+            <BaseSelectField
+              label="Pasirinkite matą"
+              :values="unitValues"
+              :defaultValue="units"
+              @onChange="(value) => (units = value)"
+            />
 
-          <BaseSelectField
-            label="Pasirinkite apvalinimą"
-            :values="precisionValues"
-            :defaultValue="precision"
-            @onChange="(value) => (precision = value)"
-          />
-          <div
-            @mouseenter="instructionOpen = true"
-            @mouseleave="instructionOpen = false"
-            class="relative hover:cursor-pointer"
-          >
-            <NuxtImg
-              src="/icons/info.svg"
-              alt="information"
-              width="20"
-              height="20"
-              decoding="auto"
-              loading="lazy"
-              :ismap="true"
-              class="mt-5"
+            <BaseSelectField
+              label="Pasirinkite apvalinimą"
+              :values="precisionValues"
+              :defaultValue="precision"
+              @onChange="(value) => (precision = value)"
             />
             <div
-              v-if="instructionOpen"
-              class="absolute top-10 right-0 bg-white border rounded-md border-dark-light h-[500px] overflow-auto md:block hidden"
+              @mouseenter="instructionOpen = true"
+              @mouseleave="instructionOpen = false"
+              class="relative hover:cursor-pointer"
             >
+              <NuxtImg
+                src="/icons/info.svg"
+                alt="information"
+                width="20"
+                height="20"
+                decoding="auto"
+                loading="lazy"
+                :ismap="true"
+                class="mt-5"
+              />
               <div
-                class="flex gap-4 divide-x-2 border-b-2 border-dark-full divide-dark-full font-semibold"
+                v-if="instructionOpen"
+                class="absolute top-10 right-0 bg-white border rounded-md border-dark-light h-[500px] overflow-auto md:block hidden"
               >
-                <div class="w-40 p-4">Pavadinimas</div>
-                <div class="w-40 p-4">Komanda</div>
-                <div class="w-48 p-4">Pavyzdys</div>
-                <div class="w-80 p-4">Paaiškinimas</div>
-              </div>
-              <div
-                v-for="instruction in laserInstructions"
-                class="flex gap-4 divide-x border-b border-dark-full divide-dark-full"
-              >
-                <div class="w-40 p-4">{{ instruction.name }}</div>
-                <div class="w-40 p-4">{{ instruction.command }}</div>
-                <div class="w-48 p-4">{{ instruction.example }}</div>
-                <div class="w-80 p-4">{{ instruction.comment }}</div>
+                <div
+                  class="flex gap-4 divide-x-2 border-b-2 border-dark-full divide-dark-full font-semibold"
+                >
+                  <div class="w-40 p-4">Pavadinimas</div>
+                  <div class="w-40 p-4">Komanda</div>
+                  <div class="w-48 p-4">Pavyzdys</div>
+                  <div class="w-80 p-4">Paaiškinimas</div>
+                </div>
+                <div
+                  v-for="instruction in laserInstructions"
+                  class="flex gap-4 divide-x border-b border-dark-full divide-dark-full"
+                >
+                  <div class="w-40 p-4">{{ instruction.name }}</div>
+                  <div class="w-40 p-4">{{ instruction.command }}</div>
+                  <div class="w-48 p-4">{{ instruction.example }}</div>
+                  <div class="w-80 p-4">{{ instruction.comment }}</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <textarea
-          v-model="textArea"
-          name="auto"
-          id="auto"
-          class="border border-dark-light w-full h-96 p-2 rounded-md"
+          <textarea
+            v-model="textArea"
+            name="auto"
+            id="auto"
+            class="border border-dark-light w-full h-96 p-2 rounded-md"
+          />
+        </BaseModal>
+        <BaseButton name="skaičiuoti sąmatą" @click="calculateResultsHandler" />
+        <BaseSelectField
+          :values="['Didmena', 'Mažmena']"
+          id="parts"
+          :defaultValue="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
+          width="w-48"
+          :name="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
+          @onChange="retailHandler"
         />
-      </BaseModal>
-      <BaseButton name="skaičiuoti sąmatą" @click="calculateResultsHandler" />
-      <BaseSelectField
-        :values="['Didmena', 'Mažmena']"
-        id="parts"
-        :defaultValue="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
-        width="w-48"
-        :name="calculationsStore.retail ? 'Mažmena' : 'Didmena'"
-        @onChange="retailHandler"
-      />
-      <BaseSelectField
-        :values="['Kvadratinis metras', 'Metras']"
-        id="units"
-        :defaultValue="calculationsStore.units ? 'Kvadratinis metras' : 'Metras'"
-        width="w-60"
-        @onChange="unitHandler"
-      />
+        <BaseSelectField
+          :values="['Kvadratinis metras', 'Metras']"
+          id="units"
+          :defaultValue="calculationsStore.units ? 'Kvadratinis metras' : 'Metras'"
+          width="w-60"
+          @onChange="unitHandler"
+        />
+      </div>
+      <div class="flex gap-8 justify-center py-2">
+        <div>Bendras ilgis: {{ totals.totalLenght.toFixed(2) }}</div>
+        <div>Bendra kvadratūra: {{ totals.totalSquare.toFixed(2) }}</div>
+      </div>
     </div>
 
     <div v-for="(fence, index) in calculationsStore.fences" :key="fence.id">

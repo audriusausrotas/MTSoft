@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { currentLengthValues } from "~/data/initialValues";
 import {
   fenceSide,
   fenceDirection,
@@ -17,6 +18,8 @@ const currentFence = calculationsStore.fences[props.index];
 
 const needPoles = ref<boolean>(currentFence.parts.includes("Stulpai"));
 const isOpen = ref<boolean>(false);
+
+const additionalBindingsValues = ["Nepridėti", "Pridėti 10 cm", "Pridėti 20 cm"];
 
 const isFence = computed(
   () =>
@@ -60,8 +63,6 @@ watch(isFence, (value) => {
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateSide(props.index, value)"
       />
-    </div>
-    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
       <BaseSelectField
         label="Tvoros tipas"
         :values="settingsStore.selectValues.fenceTypes"
@@ -70,7 +71,16 @@ watch(isFence, (value) => {
         width="w-60"
         @onChange="(value: string) => calculationsStore.updateType(props.index, value)"
       />
-
+      <BaseSelectField
+        label="Tarpų ilgis"
+        :values="currentLengthValues"
+        id="fenceLength"
+        :defaultValue="calculationsStore.currentLength"
+        width="w-60"
+        @onChange="(value: string) => calculationsStore.changeCurrentLength(value)"
+      />
+    </div>
+    <div class="flex flex-wrap justify-center items-end gap-4 xl:justify-normal">
       <BaseSelectField
         label="Tvoros spalva"
         :values="settingsStore.selectValues.fenceColors"

@@ -11,6 +11,7 @@ export interface Calculations {
   fences: Fence[];
   retail: boolean;
   units: boolean;
+  currentLength: string;
 }
 
 export interface Project {

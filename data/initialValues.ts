@@ -21,6 +21,8 @@ export const initialWorkData: Works = {
   retail: false,
 };
 
+export const currentLengthValues = ["200", "250", "300"];
+
 export const initialResultData: Result = {
   id: "",
   name: "",

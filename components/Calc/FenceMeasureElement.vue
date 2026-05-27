@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { yesno, gateDirection, laiptasDirection } from "~/data/selectFieldData";
+import { yesno, laiptasDirection } from "~/data/selectFieldData";
 const props = defineProps(["measureIndex", "index", "measure", "lastElement"]);
 
 const calculationsStore = useCalculationsStore();
@@ -10,9 +10,8 @@ const isData = !props.measure.kampas.exist && !props.measure.laiptas.exist;
 
 const isSegment = computed(
   () =>
-    settingsStore.fences.find(
-      (fence) => fence.name === calculationsStore.fences[props.index].name,
-    )?.category === "Segmentas",
+    settingsStore.fences.find((fence) => fence.name === calculationsStore.fences[props.index].name)
+      ?.category === "Segmentas",
 );
 
 const toggleCheckbox = (value: boolean) => {
@@ -22,9 +21,7 @@ const toggleCheckbox = (value: boolean) => {
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-4 w-[500px] border rounded-lg p-4 shadow-md border-gray-300"
-  >
+  <div class="flex flex-col gap-4 w-[500px] border rounded-lg p-4 shadow-md border-gray-300">
     <div class="flex items-end gap-4 max-w-[500px] relative group">
       <BaseInput
         :name="props.measureIndex + 1"
@@ -41,19 +38,12 @@ const toggleCheckbox = (value: boolean) => {
         label="ilgis"
         type="number"
         variant="light"
-        :active="
-          calculationsStore.fences[props.index].measures.length - 1 ===
-          props.measureIndex
-        "
+        :active="calculationsStore.fences[props.index].measures.length - 1 === props.measureIndex"
         :name="props.measure.length"
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureLength(
-              props.index,
-              props.measureIndex,
-              value,
-            )
+            calculationsStore.updateMeasureLength(props.index, props.measureIndex, value)
         "
       />
 
@@ -68,11 +58,7 @@ const toggleCheckbox = (value: boolean) => {
         @EnterPressed="calculationsStore.addMeasure(props.index)"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureHeight(
-              props.index,
-              props.measureIndex,
-              value,
-            )
+            calculationsStore.updateMeasureHeight(props.index, props.measureIndex, value)
         "
       />
 
@@ -82,18 +68,10 @@ const toggleCheckbox = (value: boolean) => {
         :disable="calculationsStore.retail || isSegment"
         label="elementai"
         :variant="isSegment ? '' : !calculationsStore.retail ? 'light' : ''"
-        :name="
-          isSegment
-            ? Math.ceil(props.measure.length / 255)
-            : props.measure.elements
-        "
+        :name="isSegment ? Math.ceil(props.measure.length / 255) : props.measure.elements"
         @onChange="
           (value: number): void =>
-            calculationsStore.updateMeasureElements(
-              props.index,
-              props.measureIndex,
-              value,
-            )
+            calculationsStore.updateMeasureElements(props.index, props.measureIndex, value)
         "
       />
 
@@ -122,11 +100,7 @@ const toggleCheckbox = (value: boolean) => {
         :name="props.measure.kampas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampas(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateMeasureKampas(props.index, value, props.measureIndex)
         "
       />
       <BaseInput
@@ -138,11 +112,7 @@ const toggleCheckbox = (value: boolean) => {
         :name="props.measure.kampas.comment"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureKampasComment(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateMeasureKampasComment(props.index, value, props.measureIndex)
         "
       />
 
@@ -163,11 +133,7 @@ const toggleCheckbox = (value: boolean) => {
         :name="props.measure.laiptas.value"
         @onChange="
           (value: string): void =>
-            calculationsStore.updateMeasureLaiptas(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateMeasureLaiptas(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -179,11 +145,7 @@ const toggleCheckbox = (value: boolean) => {
         width="w-32"
         @onChange="
           (value: string) =>
-            calculationsStore.updateMeasureLaiptasDirection(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateMeasureLaiptasDirection(props.index, value, props.measureIndex)
         "
       />
 
@@ -193,16 +155,11 @@ const toggleCheckbox = (value: boolean) => {
         height="20"
         decoding="auto"
         class="hover:scale-125 transition-transform hover:cursor-pointer absolute top-0 left-8 group-hover:flex hidden"
-        @click="
-          calculationsStore.deleteMeasure(props.index, props.measureIndex)
-        "
+        @click="calculationsStore.deleteMeasure(props.index, props.measureIndex)"
       />
     </div>
 
-    <div
-      v-if="isChecked"
-      class="flex flex-wrap justify-center md:justify-between gap-2"
-    >
+    <div v-if="isChecked" class="flex flex-wrap justify-center md:justify-between gap-2">
       <BaseSelectField
         :values="yesno"
         id="gateInstallation"
@@ -211,19 +168,12 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateInstallation(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateInstallation(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="yesno"
         label="Automatika"
         id="automatics"
@@ -231,19 +181,12 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateAutomatics(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateAutomatics(props.index, value, props.measureIndex)
         "
       />
 
       <BaseSelectField
-        v-if="
-          props.measure.length <= 200 &&
-          props.measure.gates.option !== 'Segmentiniai'
-        "
+        v-if="props.measure.length <= 200 && props.measure.gates.option !== 'Segmentiniai'"
         :values="settingsStore.selectValues.gateLock"
         id="gateLock"
         label="vartelių spyna"
@@ -251,11 +194,7 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateGateLock(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateGateLock(props.index, value, props.measureIndex)
         "
       />
 
@@ -268,11 +207,7 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateGateOption(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateGateOption(props.index, value, props.measureIndex)
         "
       />
       <BaseSelectField
@@ -284,21 +219,14 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateGateOption(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateGateOption(props.index, value, props.measureIndex)
         "
       />
     </div>
 
     <div v-if="isChecked" class="flex gap-4">
       <BaseSelectField
-        v-if="
-          props.measure.length > 200 &&
-          props.measure.gates.option === 'Stumdomi'
-        "
+        v-if="props.measure.length > 200 && props.measure.gates.option === 'Stumdomi'"
         :values="yesno"
         id="bankette"
         label="vartų pamatas"
@@ -306,11 +234,7 @@ const toggleCheckbox = (value: boolean) => {
         width="w-36"
         @onChange="
           (value: string) =>
-            calculationsStore.updateBankette(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateBankette(props.index, value, props.measureIndex)
         "
       />
 
@@ -322,11 +246,7 @@ const toggleCheckbox = (value: boolean) => {
         :name="props.measure.gates.comment"
         @onChange="
           (value: string) =>
-            calculationsStore.updateGateComment(
-              props.index,
-              value,
-              props.measureIndex,
-            )
+            calculationsStore.updateGateComment(props.index, value, props.measureIndex)
         "
       />
     </div>
