@@ -36,6 +36,7 @@ export const useCalculationsStore = defineStore("calculations", {
         elements: 0,
         totalLength: 0,
         totalQuantity: 0,
+        additionalBindings: "Nepridėti",
         measures: [],
         fenceboards: false,
       };
@@ -143,6 +144,10 @@ export const useCalculationsStore = defineStore("calculations", {
 
     updateBindings(index: number, value: string): void {
       this.fences[index].bindings = value;
+    },
+
+    updateAdditionalBindings(index: number, value: string): void {
+      this.fences[index].additionalBindings = value;
     },
 
     updateGateOption(index: number, value: string, measureIndex: number): void {

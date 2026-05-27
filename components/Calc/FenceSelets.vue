@@ -178,6 +178,17 @@ watch(isFence, (value) => {
         @onChange="(value: string) => calculationsStore.updateBindings(props.index, value)"
       />
       <BaseSelectField
+        v-if="currentFence.bindings === 'Taip'"
+        label="Apkaustų ilgis"
+        :values="additionalBindingsValues"
+        id="additionalBindings"
+        :defaultValue="currentFence.additionalBindings || additionalBindingsValues[0]"
+        width="w-60"
+        @onChange="
+          (value: string) => calculationsStore.updateAdditionalBindings(props.index, value)
+        "
+      />
+      <BaseSelectField
         v-if="needPoles"
         label="ankeriuojami stulpai"
         :values="yesno"
