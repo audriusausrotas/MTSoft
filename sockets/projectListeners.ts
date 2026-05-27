@@ -73,4 +73,7 @@ export default function projectListeners(socket: Socket) {
   socket.on("changeCompletionDate", ({ _id, date }) => {
     projectsStore.changeCompletionDate(_id, date);
   });
+  socket.on("changeProjectDates", ({ _id, dates }) => {
+    projectsStore.updateProjectField(_id, "dates", dates);
+  });
 }

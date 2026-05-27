@@ -8,10 +8,6 @@ const { setError, setSuccess } = useCustomError();
 
 const date = computed(() => props.project?.dates?.dateConfirmed ?? "");
 
-// const date = props.project?.dates?.dateConfirmed
-//   ? props.project?.dates?.dateConfirmed
-//   : props.project?.dates?.dateCreated;
-
 const time = computed(() =>
   props.project?.dates?.dateExparation
     ? Math.ceil((new Date(props.project.dates.dateExparation).getTime() - Date.now()) / 86400000)
