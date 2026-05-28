@@ -204,19 +204,31 @@ export default function generateResults() {
         }
         return;
       }
+      const calculatedLength =
+        item.width < 201
+          ? 100
+          : item.width < 410
+            ? 400
+            : item.width < 510
+              ? 500
+              : item.width < 610
+                ? 600
+                : item.width < 710
+                  ? 700
+                  : item.width < 810
+                    ? 800
+                    : item.width;
 
-      const length = Math.ceil(item.width / 100) * 100;
-      const gate = gates.find(
+      const option = item.option.replace("Gaminami", "Varteliai");
+
+      let gate = gates.find(
         (gate) =>
-          gate.category.toLowerCase() ===
-            item.option.replace("Gaminami", "Varteliai").toLowerCase() && length === gate.length,
+          gate.category.toLowerCase() === option.toLowerCase() && calculatedLength === gate.length,
       );
-
-      if (!gate) return;
 
       createResultElement({
         ...item,
-        name: gate.name,
+        name: gate?.name || "Neatpažinti vartai",
         quantity: 1,
       });
     });

@@ -5,7 +5,8 @@ const measurement = ref<string>("vnt");
 const isGate =
   props.result.category === "stumdomi" ||
   props.result.category === "varstomi" ||
-  props.result.category === "varteliai";
+  props.result.category === "varteliai" ||
+  props.result.category === "segmentiniai";
 
 if (props.result.name.toLowerCase().includes("apkausta")) measurement.value = "m";
 else if (props.result.name.toLowerCase().includes("metras")) measurement.value = "m";
@@ -25,16 +26,30 @@ else measurement.value = "vnt";
     <div class="border sm:hidden w-full"></div>
     <div class="flex-1">
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
-      <div class="flex print:gap-4 gap-2 sm:gap-8">
+      <div class="flex print:gap-4 gap-2 sm:gap-2 text-white print:text-black">
         <span class="w-fit">{{ props.result.name }}</span>
-        <span v-if="isGate">su {{ props.result.auto === "Taip" ? "automatika" : "" }}</span>
-        <span v-if="isGate"
-          >{{ props.result.auto === "Taip" ? "ir " : "" }}
-          {{ props.result.installation === "Taip" ? "montavimu" : "" }}</span
-        >
-        <span v-if="isGate">{{
-          props.result.lock.includes("el.") ? "elektromagnetine spyna" : ""
-        }}</span>
+        <span v-if="isGate">
+          <span v-if="props.result.width < 200">
+            <span v-if="props.result.category === 'varteliai'">
+              <span>{{
+                props.result.lock.includes("el.")
+                  ? " su elektromagnetine spyna"
+                  : " su paprasta spyna"
+              }}</span>
+              <span>
+                {{
+                  props.result.installation === "Taip" ? " ir montavimu" : " , be montavimo"
+                }}</span
+              >
+            </span>
+          </span>
+          <span v-else>
+            <span>{{ props.result.auto === "Taip" ? " su automatika" : " be automatikos" }}</span>
+            <span>{{
+              props.result.installation === "Taip" ? " ir montavimu" : " , be montavimo"
+            }}</span>
+          </span>
+        </span>
         <span v-if="props.result.category === 'Tvora'">{{
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>
