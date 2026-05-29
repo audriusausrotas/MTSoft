@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { C } from "vue-router/dist/router-CWoNjPRp.mjs";
-
 const props = defineProps(["result", "index", "hidePrices"]);
 const measurement = ref<string>("vnt");
 
