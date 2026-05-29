@@ -44,13 +44,12 @@ export default function createResultElement(item: any) {
       if (
         backupExist &&
         backup &&
-        retailCheck &&
         checkName &&
-        backup.width === item.width &&
-        backup.width === item.height &&
-        backup.auto === item.auto &&
-        backup.lock === item.lock &&
-        backup.installation === item.installation
+        backup?.width === item.width &&
+        backup?.height === item.height &&
+        backup?.auto === item.auto &&
+        backup?.lock === item.lock &&
+        backup?.installation === item.installation
       ) {
         cost = backup.cost;
         price = backup.price;
