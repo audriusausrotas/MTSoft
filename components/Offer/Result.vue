@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { C } from "vue-router/dist/router-CWoNjPRp.mjs";
+
 const props = defineProps(["result", "index", "hidePrices"]);
 const measurement = ref<string>("vnt");
 
@@ -26,7 +28,7 @@ else measurement.value = "vnt";
     <div class="border sm:hidden w-full"></div>
     <div class="flex-1">
       <p class="block sm:hidden font-bold">Pavadinimas:</p>
-      <div class="flex print:gap-4 gap-2 sm:gap-2 text-white print:text-black">
+      <div class="flex print:gap-4 gap-2 sm:gap-2 print:text-black">
         <span class="w-fit">{{ props.result.name }}</span>
         <span v-if="isGate">
           <span v-if="props.result.width < 200">
