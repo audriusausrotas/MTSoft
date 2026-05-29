@@ -39,6 +39,12 @@ const filteredItems = (value: string): void => {
   }
 };
 
+const cancelHandler = (): void => {
+  input.value = "";
+  filteredData.value = [];
+  open.value = false;
+};
+
 watch(input, (newValue) => {
   if (shouldClose.value) {
     open.value = false;
@@ -58,7 +64,7 @@ onMounted(() => {
 
 <template>
   <div class="relative flex flex-col font-medium gap-1" :class="props.width ? props.width : 'w-60'">
-    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ props.label }}</label>
+    <label v-if="props.label" :for="props.label" class="pl-2 text-sm">{{ label }}</label>
     <input
       class="h-10 px-4 overflow-auto rounded-lg shadow-sm outline-none costom-border w-full"
       :class="props.disable ? 'bg-gray-ultra-light' : 'bg-white'"
@@ -82,6 +88,13 @@ onMounted(() => {
         {{ item.name }}
       </li>
     </ul>
+    <div
+      v-if="open"
+      class="flex items-center absolute top-6 right-0 justify-center px-4 cursor-pointer border-2 rounded-lg h-10 w-10 hover:text-white hover:bg-red-full select-none"
+      @click="cancelHandler"
+    >
+      X
+    </div>
   </div>
 </template>
 <style scoped>
