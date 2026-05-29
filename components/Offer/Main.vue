@@ -162,7 +162,7 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
     </div>
 
     <div
-      class="text-2xl font-semibold print:font-bold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black p-3 print:p-0 print:text-base print:py-4 text-white text-center"
+      class="text-2xl font-semibold print:font-bold bg-red-full rounded-xl print:rounded-none print:bg-transparent print:text-black p-3 print:p-0 print:text-base print:py-4 text-center"
     >
       Medžiagos
     </div>
