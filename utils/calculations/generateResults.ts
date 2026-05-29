@@ -20,7 +20,7 @@ export default function generateResults() {
           quantity: results.totalHoles,
         });
 
-      if (item.name.includes("Dilė")) {
+      if (item.name.includes("Dilė") && item.direction === "Vertikali") {
         cork += item.quantity;
       }
     });

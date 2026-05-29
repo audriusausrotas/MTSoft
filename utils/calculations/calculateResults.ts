@@ -124,7 +124,7 @@ export default function calculateResults() {
       // calculate borders, crossbars
       if (isFence) {
         // calculate crossbars
-        if (isFenceboard) {
+        if (isFenceboard && item.direction === "Vertikali") {
           if (!onlyServices) results.addCrossbars(item.color);
           if (!onlyParts) results.addTotalCrossbars();
         }
