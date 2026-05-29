@@ -289,7 +289,7 @@ export const useCalculationsStore = defineStore("calculations", {
     },
 
     deleteMeasures(index: number): void {
-      this.fences[index].measures = [createInitialMeasure()];
+      this.fences[index].measures = [];
       this.updateFenceTotals(index);
     },
 

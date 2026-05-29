@@ -1,14 +1,13 @@
 <script setup lang="ts">
 const emit = defineEmits(["onClick"]);
-const props = defineProps(["name", "open"]);
+const props = defineProps(["open"]);
 </script>
 
 <template>
   <div
-    class="flex gap-2 text-lg font-semibold select-none hover:cursor-pointer"
+    class="flex gap-2 text-lg font-semibold select-none hover:cursor-pointer rounded-lg border border-gray-300 p-4"
     @click="emit('onClick')"
   >
-    <h6>{{ props.name }}</h6>
     <NuxtImg
       src="/icons/arrowDown.svg"
       width="10"
