@@ -59,7 +59,7 @@ export default function generateResults() {
 
   if (results.gatePoles.length > 0) {
     let pole = "";
-    const exist = results.gates.some((item) => item.name === "Varstomi");
+    const exist = results.gates.some((item) => item.option === "Varstomi");
     if (exist) {
       pole = settingsStore.defaultValues.gatePoleAlt;
     } else {
@@ -85,7 +85,7 @@ export default function generateResults() {
 
   if (results.anchoredGatePoles.length > 0) {
     let pole = "";
-    const exist = results.gates.some((item) => item.name === "Varstomi");
+    const exist = results.gates.some((item) => item.option === "Varstomi");
     if (exist) {
       pole = settingsStore.defaultValues.anchoredGatePoleAlt;
     } else {

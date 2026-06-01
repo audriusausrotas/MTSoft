@@ -112,7 +112,11 @@ export default function calculateResults() {
 
       // calculate wholesale legs
       if (!calculationsStore.retail) {
-        if (fenceSettings.category === "Tvora" && !measure.gates.exist) {
+        if (
+          fenceSettings.category === "Tvora" &&
+          !measure.gates.exist &&
+          !calculationsStore.units
+        ) {
           const name =
             item.bindings === "Taip"
               ? settingsStore.defaultValues.retailSingleLeg

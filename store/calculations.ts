@@ -348,17 +348,13 @@ export const useCalculationsStore = defineStore("calculations", {
 
         const seeThroughStep = fenceRename in fenceData.steps ? fenceData.steps[fenceRename] : null;
 
-        if (measure.height && this.fences[index].direction === "Horizontali" && seeThroughStep) {
+        if (measure.height && fenceData.defaultDirection === "Horizontali" && seeThroughStep) {
           elements = measure.height / seeThroughStep;
-        } else if (
-          measure.length &&
-          this.fences[index].direction === "Vertikali" &&
-          seeThroughStep
-        ) {
+        } else if (measure.length && fenceData.defaultDirection === "Vertikali" && seeThroughStep) {
           elements = measure.length / seeThroughStep;
         }
       }
-      this.fences[index].measures[measureIndex].elements = Math.round(elements);
+      measure.elements = Math.round(elements);
       this.recalculateTotalElements(index);
     },
 

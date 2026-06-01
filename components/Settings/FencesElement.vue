@@ -498,11 +498,11 @@ const addImage = () => {
             v-if="!isSegment"
             label="Kryptis"
             :values="fenceDirection"
-            :defaultValue="defaultDirection.value"
+            :defaultValue="defaultDirection"
             :disable="!editable"
             :variant="editable ? 'light' : ''"
             width="w-40"
-            @onChange="(value) => (defaultDirection.value = value)"
+            @onChange="(value) => (defaultDirection = value)"
           />
 
           <BaseInput

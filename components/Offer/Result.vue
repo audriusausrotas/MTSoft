@@ -54,7 +54,9 @@ else measurement.value = "vnt";
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>
         <span v-if="props.result.category === 'Tvora'">{{ props.result.seeThrough }}</span>
-        <span v-if="props.result.category === 'Tvoralentė'">H-{{ props.result.height }}</span>
+        <span v-if="props.result.category === 'Tvoralentė' && props.result.height"
+          >H-{{ props.result.height }}</span
+        >
 
         <span v-if="props.result.color && !props.result.name.includes('RAL')"
           >RAL {{ props.result.color }}</span
