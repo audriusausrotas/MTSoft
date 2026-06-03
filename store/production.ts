@@ -36,7 +36,7 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
-    fenceAditionalOrdered(projectOrderNr: string, message: string, data: Bindings) {
+    fenceAditionalOrdered(projectOrderNr: string, message: string, data: Bindings[]) {
       console.log(projectOrderNr, message, data);
       const userStore = useUserStore();
       const index = this.production.findIndex((p) => p._id === projectOrderNr);
@@ -50,7 +50,9 @@ export const useProductionStore = defineStore("production", {
           comment: message,
         });
 
-      this.production[index].bindings?.push(data);
+      for (const binding of data) {
+        this.production[index].bindings?.push(binding);
+      }
     },
 
     deleteProductionOrder(id: string) {
