@@ -49,6 +49,16 @@ export const useProductionStore = defineStore("production", {
           creator: userStore.user?.username || "Sistema",
           comment: message,
         });
+      this.production[index].bindings?.push({
+        id: new Date().getTime().toString(),
+        color: "",
+        height: 0,
+        name: "PAPILDOMAS UŽSAKYMAS",
+        quantity: 0,
+        cut: 0,
+        done: 0,
+        postone: true,
+      });
 
       for (const binding of data) {
         this.production[index].bindings?.push(binding);
