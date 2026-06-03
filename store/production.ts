@@ -36,6 +36,22 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
+    fenceAditionalOrdered(projectOrderNr: string, message: string, data: Bindings) {
+      const userStore = useUserStore();
+      const index = this.production.findIndex((p) => p._id === projectOrderNr);
+
+      if (index === -1) return;
+
+      if (message)
+        this.production[index].comments.push({
+          date: new Date().toISOString(),
+          creator: userStore.user?.username || "Sistema",
+          comment: message,
+        });
+
+      this.production[index].bindings?.push(data);
+    },
+
     deleteProductionOrder(id: string) {
       this.production = this.production.filter((item) => item._id !== id);
     },
