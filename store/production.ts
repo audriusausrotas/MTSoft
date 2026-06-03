@@ -37,6 +37,7 @@ export const useProductionStore = defineStore("production", {
     },
 
     fenceAditionalOrdered(projectOrderNr: string, message: string, data: Bindings) {
+      console.log(projectOrderNr, message, data);
       const userStore = useUserStore();
       const index = this.production.findIndex((p) => p._id === projectOrderNr);
 
