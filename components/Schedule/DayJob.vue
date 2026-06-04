@@ -45,7 +45,7 @@ const deleteHandler = () => {
           ? router.push(`/gamyba/${props.job._id}`)
           : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer flex items-center text-sm h-full"
+    class="hover:cursor-pointer flex items-center text-sm h-full last:border-b-0 border-b border-white"
   >
     <div
       v-if="props.job?.orderNumber"
@@ -53,9 +53,7 @@ const deleteHandler = () => {
     >
       {{ props.job?.orderNumber }} {{ props.job?.manufacturer?.slice(0, 1) }}
     </div>
-    <div
-      :class="`${status} ${!status ? ' border bg-gray-300  border-stone-400 font-medium' : ''} p-1 flex-1 `"
-    >
+    <div :class="`${status} ${!status ? '  bg-gray-300 font-medium' : ''} p-1 flex-1 `">
       {{ props.job?.address }}
     </div>
   </div>

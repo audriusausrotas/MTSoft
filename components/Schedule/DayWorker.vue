@@ -137,7 +137,7 @@ watch(
 
     <p
       v-if="!commentModalOpen && comment"
-      class="items-center flex justify-center text-sm font-medium h-[28px] bg-gray-500 text-white"
+      class="items-center flex justify-center text-sm font-medium h-[28px] bg-gray-300"
     >
       {{ comment }}
     </p>
@@ -172,7 +172,7 @@ watch(
       </div>
     </div>
 
-    <div class="flex flex-col gap-0.5">
+    <div class="flex flex-col">
       <ScheduleDayJob
         v-if="selectedJobs.length > 0"
         v-for="job in selectedJobs"
