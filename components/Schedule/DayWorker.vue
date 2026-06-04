@@ -108,7 +108,7 @@ watch(
         ? 'bg-green-400'
         : props.isWeekend(props.date)
           ? 'bg-red-300'
-          : 'bg-white'
+          : 'bg-gray-200'
     "
     class="relative flex-1 flex flex-col justify-start"
   >
