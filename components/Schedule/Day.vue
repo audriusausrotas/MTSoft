@@ -25,10 +25,10 @@ const isWeekend = (date: Date) => {
     <div
       :class="[
         isToday(props.date)
-          ? 'bg-green-400'
+          ? 'bg-green-400 border-4 border-green-600'
           : isWeekend(props.date)
-          ? 'bg-red-300'
-          : 'bg-gray-600 text-white',
+            ? 'bg-red-300'
+            : 'bg-gray-600 text-white',
         'p-2 border rounded-md  border-stone-500 w-32 h-24 flex flex-col justify-center capitalize',
       ]"
     >

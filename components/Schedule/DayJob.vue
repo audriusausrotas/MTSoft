@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { RALcolors } from "~/data/initialValues";
+
 const props = defineProps(["job", "isAdmin", "worker"]);
 const emit = defineEmits(["onDelete"]);
 const router = useRouter();
 const userStore = useUserStore();
 const productionStore = useProductionStore();
+
+type RALColorCode = keyof typeof RALcolors;
 
 const menuOpen = ref<boolean>(false);
 
@@ -15,15 +19,17 @@ const status = computed(() => {
   if (!project) return null;
 
   return project.status === "Gaminama"
-    ? "bg-green-500"
+    ? "bg-green-700 text-white"
     : project.status === "Laukiama"
-      ? "bg-orange-500"
+      ? "bg-orange-500 text-white"
       : project.status === "Negaminti"
-        ? " bg-red-600"
+        ? " bg-red-700 text-white"
         : project.status === "Pagaminta"
-          ? "bg-violet-500"
-          : "bg-black";
+          ? "bg-violet-700 text-white"
+          : "bg-white text-black";
 });
+
+const RALcolor = computed(() => RALcolors[props.job.color as RALColorCode] || "#000000");
 
 const deleteHandler = () => {
   emit("onDelete", props.job._id);
@@ -39,11 +45,16 @@ const deleteHandler = () => {
           ? router.push(`/gamyba/${props.job._id}`)
           : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer hover:bg-red-600 hover:text-white flex justify-center items-center gap-1"
+    class="hover:cursor-pointer hover:bg-red-600 hover:text-white flex p-0.5 items-center gap-0.5 text-sm"
   >
-    <div v-if="status" class="w-2 h-2 rounded-full" :class="status"></div>
-    <div>
-      {{ props.job.address }}
+    <div
+      v-if="props.job?.orderNumber"
+      :class="`bg-[${RALcolor}]  p-1 rounded ${RALcolor === '#000000' ? 'text-black border-black border font-medium' : 'text-white'} `"
+    >
+      {{ props.job?.orderNumber }}
+    </div>
+    <div :class="`${status} p-1 rounded `">
+      {{ props.job?.address }}
     </div>
   </div>
   <div

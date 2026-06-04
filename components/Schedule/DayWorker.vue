@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Project, Job } from "~/data/interfaces";
+import type { Job, Production } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
@@ -36,10 +36,15 @@ const newCommentHandler = () => {
   menuOpen.value = false;
 };
 
-const selectHandler = (value: Project) => {
+const selectHandler = (value: Production) => {
   modalOpen.value = false;
 
-  selectedJobs.value.push({ _id: value._id!, address: value.client.address });
+  selectedJobs.value.push({
+    _id: value._id!,
+    address: value.client.address,
+    orderNumber: value.orderNumber,
+    color: value?.fences[0]?.color || "#000",
+  });
   canSave.value = true;
 };
 
@@ -92,7 +97,7 @@ watch(
   <div
     :class="
       props.isToday(props.date)
-        ? 'bg-green-400'
+        ? 'border-4 border-green-600'
         : props.isWeekend(props.date)
           ? 'bg-red-300'
           : 'bg-stone-100'
@@ -114,15 +119,15 @@ watch(
       v-if="isAdmin && canSave"
       @click="saveHandler"
       src="/icons/save.svg"
-      width="20"
-      height="20"
+      width="25"
+      height="25"
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 left-0.5 bg-inherit z-30 rounded-sm"
+      class="hover:cursor-pointer absolute bottom-0 right-0 bg-white p-0.5 z-40 rounded border-2 border-red-600 hover:scale-110"
     />
 
-    <p v-if="!commentModalOpen">{{ comment }}</p>
+    <p v-if="!commentModalOpen" class="text-sm font-medium">{{ comment }}</p>
 
     <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
       <div

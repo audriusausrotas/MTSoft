@@ -458,6 +458,8 @@ export interface Worker {
 export interface Job {
   _id: string;
   address: string;
+  orderNumber: string;
+  color: string;
 }
 
 export interface Schedule {

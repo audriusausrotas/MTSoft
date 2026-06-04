@@ -24,7 +24,7 @@ onMounted(() => {
   }, 500);
 });
 
-function scrollToToday() {
+const scrollToToday = () => {
   const todayIndex = calendarDates.value.findIndex((date) => {
     const today = new Date();
     return today.toDateString() === new Date(date).toDateString();
@@ -47,7 +47,7 @@ function scrollToToday() {
       });
     }
   }
-}
+};
 </script>
 
 <template>
