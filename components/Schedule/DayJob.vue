@@ -49,12 +49,12 @@ const deleteHandler = () => {
   >
     <div
       v-if="props.job?.orderNumber"
-      :class="`bg-[${RALcolor}]  p-1 flex items-center justify-center rounded h-full w-[74px]  ${RALcolor === '#000000' ? 'text-black border-black border font-medium' : 'text-white'} `"
+      :class="`bg-[${RALcolor}]   flex items-center justify-center rounded h-full w-[76px]  ${RALcolor === '#000000' ? 'text-black border-black border font-medium' : 'text-white'} `"
     >
       {{ props.job?.orderNumber }}
     </div>
     <div
-      :class="`${status} ${!status ? ' border bg-gray-200 border-stone-400' : ''} p-1 rounded flex-1 `"
+      :class="`${status} ${!status ? ' border bg-gray-200 border-stone-400' : ''} p-1  rounded flex-1 `"
     >
       {{ props.job?.address }}
     </div>
