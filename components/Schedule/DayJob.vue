@@ -23,9 +23,9 @@ const status = computed(() => {
     : project.status === "Laukiama"
       ? "bg-orange-500 text-white"
       : project.status === "Negaminti"
-        ? " bg-red-700 text-white"
+        ? " bg-red-600 text-white"
         : project.status === "Pagaminta"
-          ? "bg-violet-700 text-white"
+          ? "bg-violet-600 text-white"
           : "bg-white text-black ";
 });
 
@@ -45,23 +45,23 @@ const deleteHandler = () => {
           ? router.push(`/gamyba/${props.job._id}`)
           : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer hover:scale-[1.02] transition-transform flex p-0.5 items-center gap-0.5 text-sm h-full"
+    class="hover:cursor-pointer flex items-center text-sm h-full"
   >
     <div
       v-if="props.job?.orderNumber"
-      :class="`bg-[${RALcolor}]   flex items-center justify-center rounded h-full w-[85px]  ${RALcolor === '#000000' ? 'text-black bg-white border-black border font-medium' : 'text-white'} `"
+      :class="`bg-[${RALcolor}]   flex items-center justify-center  h-full w-[85px]  ${RALcolor === '#000000' ? 'text-black bg-white border-black border font-medium' : 'text-white'} `"
     >
       {{ props.job?.orderNumber }} {{ props.job?.manufacturer?.slice(0, 1) }}
     </div>
     <div
-      :class="`${status} ${!status ? ' border bg-gray-200 border-stone-400' : ''} p-1  rounded flex-1 `"
+      :class="`${status} ${!status ? ' border bg-gray-300  border-stone-400 font-medium' : ''} p-1 flex-1 `"
     >
       {{ props.job?.address }}
     </div>
   </div>
   <div
     v-if="menuOpen"
-    class="absolute left-0 top-0 z-30 h-full bg-blue-600 border overflow-hidden border-stone-500 w-full"
+    class="absolute left-0 top-0 z-30 h-full bg-gray-600 overflow-hidden w-full flex flex-col"
   >
     <NuxtLink
       :to="
@@ -70,7 +70,7 @@ const deleteHandler = () => {
           ? `/perziura/${props.job._id}`
           : `/montavimas/${props.job._id}`
       "
-      class="hover:cursor-pointer hover:bg-red-600 text-white w-full block"
+      class="hover:cursor-pointer hover:bg-red-600 text-white p-0.5"
     >
       Atidaryti projektą
     </NuxtLink>
@@ -80,15 +80,18 @@ const deleteHandler = () => {
         userStore.user?.accountType === 'Vadybininkas'
       "
       :to="`/gamyba/${props.job._id}`"
-      class="hover:cursor-pointer hover:bg-red-600 text-white w-full block"
+      class="hover:cursor-pointer hover:bg-red-600 text-white p-0.5"
     >
       Atidaryti gamybą
     </NuxtLink>
-    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="deleteHandler">
-      Ištrinti projektą
+    <div class="hover:cursor-pointer hover:bg-red-600 text-white p-0.5" @click="deleteHandler">
+      Ištrinti darbą
     </div>
-    <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
-      Uždaryti meniu
+    <div
+      class="absolute top-0 right-0 hover:cursor-pointer hover:scale-105 transition-transform text-white h-7 w-7 flex items-center justify-center rounded-md bg-red-600 border"
+      @click="menuOpen = false"
+    >
+      X
     </div>
   </div>
 </template>

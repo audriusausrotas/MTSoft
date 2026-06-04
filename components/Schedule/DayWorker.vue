@@ -108,64 +108,75 @@ watch(
         ? 'bg-green-400'
         : props.isWeekend(props.date)
           ? 'bg-red-300'
-          : 'bg-stone-100'
+          : 'bg-white'
     "
-    class="border relative flex-1 rounded-md flex flex-col border-stone-500 justify-start"
+    class="relative flex-1 flex flex-col justify-start"
   >
     <NuxtImg
       v-if="isAdmin"
       @click="menuOpen = !menuOpen"
       src="/icons/hamburger.svg"
-      width="20"
-      height="20"
+      width="23"
+      height="23"
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute top-0.5 right-0.5 bg-inherit z-30 rounded-sm"
+      class="hover:cursor-pointer absolute top-[1.8px] right-[1px] bg-white z-30 rounded hover:scale-110"
     />
     <NuxtImg
       v-if="isAdmin && canSave"
       @click="saveHandler"
       src="/icons/save.svg"
-      width="25"
-      height="25"
+      width="23"
+      height="23"
       decoding="auto"
       loading="lazy"
       :ismap="true"
-      class="hover:cursor-pointer absolute bottom-0 right-0 bg-white p-0.5 z-40 rounded border-2 border-red-600 hover:scale-110"
+      class="hover:cursor-pointer absolute bottom-[1.8px] right-[1px] bg-white z-40 rounded p-0.5 hover:scale-110"
     />
 
-    <p v-if="!commentModalOpen" class="text-sm font-medium">{{ comment }}</p>
+    <p
+      v-if="!commentModalOpen && comment"
+      class="items-center flex justify-center text-sm font-medium h-[28px] bg-gray-500 text-white"
+    >
+      {{ comment }}
+    </p>
 
-    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-30 text-white">
+    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-gray-600 z-30 text-white">
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
-        class="hover:cursor-pointer hover:bg-red-600 hover:text-white"
+        class="hover:cursor-pointer hover:bg-red-600 hover:text-white p-0.5"
       >
         Pridėti darbą
       </div>
       <div
         v-if="isAdmin"
         @click="newCommentHandler"
-        class="hover:cursor-pointer hover:bg-red-600 hover:text-white"
+        class="hover:cursor-pointer hover:bg-red-600 hover:text-white p-0.5"
       >
         Pridėti komentarą
       </div>
       <div
         v-if="isAdmin && comment !== ''"
         @click="commentDeleteHandler"
-        class="hover:cursor-pointer hover:bg-red-600 hover:text-white"
+        class="hover:cursor-pointer hover:bg-red-600 hover:text-white p-0.5"
       >
         Ištrinti komentarą
       </div>
-      <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
-        Uždaryti meniu
+      <div
+        class="absolute top-0 right-0 hover:cursor-pointer hover:scale-105 transition-transform text-white h-7 w-7 flex items-center justify-center rounded-md bg-red-600 border"
+        @click="menuOpen = false"
+      >
+        X
       </div>
     </div>
 
-    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id">
+    <div class="flex flex-col gap-0.5">
       <ScheduleDayJob
+        v-if="selectedJobs.length > 0"
+        v-for="job in selectedJobs"
+        :key="job._id"
         :job="job"
         :isAdmin="isAdmin"
         @onDelete="deleteHandler"
@@ -175,15 +186,15 @@ watch(
 
     <div
       v-if="commentModalOpen"
-      class="bg-blue-600 absolute top-0 left-0 w-full h-full flex flex-col justify-end placeholder-white text-white"
+      class="bg-gray-600 absolute top-0 left-0 w-full h-full flex flex-col placeholder-white text-white"
     >
-      <div class="border-y border-white">
+      <div class="bg-white text-black">
         <input type="text" placeholder="Komentaras" v-model="comment" class="w-full p-1" />
       </div>
-      <div class="flex justify">
+      <div class="flex">
         <div
           @click="cancelHandler"
-          class="hover:cursor-pointer p-1 flex-1 bg-green-600 hover:bg-red-600 hover:text-white"
+          class="hover:cursor-pointer p-1 flex-1 hover:bg-red-600 hover:text-white"
         >
           Uždaryti
         </div>

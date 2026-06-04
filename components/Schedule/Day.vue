@@ -21,7 +21,7 @@ const isWeekend = (date: Date) => {
 </script>
 
 <template>
-  <div class="text-center flex gap-1 calendar-item relative">
+  <div class="text-center flex relative divide-x-2 divide-black">
     <div
       :class="[
         isToday(props.date)
@@ -29,7 +29,7 @@ const isWeekend = (date: Date) => {
           : isWeekend(props.date)
             ? 'bg-red-300'
             : 'bg-gray-600 text-white',
-        'p-2 border rounded-md  border-stone-500 w-32 h-24 flex flex-col justify-center capitalize',
+        'w-32 min-h-20 flex flex-col justify-center capitalize ',
       ]"
     >
       <p>{{ formatMonthDay(props.date) }}</p>
