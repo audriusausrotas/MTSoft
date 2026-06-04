@@ -26,7 +26,7 @@ const status = computed(() => {
         ? " bg-red-700 text-white"
         : project.status === "Pagaminta"
           ? "bg-violet-700 text-white"
-          : "bg-white text-black";
+          : "bg-white text-black ";
 });
 
 const RALcolor = computed(() => RALcolors[props.job.color as RALColorCode] || "#000000");
@@ -45,7 +45,7 @@ const deleteHandler = () => {
           ? router.push(`/gamyba/${props.job._id}`)
           : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer hover:bg-red-600 hover:text-white flex p-0.5 items-center gap-0.5 text-sm"
+    class="hover:cursor-pointer hover:scale-[1.02] transition-transform flex p-0.5 items-center gap-0.5 text-sm"
   >
     <div
       v-if="props.job?.orderNumber"
@@ -53,13 +53,13 @@ const deleteHandler = () => {
     >
       {{ props.job?.orderNumber }}
     </div>
-    <div :class="`${status} p-1 rounded `">
+    <div :class="`${status} p-1 rounded`">
       {{ props.job?.address }}
     </div>
   </div>
   <div
     v-if="menuOpen"
-    class="absolute left-0 z-30 bg-blue-600 border overflow-hidden border-stone-500 w-full h-fit"
+    class="absolute left-0 top-0 z-30 h-full bg-blue-600 border overflow-hidden border-stone-500 w-full"
   >
     <NuxtLink
       :to="
@@ -70,10 +70,20 @@ const deleteHandler = () => {
       "
       class="hover:cursor-pointer hover:bg-red-600 text-white w-full block"
     >
-      Atidaryti darbą
+      Atidaryti projektą
+    </NuxtLink>
+    <NuxtLink
+      v-if="
+        userStore.user?.accountType === 'Administratorius' ||
+        userStore.user?.accountType === 'Vadybininkas'
+      "
+      :to="`/gamyba/${props.job._id}`"
+      class="hover:cursor-pointer hover:bg-red-600 text-white w-full block"
+    >
+      Atidaryti gamybą
     </NuxtLink>
     <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="deleteHandler">
-      Ištrinti darbą
+      Ištrinti projektą
     </div>
     <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
       Uždaryti meniu

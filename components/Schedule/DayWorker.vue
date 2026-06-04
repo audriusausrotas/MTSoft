@@ -97,7 +97,7 @@ watch(
   <div
     :class="
       props.isToday(props.date)
-        ? 'border-4 border-green-600'
+        ? 'bg-green-400'
         : props.isWeekend(props.date)
           ? 'bg-red-300'
           : 'bg-stone-100'
@@ -129,7 +129,7 @@ watch(
 
     <p v-if="!commentModalOpen" class="text-sm font-medium">{{ comment }}</p>
 
-    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-20 text-white">
+    <div v-if="menuOpen" class="absolute top-0 left-0 w-full h-full bg-blue-600 z-30 text-white">
       <div
         v-if="isAdmin"
         @click="newWorkHandler"
@@ -151,9 +151,12 @@ watch(
       >
         Ištrinti komentarą
       </div>
+      <div class="hover:cursor-pointer hover:bg-red-600 text-white" @click="menuOpen = false">
+        Uždaryti meniu
+      </div>
     </div>
 
-    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id" class="relative">
+    <div v-if="selectedJobs.length > 0" v-for="job in selectedJobs" :key="job._id">
       <ScheduleDayJob
         :job="job"
         :isAdmin="isAdmin"
