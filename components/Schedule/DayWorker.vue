@@ -44,8 +44,9 @@ const selectHandler = (value: Production | Project) => {
     address: value.client.address,
     orderNumber: value.orderNumber,
     color:
-      (value as Production).fences?.[0]?.color ||
-      (value as Project).fenceMeasures?.[0]?.color ||
+      (value as Production)?.fences?.[0]?.color ||
+      (value as Production)?.bindings?.[0]?.color ||
+      (value as Project)?.fenceMeasures?.[0]?.color ||
       "#000",
   });
   canSave.value = true;
