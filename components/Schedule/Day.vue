@@ -21,7 +21,7 @@ const isWeekend = (date: Date) => {
 </script>
 
 <template>
-  <div class="text-center flex relative divide-x-2 divide-black">
+  <div class="text-center flex relative divide-x-2 calendar-item divide-black">
     <div
       :class="[
         isToday(props.date)
