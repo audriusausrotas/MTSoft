@@ -53,7 +53,7 @@ const deleteHandler = () => {
     >
       {{ props.job?.orderNumber }}
     </div>
-    <div :class="`${status} p-1 rounded`">
+    <div :class="`${status} p-1 rounded flex-1`">
       {{ props.job?.address }}
     </div>
   </div>
