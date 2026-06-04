@@ -53,7 +53,9 @@ const deleteHandler = () => {
     >
       {{ props.job?.orderNumber }}
     </div>
-    <div :class="`${status} p-1 rounded flex-1`">
+    <div
+      :class="`${status} ${!status ? ' border bg-gray-200 border-stone-400' : ''} p-1 rounded flex-1 `"
+    >
       {{ props.job?.address }}
     </div>
   </div>

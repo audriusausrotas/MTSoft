@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Job, Production } from "~/data/interfaces";
+import type { Job, Production, Project } from "~/data/interfaces";
 
 const props = defineProps(["worker", "date", "isToday", "isWeekend"]);
 
@@ -36,14 +36,17 @@ const newCommentHandler = () => {
   menuOpen.value = false;
 };
 
-const selectHandler = (value: Production) => {
+const selectHandler = (value: Production | Project) => {
   modalOpen.value = false;
-
+  console.log(value);
   selectedJobs.value.push({
     _id: value._id!,
     address: value.client.address,
     orderNumber: value.orderNumber,
-    color: value?.fences[0]?.color || "#000",
+    color:
+      (value as Production).fences?.[0]?.color ||
+      (value as Project).fenceMeasures?.[0]?.color ||
+      "#000",
   });
   canSave.value = true;
 };
