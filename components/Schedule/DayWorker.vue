@@ -38,7 +38,7 @@ const newCommentHandler = () => {
 
 const selectHandler = (value: Production | Project) => {
   modalOpen.value = false;
-  console.log(value);
+
   selectedJobs.value.push({
     _id: value._id!,
     address: value.client.address,
@@ -48,6 +48,10 @@ const selectHandler = (value: Production | Project) => {
       (value as Production)?.bindings?.[0]?.color ||
       (value as Project)?.fenceMeasures?.[0]?.color ||
       "#000",
+    manufacturer:
+      (value as Production)?.fences?.[0]?.manufacturer ||
+      (value as Project)?.fenceMeasures?.[0]?.manufacturer ||
+      "",
   });
   canSave.value = true;
 };

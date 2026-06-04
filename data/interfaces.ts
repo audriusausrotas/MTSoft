@@ -460,6 +460,7 @@ export interface Job {
   address: string;
   orderNumber: string;
   color: string;
+  manufacturer: string;
 }
 
 export interface Schedule {
