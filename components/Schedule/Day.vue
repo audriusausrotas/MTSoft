@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["date", "workers"]);
+const scheduleStore = useScheduleStore();
 
 const formatMonthDay = (date: Date) => {
   return date.toLocaleDateString("lt-LT", { month: "long", day: "numeric" });
@@ -23,13 +24,14 @@ const isWeekend = (date: Date) => {
 <template>
   <div class="text-center flex relative divide-x-2 calendar-item divide-black">
     <div
+      @click="scheduleStore.toggleSelectedToday()"
       :class="[
         isToday(props.date)
           ? 'bg-green-400'
           : isWeekend(props.date)
             ? 'bg-red-300'
             : 'bg-gray-600 text-white',
-        'w-32 min-h-20 flex flex-col justify-center capitalize ',
+        'w-32 min-h-20 flex flex-col justify-center capitalize border-b-2 select-none hover:cursor-pointer border-black',
       ]"
     >
       <p>{{ formatMonthDay(props.date) }}</p>

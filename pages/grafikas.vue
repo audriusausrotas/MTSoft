@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const userStore = useUserStore();
+const scheduleStore = useScheduleStore();
 
 const calendarDates = ref<Date[]>([]);
 const workers = computed(() =>
@@ -16,12 +17,21 @@ const workers = computed(() =>
   }),
 );
 
-onMounted(() => {
+const datesToDisplay = () => {
   calendarDates.value = getCalendarRange();
-
+  if (scheduleStore.selectedToday) {
+    calendarDates.value = calendarDates.value.filter((date) => {
+      const today = new Date();
+      return today.toDateString() === new Date(date).toDateString();
+    });
+  }
   setTimeout(() => {
     scrollToToday();
   }, 500);
+};
+
+onMounted(() => {
+  datesToDisplay();
 });
 
 const scrollToToday = () => {
@@ -48,11 +58,18 @@ const scrollToToday = () => {
     }
   }
 };
+
+watch(
+  () => scheduleStore.selectedToday,
+  () => {
+    datesToDisplay();
+  },
+);
 </script>
 
 <template>
-  <div class="overflow-y-auto h-[75vh] w-full lg:pr-8">
-    <div class="flex flex-col divide-y-2 divide-black border-2 border-t-0 border-black">
+  <div class="overflow-y-auto h-[85dvh] w-full lg:pr-8">
+    <div class="flex flex-col divide-y-2 gap-2 divide-black border-2 border-t-0 border-black">
       <div
         v-if="
           userStore.user?.accountType === 'Administratorius' ||

@@ -3,6 +3,7 @@ import type { Schedule, Worker } from "~/data/interfaces";
 export const useScheduleStore = defineStore("schedule", {
   state: () => ({
     schedules: [] as Schedule[],
+    selectedToday: false,
   }),
 
   actions: {
@@ -17,6 +18,11 @@ export const useScheduleStore = defineStore("schedule", {
       } else {
         this.schedules.push(schedule);
       }
+    },
+
+    toggleSelectedToday() {
+      console.log(this.selectedToday);
+      this.selectedToday = !this.selectedToday;
     },
 
     updateSchedule(schedule: Schedule) {

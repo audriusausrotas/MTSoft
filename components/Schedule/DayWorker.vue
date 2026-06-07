@@ -110,7 +110,7 @@ watch(
           ? 'bg-red-300'
           : 'bg-gray-50'
     "
-    class="relative flex-1 flex flex-col justify-start"
+    class="relative flex-1 flex flex-col justify-start border-b-2 border-black"
   >
     <NuxtImg
       v-if="isAdmin"
@@ -172,7 +172,7 @@ watch(
       </div>
     </div>
 
-    <div class="flex flex-col">
+    <div class="flex flex-col divide-y divide-black">
       <ScheduleDayJob
         v-if="selectedJobs.length > 0"
         v-for="job in selectedJobs"

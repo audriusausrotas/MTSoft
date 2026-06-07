@@ -45,16 +45,19 @@ const deleteHandler = () => {
           ? router.push(`/gamyba/${props.job._id}`)
           : router.push(`/montavimas/${props.job._id}`)
     "
-    class="hover:cursor-pointer flex items-center text-sm h-full last:border-b-0 border-b border-white"
+    class="hover:cursor-pointer flex items-center h-full"
   >
     <div
       v-if="props.job?.orderNumber"
-      :class="`bg-[${RALcolor}]   flex items-center justify-center  h-full w-[88px]  ${RALcolor === '#000000' ? 'text-black bg-white border-black border font-medium' : 'text-white'} `"
+      :class="`flex items-center justify-center h-full w-[96px] bg-[${RALcolor}] ${RALcolor === '#000000' ? 'text-black bg-white border-black border font-medium' : 'text-white'} `"
     >
       {{ props.job?.orderNumber }} {{ props.job?.manufacturer?.slice(0, 1) }}
     </div>
-    <div :class="`${status} ${!status ? '  bg-gray-300 font-medium' : ''} p-1 flex-1 `">
-      {{ props.job?.address }}
+    <div class="p-0.5 flex-1 flex items-center h-full">
+      <span v-if="status" :class="`${status} min-w-2 min-h-full rounded-full`" />
+      <div class="w-full">
+        {{ props.job?.address }}
+      </div>
     </div>
   </div>
   <div
