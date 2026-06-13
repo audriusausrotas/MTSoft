@@ -272,6 +272,7 @@ export default function generateResults() {
   }
 
   if (results.totalAnchoredPoles > 0) {
+    console.log("Anchored poles:", results.totalAnchoredPoles);
     createWorkElement({
       name: settingsStore.defaultValues.anchoredPolesWork,
       quantity: results.totalAnchoredPoles,

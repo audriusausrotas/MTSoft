@@ -137,7 +137,7 @@ watch(
 
     <p
       v-if="!commentModalOpen && comment"
-      class="items-center flex justify-center text-sm font-medium h-[28px] bg-gray-300 border-b border-white"
+      class="items-center flex justify-center text-sm font-medium h-fit min-h-[28px] p-0.5 bg-gray-300"
     >
       {{ comment }}
     </p>
