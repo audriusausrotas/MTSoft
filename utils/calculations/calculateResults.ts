@@ -201,9 +201,13 @@ export default function calculateResults() {
                     : settingsStore.defaultValues.poleMain,
                 );
 
-          if (results.totalPoles === 0 && !onlyParts) results.addTotalPoles();
+          if (results.totalPoles === 0 && !onlyParts && !anchoredPoles) {
+            results.addTotalPoles();
+          }
 
-          if (results.totalAnchoredPoles === 0 && !onlyParts) results.addTotalAnchoredPoles();
+          if (results.totalAnchoredPoles === 0 && !onlyParts && anchoredPoles) {
+            results.addTotalAnchoredPoles();
+          }
 
           if (!onlyParts) anchoredPoles ? results.addTotalAnchoredPoles() : results.addTotalPoles();
 
