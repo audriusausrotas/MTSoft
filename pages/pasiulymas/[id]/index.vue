@@ -279,7 +279,7 @@ const orderStatusHandler = async (value: boolean) => {
         <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
           <div class="flex px-4 justify-between print:border-t border-dark-full">
             <p class="font-semibold">Kaina:</p>
-            <p class="">{{ offer.offer?.totalPrice }} €</p>
+            <p class="">{{ offer.offer?.totalPrice.toFixed(2) }} €</p>
           </div>
 
           <div class="flex px-4 justify-between">
@@ -292,7 +292,9 @@ const orderStatusHandler = async (value: boolean) => {
             :class="!offer.offer?.discount ? 'border-y-2 border-dark-full py-1' : ''"
           >
             <p class="font-bold">Kaina su PVM:</p>
-            <p class="text-red-full font-bold print:text-black">{{ offer.offer?.priceVAT }} €</p>
+            <p class="text-red-full font-bold print:text-black">
+              {{ offer.offer?.priceVAT.toFixed(2) }} €
+            </p>
           </div>
 
           <div
@@ -301,9 +303,7 @@ const orderStatusHandler = async (value: boolean) => {
           >
             <p class="text-2xl print:text-base font-bold">Kaina su nuolaida:</p>
             <p class="text-red-full font-bold print:text-black">
-              {{ offer.offer?.priceWithDiscount }}
-
-              €
+              {{ offer.offer?.priceWithDiscount.toFixed(2) }} €
             </p>
           </div>
           <div class="flex px-4 print:py-1 text-base font-medium justify-between">
@@ -311,8 +311,8 @@ const orderStatusHandler = async (value: boolean) => {
             <p class="">
               {{
                 offer.offer?.discount
-                  ? Math.round(offer.offer?.priceWithDiscount * 0.3)
-                  : Math.round(offer.offer?.priceVAT * 0.3)
+                  ? Math.round(offer.offer?.priceWithDiscount * 0.3).toFixed(2)
+                  : Math.round(offer.offer?.priceVAT * 0.3).toFixed(2)
               }}
 
               €
