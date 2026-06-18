@@ -96,13 +96,6 @@ export const useProjectsStore = defineStore("Projects", {
       const project = this.projects.find((p) => p._id === _id);
       if (project) project.dates.dateCompletion = date;
     },
-
-    // aditionalOrderedProject(_id: string, data: Fence[]) {
-    //   const project = this.projects.find((p) => p._id === _id);
-    //   if (project) {
-    //     project.fences = [...project.fences, ...data];
-    //   }
-    // },
   },
 
   getters: {
