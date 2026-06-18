@@ -49,16 +49,15 @@ export const useProductionStore = defineStore("production", {
           comment: message,
         });
 
-      if (this.production[index].fences.length) {
+      if (data[0].fences[0].measures.length > 0)
         this.production[index].fences.push(data[0].fences[0]);
-      }
 
-      if (this.production[index]?.bindings?.length) {
+      if (data[0].bindings.length > 0) {
         this.production[index].bindings?.push({
           id: new Date().getTime().toString(),
           color: "",
           height: 0,
-          name: "------ Papildomai ------",
+          name: "------- Papildomai -------",
           quantity: 0,
           cut: 0,
           done: 0,
