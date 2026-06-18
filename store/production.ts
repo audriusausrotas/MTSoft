@@ -58,7 +58,7 @@ export const useProductionStore = defineStore("production", {
           id: new Date().getTime().toString(),
           color: "",
           height: 0,
-          name: "======= Papildomai =======",
+          name: "------ Papildomai ------",
           quantity: 0,
           cut: 0,
           done: 0,
