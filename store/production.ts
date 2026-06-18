@@ -36,8 +36,7 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
-    fenceAditionalOrdered(projectOrderNr: string, message: string, data: Bindings[]) {
-      console.log(projectOrderNr, message, data);
+    aditionalOrderedProduction(projectOrderNr: string, message: string, data: any) {
       const userStore = useUserStore();
       const index = this.production.findIndex((p) => p._id === projectOrderNr);
 
@@ -49,19 +48,26 @@ export const useProductionStore = defineStore("production", {
           creator: userStore.user?.username || "Sistema",
           comment: message,
         });
-      this.production[index].bindings?.push({
-        id: new Date().getTime().toString(),
-        color: "",
-        height: 0,
-        name: "PAPILDOMAS UŽSAKYMAS",
-        quantity: 0,
-        cut: 0,
-        done: 0,
-        postone: true,
-      });
 
-      for (const binding of data) {
-        this.production[index].bindings?.push(binding);
+      if (this.production[index].fences.length) {
+        this.production[index].fences.push(data[0].fences[0]);
+      }
+
+      if (this.production[index]?.bindings?.length) {
+        this.production[index].bindings?.push({
+          id: new Date().getTime().toString(),
+          color: "",
+          height: 0,
+          name: "======= Papildomai =======",
+          quantity: 0,
+          cut: 0,
+          done: 0,
+          postone: true,
+        });
+
+        for (const binding of data[0].bindings) {
+          this.production[index].bindings?.push(binding);
+        }
       }
     },
 

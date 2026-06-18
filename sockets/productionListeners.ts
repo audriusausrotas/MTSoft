@@ -80,7 +80,7 @@ export default function productionListeners(socket: Socket) {
     productionStore.updateFiles(_id, files);
   });
 
-  socket.on("externalOrderUpdate", ({ projectOrderNr, message, data }) => {
-    productionStore.fenceAditionalOrdered(projectOrderNr, message, data);
+  socket.on("aditionalOrderedProduction", ({ projectOrderNr, message, data }) => {
+    productionStore.aditionalOrderedProduction(projectOrderNr, message, data);
   });
 }
