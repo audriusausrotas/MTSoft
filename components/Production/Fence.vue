@@ -84,13 +84,13 @@ const deleteHandler = async () => {
   const confirmed = confirm("Ar tikrai norite ištrinti tvorą?");
   if (!confirmed) return;
 
-  const requestData = { _id: props._id, index: props.fenceIndex };
+  const requestData = { _id: props._id, fenceId: props.fence.id };
 
   const response: any = await request.delete("deleteFence", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
-      productionStore.deleteFence(response.data._id, response.data.index);
+      productionStore.deleteFence(response.data._id, response.data.fenceId);
 
     setSuccess(response.message);
   } else {

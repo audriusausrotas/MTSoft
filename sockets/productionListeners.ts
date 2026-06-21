@@ -11,8 +11,8 @@ export default function productionListeners(socket: Socket) {
     productionStore.deleteBinding(_id, bindingId);
   });
 
-  socket.on("deleteProductionFence", ({ _id, index }) => {
-    productionStore.deleteFence(_id, index);
+  socket.on("deleteProductionFence", ({ _id, fenceId }) => {
+    productionStore.deleteFence(_id, fenceId);
   });
 
   socket.on("deleteProductionMeasure", ({ _id, index, measureIndex }) => {

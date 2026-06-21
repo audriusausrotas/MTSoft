@@ -75,10 +75,10 @@ export const useProductionStore = defineStore("production", {
       this.production = this.production.filter((item) => item._id !== id);
     },
 
-    deleteFence(_id: string, index: number) {
+    deleteFence(_id: string, fenceId: string) {
       this.production = this.production.filter((item) => {
         if (item._id === _id) {
-          item.fences = item.fences.filter((item, i) => i !== index);
+          item.fences = item.fences.filter((item) => item.id !== fenceId);
           return item;
         } else return item;
       });
