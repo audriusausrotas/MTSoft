@@ -17,14 +17,7 @@ const closeHandler = () => {
         class="absolute top-2 right-4 font-bold text-2xl hover:cursor-pointer px-1 py-1"
         @click="closeHandler"
       >
-        <NuxtImg
-          src="/icons/close.svg"
-          width="40"
-          height="40"
-          decoding="auto"
-          loading="lazy"
-          :ismap="true"
-        />
+        <img src="/icons/close.svg" alt="close" />
       </div>
       <div class="m-auto flex justify-center w-[90%] h-[90%]">
         <div class="rounded-xl overflow-hidden">

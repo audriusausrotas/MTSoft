@@ -30,56 +30,29 @@ const cancelHandler = () => {
 
 <template>
   <div class="flex gap-2">
-    <NuxtImg
+    <img
       v-if="editable"
-      src="/icons/save.svg"
-      width="20"
-      height="20"
-      decoding="auto"
-      :ismap="true"
-      loading="lazy"
-      class="default-button"
       @click="saveHandler"
-    />
-    <NuxtImg
-      v-else
-      src="/icons/edit.svg"
-      width="20"
-      height="20"
-      decoding="auto"
-      :ismap="true"
-      loading="lazy"
+      src="/icons/save.svg"
+      alt="save"
       class="default-button"
-      @click="editHandler"
     />
 
-    <NuxtImg
+    <img v-else @click="editHandler" src="/icons/edit.svg" alt="edit" class="default-button" />
+
+    <img
       v-if="!editable"
       @click="deleteHandler"
       src="/icons/delete.svg"
-      width="20"
-      height="20"
-      decoding="auto"
-      :ismap="true"
-      loading="lazy"
+      alt="delete"
       class="default-button"
     />
-    <NuxtImg
-      v-else
-      @click="cancelHandler"
-      src="/icons/close.svg"
-      width="20"
-      height="20"
-      decoding="auto"
-      :ismap="true"
-      loading="lazy"
-      class="default-button"
-    />
+    <img v-else @click="cancelHandler" src="/icons/close.svg" alt="cancel" class="default-button" />
   </div>
 </template>
 
 <style scoped>
 .default-button {
-  @apply hover:cursor-pointer hover:scale-110 transition-transform border h-10 rounded-lg w-10 p-2 bg-gray-ultra-light border-dark-light;
+  @apply hover:cursor-pointer hover:scale-125 transition-transform border h-10 rounded-lg w-10 p-2;
 }
 </style>

@@ -140,63 +140,59 @@ filterByIndex();
       <div class="flex gap-4 items-center mb-2">
         <p class="text-2xl font-bold">Apkaustai</p>
       </div>
-      <div class="flex w-fit border-y items-center h-8 border-black select-none">
+      <div
+        class="flex w-fit items-center h-8 select-none border border-black border-b-0 divide-x divide-black"
+      >
         <p
-          class="hover:cursor-pointer h-full items-center w-10 border-x border-black flex justify-evenly"
+          class="hover:cursor-pointer h-full items-center w-10 flex justify-evenly"
           @click="filterByIndex"
         >
           Nr
-          <NuxtImg
+          <img
             src="/icons/arrowDown.svg"
+            alt="arrowDown"
             width="8"
             height="8"
-            decoding="auto"
-            :ismap="true"
-            loading="lazy"
             :class="filterIndex ? 'rotate-180' : ''"
             class="transition-all"
           />
         </p>
-        <p class="w-48 border-r border-black h-full flex justify-center items-center">tipas</p>
+        <p class="w-48 h-full flex justify-center items-center">tipas</p>
         <p
-          class="hover:cursor-pointer w-16 flex gap-1 justify-center border-r border-black h-full items-center"
+          class="hover:cursor-pointer w-16 flex gap-1 justify-center h-full items-center"
           @click="filterByLength"
         >
           Ilgis
-          <NuxtImg
+
+          <img
             src="/icons/arrowDown.svg"
+            alt="arrowDown"
             width="8"
             height="8"
-            decoding="auto"
-            :ismap="true"
-            loading="lazy"
             :class="filterLength ? 'rotate-180' : ''"
             class="transition-all"
           />
         </p>
-        <p class="w-16 border-r border-black h-full flex justify-center items-center">Kiekis</p>
-        <p class="w-16 border-r border-black h-full flex justify-center items-center">spalva</p>
-        <p class="w-24 border-r border-black h-full flex justify-center items-center">Išpjauta</p>
-        <p class="w-24 border-r border-black h-full flex justify-center items-center">Pagaminta</p>
-        <p
-          v-if="isAdmin"
-          class="w-24 border-r border-black h-full flex justify-center items-center print:hidden"
-        >
+        <p class="w-16 h-full flex justify-center items-center">Kiekis</p>
+        <p class="w-16 h-full flex justify-center items-center">spalva</p>
+        <p class="w-24 h-full flex justify-center items-center">Išpjauta</p>
+        <p class="w-24 h-full flex justify-center items-center">Pagaminta</p>
+        <p v-if="isAdmin" class="w-24 h-full flex justify-center items-center print:hidden">
           Veiksmai
         </p>
-        <p
-          v-if="isAdmin"
-          class="w-10 border-r border-black h-full flex justify-center items-center print:hidden"
-        ></p>
+        <p v-if="isAdmin" class="w-[90px] h-full flex justify-center items-center print:hidden"></p>
+        <div v-if="!isAdmin" class="w-[29px] h-full"></div>
       </div>
 
-      <ProductionBindings
-        v-for="binding in filteredMeasures"
-        :key="binding.id"
-        :binding="binding"
-        :index="binding.index"
-        :_id="props._id"
-      />
+      <div class="w-fit divide-y divide-black border border-black">
+        <ProductionBindings
+          v-for="binding in filteredMeasures"
+          :key="binding.id"
+          :binding="binding"
+          :index="binding.index"
+          :_id="props._id"
+        />
+      </div>
       <div class="flex gap-4 flex-wrap mt-2">
         <BaseButton v-if="isAdmin" @click="newBindingHandler" name="Pridėti naują" />
         <BaseButton @click="bindingPrintHandler" name="Spausdinti lipduką" />

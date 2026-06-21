@@ -341,7 +341,7 @@ export interface Production {
   orderNumber: string;
   status: string;
   fences: ProductionFence[];
-  bindings: Bindings[] | null;
+  bindings: Bindings[];
   comments: Comment[];
   files: string[];
 }
@@ -402,6 +402,7 @@ export interface ProductionFence {
   elements: number;
   totalLength: number;
   totalQuantity: number;
+  files: string[];
   measures: ProductionMeasure[];
 }
 
@@ -434,13 +435,14 @@ export interface Comment {
 
 export interface Bindings {
   id: string;
-  color: string | undefined;
-  height: number | undefined;
-  name: string | undefined;
-  quantity: number | undefined;
-  cut: number | undefined;
-  done: number | undefined;
+  color: string;
+  height: number;
+  name: string;
+  quantity: number;
+  cut: number;
+  done: number;
   postone: boolean;
+  files: string[];
 }
 
 export interface BindingItem {

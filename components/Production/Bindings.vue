@@ -18,6 +18,7 @@ const name = ref<string>(props.binding.name);
 const height = ref<number>(props.binding.height);
 const quantity = ref<number>(props.binding.quantity);
 const color = ref<string>(props.binding.color);
+const isLoading = ref<boolean>(false);
 
 const iMadeChanges = ref<boolean>(false);
 const isSavedCut = ref<boolean>(true);
@@ -32,8 +33,7 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.binding.cut === 0 || props.binding.cut === undefined
       ? "bg-transparent"
-      : +props.binding.cut === +props.binding.quantity &&
-          +done === +props.binding.quantity
+      : +props.binding.cut === +props.binding.quantity && +done === +props.binding.quantity
         ? "bg-green-500"
         : +props.binding.cut > +props.binding.quantity
           ? "bg-red-full"
@@ -62,9 +62,7 @@ const doneColor = computed(() => {
         : "bg-orange-500";
 });
 
-const RALcolor = computed(
-  () => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF",
-);
+const RALcolor = computed(() => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF");
 
 const saveHandler = async (field: string) => {
   const requestData = {
@@ -135,10 +133,7 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch(
-    "updateProductionPostone",
-    requestData,
-  );
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -190,29 +185,39 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value
-      ? (isSavedCut.value = false)
-      : (isSavedCut.value = true);
+    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
   else if (field === "name")
-    inputElement.value !== name.value
-      ? (isSavedName.value = false)
-      : (isSavedName.value = true);
+    inputElement.value !== name.value ? (isSavedName.value = false) : (isSavedName.value = true);
   else if (field === "color")
-    inputElement.value !== color.value
-      ? (isSavedColor.value = false)
-      : (isSavedColor.value = true);
+    inputElement.value !== color.value ? (isSavedColor.value = false) : (isSavedColor.value = true);
   else if (field === "height")
     +inputElement.value !== height.value
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value
-      ? (isSavedDone.value = false)
-      : (isSavedDone.value = true);
+    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
   else if (field === "quantity")
     +inputElement.value !== quantity.value
       ? (isSavedQuantity.value = false)
       : (isSavedQuantity.value = true);
+};
+
+const uploadFiles = async (data: any) => {
+  isLoading.value = true;
+  const url = "https://mtsoft.lt/api/uploadFiles";
+
+  const response: any = await $fetch(url, {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      productionStore.updateBindingFiles(response.data._id, response.data.id, response.data.files);
+    setSuccess(response.message);
+  } else setError(response.message);
+  isLoading.value = false;
 };
 
 watch(
@@ -244,12 +249,12 @@ watch(
 </script>
 
 <template>
-  <div class="flex even:bg-gray-ultra-light border-b h-8 border-black w-fit">
-    <p class="w-10 border-x border-black text-center" :class="indexColor">
+  <div class="flex items-center even:bg-gray-ultra-light h-8 w-fit divide-x divide-black">
+    <p class="w-10 text-center h-full" :class="indexColor">
       {{ props.index + 1 }}
     </p>
 
-    <div class="w-48 border-r border-black px-1 flex">
+    <div class="w-48 px-1 flex items-center h-full">
       <input
         type="text"
         class="w-full"
@@ -258,20 +263,16 @@ watch(
         @keydown.enter="saveHandler('name')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         v-if="!isSavedName"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('name')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
 
-    <div class="w-16 border-r border-black px-1 flex">
+    <div class="w-16 px-1 flex h-full items-center">
       <input
         type="number"
         class="w-full"
@@ -280,20 +281,16 @@ watch(
         @keydown.enter="saveHandler('height')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         v-if="!isSavedHeight"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('height')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
 
-    <div class="w-16 border-r border-black px-1 flex">
+    <div class="w-16 px-1 flex h-full items-center">
       <input
         type="number"
         class="w-full"
@@ -302,25 +299,19 @@ watch(
         @keydown.enter="saveHandler('quantity')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+
+      <img
         v-if="!isSavedQuantity"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('quantity')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
 
     <div
-      class="w-16 border-r border-black px-1 flex"
-      :class="[
-        `bg-[${RALcolor}]`,
-        RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
-      ]"
+      class="w-16 px-1 flex h-full items-center"
+      :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
     >
       <input
         type="text"
@@ -330,20 +321,17 @@ watch(
         @keydown.enter="saveHandler('color')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+
+      <img
         v-if="!isSavedColor"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('color')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
 
-    <div class="w-24 border-r border-black px-1 flex" :class="cutColor">
+    <div class="w-24 px-1 flex h-full items-center" :class="cutColor">
       <input
         type="number"
         placeholder="Išpjauti"
@@ -353,60 +341,56 @@ watch(
         @keydown.enter="saveHandler('cut')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         v-if="!isSavedCut"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('cut')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
-    <div class="w-24 border-r border-black px-1 flex" :class="doneColor">
+    <div class="w-24 px-1 flex h-full items-center" :class="doneColor">
       <input
         type="number"
         placeholder="Pagaminti"
         class="w-full"
         :value="props.binding.done"
         @input="updateMeasure('done', $event)"
+        -
         @keydown.enter="saveHandler('done')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         v-if="!isSavedDone"
         src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="save icon"
         @click="saveHandler('done')"
-        class="hover:cursor-pointer"
+        class="hover:cursor-pointer w-5 h-5"
       />
     </div>
     <button
       v-if="isAdmin"
-      class="w-24 border-r border-black print:hidden lg:hover:bg-red-full lg:hover:text-white"
+      class="w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white h-full items-center"
       :class="{ 'bg-red-full text-white': props.binding.postone }"
       @click="postoneHandler"
     >
       Negaminti
     </button>
-    <div
-      v-if="isAdmin"
-      class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
-      @click="deleteHandler"
-    >
-      <NuxtImg
-        width="20"
-        height="20"
+    <div class="flex items-center h-full">
+      <ProductionGalleryButton :files="props.binding.files" />
+      <ProductionUploadButton
+        v-if="isAdmin"
+        @upload="uploadFiles"
+        :_id="props._id"
+        :id="props.binding.id"
+        category="binding"
+      />
+    </div>
+    <div v-if="isAdmin" @click="deleteHandler" class="print:hidden h-full px-1">
+      <img
         src="/icons/delete.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="delete"
+        class="print:hidden hover:scale-125 hover:cursor-pointer transition-transform w-6 h-full"
       />
     </div>
   </div>

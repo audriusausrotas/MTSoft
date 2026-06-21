@@ -62,6 +62,7 @@ export const useProductionStore = defineStore("production", {
           cut: 0,
           done: 0,
           postone: true,
+          files: [],
         });
 
         for (const binding of data[0].bindings) {
@@ -202,6 +203,34 @@ export const useProductionStore = defineStore("production", {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
           item.files = [...files];
+          return item;
+        } else return item;
+      });
+    },
+
+    updateFenceFiles(_id: string, id: string, files: string[]) {
+      this.production = this.production.map((item) => {
+        if (item._id === _id) {
+          item.fences = item.fences.map((fence) => {
+            if (fence.id === id) {
+              fence.files = [...files];
+            }
+            return fence;
+          });
+          return item;
+        } else return item;
+      });
+    },
+
+    updateBindingFiles(_id: string, id: string, files: string[]) {
+      this.production = this.production.map((item) => {
+        if (item._id === _id) {
+          item.bindings = item.bindings?.map((binding) => {
+            if (binding.id === id) {
+              binding.files = [...files];
+            }
+            return binding;
+          });
           return item;
         } else return item;
       });

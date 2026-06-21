@@ -37,8 +37,7 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.data.cut === 0 || props.data.cut === undefined
       ? "bg-transparent"
-      : +props.data.cut === +props.data.elements &&
-          +props.data.done === +props.data.elements
+      : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
         ? "bg-green-500"
         : +props.data.cut > +props.data.elements
           ? "bg-red-full"
@@ -134,10 +133,7 @@ const gateHandler = async () => {
     value: !isGate.value,
   };
 
-  const response: any = await request.patch(
-    "updateProductionGate",
-    requestData,
-  );
+  const response: any = await request.patch("updateProductionGate", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -162,10 +158,7 @@ const postoneHandler = async () => {
     option: "fences",
   };
 
-  const response: any = await request.patch(
-    "updateProductionPostone",
-    requestData,
-  );
+  const response: any = await request.patch("updateProductionPostone", requestData);
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -293,9 +286,7 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value
-      ? (isSavedCut.value = false)
-      : (isSavedCut.value = true);
+    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
   else if (field === "elements")
     +inputElement.value !== elements.value
       ? (isSavedElements.value = false)
@@ -305,9 +296,7 @@ const updateMeasure = (field: string, event: Event) => {
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value
-      ? (isSavedDone.value = false)
-      : (isSavedDone.value = true);
+    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
   else if (field === "length")
     +inputElement.value !== length.value
       ? (isSavedLength.value = false)
@@ -340,101 +329,60 @@ watch(
 </script>
 
 <template>
-  <div
-    v-if="props.data.laiptas.exist"
-    class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
-  >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+  <div v-if="props.data.laiptas.exist" class="odd:bg-gray-ultra-light flex select-none h-8">
+    <p class="w-10 flex items-center justify-center h-full">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Laiptas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full">Laiptas</p>
+    <p class="w-24 flex items-center justify-center h-full">
       {{ props.data.laiptas.direction }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
-      {{ props.data.laiptas.value }} cm
-    </p>
-    <p class="flex-1 h-full border-r border-black"></p>
+    <p class="w-24 flex items-center justify-center h-full">{{ props.data.laiptas.value }} cm</p>
+    <p class="flex-1 h-full"></p>
     <div
       v-if="isAdmin"
-      class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+      class="w-8 print:hidden flex justify-center items-center hover:scale-125 transition-transform hover:cursor-pointer"
       @click="deleteHandler"
     >
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         src="/icons/delete.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="delete"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
       />
     </div>
   </div>
-  <div
-    v-else-if="props.data.kampas.exist"
-    class="border-b border-black w-[736px] odd:bg-gray-ultra-light flex select-none h-8"
-  >
-    <p
-      class="w-10 flex items-center justify-center h-full border-x border-black"
-    >
+  <div v-else-if="props.data.kampas.exist" class="odd:bg-gray-ultra-light flex select-none h-8">
+    <p class="w-10 flex items-center justify-center h-full">
       {{ props.index + 1 }}
     </p>
-    <p
-      class="w-20 flex items-center justify-center h-full border-r border-black"
-    >
-      Kampas
-    </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
+    <p class="w-20 flex items-center justify-center h-full">Kampas</p>
+    <p class="w-24 flex items-center justify-center h-full">
       {{ props.data.kampas.value }}
     </p>
-    <p
-      class="w-24 flex items-center justify-center h-full border-r border-black"
-    >
-      laipsnių
-    </p>
-    <p class="flex-1 h-full border-r border-black"></p>
+    <p class="w-24 flex items-center justify-center h-full">laipsnių</p>
+    <p class="flex-1 h-full"></p>
     <div
       v-if="isAdmin"
-      class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+      class="w-8 print:hidden flex justify-center items-center hover:scale-125 transition-transform hover:cursor-pointer"
       @click="deleteHandler"
     >
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         src="/icons/delete.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="delete"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
       />
     </div>
   </div>
-  <div
-    v-else
-    class="w-fit h-8 odd:bg-gray-ultra-light border-b border-black flex select-none"
-  >
+  <div v-else class="w-full h-8 odd:bg-gray-ultra-light flex select-none">
     <div
       @click="gateHandler"
-      class="w-10 flex items-center justify-center h-full border-x border-black"
+      class="w-10 flex items-center justify-center h-full"
       :class="[indexColor, isAdmin ? 'hover:cursor-pointer' : '']"
     >
       {{ props.index + 1 }} {{ isGate ? "v" : "" }}
     </div>
 
-    <div
-      class="w-20 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-20 flex items-center justify-center h-full px-1">
       <input
         type="number"
         class="w-full"
@@ -443,21 +391,15 @@ watch(
         @keydown.enter="saveHandler('length')"
         @wheel="(e) => e.preventDefault()"
       />
-      <NuxtImg
-        width="20"
-        height="20"
-        v-if="!isSavedLength"
-        src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        @click="saveHandler('length')"
-        class="hover:cursor-pointer"
-      />
+      <div v-if="!isSavedLength" @click="saveHandler('length')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full px-1">
       <input
         type="number"
         :value="props.data.elements"
@@ -466,21 +408,16 @@ watch(
         @wheel="(e) => e.preventDefault()"
         class="w-full"
       />
-      <NuxtImg
-        width="20"
-        height="20"
-        v-if="!isSavedElements"
-        src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        @click="saveHandler('elements')"
-        class="hover:cursor-pointer"
-      />
+
+      <div v-if="!isSavedElements" @click="saveHandler('elements')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-    >
+    <div class="w-24 flex items-center justify-center h-full px-1">
       <input
         type="number"
         :value="props.data.height"
@@ -489,22 +426,15 @@ watch(
         @wheel="(e) => e.preventDefault()"
         class="w-full"
       />
-      <NuxtImg
-        width="20"
-        height="20"
-        v-if="!isSavedHeight"
-        src="/icons/save.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        @click="saveHandler('height')"
-        class="hover:cursor-pointer"
-      />
+      <div v-if="!isSavedHeight" @click="saveHandler('height')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-      :class="cutColor"
-    >
+    <div class="w-24 flex items-center justify-center h-full px-1" :class="cutColor">
       <input
         :value="props.data.cut"
         @input="updateMeasure('cut', $event)"
@@ -514,22 +444,15 @@ watch(
         placeholder="Išpjauti"
         class="w-full"
       />
-      <NuxtImg
-        v-if="!isSavedCut"
-        src="/icons/save.svg"
-        width="20"
-        height="20"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        @click="saveHandler('cut')"
-        class="hover:cursor-pointer"
-      />
+      <div v-if="!isSavedCut" @click="saveHandler('cut')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
     </div>
-    <div
-      class="w-24 flex items-center justify-center h-full border-r border-black px-1"
-      :class="doneColor"
-    >
+    <div class="w-24 flex items-center justify-center h-full px-1" :class="doneColor">
       <input
         :value="props.data.done"
         @input="updateMeasure('done', $event)"
@@ -539,27 +462,23 @@ watch(
         placeholder="Pagaminti"
         class="w-full"
       />
-      <NuxtImg
-        v-if="!isSavedDone"
-        src="/icons/save.svg"
-        width="20"
-        height="20"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
-        @click="saveHandler('done')"
-        class="hover:cursor-pointer"
-      />
+      <div v-if="!isSavedDone" @click="saveHandler('done')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
     </div>
     <button
-      class="flex items-center justify-center h-full border-r border-black w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
+      class="flex items-center justify-center h-full w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
       @click="printHandler"
     >
       Spausdinti
     </button>
     <button
       v-if="isAdmin"
-      class="flex items-center justify-center h-full border-r border-black w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
+      class="flex items-center justify-center h-full w-24 print:hidden lg:hover:bg-red-full lg:hover:text-white"
       :class="{ 'bg-red-full text-white': props.data.postone }"
       @click="postoneHandler"
     >
@@ -567,16 +486,13 @@ watch(
     </button>
     <div
       v-if="isAdmin"
-      class="w-10 border-r border-black print:hidden flex justify-center items-center hover:bg-red-ulta-light hover:cursor-pointer"
+      class="w-8 print:hidden h-full flex items-center justify-center"
       @click="deleteHandler"
     >
-      <NuxtImg
-        width="20"
-        height="20"
+      <img
         src="/icons/delete.svg"
-        decoding="auto"
-        loading="lazy"
-        :ismap="true"
+        alt="delete"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
       />
     </div>
   </div>

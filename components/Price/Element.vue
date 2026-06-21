@@ -147,7 +147,6 @@ watch(
         @onChange="(v) => (productCategory = v)"
       />
       <BaseActionButtons
-        class=""
         @onSave="saveHandler"
         @onEdit="editable = true"
         @onDelete="deleteHandler"

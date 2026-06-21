@@ -6,14 +6,9 @@ const props = defineProps<{
   retail: Boolean;
 }>();
 
-const img1 = `/images/${props.fence.name
-  .replace("/", "")
-  .replace(" ", "")
-  .toLowerCase()}.jpg`;
+const img1 = `/images/${props.fence.name.replace("/", "").replace(" ", "").toLowerCase()}.jpg`;
 
-const img2 = `/images/${
-  props.fence.name.replace("/", "").replace(" ", "").toLowerCase() + "s"
-}.jpg`;
+const img2 = `/images/blueprints/${props.fence.name.replace("/", "").replace(" ", "").toLowerCase()}.jpg`;
 </script>
 
 <template>
@@ -22,44 +17,27 @@ const img2 = `/images/${
       <div class="font-bold text-2xl text-center mb-4">
         {{ props.fence.name }}
       </div>
-      <div
-        class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
-      >
+      <div class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full">
         <div class="flex flex-col gap-2 w-[400px] justify-evenly">
-          <div
-            v-if="!props.retail || props.fence.name === 'Dilė'"
-            class="flex flex-col"
-          >
-            <div class="text-center font-bold text-lg">
-              {{ props.fence.name }} metro kaina
-            </div>
+          <div v-if="!props.retail || props.fence.name === 'Dilė'" class="flex flex-col">
+            <div class="text-center font-bold text-lg">{{ props.fence.name }} metro kaina</div>
             <div
               class="grid border-2 rounded-md border-black"
               :class="
-                props.fence.name !== 'Dilė'
-                  ? 'grid-cols-[1.2fr_1fr_1fr]'
-                  : 'grid-cols-[1.2fr_1fr]'
+                props.fence.name !== 'Dilė' ? 'grid-cols-[1.2fr_1fr_1fr]' : 'grid-cols-[1.2fr_1fr]'
               "
             >
-              <div
-                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
-              >
+              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
                 Skardos tipas
               </div>
-              <div
-                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
-              >
-                Premium
-              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-b-2 border-inherit font-bold"
               >
                 Eco
               </div>
-              <div class="px-2 py-1 border-b border-inherit border-r">
-                Kaina be PVM
-              </div>
+              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-b border-inherit border-r"
@@ -73,16 +51,11 @@ const img2 = `/images/${
               </div>
               <div v-else class="px-2 py-1 border-b border-inherit border-r">
                 {{
-                  props.retail
-                    ? props.fence.prices.priceRetail
-                    : props.fence.prices.priceWholesale
+                  props.retail ? props.fence.prices.priceRetail : props.fence.prices.priceWholesale
                 }}
                 €/m
               </div>
-              <div
-                v-if="props.fence.name !== 'Dilė'"
-                class="px-2 py-1 border-b border-inherit"
-              >
+              <div v-if="props.fence.name !== 'Dilė'" class="px-2 py-1 border-b border-inherit">
                 {{
                   props.retail
                     ? props.fence.prices.eco.meter.priceRetail
@@ -90,9 +63,7 @@ const img2 = `/images/${
                 }}
                 €/m
               </div>
-              <div class="px-2 py-1 border-r border-inherit flex">
-                Kaina su PVM
-              </div>
+              <div class="px-2 py-1 border-r border-inherit flex">Kaina su PVM</div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-r border-inherit flex"
@@ -131,25 +102,13 @@ const img2 = `/images/${
               Nepramatoma - montavimo žingsnis
               {{ props.fence.steps.nepramatoma }} cm
             </div>
-            <div
-              class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black"
-            >
-              <div
-                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
-              >
+            <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
+              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
                 Skardos tipas
               </div>
-              <div
-                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
-              >
-                Premium
-              </div>
-              <div class="px-2 py-1 border-b-2 border-inherit font-bold">
-                Eco
-              </div>
-              <div class="px-2 py-1 border-b border-inherit border-r">
-                Kaina be PVM
-              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
+              <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
+              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
               <div class="px-2 py-1 border-b border-inherit border-r">
                 {{
                   props.retail
@@ -173,8 +132,7 @@ const img2 = `/images/${
                 {{
                   (props.retail
                     ? props.fence.prices.premium.nepramatoma.priceRetail * 1.21
-                    : props.fence.prices.premium.nepramatoma.priceWholesale *
-                      1.21
+                    : props.fence.prices.premium.nepramatoma.priceWholesale * 1.21
                   ).toFixed(2)
                 }}
                 €/m
@@ -198,25 +156,13 @@ const img2 = `/images/${
               Vidutinė - montavimo žingsnis
               {{ props.fence.steps.vidutiniska }} cm
             </div>
-            <div
-              class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black"
-            >
-              <div
-                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
-              >
+            <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
+              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
                 Skardos tipas
               </div>
-              <div
-                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
-              >
-                Premium
-              </div>
-              <div class="px-2 py-1 border-b-2 border-inherit font-bold">
-                Eco
-              </div>
-              <div class="px-2 py-1 border-b border-inherit border-r flex">
-                Kaina be PVM
-              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
+              <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
+              <div class="px-2 py-1 border-b border-inherit border-r flex">Kaina be PVM</div>
               <div class="px-2 py-1 border-b border-inherit border-r flex">
                 {{
                   props.retail
@@ -240,8 +186,7 @@ const img2 = `/images/${
                 {{
                   (props.retail
                     ? props.fence.prices.premium.vidutiniska.priceRetail * 1.21
-                    : props.fence.prices.premium.vidutiniska.priceWholesale *
-                      1.21
+                    : props.fence.prices.premium.vidutiniska.priceWholesale * 1.21
                   ).toFixed(2)
                 }}
                 €/m

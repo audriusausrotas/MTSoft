@@ -83,4 +83,11 @@ export default function productionListeners(socket: Socket) {
   socket.on("aditionalOrderedProduction", ({ projectOrderNr, message, data }) => {
     productionStore.aditionalOrderedProduction(projectOrderNr, message, data);
   });
+
+  socket.on("updateFenceFiles", ({ _id, id, files }) => {
+    productionStore.updateFenceFiles(_id, id, files);
+  });
+  socket.on("updateBindingFiles", ({ _id, id, files }) => {
+    productionStore.updateBindingFiles(_id, id, files);
+  });
 }
