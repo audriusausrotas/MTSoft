@@ -10,10 +10,10 @@ const clickHandler = (url: string) => {
 </script>
 
 <template>
-  <div v-if="files.length > 0" class="flex justify-center items-center w-7 h-full p-1">
+  <div v-if="files.length > 0" class="justify-center items-center w-7 h-full p-1">
     <img
       @click="clickHandler(props.files[0])"
-      src="/icons/view.svg"
+      :src="props.files[0]"
       alt="file view button"
       class="hover:scale-125 transition-transform hover:cursor-pointer"
     />

@@ -135,13 +135,11 @@ filterByIndex();
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8 w-fit">
     <div class="flex flex-col select-none">
-      <div class="flex gap-4 items-center mb-2">
-        <p class="text-2xl font-bold">Apkaustai</p>
-      </div>
+      <p class="text-2xl font-bold">Apkaustai</p>
       <div
-        class="flex w-fit items-center h-8 select-none border border-black border-b-0 divide-x divide-black"
+        class="flex items-center h-8 select-none border border-black border-b-0 divide-x divide-black"
       >
         <p
           class="hover:cursor-pointer h-full items-center w-10 flex justify-evenly"
@@ -180,8 +178,6 @@ filterByIndex();
         <p v-if="isAdmin" class="w-24 h-full flex justify-center items-center print:hidden">
           Veiksmai
         </p>
-        <p v-if="isAdmin" class="w-[90px] h-full flex justify-center items-center print:hidden"></p>
-        <div v-if="!isAdmin" class="w-[29px] h-full"></div>
       </div>
 
       <div class="w-fit divide-y divide-black border border-black">

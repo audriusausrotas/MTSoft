@@ -379,7 +379,7 @@ watch(
     >
       Negaminti
     </button>
-    <div class="flex items-center h-full">
+    <div class="flex items-center justify-end h-full max-w-[90px]" :class="isAdmin ? 'w-24' : ''">
       <ProductionGalleryButton :files="props.binding.files" />
       <ProductionUploadButton
         v-if="isAdmin"
@@ -388,13 +388,13 @@ watch(
         :id="props.binding.id"
         category="binding"
       />
-    </div>
-    <div v-if="isAdmin" @click="deleteHandler" class="print:hidden h-full px-1">
-      <img
-        src="/icons/delete.svg"
-        alt="delete"
-        class="print:hidden hover:scale-125 hover:cursor-pointer transition-transform w-6 h-full"
-      />
+      <div v-if="isAdmin" @click="deleteHandler" class="print:hidden h-full px-1">
+        <img
+          src="/icons/delete.svg"
+          alt="delete"
+          class="print:hidden hover:scale-125 hover:cursor-pointer transition-transform w-6 h-full"
+        />
+      </div>
     </div>
   </div>
 </template>

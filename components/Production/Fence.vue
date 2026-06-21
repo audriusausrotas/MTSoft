@@ -179,8 +179,6 @@ watch(
   },
   { immediate: true, deep: true },
 );
-
-console.log(props.fence);
 </script>
 
 <template>
@@ -211,7 +209,7 @@ console.log(props.fence);
           />
         </div>
 
-        <div class="flex-1 min-w-fit flex items-center justify-center h-full px-2">
+        <div class="flex-1 min-w-fit flex items-center justify-center h-full">
           <input
             type="text"
             v-model="name"
