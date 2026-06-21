@@ -204,7 +204,10 @@ const updateMeasure = (field: string, event: Event) => {
 
 const uploadFiles = async (data: any) => {
   isLoading.value = true;
-  const url = "https://mtsoft.lt/api/uploadFiles";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3001/api/uploadFiles"
+      : "https://mtsoft.lt/api/uploadFiles";
 
   const response: any = await $fetch(url, {
     method: "POST",
