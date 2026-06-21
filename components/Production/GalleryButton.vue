@@ -10,7 +10,7 @@ const clickHandler = (url: string) => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center w-7 h-full p-1">
+  <div v-if="files.length > 0" class="flex justify-center items-center w-7 h-full p-1">
     <img
       @click="clickHandler(props.files[0])"
       src="/icons/view.svg"
