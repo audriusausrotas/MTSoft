@@ -359,7 +359,6 @@ watch(
         class="w-full"
         :value="props.binding.done"
         @input="updateMeasure('done', $event)"
-        -
         @keydown.enter="saveHandler('done')"
         @wheel="(e) => e.preventDefault()"
       />
