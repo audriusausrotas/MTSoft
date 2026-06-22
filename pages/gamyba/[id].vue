@@ -1,4 +1,3 @@
--
 <script setup lang="ts">
 import type { Comment } from "~/data/interfaces";
 import { ProductionStatus } from "~/data/selectFieldData";
@@ -7,13 +6,18 @@ const productionStore = useProductionStore();
 const route = useRoute();
 
 const order: any = computed(() => {
-  return productionStore.production.find((item) => item._id === route.params.id);
+  return productionStore.production.find(
+    (item) => item._id === route.params.id,
+  );
 });
 
 const statusHandler = async (value: string) => {
   const requestData = { _id: order?.value._id, status: value };
 
-  const response: any = await request.patch("updateProductionStatus", requestData);
+  const response: any = await request.patch(
+    "updateProductionStatus",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -81,7 +85,11 @@ const uploadFiles = async (data: any) => {
     <div class="flex gap-4 items-end flex-wrap">
       <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." />
       <BaseInput :name="order?.client.address" width="w-96" label="Adresas" />
-      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" />
+      <BaseInput
+        :name="order?.creator.username"
+        width="w-28"
+        label="Vadybininkas"
+      />
 
       <BaseSelectField
         label="Statusas"
@@ -93,10 +101,18 @@ const uploadFiles = async (data: any) => {
       />
     </div>
     <div class="flex flex-wrap gap-4">
-      <BaseUploadButton @upload="uploadFiles" :_id="order?._id" category="production" />
+      <BaseUploadButton
+        @upload="uploadFiles"
+        :_id="order?._id"
+        category="production"
+      />
     </div>
 
-    <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
+    <BaseGalleryElement
+      :_id="order?._id"
+      :files="order?.files"
+      category="production"
+    />
 
     <BaseComment
       :commentsArray="order?.comments"
