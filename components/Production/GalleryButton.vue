@@ -10,7 +10,10 @@ const clickHandler = (url: string) => {
 </script>
 
 <template>
-  <div v-if="files.length > 0" class="justify-center items-center w-7 h-full p-1">
+  <div
+    v-if="files.length > 0"
+    class="justify-center items-center w-7 h-full p-1 border-2 border-green-500 rounded overflow-hidden"
+  >
     <img
       @click="clickHandler(props.files[0])"
       :src="props.files[0]"
