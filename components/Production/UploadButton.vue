@@ -4,36 +4,11 @@ const emit = defineEmits(["upload", "selected"]);
 
 const { setError, setSuccess } = useCustomError();
 
-const DUMMY_FILES = [
-  { name: "file1", url: "/images/blueprints/file1.jpg" },
-  { name: "file2", url: "/images/blueprints/file2.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-  { name: "file3", url: "/images/blueprints/file3.jpg" },
-];
-
 const fileInput = ref<HTMLInputElement | null>(null);
 const isUploading = ref(false);
 const modalOpen = ref(false);
 const selectOpen = ref(false);
-const files = ref<any[]>([...DUMMY_FILES]);
+const files = ref<any[]>([]);
 
 const triggerFileInput = () => {
   if (fileInput.value) {
@@ -76,12 +51,12 @@ const selectHandler = (file: string) => {
   modalHandler();
 };
 
-// onMounted(async () => {
-//   const response = await request.get("getBlueprints");
-//   if (response.success) {
-//     files.value = response.data;
-//   } else setError(response.message);
-// });
+onMounted(async () => {
+  const response = await request.get("getBlueprints");
+  if (response.success) {
+    files.value = response.data;
+  } else setError(response.message);
+});
 </script>
 
 <template>
