@@ -42,6 +42,7 @@ const deleteHandler = async (file: string) => {
       }
     }
     setSuccess(response.message);
+    modalOpen.value = false;
   } else {
     setError(response.message);
   }
