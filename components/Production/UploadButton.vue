@@ -60,7 +60,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex items-center h-full relative font-normal">
+  <div class="flex items-center h-full relative font-normal text-base">
     <div @click="modalHandler" class="w-7 px-1 hover:cursor-pointer">
       <img
         v-if="!isUploading"
