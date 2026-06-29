@@ -1,9 +1,39 @@
 <script setup lang="ts">
 const props = defineProps(["_id", "id", "category"]);
-const emit = defineEmits(["upload"]);
+const emit = defineEmits(["upload", "selected"]);
+
+const { setError, setSuccess } = useCustomError();
+
+const DUMMY_FILES = [
+  { name: "file1", url: "/images/blueprints/file1.jpg" },
+  { name: "file2", url: "/images/blueprints/file2.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+  { name: "file3", url: "/images/blueprints/file3.jpg" },
+];
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const isUploading = ref(false);
+const modalOpen = ref(false);
+const selectOpen = ref(false);
+const files = ref<any[]>([...DUMMY_FILES]);
 
 const triggerFileInput = () => {
   if (fileInput.value) {
@@ -33,17 +63,36 @@ const uploadFiles = async () => {
 
     emit("upload", formData);
   }
+  modalOpen.value = false;
 };
+
+const modalHandler = () => {
+  modalOpen.value = !modalOpen.value;
+  selectOpen.value = false;
+};
+
+const selectHandler = (file: string) => {
+  emit("selected", file);
+  modalHandler();
+};
+
+// onMounted(async () => {
+//   const response = await request.get("getBlueprints");
+//   if (response.success) {
+//     files.value = response.data;
+//   } else setError(response.message);
+// });
 </script>
 
 <template>
-  <div class="flex items-center h-full">
-    <button class="w-7 px-1" @click="triggerFileInput">
+  <div class="flex items-center h-full relative">
+    <div @click="modalHandler" class="w-7 px-1 hover:cursor-pointer">
       <img
         v-if="!isUploading"
         src="/icons/upload.svg"
         alt="upload icon"
         class="hover:scale-125 transition-transform"
+        :class="modalOpen ? '-rotate-90 scale-125' : ''"
       />
 
       <span
@@ -51,15 +100,46 @@ const uploadFiles = async () => {
         :class="isUploading ? 'animate-spin' : ''"
         class="border-4 border-b-red-500 h-5 w-5 rounded-full"
       ></span>
-    </button>
+    </div>
+    <div
+      v-if="modalOpen"
+      class="absolute -top-0.5 right-7 w-36 rounded-md overflow-hidden bg-blue-600 divide-y divide-black border border-black shadow-xl text-white z-50"
+    >
+      <button class="hover:bg-red-full w-full hover:text-white px-2 py-1" @click="triggerFileInput">
+        Įkelti failą
+      </button>
 
-    <input
-      type="file"
-      ref="fileInput"
-      accept="image/*,application/pdf"
-      multiple
-      @change="uploadFiles"
-      class="hidden"
-    />
+      <input
+        type="file"
+        ref="fileInput"
+        accept="image/*,application/pdf"
+        multiple
+        @change="uploadFiles"
+        class="hidden"
+      />
+      <button
+        @click="selectOpen = !selectOpen"
+        v-if="!selectOpen"
+        class="hover:bg-red-full w-full hover:text-white px-2 py-1"
+      >
+        Pasirinkti failą
+      </button>
+    </div>
+
+    <div>
+      <div
+        v-if="selectOpen"
+        class="absolute -top-0.5 right-7 w-fit min-w-36 max-h-40 overflow-y-auto rounded-md overflow-hidden bg-blue-600 divide-y divide-black border border-black shadow-xl text-white z-50"
+      >
+        <div
+          v-for="file in files"
+          @click="selectHandler(file.url)"
+          :key="file.url"
+          class="px-2 py-1 hover:cursor-pointer hover:bg-red-full hover:text-white"
+        >
+          {{ file.name }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>

@@ -98,6 +98,25 @@ const deleteHandler = async () => {
   }
 };
 
+const selectFile = async (file: any) => {
+  isLoading.value = true;
+
+  const requestData = {
+    _id: props._id,
+    id: props.fence.id,
+    file,
+  };
+
+  const response: any = await request.patch("updateProductionFenceFiles", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      productionStore.updateBindingFiles(response.data._id, response.data.id, response.data.files);
+    setSuccess(response.message);
+  } else setError(response.message);
+  isLoading.value = false;
+};
+
 const uploadFiles = async (data: any) => {
   isLoading.value = true;
   const url =
@@ -228,6 +247,7 @@ watch(
         <ProductionUploadButton
           v-if="isAdmin"
           @upload="uploadFiles"
+          @select="selectFile"
           :_id="props._id"
           :id="props.fence.id"
           category="fence"

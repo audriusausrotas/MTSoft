@@ -223,6 +223,25 @@ const uploadFiles = async (data: any) => {
   isLoading.value = false;
 };
 
+const selectFile = async (file: any) => {
+  isLoading.value = true;
+
+  const requestData = {
+    _id: props._id,
+    id: props.binding.id,
+    file,
+  };
+
+  const response: any = await request.patch("updateProductionBindingFiles", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      productionStore.updateBindingFiles(response.data._id, response.data.id, response.data.files);
+    setSuccess(response.message);
+  } else setError(response.message);
+  isLoading.value = false;
+};
+
 watch(
   () => props.binding,
   (binding) => {
@@ -392,6 +411,7 @@ watch(
     <div v-if="isAdmin" class="flex items-center justify-end h-full">
       <ProductionUploadButton
         @upload="uploadFiles"
+        @selected="selectFile"
         :_id="props._id"
         :id="props.binding.id"
         category="binding"
