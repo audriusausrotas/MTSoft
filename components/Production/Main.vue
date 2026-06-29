@@ -155,7 +155,7 @@ filterByIndex();
             class="transition-all"
           />
         </p>
-        <p class="w-48 h-full flex justify-center items-center">tipas</p>
+        <p class="w-[220px] h-full flex justify-center items-center">Tipas</p>
         <p
           class="hover:cursor-pointer w-16 flex gap-1 justify-center h-full items-center"
           @click="filterByLength"

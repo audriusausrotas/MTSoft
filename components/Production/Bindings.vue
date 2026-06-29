@@ -256,22 +256,30 @@ watch(
     <p class="w-10 text-center h-full" :class="indexColor">
       {{ props.index + 1 }}
     </p>
-
-    <div class="w-48 px-1 flex items-center h-full">
-      <input
-        type="text"
-        class="w-full"
-        :value="props.binding.name"
-        @input="updateMeasure('name', $event)"
-        @keydown.enter="saveHandler('name')"
-        @wheel="(e) => e.preventDefault()"
-      />
-      <img
-        v-if="!isSavedName"
-        src="/icons/save.svg"
-        alt="save icon"
-        @click="saveHandler('name')"
-        class="hover:cursor-pointer w-5 h-5"
+    <div class="flex w-[220px] h-full">
+      <div class="pl-1 flex items-center w-full">
+        <input
+          type="text"
+          class="w-full"
+          :value="props.binding.name"
+          :disabled="!isAdmin"
+          @input="updateMeasure('name', $event)"
+          @keydown.enter="saveHandler('name')"
+          @wheel="(e) => e.preventDefault()"
+        />
+        <img
+          v-if="!isSavedName"
+          src="/icons/save.svg"
+          alt="save icon"
+          @click="saveHandler('name')"
+          class="hover:cursor-pointer w-5 h-5"
+        />
+      </div>
+      <ProductionGalleryButton
+        :files="props.binding.files"
+        :_id="props._id"
+        :id="props.binding.id"
+        category="binding"
       />
     </div>
 
@@ -280,6 +288,7 @@ watch(
         type="number"
         class="w-full"
         :value="props.binding.height"
+        :disabled="!isAdmin"
         @input="updateMeasure('height', $event)"
         @keydown.enter="saveHandler('height')"
         @wheel="(e) => e.preventDefault()"
@@ -298,6 +307,7 @@ watch(
         type="number"
         class="w-full"
         :value="props.binding.quantity"
+        :disabled="!isAdmin"
         @input="updateMeasure('quantity', $event)"
         @keydown.enter="saveHandler('quantity')"
         @wheel="(e) => e.preventDefault()"
@@ -319,6 +329,7 @@ watch(
       <input
         type="text"
         class="w-full text-center"
+        :disabled="!isAdmin"
         :value="props.binding.color"
         @input="updateMeasure('color', $event)"
         @keydown.enter="saveHandler('color')"
@@ -378,16 +389,14 @@ watch(
     >
       Negaminti
     </button>
-    <div class="flex items-center justify-end h-full max-w-[90px]" :class="isAdmin ? 'w-24' : ''">
-      <ProductionGalleryButton :files="props.binding.files" />
+    <div v-if="isAdmin" class="flex items-center justify-end h-full">
       <ProductionUploadButton
-        v-if="isAdmin"
         @upload="uploadFiles"
         :_id="props._id"
         :id="props.binding.id"
         category="binding"
       />
-      <div v-if="isAdmin" @click="deleteHandler" class="print:hidden h-full px-1">
+      <div @click="deleteHandler" class="print:hidden h-full px-1">
         <img
           src="/icons/delete.svg"
           alt="delete"

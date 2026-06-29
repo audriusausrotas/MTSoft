@@ -1,33 +1,10 @@
 <script setup lang="ts">
-const props = defineProps(["_id", "file", "category"]);
-const { setError, setSuccess } = useCustomError();
+const props = defineProps(["_id", "file"]);
 
-const deleteHandler = async (event: Event) => {
-  event.stopPropagation();
+const emit = defineEmits(["delete"]);
 
-  const requestData = {
-    files: [props.file],
-    category: props.category,
-    _id: props._id,
-  };
-
-  const response: any = await request.delete("deleteFiles", requestData);
-
-  if (response.success) {
-    if (!useSocketStore().connected) {
-      if (props.category === "projects") {
-        useProjectsStore().updateFiles(response.data._id, response.data.files);
-      } else if (props.category === "production") {
-        useProductionStore().updateFiles(response.data._id, response.data.files);
-      } else if (props.category === "installation") {
-        useInstallationStore().updateFiles(response.data._id, response.data.files);
-      }
-    }
-
-    setSuccess(response.message);
-  } else {
-    setError(response.message);
-  }
+const deleteHandler = () => {
+  emit("delete", props.file);
 };
 </script>
 
@@ -55,7 +32,7 @@ const deleteHandler = async (event: Event) => {
         :ismap="true"
         loading="lazy"
         class="hover:cursor-pointer"
-        @click="deleteHandler"
+        @click.stop="deleteHandler"
       />
     </div>
   </div>

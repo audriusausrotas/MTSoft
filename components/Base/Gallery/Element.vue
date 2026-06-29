@@ -7,6 +7,31 @@ const clickHandler = (url: string) => {
   selectedPhoto.value = url;
   modalOpen.value = true;
 };
+
+const { setError, setSuccess } = useCustomError();
+
+const deleteHandler = async (file: string) => {
+  const requestData = {
+    files: [file],
+    category: props.category,
+    _id: props._id,
+  };
+  const response: any = await request.delete("deleteFiles", requestData);
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      if (props.category === "projects") {
+        useProjectsStore().updateFiles(response.data._id, response.data.files);
+      } else if (props.category === "production") {
+        useProductionStore().updateFiles(response.data._id, response.data.files);
+      } else if (props.category === "installation") {
+        useInstallationStore().updateFiles(response.data._id, response.data.files);
+      }
+    }
+    setSuccess(response.message);
+  } else {
+    setError(response.message);
+  }
+};
 </script>
 
 <template>
@@ -16,13 +41,14 @@ const clickHandler = (url: string) => {
       :key="file"
       :file="file"
       :_id="props._id"
-      :category="props.category"
       @click="clickHandler(file)"
+      @delete="deleteHandler"
     />
   </div>
   <BaseGalleryModal
     v-if="modalOpen"
     @close="modalOpen = false"
+    @delete="deleteHandler"
     :files="props.files"
     :selectedPhoto="selectedPhoto"
   />

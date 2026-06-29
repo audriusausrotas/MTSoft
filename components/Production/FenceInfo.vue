@@ -387,6 +387,7 @@ watch(
         type="number"
         class="w-full"
         :value="props.data.length"
+        :disabled="!isAdmin"
         @input="updateMeasure('length', $event)"
         @keydown.enter="saveHandler('length')"
         @wheel="(e) => e.preventDefault()"
@@ -403,6 +404,7 @@ watch(
       <input
         type="number"
         :value="props.data.elements"
+        :disabled="!isAdmin"
         @input="updateMeasure('elements', $event)"
         @keydown.enter="saveHandler('elements')"
         @wheel="(e) => e.preventDefault()"
@@ -421,6 +423,7 @@ watch(
       <input
         type="number"
         :value="props.data.height"
+        :disabled="!isAdmin"
         @input="updateMeasure('height', $event)"
         @keydown.enter="saveHandler('height')"
         @wheel="(e) => e.preventDefault()"

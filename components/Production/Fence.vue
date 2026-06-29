@@ -217,18 +217,21 @@ watch(
             :class="{ 'text-center': !editable }"
             :disabled="!editable"
           />
-        </div>
-
-        <div class="flex items-center justify-center h-full">
-          <ProductionGalleryButton :files="props.fence.files" />
-          <ProductionUploadButton
-            v-if="isAdmin"
-            @upload="uploadFiles"
+          <ProductionGalleryButton
+            :files="props.fence.files"
             :_id="props._id"
             :id="props.fence.id"
             category="fence"
           />
         </div>
+
+        <ProductionUploadButton
+          v-if="isAdmin"
+          @upload="uploadFiles"
+          :_id="props._id"
+          :id="props.fence.id"
+          category="fence"
+        />
 
         <div v-if="isAdmin" class="flex w-16 h-full justify-around">
           <img
