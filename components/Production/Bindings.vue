@@ -12,6 +12,12 @@ const isAdmin =
   userStore.user?.accountType === "Administratorius" ||
   userStore.user?.accountType === "Vadybininkas";
 
+const canEdit = computed(() => {
+  if (productionStore.selectedMachine.includes("Pjovimo")) return "cut";
+  if (productionStore.selectedMachine.includes("Lenkimo")) return "done";
+  if (productionStore.selectedMachine.includes("Skylučių")) return "holes";
+});
+
 const cut = ref<number>(props.binding.cut);
 const done = ref<number>(props.binding.done);
 const name = ref<string>(props.binding.name);
@@ -81,7 +87,8 @@ const saveHandler = async (field: string) => {
                 ? +props.binding.quantity
                 : props.binding.color,
     field,
-    option: "bindings",
+    selectedMachine: productionStore.selectedMachine,
+    selectedHolesInfo: productionStore.selectedHolesInfo,
   };
 
   const response: any = await request.patch("updateMeasure", requestData);
@@ -369,6 +376,7 @@ watch(
         type="number"
         placeholder="Išpjauti"
         class="w-full"
+        :disabled="canEdit !== 'cut'"
         :value="props.binding.cut"
         @input="updateMeasure('cut', $event)"
         @keydown.enter="saveHandler('cut')"
@@ -385,6 +393,7 @@ watch(
     <div class="w-24 px-1 flex h-full items-center" :class="doneColor">
       <input
         type="number"
+        :disabled="canEdit !== 'done'"
         placeholder="Pagaminti"
         class="w-full"
         :value="props.binding.done"

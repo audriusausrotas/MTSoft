@@ -18,19 +18,38 @@ const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
 const userStore = useUserStore();
 
-const isLoading = ref<boolean>(false);
-const editable = ref<boolean>(false);
-const name = ref<string>(props.fence.name || "Nežinoma");
-const side = ref<string>(props.fence.side || "Nežinoma");
-const color = ref<string>(props.fence.color || "Nežinoma");
 const manufacturer = ref<string>(props.fence.manufacturer || "Nežinoma");
 const material = ref<string>(props.fence.material || "Nežinoma");
+const holesCount = ref<number>(props.fence.holesDone || 0);
+const color = ref<string>(props.fence.color || "Nežinoma");
+const side = ref<string>(props.fence.side || "Nežinoma");
+const name = ref<string>(props.fence.name || "Nežinoma");
 const holes = ref<string>(props.fence.holes);
 const step = ref<number>(props.fence.step);
+const isSavedHoles = ref<boolean>(true);
+const isLoading = ref<boolean>(false);
+const editable = ref<boolean>(false);
+
+const showHoles = computed(() => {
+  if (
+    userStore.user?.accountType === "Vadybininkas" ||
+    userStore.user?.accountType === "Administratorius"
+  )
+    return true;
+  if (productionStore.selectedMachine.includes("Pjovimo")) return false;
+  if (productionStore.selectedMachine.includes("Skylučių")) return true;
+  if (
+    productionStore.selectedMachine.includes("Lenkimo") &&
+    productionStore.selectedHolesInfo.includes("Skylutes")
+  )
+    return true;
+  return false;
+});
 
 const isAdmin =
   userStore.user?.accountType === "Administratorius" ||
   userStore.user?.accountType === "Vadybininkas";
+
 const filterIndex = ref<boolean>(false);
 const filterLength = ref<boolean>(false);
 
@@ -137,6 +156,28 @@ const uploadFiles = async (data: any) => {
   } else setError(response.message);
 };
 
+const saveHolesHandler = async () => {
+  const requestData = {
+    _id: props._id,
+    index: props.fenceIndex,
+    value: holesCount.value,
+    field: "holes",
+    selectedMachine: productionStore.selectedMachine,
+    selectedHolesInfo: productionStore.selectedHolesInfo,
+  };
+
+  const response: any = await request.patch("updateHoles", requestData);
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      productionStore.updateHoles(response.data._id, response.data.index, response.data.value);
+    isSavedHoles.value = true;
+    setSuccess(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
 const saveHandler = async () => {
   const requestData = {
     _id: props._id,
@@ -173,8 +214,6 @@ const saveHandler = async () => {
   editable.value = false;
 };
 
-filterByIndex();
-
 watch(
   () => props.fence.measures,
   (newMeasures) => {
@@ -198,10 +237,31 @@ watch(
   },
   { immediate: true, deep: true },
 );
+
+watch(
+  () => holesCount.value,
+  () => {
+    if (holesCount.value !== props.fence.holesDone) {
+      isSavedHoles.value = false;
+    }
+  },
+);
+
+watch(
+  () => props.fence.holesDone,
+  (value) => {
+    holesCount.value = value || 0;
+    isSavedHoles.value = true;
+  },
+);
+
+onMounted(() => {
+  filterByIndex();
+});
 </script>
 
 <template>
-  <div class="flex flex-col" :class="isAdmin ? 'max-w-[736px]' : 'max-w-[600px]'">
+  <div class="flex flex-col max-w-fit">
     <div class="divide-y divide-black border border-black">
       <div v-if="fence.comment">{{ fence.comment }}</div>
       <div class="flex items-center font-bold text-lg divide-x divide-black h-8">
@@ -216,7 +276,7 @@ watch(
         </div>
 
         <div
-          class="w-40 flex items-center justify-center h-full px-2"
+          class="w-[152px] flex items-center justify-center h-full px-2"
           :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
         >
           <input
@@ -290,7 +350,7 @@ watch(
           />
         </div>
 
-        <div class="w-40 flex items-center justify-center h-full px-2">
+        <div class="w-[152px] flex items-center justify-center h-full px-2">
           <input
             type="text"
             v-model="material"
@@ -305,7 +365,7 @@ watch(
             {{ holes === "Taip" ? "Su skylutėmis " + step + "  cm" : "Be skylučių" }}
           </div>
 
-          <div v-else class="flex items-center w-full justify-between">
+          <div v-else class="flex items-center w-full justify-evenly">
             <div class="flex gap-2">
               Skylutės:
               <div
@@ -322,10 +382,34 @@ watch(
             </div>
           </div>
         </div>
-        <div
-          v-if="isAdmin"
-          class="hover:cursor-pointer w-[39px] flex items-center justify-center"
-        ></div>
+      </div>
+
+      <div v-if="showHoles" class="flex w-full items-center font-bold">
+        <div class="py-1 px-2 w-[313px] border-r border-black select-none">
+          Skylutės išmuštos į U formos profilius:
+        </div>
+        <div class="flex gap-4 items-center justify-center py-1 px-2 text-center flex-1">
+          <span class="border border-black px-2">
+            <input type="number" v-model="holesCount" class="w-8" />
+          </span>
+          iš
+          {{
+            fence.measures.reduce(
+              (acc: number, item: any) =>
+                acc + (item.gates.exist ? 0 : item.kampas.exist ? 0 : item.laiptas.exist ? 0 : 1),
+              0,
+            ) * 2
+          }}
+          <div class="w-6">
+            <img
+              v-if="!isSavedHoles"
+              @click="saveHolesHandler"
+              src="/icons/save.svg"
+              alt="save"
+              class="hover:cursor-pointer hover:scale-125 transition-transform"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="flex w-fit divide-x divide-black items-center h-8 select-none">
@@ -357,14 +441,15 @@ watch(
         <p class="w-24 flex items-center justify-center h-full">Aukštis</p>
         <p class="w-24 flex items-center justify-center h-full">Išpjauti</p>
         <p class="w-24 flex items-center justify-center h-full">Pagaminti</p>
+        <p v-if="showHoles" class="w-24 flex items-center justify-center h-full">Skylutės</p>
         <p class="w-24 flex items-center justify-center h-full print:hidden">Veiksmai</p>
         <p v-if="isAdmin" class="w-24 flex items-center justify-center h-full print:hidden">
           Veiksmai
         </p>
-        <p v-if="isAdmin" class="w-10 flex items-center justify-center h-full print:hidden"></p>
+        <p v-if="isAdmin" class="w-8 flex items-center justify-center h-full print:hidden"></p>
       </div>
 
-      <div class="flex flex-col flex-1 divide-y divide-black">
+      <div class="flex flex-col w-full divide-y divide-black">
         <ProductionFenceInfo
           v-for="data in filteredMeasures"
           :key="data?._id?.toString()"
@@ -376,10 +461,12 @@ watch(
           :_id="props._id"
           :orderNr="props.orderNr"
           :clientAddress="props.clientAddress"
+          :showHoles="showHoles"
           class="divide-x divide-black"
         />
       </div>
     </div>
+
     <BaseButton v-if="isAdmin" name="Pridėti naują" class="mt-2" @click="newMeasureHandler" />
   </div>
 </template>

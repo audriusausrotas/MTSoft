@@ -403,6 +403,7 @@ export interface ProductionFence {
   totalLength: number;
   totalQuantity: number;
   files: string[];
+  holesDone: number;
   measures: ProductionMeasure[];
 }
 
@@ -414,6 +415,7 @@ export interface ProductionMeasure {
   gates: GateInfo;
   cut: number | undefined;
   done: number | undefined;
+  holes: number | undefined;
   postone: boolean;
   kampas: {
     exist: boolean;

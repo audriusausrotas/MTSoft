@@ -3,6 +3,8 @@ import type { Bindings, Production, ProductionMeasure, Comment } from "~/data/in
 export const useProductionStore = defineStore("production", {
   state: () => ({
     production: [] as Production[],
+    selectedMachine: "" as string,
+    selectedHolesInfo: "" as string,
   }),
 
   actions: {
@@ -34,6 +36,14 @@ export const useProductionStore = defineStore("production", {
           return item;
         } else return item;
       });
+    },
+
+    selectMachine(machine: string) {
+      this.selectedMachine = machine;
+    },
+
+    selectHolesInfo(holesInfo: string) {
+      this.selectedHolesInfo = holesInfo;
     },
 
     aditionalOrderedProduction(projectOrderNr: string, message: string, data: any) {
@@ -134,6 +144,15 @@ export const useProductionStore = defineStore("production", {
           );
           return item;
         } else return item;
+      });
+    },
+
+    updateHoles(_id: string, index: number, value: number) {
+      this.production = this.production.map((item: Production) => {
+        if (item._id === _id) {
+          item.fences[index].holesDone = value;
+        }
+        return item;
       });
     },
 

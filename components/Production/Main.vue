@@ -131,7 +131,9 @@ watch(
   { deep: true },
 );
 
-filterByIndex();
+onMounted(() => {
+  filterByIndex();
+});
 </script>
 
 <template>

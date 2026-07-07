@@ -3,19 +3,31 @@ const userStore = useUserStore();
 const scheduleStore = useScheduleStore();
 
 const calendarDates = ref<Date[]>([]);
-const workers = computed(() =>
-  userStore.users.filter((worker) => {
-    if (
-      userStore.user?.accountType === "Administratorius" ||
-      userStore.user?.accountType === "Sandėlys" ||
-      userStore.user?.accountType === "Vadybininkas"
-    ) {
-      return worker.accountType === "Gamyba" || worker.accountType === "Montavimas";
-    } else {
-      return worker._id === userStore.user?._id;
-    }
-  }),
+
+const productionWorker = computed(() =>
+  userStore.users.find((user) => user.email === "gamyba@modernitvora.lt"),
 );
+
+const workers = computed(() => {
+  const accountType = userStore.user?.accountType;
+
+  if (
+    accountType === "Administratorius" ||
+    accountType === "Sandėlys" ||
+    accountType === "Vadybininkas"
+  ) {
+    return [
+      productionWorker.value!,
+      ...userStore.users.filter((u) => u.accountType === "Montavimas"),
+    ];
+  }
+
+  if (accountType === "Gamyba") {
+    return [productionWorker.value!];
+  }
+
+  return userStore.users.filter((u) => u._id === userStore.user?._id);
+});
 
 const datesToDisplay = () => {
   calendarDates.value = getCalendarRange();

@@ -3,7 +3,16 @@ import type { Comment } from "~/data/interfaces";
 import { ProductionStatus } from "~/data/selectFieldData";
 const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
+const userStore = useUserStore();
 const route = useRoute();
+
+const HOLESINFO = ["Skylutes mušu pats", "Skylučių pats nemušu"];
+const MACHINES = [
+  "Pjovimo staklės",
+  "Lenkimo staklės 1",
+  "Lenkimo staklės 2",
+  "Skylučių mušimo staklės",
+];
 
 const order: any = computed(() => {
   return productionStore.production.find((item) => item._id === route.params.id);
@@ -73,22 +82,53 @@ const uploadFiles = async (data: any) => {
     setSuccess(response.message);
   } else setError(response.message);
 };
+
+watch(
+  () => productionStore.selectedMachine,
+  () => {
+    productionStore.selectHolesInfo("");
+  },
+);
 </script>
 
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex gap-4 items-end flex-wrap">
-      <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." />
-      <BaseInput :name="order?.client.address" width="w-96" label="Adresas" />
-      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" />
+      <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." disable />
+      <BaseInput :name="order?.client.address" width="w-96" label="Adresas" disable />
+      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" disable />
 
       <BaseSelectField
         label="Statusas"
         :values="ProductionStatus"
         id="productionStatus"
         :defaultValue="order?.status || ProductionStatus[0]"
-        width="w-60"
+        width="w-[170px]"
         @onChange="(value: string) => statusHandler(value)"
+      />
+    </div>
+
+    <div class="flex gap-4 items-end flex-wrap">
+      <BaseInput :name="userStore.user?.username || ''" width="w-60" label="Operatorius" disable />
+
+      <BaseSelectField
+        label="Staklės"
+        :values="MACHINES"
+        id="stakles"
+        defaultValue="Pasirinkti stakles"
+        width="w-60"
+        @onChange="(value: string) => productionStore.selectMachine(value)"
+      />
+
+      <BaseSelectField
+        :key="productionStore.selectedMachine"
+        v-if="productionStore.selectedMachine.includes('Lenkimo')"
+        label="Skylučių informacija"
+        :values="HOLESINFO"
+        id="skyluciuInformacija"
+        defaultValue="Pasirinkti skylučių informaciją"
+        width="w-[314px]"
+        @onChange="(value: string) => productionStore.selectHolesInfo(value)"
       />
     </div>
 
@@ -102,7 +142,7 @@ const uploadFiles = async (data: any) => {
       :commentsArray="order?.comments"
       :id="order?._id"
       @onSave="commentHandler"
-      class="max-w-[896px]"
+      class="max-w-[828px]"
       @onDelete="deleteHandler"
     />
 

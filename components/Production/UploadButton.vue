@@ -41,22 +41,21 @@ const uploadFiles = async () => {
   modalOpen.value = false;
 };
 
-const modalHandler = () => {
+const modalHandler = async () => {
   modalOpen.value = !modalOpen.value;
   selectOpen.value = false;
+  if (modalOpen.value) {
+    const response = await request.get("getBlueprints");
+    if (response.success) {
+      files.value = response.data;
+    } else setError(response.message);
+  }
 };
 
 const selectHandler = (file: string) => {
   emit("selected", file);
   modalHandler();
 };
-
-onMounted(async () => {
-  const response = await request.get("getBlueprints");
-  if (response.success) {
-    files.value = response.data;
-  } else setError(response.message);
-});
 </script>
 
 <template>

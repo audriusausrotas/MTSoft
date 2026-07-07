@@ -8,6 +8,7 @@ const props = defineProps([
   "_id",
   "orderNr",
   "clientAddress",
+  "showHoles",
 ]);
 
 const { setError, setSuccess } = useCustomError();
@@ -17,10 +18,18 @@ const userStore = useUserStore();
 const isAdmin =
   userStore.user?.accountType === "Administratorius" ||
   userStore.user?.accountType === "Vadybininkas";
+
+const canEdit = computed(() => {
+  if (productionStore.selectedMachine.includes("Pjovimo")) return "cut";
+  if (productionStore.selectedMachine.includes("Lenkimo")) return "done";
+  if (productionStore.selectedMachine.includes("Skylučių")) return "holes";
+});
+
 const isGate = computed(() => props.data.gates?.exist || false);
 
 const cut = ref<number>(props.data.cut);
 const done = ref<number>(props.data.done);
+const holes = ref<number>(props.data.holes);
 const elements = ref<number>(props.data.elements);
 const height = ref<number>(props.data.height);
 const length = ref<number>(props.data.length);
@@ -31,6 +40,7 @@ const isSavedHeight = ref<boolean>(true);
 const isSavedLength = ref<boolean>(true);
 const isSavedCut = ref<boolean>(true);
 const isSavedDone = ref<boolean>(true);
+const isSavedHoles = ref<boolean>(true);
 
 const indexColor = computed(() => {
   return props.data.postone
@@ -66,6 +76,16 @@ const doneColor = computed(() => {
         : "bg-orange-500";
 });
 
+const holesColor = computed(() => {
+  return +props.data.holes === +props.data.elements
+    ? "bg-green-500"
+    : +props.data.holes === 0 || props.data.holes === undefined
+      ? "bg-transparent"
+      : +props.data.holes > +props.data.elements
+        ? "bg-red-full"
+        : "bg-orange-500";
+});
+
 const saveHandler = async (field: string) => {
   const requestData = {
     _id: props._id,
@@ -76,13 +96,16 @@ const saveHandler = async (field: string) => {
         ? +props.data.cut
         : field === "done"
           ? +props.data.done
-          : field === "elements"
-            ? +props.data.elements
-            : field === "length"
-              ? +props.data.length
-              : +props.data.height,
+          : field === "holes"
+            ? +props.data.holes
+            : field === "elements"
+              ? +props.data.elements
+              : field === "length"
+                ? +props.data.length
+                : +props.data.height,
     field,
-    option: "fences",
+    selectedMachine: productionStore.selectedMachine,
+    selectedHolesInfo: productionStore.selectedHolesInfo,
   };
 
   const response: any = await request.patch("updateMeasure", requestData);
@@ -112,6 +135,9 @@ const saveHandler = async (field: string) => {
     } else if (field === "done") {
       done.value = +requestData.value;
       isSavedDone.value = true;
+    } else if (field === "holes") {
+      holes.value = +requestData.value;
+      isSavedHoles.value = true;
     } else if (field === "length") {
       length.value = +requestData.value;
       isSavedLength.value = true;
@@ -287,6 +313,10 @@ const updateMeasure = (field: string, event: Event) => {
 
   if (field === "cut")
     +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+  else if (field === "holes")
+    +inputElement.value !== holes.value
+      ? (isSavedHoles.value = false)
+      : (isSavedHoles.value = true);
   else if (field === "elements")
     +inputElement.value !== elements.value
       ? (isSavedElements.value = false)
@@ -312,6 +342,9 @@ watch(
       }
       if (fence.cut !== cut.value) {
         cut.value = +fence.cut;
+      }
+      if (fence.holes !== holes.value) {
+        holes.value = +fence.holes;
       }
       if (fence.done !== done.value) {
         done.value = +fence.done;
@@ -440,6 +473,7 @@ watch(
     <div class="w-24 flex items-center justify-center h-full px-1" :class="cutColor">
       <input
         :value="props.data.cut"
+        :disabled="canEdit !== 'cut'"
         @input="updateMeasure('cut', $event)"
         @keydown.enter="saveHandler('cut')"
         @wheel="(e) => e.preventDefault()"
@@ -458,6 +492,7 @@ watch(
     <div class="w-24 flex items-center justify-center h-full px-1" :class="doneColor">
       <input
         :value="props.data.done"
+        :disabled="canEdit !== 'done'"
         @input="updateMeasure('done', $event)"
         @keydown.enter="saveHandler('done')"
         @wheel="(e) => e.preventDefault()"
@@ -466,6 +501,28 @@ watch(
         class="w-full"
       />
       <div v-if="!isSavedDone" @click="saveHandler('done')" class="w-7">
+        <img
+          src="/icons/save.svg"
+          alt="save"
+          class="hover:cursor-pointer hover:scale-125 transition-transform"
+        />
+      </div>
+    </div>
+    <div
+      v-if="showHoles"
+      class="w-24 flex items-center justify-center h-full px-1"
+      :class="holesColor"
+    >
+      <input
+        :value="props.data.holes"
+        @input="updateMeasure('holes', $event)"
+        @keydown.enter="saveHandler('holes')"
+        @wheel="(e) => e.preventDefault()"
+        type="number"
+        placeholder="Skylutės"
+        class="w-full"
+      />
+      <div v-if="!isSavedHoles" @click="saveHandler('holes')" class="w-7">
         <img
           src="/icons/save.svg"
           alt="save"

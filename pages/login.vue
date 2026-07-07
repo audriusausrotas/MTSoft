@@ -123,12 +123,12 @@ const clearFields = () => {
 
       <BaseButton
         v-if="login"
-        name="login"
+        name="Prisijungti"
         @click="loginHandler"
         @keyup.enter="loginHandler"
         :isLoading="isLoading"
       />
-      <BaseButton v-else name="register" @click="registerHandler" :isLoading="isLoading" />
+      <BaseButton v-else name="Registruotis" @click="registerHandler" :isLoading="isLoading" />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?
@@ -139,6 +139,10 @@ const clearFields = () => {
         Turi paskyrą?
         <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Prisijunk</span>
       </p>
+
+      <NuxtLink class="text-blue-500 hover:cursor-pointer" to="/atstatymas">
+        Pamiršai slaptažodį?
+      </NuxtLink>
     </div>
   </div>
 </template>

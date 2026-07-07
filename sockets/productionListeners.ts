@@ -35,6 +35,10 @@ export default function productionListeners(socket: Socket) {
     productionStore.updateGate(_id, index, measureIndex, value);
   });
 
+  socket.on("updateProductionHoles", ({ _id, index, value }) => {
+    productionStore.updateHoles(_id, index, value);
+  });
+
   socket.on(
     "updateProductionFence",
     ({ _id, index, side, color, name, manufacturer, material, holes, step }) => {

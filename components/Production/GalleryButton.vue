@@ -50,7 +50,7 @@ const deleteHandler = async (file: string) => {
 <template>
   <div class="flex justify-center items-center w-8 h-full p-1">
     <img
-      v-if="files.length > 0"
+      v-if="files?.length && files.length > 0"
       @click="clickHandler(props.files[0])"
       src="/icons/view.svg"
       alt="file view button"
