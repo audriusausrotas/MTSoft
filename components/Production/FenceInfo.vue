@@ -47,7 +47,8 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.data.cut === 0 || props.data.cut === undefined
       ? "bg-transparent"
-      : +props.data.cut === +props.data.elements && +props.data.done === +props.data.elements
+      : +props.data.cut === +props.data.elements &&
+          +props.data.done === +props.data.elements
         ? "bg-green-500"
         : +props.data.cut > +props.data.elements
           ? "bg-red-full"
@@ -159,7 +160,10 @@ const gateHandler = async () => {
     value: !isGate.value,
   };
 
-  const response: any = await request.patch("updateProductionGate", requestData);
+  const response: any = await request.patch(
+    "updateProductionGate",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -184,7 +188,10 @@ const postoneHandler = async () => {
     option: "fences",
   };
 
-  const response: any = await request.patch("updateProductionPostone", requestData);
+  const response: any = await request.patch(
+    "updateProductionPostone",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -312,7 +319,9 @@ const updateMeasure = (field: string, event: Event) => {
   );
 
   if (field === "cut")
-    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+    +inputElement.value !== cut.value
+      ? (isSavedCut.value = false)
+      : (isSavedCut.value = true);
   else if (field === "holes")
     +inputElement.value !== holes.value
       ? (isSavedHoles.value = false)
@@ -326,7 +335,9 @@ const updateMeasure = (field: string, event: Event) => {
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+    +inputElement.value !== done.value
+      ? (isSavedDone.value = false)
+      : (isSavedDone.value = true);
   else if (field === "length")
     +inputElement.value !== length.value
       ? (isSavedLength.value = false)
@@ -362,7 +373,10 @@ watch(
 </script>
 
 <template>
-  <div v-if="props.data.laiptas.exist" class="odd:bg-gray-ultra-light flex select-none h-8">
+  <div
+    v-if="props.data.laiptas.exist"
+    class="odd:bg-gray-ultra-light flex select-none h-8"
+  >
     <p class="w-10 flex items-center justify-center h-full">
       {{ props.index + 1 }}
     </p>
@@ -370,7 +384,9 @@ watch(
     <p class="w-24 flex items-center justify-center h-full">
       {{ props.data.laiptas.direction }}
     </p>
-    <p class="w-24 flex items-center justify-center h-full">{{ props.data.laiptas.value }} cm</p>
+    <p class="w-24 flex items-center justify-center h-full">
+      {{ props.data.laiptas.value }} cm
+    </p>
     <p class="flex-1 h-full"></p>
     <div
       v-if="isAdmin"
@@ -384,7 +400,10 @@ watch(
       />
     </div>
   </div>
-  <div v-else-if="props.data.kampas.exist" class="odd:bg-gray-ultra-light flex select-none h-8">
+  <div
+    v-else-if="props.data.kampas.exist"
+    class="odd:bg-gray-ultra-light flex select-none h-8"
+  >
     <p class="w-10 flex items-center justify-center h-full">
       {{ props.index + 1 }}
     </p>
@@ -470,10 +489,13 @@ watch(
         />
       </div>
     </div>
-    <div class="w-24 flex items-center justify-center h-full px-1" :class="cutColor">
+    <div
+      class="w-24 flex items-center justify-center h-full px-1"
+      :class="cutColor"
+    >
       <input
         :value="props.data.cut"
-        :disabled="canEdit !== 'cut'"
+        :disabled="!isAdmin && canEdit !== 'cut'"
         @input="updateMeasure('cut', $event)"
         @keydown.enter="saveHandler('cut')"
         @wheel="(e) => e.preventDefault()"
@@ -489,10 +511,13 @@ watch(
         />
       </div>
     </div>
-    <div class="w-24 flex items-center justify-center h-full px-1" :class="doneColor">
+    <div
+      class="w-24 flex items-center justify-center h-full px-1"
+      :class="doneColor"
+    >
       <input
         :value="props.data.done"
-        :disabled="canEdit !== 'done'"
+        :disabled="!isAdmin && canEdit !== 'done'"
         @input="updateMeasure('done', $event)"
         @keydown.enter="saveHandler('done')"
         @wheel="(e) => e.preventDefault()"
