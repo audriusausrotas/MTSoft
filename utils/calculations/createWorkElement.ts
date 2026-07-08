@@ -2,7 +2,10 @@ import type { Works } from "~/data/interfaces";
 import { v4 as uuidv4 } from "uuid";
 import getProductPrice from "~/utils/calculations/getProductPrice";
 
-export default function createWorkElement(item: { name: string; quantity: number }) {
+export default function createWorkElement(item: {
+  name: string;
+  quantity: number;
+}) {
   const product: any = getProductPrice(item.name);
   const retail = useCalculationsStore().retail;
   const backupStore = useBackupStore();
@@ -31,10 +34,10 @@ export default function createWorkElement(item: { name: string; quantity: number
     quantity = backup.quantity;
   }
 
-  const totalPrice = +(price * quantity).toFixed(2);
-  const totalCost = +(cost * quantity).toFixed(2);
-  const profit = +(totalPrice - totalCost).toFixed(2);
-  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+  const totalPrice = +(price * quantity)?.toFixed(2);
+  const totalCost = +(cost * quantity)?.toFixed(2);
+  const profit = +(totalPrice - totalCost)?.toFixed(2);
+  const margin = +(Math.round((profit / totalPrice) * 10000) / 100)?.toFixed(2);
 
   const resultData: Works = {
     id: uuidv4(),

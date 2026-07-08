@@ -1,7 +1,14 @@
 import { defineStore } from "pinia";
 import { initialResultData, initialWorkData } from "~/data/initialValues";
 import { v4 as uuidv4 } from "uuid";
-import type { Result, Fences, Gate, OtherParts, Works, Product } from "~/data/interfaces";
+import type {
+  Result,
+  Fences,
+  Gate,
+  OtherParts,
+  Works,
+  Product,
+} from "~/data/interfaces";
 
 export const useResultsStore = defineStore("results", {
   state: () => ({
@@ -145,9 +152,12 @@ export const useResultsStore = defineStore("results", {
             : value.prices.cost.automation;
 
         selectedResult.price =
-          value.prices.priceRetail.frame + value.prices.priceRetail.installation + lockPrice;
+          value.prices.priceRetail.frame +
+          value.prices.priceRetail.installation +
+          lockPrice;
 
-        selectedResult.cost = value.prices.cost.frame + value.prices.cost.installation + lockCost;
+        selectedResult.cost =
+          value.prices.cost.frame + value.prices.cost.installation + lockCost;
       } else {
         selectedResult.price = value.prices.priceRetail;
         selectedResult.cost = value.prices.cost;
@@ -208,11 +218,12 @@ export const useResultsStore = defineStore("results", {
 
     recalculateTotals(index: number): void {
       const result = this.results[index];
-      result.totalPrice = +(result.price * result.quantity).toFixed(2);
-      result.totalCost = +(result.cost * result.quantity).toFixed(2);
-      result.profit = +(result.totalPrice - result.totalCost).toFixed(2);
-      const marginValue = ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
-      result.margin = +marginValue.toFixed(2);
+      result.totalPrice = +(result.price * result.quantity)?.toFixed(2);
+      result.totalCost = +(result.cost * result.quantity)?.toFixed(2);
+      result.profit = +(result.totalPrice - result.totalCost)?.toFixed(2);
+      const marginValue =
+        ((result.totalPrice - result.totalCost) / result.totalPrice) * 100;
+      result.margin = +marginValue?.toFixed(2);
       this.calculateTotals();
     },
 
@@ -221,8 +232,9 @@ export const useResultsStore = defineStore("results", {
       work.totalPrice = Math.round(work.price * work.quantity);
       work.totalCost = Math.round(work.cost * work.quantity);
       work.profit = work.totalPrice - work.totalCost;
-      const marginValue = ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
-      work.margin = parseFloat(marginValue.toFixed(2));
+      const marginValue =
+        ((work.totalPrice - work.totalCost) / work.totalPrice) * 100;
+      work.margin = parseFloat(marginValue?.toFixed(2));
       this.calculateTotals();
     },
 
@@ -241,18 +253,21 @@ export const useResultsStore = defineStore("results", {
         newCost += item.totalCost;
       });
 
-      this.totalPrice = +newPrice.toFixed(2);
-      this.totalCost = +newCost.toFixed(2);
-      this.totalProfit = +(newPrice - newCost).toFixed(2);
-      this.totalMargin = +(Math.round(((newPrice - newCost) / newPrice) * 10000) / 100).toFixed(2);
-      this.priceVAT = +(newPrice + newPrice * 0.21).toFixed(2);
+      this.totalPrice = +newPrice?.toFixed(2);
+      this.totalCost = +newCost?.toFixed(2);
+      this.totalProfit = +(newPrice - newCost)?.toFixed(2);
+      this.totalMargin = +(
+        Math.round(((newPrice - newCost) / newPrice) * 10000) / 100
+      )?.toFixed(2);
+      this.priceVAT = +(newPrice + newPrice * 0.21)?.toFixed(2);
       this.calculateFencePriceWithDiscount();
     },
 
     calculateFencePriceWithDiscount() {
-      const calculatedDiscount = +(this.totalPrice + (this.priceVAT - this.totalPrice) / 2).toFixed(
-        2,
-      );
+      const calculatedDiscount = +(
+        this.totalPrice +
+        (this.priceVAT - this.totalPrice) / 2
+      )?.toFixed(2);
       this.updateDiscount(calculatedDiscount);
     },
 
@@ -378,7 +393,9 @@ export const useResultsStore = defineStore("results", {
           const totalPrice = work.price * work.quantity;
           const totalCost = work.cost * work.quantity;
           const profit = totalPrice - totalCost;
-          const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+          const margin = +(
+            Math.round((profit / totalPrice) * 10000) / 100
+          )?.toFixed(2);
 
           item.quantity = work.quantity;
           item.totalPrice = totalPrice;
@@ -394,7 +411,9 @@ export const useResultsStore = defineStore("results", {
     addPoles(color: string, name: string): void {
       let quantity = 0;
       if (this.poles.length === 0 && this.gatePoles.length === 0) quantity++;
-      const doesExist = this.poles.some((item) => item.color === color && item.name === name);
+      const doesExist = this.poles.some(
+        (item) => item.color === color && item.name === name,
+      );
       if (!doesExist) quantity++;
       if (quantity === 0) quantity++;
       this.poles = this.addPart(this.poles, color, quantity, 3, name);
@@ -402,11 +421,20 @@ export const useResultsStore = defineStore("results", {
 
     addAnchoredPoles(color: string, height: number): void {
       let quantity = 0;
-      if (this.anchoredPoles.length === 0 && this.anchoredGatePoles.length === 0) quantity++;
+      if (
+        this.anchoredPoles.length === 0 &&
+        this.anchoredGatePoles.length === 0
+      )
+        quantity++;
       const doesExist = this.anchoredPoles.some((item) => item.color === color);
       if (!doesExist) quantity++;
       if (quantity === 0) quantity++;
-      this.anchoredPoles = this.addPart(this.anchoredPoles, color, quantity, height);
+      this.anchoredPoles = this.addPart(
+        this.anchoredPoles,
+        color,
+        quantity,
+        height,
+      );
     },
 
     removePole(color: string): void {
@@ -428,7 +456,12 @@ export const useResultsStore = defineStore("results", {
     },
 
     addAnchoredGatePoles(color: string, quantity: number): void {
-      this.anchoredGatePoles = this.addPart(this.anchoredGatePoles, color, +quantity, 3);
+      this.anchoredGatePoles = this.addPart(
+        this.anchoredGatePoles,
+        color,
+        +quantity,
+        3,
+      );
     },
 
     addCrossbars(color: string): void {
@@ -440,12 +473,23 @@ export const useResultsStore = defineStore("results", {
       this.totalElements += elements;
 
       const isFenceboard =
-        useSettingsStore().fences.find((fence) => fence.name === name)?.category === "Tvoralentė";
+        useSettingsStore().fences.find((fence) => fence.name === name)
+          ?.category === "Tvoralentė";
 
       if (isFenceboard) {
-        this.bolts = this.addPart(this.bolts, color, Math.ceil(elements) * 4, 0);
+        this.bolts = this.addPart(
+          this.bolts,
+          color,
+          Math.ceil(elements) * 4,
+          0,
+        );
       } else {
-        this.rivets = this.addPart(this.rivets, color, Math.ceil(elements) * 4, 0);
+        this.rivets = this.addPart(
+          this.rivets,
+          color,
+          Math.ceil(elements) * 4,
+          0,
+        );
       }
     },
 
@@ -454,33 +498,80 @@ export const useResultsStore = defineStore("results", {
     },
 
     addRetailLeg(height: number, color: string, name: string): void {
-      this.retailLegs = this.addPart(this.retailLegs, color, height * 2, 0, name);
+      this.retailLegs = this.addPart(
+        this.retailLegs,
+        color,
+        height * 2,
+        0,
+        name,
+      );
     },
 
     addBindingsLength(height: number, color: string): void {
       const useCalculate = useCalculationsStore();
       if (this.bindingsLength.length === 0 && useCalculate.retail) {
-        this.bindingsLength = this.addPart(this.bindingsLength, color, height * 2, 0);
+        this.bindingsLength = this.addPart(
+          this.bindingsLength,
+          color,
+          height * 2,
+          0,
+        );
       }
-      this.bindingsLength = this.addPart(this.bindingsLength, color, height * 2, 0);
+      this.bindingsLength = this.addPart(
+        this.bindingsLength,
+        color,
+        height * 2,
+        0,
+      );
     },
 
-    addSegment(height: number, color: string, name: string, quantity: number): void {
-      this.segments = this.addPart(this.segments, color, quantity, +height, name);
+    addSegment(
+      height: number,
+      color: string,
+      name: string,
+      quantity: number,
+    ): void {
+      this.segments = this.addPart(
+        this.segments,
+        color,
+        quantity,
+        +height,
+        name,
+      );
 
       const holdersCount = +height < 130 ? 2 : 3;
 
       if (this.segmentHolders.length === 0) {
-        this.segmentHolders = this.addPart(this.segmentHolders, color, holdersCount, 0);
+        this.segmentHolders = this.addPart(
+          this.segmentHolders,
+          color,
+          holdersCount,
+          0,
+        );
       }
-      this.segmentHolders = this.addPart(this.segmentHolders, color, holdersCount, 0);
+      this.segmentHolders = this.addPart(
+        this.segmentHolders,
+        color,
+        holdersCount,
+        0,
+      );
     },
 
-    addPart(array: OtherParts[], color: string, quantity: number, height: number, name?: string) {
+    addPart(
+      array: OtherParts[],
+      color: string,
+      quantity: number,
+      height: number,
+      name?: string,
+    ) {
       let tempArr = [...array];
       let itemExist = false;
       tempArr.forEach((item) => {
-        if (item.color === color && height === item.height && item.name === name) {
+        if (
+          item.color === color &&
+          height === item.height &&
+          item.name === name
+        ) {
           item.quantity += quantity;
           itemExist = true;
         }

@@ -13,8 +13,12 @@ const showButtons = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 const pdfSection = ref<HTMLElement | null>(null);
 
-offer.offer?.results?.forEach((item: Result) => (totalPriceParts.value += item.totalPrice));
-offer.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.totalPrice));
+offer.offer?.results?.forEach(
+  (item: Result) => (totalPriceParts.value += item.totalPrice),
+);
+offer.offer?.works?.forEach(
+  (item: Works) => (totalPriceWorks.value += item.totalPrice),
+);
 showButtons.value = offer.offer?.status === "Nepatvirtintas";
 
 const downloadAsPDF = async () => {
@@ -61,7 +65,10 @@ const orderStatusHandler = async (value: boolean) => {
 </script>
 
 <template>
-  <div class="flex flex-col print:gap-0 sm:py-8 py-0 print:py-0 gap-6 sm:gap-12" ref="pdfSection">
+  <div
+    class="flex flex-col print:gap-0 sm:py-8 py-0 print:py-0 gap-6 sm:gap-12"
+    ref="pdfSection"
+  >
     <div
       class="flex justify-center flex-wrap text-center md:justify-between p-8 sm:p-14 text-xl font-semibold items-center gap-8 md:gap-0 rounded-t-xl text-white bg-red-full print:hidden"
     >
@@ -93,13 +100,23 @@ const orderStatusHandler = async (value: boolean) => {
       </h6>
     </div>
 
-    <div class="flex justify-evenly flex-wrap gap-8 lg:gap-0 lg:py-4 py-0 print:hidden">
+    <div
+      class="flex justify-evenly flex-wrap gap-8 lg:gap-0 lg:py-4 py-0 print:hidden"
+    >
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Kliento Duomenys</p>
         <div class="flex gap-2 sm:gap-8 justify-center flex-wrap">
           <div class="flex flex-col gap-2">
-            <BaseInput :disable="true" :name="offer.offer?.client?.username" label="klientas" />
-            <BaseInput :disable="true" :name="offer.offer?.client?.address" label="adresas" />
+            <BaseInput
+              :disable="true"
+              :name="offer.offer?.client?.username"
+              label="klientas"
+            />
+            <BaseInput
+              :disable="true"
+              :name="offer.offer?.client?.address"
+              label="adresas"
+            />
           </div>
           <div class="flex flex-col gap-2">
             <a :href="'tel:' + offer.offer?.client?.phone">
@@ -122,7 +139,9 @@ const orderStatusHandler = async (value: boolean) => {
         </div>
       </div>
 
-      <div class="border border-dark-ultra-light min-h-full hidden xl:block"></div>
+      <div
+        class="border border-dark-ultra-light min-h-full hidden xl:block"
+      ></div>
 
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
@@ -130,7 +149,11 @@ const orderStatusHandler = async (value: boolean) => {
           <div class="flex flex-col gap-2">
             <BaseInput
               :disable="true"
-              :name="offer.offer?.creator?.username + ' ' + offer.offer?.creator?.lastName"
+              :name="
+                offer.offer?.creator?.username +
+                ' ' +
+                offer.offer?.creator?.lastName
+              "
               label="Atsakingas vadybininkas:"
             />
 
@@ -141,7 +164,10 @@ const orderStatusHandler = async (value: boolean) => {
             />
           </div>
           <div class="flex flex-col gap-2">
-            <a :href="'tel:' + offer.offer?.creator?.phone" class="hover: cursor-pointer">
+            <a
+              :href="'tel:' + offer.offer?.creator?.phone"
+              class="hover: cursor-pointer"
+            >
               <BaseInput
                 :disable="true"
                 :name="offer.offer?.creator?.phone"
@@ -166,7 +192,9 @@ const orderStatusHandler = async (value: boolean) => {
     <div class="print:flex hidden items-center justify-between">
       <div class="flex flex-col">
         <h3 class="text-3xl font-bold">PASIŪLYMAS</h3>
-        <h3 class="font-medium">Pasiūlymo Nr.: {{ offer.offer?.orderNumber }}</h3>
+        <h3 class="font-medium">
+          Pasiūlymo Nr.: {{ offer.offer?.orderNumber }}
+        </h3>
       </div>
       <NuxtImg
         src="/images/logo.png"
@@ -180,8 +208,12 @@ const orderStatusHandler = async (value: boolean) => {
       />
     </div>
 
-    <div class="hidden print:flex justify-between border-y text-xs border-dark-full">
-      <div class="flex flex-col justify-between py-4 print:font-medium flex-1 pr-4">
+    <div
+      class="hidden print:flex justify-between border-y text-xs border-dark-full"
+    >
+      <div
+        class="flex flex-col justify-between py-4 print:font-medium flex-1 pr-4"
+      >
         <div class="flex flex-col flex-1 gap-1">
           <p class="">Pasiūlymo data:</p>
           <p>
@@ -195,7 +227,9 @@ const orderStatusHandler = async (value: boolean) => {
           </p>
         </div>
       </div>
-      <div class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4">
+      <div
+        class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4"
+      >
         <h3 class="font-bold">Kliento Duomenys</h3>
         <p>Klientas: {{ offer.offer?.client?.username }}</p>
         <p>Adresas: {{ offer.offer?.client?.address }}</p>
@@ -207,7 +241,11 @@ const orderStatusHandler = async (value: boolean) => {
         <h3 class="font-bold">Moderni Tvora Kontaktai</h3>
         <p>
           Vadybininkas:
-          {{ offer.offer?.creator?.username + " " + offer.offer?.creator?.lastName }}
+          {{
+            offer.offer?.creator?.username +
+            " " +
+            offer.offer?.creator?.lastName
+          }}
         </p>
         <p>Adresas: Lauko g. 1, Trakiškiai, Marijampolė</p>
         <p>Telefonas: {{ offer.offer?.creator?.phone }}</p>
@@ -241,7 +279,7 @@ const orderStatusHandler = async (value: boolean) => {
       <p
         class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
-        Viso: {{ totalPriceParts.toFixed(2) }} €
+        Viso: {{ totalPriceParts?.toFixed(2) }} €
       </p>
     </div>
     <div
@@ -270,30 +308,34 @@ const orderStatusHandler = async (value: boolean) => {
       <p
         class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
-        Viso: {{ totalPriceWorks.toFixed(2) }} €
+        Viso: {{ totalPriceWorks?.toFixed(2) }} €
       </p>
     </div>
 
     <div class="flex justify-end border-dark-full">
       <div class="w-96 print:w-72">
         <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
-          <div class="flex px-4 justify-between print:border-t border-dark-full">
+          <div
+            class="flex px-4 justify-between print:border-t border-dark-full"
+          >
             <p class="font-semibold">Kaina:</p>
-            <p class="">{{ offer.offer?.totalPrice.toFixed(2) }} €</p>
+            <p class="">{{ offer.offer?.totalPrice?.toFixed(2) }} €</p>
           </div>
 
           <div class="flex px-4 justify-between">
             <p class="font-semibold">PVM Suma:</p>
-            <p>{{ (offer.offer?.totalPrice * 0.21).toFixed(2) }} €</p>
+            <p>{{ (offer.offer?.totalPrice * 0.21)?.toFixed(2) }} €</p>
           </div>
 
           <div
             class="flex px-4 justify-between"
-            :class="!offer.offer?.discount ? 'border-y-2 border-dark-full py-1' : ''"
+            :class="
+              !offer.offer?.discount ? 'border-y-2 border-dark-full py-1' : ''
+            "
           >
             <p class="font-bold">Kaina su PVM:</p>
             <p class="text-red-full font-bold print:text-black">
-              {{ offer.offer?.priceVAT.toFixed(2) }} €
+              {{ offer.offer?.priceVAT?.toFixed(2) }} €
             </p>
           </div>
 
@@ -303,16 +345,18 @@ const orderStatusHandler = async (value: boolean) => {
           >
             <p class="text-2xl print:text-base font-bold">Kaina su nuolaida:</p>
             <p class="text-red-full font-bold print:text-black">
-              {{ offer.offer?.priceWithDiscount.toFixed(2) }} €
+              {{ offer.offer?.priceWithDiscount?.toFixed(2) }} €
             </p>
           </div>
-          <div class="flex px-4 print:py-1 text-base font-medium justify-between">
+          <div
+            class="flex px-4 print:py-1 text-base font-medium justify-between"
+          >
             <p class=" ">Avanso suma:</p>
             <p class="">
               {{
                 offer.offer?.discount
-                  ? Math.round(offer.offer?.priceWithDiscount * 0.3).toFixed(2)
-                  : Math.round(offer.offer?.priceVAT * 0.3).toFixed(2)
+                  ? Math.round(offer.offer?.priceWithDiscount * 0.3)?.toFixed(2)
+                  : Math.round(offer.offer?.priceVAT * 0.3)?.toFixed(2)
               }}
 
               €
@@ -323,7 +367,9 @@ const orderStatusHandler = async (value: boolean) => {
     </div>
   </div>
   <div class="flex flex-col items-center gap-10 mt-8 mb-12 print:hidden">
-    <p v-if="showButtons" class="text-2xl font-semibold">Ar jus tenkina šis pasiūlymas?</p>
+    <p v-if="showButtons" class="text-2xl font-semibold">
+      Ar jus tenkina šis pasiūlymas?
+    </p>
     <div v-if="showButtons" class="flex justify-center gap-8 flex-wrap">
       <BaseButton
         name="pasiūlymas tenkina"

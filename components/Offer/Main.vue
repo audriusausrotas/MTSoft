@@ -6,12 +6,19 @@ const props = defineProps(["offer"]);
 const totalPriceParts = ref<number>(0);
 const totalPriceWorks = ref<number>(0);
 
-props.offer?.results?.forEach((item: Result) => (totalPriceParts.value += item.totalPrice));
-props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.totalPrice));
+props.offer?.results?.forEach(
+  (item: Result) => (totalPriceParts.value += item.totalPrice),
+);
+props.offer?.works?.forEach(
+  (item: Works) => (totalPriceWorks.value += item.totalPrice),
+);
 </script>
 
 <template>
-  <div class="flex flex-col print:gap-0 sm:py-8 py-0 print:py-0 gap-6 sm:gap-12" ref="pdfSection">
+  <div
+    class="flex flex-col print:gap-0 sm:py-8 py-0 print:py-0 gap-6 sm:gap-12"
+    ref="pdfSection"
+  >
     <div
       class="flex justify-center flex-wrap text-center md:justify-between p-8 sm:p-14 text-xl font-semibold items-center gap-8 md:gap-0 rounded-t-xl text-white bg-red-full print:hidden"
     >
@@ -48,8 +55,16 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
         <p class="text-xl font-semibold">Kliento Duomenys</p>
         <div class="flex gap-2 sm:gap-4 justify-center flex-wrap">
           <div class="flex flex-col gap-2">
-            <BaseInput :disable="true" :name="offer?.client?.username" label="klientas" />
-            <BaseInput :disable="true" :name="offer?.client?.address" label="adresas" />
+            <BaseInput
+              :disable="true"
+              :name="offer?.client?.username"
+              label="klientas"
+            />
+            <BaseInput
+              :disable="true"
+              :name="offer?.client?.address"
+              label="adresas"
+            />
           </div>
           <div class="flex flex-col gap-2">
             <a :href="'tel:' + offer?.client?.phone">
@@ -72,7 +87,9 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
         </div>
       </div>
 
-      <div class="border border-dark-ultra-light min-h-full hidden xl:block"></div>
+      <div
+        class="border border-dark-ultra-light min-h-full hidden xl:block"
+      ></div>
 
       <div class="flex flex-col items-center gap-8">
         <p class="text-xl font-semibold">Moderni Tvora Kontaktai</p>
@@ -84,10 +101,17 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
               label="Atsakingas vadybininkas:"
             />
 
-            <BaseInput :disable="true" name="Lauko g. 1, Trakiškiai, Marijampolė" label="adresas" />
+            <BaseInput
+              :disable="true"
+              name="Lauko g. 1, Trakiškiai, Marijampolė"
+              label="adresas"
+            />
           </div>
           <div class="flex flex-col gap-2">
-            <a :href="'tel:' + offer?.creator?.phone" class="hover: cursor-pointer">
+            <a
+              :href="'tel:' + offer?.creator?.phone"
+              class="hover: cursor-pointer"
+            >
               <BaseInput
                 :disable="true"
                 :name="offer?.creator?.phone"
@@ -126,8 +150,12 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
       />
     </div>
 
-    <div class="hidden print:flex justify-between border-y text-xs border-dark-full">
-      <div class="flex flex-col justify-between py-4 print:font-medium flex-1 pr-4">
+    <div
+      class="hidden print:flex justify-between border-y text-xs border-dark-full"
+    >
+      <div
+        class="flex flex-col justify-between py-4 print:font-medium flex-1 pr-4"
+      >
         <div class="flex flex-col flex-1 gap-1">
           <p class="">Pasiūlymo data:</p>
           <p>
@@ -141,7 +169,9 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
           </p>
         </div>
       </div>
-      <div class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4">
+      <div
+        class="flex flex-col flex-1 gap-1 border-x border-dark-full font-medium p-4"
+      >
         <h3 class="font-bold">Kliento Duomenys</h3>
         <p>Klientas: {{ offer?.client?.username }}</p>
         <p>Adresas: {{ offer?.client?.address }}</p>
@@ -187,7 +217,7 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
       <p
         class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
-        Viso: {{ totalPriceParts.toFixed(2) }} €
+        Viso: {{ totalPriceParts?.toFixed(2) }} €
       </p>
     </div>
     <div
@@ -216,21 +246,23 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
       <p
         class="sm:text-2xl text-lg print:text-base print:font-medium text-center print:bg-transparent p-2 print:pt-0 print:w-fit bg-gray-light rounded-2xl font-semibold w-56 sm:w-96 mt-8 print:mt-1 self-end"
       >
-        Viso: {{ totalPriceWorks.toFixed(2) }} €
+        Viso: {{ totalPriceWorks?.toFixed(2) }} €
       </p>
     </div>
 
     <div class="flex justify-end border-dark-full">
       <div class="w-96 print:w-72">
         <div class="text-xl print:text-base flex flex-col print:gap-0 gap-2">
-          <div class="flex px-4 justify-between print:border-t border-dark-full">
+          <div
+            class="flex px-4 justify-between print:border-t border-dark-full"
+          >
             <p class="font-semibold">Kaina:</p>
             <p class="">{{ offer?.totalPrice }} €</p>
           </div>
 
           <div class="flex px-4 justify-between">
             <p class="font-semibold">PVM Suma:</p>
-            <p>{{ (offer?.totalPrice * 0.21).toFixed(2) }} €</p>
+            <p>{{ (offer?.totalPrice * 0.21)?.toFixed(2) }} €</p>
           </div>
 
           <div
@@ -238,7 +270,9 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
             :class="!offer?.discount ? 'border-y-2 border-dark-full py-1' : ''"
           >
             <p class="font-bold">Kaina su PVM:</p>
-            <p class="text-red-full font-bold print:text-black">{{ offer?.priceVAT }} €</p>
+            <p class="text-red-full font-bold print:text-black">
+              {{ offer?.priceVAT }} €
+            </p>
           </div>
 
           <div
@@ -252,7 +286,9 @@ props.offer?.works?.forEach((item: Works) => (totalPriceWorks.value += item.tota
               €
             </p>
           </div>
-          <div class="flex px-4 print:py-1 text-base font-medium justify-between">
+          <div
+            class="flex px-4 print:py-1 text-base font-medium justify-between"
+          >
             <p class=" ">Avanso suma:</p>
             <p class="">
               {{

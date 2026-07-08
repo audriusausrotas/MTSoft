@@ -19,7 +19,9 @@ const action = computed(() => {
   }
 });
 
-const cutQuantity = computed(() => (props.item.operation === "cut" ? props.item.totalQuantity : 0));
+const cutQuantity = computed(() =>
+  props.item.operation === "cut" ? props.item.totalQuantity : 0,
+);
 
 const bendQuantity = computed(() =>
   props.item.operation === "done" ? props.item.totalQuantity : 0,
@@ -40,7 +42,9 @@ const holesQuantity = computed(() =>
       {{ item.orderNumber }}
     </div>
 
-    <div class="w-60 flex-shrink-0">{{ item.user?.username }} {{ item.user?.lastName }}</div>
+    <div class="w-60 flex-shrink-0">
+      {{ item.user?.username }} {{ item.user?.lastName }}
+    </div>
 
     <div class="w-60 flex-shrink-0">
       {{ item.machine }}
@@ -63,7 +67,7 @@ const holesQuantity = computed(() =>
     </div>
 
     <div class="w-24 flex-shrink-0">
-      {{ (item.totalLength / 100).toFixed(2) }}
+      {{ (item.totalLength / 100)?.toFixed(2) }}
     </div>
   </div>
 </template>

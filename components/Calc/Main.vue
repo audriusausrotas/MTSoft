@@ -35,7 +35,11 @@ const calculateResultsHandler = async () => {
 };
 
 const confirmHandler = () => {
-  calculationsStore.lazerCalculate(textArea.value, units.value, precision.value);
+  calculationsStore.lazerCalculate(
+    textArea.value,
+    units.value,
+    precision.value,
+  );
   modalOpen.value = false;
 };
 
@@ -133,14 +137,16 @@ const unitHandler = (value: string) => {
         <BaseSelectField
           :values="['Kvadratinis metras', 'Metras']"
           id="units"
-          :defaultValue="calculationsStore.units ? 'Kvadratinis metras' : 'Metras'"
+          :defaultValue="
+            calculationsStore.units ? 'Kvadratinis metras' : 'Metras'
+          "
           width="w-60"
           @onChange="unitHandler"
         />
       </div>
       <div class="flex gap-8 justify-center py-2">
-        <div>Bendras ilgis: {{ totals.totalLenght.toFixed(2) }}</div>
-        <div>Bendra kvadratūra: {{ totals.totalSquare.toFixed(2) }}</div>
+        <div>Bendras ilgis: {{ totals.totalLenght?.toFixed(2) }}</div>
+        <div>Bendra kvadratūra: {{ totals.totalSquare?.toFixed(2) }}</div>
       </div>
     </div>
 

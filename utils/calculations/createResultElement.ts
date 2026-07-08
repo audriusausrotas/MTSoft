@@ -20,19 +20,28 @@ export default function createResultElement(item: any) {
   let price = 0;
 
   if (product) {
-    if (backupExist && backup && backup.retail === retail && units === backup.units) {
+    if (
+      backupExist &&
+      backup &&
+      backup.retail === retail &&
+      units === backup.units
+    ) {
       cost = backup.cost;
       price = backup.price;
     } else {
       cost = product.prices.cost;
-      price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
+      price = retail
+        ? product.prices.priceRetail
+        : product.prices.priceWholesale;
     }
   } else {
     product = getFencePrice(item.name);
     if (!product) product = getGatePrice(item.name);
 
     const retailCheck = backup?.retail === retail || null;
-    const checkName = item.name.toLowerCase().trim() === backup?.name.toLowerCase().trim() || null;
+    const checkName =
+      item.name.toLowerCase().trim() === backup?.name.toLowerCase().trim() ||
+      null;
 
     // calculate gate price
     if (
@@ -55,22 +64,29 @@ export default function createResultElement(item: any) {
         price = backup.price;
       } else {
         const isRetail = retail ? "priceRetail" : "priceWholesale";
-        const lockName = item.lock.toLowerCase().replace(" ", "_").replace(".", "");
+        const lockName = item.lock
+          .toLowerCase()
+          .replace(" ", "_")
+          .replace(".", "");
 
         cost = product.prices.cost.frame || 0;
         if (item.auto === "Taip") cost += product.prices.cost.automation || 0;
-        if (item.installation === "Taip") cost += product.prices.cost.installation || 0;
+        if (item.installation === "Taip")
+          cost += product.prices.cost.installation || 0;
         cost += product.prices.cost[lockName] || 0;
 
         price = product.prices[isRetail].frame || 0;
-        if (item.auto === "Taip") price += product.prices[isRetail].automation || 0;
-        if (item.installation === "Taip") price += product.prices[isRetail].installation || 0;
+        if (item.auto === "Taip")
+          price += product.prices[isRetail].automation || 0;
+        if (item.installation === "Taip")
+          price += product.prices[isRetail].installation || 0;
         price += product.prices[isRetail][lockName] || 0;
       }
       // calculate fence price
     } else if (product?.category === "Tvora") {
       const checkSeethrough = item.seeThrough === backup?.seeThrough || null;
-      const checkManufacturer = backup?.manufacturer === item.manufacturer || null;
+      const checkManufacturer =
+        backup?.manufacturer === item.manufacturer || null;
       const checkUnits = units === backup?.units || null;
 
       if (
@@ -93,7 +109,9 @@ export default function createResultElement(item: any) {
               .toLowerCase()
           : "meter";
         const source =
-          item.manufacturer === "Ukraina" ? product.prices.eco : product.prices.premium;
+          item.manufacturer === "Ukraina"
+            ? product.prices.eco
+            : product.prices.premium;
 
         const fenceData = source[fenceRename as keyof typeof source];
 
@@ -103,38 +121,41 @@ export default function createResultElement(item: any) {
       // if fenceboard
     } else if (product.category === "Tvoralentė") {
       price = +(
-        ((retail ? product.prices.priceRetail : product.prices.priceWholesale) * item.height) /
+        ((retail ? product.prices.priceRetail : product.prices.priceWholesale) *
+          item.height) /
         100
-      ).toFixed(2);
-      cost = +((product.prices.cost * item.height) / 100).toFixed(2);
+      )?.toFixed(2);
+      cost = +((product.prices.cost * item.height) / 100)?.toFixed(2);
 
       // other parts
     } else {
-      price = retail ? +product.prices.priceRetail : +product.prices.priceWholesale;
+      price = retail
+        ? +product.prices.priceRetail
+        : +product.prices.priceWholesale;
       cost = +product.prices.cost;
     }
   }
 
-  const totalPrice = +(price * item.quantity).toFixed(2);
-  const totalCost = +(cost * item.quantity).toFixed(2);
-  const profit = +(totalPrice - totalCost).toFixed(2);
-  const margin = +(Math.round((profit / totalPrice) * 10000) / 100).toFixed(2);
+  const totalPrice = +(price * item.quantity)?.toFixed(2);
+  const totalCost = +(cost * item.quantity)?.toFixed(2);
+  const profit = +(totalPrice - totalCost)?.toFixed(2);
+  const margin = +(Math.round((profit / totalPrice) * 10000) / 100)?.toFixed(2);
 
   const resultData: Result = {
     id: uuidv4(),
     name: item.name,
-    quantity: +item.quantity.toFixed(2),
+    quantity: +item.quantity?.toFixed(2),
     color: item.color || "",
     height: item.height || 0,
     space: item.space || 0,
     twoSided: item.twoSided || "",
     direction: item.direction || "",
     seeThrough: item.seeThrough || "",
-    price: +price.toFixed(2),
-    totalPrice: +totalPrice.toFixed(2),
-    cost: +cost.toFixed(2),
-    totalCost: +totalCost.toFixed(2),
-    profit: +profit.toFixed(2),
+    price: +price?.toFixed(2),
+    totalPrice: +totalPrice?.toFixed(2),
+    cost: +cost?.toFixed(2),
+    totalCost: +totalCost?.toFixed(2),
+    profit: +profit?.toFixed(2),
     margin: +margin,
     category: product.category || "",
     width: item.width || 0,

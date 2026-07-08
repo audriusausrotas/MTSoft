@@ -47,21 +47,29 @@ const getStatusColor = (status: string) => {
     </div>
     <div class="w-72 flex-shrink-0">{{ project?.client?.address }}</div>
     <div class="w-32 flex-shrink-0">
-      {{ project?.creator?.username }} {{ project?.creator?.lastName?.slice(0, 1) }}.
+      {{ project?.creator?.username }}
+      {{ project?.creator?.lastName?.slice(0, 1) }}.
     </div>
-    <div class="w-32 flex-shrink-0">{{ project?.dates?.dateCreated?.slice(0, 10) }}</div>
+    <div class="w-32 flex-shrink-0">
+      {{ project?.dates?.dateCreated?.slice(0, 10) }}
+    </div>
     <div class="w-24 flex-shrink-0 font-medium">{{ project?.advance }} €</div>
     <div class="w-24 flex-shrink-0 font-medium">
       {{
         (
-          (project.discount ? project.priceWithDiscount : project.totalPrice) - project.advance
-        ).toFixed(2)
+          (project.discount ? project.priceWithDiscount : project.totalPrice) -
+          project.advance
+        )?.toFixed(2)
       }}
       €
     </div>
     <div class="w-24 flex-shrink-0 font-medium">{{ project?.totalCost }} €</div>
-    <div class="w-24 flex-shrink-0 font-medium">{{ project?.totalPrice }} €</div>
-    <div class="w-24 flex-shrink-0 font-medium text-red-600">{{ project?.totalProfit }} €</div>
+    <div class="w-24 flex-shrink-0 font-medium">
+      {{ project?.totalPrice }} €
+    </div>
+    <div class="w-24 flex-shrink-0 font-medium text-red-600">
+      {{ project?.totalProfit }} €
+    </div>
     <div class="font-medium">{{ project?.totalMargin }} %</div>
   </div>
 </template>

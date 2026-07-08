@@ -18,27 +18,44 @@ console.log(img2);
       <div class="font-bold text-2xl text-center mb-4">
         {{ props.fence.name }}
       </div>
-      <div class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full">
+      <div
+        class="flex flex-wrap 2xl:justify-between justify-center gap-4 2xl:gap-0 w-full"
+      >
         <div class="flex flex-col gap-2 w-[400px] justify-evenly">
-          <div v-if="!props.retail || props.fence.name === 'Dilė'" class="flex flex-col">
-            <div class="text-center font-bold text-lg">{{ props.fence.name }} metro kaina</div>
+          <div
+            v-if="!props.retail || props.fence.name === 'Dilė'"
+            class="flex flex-col"
+          >
+            <div class="text-center font-bold text-lg">
+              {{ props.fence.name }} metro kaina
+            </div>
             <div
               class="grid border-2 rounded-md border-black"
               :class="
-                props.fence.name !== 'Dilė' ? 'grid-cols-[1.2fr_1fr_1fr]' : 'grid-cols-[1.2fr_1fr]'
+                props.fence.name !== 'Dilė'
+                  ? 'grid-cols-[1.2fr_1fr_1fr]'
+                  : 'grid-cols-[1.2fr_1fr]'
               "
             >
-              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
+              <div
+                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
+              >
                 Skardos tipas
               </div>
-              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
+              <div
+                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
+              >
+                Premium
+              </div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-b-2 border-inherit font-bold"
               >
                 Eco
               </div>
-              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
+              <div class="px-2 py-1 border-b border-inherit border-r">
+                Kaina be PVM
+              </div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-b border-inherit border-r"
@@ -52,11 +69,16 @@ console.log(img2);
               </div>
               <div v-else class="px-2 py-1 border-b border-inherit border-r">
                 {{
-                  props.retail ? props.fence.prices.priceRetail : props.fence.prices.priceWholesale
+                  props.retail
+                    ? props.fence.prices.priceRetail
+                    : props.fence.prices.priceWholesale
                 }}
                 €/m
               </div>
-              <div v-if="props.fence.name !== 'Dilė'" class="px-2 py-1 border-b border-inherit">
+              <div
+                v-if="props.fence.name !== 'Dilė'"
+                class="px-2 py-1 border-b border-inherit"
+              >
                 {{
                   props.retail
                     ? props.fence.prices.eco.meter.priceRetail
@@ -64,7 +86,9 @@ console.log(img2);
                 }}
                 €/m
               </div>
-              <div class="px-2 py-1 border-r border-inherit flex">Kaina su PVM</div>
+              <div class="px-2 py-1 border-r border-inherit flex">
+                Kaina su PVM
+              </div>
               <div
                 v-if="props.fence.name !== 'Dilė'"
                 class="px-2 py-1 border-r border-inherit flex"
@@ -73,7 +97,7 @@ console.log(img2);
                   (props.retail
                     ? props.fence.prices.premium.meter.priceRetail * 1.21
                     : props.fence.prices.premium.meter.priceWholesale * 1.21
-                  ).toFixed(2)
+                  )?.toFixed(2)
                 }}
                 €/m
               </div>
@@ -82,7 +106,7 @@ console.log(img2);
                   (props.retail
                     ? props.fence.prices.priceRetail * 1.21
                     : props.fence.prices.priceWholesale * 1.21
-                  ).toFixed(2)
+                  )?.toFixed(2)
                 }}
                 €/m
               </div>
@@ -91,7 +115,7 @@ console.log(img2);
                   (props.retail
                     ? props.fence.prices.eco.meter.priceRetail * 1.21
                     : props.fence.prices.eco.meter.priceWholesale * 1.21
-                  ).toFixed(2)
+                  )?.toFixed(2)
                 }}
                 €/m
               </div>
@@ -103,13 +127,25 @@ console.log(img2);
               Nepramatoma - montavimo žingsnis
               {{ props.fence.steps.nepramatoma }} cm
             </div>
-            <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
-              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
+            <div
+              class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black"
+            >
+              <div
+                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
+              >
                 Skardos tipas
               </div>
-              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
-              <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
-              <div class="px-2 py-1 border-b border-inherit border-r">Kaina be PVM</div>
+              <div
+                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
+              >
+                Premium
+              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit font-bold">
+                Eco
+              </div>
+              <div class="px-2 py-1 border-b border-inherit border-r">
+                Kaina be PVM
+              </div>
               <div class="px-2 py-1 border-b border-inherit border-r">
                 {{
                   props.retail
@@ -133,8 +169,9 @@ console.log(img2);
                 {{
                   (props.retail
                     ? props.fence.prices.premium.nepramatoma.priceRetail * 1.21
-                    : props.fence.prices.premium.nepramatoma.priceWholesale * 1.21
-                  ).toFixed(2)
+                    : props.fence.prices.premium.nepramatoma.priceWholesale *
+                      1.21
+                  )?.toFixed(2)
                 }}
                 €/m
                 <span class="text-[12px] items-start mr-1">2</span>
@@ -144,7 +181,7 @@ console.log(img2);
                   (props.retail
                     ? props.fence.prices.eco.nepramatoma.priceRetail * 1.21
                     : props.fence.prices.eco.nepramatoma.priceWholesale * 1.21
-                  ).toFixed(2)
+                  )?.toFixed(2)
                 }}
                 €/m
                 <span class="text-[12px] items-start mr-1">2</span>
@@ -157,13 +194,25 @@ console.log(img2);
               Vidutinė - montavimo žingsnis
               {{ props.fence.steps.vidutiniska }} cm
             </div>
-            <div class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black">
-              <div class="px-2 py-1 border-b-2 border-r border-inherit font-bold">
+            <div
+              class="grid grid-cols-[1.2fr_1fr_1fr] border-2 rounded-md border-black"
+            >
+              <div
+                class="px-2 py-1 border-b-2 border-r border-inherit font-bold"
+              >
                 Skardos tipas
               </div>
-              <div class="px-2 py-1 border-b-2 border-inherit border-r font-bold">Premium</div>
-              <div class="px-2 py-1 border-b-2 border-inherit font-bold">Eco</div>
-              <div class="px-2 py-1 border-b border-inherit border-r flex">Kaina be PVM</div>
+              <div
+                class="px-2 py-1 border-b-2 border-inherit border-r font-bold"
+              >
+                Premium
+              </div>
+              <div class="px-2 py-1 border-b-2 border-inherit font-bold">
+                Eco
+              </div>
+              <div class="px-2 py-1 border-b border-inherit border-r flex">
+                Kaina be PVM
+              </div>
               <div class="px-2 py-1 border-b border-inherit border-r flex">
                 {{
                   props.retail
@@ -187,8 +236,9 @@ console.log(img2);
                 {{
                   (props.retail
                     ? props.fence.prices.premium.vidutiniska.priceRetail * 1.21
-                    : props.fence.prices.premium.vidutiniska.priceWholesale * 1.21
-                  ).toFixed(2)
+                    : props.fence.prices.premium.vidutiniska.priceWholesale *
+                      1.21
+                  )?.toFixed(2)
                 }}
                 €/m
                 <span class="text-[12px] items-start mr-1">2</span>
@@ -198,7 +248,7 @@ console.log(img2);
                   (props.retail
                     ? props.fence.prices.eco.vidutiniska.priceRetail * 1.21
                     : props.fence.prices.eco.vidutiniska.priceWholesale * 1.21
-                  ).toFixed(2)
+                  )?.toFixed(2)
                 }}
                 €/m
                 <span class="text-[12px] items-start mr-1">2</span>

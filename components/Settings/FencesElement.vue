@@ -148,7 +148,8 @@ const saveHandler = async () => {
 
   const response: any = await request.patch("updateFenceData", requestData);
   if (response.success) {
-    !useSocketStore().connected && settingsStore.updateFenceSettings(response.data);
+    !useSocketStore().connected &&
+      settingsStore.updateFenceSettings(response.data);
     editable.value = false;
     setSuccess(response.message);
   } else {
@@ -159,7 +160,9 @@ const saveHandler = async () => {
 const deleteHandler = async () => {
   if (!confirm("Ar tikrai norite ištrinti šią tvorą?")) return;
 
-  const response: any = await request.delete(`deleteFenceSettings/${props.fence._id}`);
+  const response: any = await request.delete(
+    `deleteFenceSettings/${props.fence._id}`,
+  );
   if (response.success) {
     !useSocketStore().connected && settingsStore.deleteFence(props.fence._id);
     setSuccess(response.message);
@@ -174,9 +177,8 @@ const recalculateHandler = () => {
 
     const legNamePremium = settingsStore.defaultValues.retailDoubleLeg;
     const legNameEco = settingsStore.defaultValues.retailDoubleLegEco;
-    const legPricePremium: Product | undefined = useProductsStore().products.find(
-      (item) => item.name === legNamePremium,
-    );
+    const legPricePremium: Product | undefined =
+      useProductsStore().products.find((item) => item.name === legNamePremium);
     const legPriceEco: Product | undefined = useProductsStore().products.find(
       (item) => item.name === legNameEco,
     );
@@ -186,22 +188,22 @@ const recalculateHandler = () => {
     prices.premium.meter.priceRetail = (
       prices.premium.meter.cost /
       ((100 - profit.premiumRetail) / 100)
-    ).toFixed(2);
+    )?.toFixed(2);
 
     prices.premium.meter.priceWholesale = (
       prices.premium.meter.cost /
       ((100 - profit.premiumWholesale) / 100)
-    ).toFixed(2);
+    )?.toFixed(2);
 
     prices.eco.meter.priceRetail = (
       prices.eco.meter.cost /
       ((100 - profit.ecoRetail) / 100)
-    ).toFixed(2);
+    )?.toFixed(2);
 
     prices.eco.meter.priceWholesale = (
       prices.eco.meter.cost /
       ((100 - profit.ecoWholesale) / 100)
-    ).toFixed(2);
+    )?.toFixed(2);
 
     //cost
     prices.premium.aklina.cost = calculateFencePrice(
@@ -395,9 +397,15 @@ const recalculateHandler = () => {
     );
   } else {
     if (!prices.cost) return;
-    prices.priceRetail = calculateProductPrice(prices.cost, profit.premiumRetail);
+    prices.priceRetail = calculateProductPrice(
+      prices.cost,
+      profit.premiumRetail,
+    );
 
-    prices.priceWholesale = (prices.cost / ((100 - profit.premiumWholesale) / 100)).toFixed(2);
+    prices.priceWholesale = (
+      prices.cost /
+      ((100 - profit.premiumWholesale) / 100)
+    )?.toFixed(2);
   }
 };
 
@@ -411,9 +419,14 @@ const addImage = () => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full border border-gray-full p-2 rounded-xl relative gap-8">
+  <div
+    class="flex flex-col w-full border border-gray-full p-2 rounded-xl relative gap-8"
+  >
     <div class="flex justify-between items-center">
-      <div @click="fenceOpen = !fenceOpen" class="flex gap-4 hover:cursor-pointer select-none">
+      <div
+        @click="fenceOpen = !fenceOpen"
+        class="flex gap-4 hover:cursor-pointer select-none"
+      >
         <NuxtImg
           src="/icons/arrowDown.svg"
           alt="arrow-down"
@@ -440,7 +453,9 @@ const addImage = () => {
             <BaseInput
               :name="profit.premiumWholesale"
               placeholder="Didmenos %"
-              :label="props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'"
+              :label="
+                props.fence.category === 'Tvora' ? 'Didmena Premium' : 'Didmena'
+              "
               type="number"
               width="w-40"
               @onChange="(value) => (profit.premiumWholesale = +value)"
@@ -448,7 +463,9 @@ const addImage = () => {
             <BaseInput
               :name="profit.premiumRetail"
               placeholder="Mažmenos %"
-              :label="props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'"
+              :label="
+                props.fence.category === 'Tvora' ? 'Mažmena Premium' : 'Mažmena'
+              "
               type="number"
               width="w-40"
               @onChange="(value) => (profit.premiumRetail = +value)"
@@ -649,7 +666,9 @@ const addImage = () => {
             :wholesale="prices.premium.meter.priceWholesale"
             :retail="prices.premium.meter.priceRetail"
             @cost="(value) => (prices.premium.meter.cost = +value)"
-            @wholesale="(value) => (prices.premium.meter.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.premium.meter.priceWholesale = +value)
+            "
             @retail="(value) => (prices.premium.meter.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -659,7 +678,9 @@ const addImage = () => {
             :wholesale="prices.premium.aklina.priceWholesale"
             :retail="prices.premium.aklina.priceRetail"
             @cost="(value) => (prices.premium.aklina.cost = +value)"
-            @wholesale="(value) => (prices.premium.aklina.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.premium.aklina.priceWholesale = +value)
+            "
             @retail="(value) => (prices.premium.aklina.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -669,8 +690,12 @@ const addImage = () => {
             :wholesale="prices.premium.nepramatoma.priceWholesale"
             :retail="prices.premium.nepramatoma.priceRetail"
             @cost="(value) => (prices.premium.nepramatoma.cost = +value)"
-            @wholesale="(value) => (prices.premium.nepramatoma.priceWholesale = +value)"
-            @retail="(value) => (prices.premium.nepramatoma.priceRetail = +value)"
+            @wholesale="
+              (value) => (prices.premium.nepramatoma.priceWholesale = +value)
+            "
+            @retail="
+              (value) => (prices.premium.nepramatoma.priceRetail = +value)
+            "
           />
           <FencesElementBlock
             name="Vidutiniska"
@@ -679,8 +704,12 @@ const addImage = () => {
             :wholesale="prices.premium.vidutiniska.priceWholesale"
             :retail="prices.premium.vidutiniska.priceRetail"
             @cost="(value) => (prices.premium.vidutiniska.cost = +value)"
-            @wholesale="(value) => (prices.premium.vidutiniska.priceWholesale = +value)"
-            @retail="(value) => (prices.premium.vidutiniska.priceRetail = +value)"
+            @wholesale="
+              (value) => (prices.premium.vidutiniska.priceWholesale = +value)
+            "
+            @retail="
+              (value) => (prices.premium.vidutiniska.priceRetail = +value)
+            "
           />
           <FencesElementBlock
             name="Pramatoma"
@@ -689,7 +718,9 @@ const addImage = () => {
             :wholesale="prices.premium.pramatoma.priceWholesale"
             :retail="prices.premium.pramatoma.priceRetail"
             @cost="(value) => (prices.premium.pramatoma.cost = +value)"
-            @wholesale="(value) => (prices.premium.pramatoma.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.premium.pramatoma.priceWholesale = +value)
+            "
             @retail="(value) => (prices.premium.pramatoma.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -699,8 +730,12 @@ const addImage = () => {
             :wholesale="prices.premium.pramatoma25.priceWholesale"
             :retail="prices.premium.pramatoma25.priceRetail"
             @cost="(value) => (prices.premium.pramatoma25.cost = +value)"
-            @wholesale="(value) => (prices.premium.pramatoma25.priceWholesale = +value)"
-            @retail="(value) => (prices.premium.pramatoma25.priceRetail = +value)"
+            @wholesale="
+              (value) => (prices.premium.pramatoma25.priceWholesale = +value)
+            "
+            @retail="
+              (value) => (prices.premium.pramatoma25.priceRetail = +value)
+            "
           />
           <FencesElementBlock
             name="50% pramatomumas"
@@ -709,8 +744,12 @@ const addImage = () => {
             :wholesale="prices.premium.pramatoma50.priceWholesale"
             :retail="prices.premium.pramatoma50.priceRetail"
             @cost="(value) => (prices.premium.pramatoma50.cost = +value)"
-            @wholesale="(value) => (prices.premium.pramatoma50.priceWholesale = +value)"
-            @retail="(value) => (prices.premium.pramatoma50.priceRetail = +value)"
+            @wholesale="
+              (value) => (prices.premium.pramatoma50.priceWholesale = +value)
+            "
+            @retail="
+              (value) => (prices.premium.pramatoma50.priceRetail = +value)
+            "
           />
         </div>
       </SettingsFenceElementWraper>
@@ -744,7 +783,9 @@ const addImage = () => {
             :wholesale="prices.eco.nepramatoma.priceWholesale"
             :retail="prices.eco.nepramatoma.priceRetail"
             @cost="(value) => (prices.eco.nepramatoma.cost = +value)"
-            @wholesale="(value) => (prices.eco.nepramatoma.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.eco.nepramatoma.priceWholesale = +value)
+            "
             @retail="(value) => (prices.eco.nepramatoma.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -754,7 +795,9 @@ const addImage = () => {
             :wholesale="prices.eco.vidutiniska.priceWholesale"
             :retail="prices.eco.vidutiniska.priceRetail"
             @cost="(value) => (prices.eco.vidutiniska.cost = +value)"
-            @wholesale="(value) => (prices.eco.vidutiniska.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.eco.vidutiniska.priceWholesale = +value)
+            "
             @retail="(value) => (prices.eco.vidutiniska.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -764,7 +807,9 @@ const addImage = () => {
             :wholesale="prices.eco.pramatoma.priceWholesale"
             :retail="prices.eco.pramatoma.priceRetail"
             @cost="(value) => (prices.eco.pramatoma.cost = +value)"
-            @wholesale="(value) => (prices.eco.pramatoma.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.eco.pramatoma.priceWholesale = +value)
+            "
             @retail="(value) => (prices.eco.pramatoma.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -774,7 +819,9 @@ const addImage = () => {
             :wholesale="prices.eco.pramatoma25.priceWholesale"
             :retail="prices.eco.pramatoma25.priceRetail"
             @cost="(value) => (prices.eco.pramatoma25.cost = +value)"
-            @wholesale="(value) => (prices.eco.pramatoma25.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.eco.pramatoma25.priceWholesale = +value)
+            "
             @retail="(value) => (prices.eco.pramatoma25.priceRetail = +value)"
           />
           <FencesElementBlock
@@ -784,7 +831,9 @@ const addImage = () => {
             :wholesale="prices.eco.pramatoma50.priceWholesale"
             :retail="prices.eco.pramatoma50.priceRetail"
             @cost="(value) => (prices.eco.pramatoma50.cost = +value)"
-            @wholesale="(value) => (prices.eco.pramatoma50.priceWholesale = +value)"
+            @wholesale="
+              (value) => (prices.eco.pramatoma50.priceWholesale = +value)
+            "
             @retail="(value) => (prices.eco.pramatoma50.priceRetail = +value)"
           />
         </div>
@@ -802,7 +851,9 @@ const addImage = () => {
           />
         </div>
         <div>
-          <label for="fenceDescription" class="text-lg font-semibold">Tvoros aprašymas</label>
+          <label for="fenceDescription" class="text-lg font-semibold"
+            >Tvoros aprašymas</label
+          >
           <textarea
             :disabled="!editable"
             v-model="aditional.description"
@@ -824,7 +875,9 @@ const addImage = () => {
           />
         </div>
         <div>
-          <label for="fenceSeoTitle" class="text-lg font-semibold">Seo pavadinimas</label>
+          <label for="fenceSeoTitle" class="text-lg font-semibold"
+            >Seo pavadinimas</label
+          >
           <textarea
             :disabled="!editable"
             v-model="aditional.seoTitle"
@@ -846,7 +899,9 @@ const addImage = () => {
           />
         </div>
         <div>
-          <label for="fenceSeoDescription" class="text-lg font-semibold">Seo aprašymas</label>
+          <label for="fenceSeoDescription" class="text-lg font-semibold"
+            >Seo aprašymas</label
+          >
           <textarea
             :disabled="!editable"
             v-model="aditional.seoDescription"
@@ -868,35 +923,49 @@ const addImage = () => {
           />
         </div>
         <div class="flex flex-col gap-4">
-          <BaseButton @click="addImage" :disabled="!editable">Pridėti nuotrauką</BaseButton>
+          <BaseButton @click="addImage" :disabled="!editable"
+            >Pridėti nuotrauką</BaseButton
+          >
 
-          <div v-for="(image, index) in aditional.images" :key="index" class="flex gap-4">
+          <div
+            v-for="(image, index) in aditional.images"
+            :key="index"
+            class="flex gap-4"
+          >
             <BaseInput
               :disable="!editable"
               label="Nuotraukos pavadinimas"
               :name="image.name"
-              @onChange="(value: string) => (aditional.images[index].name = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].name = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos URL"
               :name="image.url"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].url = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].url = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos aprašymas"
               :name="image.alt"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].alt = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].alt = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos aprašymas EN"
               :name="image.altEN"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].altEN = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].altEN = value)
+              "
             />
           </div>
         </div>
