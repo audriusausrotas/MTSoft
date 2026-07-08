@@ -699,3 +699,22 @@ export interface WebsiteSettings {
   gallery: Image[];
   funded: Image[];
 }
+
+export interface ProductionEvent {
+  _id: string;
+  orderNumber: string;
+  timestamp: string;
+  user: string;
+  machine: string;
+  operation: "bend" | "cut";
+  element: {
+    name: string;
+    quantity: number;
+    holesCount: number;
+    length: number;
+    location: {
+      mainIndex: number;
+      subIndex?: number;
+    };
+  };
+}

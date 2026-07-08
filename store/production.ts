@@ -162,13 +162,12 @@ export const useProductionStore = defineStore("production", {
       measureIndex: number | null,
       value: boolean | number | string,
       field: string,
-      option: string,
     ) {
       this.production = this.production.map((item) => {
         if (item._id === _id) {
-          option === "bindings"
-            ? ((item.bindings as any)[index][field] = value)
-            : ((item.fences as any)[index].measures[measureIndex!][field] = value);
+          if (measureIndex !== null && measureIndex !== undefined)
+            (item.fences as any)[index].measures[measureIndex][field] = value;
+          else (item.bindings as any)[index][field] = value;
         }
         return item;
       });

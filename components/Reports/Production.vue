@@ -192,17 +192,17 @@ watch(
       />
     </div>
 
-    <div class="flex flex-col overflow-y-scroll max-h-[60dvh] border rounded-lg shadow-lg">
+    <div class="flex flex-col overflow-y-scroll h-[60dvh] border rounded-lg shadow-lg">
       <div class="flex p-4 sticky top-0 z-10 bg-slate-100 font-semibold gap-4">
         <div class="w-8 flex-shrink-0">Nr</div>
         <div class="w-28 flex-shrink-0">Užsakymo Nr</div>
         <div class="w-60 flex-shrink-0">Darbuotojas</div>
         <div class="w-60 flex-shrink-0">Staklės</div>
         <div class="w-24 flex-shrink-0">Veiksmas</div>
-        <div class="w-24 flex-shrink-0">Pjovimai</div>
+        <div class="w-24 flex-shrink-0">Kiekis</div>
+        <div class="w-24 flex-shrink-0">Ilgis</div>
         <div class="w-24 flex-shrink-0">Lenkimai</div>
         <div class="w-24 flex-shrink-0">Skylutės</div>
-        <div class="w-24 flex-shrink-0">Ilgis</div>
       </div>
 
       <ReportsProductionResult

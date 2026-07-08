@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RALcolors } from "~/data/initialValues";
-import type { Measure } from "~/data/interfaces";
+import type { Measure, ProductionMeasure } from "~/data/interfaces";
 
 interface Props {
   fence: any;
@@ -157,10 +157,26 @@ const uploadFiles = async (data: any) => {
 };
 
 const saveHolesHandler = async () => {
+  const count = (props.fence.measures ?? []).reduce(
+    (acc: { total: number; count: number }, item: ProductionMeasure) => {
+      if (!item.gates?.exist) {
+        acc.total += Number(item.elements || 0);
+        acc.count += 1;
+      }
+
+      return acc;
+    },
+    {
+      total: 0,
+      count: 0,
+    },
+  );
+
   const requestData = {
     _id: props._id,
     index: props.fenceIndex,
     value: holesCount.value,
+    holesCount: Math.round((count.total / (count.count * 2)) * 4),
     field: "holes",
     selectedMachine: productionStore.selectedMachine,
     selectedHolesInfo: productionStore.selectedHolesInfo,
