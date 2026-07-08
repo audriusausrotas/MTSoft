@@ -28,7 +28,7 @@ export default function createWorkElement(item: {
     price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
   }
 
-  let quantity = +item.quantity.toFixed(2);
+  let quantity = +item.quantity?.toFixed(2);
 
   if (item.name.toLowerCase() === "transportas" && backupExist && backup) {
     quantity = backup.quantity;
