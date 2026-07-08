@@ -78,11 +78,13 @@ const action = computed(() => {
           <div class="w-24">Tvoros Nr.</div>
           <div class="w-24">Tarpo Nr</div>
         </div>
-        <ReportsProductionAditional
-          v-for="element in props.item.elements"
-          :key="element.timestamp + element.name"
-          :element="element"
-        />
+        <div class="flex flex-col max-w-96 overflow-y-auto">
+          <ReportsProductionAditional
+            v-for="element in props.item.elements"
+            :key="element.timestamp + element.name"
+            :element="element"
+          />
+        </div>
       </div>
     </div>
   </div>
