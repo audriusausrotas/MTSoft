@@ -14,6 +14,10 @@ const MACHINES = [
   "Skylučių mušimo staklės",
 ];
 
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
+
 const order: any = computed(() => {
   return productionStore.production.find((item) => item._id === route.params.id);
 });
@@ -92,10 +96,10 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-4 w-full" :class="isAdmin ? 'max-w-[830px]' : 'max-w-[700px]'">
     <div class="flex gap-4 items-end flex-wrap">
       <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." disable />
-      <BaseInput :name="order?.client.address" width="w-96" label="Adresas" disable />
+      <BaseInput :name="order?.client.address" class="flex-1" label="Adresas" disable />
       <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" disable />
 
       <BaseSelectField
@@ -103,20 +107,21 @@ watch(
         :values="ProductionStatus"
         id="productionStatus"
         :defaultValue="order?.status || ProductionStatus[0]"
-        width="w-[170px]"
+        width="w-32"
+        class=""
         @onChange="(value: string) => statusHandler(value)"
       />
     </div>
 
-    <div class="flex gap-4 items-end flex-wrap">
-      <BaseInput :name="userStore.user?.username || ''" width="w-60" label="Operatorius" disable />
+    <div v-if="!isAdmin" class="flex gap-4 items-end flex-wrap">
+      <BaseInput :name="userStore.user?.username || ''" width="w-32" label="Operatorius" disable />
 
       <BaseSelectField
         label="Staklės"
         :values="MACHINES"
         id="stakles"
         defaultValue="Pasirinkti stakles"
-        width="w-60"
+        width="w-56"
         @onChange="(value: string) => productionStore.selectMachine(value)"
       />
 
@@ -127,12 +132,13 @@ watch(
         :values="HOLESINFO"
         id="skyluciuInformacija"
         defaultValue="Pasirinkti skylučių informaciją"
-        width="w-[314px]"
+        width="min-w-fit w-full"
+        class="flex-1"
         @onChange="(value: string) => productionStore.selectHolesInfo(value)"
       />
     </div>
 
-    <div class="flex flex-wrap gap-4">
+    <div v-if="isAdmin" class="flex flex-wrap gap-4">
       <BaseUploadButton @upload="uploadFiles" :_id="order?._id" category="production" />
     </div>
 
@@ -141,12 +147,12 @@ watch(
     <BaseComment
       :commentsArray="order?.comments"
       :id="order?._id"
+      :hideInput="!isAdmin"
       @onSave="commentHandler"
-      class="max-w-[828px]"
       @onDelete="deleteHandler"
     />
 
-    <div class="flex gap-4 flex-col">
+    <div class="flex gap-8 flex-col">
       <ProductionFence
         v-for="(fence, index) in order?.fences"
         :key="fence._id"

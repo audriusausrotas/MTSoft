@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { v4 } from "uuid";
-const props = defineProps(["commentsArray", "id"]);
+
+const props = withDefaults(
+  defineProps<{
+    id: string;
+    hideInput?: boolean;
+    commentsArray: string[];
+  }>(),
+  {
+    hideInput: false,
+  },
+);
 const emit = defineEmits(["onSave", "onDelete"]);
 
 const newComment = ref<string>("");
@@ -18,7 +28,7 @@ const deleteHandler = (comment: string): void => {
 
 <template>
   <div class="flex flex-col gap-2">
-    <div class="flex gap-4 items-end flex-wrap print:hidden">
+    <div v-if="!props.hideInput" class="flex gap-4 items-end flex-wrap print:hidden">
       <BaseInput
         label="Naujas komentaras"
         class="flex-1"

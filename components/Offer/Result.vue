@@ -90,7 +90,7 @@ else measurement.value = "vnt";
         <p class="block sm:hidden font-bold">Viso:</p>
         <div class="w-20 flex gap-2">
           <p>
-            {{ props.result.totalPrice }}
+            {{ props.result.totalPrice.toFixed(2) }}
           </p>
           <p>€</p>
         </div>

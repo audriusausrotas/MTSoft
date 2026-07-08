@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const productionStore = useProductionStore();
+const userStore = useUserStore();
+
+const isAdmin =
+  userStore.user?.accountType === "Administratorius" ||
+  userStore.user?.accountType === "Vadybininkas";
 
 const searchQuery = ref("");
 
@@ -38,7 +43,7 @@ const postonedOrders = computed(() => {
 <template>
   <div class="flex flex-col gap-4 select-none mb-12 w-full max-w-[690px]">
     <div class="flex gap-4 flex-wrap">
-      <ProductionNewOrder />
+      <ProductionNewOrder v-if="isAdmin" />
       <BaseInput
         placeholder="Paieška"
         width="flex-1"
