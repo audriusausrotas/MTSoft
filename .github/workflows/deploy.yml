@@ -1,61 +1,49 @@
-# name: Deploy Frontend
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
-
-#       - name: Setup Node
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 24
-
-#       - name: Install dependencies
-#         run: npm ci
-
-#       - name: Build frontend
-#         run: npm run build
-
-#       - name: Upload to VPS
-#         uses: appleboy/scp-action@v0.1.7
-#         with:
-#           host: ${{ secrets.VPS_IP }}
-#           username: ${{ secrets.VPS_USERNAME }}
-#           key: ${{ secrets.VPS_SSH_KEY }}
-#           source: ".output,package.json"
-#           target: "/var/www/mtsoft/frontend"
-
-#       - name: Restart frontend
-#         uses: appleboy/ssh-action@v1.0.3
-#         with:
-#           host: ${{ secrets.VPS_IP }}
-#           username: ${{ secrets.VPS_USERNAME }}
-#           key: ${{ secrets.VPS_SSH_KEY }}
-#           script: |
-#             cd /var/www/mtsoft/frontend
-
-#             npm install --omit=dev
-
-#             pm2 reload frontend || pm2 start .output/server/index.mjs --name frontend
-
-#             pm2 save
-
-name: Deploy Frontend Disabled
+name: Deploy Frontend
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  disabled:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Disabled
-        run: echo "Deploy disabled"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Upload to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: ".output,package.json"
+          target: "/var/www/mtsoft/frontend"
+
+      - name: Restart frontend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/mtsoft/frontend
+
+            npm install --omit=dev
+
+            pm2 reload frontend || pm2 start .output/server/index.mjs --name frontend
+
+            pm2 save
