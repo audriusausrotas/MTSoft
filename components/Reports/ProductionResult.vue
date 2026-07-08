@@ -23,7 +23,7 @@ const action = computed(() => {
 </script>
 
 <template>
-  <div class="flex p-4 gap-4 border-t items-center hover:bg-slate-50">
+  <div class="flex p-4 gap-4 border-t items-center hover:bg-gray-50">
     <div class="w-8 flex-shrink-0">
       {{ index + 1 }}
     </div>
@@ -59,30 +59,27 @@ const action = computed(() => {
     </div>
 
     <div class="w-6 flex-shrink-0 relative">
-      <img
-        @mouseenter="open = true"
-        @mouseleave="open = false"
-        src="/icons/eye.svg"
-        alt=""
-        class="cursor-pointer"
-      />
+      <img @click="open = !open" src="/icons/eye.svg" alt="" class="cursor-pointer" />
       <div
         v-if="open"
-        class="absolute top-4 right-6 border w-fit overflow-hidden border-gray-300 rounded-md bg-white shadow-lg divide-y divide-gray-light"
+        class="absolute top-4 right-6 border w-fit flex flex-col h-fit max-h-[600px] overflow-y-auto overflow-x-hidden border-gray-300 rounded-md bg-white shadow-lg divide-y divide-gray-light"
       >
-        <div class="flex gap-4 bg-gray-100 p-2">
+        <div class="flex gap-4 bg-gray-300 p-2 font-medium sticky top-0">
+          <div class="w-8">Nr</div>
           <div class="w-48">Pavadinimas</div>
-          <div class="w-12">Kiekis</div>
-          <div class="w-12">Ilgis</div>
-          <div class="w-24">Data</div>
+          <div class="w-14">Kiekis</div>
+          <div class="w-14">Ilgis</div>
+          <div class="w-24">Bendras ilgis</div>
+          <div class="w-40">Data</div>
           <div class="w-24">Tvoros Nr.</div>
           <div class="w-24">Tarpo Nr</div>
         </div>
-        <div class="flex flex-col max-w-96 overflow-y-auto">
+        <div class="divide-y divide-gray-light">
           <ReportsProductionAditional
-            v-for="element in props.item.elements"
-            :key="element.timestamp + element.name"
+            v-for="(element, index) in props.item.elements"
+            :key="element.timestamp + element.name + index"
             :element="element"
+            :index="+index"
           />
         </div>
       </div>

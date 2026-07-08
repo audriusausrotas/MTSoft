@@ -192,8 +192,8 @@ watch(
       />
     </div>
 
-    <div class="flex flex-col overflow-y-scroll h-[60dvh] border rounded-lg shadow-lg">
-      <div class="flex p-4 sticky top-0 z-10 bg-slate-100 font-semibold gap-4">
+    <div class="flex flex-col overflow-y-scroll h-[70dvh] border rounded-lg shadow-lg">
+      <div class="flex p-4 sticky top-0 z-10 bg-gray-300 font-semibold gap-4">
         <div class="w-8 flex-shrink-0">Nr</div>
         <div class="w-28 flex-shrink-0">Užsakymo Nr</div>
         <div class="w-60 flex-shrink-0">Darbuotojas</div>
