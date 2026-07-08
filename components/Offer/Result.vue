@@ -54,7 +54,7 @@ else measurement.value = "vnt";
           props?.result?.manufacturer === "Ukraina" ? "Eco" : "Premium"
         }}</span>
         <span v-if="props.result.category === 'Tvora'">{{ props.result.seeThrough }}</span>
-        <span v-if="props.result.category === 'Tvoralentė' && props.result.height"
+        <span v-if="props.result.category === 'Tvoralentė' && props.result.height > 0"
           >H-{{ props.result.height }}</span
         >
 
