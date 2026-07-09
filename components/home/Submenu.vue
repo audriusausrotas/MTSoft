@@ -100,6 +100,23 @@ const copyHandler = async () => {
   }
 };
 
+const confirmHandler = async () => {
+  const response: any = await request.patch("confirmProject", { _id: props._id });
+
+  if (response.success) {
+    !useSocketStore().connected &&
+      projectsStore.updateProjectDates(
+        response.data._id,
+        "dateConfirmed",
+        response.data.dateConfirmed,
+      );
+
+    setSuccess(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
 const archiveHandler = async () => {
   const requestData = { _id: props._id, location: props.location };
 
@@ -181,15 +198,6 @@ const unconfirmedHandler = async () => {
 
     <div
       v-if="props.location === 'projects'"
-      @click="linkHandler"
-      class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
-    >
-      <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
-      <p>Kopijuoti nuorodą</p>
-    </div>
-
-    <div
-      v-if="props.location === 'projects'"
       @click="editHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
@@ -199,11 +207,29 @@ const unconfirmedHandler = async () => {
 
     <div
       v-if="props.location === 'projects'"
+      @click="linkHandler"
+      class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+    >
+      <NuxtImg src="/icons/link.svg" alt="link button" width="20" height="20" />
+      <p>Kopijuoti nuorodą</p>
+    </div>
+
+    <div
+      v-if="props.location === 'projects'"
       @click="copyHandler"
       class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
     >
       <NuxtImg src="/icons/pageflip.svg" alt="edit button" width="20" height="20" />
       <p>Kopijuoti projektą</p>
+    </div>
+
+    <div
+      v-if="props.location === 'projects'"
+      @click="confirmHandler"
+      class="hover:bg-red-full h-full flex gap-2 items-center px-2 hover:cursor-pointer hover:text-white"
+    >
+      <NuxtImg src="/icons/confirm.svg" alt="confirm button" width="20" height="20" />
+      <p>Patvirtinti projektą</p>
     </div>
 
     <div

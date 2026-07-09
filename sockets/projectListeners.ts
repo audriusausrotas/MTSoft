@@ -28,6 +28,10 @@ export default function projectListeners(socket: Socket) {
     projectsStore.updateProjectDates(_id, "dateExparation", dateExparation);
   });
 
+  socket.on("confirmProject", ({ _id, dateConfirmed }) => {
+    projectsStore.updateProjectDates(_id, "dateConfirmed", dateConfirmed);
+  });
+
   socket.on("updateProjectFiles", ({ _id, files }) => {
     projectsStore.updateProjectField(_id, "files", files);
   });
