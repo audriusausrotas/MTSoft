@@ -156,6 +156,23 @@ export const useProductionStore = defineStore("production", {
       });
     },
 
+    productionDefect(_id: string, index: number, measureIndex: any) {
+      const isBinding = measureIndex === null || measureIndex === undefined;
+
+      this.production = this.production.map((item: any) => {
+        if (item._id === _id) {
+          if (isBinding) {
+            item.bindings[index].cut -= 1;
+            item.bindings[index].done -= 1;
+          } else {
+            item.fences[index].measures[measureIndex].cut -= 1;
+            item.fences[index].measures[measureIndex].done -= 1;
+          }
+        }
+        return item;
+      });
+    },
+
     updateMeasure(
       _id: string,
       index: number,

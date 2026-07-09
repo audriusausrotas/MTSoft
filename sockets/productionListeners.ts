@@ -19,16 +19,20 @@ export default function productionListeners(socket: Socket) {
     productionStore.deleteMeasure(_id, index, measureIndex);
   });
 
-  socket.on("updateProductionPostone", ({ _id, index, measureIndex, value, option }) => {
-    productionStore.updateMeasure(_id, index, measureIndex, value, "postone", option);
+  socket.on("updateProductionPostone", ({ _id, index, measureIndex, value }) => {
+    productionStore.updateMeasure(_id, index, measureIndex, value, "postone");
   });
 
   socket.on("updateProductionStatus", ({ _id, status }) => {
     productionStore.updateStatus(_id, status);
   });
 
-  socket.on("updateProductionMeasure", ({ _id, index, measureIndex, value, field, option }) => {
-    productionStore.updateMeasure(_id, index, measureIndex, value, field, option);
+  socket.on("updateProductionMeasure", ({ _id, index, measureIndex, value, field }) => {
+    productionStore.updateMeasure(_id, index, measureIndex, value, field);
+  });
+
+  socket.on("productionDefect", ({ _id, index, measureIndex }) => {
+    productionStore.productionDefect(_id, index, measureIndex);
   });
 
   socket.on("updateProductionGate", ({ _id, index, measureIndex, value }) => {

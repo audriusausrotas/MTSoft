@@ -16,6 +16,8 @@ const action = computed(() => {
       return "Lenkimas";
     case "holes":
       return "Skylutės";
+    case "defect":
+      return "Defektas";
     default:
       return "-";
   }
@@ -38,7 +40,7 @@ const action = computed(() => {
       {{ item.machine }}
     </div>
 
-    <div class="w-24 flex-shrink-0">
+    <div class="w-24 flex-shrink-0" :class="action === 'Defektas' ? 'text-red-500' : ''">
       {{ action }}
     </div>
 
@@ -72,7 +74,7 @@ const action = computed(() => {
           <div class="w-24">Bendras ilgis</div>
           <div class="w-40">Data</div>
           <div class="w-20">Tvoros Nr.</div>
-          <div class="w-20">Tarpo Nr</div>
+          <div class="w-20">Tarpo Nr.</div>
         </div>
         <div class="divide-y divide-gray-light">
           <ReportsProductionAditional

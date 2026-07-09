@@ -458,11 +458,10 @@ onMounted(() => {
         <p class="w-24 flex items-center justify-center h-full">Išpjauti</p>
         <p class="w-24 flex items-center justify-center h-full">Pagaminti</p>
         <p v-if="showHoles" class="w-24 flex items-center justify-center h-full">Skylutės</p>
-        <p class="w-24 flex items-center justify-center h-full print:hidden">Veiksmai</p>
+        <p class="w-32 flex items-center justify-center h-full print:hidden">Veiksmai</p>
         <p v-if="isAdmin" class="w-24 flex items-center justify-center h-full print:hidden">
           Veiksmai
         </p>
-        <p v-if="isAdmin" class="w-8 flex items-center justify-center h-full print:hidden"></p>
       </div>
 
       <div class="flex flex-col w-full divide-y divide-black">

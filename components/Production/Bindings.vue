@@ -241,6 +241,35 @@ const selectFile = async (file: any) => {
   isLoading.value = false;
 };
 
+const defectHandler = async () => {
+  if (!productionStore.selectedMachine) {
+    setError("Pasirinkite stakles");
+    return;
+  }
+
+  const confirm = window.confirm("Ar tikrai norite pažymėti kaip defektą?");
+  if (!confirm) return;
+
+  const requestData = {
+    _id: props._id,
+    index: props.index,
+    field: "defect",
+    selectedMachine: productionStore.selectedMachine,
+    selectedHolesInfo: productionStore.selectedHolesInfo,
+  };
+
+  const response: any = await request.patch("productionDefect", requestData);
+
+  if (response.success) {
+    if (!useSocketStore().connected) {
+      productionStore.productionDefect(response.data._id, response.data.index, null);
+    }
+    setSuccess(response.message);
+  } else {
+    setError(response.message);
+  }
+};
+
 watch(
   () => props.binding,
   (binding) => {
@@ -424,6 +453,16 @@ watch(
           class="print:hidden hover:scale-125 hover:cursor-pointer transition-transform w-6 h-full"
         />
       </div>
+    </div>
+    <div v-else class="w-8 print:hidden h-full flex items-center justify-center">
+      <img
+        @click="defectHandler"
+        src="/icons/sad.svg"
+        alt="defect"
+        width="25"
+        height="25"
+        class="hover:cursor-pointer hover:scale-125 transition-transform"
+      />
     </div>
   </div>
 </template>
