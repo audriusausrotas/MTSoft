@@ -1,4 +1,11 @@
-import type { DefaultValues, FenceSetup, Gates, SelectValues, UserRights } from "~/data/interfaces";
+import type {
+  DefaultValues,
+  FenceSetup,
+  Gates,
+  ReportSettings,
+  SelectValues,
+  UserRights,
+} from "~/data/interfaces";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -7,6 +14,7 @@ export const useSettingsStore = defineStore("settings", {
     gates: [] as Gates[],
     defaultValues: {} as DefaultValues,
     userRights: [] as UserRights[],
+    reports: [] as ReportSettings[],
     selectValues: {
       fenceMaterials: [],
       fenceColors: [],
@@ -34,6 +42,10 @@ export const useSettingsStore = defineStore("settings", {
       this.userRights = [...data];
     },
 
+    addReportSettings(data: ReportSettings[]) {
+      this.reports = [...data];
+    },
+
     addGateData(data: Gates[]) {
       this.gates = [...data];
     },
@@ -52,6 +64,21 @@ export const useSettingsStore = defineStore("settings", {
 
     newSelectValue(field: keyof SelectValues, value: string) {
       this.selectValues[field].push(value);
+    },
+
+    newReport(data: ReportSettings) {
+      this.reports.push(data);
+    },
+
+    editReport(data: ReportSettings) {
+      this.reports = this.reports.map((item) => {
+        if (item._id === data._id) return data;
+        else return item;
+      });
+    },
+
+    deleteReport(_id: string) {
+      this.reports = this.reports.filter((item) => item._id !== _id);
     },
 
     deleteSelectValue(field: keyof SelectValues, index: number) {

@@ -71,8 +71,8 @@ const action = computed(() => {
           <div class="w-14">Ilgis</div>
           <div class="w-24">Bendras ilgis</div>
           <div class="w-40">Data</div>
-          <div class="w-24">Tvoros Nr.</div>
-          <div class="w-24">Tarpo Nr</div>
+          <div class="w-20">Tvoros Nr.</div>
+          <div class="w-20">Tarpo Nr</div>
         </div>
         <div class="divide-y divide-gray-light">
           <ReportsProductionAditional

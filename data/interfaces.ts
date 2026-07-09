@@ -153,6 +153,13 @@ export interface Dates {
   dateArchieved: string;
 }
 
+export interface ReportSettings {
+  _id?: string;
+  name: string;
+  keyword: string;
+  bends: string;
+}
+
 export interface RetailLegs {
   color: string;
   quantity: number;

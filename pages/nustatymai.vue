@@ -42,12 +42,20 @@ const selected = ref<string>("bendri");
       >
         Pasirinkimo laukų nustatymai
       </div>
+      <div
+        @click="selected = 'ataskaitos'"
+        class="flex-1 p-2 border-dark-light hover:cursor-pointer hover:bg-red-600 hover:text-white"
+        :class="selected === 'ataskaitos' ? 'bg-red-full text-white' : ''"
+      >
+        Ataskaitų nustatymai
+      </div>
     </div>
     <SettingsUserSettings v-if="selected === 'bendri'" />
     <SettingsFences v-else-if="selected === 'tvoros'" />
     <SettingsGates v-else-if="selected === 'vartai'" />
     <SettingsCalc v-else-if="selected === 'skaiciuokle'" />
     <SettingsSelect v-else-if="selected === 'pasirinkimai'" />
+    <SettingsReports v-else-if="selected === 'ataskaitos'" />
   </div>
 </template>
 <style scoped></style>

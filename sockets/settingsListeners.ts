@@ -34,4 +34,13 @@ export default function settingsListeners(socket: Socket) {
   socket.on("updateGateData", (data) => {
     settingsStore.updateGateData(data);
   });
+  socket.on("newReport", (data) => {
+    settingsStore.newReport(data);
+  });
+  socket.on("editReport", (data) => {
+    settingsStore.editReport(data);
+  });
+  socket.on("deleteReport", ({ _id }) => {
+    settingsStore.deleteReport(_id);
+  });
 }

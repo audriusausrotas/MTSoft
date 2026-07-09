@@ -17,12 +17,11 @@ const isBinding =
     <div class="w-14">{{ (element.length / 100).toFixed(2) }}</div>
     <div class="w-24">{{ ((element.quantity * element.length) / 100).toFixed(2) }}</div>
     <div class="w-40">{{ new Date(element.timestamp).toLocaleString("lt-LT") }}</div>
-    <div class="w-24">
-      {{ isBinding ? "Lankstinys " : "Tvora " }}
+    <div class="w-20">
       {{ element.location.index + 1 }}
     </div>
-    <div class="w-24">
-      {{ isBinding ? "---------" : "Tarpas " + (element.location.measureIndex + 1) }}
+    <div class="w-20">
+      {{ isBinding ? "---------" : +(element.location.measureIndex + 1) }}
     </div>
   </div>
 </template>
