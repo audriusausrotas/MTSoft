@@ -44,19 +44,22 @@ const action = computed(() => {
       {{ action }}
     </div>
 
-    <div class="w-24 flex-shrink-0">
+    <div class="w-14 flex-shrink-0">
       {{ props.item.totalQuantity }}
     </div>
 
-    <div class="w-24 flex-shrink-0">
+    <div class="w-14 flex-shrink-0">
       {{ (item.totalLength / 100)?.toFixed(2) }}
     </div>
 
-    <div class="w-24 flex-shrink-0">
+    <div class="w-20 flex-shrink-0">
       {{ props.item.totalBends }}
     </div>
+    <div class="w-28 flex-shrink-0">
+      {{ (props.item.totalBendLength / 100)?.toFixed(2) }}
+    </div>
 
-    <div class="w-24 flex-shrink-0">
+    <div class="w-20 flex-shrink-0">
       {{ props.item.totalHoles }}
     </div>
 
@@ -66,12 +69,14 @@ const action = computed(() => {
         v-if="open"
         class="absolute top-4 right-6 border w-fit flex flex-col h-fit max-h-[600px] overflow-y-auto overflow-x-hidden border-gray-300 rounded-md bg-white shadow-lg divide-y divide-gray-light"
       >
-        <div class="flex gap-4 bg-gray-300 p-2 font-medium sticky top-0">
+        <div class="flex gap-4 bg-gray-300 p-2 font-medium text sticky top-0 text-center">
           <div class="w-8">Nr</div>
           <div class="w-48">Pavadinimas</div>
           <div class="w-14">Kiekis</div>
           <div class="w-14">Ilgis</div>
           <div class="w-24">Bendras ilgis</div>
+          <div class="w-20">Lenkimai</div>
+          <div class="w-28">Išlenkta metrų</div>
           <div class="w-40">Data</div>
           <div class="w-20">Tvoros Nr.</div>
           <div class="w-20">Tarpo Nr.</div>

@@ -199,10 +199,11 @@ watch(
         <div class="w-60 flex-shrink-0">Darbuotojas</div>
         <div class="w-60 flex-shrink-0">Staklės</div>
         <div class="w-24 flex-shrink-0">Veiksmas</div>
-        <div class="w-24 flex-shrink-0">Kiekis</div>
-        <div class="w-24 flex-shrink-0">Ilgis</div>
-        <div class="w-24 flex-shrink-0">Lenkimai</div>
-        <div class="w-24 flex-shrink-0">Skylutės</div>
+        <div class="w-14 flex-shrink-0">Kiekis</div>
+        <div class="w-14 flex-shrink-0">Ilgis</div>
+        <div class="w-20 flex-shrink-0">Lenkimai</div>
+        <div class="w-28 flex-shrink-0">Išlenkta metrų</div>
+        <div class="w-20 flex-shrink-0">Skylutės</div>
       </div>
 
       <ReportsProductionResult
