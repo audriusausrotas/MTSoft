@@ -26,13 +26,13 @@ export default function createResultElement(item: any) {
       backup.retail === retail &&
       units === backup.units
     ) {
-      cost = backup.cost;
-      price = backup.price;
+      cost = +backup.cost;
+      price = +backup.price;
     } else {
-      cost = product.prices.cost;
+      cost = +product.prices.cost;
       price = retail
-        ? product.prices.priceRetail
-        : product.prices.priceWholesale;
+        ? +product.prices.priceRetail
+        : +product.prices.priceWholesale;
     }
   } else {
     product = getFencePrice(item.name);
@@ -60,8 +60,8 @@ export default function createResultElement(item: any) {
         backup?.lock === item.lock &&
         backup?.installation === item.installation
       ) {
-        cost = backup.cost;
-        price = backup.price;
+        cost = +backup.cost;
+        price = +backup.price;
       } else {
         const isRetail = retail ? "priceRetail" : "priceWholesale";
         const lockName = item.lock
@@ -98,8 +98,8 @@ export default function createResultElement(item: any) {
         checkName &&
         checkUnits
       ) {
-        cost = backup.cost;
-        price = backup.price;
+        cost = +backup.cost;
+        price = +backup.price;
       } else {
         const fenceRename = units
           ? String(item.seeThrough)
@@ -121,11 +121,13 @@ export default function createResultElement(item: any) {
       // if fenceboard
     } else if (product.category === "Tvoralentė") {
       price = +(
-        ((retail ? product.prices.priceRetail : product.prices.priceWholesale) *
-          item.height) /
+        ((retail
+          ? +product.prices.priceRetail
+          : +product.prices.priceWholesale) *
+          +item.height) /
         100
       )?.toFixed(2);
-      cost = +((product.prices.cost * item.height) / 100)?.toFixed(2);
+      cost = +((+product.prices.cost * +item.height) / 100)?.toFixed(2);
 
       // other parts
     } else {
@@ -136,10 +138,12 @@ export default function createResultElement(item: any) {
     }
   }
 
-  const totalPrice = +(price * item.quantity)?.toFixed(2);
-  const totalCost = +(cost * item.quantity)?.toFixed(2);
-  const profit = +(totalPrice - totalCost)?.toFixed(2);
-  const margin = +(Math.round((profit / totalPrice) * 10000) / 100)?.toFixed(2);
+  const totalPrice = +(+price * +item.quantity)?.toFixed(2);
+  const totalCost = +(+cost * +item.quantity)?.toFixed(2);
+  const profit = +(+totalPrice - +totalCost)?.toFixed(2);
+  const margin = +(Math.round((+profit / +totalPrice) * 10000) / 100)?.toFixed(
+    2,
+  );
 
   const resultData: Result = {
     id: uuidv4(),

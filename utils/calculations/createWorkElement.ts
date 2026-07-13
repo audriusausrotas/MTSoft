@@ -21,11 +21,13 @@ export default function createWorkElement(item: {
   if (!product) return;
 
   if (backupExist && backup && backup.retail === retail) {
-    cost = backup.cost;
-    price = backup.price;
+    cost = +backup.cost;
+    price = +backup.price;
   } else {
-    cost = product.prices.cost;
-    price = retail ? product.prices.priceRetail : product.prices.priceWholesale;
+    cost = +product.prices.cost;
+    price = retail
+      ? +product.prices.priceRetail
+      : +product.prices.priceWholesale;
   }
 
   let quantity = +item.quantity?.toFixed(2);
@@ -34,10 +36,12 @@ export default function createWorkElement(item: {
     quantity = backup.quantity;
   }
 
-  const totalPrice = +(price * quantity)?.toFixed(2);
-  const totalCost = +(cost * quantity)?.toFixed(2);
-  const profit = +(totalPrice - totalCost)?.toFixed(2);
-  const margin = +(Math.round((profit / totalPrice) * 10000) / 100)?.toFixed(2);
+  const totalPrice = +(+price * +quantity)?.toFixed(2);
+  const totalCost = +(+cost * +quantity)?.toFixed(2);
+  const profit = +(+totalPrice - +totalCost)?.toFixed(2);
+  const margin = +(Math.round((+profit / +totalPrice) * 10000) / 100)?.toFixed(
+    2,
+  );
 
   const resultData: Works = {
     id: uuidv4(),
