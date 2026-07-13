@@ -42,8 +42,9 @@ jobs:
           script: |
             cd /var/www/mtsoft/frontend
 
-            npm install --omit=dev
+            # npm install --omit=dev
 
-            pm2 reload frontend || pm2 start .output/server/index.mjs --name frontend
+            # pm2 reload frontend || pm2 start .output/server/index.mjs --name frontend
+            pm2 reload frontend || HOST=127.0.0.1 PORT=3000 pm2 start .output/server/index.mjs --name frontend
 
             pm2 save
