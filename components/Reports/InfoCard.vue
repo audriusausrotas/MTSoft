@@ -25,13 +25,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <div
-    class="flex flex-col justify-between border rounded-lg p-4 max-w-720 w-full gap-6 shadow-lg"
-  >
+  <div class="flex flex-col justify-between border rounded-lg p-4 max-w-72 w-full gap-6 shadow-lg">
     <div>{{ name }}</div>
-    <div class="font-bold text-4xl">
-      {{ (filtered || 0)?.toFixed(2) }} {{ sign }}
-    </div>
+    <div class="font-bold text-4xl">{{ (filtered || 0)?.toFixed(2) }} {{ sign }}</div>
     <div class="flex gap-4">
       <div>{{ extra }}</div>
       <div>{{ (total || 0)?.toFixed(2) }} {{ sign }}</div>

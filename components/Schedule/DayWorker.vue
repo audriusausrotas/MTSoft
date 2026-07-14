@@ -201,7 +201,7 @@ watch(
       </div>
     </div>
 
-    <div v-if="modalOpen" class="absolute top-0 left-0 w-full bg-white min-w-96 z-40 rounded-lg">
+    <div v-if="modalOpen" class="absolute top-0 right-0 w-full bg-white min-w-96 z-40 rounded-lg">
       <BaseSearchFieldProduction
         width="w-full"
         :data="

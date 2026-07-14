@@ -64,7 +64,12 @@ const action = computed(() => {
     </div>
 
     <div class="w-6 flex-shrink-0 relative">
-      <img @click="open = !open" src="/icons/eye.svg" alt="" class="cursor-pointer" />
+      <img
+        @click="open = !open"
+        :src="`/icons/eye${open ? '2' : ''}.svg`"
+        alt=""
+        class="cursor-pointer"
+      />
       <div
         v-if="open"
         class="absolute top-4 right-6 border w-fit flex flex-col h-fit max-h-[600px] overflow-y-auto overflow-x-hidden border-gray-300 rounded-md bg-white shadow-lg divide-y divide-gray-light"

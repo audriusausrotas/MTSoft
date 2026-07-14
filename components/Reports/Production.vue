@@ -32,6 +32,27 @@ const currentYear = currentDate.getFullYear();
 
 let timeout: any;
 
+const totalData = computed(() => {
+  let cut = 0;
+  let bend = 0;
+  let holes = 0;
+  let defect = 0;
+
+  data.value.forEach((item) => {
+    if (item.operation === "cut") cut += item.totalLength / 100;
+    if (item.operation === "done") bend += item.totalBends;
+    if (item.operation === "holes") holes += item.totalHoles;
+    if (item.operation === "defect") defect += item.totalQuantity;
+  });
+
+  return {
+    cut,
+    bend,
+    holes,
+    defect,
+  };
+});
+
 const users = computed(() => [
   {
     label: "Visi",
@@ -137,6 +158,28 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4 w-full rounded-lg">
+    <div class="flex gap-4 flex-wrap">
+      <ReportsInfoCardProduction
+        name="Pjovimas"
+        :data="totalData.cut"
+        :target="1800"
+        sign="m"
+        icon="scissors"
+      />
+      <ReportsInfoCardProduction
+        name="Lenkimas"
+        :data="totalData.bend"
+        :target="1500"
+        icon="ruler"
+      />
+      <ReportsInfoCardProduction
+        name="Skylučių Mušimas"
+        :data="totalData.holes"
+        :target="1800"
+        icon="hole"
+      />
+      <ReportsInfoCardProduction name="Brokas" :data="totalData.defect" :target="5" icon="cross" />
+    </div>
     <div class="flex gap-4 p-4 border rounded-lg shadow-lg">
       <BaseInput
         placeholder="Paieška"
