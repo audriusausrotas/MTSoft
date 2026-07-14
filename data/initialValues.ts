@@ -1,4 +1,10 @@
-import type { Client, Measure, Result, MenuLinks, Works } from "~/data/interfaces";
+import type {
+  Client,
+  Measure,
+  Result,
+  MenuLinks,
+  Works,
+} from "~/data/interfaces";
 
 export const clientInitialValue: Client = {
   username: "",
@@ -76,7 +82,11 @@ export const optionLinks: MenuLinks[] = [
 export const adminLinks: MenuLinks[] = [
   { name: "Vartotojai", link: "/vartotojai", iconPath: "/icons/users.svg" },
   { name: "Nustatymai", link: "/nustatymai", iconPath: "/icons/users.svg" },
-  { name: "Tinklapis", link: "/tinklapio-nustatymai", iconPath: "/icons/users.svg" },
+  {
+    name: "Tinklapis",
+    link: "/tinklapio-nustatymai",
+    iconPath: "/icons/users.svg",
+  },
   { name: "Ataskaitos", link: "/ataskaitos", iconPath: "/icons/users.svg" },
 ];
 
@@ -118,4 +128,5 @@ export const RALcolors = {
   "6005": "#289E4B",
   "9005": "#0A0A0A",
   "3009": "#D15441",
+  "8004": "#D15C3B",
 };

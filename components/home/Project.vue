@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { RALcolors } from "~/data/initialValues";
-type RALColorCode = keyof typeof RALcolors;
 
 const props = defineProps(["project", "index", "length", "location"]);
 const projectsStore = useProjectsStore();
 const settingsStore = useSettingsStore();
 const open = ref<boolean>(false);
+
+type RALColorCode = keyof typeof RALcolors;
 
 const { setError, setSuccess } = useCustomError();
 
@@ -21,7 +22,9 @@ const time = computed(() =>
 );
 
 const RALcolor = computed(
-  () => RALcolors[color.value as RALColorCode] || "#FFFFFF",
+  () =>
+    RALcolors[props.project?.fenceMeasures[0]?.color as RALColorCode] ||
+    "#FFFFFF",
 );
 
 const color = computed(() => {
@@ -114,15 +117,18 @@ const statusHandler = async (value: string) => {
       </div>
     </div>
 
-    <BaseInfoField
-      :name="props.project?.orderNumber"
-      width="w-24"
+    <div
       :class="[
         `bg-[${RALcolor}]`,
         RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+        'border p-2 rounded-lg w-24 relative border-dark-light',
       ]"
-    />
-
+    >
+      {{ props?.project?.orderNumber }}
+      <span class="absolute top-0.5 right-0.5 text-xs">{{
+        props.project?.fenceMeasures[0]?.manufacturer?.slice(0, 1)
+      }}</span>
+    </div>
     <div class="relative flex-1">
       <div
         v-if="
