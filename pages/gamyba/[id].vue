@@ -19,13 +19,18 @@ const isAdmin =
   userStore.user?.accountType === "Vadybininkas";
 
 const order: any = computed(() => {
-  return productionStore.production.find((item) => item._id === route.params.id);
+  return productionStore.production.find(
+    (item) => item._id === route.params.id,
+  );
 });
-
+console.log(order.value);
 const statusHandler = async (value: string) => {
   const requestData = { _id: order?.value._id, status: value };
 
-  const response: any = await request.patch("updateProductionStatus", requestData);
+  const response: any = await request.patch(
+    "updateProductionStatus",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -96,11 +101,29 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full" :class="isAdmin ? 'max-w-[830px]' : 'max-w-[700px]'">
+  <div
+    class="flex flex-col gap-4 w-full"
+    :class="isAdmin ? 'max-w-[830px]' : 'max-w-[700px]'"
+  >
     <div class="flex gap-4 items-end flex-wrap">
-      <BaseInput :name="order?.orderNumber" width="w-28" label="Užsakymo Nr." disable />
-      <BaseInput :name="order?.client.address" class="flex-1" label="Adresas" disable />
-      <BaseInput :name="order?.creator.username" width="w-28" label="Vadybininkas" disable />
+      <BaseInput
+        :name="order?.orderNumber"
+        width="w-28"
+        label="Užsakymo Nr."
+        disable
+      />
+      <BaseInput
+        :name="order?.client.address"
+        class="flex-1"
+        label="Adresas"
+        disable
+      />
+      <BaseInput
+        :name="order?.creator.username"
+        width="w-28"
+        label="Vadybininkas"
+        disable
+      />
 
       <BaseSelectField
         label="Statusas"
@@ -114,7 +137,12 @@ watch(
     </div>
 
     <div v-if="!isAdmin" class="flex gap-4 items-end flex-wrap">
-      <BaseInput :name="userStore.user?.username || ''" width="w-32" label="Operatorius" disable />
+      <BaseInput
+        :name="userStore.user?.username || ''"
+        width="w-32"
+        label="Operatorius"
+        disable
+      />
 
       <BaseSelectField
         label="Staklės"
@@ -139,10 +167,18 @@ watch(
     </div>
 
     <div v-if="isAdmin" class="flex flex-wrap gap-4">
-      <BaseUploadButton @upload="uploadFiles" :_id="order?._id" category="production" />
+      <BaseUploadButton
+        @upload="uploadFiles"
+        :_id="order?._id"
+        category="production"
+      />
     </div>
 
-    <BaseGalleryElement :_id="order?._id" :files="order?.files" category="production" />
+    <BaseGalleryElement
+      :_id="order?._id"
+      :files="order?.files"
+      category="production"
+    />
 
     <BaseComment
       :commentsArray="order?.comments"
