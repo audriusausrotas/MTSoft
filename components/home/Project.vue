@@ -121,7 +121,7 @@ const statusHandler = async (value: string) => {
       :class="[
         `bg-[${RALcolor}]`,
         RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
-        'border p-2 rounded-lg w-24 relative border-dark-light',
+        'border p-2 rounded-lg w-[100px] relative border-dark-light',
       ]"
     >
       {{ props?.project?.orderNumber }}
