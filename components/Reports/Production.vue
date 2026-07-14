@@ -27,31 +27,32 @@ const { setError, setSuccess } = useCustomError();
 const userStore = useUserStore();
 
 const data = ref<any[]>([]);
+const totalData = ref<any>({});
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 
 let timeout: any;
 
-const totalData = computed(() => {
-  let cut = 0;
-  let bend = 0;
-  let holes = 0;
-  let defect = 0;
+// const totalData = computed(() => {
+//   let cut = 0;
+//   let bend = 0;
+//   let holes = 0;
+//   let defect = 0;
 
-  data.value.forEach((item) => {
-    if (item.operation === "cut") cut += item.totalLength / 100;
-    if (item.operation === "done") bend += item.totalBends;
-    if (item.operation === "holes") holes += item.totalHoles;
-    if (item.operation === "defect") defect += item.totalQuantity;
-  });
+//   data.value.forEach((item) => {
+//     if (item.operation === "cut") cut += item.totalLength / 100;
+//     if (item.operation === "done") bend += item.totalBends;
+//     if (item.operation === "holes") holes += item.totalHoles;
+//     if (item.operation === "defect") defect += item.totalQuantity;
+//   });
 
-  return {
-    cut,
-    bend,
-    holes,
-    defect,
-  };
-});
+//   return {
+//     cut,
+//     bend,
+//     holes,
+//     defect,
+//   };
+// });
 
 const users = computed(() => [
   {
@@ -118,7 +119,8 @@ const filterHandler = async () => {
   const response: any = await request.post("getProductionReport", requestData);
 
   if (response.success) {
-    data.value = response.data;
+    data.value = response.data.data;
+    totalData.value = response.data.totalData;
     setSuccess(response.message);
   } else {
     setError(response.message);
@@ -161,24 +163,29 @@ watch(
     <div class="flex gap-4 flex-wrap">
       <ReportsInfoCardProduction
         name="Pjovimas"
-        :data="totalData.cut"
+        :data="totalData.totalCut"
         :target="1800"
         sign="m"
         icon="scissors"
       />
       <ReportsInfoCardProduction
         name="Lenkimas"
-        :data="totalData.bend"
+        :data="totalData.totalBend"
         :target="1500"
         icon="ruler"
       />
       <ReportsInfoCardProduction
         name="Skylučių Mušimas"
-        :data="totalData.holes"
+        :data="totalData.totalHoles"
         :target="1800"
         icon="hole"
       />
-      <ReportsInfoCardProduction name="Brokas" :data="totalData.defect" :target="5" icon="cross" />
+      <ReportsInfoCardProduction
+        name="Brokas"
+        :data="totalData.totalDefect"
+        :target="5"
+        icon="cross"
+      />
     </div>
     <div class="flex gap-4 p-4 border rounded-lg shadow-lg">
       <BaseInput
