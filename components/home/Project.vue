@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { RALcolors } from "~/data/initialValues";
+type RALColorCode = keyof typeof RALcolors;
+
 const props = defineProps(["project", "index", "length", "location"]);
 const projectsStore = useProjectsStore();
 const settingsStore = useSettingsStore();
@@ -10,8 +13,15 @@ const date = computed(() => props.project?.dates?.dateConfirmed ?? "");
 
 const time = computed(() =>
   props.project?.dates?.dateExparation
-    ? Math.ceil((new Date(props.project.dates.dateExparation).getTime() - Date.now()) / 86400000)
+    ? Math.ceil(
+        (new Date(props.project.dates.dateExparation).getTime() - Date.now()) /
+          86400000,
+      )
     : 0,
+);
+
+const RALcolor = computed(
+  () => RALcolors[color.value as RALColorCode] || "#FFFFFF",
 );
 
 const color = computed(() => {
@@ -55,7 +65,11 @@ const statusHandler = async (value: string) => {
   const response: any = await request.patch("updateProjectStatus", requestData);
   if (response.success) {
     !useSocketStore().connected &&
-      projectsStore.updateProjectField(response.data._id, "status", response.data.status);
+      projectsStore.updateProjectField(
+        response.data._id,
+        "status",
+        response.data.status,
+      );
 
     setSuccess(response.message);
   } else {
@@ -92,16 +106,29 @@ const statusHandler = async (value: string) => {
         <div class="flex justify-between">
           <p>Įgyvendinimas:</p>
           <p>
-            {{ project?.dates?.dateCompletion?.slice(0, 10) || "-------------" }}
+            {{
+              project?.dates?.dateCompletion?.slice(0, 10) || "-------------"
+            }}
           </p>
         </div>
       </div>
     </div>
 
-    <BaseInfoField :name="props.project?.orderNumber" width="w-24" />
+    <BaseInfoField
+      :name="props.project?.orderNumber"
+      width="w-24"
+      :class="[
+        `bg-[${RALcolor}]`,
+        RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+      ]"
+    />
+
     <div class="relative flex-1">
       <div
-        v-if="props.project?.gateManufacturer && props.project?.status !== 'Nepatvirtintas'"
+        v-if="
+          props.project?.gateManufacturer &&
+          props.project?.status !== 'Nepatvirtintas'
+        "
         class="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-500"
       ></div>
       <BaseAddressLink :name="props.project?.client?.address" width="w-full" />
@@ -122,8 +149,16 @@ const statusHandler = async (value: string) => {
       />
     </div>
 
-    <BaseInfoField :name="props.project?.client?.phone" width="w-32" :tel="true" />
-    <BaseInfoField :name="props.project?.client?.email" width="w-64  " :email="true" />
+    <BaseInfoField
+      :name="props.project?.client?.phone"
+      width="w-32"
+      :tel="true"
+    />
+    <BaseInfoField
+      :name="props.project?.client?.email"
+      width="w-64  "
+      :email="true"
+    />
 
     <div v-if="location === 'projects'" class="relative">
       <BaseSelectField
@@ -151,7 +186,12 @@ const statusHandler = async (value: string) => {
         {{ time > 0 ? time : 0 }}
       </div>
     </div>
-    <BaseInfoField v-else :name="props.project?.status" width="w-48 " :class="color" />
+    <BaseInfoField
+      v-else
+      :name="props.project?.status"
+      width="w-48 "
+      :class="color"
+    />
     <div
       class="relative hover:bg-red-full p-2 rounded-lg hover:cursor-pointer"
       :class="open && 'bg-red-full'"
@@ -165,7 +205,11 @@ const statusHandler = async (value: string) => {
         loading="lazy"
         :ismap="true"
       />
-      <HomeSubmenu v-if="open" :location="props.location" :_id="props.project?._id" />
+      <HomeSubmenu
+        v-if="open"
+        :location="props.location"
+        :_id="props.project?._id"
+      />
     </div>
   </div>
 </template>
