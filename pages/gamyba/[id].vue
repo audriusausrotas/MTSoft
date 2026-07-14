@@ -23,7 +23,7 @@ const order: any = computed(() => {
     (item) => item._id === route.params.id,
   );
 });
-console.log(order.value);
+
 const statusHandler = async (value: string) => {
   const requestData = { _id: order?.value._id, status: value };
 
