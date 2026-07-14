@@ -34,8 +34,11 @@ const loginHandler = async () => {
       (item) => item.accountType === response.data.accountType,
     );
 
-    if (rights) await fetchInitialUserData(rights);
-    await navigateTo("/");
+    if (rights) {
+      await fetchInitialUserData(rights);
+      console.trace("Redirecting to / after Login");
+      await navigateTo("/");
+    }
   } else {
     setError(response.message);
   }
@@ -43,7 +46,12 @@ const loginHandler = async () => {
 };
 
 const registerHandler = async () => {
-  if (!username.value || !email.value || !password.value || !retypePassword.value) {
+  if (
+    !username.value ||
+    !email.value ||
+    !password.value ||
+    !retypePassword.value
+  ) {
     setError("Visi laukai yra privalomi");
     return;
   }
@@ -128,16 +136,25 @@ const clearFields = () => {
         @keyup.enter="loginHandler"
         :isLoading="isLoading"
       />
-      <BaseButton v-else name="Registruotis" @click="registerHandler" :isLoading="isLoading" />
+      <BaseButton
+        v-else
+        name="Registruotis"
+        @click="registerHandler"
+        :isLoading="isLoading"
+      />
 
       <p v-if="login" class="self-center mt-4">
         Dar neturi paskyros?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Registruokis</span>
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
+          >Registruokis</span
+        >
       </p>
 
       <p v-else class="self-center mt-4">
         Turi paskyrą?
-        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin">Prisijunk</span>
+        <span class="text-blue-500 hover:cursor-pointer" @click="changeLogin"
+          >Prisijunk</span
+        >
       </p>
 
       <NuxtLink class="text-blue-500 hover:cursor-pointer" to="/atstatymas">

@@ -72,6 +72,7 @@ const saveHandler = async (): Promise<void> => {
 
       clearHandler();
       setSuccess(response.message);
+      console.trace("Redirecting to / from skaiciuokle after save");
       await navigateTo("/");
     } else {
       setError(response.message);

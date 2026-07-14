@@ -41,6 +41,7 @@ export default function projectListeners(socket: Socket) {
     useProductionStore().deleteProductionOrder(_id);
     useInstallationStore().deleteInstallationOrder(_id);
     projectsStore.deleteProject(_id);
+    console.trace("Redirecting to / from finishProject socket event");
     navigateTo("/");
   });
 
