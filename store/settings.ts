@@ -20,12 +20,12 @@ export const useSettingsStore = defineStore("settings", {
       fenceColors: [],
       fenceTypes: [],
       fenceManufacturers: [],
-      retailFenceTypes: [],
       status: [],
       accountTypes: [],
       gateTypes: [],
       gateOption: [],
       gateLock: [],
+      productionElements: [],
     } as SelectValues,
   }),
 
@@ -82,7 +82,9 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     deleteSelectValue(field: keyof SelectValues, index: number) {
-      this.selectValues[field] = this.selectValues[field].filter((item, ind) => ind !== index);
+      this.selectValues[field] = this.selectValues[field].filter(
+        (item, ind) => ind !== index,
+      );
     },
 
     updateUserRights(data: UserRights) {
@@ -108,7 +110,9 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     deleteFence(id: string) {
-      this.fences = this.fences.filter((item: FenceSetup) => item._id.toString() !== id.toString());
+      this.fences = this.fences.filter(
+        (item: FenceSetup) => item._id.toString() !== id.toString(),
+      );
     },
   },
 

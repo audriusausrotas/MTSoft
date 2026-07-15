@@ -490,9 +490,9 @@ export interface SelectValues {
   gateTypes: string[];
   fenceColors: string[];
   fenceTypes: string[];
-  retailFenceTypes: string[];
   status: string[];
   accountTypes: string[];
+  productionElements: string[];
 }
 
 export interface DefaultValues {

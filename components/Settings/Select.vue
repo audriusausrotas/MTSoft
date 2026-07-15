@@ -17,12 +17,6 @@ const settingsStore = useSettingsStore();
     />
 
     <SettingsSelectElement
-      field="retailFenceTypes"
-      name="Didmenos tvoros tipai"
-      :data="settingsStore.selectValues.retailFenceTypes"
-    />
-
-    <SettingsSelectElement
       field="fenceMaterials"
       name="Tvoros skardos"
       :data="settingsStore.selectValues.fenceMaterials"
@@ -62,6 +56,12 @@ const settingsStore = useSettingsStore();
       field="gateLock"
       name="Vartelių spyna"
       :data="settingsStore.selectValues.gateLock"
+    />
+
+    <SettingsSelectElement
+      field="productionElements"
+      name="Gamybos elementai"
+      :data="settingsStore.selectValues.productionElements"
     />
   </div>
 </template>

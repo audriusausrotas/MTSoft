@@ -4,6 +4,7 @@ import { RALcolors } from "~/data/initialValues";
 const props = defineProps(["binding", "index", "_id"]);
 const { setError, setSuccess } = useCustomError();
 const productionStore = useProductionStore();
+const settingsStore = useSettingsStore();
 const userStore = useUserStore();
 
 type RALColorCode = keyof typeof RALcolors;
@@ -39,7 +40,8 @@ const indexColor = computed(() => {
     ? "bg-red-full text-white"
     : +props.binding.cut === 0 || props.binding.cut === undefined
       ? "bg-transparent"
-      : +props.binding.cut === +props.binding.quantity && +done === +props.binding.quantity
+      : +props.binding.cut === +props.binding.quantity &&
+          +done === +props.binding.quantity
         ? "bg-green-500"
         : +props.binding.cut > +props.binding.quantity
           ? "bg-red-full"
@@ -68,7 +70,9 @@ const doneColor = computed(() => {
         : "bg-orange-500";
 });
 
-const RALcolor = computed(() => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF");
+const RALcolor = computed(
+  () => RALcolors[props.binding.color as RALColorCode] || "#FFFFFF",
+);
 
 const saveHandler = async (field: string) => {
   const requestData = {
@@ -140,7 +144,10 @@ const postoneHandler = async () => {
     option: "bindings",
   };
 
-  const response: any = await request.patch("updateProductionPostone", requestData);
+  const response: any = await request.patch(
+    "updateProductionPostone",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
@@ -181,24 +188,44 @@ const updateMeasure = (field: string, event: Event) => {
 
   iMadeChanges.value = true;
 
-  productionStore.updateMeasure(props._id, props.index, null, inputElement.value, field);
+  productionStore.updateMeasure(
+    props._id,
+    props.index,
+    null,
+    inputElement.value,
+    field,
+  );
 
   if (field === "cut")
-    +inputElement.value !== cut.value ? (isSavedCut.value = false) : (isSavedCut.value = true);
+    +inputElement.value !== cut.value
+      ? (isSavedCut.value = false)
+      : (isSavedCut.value = true);
   else if (field === "name")
-    inputElement.value !== name.value ? (isSavedName.value = false) : (isSavedName.value = true);
+    inputElement.value !== name.value
+      ? (isSavedName.value = false)
+      : (isSavedName.value = true);
   else if (field === "color")
-    inputElement.value !== color.value ? (isSavedColor.value = false) : (isSavedColor.value = true);
+    inputElement.value !== color.value
+      ? (isSavedColor.value = false)
+      : (isSavedColor.value = true);
   else if (field === "height")
     +inputElement.value !== height.value
       ? (isSavedHeight.value = false)
       : (isSavedHeight.value = true);
   else if (field === "done")
-    +inputElement.value !== done.value ? (isSavedDone.value = false) : (isSavedDone.value = true);
+    +inputElement.value !== done.value
+      ? (isSavedDone.value = false)
+      : (isSavedDone.value = true);
   else if (field === "quantity")
     +inputElement.value !== quantity.value
       ? (isSavedQuantity.value = false)
       : (isSavedQuantity.value = true);
+};
+
+const updateMeasureValue = (field: string, value: string) => {
+  iMadeChanges.value = true;
+
+  productionStore.updateMeasure(props._id, props.index, null, value, field);
 };
 
 const uploadFiles = async (data: any) => {
@@ -216,7 +243,11 @@ const uploadFiles = async (data: any) => {
 
   if (response.success) {
     !useSocketStore().connected &&
-      productionStore.updateBindingFiles(response.data._id, response.data.id, response.data.files);
+      productionStore.updateBindingFiles(
+        response.data._id,
+        response.data.id,
+        response.data.files,
+      );
     setSuccess(response.message);
   } else setError(response.message);
   isLoading.value = false;
@@ -231,11 +262,18 @@ const selectFile = async (file: any) => {
     file,
   };
 
-  const response: any = await request.patch("updateProductionBindingFiles", requestData);
+  const response: any = await request.patch(
+    "updateProductionBindingFiles",
+    requestData,
+  );
 
   if (response.success) {
     !useSocketStore().connected &&
-      productionStore.updateBindingFiles(response.data._id, response.data.id, response.data.files);
+      productionStore.updateBindingFiles(
+        response.data._id,
+        response.data.id,
+        response.data.files,
+      );
     setSuccess(response.message);
   } else setError(response.message);
   isLoading.value = false;
@@ -262,7 +300,11 @@ const defectHandler = async () => {
 
   if (response.success) {
     if (!useSocketStore().connected) {
-      productionStore.productionDefect(response.data._id, response.data.index, null);
+      productionStore.productionDefect(
+        response.data._id,
+        response.data.index,
+        null,
+      );
     }
     setSuccess(response.message);
   } else {
@@ -299,20 +341,25 @@ watch(
 </script>
 
 <template>
-  <div class="flex items-center even:bg-gray-ultra-light h-8 w-fit divide-x divide-black">
+  <div
+    class="flex items-center even:bg-gray-ultra-light h-8 w-fit divide-x divide-black"
+  >
     <p class="w-10 text-center h-full" :class="indexColor">
       {{ props.index + 1 }}
     </p>
     <div class="flex w-[220px] h-full">
-      <div class="pl-1 flex items-center w-full">
-        <input
-          type="text"
-          class="w-full"
-          :value="props.binding.name"
-          :disabled="!isAdmin"
-          @input="updateMeasure('name', $event)"
+      <div class="pl-1 flex items-center w-full relative">
+        <ProductionBindingSearchField
+          :data="settingsStore.selectValues.productionElements"
+          :name="props.binding.name"
+          :disable="!isAdmin"
           @keydown.enter="saveHandler('name')"
-          @wheel="(e) => e.preventDefault()"
+          @OnClick="
+            (value: any) => {
+              updateMeasureValue('name', value);
+            }
+          "
+          @onChange="(value) => updateMeasure('name', value)"
         />
         <img
           v-if="!isSavedName"
@@ -371,7 +418,10 @@ watch(
 
     <div
       class="w-16 px-1 flex h-full items-center"
-      :class="[`bg-[${RALcolor}]`, RALcolor === '#FFFFFF' ? 'text-black' : 'text-white']"
+      :class="[
+        `bg-[${RALcolor}]`,
+        RALcolor === '#FFFFFF' ? 'text-black' : 'text-white',
+      ]"
     >
       <input
         type="text"
@@ -454,7 +504,10 @@ watch(
         />
       </div>
     </div>
-    <div v-else class="w-8 print:hidden h-full flex items-center justify-center">
+    <div
+      v-else
+      class="w-8 print:hidden h-full flex items-center justify-center"
+    >
       <img
         @click="defectHandler"
         src="/icons/sad.svg"
