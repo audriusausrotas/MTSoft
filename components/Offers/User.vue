@@ -15,13 +15,14 @@ const status = ref<string>(props.client.status);
 const open = ref<boolean>(false);
 const input = ref<string>(props.client.comment);
 
-if (props.client.name === "testas") console.log(props.client);
-
 const deleteHandler = async () => {
-  const response: any = await request.delete(`deletePotentialClient/${props.client._id}`);
+  const response: any = await request.delete(
+    `deletePotentialClient/${props.client._id}`,
+  );
 
   if (response.success) {
-    !useSocketStore().connected && potentialClientsStore.deletePotentialClient(response.data._id);
+    !useSocketStore().connected &&
+      potentialClientsStore.deletePotentialClient(response.data._id);
 
     setSuccess(response.message);
   } else {
@@ -44,7 +45,8 @@ const saveHandler = async () => {
   const response: any = await request.patch("updateClient", client);
 
   if (response.success) {
-    !useSocketStore().connected && potentialClientsStore.updatePotentialClients(response.data);
+    !useSocketStore().connected &&
+      potentialClientsStore.updatePotentialClients(response.data);
 
     setSuccess(response.message);
     editable.value = false;
@@ -113,7 +115,9 @@ watch(
         />
       </div>
 
-      <div class="w-6 hover:cursor-pointer hover:scale-150 transition-transform">
+      <div
+        class="w-6 hover:cursor-pointer hover:scale-150 transition-transform"
+      >
         <NuxtImg
           v-if="!editable"
           @click="editable = true"

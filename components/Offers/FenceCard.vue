@@ -9,7 +9,6 @@ const props = defineProps<{
 const img1 = `/images/${props.fence.name.replace("/", "").replace(" ", "").toLowerCase()}.jpg`;
 
 const img2 = `/images/blueprints/${props.fence.name.replace(" ", "_").replace("/", "_").toLowerCase()}.jpg`;
-console.log(img2);
 </script>
 
 <template>

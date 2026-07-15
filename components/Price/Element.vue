@@ -40,7 +40,8 @@ const deleteHandler = async (): Promise<void> => {
   const response = await request.delete(`deleteProduct/${props.product._id}`);
 
   if (response.success) {
-    !useSocketStore().connected && productsStore.deleteProduct(response.data._id);
+    !useSocketStore().connected &&
+      productsStore.deleteProduct(response.data._id);
 
     setSuccess(response.message);
   } else {
@@ -57,7 +58,7 @@ const saveHandler = async () => {
     profit: { ...profit },
     aditional: { ...aditional },
   };
-  console.log(requestData);
+
   const response = await request.patch("updateProduct", requestData);
 
   if (response.success) {
@@ -155,8 +156,14 @@ watch(
     </div>
 
     <div v-if="editable" class="flex gap-4 flex-col">
-      <div class="grid grid-cols-[40px_auto_150px_150px_150px_200px_100px] gap-4">
-        <BaseInfoField name="Pelno skaičiavimas pagal maržą %" width="full" class="col-start-2" />
+      <div
+        class="grid grid-cols-[40px_auto_150px_150px_150px_200px_100px] gap-4"
+      >
+        <BaseInfoField
+          name="Pelno skaičiavimas pagal maržą %"
+          width="full"
+          class="col-start-2"
+        />
 
         <BaseInput
           width="w-full col-start-4"
@@ -174,7 +181,11 @@ watch(
           :name="profit.retail"
           @onChange="(value) => (profit.retail = value)"
         />
-        <BaseButton name="Skaičiuoti" width="w-full" @click="calculateHandler" />
+        <BaseButton
+          name="Skaičiuoti"
+          width="w-full"
+          @click="calculateHandler"
+        />
       </div>
 
       <SettingsFenceElementWraper name="Papildoma informacija">
@@ -249,35 +260,49 @@ watch(
           />
         </div>
         <div class="flex flex-col gap-4">
-          <BaseButton @click="addImage" :disabled="!editable">Pridėti nuotrauką</BaseButton>
+          <BaseButton @click="addImage" :disabled="!editable"
+            >Pridėti nuotrauką</BaseButton
+          >
 
-          <div v-for="(image, index) in aditional.images" :key="index" class="flex gap-4">
+          <div
+            v-for="(image, index) in aditional.images"
+            :key="index"
+            class="flex gap-4"
+          >
             <BaseInput
               :disable="!editable"
               label="Nuotraukos pavadinimas"
               :name="image.name"
-              @onChange="(value: string) => (aditional.images[index].name = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].name = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos URL"
               :name="image.url"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].url = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].url = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos aprašymas"
               :name="image.alt"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].alt = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].alt = value)
+              "
             />
             <BaseInput
               :disable="!editable"
               label="Nuotraukos aprašymas EN"
               :name="image.altEN"
               width="flex-1"
-              @onChange="(value: string) => (aditional.images[index].altEN = value)"
+              @onChange="
+                (value: string) => (aditional.images[index].altEN = value)
+              "
             />
           </div>
         </div>

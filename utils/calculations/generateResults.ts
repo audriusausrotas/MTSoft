@@ -127,7 +127,9 @@ export default function generateResults() {
 
   if (results.rivets.length > 0) {
     results.rivets.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000,
+      );
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.rivets,
@@ -138,7 +140,9 @@ export default function generateResults() {
 
   if (results.bolts.length > 0) {
     results.bolts.forEach((item) => {
-      const boxQuantity = Math.ceil((item.quantity + item.quantity * 0.1) / 1000);
+      const boxQuantity = Math.ceil(
+        (item.quantity + item.quantity * 0.1) / 1000,
+      );
       createResultElement({
         ...item,
         name: settingsStore.defaultValues.bolts,
@@ -223,7 +227,8 @@ export default function generateResults() {
 
       let gate = gates.find(
         (gate) =>
-          gate.category.toLowerCase() === option.toLowerCase() && calculatedLength === gate.length,
+          gate.category.toLowerCase() === option.toLowerCase() &&
+          calculatedLength === gate.length,
       );
 
       createResultElement({
@@ -272,7 +277,6 @@ export default function generateResults() {
   }
 
   if (results.totalAnchoredPoles > 0) {
-    console.log("Anchored poles:", results.totalAnchoredPoles);
     createWorkElement({
       name: settingsStore.defaultValues.anchoredPolesWork,
       quantity: results.totalAnchoredPoles,
