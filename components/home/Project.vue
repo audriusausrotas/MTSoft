@@ -23,7 +23,7 @@ const time = computed(() =>
 
 const RALcolor = computed(
   () =>
-    RALcolors[props.project?.fenceMeasures[0]?.color as RALColorCode] ||
+    RALcolors[props.project?.fenceMeasures?.[0]?.color as RALColorCode] ||
     "#FFFFFF",
 );
 
@@ -125,9 +125,13 @@ const statusHandler = async (value: string) => {
       ]"
     >
       {{ props?.project?.orderNumber }}
-      <span class="absolute top-0.5 right-0.5 text-xs">{{
-        props.project?.fenceMeasures[0]?.manufacturer?.slice(0, 1)
-      }}</span>
+      <span
+        v-if="props.project?.fenceMeasures?.[0]?.manufacturer"
+        class="absolute top-0.5 right-0.5 text-xs"
+        >{{
+          props.project?.fenceMeasures?.[0]?.manufacturer?.slice(0, 1)
+        }}</span
+      >
     </div>
     <div class="relative flex-1">
       <div
