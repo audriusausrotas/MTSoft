@@ -94,7 +94,6 @@ onMounted(() => {
       ref="inputRef"
       v-model="input"
       class="w-full overflow-auto outline-none"
-      :class="disable ? 'bg-gray-ultra-light' : 'bg-white'"
       :disabled="disable"
       @input="emitUpdate"
     />

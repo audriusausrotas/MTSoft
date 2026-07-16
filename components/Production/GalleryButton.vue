@@ -24,9 +24,15 @@ const deleteHandler = async (file: string) => {
       if (props.category === "projects") {
         useProjectsStore().updateFiles(response.data._id, response.data.files);
       } else if (props.category === "production") {
-        useProductionStore().updateFiles(response.data._id, response.data.files);
+        useProductionStore().updateFiles(
+          response.data._id,
+          response.data.files,
+        );
       } else if (props.category === "installation") {
-        useInstallationStore().updateFiles(response.data._id, response.data.files);
+        useInstallationStore().updateFiles(
+          response.data._id,
+          response.data.files,
+        );
       } else if (props.category === "fence") {
         useProductionStore().updateFenceFiles(
           response.data._id,
@@ -48,7 +54,7 @@ const deleteHandler = async (file: string) => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center w-8 h-full p-1">
+  <div class="flex justify-center items-center w-8 h-full">
     <img
       v-if="files?.length && files.length > 0"
       @click="clickHandler(props.files[0])"

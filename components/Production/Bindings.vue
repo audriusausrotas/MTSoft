@@ -348,7 +348,7 @@ watch(
       {{ props.index + 1 }}
     </p>
     <div class="flex w-[220px] h-full">
-      <div class="pl-1 flex items-center w-full relative">
+      <div class="px-1 flex w-full items-center relative">
         <ProductionBindingSearchField
           :data="settingsStore.selectValues.productionElements"
           :name="props.binding.name"
@@ -368,13 +368,14 @@ watch(
           @click="saveHandler('name')"
           class="hover:cursor-pointer w-5 h-5"
         />
+        <ProductionGalleryButton
+          v-if="props.binding.files.length > 0"
+          :files="props.binding.files"
+          :_id="props._id"
+          :id="props.binding.id"
+          category="binding"
+        />
       </div>
-      <ProductionGalleryButton
-        :files="props.binding.files"
-        :_id="props._id"
-        :id="props.binding.id"
-        category="binding"
-      />
     </div>
 
     <div class="w-16 px-1 flex h-full items-center">
