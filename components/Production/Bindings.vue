@@ -369,7 +369,6 @@ watch(
           class="hover:cursor-pointer w-5 h-5"
         />
         <ProductionGalleryButton
-          v-if="props.binding.files.length > 0"
           :files="props.binding.files"
           :_id="props._id"
           :id="props.binding.id"
