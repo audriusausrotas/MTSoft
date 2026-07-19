@@ -3,6 +3,7 @@ import type {
   FenceSetup,
   Gates,
   ReportSettings,
+  ReportsGeneral,
   SelectValues,
   UserRights,
 } from "~/data/interfaces";
@@ -14,7 +15,6 @@ export const useSettingsStore = defineStore("settings", {
     gates: [] as Gates[],
     defaultValues: {} as DefaultValues,
     userRights: [] as UserRights[],
-    reports: [] as ReportSettings[],
     selectValues: {
       fenceMaterials: [],
       fenceColors: [],
@@ -27,6 +27,24 @@ export const useSettingsStore = defineStore("settings", {
       gateLock: [],
       productionElements: [],
     } as SelectValues,
+    reports: [] as ReportSettings[],
+
+    reportsGeneral: {
+      workStart1: "",
+      workStart2: "",
+      workEnd1: "",
+      workEnd2: "",
+      cutGoal1: 0,
+      cutGoal2: 0,
+      bendGoal1M1: 0,
+      bendGoal2M1: 0,
+      bendGoal1M2: 0,
+      bendGoal2M2: 0,
+      holesGoal1: 0,
+      holesGoal2: 0,
+      holesIndex: 0,
+      bendCost: 0,
+    } as ReportsGeneral,
   }),
 
   actions: {
@@ -48,6 +66,10 @@ export const useSettingsStore = defineStore("settings", {
 
     addGateData(data: Gates[]) {
       this.gates = [...data];
+    },
+
+    addReportsGeneral(data: ReportsGeneral) {
+      this.reportsGeneral = data;
     },
 
     updateGateData(data: Gates) {
@@ -82,9 +104,7 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     deleteSelectValue(field: keyof SelectValues, index: number) {
-      this.selectValues[field] = this.selectValues[field].filter(
-        (item, ind) => ind !== index,
-      );
+      this.selectValues[field] = this.selectValues[field].filter((item, ind) => ind !== index);
     },
 
     updateUserRights(data: UserRights) {
@@ -110,9 +130,7 @@ export const useSettingsStore = defineStore("settings", {
     },
 
     deleteFence(id: string) {
-      this.fences = this.fences.filter(
-        (item: FenceSetup) => item._id.toString() !== id.toString(),
-      );
+      this.fences = this.fences.filter((item: FenceSetup) => item._id.toString() !== id.toString());
     },
   },
 

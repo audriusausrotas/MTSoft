@@ -43,4 +43,7 @@ export default function settingsListeners(socket: Socket) {
   socket.on("deleteReport", ({ _id }) => {
     settingsStore.deleteReport(_id);
   });
+  socket.on("updateReportsGeneral", (data) => {
+    settingsStore.addReportsGeneral(data);
+  });
 }

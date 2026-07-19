@@ -219,7 +219,10 @@ export async function fetchSelects() {
 export async function fetchReportSettings() {
   try {
     const response: any = await request.get("getReportSettings");
-    response.success && useSettingsStore().addReportSettings(response.data);
+    if (response.success) {
+      useSettingsStore().addReportSettings(response.data.reportSettings);
+      useSettingsStore().addReportsGeneral(response.data.reportGeneralSettings);
+    }
   } catch (error) {
     console.log("Serverio klaida: " + error);
     return { success: false, data: null };
