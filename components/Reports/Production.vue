@@ -160,31 +160,50 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4 w-full rounded-lg">
-    <div class="flex gap-4 flex-wrap">
+    <div class="flex gap-8 flex-wrap justify-center">
       <ReportsInfoCardProduction
         name="Pjovimas"
-        :data="totalData.totalCut"
-        :target="1800"
+        :data="totalData?.cut?.meters"
+        :target="totalData?.cut?.goal"
         sign="m"
         icon="scissors"
       />
       <ReportsInfoCardProduction
-        name="Lenkimas"
-        :data="totalData.totalBend"
-        :target="1500"
+        name="Lenkimas 1 staklės"
+        :data="totalData?.bend?.M1?.bends"
+        :target="totalData?.bend?.M1?.goal"
+        icon="ruler"
+      />
+      <ReportsInfoCardProduction
+        name="Lenkimas 2 staklės"
+        :data="totalData?.bend?.M2?.bends"
+        :target="totalData?.bend?.M2?.goal"
         icon="ruler"
       />
       <ReportsInfoCardProduction
         name="Skylučių Mušimas"
-        :data="totalData.totalHoles"
-        :target="1800"
+        :data="totalData?.holes?.count"
+        :target="totalData?.holes?.goal"
         icon="hole"
       />
-      <ReportsInfoCardProduction
+      <ReportsDefectCardProduction
         name="Brokas"
-        :data="totalData.totalDefect"
-        :target="5"
+        :data="totalData?.defects?.quantity"
+        :percentage="totalData?.defects?.percentage"
         icon="cross"
+      />
+      <ReportsInfoCardProduction
+        name="Bendras KPI"
+        :data="totalData?.kpi"
+        :target="totalData?.bend?.M1?.goal + totalData?.bend?.M2?.goal"
+        icon="kpi"
+      />
+      <ReportsInfoCardProduction
+        name="Gamybos savikaina"
+        :data="totalData?.selfCost"
+        :target="1000"
+        sign="€"
+        icon="cost"
       />
     </div>
     <div class="flex gap-4 p-4 border rounded-lg shadow-lg">

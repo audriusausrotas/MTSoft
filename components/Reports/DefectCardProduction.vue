@@ -12,24 +12,14 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  target: {
+  percentage: {
     type: Number,
     default: 0,
   },
-  sign: {
-    type: String,
-    default: "vnt",
-  },
-});
-
-const targetPercentage = computed(() => {
-  if (props.target <= 0) return 0;
-  const result = (props.data / props.target) * 100;
-  return result > 100 ? 100 : result;
 });
 
 const progressWidth = computed(() => {
-  return `${Math.min(targetPercentage.value, 100)}%`;
+  return `${(props?.percentage * 1000).toFixed(2)}%`;
 });
 </script>
 
@@ -46,44 +36,38 @@ const progressWidth = computed(() => {
 
       <div
         class="flex items-center gap-1 px-2 rounded-xl text-sm font-medium"
-        :class="[
-          targetPercentage < 100 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-600',
-        ]"
+        :class="[percentage < 0.1 ? ' bg-green-100 text-green-600' : 'bg-red-100 text-red-600']"
       >
         <div
           class="w-3 h-3 rounded-full"
-          :class="[targetPercentage < 100 ? ' bg-yellow-400' : ' bg-green-500']"
+          :class="[percentage < 0.1 ? ' bg-green-500' : ' bg-red-600']"
         ></div>
-        {{ targetPercentage < 100 ? "atsilieka" : "norma" }}
+        {{ percentage < 0.1 ? "norma" : "viršytas" }}
       </div>
     </div>
     <div class="text-xs text-gray-600">{{ name }}</div>
-    <div class="font-bold text-3xl">{{ data.toFixed(0) }} {{ sign }}</div>
+    <div class="font-bold text-3xl">{{ data?.toFixed(0) }} vnt</div>
     <div
       class="flex gap-2 bg-white border-dark-light border px-2 py-1 rounded-md font-medium text-xs"
     >
       <div class="w-4 h-4">
         <img src="/icons/target.svg" alt="icon" />
       </div>
-      <span class="text-gray-400">{{ "Tikslas:" }}</span
-      >{{ target }} {{ sign }}
+      <span class="text-gray-400">Tikslas </span> {{ "< 0.1" }} %
+    </div>
+    <div class="text-lg font-bold" :class="percentage < 0.1 ? 'text-green-600' : 'text-red-600'">
+      {{ percentage?.toFixed(3) }}%
     </div>
 
-    <div
-      class="text-lg font-bold"
-      :class="targetPercentage < 100 ? 'text-amber-600' : 'text-green-500'"
-    >
-      {{ targetPercentage.toFixed(2) }}%
-    </div>
     <div class="h-2 rounded-full w-full border bg-white overflow-hidden">
       <div
-        :class="[targetPercentage < 100 ? 'bg-amber-600' : 'bg-green-500', 'h-full rounded-full']"
+        :class="[percentage < 0.1 ? 'bg-green-600' : 'bg-red-600', 'h-full rounded-full']"
         :style="{ width: progressWidth }"
       ></div>
     </div>
     <div class="flex justify-between text-xs text-gray-400 border-t-2 border-dotted pt-1">
-      <div>{{ "Liko iki tikslo" }}</div>
-      <div>{{ target - data < 0 ? 0 : (target - data).toFixed(2) }} {{ sign }}</div>
+      <div>Šiuo metu</div>
+      <div>{{ percentage > 0.1 ? "Viršytas" : "stabilus" }}</div>
     </div>
   </div>
 </template>
