@@ -44,6 +44,9 @@ export const useSettingsStore = defineStore("settings", {
       holesGoal2: 0,
       holesIndex: 0,
       bendCost: 0,
+      holesCost: 0,
+      defectPercentage: 0,
+      costTarget: 0,
     } as ReportsGeneral,
   }),
 

@@ -33,27 +33,6 @@ const currentYear = currentDate.getFullYear();
 
 let timeout: any;
 
-// const totalData = computed(() => {
-//   let cut = 0;
-//   let bend = 0;
-//   let holes = 0;
-//   let defect = 0;
-
-//   data.value.forEach((item) => {
-//     if (item.operation === "cut") cut += item.totalLength / 100;
-//     if (item.operation === "done") bend += item.totalBends;
-//     if (item.operation === "holes") holes += item.totalHoles;
-//     if (item.operation === "defect") defect += item.totalQuantity;
-//   });
-
-//   return {
-//     cut,
-//     bend,
-//     holes,
-//     defect,
-//   };
-// });
-
 const users = computed(() => [
   {
     label: "Visi",
@@ -127,34 +106,17 @@ const filterHandler = async () => {
   }
 };
 
-onMounted(filterHandler);
+watch(
+  () => filters.search,
+  () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(filterHandler, 400);
+  },
+);
 
 watch(
-  filters,
-  () => {
-    if (filters.month === "Visi" && filters.day !== "Visi") {
-      filters.day = "Visi";
-      return;
-    }
-
-    if (filters.year === "Visi") {
-      if (filters.month !== "Visi" || filters.day !== "Visi") {
-        filters.month = "Visi";
-        filters.day = "Visi";
-        return;
-      }
-    }
-
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-      filterHandler();
-    }, 400);
-  },
-  {
-    deep: true,
-    immediate: true,
-  },
+  () => [filters.user, filters.machine, filters.year, filters.month, filters.day],
+  filterHandler,
 );
 </script>
 
@@ -190,18 +152,19 @@ watch(
         name="Brokas"
         :data="totalData?.defects?.quantity"
         :percentage="totalData?.defects?.percentage"
+        :target="totalData?.defects?.target"
         icon="cross"
       />
       <ReportsInfoCardProduction
         name="Bendras KPI"
         :data="totalData?.kpi"
-        :target="totalData?.bend?.M1?.goal + totalData?.bend?.M2?.goal"
+        :target="(totalData?.bend?.M1?.goal || 0) + (totalData?.bend?.M2?.goal || 0)"
         icon="kpi"
       />
       <ReportsInfoCardProduction
         name="Gamybos savikaina"
-        :data="totalData?.selfCost"
-        :target="1000"
+        :data="totalData?.selfCost?.value"
+        :target="totalData?.selfCost?.target"
         sign="€"
         icon="cost"
       />

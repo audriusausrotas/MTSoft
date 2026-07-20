@@ -103,6 +103,24 @@ watch(
           €
         </div>
         <div></div>
+        <div class="p-2 border-b border-dark-light font-medium">Skylučių mušimo savikaina</div>
+        <div class="p-2 border-x border-b border-dark-light flex justify-between">
+          <input v-model.number="settingStore.reportsGeneral.holesCost" type="number" />
+          €
+        </div>
+        <div></div>
+        <div class="p-2 border-b border-dark-light font-medium">Defektų procentas</div>
+        <div class="p-2 border-x border-b border-dark-light flex justify-between">
+          <input v-model.number="settingStore.reportsGeneral.defectPercentage" type="number" />
+          %
+        </div>
+        <div></div>
+        <div class="p-2 border-b border-dark-light font-medium">Savikainos tikslas</div>
+        <div class="p-2 border-x border-b border-dark-light flex justify-between">
+          <input v-model.number="settingStore.reportsGeneral.costTarget" type="number" />
+          €
+        </div>
+        <div></div>
       </div>
     </div>
     <BaseButton v-if="isDirty" name="išsaugoti" @click="saveHandler" />

@@ -741,4 +741,7 @@ export interface ReportsGeneral {
   holesGoal2: number;
   holesIndex: number;
   bendCost: number;
+  holesCost: number;
+  defectPercentage: number;
+  costTarget: number;
 }
