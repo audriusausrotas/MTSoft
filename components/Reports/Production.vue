@@ -172,7 +172,7 @@ watch(
   },
 );
 
-onMounted(() => {
+onBeforeMount(() => {
   filterHandler();
 });
 </script>
