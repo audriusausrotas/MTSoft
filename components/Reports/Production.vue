@@ -171,6 +171,10 @@ watch(
     timeout = setTimeout(filterHandler, 400);
   },
 );
+
+onMounted(() => {
+  filterHandler();
+});
 </script>
 
 <template>
