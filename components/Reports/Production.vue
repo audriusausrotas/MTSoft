@@ -172,9 +172,7 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  filterHandler();
-});
+filterHandler();
 </script>
 
 <template>
