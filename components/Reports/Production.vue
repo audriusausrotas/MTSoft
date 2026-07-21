@@ -258,7 +258,13 @@ watch(
         </div>
         <div class="w-14 flex-shrink-0">
           {{
-            (totalData?.cut?.meters + totalData.bend?.total?.meters).toFixed(0)
+            (totalData?.cut?.meters + +totalData.bend?.total?.meters)?.toFixed(
+              0,
+            ) === "NaN"
+              ? ""
+              : (
+                  totalData?.cut?.meters + +totalData.bend?.total?.meters
+                )?.toFixed(0)
           }}
         </div>
         <div class="w-20 flex-shrink-0">
