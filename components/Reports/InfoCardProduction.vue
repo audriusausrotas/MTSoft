@@ -35,7 +35,7 @@ const progressWidth = computed(() => {
 
 <template>
   <div
-    class="flex flex-col bg-gray-50 justify-between border rounded-lg p-4 max-w-80 w-full gap-2 shadow-lg"
+    class="flex flex-col bg-gray-50 justify-between border rounded-lg p-4 max-w-[340px] w-full gap-2 shadow-lg"
   >
     <div class="flex justify-between items-center gap-2">
       <div
