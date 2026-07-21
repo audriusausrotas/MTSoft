@@ -67,14 +67,20 @@ const YEARS = computed(() => {
 
 const DAYS = computed(() => {
   if (filters.month === "Visi") {
-    return ["Visi", ...Array.from({ length: 31 }, (_, i) => (i + 1).toString())];
+    return [
+      "Visi",
+      ...Array.from({ length: 31 }, (_, i) => (i + 1).toString()),
+    ];
   }
 
   const monthIndex = MONTHS.indexOf(filters.month);
   const year = Number(filters.year) || currentYear;
   const daysInMonth = new Date(year, monthIndex, 0).getDate();
 
-  return ["Visi", ...Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString())];
+  return [
+    "Visi",
+    ...Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString()),
+  ];
 });
 
 const onUserChange = (label: string) => {
@@ -115,21 +121,20 @@ watch(
 );
 
 watch(
-  () => [filters.user, filters.machine, filters.year, filters.month, filters.day],
+  () => [
+    filters.user,
+    filters.machine,
+    filters.year,
+    filters.month,
+    filters.day,
+  ],
   filterHandler,
 );
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full rounded-lg">
+  <div class="flex flex-col gap-8 w-full rounded-lg">
     <div class="flex gap-8 flex-wrap justify-center">
-      <ReportsInfoCardProduction
-        name="Pjovimas"
-        :data="totalData?.cut?.meters"
-        :target="totalData?.cut?.goal"
-        sign="m"
-        icon="scissors"
-      />
       <ReportsInfoCardProduction
         name="Lenkimas 1 staklės"
         :data="totalData?.bend?.M1?.bends"
@@ -143,10 +148,29 @@ watch(
         icon="ruler"
       />
       <ReportsInfoCardProduction
+        name="Pjovimas"
+        :data="totalData?.cut?.meters"
+        :target="totalData?.cut?.goal"
+        sign="m"
+        icon="scissors"
+      />
+      <ReportsInfoCardProduction
         name="Skylučių Mušimas"
         :data="totalData?.holes?.count"
         :target="totalData?.holes?.goal"
         icon="hole"
+      />
+      <ReportsInfoCardProduction
+        name="Staklių 1 KPI"
+        :data="totalData?.kpi?.M1"
+        :target="totalData?.bend?.M1?.goal || 0"
+        icon="kpi"
+      />
+      <ReportsInfoCardProduction
+        name="Staklių 2 KPI"
+        :data="totalData?.kpi?.M2"
+        :target="totalData?.bend?.M2?.goal || 0"
+        icon="kpi"
       />
       <ReportsDefectCardProduction
         name="Brokas"
@@ -154,12 +178,6 @@ watch(
         :percentage="totalData?.defects?.percentage"
         :target="totalData?.defects?.target"
         icon="cross"
-      />
-      <ReportsInfoCardProduction
-        name="Bendras KPI"
-        :data="totalData?.kpi"
-        :target="(totalData?.bend?.M1?.goal || 0) + (totalData?.bend?.M2?.goal || 0)"
-        icon="kpi"
       />
       <ReportsInfoCardProduction
         name="Gamybos savikaina"
@@ -182,7 +200,9 @@ watch(
         label="Operatorius"
         :values="users.map((user) => user.label)"
         id="userFilter"
-        :defaultValue="users.find((user) => user.email === filters.user)?.label ?? 'Visi'"
+        :defaultValue="
+          users.find((user) => user.email === filters.user)?.label ?? 'Visi'
+        "
         width="w-60"
         @onChange="onUserChange"
       />
@@ -224,26 +244,53 @@ watch(
       />
     </div>
 
-    <div class="flex flex-col overflow-y-scroll h-[70dvh] border rounded-lg shadow-lg">
-      <div class="flex p-4 sticky top-0 z-10 bg-gray-300 font-semibold gap-4">
-        <div class="w-8 flex-shrink-0">Nr</div>
-        <div class="w-28 flex-shrink-0">Užsakymo Nr</div>
-        <div class="w-60 flex-shrink-0">Darbuotojas</div>
-        <div class="w-60 flex-shrink-0">Staklės</div>
-        <div class="w-24 flex-shrink-0">Veiksmas</div>
-        <div class="w-14 flex-shrink-0">Kiekis</div>
-        <div class="w-14 flex-shrink-0">Ilgis</div>
-        <div class="w-20 flex-shrink-0">Lenkimai</div>
-        <div class="w-28 flex-shrink-0">Išlenkta metrų</div>
-        <div class="w-20 flex-shrink-0">Skylutės</div>
+    <div
+      class="flex flex-col overflow-y-scroll h-[70dvh] border rounded-t-lg shadow-lg"
+    >
+      <div class="flex py-2 px-4 bg-gray-300 border-b-2 font-medium gap-4">
+        <div class="w-8 flex-shrink-0"></div>
+        <div class="w-28 flex-shrink-0"></div>
+        <div class="w-60 flex-shrink-0"></div>
+        <div class="w-60 flex-shrink-0"></div>
+        <div class="w-24 flex-shrink-0 font-bold">Viso:</div>
+        <div class="w-14 flex-shrink-0">
+          {{ totalData?.bend?.total?.quantity }}
+        </div>
+        <div class="w-14 flex-shrink-0">
+          {{
+            (totalData?.cut?.meters + totalData.bend?.total?.meters).toFixed(0)
+          }}
+        </div>
+        <div class="w-20 flex-shrink-0">
+          {{ totalData?.bend?.total?.bends }}
+        </div>
+        <div class="w-28 flex-shrink-0">
+          {{ totalData?.bend?.total?.meters?.toFixed(0) }}
+        </div>
+        <div class="w-20 flex-shrink-0">{{ totalData?.holes?.count }}</div>
       </div>
 
-      <ReportsProductionResult
-        v-for="(item, index) in data"
-        :key="`${item.orderNumber}_${item.user.email}_${item.machine}_${item.operation}`"
-        :item="item"
-        :index="index"
-      />
+      <div class="flex flex-col">
+        <div class="flex p-4 sticky top-0 z-10 bg-gray-300 font-semibold gap-4">
+          <div class="w-8 flex-shrink-0">Nr</div>
+          <div class="w-28 flex-shrink-0">Užsakymo Nr</div>
+          <div class="w-60 flex-shrink-0">Darbuotojas</div>
+          <div class="w-60 flex-shrink-0">Staklės</div>
+          <div class="w-24 flex-shrink-0">Veiksmas</div>
+          <div class="w-14 flex-shrink-0">Kiekis</div>
+          <div class="w-14 flex-shrink-0">Ilgis</div>
+          <div class="w-20 flex-shrink-0">Lenkimai</div>
+          <div class="w-28 flex-shrink-0">Išlenkta metrų</div>
+          <div class="w-20 flex-shrink-0">Skylutės</div>
+        </div>
+
+        <ReportsProductionResult
+          v-for="(item, index) in data"
+          :key="`${item.orderNumber}_${item.user.email}_${item.machine}_${item.operation}`"
+          :item="item"
+          :index="index"
+        />
+      </div>
     </div>
   </div>
 </template>
