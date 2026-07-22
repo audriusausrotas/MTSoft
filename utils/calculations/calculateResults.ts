@@ -37,7 +37,8 @@ export default function calculateResults() {
       const temp = calculateHorizontalFence(fenceTemp, item);
       if (!onlyServices) fenceTemp = [...(temp || [])];
       if (!onlyParts) {
-        if (item.bindings === "Taip") results.addTotalFenceWithBindings(item.totalQuantity);
+        if (item.bindings === "Taip")
+          results.addTotalFenceWithBindings(item.totalQuantity);
         else results.addTotalFence(item.totalQuantity);
       }
     }
@@ -46,7 +47,8 @@ export default function calculateResults() {
     let lastBindingHeight: number = 0;
 
     item.measures.forEach((measure) => {
-      const isFence = !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
+      const isFence =
+        !measure.gates.exist && !measure.kampas.exist && !measure.laiptas.exist;
 
       //calculate holes
       if (item.holes === "Taip" && fenceSettings.category === "Tvora") {
@@ -92,18 +94,22 @@ export default function calculateResults() {
 
       // calculate total elements
       if (!isSegment) {
-        if (!onlyServices) results.addTotalElements(measure.elements, item.color, item.name);
+        if (!onlyServices)
+          results.addTotalElements(measure.elements, item.color, item.name);
 
         // calculate bindings
 
         if (item.direction === "Horizontali" && item.bindings === "Taip") {
-          const aditionalHeight = item.additionalBindings.includes("10")
+          const aditionalHeight = item?.additionalBindings?.includes("10")
             ? 10
-            : item.additionalBindings.includes("20")
+            : item?.additionalBindings?.includes("20")
               ? 20
               : 0;
           if (!onlyServices) {
-            results.addBindingsLength(measure.height + aditionalHeight, item.color);
+            results.addBindingsLength(
+              measure.height + aditionalHeight,
+              item.color,
+            );
           }
           if (!onlyServices && !calculationsStore.retail)
             lastBindingHeight = measure.height + aditionalHeight;
@@ -184,7 +190,9 @@ export default function calculateResults() {
                 : results.addGatePoles(item.color, 1);
 
             if (!onlyParts)
-              anchoredPoles ? results.addTotalAnchoredGatePoles(1) : results.addTotalGatePoles(1);
+              anchoredPoles
+                ? results.addTotalAnchoredGatePoles(1)
+                : results.addTotalGatePoles(1);
           }
           isTogether = true;
         } else {
@@ -209,7 +217,10 @@ export default function calculateResults() {
             results.addTotalAnchoredPoles();
           }
 
-          if (!onlyParts) anchoredPoles ? results.addTotalAnchoredPoles() : results.addTotalPoles();
+          if (!onlyParts)
+            anchoredPoles
+              ? results.addTotalAnchoredPoles()
+              : results.addTotalPoles();
 
           isTogether = false;
         }

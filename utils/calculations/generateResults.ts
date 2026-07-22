@@ -20,7 +20,7 @@ export default function generateResults() {
           quantity: results.totalHoles,
         });
 
-      if (item.name.includes("Dilė") && item.direction === "Vertikali") {
+      if (item?.name?.includes("Dilė") && item.direction === "Vertikali") {
         cork += item.quantity;
       }
     });
@@ -315,7 +315,7 @@ export default function generateResults() {
     let quantity = 0;
 
     results.gates.forEach((item) => {
-      if (item.bankette === "Taip" && item.option.includes("Stumdomi")) {
+      if (item.bankette === "Taip" && item?.option?.includes("Stumdomi")) {
         quantity +=
           item.width <= 500
             ? 2
