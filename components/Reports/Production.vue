@@ -177,7 +177,7 @@ filterHandler();
 
 <template>
   <div class="flex flex-col gap-8 w-full rounded-lg">
-    <div class="flex gap-4 flex-wrap justify-between">
+    <div class="flex gap-6 flex-wrap justify-center">
       <ReportsInfoCardProduction
         name="Lenkimas 1 staklės"
         :data="totalData?.bend?.M1?.bends"
@@ -203,18 +203,14 @@ filterHandler();
         :target="totalData?.holes?.goal"
         icon="hole"
       />
+
       <ReportsInfoCardProduction
-        name="Staklių 1 KPI"
-        :data="totalData?.kpi?.M1"
-        :target="totalData?.bend?.M1?.goal || 0"
+        name="Bendras KPI"
+        :data="totalData?.kpi?.total"
+        :target="totalData?.bend?.M1?.goal + totalData?.bend?.M2?.goal"
         icon="kpi"
       />
-      <ReportsInfoCardProduction
-        name="Staklių 2 KPI"
-        :data="totalData?.kpi?.M2"
-        :target="totalData?.bend?.M2?.goal || 0"
-        icon="kpi"
-      />
+
       <ReportsDefectCardProduction
         name="Brokas"
         :data="totalData?.defects?.quantity"

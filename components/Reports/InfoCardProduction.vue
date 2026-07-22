@@ -25,7 +25,7 @@ const props = defineProps({
 const targetPercentage = computed(() => {
   if (props.target <= 0) return 0;
   const result = (props.data / props.target) * 100;
-  return result > 100 ? 100 : result;
+  return result;
 });
 
 const progressWidth = computed(() => {
@@ -39,9 +39,7 @@ const progressWidth = computed(() => {
   >
     <div class="flex justify-between items-center gap-2">
       <div class="flex items-center gap-2">
-        <div
-          class="bg-white rounded-lg w-8 h-8 border border-dark-ultralight p-1.5"
-        >
+        <div class="bg-white rounded-lg w-8 h-8 border border-dark-ultralight p-1.5">
           <img :src="`/icons/${icon}.svg`" alt="icon" />
         </div>
         <div class="font-medium">{{ name }}</div>
@@ -50,9 +48,7 @@ const progressWidth = computed(() => {
       <div
         class="flex items-center gap-1 px-2 rounded-xl text-sm font-medium"
         :class="[
-          targetPercentage < 100
-            ? 'bg-amber-100 text-amber-700'
-            : 'bg-green-100 text-green-600',
+          targetPercentage < 100 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-600',
         ]"
       >
         <div
@@ -63,7 +59,7 @@ const progressWidth = computed(() => {
       </div>
     </div>
 
-    <div class="font-bold text-3xl">{{ data.toFixed(0) }} {{ sign }}</div>
+    <div class="font-bold text-3xl">{{ data.toFixed(1) }} {{ sign }}</div>
     <div
       class="flex gap-2 bg-white border-dark-light border px-2 py-1 rounded-md font-medium text-xs"
     >
@@ -76,26 +72,32 @@ const progressWidth = computed(() => {
 
     <div
       class="text-lg font-bold"
-      :class="targetPercentage < 100 ? 'text-amber-600' : 'text-green-500'"
+      :class="
+        targetPercentage > 100
+          ? 'text-green-500'
+          : targetPercentage < 90
+            ? 'text-amber-600'
+            : 'text-yellow-500'
+      "
     >
       {{ targetPercentage.toFixed(2) }}%
     </div>
     <div class="h-2 rounded-full w-full border bg-white overflow-hidden">
       <div
         :class="[
-          targetPercentage < 100 ? 'bg-amber-600' : 'bg-green-500',
+          targetPercentage > 100
+            ? 'bg-green-500'
+            : targetPercentage < 90
+              ? 'bg-amber-600'
+              : 'bg-yellow-500',
           'h-full rounded-full',
         ]"
         :style="{ width: progressWidth }"
       ></div>
     </div>
-    <div
-      class="flex justify-between text-xs text-gray-400 border-t-2 border-dotted pt-1"
-    >
+    <div class="flex justify-between text-xs text-gray-400 border-t-2 border-dotted pt-1">
       <div>{{ "Liko iki tikslo" }}</div>
-      <div>
-        {{ target - data < 0 ? 0 : (target - data).toFixed(2) }} {{ sign }}
-      </div>
+      <div>{{ target - data < 0 ? 0 : (target - data).toFixed(2) }} {{ sign }}</div>
     </div>
   </div>
 </template>

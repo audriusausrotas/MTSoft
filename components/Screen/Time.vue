@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useScreenStore } from "~/store/screen";
+
 type SegmentType = "darbas" | "pertrauke" | "pietus";
 
 interface Segment {
@@ -25,14 +27,17 @@ interface CurrentSegment extends Segment {
   progress: number;
 }
 
+const useScreen = useScreenStore();
+const useSettings = useSettingsStore();
+
 const now = ref(new Date());
+const muted = ref(false);
 
 let timer: ReturnType<typeof setInterval>;
 let audio: any = null;
 
 onMounted(() => {
   audio = new Audio("/sounds/asdf.wav");
-  
 });
 
 onMounted(() => {
@@ -128,11 +133,7 @@ const dateNow = computed(() =>
 );
 
 function currentMinutes() {
-  return (
-    now.value.getHours() * 60 +
-    now.value.getMinutes() +
-    now.value.getSeconds() / 60
-  );
+  return now.value.getHours() * 60 + now.value.getMinutes() + now.value.getSeconds() / 60;
 }
 
 const currentSegment = computed<CurrentSegment | null>(() => {
@@ -174,42 +175,66 @@ const currentStatus = computed<Status>(() => {
 });
 
 const timeLeft = computed(() => {
-  if (!currentSegment?.value) {
-    return "";
-  }
+  if (!currentSegment.value) return "--:--";
 
-  const left = currentSegment?.value?.end - currentMinutes();
+  const totalMinutes = Math.ceil(currentSegment.value.end - currentMinutes());
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
 
-  const min = Math.floor(left);
-
-  const sec = Math.floor((left - min) * 60);
-
-  return `${min} min ${String(sec).padStart(2, "0")} s`;
+  if (hours > 0) return `${hours} val ${minutes} min`;
+  return `${minutes} min`;
 });
 
 function timelinePosition(shift: Shift) {
   const minutes = currentMinutes();
 
-  if (minutes < shift?.start || minutes > shift?.end) {
+  if (minutes <= shift?.start || minutes >= shift?.end) {
     return null;
   }
 
   return ((minutes - shift?.start) / (shift?.end - shift?.start)) * 100;
 }
 
-watch(timeLeft, () => {
-  audio.play();
-});
+const getCurrentShift = () => {
+  const minutes = currentMinutes();
+
+  const shift1Start = tm(useSettings.reportsGeneral.workStart1);
+  const shift1End = tm(useSettings.reportsGeneral.workEnd1);
+  const shift2End = tm(useSettings.reportsGeneral.workEnd2);
+
+  if (minutes >= shift1Start && minutes < shift1End) return 1;
+  if (minutes >= shift1End && minutes < shift2End) return 2;
+  return 0;
+};
 
 watch(currentStatus, (newStatus, oldStatus) => {
   if (newStatus.text !== oldStatus?.text) {
-    audio?.play();
+    if (muted.value) audio?.play();
   }
 });
+
+watch(
+  now,
+  () => {
+    const shift = getCurrentShift();
+
+    if (useScreen.shift !== shift) {
+      useScreen.setShift(shift);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
+    <div
+      @click="muted = !muted"
+      class="absolute top-1 right-1 border border-gray-300 rounded-lg shadow-lg p-1.5 w-8 h-8 hover:cursor-pointer"
+    >
+      <img v-if="muted" src="/icons/soundON.svg" alt="soundIcon" />
+      <img v-else src="/icons/soundOFF.svg" alt="soundIcon" />
+    </div>
     <div
       class="flex gap-8 rounded-3xl border-[3px] px-10 py-4 text-center shadow-xl"
       :style="{
@@ -249,9 +274,7 @@ watch(currentStatus, (newStatus, oldStatus) => {
           </span>
         </div>
 
-        <div v-if="currentSegment" class="text-2xl font-bold">
-          Liko: {{ timeLeft }}
-        </div>
+        <div class="text-2xl font-bold">Liko: {{ timeLeft }}</div>
       </div>
     </div>
 

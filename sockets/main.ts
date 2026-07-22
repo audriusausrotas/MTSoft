@@ -12,6 +12,7 @@ import clientListeners from "./clientListeners";
 import orderListeners from "./orderListeners";
 import userListeners from "./userListeners";
 import { Socket } from "socket.io-client";
+import screenListeners from "./screenListeners";
 
 export default (socket: Socket) => {
   websiteSettingsListeners(socket);
@@ -24,6 +25,7 @@ export default (socket: Socket) => {
   archiveListeners(socket);
   productListeners(socket);
   projectListeners(socket);
+  screenListeners(socket);
   clientListeners(socket);
   orderListeners(socket);
   userListeners(socket);
