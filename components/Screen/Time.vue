@@ -37,7 +37,7 @@ let timer: ReturnType<typeof setInterval>;
 let audio: any = null;
 
 onMounted(() => {
-  audio = new Audio("/sounds/asdf.wav");
+  audio = new Audio("/sounds/ringtone.mp3");
 });
 
 onMounted(() => {
