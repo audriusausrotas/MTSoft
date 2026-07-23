@@ -133,7 +133,11 @@ const dateNow = computed(() =>
 );
 
 function currentMinutes() {
-  return now.value.getHours() * 60 + now.value.getMinutes() + now.value.getSeconds() / 60;
+  return (
+    now.value.getHours() * 60 +
+    now.value.getMinutes() +
+    now.value.getSeconds() / 60
+  );
 }
 
 const currentSegment = computed<CurrentSegment | null>(() => {
@@ -236,7 +240,7 @@ watch(
       <img v-else src="/icons/soundOFF.svg" alt="soundIcon" />
     </div>
     <div
-      class="flex gap-8 rounded-3xl border-[3px] px-10 py-4 text-center shadow-xl"
+      class="flex justify-between min-w-[1200px] rounded-3xl border-[3px] px-10 py-4 text-center shadow-xl"
       :style="{
         borderColor: currentStatus?.color,
         background: '#f2f2f2',
