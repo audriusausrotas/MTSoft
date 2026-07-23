@@ -46,6 +46,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (user?.accountType.toLowerCase() === "servisas" && to.path !== "/servisas")
     return navigateTo("/servisas");
 
+  if (user?.accountType.toLowerCase() === "ekranas" && to.path !== "/ekranas")
+    return navigateTo("/ekranas");
+
   let userRights = settingsStore.userRights.find(
     (item) => item.accountType === user?.accountType,
   );
