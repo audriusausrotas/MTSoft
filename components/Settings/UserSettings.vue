@@ -16,6 +16,7 @@ const accountTypes = settingsStore.selectValues.accountTypes;
       <p class="w-28">Užsakymai</p>
       <p class="w-28">Kita</p>
       <p class="w-28">Admin</p>
+      <p class="w-28">Ekranas</p>
     </div>
     <SettingsUserRights
       v-for="accountType in accountTypes"

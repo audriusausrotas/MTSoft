@@ -555,6 +555,7 @@ export interface UserRights {
   orders: boolean;
   admin: boolean;
   warehouse: boolean;
+  screen: boolean;
 }
 
 export interface Order {

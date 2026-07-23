@@ -14,6 +14,8 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
   if (userRights?.installation) fetchData.push(fetchInstallation());
   if (userRights?.orders) fetchData.push(fetchOrders());
 
+  if (userRights?.screen) fetchData.push(fetchReportSettings());
+
   if (userRights?.admin || userRights?.other) {
     fetchData.push(
       fetchProducts(),
@@ -21,7 +23,6 @@ export const fetchInitialUserData = async (userRights: UserRights | undefined) =
       fetchSelects(),
       fetchGateData(),
       fetchDefaultValues(),
-      fetchReportSettings(),
       fetchWebsiteSettings(),
       fetchPotentialClients(),
     );

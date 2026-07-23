@@ -13,6 +13,7 @@ const rights = reactive({
   warehouse: false,
   schedule: false,
   project: false,
+  screen: false,
   orders: false,
   admin: false,
   other: false,
@@ -44,6 +45,7 @@ watchEffect(() => {
     rights.warehouse = user.warehouse;
     rights.schedule = user.schedule;
     rights.project = user.project;
+    rights.screen = user.screen;
     rights.orders = user.orders;
     rights.admin = user.admin;
     rights.other = user.other;
@@ -77,6 +79,9 @@ watchEffect(() => {
     </div>
     <div class="w-28 flex justify-center">
       <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.admin" />
+    </div>
+    <div class="w-28 flex justify-center">
+      <input type="checkbox" class="w-5" :disabled="!editable" v-model="rights.screen" />
     </div>
     <NuxtImg
       v-if="!editable"
