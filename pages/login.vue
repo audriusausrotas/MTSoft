@@ -21,7 +21,6 @@ const loginHandler = async () => {
   isLoading.value = true;
 
   const loginData = { email: email.value, password: password.value };
-
   const response = await request.post("login", loginData);
 
   if (response.success) {
@@ -30,6 +29,7 @@ const loginHandler = async () => {
     setSuccess(response.message);
 
     await fetchUserRights();
+
     const rights = useSettingsStore().userRights.find(
       (item) => item.accountType === response.data.accountType,
     );
